@@ -1,0 +1,109 @@
+.classify {
+  padding: 20px calc(50% - 600px);
+  min-height: calc(100vh - 64px - 62px);
+}
+
+/*文章列表*/
+.article-item{
+  margin-bottom: 10px;
+  padding: 20px;
+  background: #fff;
+  list-style: none;
+
+  .item-cont {
+    display: flex;
+
+    &--img {
+      width: 30%;
+      display: block;
+      margin-right: 20px;
+      border-radius: 5px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    &--title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    &--info {
+      font-size: 16px;
+      color: #888;
+      line-height: 24px;
+    }
+  }
+
+  .item-author {
+    width: 100%;
+    clear: both;
+    margin: 20px 0 0 0;
+    color: #838383;
+    font-size: 14px;
+    span{
+      margin-right: 10px;
+
+      a {
+        color: #096;
+      }
+    }
+    .lm {
+      color: #096;
+      i {
+        color: #ff7c7c;
+        margin-right: 5px;
+      }
+    }
+    .time {
+      i {
+        color: #00cad4;
+        margin-right: 5px;
+      }
+    }
+    .more {
+      float: right;
+    }
+  }
+}
+
+// 文章左侧
+.classify-slider {
+  margin-left: 20px;
+  background-color: transparent;
+  text-align: center;
+  padding-top: 40px;
+
+  p {
+    color: #555;
+    line-height: 2;
+    cursor: pointer;
+    font-size: 16px;
+
+    &.active {
+      color: #1890ff;
+    }
+  }
+}
+
+// 文章顶部
+.classify-header {
+  display: flex;
+  flex-wrap: wrap;
+  p {
+    color: #555;
+    width: 25%;
+    text-align: center;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+
+    &.active {
+      color: #1890ff;
+    }
+  }
+}
