@@ -77,7 +77,7 @@ class Home extends Component {
     axios.get(API.CATEGORY_FIND_ALL)
       .then(({ data }) =>{
         self.setState({
-          classifyList: data
+          classifyList: data.result
         });
       })
   };
