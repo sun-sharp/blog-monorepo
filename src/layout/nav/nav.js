@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import {
   Layout,
   Row,
-  Col,
   Tooltip,
 } from 'antd';
 import { isMobileOrPc } from '../../utils/utils';
