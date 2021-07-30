@@ -26,7 +26,7 @@ class Home extends Component {
       articleList: [],
       articleTotal: 0,
       bannerData: [],
-      classifyValue: 21,
+      classifyValue: null,
       classifyList: []
     };
   }
@@ -76,8 +76,13 @@ class Home extends Component {
     const self = this;
     axios.get(API.CATEGORY_FIND_ALL)
       .then(({ data }) =>{
+        const listData = JSON.parse(JSON.stringify(data));
+        listData.unshift({
+          title: "全部",
+          value: null
+        });
         self.setState({
-          classifyList: data.result
+          classifyList: listData
         });
       })
   };
@@ -112,8 +117,8 @@ class Home extends Component {
       const outline = item.outline.length> 100
         ? `${item.outline.slice(0, 100)}...` : item.outline;
       // 处理连接跳转
-      // const linkTo = { path :"/articleDetails",query: { id: item._id } };
-      const linkTo = `/articleDetails?articleId=${item._id}`;
+      // const linkTo = { path :"/articleDetails",query: { articleId: item.id } };
+      const linkTo = `/articleDetails?articleId=${item.id}`;
       const image = "";
       // 处理循环样式
       articleItem.push({
@@ -138,7 +143,7 @@ class Home extends Component {
             <Carousel autoplay autoplaySpeed={10000} ref='imgCarousel'>
               {
                 this.state.bannerData.map((item, index) =>
-                  <a href={item.linkUrl}  title={item.title} key={index}>
+                  <a href={item.linkUrl || "#"}  title={item.title} key={index}>
                     <img className="home-carousel--banner" src={item.image} alt="轮播图"/>
                   </a>
                 )
