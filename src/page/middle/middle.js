@@ -1274,14 +1274,14 @@ class Middle extends Component {
               {/*<Link className="link" to={`/project`}>*/}
               {/*  项目*/}
               {/*</Link>*/}
-              <a
+              {/* <a
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"
                 href={`http://admin.yangruirui.cn`}
               >
                 后台管理系统
-              </a>
+              </a> */}
               {/*<a*/}
               {/*  target="_blank"*/}
               {/*  rel="noopener noreferrer"*/}
