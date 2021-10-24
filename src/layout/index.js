@@ -21,14 +21,19 @@ class Layouts extends Component {
     return (
       <div className="Layouts">
         {!isIndexPage ? (
-            <Layout>
-              <Nav />
-              {this.props.children}
-              <Footer className="layouts-footer">
-                ©2020<i className="icon-aixin layouts-footer--love"/>Mr.Yang | 黔ICP备20002802号
-              </Footer>
-              <BackTop />
-            </Layout>
+          <Layout>
+            <Nav />
+            {this.props.children}
+            <Footer className="layouts-footer">
+              ©2020
+              <i className="icon-aixin layouts-footer--love" />
+              <span>Mr.Yang | </span>
+              <a href="https://beian.miit.gov.cn">
+                黔ICP备2021008571号
+              </a>
+            </Footer>
+            <BackTop />
+          </Layout>
         ) : (
           <Middle />
         )}
@@ -38,4 +43,3 @@ class Layouts extends Component {
 }
 
 export default Layouts;
-
