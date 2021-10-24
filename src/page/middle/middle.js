@@ -1262,7 +1262,7 @@ class Middle extends Component {
         <canvas id="sakura" />
         <div className="content">
           <div className="middle-header">
-            <Link className="link" to={`/home`}>
+            <Link className="link" to={`/`}>
               <img className="middle-logo" src="https://6672-frist-ixdkl-1300617104.tcb.qcloud.la/blog/www/logo.jpg" alt="Yang Ruirui logo" />
             </Link>
           </div>
