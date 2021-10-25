@@ -49,7 +49,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "./src/styles/common.scss";', // 添加公共样式
+          additionalData: '@import "./src/styles/variable.scss";', // 添加公共样式
         },
       },
     },
@@ -85,12 +85,3 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
   };
 };
-
-// export default defineConfig({
-//   plugins: [vue()],
-//   resolve: {
-//     alias: {
-//       '@': '/src',
-//     },
-//   },
-// });
