@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router, { setupRouter } from './router';
+import { setupStore } from '@/store';
 
 async function bootstrap() {
   //   // const appProvider = createApp(AppProvider);
@@ -21,8 +22,8 @@ async function bootstrap() {
   //   // 注册全局方法，如：app.config.globalProperties.$message = message
   //   //setupGlobalMethods(app);
 
-  //   // 挂载状态管理
-  //   // setupStore(app);
+  // 挂载状态管理
+  setupStore(app);
 
   //   //优先挂载一下 Provider 解决路由守卫，Axios中可使用，Dialog，Message 等之类组件
   //   // appProvider.mount('#appProvider', true);

@@ -1,7 +1,7 @@
-/** 
- *  @module .prettierrc 
+/**
+ *  @module .prettierrc
  * @author: yangruirui
- * @description: prettier配置 
+ * @description: prettier配置
  */
 module.exports = {
   printWidth: 160, // 单行输出（不折行）的（最大）长度
