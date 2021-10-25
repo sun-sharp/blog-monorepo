@@ -21,6 +21,6 @@ module.exports = {
   requirePragma: false, // 取消作为其第一注释的文件将被格式化
   proseWrap: 'always', // 当超出print width（上面有这个参数）时就折行
   htmlWhitespaceSensitivity: 'ignore', // 指定 HTML 文件的全局空白区域敏感度, "ignore" - 空格被认为是不敏感的
-  endOfLine: 'lf' // 换行符使用 lf
+  endOfLine: 'lf', // 换行符使用 lf
   rangeStart: 0, // 每个文件格式化的范围是文件的全部内容
 };

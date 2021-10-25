@@ -1,7 +1,6 @@
-import { App } from 'vue';
+import type { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 // import { createRouterGuards } from './router-guards';
-
 
 // export const RootRoute: RouteRecordRaw = {
 //   path: '/',
@@ -21,7 +20,6 @@ export const LoginRoute: RouteRecordRaw = {
     title: '登录',
   },
 };
-
 
 //普通路由 无需验证权限
 export const constantRouter: any[] = [LoginRoute];

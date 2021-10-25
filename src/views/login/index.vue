@@ -1,10 +1,5 @@
-
-
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <div class="view-account">
-    login
-  </div>
+  <div class="view-account">login</div>
 </template>
