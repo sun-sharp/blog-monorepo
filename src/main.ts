@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router, { setupRouter } from './router';
 import { setupStore } from '@/store';
+import { setupNaive, setupDirectives } from '@/plugins';
 
 async function bootstrap() {
   //   // const appProvider = createApp(AppProvider);
@@ -10,17 +11,17 @@ async function bootstrap() {
 
   //   // app.use(MakeitCaptcha);
 
-  //   // 注册全局常用的 naive-ui 组件
-  //   // setupNaive(app);
+  // 注册全局常用的 naive-ui 组件
+  setupNaive(app);
 
   //   // 注册全局自定义组件
   //   //setupCustomComponents();
 
-  //   // 注册全局自定义指令，如：v-permission权限指令
-  //   // setupDirectives(app);
+  // 注册全局自定义指令，如：v-permission权限指令
+  setupDirectives(app);
 
-  //   // 注册全局方法，如：app.config.globalProperties.$message = message
-  //   //setupGlobalMethods(app);
+  // 注册全局方法，如：app.config.globalProperties.$message = message
+  // setupGlobalMethods(app);
 
   // 挂载状态管理
   setupStore(app);

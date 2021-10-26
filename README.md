@@ -65,6 +65,9 @@ vue
 
 # vue路由
 vue-router
+
+# 从ant设计图标集成的Vue3 SVG图标组件
+@vicons/antd
 ```
 
 ### devDependencies

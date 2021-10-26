@@ -1,6 +1,6 @@
 {
-  "name": "my-vue-app",
-  "version": "0.0.0",
+  "name": "vue3-ts-manage",
+  "version": "0.0.1",
   "scripts": {
     "serve": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -10,9 +10,11 @@
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm run bootstrap"
   },
   "dependencies": {
+    "@vicons/antd": "^0.11.0",
     "axios": "^0.23.0",
     "date-fns": "^2.25.0",
     "mockjs": "^1.1.0",
+    "naive-ui": "^2.19.11",
     "pinia": "^2.0.0-rc.10",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12"

@@ -49,7 +49,7 @@ export default [
     },
   },
   {
-    url: `${basic}/dmin_info`,
+    url: `${basic}/admin_info`,
     timeout: 1000,
     method: 'get',
     response: () => {
