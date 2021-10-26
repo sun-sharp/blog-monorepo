@@ -72,7 +72,7 @@ export const useProjectSettingStore = defineStore({
   },
 });
 
-// Need to be used outside the setup
+// 需要在设置之外使用
 export function useProjectSettingStoreWithOut() {
   return useProjectSettingStore(store);
 }

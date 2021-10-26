@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
-import { createStorage } from '@/utils/Storage';
+import { createStorage, storage } from '@/utils/Storage';
 import { store } from '@/store';
 import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN } from '@/store/mutation-types';
-// import { ResultEnum } from '@/enums/httpEnum';
+import { ResultEnum } from '@/enums/httpEnum';
 
 const Storage = createStorage({ storage: localStorage });
 import { getUserInfo, login } from '@/api/system/user';
-// import { storage } from '@/utils/Storage';
 
 export interface IUserState {
   token: string;
@@ -40,9 +39,9 @@ export const useUserStore = defineStore({
     getPermissions(): [any][] {
       return this.permissions;
     },
-    // getUserInfo(): object {
-    //   return this.info;
-    // },
+    getUserInfo(): object {
+      return this.info;
+    },
   },
   actions: {
     setToken(token: string) {
@@ -57,24 +56,24 @@ export const useUserStore = defineStore({
     setUserInfo(info) {
       this.info = info;
     },
-    // // 登录
-    // async login(userInfo) {
-    //   try {
-    //     const response = await login(userInfo);
-    //     const { result, code } = response;
-    //     if (code === ResultEnum.SUCCESS) {
-    //       const ex = 7 * 24 * 60 * 60 * 1000;
-    //       storage.set(ACCESS_TOKEN, result.token, ex);
-    //       storage.set(CURRENT_USER, result, ex);
-    //       storage.set(IS_LOCKSCREEN, false);
-    //       this.setToken(result.token);
-    //       this.setUserInfo(result);
-    //     }
-    //     return Promise.resolve(response);
-    //   } catch (e) {
-    //     return Promise.reject(e);
-    //   }
-    // },
+    // 登录
+    async login(userInfo) {
+      try {
+        const response = await login(userInfo);
+        const { result, code } = response;
+        if (code === ResultEnum.SUCCESS) {
+          const ex = 7 * 24 * 60 * 60 * 1000;
+          storage.set(ACCESS_TOKEN, result.token, ex);
+          storage.set(CURRENT_USER, result, ex);
+          storage.set(IS_LOCK_SCREEN, false);
+          this.setToken(result.token);
+          this.setUserInfo(result);
+        }
+        return Promise.resolve(response);
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
 
     // 获取用户信息
     GetInfo() {

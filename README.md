@@ -68,6 +68,12 @@ vue-router
 
 # 从ant设计图标集成的Vue3 SVG图标组件
 @vicons/antd
+
+# ionicons5的图标
+@vicons/ionicons5
+
+# 滑块验证码
+makeit-captcha
 ```
 
 ### devDependencies

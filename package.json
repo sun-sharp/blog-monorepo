@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@vicons/antd": "^0.11.0",
+    "@vicons/ionicons5": "^0.11.0",
     "axios": "^0.23.0",
     "date-fns": "^2.25.0",
+    "makeit-captcha": "^1.2.5",
     "mockjs": "^1.1.0",
     "naive-ui": "^2.19.11",
     "pinia": "^2.0.0-rc.10",

@@ -2,14 +2,18 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router, { setupRouter } from './router';
 import { setupStore } from '@/store';
+import MakeitCaptcha from 'makeit-captcha';
+import 'makeit-captcha/dist/captcha.min.css';
 import { setupNaive, setupDirectives } from '@/plugins';
+import { AppProvider } from '@/components/Application';
 
 async function bootstrap() {
-  //   // const appProvider = createApp(AppProvider);
+  const appProvider = createApp(AppProvider);
 
   const app = createApp(App);
 
-  //   // app.use(MakeitCaptcha);
+  // 滑块验证码
+  app.use(MakeitCaptcha);
 
   // 注册全局常用的 naive-ui 组件
   setupNaive(app);
@@ -26,8 +30,8 @@ async function bootstrap() {
   // 挂载状态管理
   setupStore(app);
 
-  //   //优先挂载一下 Provider 解决路由守卫，Axios中可使用，Dialog，Message 等之类组件
-  //   // appProvider.mount('#appProvider', true);
+  // 优先挂载一下 Provider 解决路由守卫，Axios中可使用，Dialog，Message 等之类组件
+  appProvider.mount('#appProvider', true);
 
   // 挂载路由
   await setupRouter(app);

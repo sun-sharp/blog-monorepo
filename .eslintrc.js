@@ -34,6 +34,7 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/no-this-alias': 'off',
+    // '@typescript-eslint/no-this-alias': 'off',
+    'vue/require-default-prop': 'off',
   },
 };
