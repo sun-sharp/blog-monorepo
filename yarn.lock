@@ -1677,10 +1677,24 @@ esbuild-netbsd-64@0.13.9:
   resolved "https://registry.yarnpkg.com/esbuild-netbsd-64/-/esbuild-netbsd-64-0.13.9.tgz#94f2dabe83520066cc1e1fae3ecff78695a8ebb1"
   integrity sha512-PiZu3h4+Szj0iZPgvuD2Y0isOXnlNetmF6jMcOwW54BScwynW24/baE+z7PfDyNFgjV04Ga2THdcpbKBDhgWQw==
 
+esbuild-node-loader@^0.4.2:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/esbuild-node-loader/-/esbuild-node-loader-0.4.3.tgz#41a1b4559b04dc0bf554e4a9630daf9759d617d3"
+  integrity sha512-Jzs+nTsq7z4GqUTwlh8guP03EYTAhoB9r+rwb3JpVcNVG1/2fNE8Tb40syJ2nLY2yam+lZjsoh7FYd+2dGjbjg==
+  dependencies:
+    esbuild "^0.13.3"
+
 esbuild-openbsd-64@0.13.9:
   version "0.13.9"
   resolved "https://registry.yarnpkg.com/esbuild-openbsd-64/-/esbuild-openbsd-64-0.13.9.tgz#b47f6a641ca37358aeedb2b7c4bb73dd0682c6d5"
   integrity sha512-SJKN4Ez+ilY7mu+1gAdGQ9N6dktBfbEkiOAvw+hT7xHrNnTnrTGH0FT4qx9dazB9HX6D04L4PXmVOyynqi+oEQ==
+
+esbuild-register@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/esbuild-register/-/esbuild-register-3.0.0.tgz#874156f95cac7c1720d6d24cbd78c599bf35ac74"
+  integrity sha512-No7U3ZUd6gPrrC6gqdb3XFcf2lNqzn8nvQXcgcyOl8szMVuN6YUvOplnmakxWyogI9d8SiJMl0uzBzJck+Aoxw==
+  dependencies:
+    jsonc-parser "^3.0.0"
 
 esbuild-sunos-64@0.13.9:
   version "0.13.9"
@@ -1707,7 +1721,7 @@ esbuild@0.11.3:
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.11.3.tgz#b57165b907be4ffba651f6450538ce8d8c1d5eb0"
   integrity sha512-BzVRHcCtFepjS9WcqRjqoIxLqgpK21a8J4Zi4msSGxDxiXVO1IbcqT1KjhdDDnJxKfe7bvzZrvMEX+bVO0Elcw==
 
-esbuild@^0.13.2:
+esbuild@^0.13.2, esbuild@^0.13.3:
   version "0.13.9"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.13.9.tgz#aafc4b3375ac443ae7b223c26c4e58d10d2d535b"
   integrity sha512-8bYcckmisXjGvBMeylp1PRtu21uOoCDFAgXGGF2BR241zYQDN6ZLNvcmQlnQ7olG0p6PRWmJI8WVH3ca8viPuw==
@@ -1860,6 +1874,16 @@ eslint@^8.1.0:
     strip-json-comments "^3.1.0"
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
+
+esno@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/esno/-/esno-0.10.1.tgz#28f9adb30fdcc5960475d034a4f22311d334d6cd"
+  integrity sha512-wsXUWZxI0O59bvOjggWOGDd6VSwPxG+37Np8aUI1LwORIONN3L2nOOJHT7jZ3xAGkfq/J3YcnZsx+Mmw6BQFmQ==
+  dependencies:
+    cross-spawn "^7.0.3"
+    esbuild "^0.13.3"
+    esbuild-node-loader "^0.4.2"
+    esbuild-register "^3.0.0"
 
 espree@^6.2.1:
   version "6.2.1"

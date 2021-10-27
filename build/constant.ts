@@ -3,4 +3,4 @@
  */
 export const GLOB_CONFIG_FILE_NAME = 'app.config.js';
 // 输出文件夹
-export const OUTPUT_DIR = 'admin';
+export const OUTPUT_DIR = 'dist-manage';

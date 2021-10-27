@@ -44,7 +44,7 @@
             </div>
           </n-form-item>
           <n-form-item>
-            <n-button type="primary" @click="handleSubmit" size="large" :loading="loading" block>登录</n-button>
+            <n-button type="primary" size="large" :loading="loading" block @click="handleSubmit">登录</n-button>
           </n-form-item>
           <n-form-item class="default-color">
             <div class="flex view-account-other">

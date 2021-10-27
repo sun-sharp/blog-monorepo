@@ -113,4 +113,7 @@ vite-plugin-html # 一个为index.html提供minify和基于EJS模板功能的Vit
 vite-plugin-mock # 使用mock模拟数据请求
 @vitejs/plugin-vue # 提供 Vue 3 单文件组件支持
 @vitejs/plugin-vue-jsx # 提供 Vue 3 JSX 支持
+
+# 由es build支持的TypeScript/ESNext节点运行时
+esno
 ```
