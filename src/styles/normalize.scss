@@ -1,0 +1,113 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+}
+
+#app,
+body,
+html {
+  height: 100%;
+}
+
+body {
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, '\5FAE\8F6F\96C5\9ED1', Arial, sans-serif;
+  line-height: 1.5;
+  color: #515a6e;
+  font-size: 14px;
+  background-color: #f7f7f7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: #2d8cf0;
+  background: transparent;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+a:active,
+a:hover {
+  outline: 0;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #57a3f3;
+}
+
+a:active {
+  color: #2b85e4;
+}
+
+/* 滚动条凹槽的颜色，还可以设置边框属性 */
+*::-webkit-scrollbar-track-piece {
+  background-color: #f8f8f8;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+/* 滚动条的宽度 */
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+/* 滚动条的设置 */
+*::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  background-clip: padding-box;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+/* 滚动条鼠标移上去 */
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  border-style: solid;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}

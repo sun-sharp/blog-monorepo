@@ -4,9 +4,10 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img src="~@/assets/images/account-logo.png" alt="" />
+          <img class="w-40" :src="logo" alt="" />
+          <span class="ml-10">{{ title }}</span>
         </div>
-        <div class="view-account-top-desc">Naive Ui Admin中台前端/设计解决方案</div>
+        <div class="view-account-top-desc mt-20">Naive Ui Admin中台前端/设计解决方案</div>
       </div>
       <div class="view-account-form">
         <n-form ref="formRef" label-placement="left" size="large" :model="formInline" :rules="rules">
@@ -20,7 +21,7 @@
             </n-input>
           </n-form-item>
           <n-form-item path="password">
-            <n-input v-model:value="formInline.password" type="password" show-password-toggle placeholder="请输入密码">
+            <n-input v-model:value="formInline.password" type="password" show-password-on="click" placeholder="请输入密码">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <LockClosedOutline />
@@ -28,11 +29,11 @@
               </template>
             </n-input>
           </n-form-item>
-          <n-form-item path="isCaptcha">
+          <!-- <n-form-item path="isCaptcha">
             <div class="w-full">
               <mi-captcha width="384" theme-color="#2d8cf0" :logo="logo" @success="onAuthCode" />
             </div>
-          </n-form-item>
+          </n-form-item> -->
           <n-form-item class="default-color">
             <div class="flex justify-between">
               <div class="flex-initial">
@@ -51,14 +52,14 @@
               <div class="flex-initial">
                 <span>其它登录方式</span>
               </div>
-              <div class="flex-initial mx-2">
+              <div class="flex-initial mh-10">
                 <a href="javascript:">
                   <n-icon size="24" color="#2d8cf0">
                     <LogoGithub />
                   </n-icon>
                 </a>
               </div>
-              <div class="flex-initial mx-2">
+              <div class="flex-initial mh-10">
                 <a href="javascript:">
                   <n-icon size="24" color="#2d8cf0">
                     <LogoFacebook />
@@ -90,6 +91,7 @@
     password: string;
   }
 
+  const title = import.meta.env.VITE_GLOB_APP_TITLE;
   const formRef = ref();
   const message = useMessage();
   const loading = ref(false);
@@ -136,7 +138,7 @@
         if (code == ResultEnum.SUCCESS) {
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           message.success('登录成功！');
-          router.replace(toPath).then((_) => {
+          router.replace(toPath).then(() => {
             if (route.name == 'login') {
               router.replace('/');
             }
@@ -150,9 +152,10 @@
     });
   };
 
-  const onAuthCode = () => {
-    formInline.isCaptcha = true;
-  };
+  // 验证码验证
+  // const onAuthCode = () => {
+  //   formInline.isCaptcha = true;
+  // };
 </script>
 
 <style lang="scss" scoped>
@@ -176,6 +179,14 @@
       &-desc {
         font-size: 14px;
         color: #808695;
+      }
+
+      &-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 30px;
       }
     }
 

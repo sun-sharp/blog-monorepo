@@ -1,5 +1,9 @@
 import type { App } from 'vue';
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import {
+  createRouter, // createWebHistory,
+  createWebHashHistory,
+  RouteRecordRaw,
+} from 'vue-router';
 import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { PageEnum } from '@/enums/pageEnum';
 import { createRouterGuards } from './router-guards';
@@ -49,7 +53,8 @@ export const asyncRoutes = [...routeModuleList];
 export const constantRouter: any[] = [LoginRoute, RootRoute, RedirectRoute];
 
 const router = createRouter({
-  history: createWebHistory(''),
+  history: createWebHashHistory(''),
+  // history: createWebHistory('/'),
   routes: constantRouter,
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

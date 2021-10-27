@@ -7,6 +7,7 @@ export enum PageEnum {
   REDIRECT_NAME = 'Redirect',
   // 首页
   BASE_HOME = '/dashboard',
+  BASE_HOME_REDIRECT = '/dashboard/index',
   // 错误
   ERROR_PAGE_NAME = 'ErrorPage',
 }

@@ -19,8 +19,6 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    name: 'HuaweiCharge',
-    // props: ['batteryStatus', 'battery', 'calcDischargingTime'],
     props: {
       battery: {
         // 电池对象

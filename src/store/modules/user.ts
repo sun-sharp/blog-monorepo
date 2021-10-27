@@ -99,13 +99,13 @@ export const useUserStore = defineStore({
     },
 
     // 登出
-    // async logout() {
-    //   this.setPermissions([]);
-    //   this.setUserInfo('');
-    //   storage.remove(ACCESS_TOKEN);
-    //   storage.remove(CURRENT_USER);
-    //   return Promise.resolve('');
-    // },
+    async logout() {
+      this.setPermissions([]);
+      this.setUserInfo('');
+      storage.remove(ACCESS_TOKEN);
+      storage.remove(CURRENT_USER);
+      return Promise.resolve('');
+    },
   },
 });
 

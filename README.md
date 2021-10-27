@@ -74,6 +74,18 @@ vue-router
 
 # 滑块验证码
 makeit-captcha
+
+# 是一款基于Sortable.js实现的vue拖拽插件
+vuedraggable
+
+# 切换左侧菜单展示效果，监听dom元素宽度变化
+element-resize-detector
+
+# 它是为Vue 2和3服务的一套Vue Composition API的常用工具集
+@vueuse/core
+
+# echarts图表
+echarts
 ```
 
 ### devDependencies

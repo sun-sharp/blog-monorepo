@@ -17,17 +17,17 @@ const adminInfo = {
   token,
   permissions: [
     {
-      label: '主控台',
-      value: 'dashboard_console',
+      label: '首页',
+      value: 'dashboard_index',
     },
-    {
-      label: '监控页',
-      value: 'dashboard_monitor',
-    },
-    {
-      label: '工作台',
-      value: 'dashboard_workplace',
-    },
+    // {
+    //   label: '监控页',
+    //   value: 'dashboard_monitor',
+    // },
+    // {
+    //   label: '工作台',
+    //   value: 'dashboard_workplace',
+    // },
     {
       label: '基础列表',
       value: 'basic_list',

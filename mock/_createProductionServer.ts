@@ -11,7 +11,7 @@ Object.keys(modules).forEach((key) => {
 });
 
 /**
- * Used in a production environment. Need to manually import all modules
+ * 在生产环境中使用。需要手动导入所有模块
  */
 export function setupProdMockServer() {
   createProdMockServer(mockModules);
