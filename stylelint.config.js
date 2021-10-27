@@ -18,7 +18,7 @@ module.exports = {
     'at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen', 'function', 'if', 'each', 'include', 'mixin'],
+        ignoreAtRules: ['extend', 'apply', 'variants', 'responsive', 'screen', 'function', 'if', 'each', 'include', 'mixin'],
       },
     ], // 禁止使用未知的 at 规则
     'no-empty-source': null, // 禁止空源

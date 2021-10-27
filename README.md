@@ -116,4 +116,8 @@ vite-plugin-mock # 使用mock模拟数据请求
 
 # 由es build支持的TypeScript/ESNext节点运行时
 esno
+
+#  是一个允许使用 JS 插件转换样式的工具
+postcss
+autoprefixer # postcss的插件 添加了 vendor 浏览器前缀，它使用 Can I Use 上面的数据。
 ```

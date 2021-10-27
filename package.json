@@ -27,12 +27,14 @@
     "@typescript-eslint/parser": "^5.1.0",
     "@vitejs/plugin-vue": "^1.9.3",
     "@vitejs/plugin-vue-jsx": "^1.2.0",
+    "autoprefixer": "^10.3.7",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^7.20.0",
     "esno": "^0.10.1",
     "node-sass": "^6.0.1",
+    "postcss": "^8.3.11",
     "prettier": "^2.4.1",
     "sass": "^1.43.3",
     "sass-loader": "^12.2.0",
@@ -48,5 +50,22 @@
     "vite-plugin-mock": "^2.9.6",
     "vue-eslint-parser": "^8.0.0",
     "vue-tsc": "^0.3.0"
+  },
+  "lint-staged": {
+    "*.{vue,js,ts,tsx}": "eslint --fix"
+  },
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "naive-ui",
+    "vue3-ts-manage",
+    "vue3",
+    "ts",
+    "tsx",
+    "admin",
+    "typescript"
+  ],
+  "engines": {
+    "node": "^12 || >=14"
   }
 }
