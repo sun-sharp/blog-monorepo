@@ -8,6 +8,9 @@ export enum PageEnum {
   // 首页
   BASE_HOME = '/home',
   BASE_HOME_REDIRECT = '/home/index',
+  BASE_HOME_KEY = 'HomeIndex',
+  BASE_HOME_LABEL = '首页',
+  BASE_HOME_ICON = 'HomeOutlined',
   // 错误
   ERROR_PAGE_NAME = 'ErrorPage',
 }

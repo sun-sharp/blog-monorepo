@@ -18,10 +18,11 @@
   import { defineComponent, ref, onMounted, reactive, computed, watch, toRefs, unref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute';
-  import { generatorMenu, generatorMenuMix, renderIcon } from '@/utils';
+  import { generatorMenu, generatorMenuMix } from '@/utils';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
-  import { HomeOutlined } from '@vicons/antd';
+  import { PageEnum } from '@/enums/pageEnum';
+  import { constantRouterIcon } from '@/router/router-icons';
 
   export default defineComponent({
     name: 'Menu',
@@ -51,9 +52,9 @@
       const settingStore = useProjectSettingStore();
       const menus = ref<any[]>([
         {
-          icon: renderIcon(HomeOutlined),
-          key: 'HomeIndex',
-          label: '首页',
+          icon: constantRouterIcon[PageEnum.BASE_HOME_ICON],
+          key: PageEnum.BASE_HOME_KEY,
+          label: PageEnum.BASE_HOME_LABEL,
         },
       ]);
       const selectedKeys = ref<string>(currentRoute.name as string);
