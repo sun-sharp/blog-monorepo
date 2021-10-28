@@ -1,6 +1,6 @@
 import http from '@/utils/http/axios';
 
-const basic = '/blog/user';
+const basic = '/user';
 
 export interface BasicResponseModel<T = any> {
   code: number;

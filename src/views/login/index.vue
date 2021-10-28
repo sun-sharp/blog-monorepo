@@ -7,7 +7,7 @@
           <img class="w-40" :src="logo" alt="" />
           <span class="ml-10">{{ title }}</span>
         </div>
-        <div class="view-account-top-desc mt-20">Naive Ui Admin中台前端/设计解决方案</div>
+        <div class="view-account-top-desc mt-20">{{ shortName }}是一个个人的博客后台管理系统</div>
       </div>
       <div class="view-account-form">
         <n-form ref="formRef" label-placement="left" size="large" :model="formInline" :rules="rules">
@@ -92,6 +92,7 @@
   }
 
   const title = import.meta.env.VITE_GLOB_APP_TITLE;
+  const shortName = import.meta.env.VITE_GLOB_APP_SHORT_NAME;
   const formRef = ref();
   const message = useMessage();
   const loading = ref(false);

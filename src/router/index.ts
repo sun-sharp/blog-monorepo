@@ -7,6 +7,7 @@ import {
 import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { PageEnum } from '@/enums/pageEnum';
 import { createRouterGuards } from './router-guards';
+import { Layout } from '@/router/constant';
 
 // 获取静态路由
 const modules = import.meta.globEager('./modules/**/*.ts');
@@ -27,13 +28,20 @@ function sortRoute(a, b) {
 routeModuleList.sort(sortRoute);
 
 // 首页
-export const RootRoute: RouteRecordRaw = {
+export const HomeRoute: RouteRecordRaw = {
   path: '/',
-  name: 'Root',
   redirect: PageEnum.BASE_HOME,
-  meta: {
-    title: 'Root',
-  },
+  component: Layout,
+  children: [
+    {
+      path: 'home',
+      name: `Home`,
+      meta: {
+        title: '首页',
+      },
+      component: () => import('@/views/home/index.vue'),
+    },
+  ],
 };
 
 // 登录页
@@ -50,7 +58,7 @@ export const LoginRoute: RouteRecordRaw = {
 export const asyncRoutes = [...routeModuleList];
 
 //普通路由 无需验证权限
-export const constantRouter: any[] = [LoginRoute, RootRoute, RedirectRoute];
+export const constantRouter: any[] = [LoginRoute, HomeRoute, RedirectRoute];
 
 const router = createRouter({
   history: createWebHashHistory(''),

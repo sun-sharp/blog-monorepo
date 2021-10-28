@@ -5,7 +5,7 @@ const Random = Mock.Random;
 
 const token = Random.string('upper', 32, 32);
 
-const basic = '/mock-api/blog/user';
+const basic = '/mock-api/user';
 
 const adminInfo = {
   userId: '1',

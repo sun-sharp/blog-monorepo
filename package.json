@@ -2,7 +2,7 @@
   "name": "vue3-ts-manage",
   "version": "0.0.1",
   "scripts": {
-    "serve": "vite",
+    "dev": "vite",
     "build": "vue-tsc --noEmit && vite build && esno ./build/script/postBuild.ts",
     "preview": "vite preview",
     "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix",

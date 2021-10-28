@@ -1,6 +1,6 @@
 import http from '@/utils/http/axios';
 
-const basic = '/blog/user';
+const basic = '';
 
 /**
  * @description: 根据用户id获取用户菜单

@@ -1,11 +1,11 @@
 import { resultSuccess } from '../_util';
 
-const basic = '/mock-api/blog/menu';
+const basic = '/mock-api';
 
 const menusList = [
   {
-    path: '/dashboard',
-    name: 'Dashboard',
+    path: '/home',
+    name: '首页',
     component: 'LAYOUT',
     redirect: '/dashboard/console',
     meta: {

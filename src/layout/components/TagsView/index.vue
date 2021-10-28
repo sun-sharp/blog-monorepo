@@ -371,7 +371,7 @@
 
       function handleContextMenu(e, item) {
         e.preventDefault();
-        isCurrent.value = PageEnum.BASE_HOME_REDIRECT === item.path;
+        isCurrent.value = PageEnum.BASE_HOME === item.path;
         state.showDropdown = false;
         nextTick().then(() => {
           state.showDropdown = true;
@@ -415,7 +415,7 @@
         navScroll,
         route,
         tabsList,
-        baseHome: PageEnum.BASE_HOME_REDIRECT,
+        baseHome: PageEnum.BASE_HOME,
         goPage,
         closeTabItem,
         closeLeft,

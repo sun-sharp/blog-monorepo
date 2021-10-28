@@ -1,6 +1,6 @@
 import http from '@/utils/http/axios';
 
-const basic = '/blog/dashboard';
+const basic = '/dashboard';
 
 //获取主控台信息
 export function getConsoleInfo() {
