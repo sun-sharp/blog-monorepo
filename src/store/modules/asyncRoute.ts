@@ -1,24 +1,9 @@
-import { toRaw, unref } from 'vue';
+import { toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
 import { store } from '@/store';
-import { asyncRoutes, constantRouter } from '@/router/index';
+import { constantRouter } from '@/router/index';
 import { generatorDynamicRouter } from '@/router/generator-routers';
-import { useProjectSetting } from '@/utils/setting/useProjectSetting';
-
-interface TreeHelperConfig {
-  id: string;
-  children: string;
-  pid: string;
-}
-
-const DEFAULT_CONFIG: TreeHelperConfig = {
-  id: 'id',
-  children: 'children',
-  pid: 'pid',
-};
-
-const getConfig = (config: Partial<TreeHelperConfig>) => Object.assign({}, DEFAULT_CONFIG, config);
 
 export interface IAsyncRouteState {
   menus: RouteRecordRaw[];
@@ -26,23 +11,6 @@ export interface IAsyncRouteState {
   addRouters: any[];
   keepAliveComponents: string[];
   isDynamicAddedRoute: boolean;
-}
-
-// 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
-function filter<T = any>(tree: T[], func: (n: T) => boolean, config: Partial<TreeHelperConfig> = {}): T[] {
-  config = getConfig(config);
-  const children = config.children as string;
-
-  function listFilter(list: T[]) {
-    return list
-      .map((node: any) => ({ ...node }))
-      .filter((node) => {
-        node[children] = node[children] && listFilter(node[children]);
-        return func(node) || (node[children] && node[children].length);
-      });
-  }
-
-  return listFilter(tree);
 }
 
 export const useAsyncRouteStore = defineStore({
@@ -84,7 +52,7 @@ export const useAsyncRouteStore = defineStore({
       this.keepAliveComponents = compNames;
     },
     // 动态获取权限
-    async generateRoutes(data) {
+    async generateRoutes() {
       let accessedRouters;
       // 动态获取菜单
       try {

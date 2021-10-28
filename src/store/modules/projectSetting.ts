@@ -3,8 +3,7 @@ import { store } from '@/store';
 import projectSetting from '@/settings/projectSetting';
 import type { IheaderSetting, ImenuSetting, ImultiTabsSetting, IcrumbsSetting } from '/#/config';
 
-const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } =
-  projectSetting;
+const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } = projectSetting;
 
 interface ProjectSettingState {
   navMode: string; //导航模式
