@@ -18,9 +18,10 @@
   import { defineComponent, ref, onMounted, reactive, computed, watch, toRefs, unref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute';
-  import { generatorMenu, generatorMenuMix } from '@/utils';
+  import { generatorMenu, generatorMenuMix, renderIcon } from '@/utils';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
+  import { HomeOutlined } from '@vicons/antd';
 
   export default defineComponent({
     name: 'Menu',
@@ -48,7 +49,13 @@
       const router = useRouter();
       const asyncRouteStore = useAsyncRouteStore();
       const settingStore = useProjectSettingStore();
-      const menus = ref<any[]>([]);
+      const menus = ref<any[]>([
+        {
+          icon: renderIcon(HomeOutlined),
+          key: 'HomeIndex',
+          label: '首页',
+        },
+      ]);
       const selectedKeys = ref<string>(currentRoute.name as string);
       const headerMenuSelectKey = ref<string>('');
 
@@ -106,14 +113,15 @@
 
       function updateMenu() {
         if (!settingStore.menuSetting.mixMenu) {
-          menus.value = generatorMenu(asyncRouteStore.getMenus);
+          menus.value = menus.value.concat(generatorMenu(asyncRouteStore.getMenus));
         } else {
           //混合菜单
           const firstRouteName: string = (currentRoute.matched[0].name as string) || '';
-          menus.value = generatorMenuMix(asyncRouteStore.getMenus, firstRouteName, props.location);
+          menus.value = menus.value.concat(generatorMenuMix(asyncRouteStore.getMenus, firstRouteName, props.location));
           const activeMenu: string = currentRoute?.matched[0].meta?.activeMenu as string;
           headerMenuSelectKey.value = (activeMenu ? activeMenu : firstRouteName) || '';
         }
+        console.log(menus.value);
       }
 
       // 点击菜单

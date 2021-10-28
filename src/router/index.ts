@@ -28,21 +28,39 @@ function sortRoute(a, b) {
 routeModuleList.sort(sortRoute);
 
 // 首页
-export const HomeRoute: RouteRecordRaw = {
-  path: '/',
-  redirect: PageEnum.BASE_HOME,
-  component: Layout,
-  children: [
-    {
-      path: 'home',
-      name: `Home`,
-      meta: {
-        title: '首页',
+export const HomeRoute: RouteRecordRaw[] = [
+  {
+    path: '/',
+    redirect: PageEnum.BASE_HOME,
+    // component: Layout,
+    // children: [
+    //   {
+    //     path: 'home',
+    //     name: `Home`,
+    //     meta: {
+    //       title: '首页',
+    //     },
+    //     component: () => import('@/views/home/index.vue'),
+    //   },
+    // ],
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: Layout,
+    redirect: '/home/index',
+    children: [
+      {
+        path: 'index',
+        name: 'HomeIndex',
+        component: () => import('@/views/home/index.vue'),
+        meta: {
+          title: '首页',
+        },
       },
-      component: () => import('@/views/home/index.vue'),
-    },
-  ],
-};
+    ],
+  },
+];
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {
@@ -58,7 +76,7 @@ export const LoginRoute: RouteRecordRaw = {
 export const asyncRoutes = [...routeModuleList];
 
 //普通路由 无需验证权限
-export const constantRouter: any[] = [LoginRoute, HomeRoute, RedirectRoute];
+export const constantRouter: any[] = [LoginRoute, ...HomeRoute, RedirectRoute];
 
 const router = createRouter({
   history: createWebHashHistory(''),
