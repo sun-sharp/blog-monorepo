@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { RouteLocationNormalized } from 'vue-router';
 import { TABS_ROUTES } from '../mutation-types';
+import { PageEnum } from '@/enums/pageEnum';
 
 // 不需要出现在标签页中的路由
 const whiteList = ['Redirect', 'login'];
@@ -45,8 +46,8 @@ export const useTabsViewStore = defineStore({
       this.tabsList.splice(index + 1);
     },
     closeOtherTabs(route) {
-      // 关闭其他
-      this.tabsList = this.tabsList.filter((item) => item.fullPath == route.fullPath);
+      // 关闭其他，并且不能关闭首页
+      this.tabsList = this.tabsList.filter((item) => item.fullPath == route.fullPath || item.fullPath === PageEnum.BASE_HOME_REDIRECT);
     },
     closeCurrentTab(route) {
       // 关闭当前页

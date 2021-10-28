@@ -50,13 +50,7 @@
       const router = useRouter();
       const asyncRouteStore = useAsyncRouteStore();
       const settingStore = useProjectSettingStore();
-      const menus = ref<any[]>([
-        {
-          icon: constantRouterIcon[PageEnum.BASE_HOME_ICON],
-          key: PageEnum.BASE_HOME_KEY,
-          label: PageEnum.BASE_HOME_LABEL,
-        },
-      ]);
+      const menus = ref<any[]>([]);
       const selectedKeys = ref<string>(currentRoute.name as string);
       const headerMenuSelectKey = ref<string>('');
 
@@ -113,12 +107,20 @@
       );
 
       function updateMenu() {
+        // 默认菜单
+        const defaultMenu = [
+          {
+            icon: constantRouterIcon[PageEnum.BASE_HOME_ICON],
+            key: PageEnum.BASE_HOME_KEY,
+            label: PageEnum.BASE_HOME_LABEL,
+          },
+        ];
         if (!settingStore.menuSetting.mixMenu) {
-          menus.value = menus.value.concat(generatorMenu(asyncRouteStore.getMenus));
+          menus.value = [...defaultMenu, ...generatorMenu(asyncRouteStore.getMenus)];
         } else {
           //混合菜单
           const firstRouteName: string = (currentRoute.matched[0].name as string) || '';
-          menus.value = menus.value.concat(generatorMenuMix(asyncRouteStore.getMenus, firstRouteName, props.location));
+          menus.value = [...defaultMenu, ...generatorMenuMix(asyncRouteStore.getMenus, firstRouteName, props.location)];
           const activeMenu: string = currentRoute?.matched[0].meta?.activeMenu as string;
           headerMenuSelectKey.value = (activeMenu ? activeMenu : firstRouteName) || '';
         }
