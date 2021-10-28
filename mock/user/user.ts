@@ -15,12 +15,6 @@ const adminInfo = {
   desc: 'manager',
   password: Random.string('upper', 4, 16),
   token,
-  permissions: [
-    {
-      label: '首页',
-      value: 'dashboard_index',
-    },
-  ],
 };
 
 export default [

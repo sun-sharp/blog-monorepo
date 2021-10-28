@@ -3,7 +3,7 @@ import { store } from '@/store';
 import projectSetting from '@/settings/projectSetting';
 import type { IheaderSetting, ImenuSetting, ImultiTabsSetting, IcrumbsSetting } from '/#/config';
 
-const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, permissionMode, isPageAnimate, pageAnimateType } =
+const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } =
   projectSetting;
 
 interface ProjectSettingState {
@@ -14,7 +14,6 @@ interface ProjectSettingState {
   menuSetting: ImenuSetting; //多标签
   multiTabsSetting: ImultiTabsSetting; //多标签
   crumbsSetting: IcrumbsSetting; //面包屑
-  permissionMode: string; //权限模式
   isPageAnimate: boolean; //是否开启路由动画
   pageAnimateType: string; //路由动画类型
 }
@@ -29,7 +28,6 @@ export const useProjectSettingStore = defineStore({
     menuSetting,
     multiTabsSetting,
     crumbsSetting,
-    permissionMode,
     isPageAnimate,
     pageAnimateType,
   }),
@@ -54,9 +52,6 @@ export const useProjectSettingStore = defineStore({
     },
     getCrumbsSetting(): object {
       return this.multiTabsSetting;
-    },
-    getPermissionMode(): string {
-      return this.permissionMode;
     },
     getIsPageAnimate(): boolean {
       return this.isPageAnimate;

@@ -12,7 +12,6 @@ export interface IUserState {
   // username: string;
   // welcome: string;
   avatar: string;
-  permissions: any[];
   info: any;
 }
 
@@ -23,7 +22,6 @@ export const useUserStore = defineStore({
     // username: '',
     // welcome: '',
     avatar: '',
-    permissions: [],
     info: Storage.get(CURRENT_USER, {}),
   }),
   getters: {
@@ -35,10 +33,7 @@ export const useUserStore = defineStore({
     // },
     // getNickname(): string {
     //   return this.username;
-    // },
-    getPermissions(): [any][] {
-      return this.permissions;
-    },
+    // }
     getUserInfo(): object {
       return this.info;
     },
@@ -49,9 +44,6 @@ export const useUserStore = defineStore({
     },
     setAvatar(avatar: string) {
       this.avatar = avatar;
-    },
-    setPermissions(permissions) {
-      this.permissions = permissions;
     },
     setUserInfo(info) {
       this.info = info;
@@ -82,13 +74,7 @@ export const useUserStore = defineStore({
         getUserInfo()
           .then((res) => {
             const result = res;
-            if (result.permissions && result.permissions.length) {
-              const permissionsList = result.permissions;
-              that.setPermissions(permissionsList);
-              that.setUserInfo(result);
-            } else {
-              reject(new Error('getInfo: permissionsList must be a non-null array !'));
-            }
+            that.setUserInfo(result);
             that.setAvatar(result.avatar);
             resolve(res);
           })
@@ -100,7 +86,6 @@ export const useUserStore = defineStore({
 
     // 登出
     async logout() {
-      this.setPermissions([]);
       this.setUserInfo('');
       storage.remove(ACCESS_TOKEN);
       storage.remove(CURRENT_USER);

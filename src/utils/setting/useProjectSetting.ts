@@ -16,8 +16,6 @@ export function useProjectSetting() {
 
   const getCrumbsSetting = computed(() => projectStore.crumbsSetting);
 
-  const getPermissionMode = computed(() => projectStore.permissionMode);
-
   const getShowFooter = computed(() => projectStore.showFooter);
 
   const getIsPageAnimate = computed(() => projectStore.isPageAnimate);
@@ -31,7 +29,6 @@ export function useProjectSetting() {
     getMultiTabsSetting,
     getMenuSetting,
     getCrumbsSetting,
-    getPermissionMode,
     getShowFooter,
     getIsPageAnimate,
     getPageAnimateType,
