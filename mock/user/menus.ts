@@ -5,37 +5,22 @@ const basic = '/mock-api';
 const menusList = [
   {
     path: '/home',
-    name: '首页',
+    name: 'Home',
     component: 'LAYOUT',
-    redirect: '/dashboard/console',
+    redirect: '/home/index',
     meta: {
-      icon: 'DashboardOutlined',
-      title: 'Dashboard',
+      // sort: 10,
+      isRoot: true,
+      icon: 'HomeOutlined',
+      // activeMenu: 'home_index',
     },
     children: [
       {
-        path: 'console',
-        name: 'dashboard_console',
-        component: '/dashboard/console/console',
+        path: 'index',
+        name: 'HomeIndex',
+        component: '/home/index',
         meta: {
-          title: '主控台',
-        },
-      },
-      {
-        path: 'monitor',
-        name: 'dashboard_monitor',
-        component: '/dashboard/monitor/monitor',
-        meta: {
-          title: '监控页',
-        },
-      },
-      {
-        path: 'workplace',
-        name: 'dashboard_workplace',
-        component: '/dashboard/workplace/workplace',
-        meta: {
-          hidden: true,
-          title: '工作台',
+          title: '首页',
         },
       },
     ],
