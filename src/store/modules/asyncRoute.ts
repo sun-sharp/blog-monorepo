@@ -4,6 +4,7 @@ import { RouteRecordRaw } from 'vue-router';
 import { store } from '@/store';
 import { constantRouter } from '@/router/index';
 import { generatorDynamicRouter } from '@/router/generator-routers';
+import { HomeRoute, PageRoute } from '@/router/base';
 
 export interface IAsyncRouteState {
   menus: RouteRecordRaw[];
@@ -52,17 +53,18 @@ export const useAsyncRouteStore = defineStore({
       this.keepAliveComponents = compNames;
     },
     // 动态获取权限
-    async generateRoutes() {
+    async generateRoutes(userInfo?) {
       let accessedRouters;
       // 动态获取菜单
       try {
-        accessedRouters = await generatorDynamicRouter();
+        accessedRouters = await generatorDynamicRouter(userInfo.grade);
       } catch (error) {
         console.log(error);
       }
-      this.setRouters(accessedRouters);
-      this.setMenus(accessedRouters);
-      return toRaw(accessedRouters);
+      PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
+      this.setRouters([PageRoute, ...accessedRouters.routeList]);
+      this.setMenus([...accessedRouters.routeList, ...accessedRouters.oneRouteList]);
+      return toRaw([PageRoute, ...accessedRouters.routeList]);
     },
   },
 });

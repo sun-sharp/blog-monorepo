@@ -1,8 +1,87 @@
 import { resultSuccess } from '../_util';
 
 const basic = '/mock-api';
-
 const menusList = [
+  {
+    _id: '111',
+    path: '/result',
+    name: 'Result',
+    component: 'LAYOUT',
+    frameSrc: '',
+    title: '结果页面',
+    icon: 'CheckCircleOutlined',
+    sort: 1,
+    parentId: '0',
+  },
+  {
+    _id: '222',
+    path: 'success',
+    name: 'ResultSuccess',
+    component: '/result/success',
+    frameSrc: '',
+    title: '成功页',
+    icon: 'CheckCircleOutlined',
+    sort: 1,
+    parentId: '111',
+  },
+  // {
+  //   _id: '333',
+  //   path: 'fail',
+  //   name: 'ResultFail',
+  //   component: '/result/fail',
+  //   frameSrc: '',
+  //   title: '失败页',
+  //   icon: 'CheckCircleOutlined',
+  //   sort: 2,
+  //   parentId: '111',
+  // },
+  {
+    _id: '444',
+    path: '/frame',
+    name: 'Frame',
+    component: 'LAYOUT',
+    frameSrc: '',
+    title: '外部页面',
+    icon: 'DesktopOutline',
+    sort: 2,
+    parentId: '0',
+  },
+  {
+    _id: '555',
+    path: 'docs',
+    name: 'FrameDocs',
+    component: '',
+    frameSrc: 'https://naive-ui-admin-docs.vercel.app',
+    title: '项目文档(内嵌)',
+    icon: 'DesktopOutline',
+    sort: 1,
+    parentId: '444',
+  },
+  {
+    _id: '666',
+    path: '/external',
+    name: 'https://naive-ui-admin-docs.vercel.app',
+    component: '',
+    frameSrc: '',
+    title: '项目文档',
+    icon: 'DocumentTextOutline',
+    sort: 3,
+    parentId: '0',
+  },
+  {
+    _id: '777',
+    path: '/about',
+    name: 'About',
+    component: '/about/index',
+    frameSrc: '',
+    title: '关于',
+    icon: 'DocumentTextOutline',
+    sort: 3,
+    parentId: '0',
+  },
+];
+
+/* const menusList = [
   {
     path: '/result',
     name: 'Result',
@@ -82,7 +161,7 @@ const menusList = [
       sort: 9,
     },
   },
-];
+]; */
 
 export default [
   {

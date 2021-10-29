@@ -5,62 +5,7 @@ import {
   RouteRecordRaw,
 } from 'vue-router';
 import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
-import { PageEnum } from '@/enums/pageEnum';
 import { createRouterGuards } from './router-guards';
-import { Layout } from '@/router/constant';
-
-// 获取静态路由
-const modules = import.meta.globEager('./modules/**/*.ts');
-
-const routeModuleList: RouteRecordRaw[] = [];
-
-// 循环路由
-Object.keys(modules).forEach((key) => {
-  const mod = modules[key].default || {};
-  const modList = Array.isArray(mod) ? [...mod] : [mod];
-  routeModuleList.push(...modList);
-});
-
-// 按照路由排序规则排序
-function sortRoute(a, b) {
-  return (a.meta?.sort || 0) - (b.meta?.sort || 0);
-}
-routeModuleList.sort(sortRoute);
-
-// 首页
-export const HomeRoute: RouteRecordRaw[] = [
-  {
-    path: '/',
-    redirect: PageEnum.BASE_HOME,
-    // component: Layout,
-    // children: [
-    //   {
-    //     path: 'home',
-    //     name: `Home`,
-    //     meta: {
-    //       title: '首页',
-    //     },
-    //     component: () => import('@/views/home/index.vue'),
-    //   },
-    // ],
-  },
-  {
-    path: '/home',
-    name: 'Home',
-    component: Layout,
-    redirect: '/home/index',
-    children: [
-      {
-        path: 'index',
-        name: 'HomeIndex',
-        component: () => import('@/views/home/index.vue'),
-        meta: {
-          title: '首页',
-        },
-      },
-    ],
-  },
-];
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {
@@ -72,11 +17,8 @@ export const LoginRoute: RouteRecordRaw = {
   },
 };
 
-//需要验证权限
-export const asyncRoutes = [...routeModuleList];
-
 //普通路由 无需验证权限
-export const constantRouter: any[] = [LoginRoute, ...HomeRoute, RedirectRoute];
+export const constantRouter: any[] = [LoginRoute, RedirectRoute];
 
 const router = createRouter({
   history: createWebHashHistory(''),

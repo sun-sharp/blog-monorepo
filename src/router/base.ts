@@ -1,5 +1,25 @@
 import type { AppRouteRecordRaw } from '@/router/types';
 import { ErrorPage, RedirectName, Layout } from '@/router/constant';
+import { PageEnum } from '@/enums/pageEnum';
+import { RouteRecordRaw } from 'vue-router';
+
+// 首页
+export const HomeRoute: AppRouteRecordRaw = {
+  path: 'home',
+  name: `Home`,
+  component: () => import('@/views/home/index.vue'),
+  meta: {
+    title: '首页',
+  },
+};
+
+// 一级菜单
+export const PageRoute: RouteRecordRaw = {
+  path: '/',
+  redirect: PageEnum.BASE_HOME,
+  component: Layout,
+  children: [],
+};
 
 // 404 on a page
 export const ErrorPageRoute: AppRouteRecordRaw = {

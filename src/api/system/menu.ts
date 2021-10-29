@@ -5,10 +5,11 @@ const basic = '';
 /**
  * @description: 根据用户id获取用户菜单
  */
-export function adminMenus() {
+export function adminMenus(params?) {
   return http.request({
     url: `${basic}/menus`,
     method: 'GET',
+    params,
   });
 }
 
