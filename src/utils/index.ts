@@ -34,15 +34,18 @@ export function renderIcon(icon) {
  */
 export function generatorMenu(routerMap: Array<any>) {
   return filterRouter(routerMap).map((item) => {
-    const currentMenu: any = {
-      label: item.meta?.title,
-      key: item.name,
-      icon: item.meta?.icon,
+    const info = item;
+    const currentMenu = {
+      ...info,
+      ...info.meta,
+      label: info.meta?.title,
+      key: info.name,
+      icon: info.meta?.icon,
     };
     // 是否有子菜单，并递归处理
-    if (item.children && item.children.length > 0) {
+    if (info.children && info.children.length > 0) {
       // Recursion
-      currentMenu.children = generatorMenu(item.children);
+      currentMenu.children = generatorMenu(info.children);
     }
     return currentMenu;
   });
@@ -92,13 +95,6 @@ export function getChildrenRouter(routerMap: Array<any>) {
     }
     return currentMenu;
   });
-}
-
-/**
- * 判断根路由 Router
- * */
-export function isRootRouter(item) {
-  return item.meta?.alwaysShow != true && item.children?.length === 1;
 }
 
 /**

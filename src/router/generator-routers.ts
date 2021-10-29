@@ -18,36 +18,31 @@ LayoutMap.set('IFRAME', Iframe);
  * @param path
  * @returns {*}
  */
-export const routerGenerator = (routerMap, _id): any[] => {
+export const routerGenerator = (routerMap, _parentId): any[] => {
   const resultArr: any[] = [];
-  routerMap.forEach((item) => {
-    if (_id === item.parentId) {
+  routerMap.forEach((i) => {
+    const { _id, path, name, component, parentId, ...other } = i;
+    if (_parentId === parentId) {
       const currentRouter: any = {
         // 路由地址 动态拼接生成如 /dashboard/workplace
-        // path: `${path ? `${path}/` : ''}${item.path}`,
-        path: item.path,
+        path,
         // 路由名称，建议唯一
-        name: item.name || '',
+        name: name || '',
         // 该路由对应页面的 组件
-        component: item.component,
+        component,
         // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
         meta: {
-          title: item.title,
-          icon: constantRouterIcon[item.icon] || null,
-          frameSrc: item.frameSrc,
-          sort: item.sort,
+          ...other,
+          icon: constantRouterIcon[other.icon] || null,
         },
       };
       // 为了防止出现后端返回结果不规范，处理有可能出现拼接出两个 反斜杠
       currentRouter.path = currentRouter.path.replace('//', '/');
-      // 重定向
-      item.redirect && (currentRouter.redirect = item.redirect);
       // 是否有子菜单，并递归处理
-      const itemChildren = routerGenerator(routerMap, item._id);
+      const itemChildren = routerGenerator(routerMap, _id);
       if (itemChildren && itemChildren.length > 0) {
-        currentRouter.children = itemChildren;
         //如果未定义 redirect 默认第一个子路由为 redirect
-        !item.redirect && (currentRouter.redirect = `${item.path}/${itemChildren[0].path}`);
+        currentRouter.redirect = `${path}/${itemChildren[0].path}`;
         // Recursion
         currentRouter.children = itemChildren;
       }
