@@ -100,7 +100,6 @@
   import { useRouter, useRoute } from 'vue-router';
   import components from './components';
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
-  import { TABS_ROUTES } from '@/store/mutation-types';
   import { useUserStore } from '@/store/modules/user';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
   import ProjectSetting from './ProjectSetting.vue';
@@ -206,8 +205,6 @@
           onPositiveClick: () => {
             userStore.logout().then(() => {
               message.success('成功退出登录');
-              // 移除标签页
-              localStorage.removeItem(TABS_ROUTES);
               router
                 .replace({
                   name: 'Login',

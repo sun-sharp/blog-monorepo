@@ -65,8 +65,6 @@
 <script lang="ts">
   import { defineComponent, reactive, computed, ref, toRefs, unref, provide, watch, onMounted, nextTick } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { storage } from '@/utils/Storage';
-  import { TABS_ROUTES } from '@/store/mutation-types';
   import { useTabsViewStore } from '@/store/modules/tabsView';
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute';
   import { RouteItem } from '@/store/modules/tabsView';
@@ -177,12 +175,14 @@
 
       let routes: RouteItem[] = [];
 
-      try {
-        const routesStr = storage.get(TABS_ROUTES) as string | null | undefined;
-        routes = routesStr ? JSON.parse(routesStr) : [getSimpleRoute(route)];
-      } catch (e) {
-        routes = [getSimpleRoute(route)];
-      }
+      // 默认tag
+      const defaultTag = {
+        fullPath: PageEnum.BASE_HOME,
+        meta: { title: PageEnum.BASE_HOME_LABEL },
+        name: PageEnum.BASE_HOME_KEY,
+        path: PageEnum.BASE_HOME,
+      };
+      routes = defaultTag.fullPath === route.fullPath ? [getSimpleRoute(route)] : [getSimpleRoute(defaultTag), getSimpleRoute(route)];
 
       // 初始化标签页
       tabsViewStore.initTabs(routes);
@@ -219,11 +219,6 @@
         },
         { immediate: true }
       );
-
-      // 在页面关闭或刷新之前，保存数据
-      window.addEventListener('beforeunload', () => {
-        storage.set(TABS_ROUTES, JSON.stringify(tabsList.value));
-      });
 
       // 关闭当前页面
       const removeTab = (route) => {
@@ -371,7 +366,7 @@
 
       function handleContextMenu(e, item) {
         e.preventDefault();
-        isCurrent.value = PageEnum.BASE_HOME_REDIRECT === item.path;
+        isCurrent.value = PageEnum.BASE_HOME === item.path;
         state.showDropdown = false;
         nextTick().then(() => {
           state.showDropdown = true;
@@ -415,7 +410,7 @@
         navScroll,
         route,
         tabsList,
-        baseHome: PageEnum.BASE_HOME_REDIRECT,
+        baseHome: PageEnum.BASE_HOME,
         goPage,
         closeTabItem,
         closeLeft,

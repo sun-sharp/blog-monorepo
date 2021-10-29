@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { RouteLocationNormalized } from 'vue-router';
-import { TABS_ROUTES } from '../mutation-types';
 import { PageEnum } from '@/enums/pageEnum';
 
 // 不需要出现在标签页中的路由
@@ -47,7 +46,7 @@ export const useTabsViewStore = defineStore({
     },
     closeOtherTabs(route) {
       // 关闭其他，并且不能关闭首页
-      this.tabsList = this.tabsList.filter((item) => item.fullPath == route.fullPath || item.fullPath === PageEnum.BASE_HOME_REDIRECT);
+      this.tabsList = this.tabsList.filter((item) => item.fullPath == route.fullPath || item.fullPath === PageEnum.BASE_HOME);
     },
     closeCurrentTab(route) {
       // 关闭当前页
@@ -57,7 +56,6 @@ export const useTabsViewStore = defineStore({
     closeAllTabs() {
       // 关闭全部
       this.tabsList = [];
-      localStorage.removeItem(TABS_ROUTES);
     },
   },
 });

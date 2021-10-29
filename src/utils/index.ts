@@ -58,22 +58,45 @@ export function generatorMenuMix(routerMap: Array<any>, routerName: string, loca
   const cloneRouterMap = cloneDeep(routerMap);
   const newRouter = filterRouter(cloneRouterMap);
   if (location === 'header') {
-    const firstRouter: any[] = [];
-    newRouter.forEach((item) => {
-      const info = item;
-      info.children = undefined;
-      const currentMenu = {
-        ...info,
-        ...info.meta,
-        label: info.meta?.title,
-        key: info.name,
-      };
-      firstRouter.push(currentMenu);
-    });
-    return firstRouter;
+    console.log(getChildrenMix(newRouter));
+    // const firstRouter: any[] = [];
+    // newRouter.forEach((item) => {
+    //   const info = item;
+    //   // info.children = undefined;
+    //   const currentMenu = {
+    //     ...info,
+    //     ...info.meta,
+    //     label: info.meta?.title,
+    //     key: info.name,
+    //   };
+    //   firstRouter.push(currentMenu);
+    // });
+    return getChildrenMix(newRouter);
   } else {
     return getChildrenRouter(newRouter.filter((item) => item.name === routerName));
   }
+}
+
+/**
+ * 混合菜单获取最底层的菜单
+ * */
+export function getChildrenMix(newArr) {
+  let firstRouter: any[] = [];
+  filterRouter(newArr).forEach((item) => {
+    const info = item;
+    const currentMenu = {
+      ...info,
+      ...info.meta,
+      label: info.meta?.title,
+      key: info.name,
+    };
+    if (item.children && item.children.length > 0) {
+      firstRouter = firstRouter.concat(getChildrenMix(item.children));
+    } else {
+      firstRouter.push(currentMenu);
+    }
+  });
+  return firstRouter;
 }
 
 /**

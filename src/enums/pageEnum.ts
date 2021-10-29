@@ -6,8 +6,7 @@ export enum PageEnum {
   REDIRECT = '/redirect',
   REDIRECT_NAME = 'Redirect',
   // 首页
-  BASE_HOME = '/',
-  BASE_HOME_REDIRECT = '/home',
+  BASE_HOME = '/home',
   BASE_HOME_KEY = 'Home',
   BASE_HOME_LABEL = '首页',
   BASE_HOME_ICON = 'HomeOutlined',
