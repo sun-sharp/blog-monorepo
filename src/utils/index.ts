@@ -1,8 +1,8 @@
-import { h } from 'vue';
+import { h, unref } from 'vue';
 import type { App, Plugin } from 'vue';
 import { NIcon } from 'naive-ui';
 import { PageEnum } from '@/enums/pageEnum';
-// import { isObject } from './is/index';
+import { isObject } from './is/index';
 import { cloneDeep } from 'lodash-es';
 /**
  * render 图标
@@ -173,24 +173,27 @@ export function getTreeItem(data: any[], key?: string | number): any {
 //   return treeAll;
 // }
 
-// // dynamic use hook props
-// export function getDynamicProps<T, U>(props: T): Partial<U> {
-//   const ret: Recordable = {};
+// dynamic use hook props
+export function getDynamicProps<T, U>(props: T): Partial<U> {
+  const ret: Recordable = {};
 
-//   Object.keys(props).map((key) => {
-//     ret[key] = unref((props as Recordable)[key]);
-//   });
+  Object.keys(props).map((key) => {
+    ret[key] = unref((props as Recordable)[key]);
+  });
 
-//   return ret as Partial<U>;
-// }
+  return ret as Partial<U>;
+}
 
-// export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
-//   let key: string;
-//   for (key in target) {
-//     src[key] = isObject(src[key]) ? deepMerge(src[key], target[key]) : (src[key] = target[key]);
-//   }
-//   return src;
-// }
+/**
+ * 复制对象的元素到另一个对象里
+ */
+export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
+  let key: string;
+  for (key in target) {
+    src[key] = isObject(src[key]) ? deepMerge(src[key], target[key]) : (src[key] = target[key]);
+  }
+  return src;
+}
 
 /**
  * 将通过的百分比与十六进制颜色的R、G或B相加

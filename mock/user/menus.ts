@@ -123,7 +123,7 @@ const menusList = [
     frameSrc: '',
     title: '菜单管理',
     icon: 'DocumentTextOutline',
-    sort: 3,
+    sort: 1,
     parentId: '1000',
   },
   {
