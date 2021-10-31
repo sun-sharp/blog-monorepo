@@ -58,7 +58,7 @@ export function generatorMenuMix(routerMap: Array<any>, routerName: string, loca
   const cloneRouterMap = cloneDeep(routerMap);
   const newRouter = filterRouter(cloneRouterMap);
   if (location === 'header') {
-    console.log(getChildrenMix(newRouter));
+    // console.log(getChildrenMix(newRouter));
     // const firstRouter: any[] = [];
     // newRouter.forEach((item) => {
     //   const info = item;
@@ -72,6 +72,7 @@ export function generatorMenuMix(routerMap: Array<any>, routerName: string, loca
     //   firstRouter.push(currentMenu);
     // });
     return getChildrenMix(newRouter);
+    // return firstRouter;
   } else {
     return getChildrenRouter(newRouter.filter((item) => item.name === routerName));
   }
@@ -81,20 +82,18 @@ export function generatorMenuMix(routerMap: Array<any>, routerName: string, loca
  * 混合菜单获取最底层的菜单
  * */
 export function getChildrenMix(newArr) {
-  let firstRouter: any[] = [];
+  const firstRouter: any[] = [];
   filterRouter(newArr).forEach((item) => {
-    const info = item;
     const currentMenu = {
-      ...info,
-      ...info.meta,
-      label: info.meta?.title,
-      key: info.name,
+      icon: item.meta?.icon,
+      label: item.meta?.title,
+      key: item.name,
+      children: item.children,
     };
-    if (item.children && item.children.length > 0) {
-      firstRouter = firstRouter.concat(getChildrenMix(item.children));
-    } else {
-      firstRouter.push(currentMenu);
+    if (currentMenu.children && currentMenu.children.length > 0) {
+      currentMenu.children = getChildrenMix(currentMenu.children);
     }
+    firstRouter.push(currentMenu);
   });
   return firstRouter;
 }
@@ -143,22 +142,22 @@ export const withInstall = <T>(component: T, alias?: string) => {
   return component as T & Plugin;
 };
 
-// /**
-//  *  找到对应的节点
-//  * */
-// let result = null;
-// export function getTreeItem(data: any[], key?: string | number): any {
-//   data.map((item) => {
-//     if (item.key === key) {
-//       result = item;
-//     } else {
-//       if (item.children && item.children.length) {
-//         getTreeItem(item.children, key);
-//       }
-//     }
-//   });
-//   return result;
-// }
+/**
+ *  找到对应的节点
+ * */
+let result = null;
+export function getTreeItem(data: any[], key?: string | number): any {
+  data.map((item) => {
+    if (item.key === key) {
+      result = item;
+    } else {
+      if (item.children && item.children.length) {
+        getTreeItem(item.children, key);
+      }
+    }
+  });
+  return result;
+}
 
 // /**
 //  *  找到所有节点

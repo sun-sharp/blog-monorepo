@@ -110,11 +110,6 @@ export const generatorDynamicRouter = (grade: string): Promise<RouteRecordRaw[]>
   return new Promise((resolve, reject) => {
     adminMenus(grade)
       .then((result) => {
-        // console.log(result);
-        // const { oneRouteList, routeList } = routerOneScreen(result);
-
-        // console.log(routeList, 'routeList');
-        // console.log(oneRouteList, 'oneRouteList');
         resolve(routerOneScreen(result));
       })
       .catch((err) => {

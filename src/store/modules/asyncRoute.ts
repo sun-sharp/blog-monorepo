@@ -63,7 +63,7 @@ export const useAsyncRouteStore = defineStore({
       }
       PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
       this.setRouters([PageRoute, ...accessedRouters.routeList]);
-      this.setMenus([...accessedRouters.routeList, ...accessedRouters.oneRouteList]);
+      this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
       return toRaw([PageRoute, ...accessedRouters.routeList]);
     },
   },
@@ -73,3 +73,17 @@ export const useAsyncRouteStore = defineStore({
 export function useAsyncRouteStoreWidthOut() {
   return useAsyncRouteStore(store);
 }
+
+// 对菜单进行排序
+const sortRoute = (list) => {
+  const routeList = list;
+  routeList.sort((a, b) => (a.meta?.sort || 0) - (b.meta?.sort || 0));
+  routeList.forEach((i) => {
+    const item = i;
+    if (item.children && item.children.length > 0) {
+      item.children = sortRoute(item.children);
+    }
+    return item;
+  });
+  return routeList;
+};
