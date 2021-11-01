@@ -23,7 +23,7 @@ const menusList = [
     title: '结果页面',
     icon: 'CheckCircleOutlined',
     sort: 1,
-    parentId: '0',
+    parentId: 'al123',
   },
   {
     _id: '101',

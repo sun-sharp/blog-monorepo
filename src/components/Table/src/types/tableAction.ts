@@ -4,7 +4,7 @@ export interface ActionItem extends NButton.props {
   [x: string]: any;
   onClick?: Fn;
   label?: string;
-  color?: 'success' | 'error' | 'warning';
+  color?: string;
   icon?: string;
   popConfirm?: PopConfirm;
   disabled?: boolean;

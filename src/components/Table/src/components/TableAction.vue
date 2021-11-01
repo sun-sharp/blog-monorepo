@@ -1,12 +1,17 @@
 <template>
   <div class="tableAction">
     <div class="flex items-center justify-center">
-      <template v-for="(action, index) in getActions" :key="`${index}-${action.label}`">
-        <n-button v-bind="action" class="mx-2">{{ action.label }}</n-button>
-      </template>
+      <n-button v-for="(action, index) in getActions" :key="`${index}-${action.label}`" v-bind="action" class="mh-3">
+        <template v-if="action.icon" #icon>
+          <n-icon>
+            <component :is="action.icon" />
+          </n-icon>
+        </template>
+        {{ action.label }}
+      </n-button>
       <n-dropdown v-if="dropDownActions && getDropdownList.length" trigger="hover" :options="getDropdownList" @select="select">
         <slot name="more"></slot>
-        <n-button v-if="!$slots.more" v-bind="getMoreProps" class="mx-2" icon-placement="right">
+        <n-button v-if="!$slots.more" v-bind="getMoreProps" class="mh-3" icon-placement="right">
           <div class="flex items-center">
             <span>更多</span>
             <n-icon size="14" class="ml-1">
@@ -27,10 +32,12 @@
   import { ActionItem } from '@/components/Table';
   import { isBoolean, isFunction } from '@/utils/is';
   import { DownOutlined } from '@vicons/antd';
+  import icons from './icons';
+  // import { renderIcon } from '@/utils';
 
   export default defineComponent({
     name: 'TableAction',
-    components: { DownOutlined },
+    components: { ...icons, DownOutlined },
     props: {
       actions: {
         type: Array as PropType<ActionItem[]>,
@@ -49,16 +56,35 @@
         type: Function as PropType<Function>,
         default: () => {},
       },
+      dropDownType: {
+        type: String as PropType<String>,
+        default: 'default',
+      },
+      dropDownColor: {
+        type: String as PropType<String>,
+        default: undefined,
+      },
+      dropDownText: {
+        type: Boolean as PropType<Boolean>,
+        default: false,
+      },
+      dropDownTextColor: {
+        type: String as PropType<String>,
+        default: undefined,
+      },
+      size: {
+        type: String as PropType<String>,
+        default: 'small',
+      },
     },
     setup(props) {
-      const actionType = props.style === 'button' ? 'default' : props.style === 'text' ? 'primary' : 'default';
-      const actionText = props.style === 'button' ? undefined : props.style === 'text' ? true : undefined;
-
       const getMoreProps = computed(() => {
         return {
-          text: actionText,
-          type: actionType,
-          size: 'small',
+          text: props.dropDownText,
+          type: props.dropDownType,
+          color: props.dropDownColor,
+          size: props.size,
+          'text-color': props.dropDownTextColor,
         };
       });
 
@@ -70,9 +96,7 @@
           .map((action) => {
             const { popConfirm } = action;
             return {
-              size: 'small',
-              text: actionText,
-              type: actionType,
+              size: props.size,
               ...action,
               ...popConfirm,
               onConfirm: popConfirm?.confirm,
@@ -104,10 +128,9 @@
             const { popConfirm } = action;
             //需要展示什么风格，自己修改一下参数
             return {
-              size: 'small',
-              text: actionText,
-              type: actionType,
               ...action,
+              size: props.size,
+              icon: action.icon,
               ...(popConfirm || {}),
               onConfirm: popConfirm?.confirm,
               onCancel: popConfirm?.cancel,
