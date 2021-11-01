@@ -1,6 +1,6 @@
 <template>
   <n-card :bordered="false" class="proCard">
-    <basic-form @register="register" @submit="handleSubmit" @reset="handleReset">
+    <basic-form @register="searchRegister" @submit="searchSubmit" @reset="searchReset">
       <template #statusSlot="{ model, field }">
         <n-input v-model:value="model[field]" />
       </template>
@@ -14,8 +14,8 @@
       :scroll-x="1090"
       @update:checked-row-keys="onCheckedRow"
     >
-      <!-- <template #tableTitle>
-        <n-button type="primary" @click="addTable">
+      <template #tableTitle>
+        <n-button type="primary" @click="showModal = true">
           <template #icon>
             <n-icon>
               <PlusOutlined />
@@ -23,19 +23,61 @@
           </template>
           新建
         </n-button>
-      </template> -->
+      </template>
     </basic-table>
+    <n-modal v-model:show="showModal" class="w-600" :show-icon="false" preset="dialog" title="新建">
+      <basic-form @register="modelRegister">
+        <template #statusSlot="{ model, field }">
+          <n-input v-model:value="model[field]" />
+        </template>
+      </basic-form>
+
+      <template #action>
+        <n-space>
+          <n-button @click="() => (showModal = false)">取消</n-button>
+          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+        </n-space>
+      </template>
+    </n-modal>
   </n-card>
 </template>
 <script lang="ts" setup>
+  import { h, reactive, ref } from 'vue';
+  import { useMessage } from 'naive-ui';
+  import { getTableList } from '@/api/table/list';
+  import { PlusOutlined } from '@vicons/antd';
   import { BasicTable, TableAction } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { columns } from './columns';
-  import { getTableList } from '@/api/table/list';
-  import { h, reactive, ref } from 'vue';
-  import { useMessage } from 'naive-ui';
 
   const message = useMessage();
+  // 查询
+  const searchSchemas = [
+    {
+      field: 'name',
+      component: 'NInput',
+      label: '姓名',
+      componentProps: {
+        placeholder: '请输入姓名',
+        onInput: (e: any) => {
+          console.log(e);
+        },
+      },
+    },
+  ];
+  const [searchRegister, {}] = useForm({
+    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
+    labelWidth: 80,
+    schemas: searchSchemas,
+    showAdvancedButton: false,
+    showResetButton: false,
+  });
+  const params = ref({
+    pageSize: 5,
+    name: 'xiaoMa',
+  });
+
+  // 表格
   const actionRef = ref();
   const actionColumn = reactive({
     width: 220,
@@ -91,73 +133,93 @@
     },
   });
 
-  const schemas = [
+  // 新增/编辑弹窗
+  const formParams = reactive({
+    name: '',
+    address: '',
+    date: null,
+  });
+  const showModal = ref(false);
+  const formBtnLoading = ref(false);
+  const modelSchemas = [
     {
       field: 'name',
       component: 'NInput',
-      label: '姓名',
+      label: '名称',
       componentProps: {
-        placeholder: '请输入姓名',
+        placeholder: '请输入名称',
         onInput: (e: any) => {
           console.log(e);
         },
       },
     },
   ];
-
-  const [register, {}] = useForm({
-    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
+  const [modelRegister, {}] = useForm({
+    gridProps: { cols: '1' },
     labelWidth: 80,
-    schemas,
+    schemas: modelSchemas,
+    layout: 'screen',
     showAdvancedButton: false,
     showResetButton: false,
+    showSubmitButton: false,
   });
 
-  const formParams = reactive({
-    name: '',
-    address: '',
-    date: null,
-  });
-  const params = ref({
-    pageSize: 5,
-    name: 'xiaoMa',
-  });
-
+  /**
+   * 表格
+   *  */
   // 获取接口数据
   const loadDataTable = async (res) => {
     return await getTableList({ ...formParams, ...params.value, ...res });
   };
-
   // 编辑
   const handleEdit = (record: Recordable) => {
     console.log('点击了编辑', record);
   };
-
   // 删除
   const handleDelete = (record: Recordable) => {
     console.log('点击了删除', record);
     message.info('点击了删除');
   };
-
   // 选择行
   const onCheckedRow = (rowKeys) => {
     console.log(rowKeys);
   };
-
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();
   };
 
-  // 表单查询
-  const handleSubmit = (values: Recordable) => {
+  /**
+   * 查询
+   *  */
+  // 数据查询
+  const searchSubmit = (values: Recordable) => {
     console.log(values);
     reloadTable();
   };
-
-  // 表单重置
-  const handleReset = (values: Recordable) => {
+  // 数据重置
+  const searchReset = (values: Recordable) => {
     console.log(values);
+  };
+
+  /**
+   * 弹窗
+   *  */
+  const confirmForm = (e) => {
+    e.preventDefault();
+    formBtnLoading.value = true;
+    // formRef.value.validate((errors) => {
+    //   if (!errors) {
+    //     message.success('新建成功');
+    //     setTimeout(() => {
+    //       showModal.value = false;
+    //       reloadTable();
+    //     });
+    //   } else {
+    //     message.error('请填写完整信息');
+    //   }
+    //   formBtnLoading.value = false;
+    // });
   };
 </script>
 <style lang="scss" scoped>
