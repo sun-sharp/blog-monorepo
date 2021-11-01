@@ -95,18 +95,20 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
               default: () => '编辑',
             }
           ),
-          h(
-            NButton,
-            {
-              class: 'mh-3',
-              text: true,
-              type: 'error',
-              onClick: handleDelete.bind(null, row),
-            },
-            {
-              default: () => '删除',
-            }
-          ),
+          row.typeName !== '目录'
+            ? h(
+                NButton,
+                {
+                  class: 'mh-3',
+                  text: true,
+                  type: 'error',
+                  onClick: handleDelete.bind(null, row),
+                },
+                {
+                  default: () => '删除',
+                }
+              )
+            : '',
         ];
       },
     },
