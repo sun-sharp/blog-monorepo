@@ -30,6 +30,44 @@ export function renderIcon(icon) {
 // }
 
 /**
+ * 将数组menu组合成多层数组
+ */
+export const levelMenu = (menuMap: Array<any>, parentId: string | number = '0') => {
+  const menuArr: any[] = [];
+  menuMap.forEach((i) => {
+    const item = i;
+    if (item.parentId === parentId) {
+      // 是否有子菜单，并递归处理
+      const itemChildren = levelMenu(menuMap, item._id);
+      if (itemChildren && itemChildren.length > 0) {
+        // 添加子数据
+        item.children = itemChildren;
+      }
+      // 添加上级菜单的名字
+      const menuFind = menuMap.find((f) => f._id === item.parentId);
+      if (menuFind) {
+        item.parentName = menuFind.title;
+      }
+      // 判断数据类型
+      if (/http(s)?:/.test(item.name)) {
+        item.typeName = '外链';
+        item.menuUrl = item.name;
+      } else if (item.frameSrc) {
+        item.typeName = '内嵌';
+        item.menuUrl = item.frameSrc;
+      } else if (item.component === 'LAYOUT' || !item.component) {
+        item.typeName = '目录';
+      } else {
+        item.typeName = '菜单';
+        item.menuUrl = item.component;
+      }
+      menuArr.push(item);
+    }
+  });
+  return menuArr;
+};
+
+/**
  * 递归组装菜单格式
  */
 export function generatorMenu(routerMap: Array<any>) {

@@ -42,29 +42,19 @@
   </n-card>
 </template>
 <script lang="ts" setup>
-  import { h, reactive, ref } from 'vue';
-  import { useMessage } from 'naive-ui';
+  import { reactive, ref } from 'vue';
   import { getTableList } from '@/api/table/list';
   import { PlusOutlined } from '@vicons/antd';
-  import { BasicTable, TableAction } from '@/components/Table';
+  import { useMessage } from 'naive-ui';
+  import { BasicTable } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';
-  import { columns } from './columns';
+  import { useConfigure } from './configure';
 
+  // 配置
   const message = useMessage();
+  const { searchSchemas, columns, actionColumn, modelSchemas } = useConfigure({ message });
+
   // 查询
-  const searchSchemas = [
-    {
-      field: 'name',
-      component: 'NInput',
-      label: '姓名',
-      componentProps: {
-        placeholder: '请输入姓名',
-        onInput: (e: any) => {
-          console.log(e);
-        },
-      },
-    },
-  ];
   const [searchRegister, {}] = useForm({
     gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
     labelWidth: 80,
@@ -79,59 +69,6 @@
 
   // 表格
   const actionRef = ref();
-  const actionColumn = reactive({
-    width: 220,
-    title: '操作',
-    key: 'action',
-    fixed: 'right',
-    render(record) {
-      return h(TableAction as any, {
-        style: 'button',
-        actions: [
-          {
-            label: '删除',
-            icon: 'DeleteOutlined',
-            type: 'error',
-            // color: '#8a2be2',
-            onClick: handleDelete.bind(null, record),
-            // 根据业务控制是否显示 isShow
-            ifShow: () => {
-              return true;
-            },
-          },
-          {
-            label: '编辑',
-            type: 'primary',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true;
-            },
-          },
-        ],
-        // 更多
-        dropDownActions: [
-          {
-            label: '启用',
-            key: 'enabled',
-            // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-            ifShow: () => {
-              return true;
-            },
-          },
-          {
-            label: '禁用',
-            key: 'disabled',
-            ifShow: () => {
-              return true;
-            },
-          },
-        ],
-        select: (key) => {
-          message.info(`您点击了，${key} 按钮`);
-        },
-      });
-    },
-  });
 
   // 新增/编辑弹窗
   const formParams = reactive({
@@ -141,19 +78,6 @@
   });
   const showModal = ref(false);
   const formBtnLoading = ref(false);
-  const modelSchemas = [
-    {
-      field: 'name',
-      component: 'NInput',
-      label: '名称',
-      componentProps: {
-        placeholder: '请输入名称',
-        onInput: (e: any) => {
-          console.log(e);
-        },
-      },
-    },
-  ];
   const [modelRegister, {}] = useForm({
     gridProps: { cols: '1' },
     labelWidth: 80,
@@ -170,15 +94,6 @@
   // 获取接口数据
   const loadDataTable = async (res) => {
     return await getTableList({ ...formParams, ...params.value, ...res });
-  };
-  // 编辑
-  const handleEdit = (record: Recordable) => {
-    console.log('点击了编辑', record);
-  };
-  // 删除
-  const handleDelete = (record: Recordable) => {
-    console.log('点击了删除', record);
-    message.info('点击了删除');
   };
   // 选择行
   const onCheckedRow = (rowKeys) => {
@@ -222,18 +137,4 @@
     // });
   };
 </script>
-<style lang="scss" scoped>
-  .result-box {
-    width: 72%;
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 5px;
-
-    &-extra {
-      padding: 24px 40px;
-      text-align: left;
-      background: #f8f8f9;
-      border-radius: 4px;
-    }
-  }
-</style>
+<style lang="scss" scoped></style>

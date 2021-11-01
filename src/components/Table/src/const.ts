@@ -4,8 +4,8 @@ const { table } = componentSetting;
 
 const { apiSetting, defaultPageSize, pageSizes } = table;
 
-export const DEFAULTPAGESIZE = defaultPageSize;
+export const DEFAULT_PAGESIZE = defaultPageSize;
 
-export const APISETTING = apiSetting;
+export const API_SETTING = apiSetting;
 
-export const PAGESIZES = pageSizes;
+export const PAGE_SIZES = pageSizes;

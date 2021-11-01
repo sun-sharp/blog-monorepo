@@ -1,63 +1,140 @@
 <template>
   <n-card :bordered="false" class="proCard">
-    <div class="result-box">
-      <n-result status="error" title="操作失败" description="请核对并修改以下信息后，再重新提交。">
-        <div class="result-box-extra">
-          <p>user您提交的内容有如下错误：</p>
-          <p class="mt-3">
-            <n-space align="center">
-              <n-icon size="20" color="#f0a020">
-                <InfoCircleOutlined />
-              </n-icon>
-              <span>认证照片不够清晰</span>
-              <n-button type="info" text>立即修改</n-button>
-            </n-space>
-          </p>
-          <p class="mt-3">
-            <n-space>
-              <n-icon size="20" color="#f0a020">
-                <InfoCircleOutlined />
-              </n-icon>
-              <span>备注包含敏感字符，并且不能包含政治相关</span>
-              <n-button type="info" text>立即修改</n-button>
-            </n-space>
-          </p>
-        </div>
-        <template #footer>
-          <div class="flex justify-center mb-4">
-            <n-space align="center">
-              <n-button type="info" @click="goHome">回到首页</n-button>
-              <n-button>查看详情</n-button>
-              <n-button>打印</n-button>
-            </n-space>
-          </div>
+    <basic-form @register="searchRegister" @submit="searchSubmit" @reset="searchReset">
+      <template #statusSlot="{ model, field }">
+        <n-input v-model:value="model[field]" />
+      </template>
+    </basic-form>
+    <basic-table
+      ref="actionRef"
+      :columns="columns"
+      :request="loadDataTable"
+      :row-key="(row) => row.id"
+      :action-column="actionColumn"
+      :scroll-x="1090"
+      @update:checked-row-keys="onCheckedRow"
+    >
+      <template #tableTitle>
+        <n-button type="primary" @click="showModal = true">
+          <template #icon>
+            <n-icon>
+              <PlusOutlined />
+            </n-icon>
+          </template>
+          新建
+        </n-button>
+      </template>
+    </basic-table>
+    <n-modal v-model:show="showModal" class="w-600" :show-icon="false" preset="dialog" title="新建">
+      <basic-form @register="modelRegister">
+        <template #statusSlot="{ model, field }">
+          <n-input v-model:value="model[field]" />
         </template>
-      </n-result>
-    </div>
+      </basic-form>
+
+      <template #action>
+        <n-space>
+          <n-button @click="() => (showModal = false)">取消</n-button>
+          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+        </n-space>
+      </template>
+    </n-modal>
   </n-card>
 </template>
 <script lang="ts" setup>
-  import { useRouter } from 'vue-router';
-  import { InfoCircleOutlined } from '@vicons/antd';
+  import { reactive, ref } from 'vue';
+  import { getTableList } from '@/api/table/list';
+  import { PlusOutlined } from '@vicons/antd';
+  import { useMessage } from 'naive-ui';
+  import { BasicTable } from '@/components/Table';
+  import { BasicForm, useForm } from '@/components/Form/index';
+  import { useConfigure } from './configure';
 
-  const router = useRouter();
+  // 配置
+  const message = useMessage();
+  const { searchSchemas, columns, actionColumn, modelSchemas } = useConfigure({ message });
 
-  const goHome = () => {
-    router.push('/');
+  // 查询
+  const [searchRegister, {}] = useForm({
+    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
+    labelWidth: 80,
+    schemas: searchSchemas,
+    showAdvancedButton: false,
+    showResetButton: false,
+  });
+  const params = ref({
+    pageSize: 5,
+    name: 'xiaoMa',
+  });
+
+  // 表格
+  const actionRef = ref();
+
+  // 新增/编辑弹窗
+  const formParams = reactive({
+    name: '',
+    address: '',
+    date: null,
+  });
+  const showModal = ref(false);
+  const formBtnLoading = ref(false);
+  const [modelRegister, {}] = useForm({
+    gridProps: { cols: '1' },
+    labelWidth: 80,
+    schemas: modelSchemas,
+    layout: 'screen',
+    showAdvancedButton: false,
+    showResetButton: false,
+    showSubmitButton: false,
+  });
+
+  /**
+   * 表格
+   *  */
+  // 获取接口数据
+  const loadDataTable = async (res) => {
+    return await getTableList({ ...formParams, ...params.value, ...res });
+  };
+  // 选择行
+  const onCheckedRow = (rowKeys) => {
+    console.log(rowKeys);
+  };
+  // 刷新数据
+  const reloadTable = () => {
+    actionRef.value.reload();
+  };
+
+  /**
+   * 查询
+   *  */
+  // 数据查询
+  const searchSubmit = (values: Recordable) => {
+    console.log(values);
+    reloadTable();
+  };
+  // 数据重置
+  const searchReset = (values: Recordable) => {
+    console.log(values);
+  };
+
+  /**
+   * 弹窗
+   *  */
+  const confirmForm = (e) => {
+    e.preventDefault();
+    formBtnLoading.value = true;
+    // formRef.value.validate((errors) => {
+    //   if (!errors) {
+    //     message.success('新建成功');
+    //     setTimeout(() => {
+    //       showModal.value = false;
+    //       reloadTable();
+    //     });
+    //   } else {
+    //     message.error('请填写完整信息');
+    //   }
+    //   formBtnLoading.value = false;
+    // });
   };
 </script>
-<style lang="scss" scoped>
-  .result-box {
-    width: 72%;
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 5px;
-
-    &-extra {
-      padding: 24px 40px;
-      text-align: left;
-      background: #f8f8f9;
-      border-radius: 4px;
-    }
-  }
-</style>
+<style lang="scss" scoped></style>

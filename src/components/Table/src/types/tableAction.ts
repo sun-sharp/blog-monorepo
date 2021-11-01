@@ -1,6 +1,6 @@
-import { NButton } from 'naive-ui';
+import { ButtonProps } from 'naive-ui';
 import { Fn } from '@vueuse/core';
-export interface ActionItem extends NButton.props {
+export interface ActionItem extends ButtonProps {
   [x: string]: any;
   onClick?: Fn;
   label?: string;

@@ -18,7 +18,7 @@ const menusList = [
     _id: '100',
     path: '/result',
     name: 'ExampleResult',
-    component: 'LAYOUT',
+    component: '',
     frameSrc: '',
     title: '结果页面',
     icon: 'CheckCircleOutlined',

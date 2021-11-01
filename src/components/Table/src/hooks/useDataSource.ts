@@ -2,7 +2,7 @@ import { ref, ComputedRef, unref, computed, onMounted, watchEffect, watch } from
 import type { BasicTableProps } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
 import { isBoolean } from '@/utils/is';
-import { APISETTING } from '../const';
+import { API_SETTING } from '../const';
 
 export function useDataSource(propsRef: ComputedRef<BasicTableProps>, { getPaginationInfo, setPagination, setLoading, tableData }, emit) {
   const dataSourceRef = ref([]);
@@ -44,10 +44,10 @@ export function useDataSource(propsRef: ComputedRef<BasicTableProps>, { getPagin
       setLoading(true);
       const { request, pagination }: any = unref(propsRef);
       //组装分页信息
-      const pageField = APISETTING.pageField;
-      const sizeField = APISETTING.sizeField;
-      const totalField = APISETTING.totalField;
-      const listField = APISETTING.listField;
+      const pageField = API_SETTING.pageField;
+      const sizeField = API_SETTING.sizeField;
+      const totalField = API_SETTING.totalField;
+      const listField = API_SETTING.listField;
 
       let pageParams = {};
       const { page = 1, pageSize = 10 } = unref(getPaginationInfo) as PaginationProps;

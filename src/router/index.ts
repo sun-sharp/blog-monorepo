@@ -1,6 +1,7 @@
 import type { App } from 'vue';
 import {
-  createRouter, // createWebHistory,
+  createRouter,
+  // createWebHistory,
   createWebHashHistory,
   RouteRecordRaw,
 } from 'vue-router';

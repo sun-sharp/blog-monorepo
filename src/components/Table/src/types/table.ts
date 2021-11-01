@@ -25,6 +25,7 @@ export interface TableActionType {
 
 export interface BasicTableProps {
   title?: string;
+  loading: boolean;
   titleTooltip?: string;
   dataSource: Function;
   columns: any[];
