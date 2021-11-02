@@ -6,7 +6,7 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
   // 查询配置
   const searchSchemas = [
     {
-      field: 'name',
+      field: 'title',
       component: 'NInput',
       label: '名称',
       componentProps: {

@@ -64,7 +64,7 @@
   </n-card>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { nextTick, onMounted, ref } from 'vue';
   import { getMenuList } from '@/api';
   import { useMessage } from 'naive-ui';
   import { BasicForm, useForm } from '@/components/Form/index';
@@ -103,18 +103,15 @@
    * 表格
    *  */
   // 获取接口数据
+  let searchParams = {};
   const loadDataTable = () => {
     tableLoading.value = true;
-    const params = {};
-    getMenuList({ ...params })
+    getMenuList({ ...searchParams })
       .then((res) => {
         tableData.value = levelMenu(res);
-        console.log(tableData.value);
       })
       .finally(() => {
-        setTimeout(() => {
-          tableLoading.value = false;
-        }, 1000);
+        tableLoading.value = false;
       });
   };
 
@@ -136,7 +133,7 @@
    *  */
   // 数据查询
   const searchSubmit = (values: Recordable) => {
-    console.log(values);
+    searchParams = values;
     loadDataTable();
   };
   // 数据重置
@@ -179,9 +176,9 @@
   };
 
   onMounted(() => {
-    // nextTick(() => {
-    loadDataTable();
-    // });
+    nextTick(() => {
+      loadDataTable();
+    });
   });
 </script>
 <style lang="scss" scoped>

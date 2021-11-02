@@ -30,12 +30,32 @@ export function renderIcon(icon) {
 // }
 
 /**
+ * 判断数据类型
+ */
+const typeNameMenu = (item) => {
+  if (/http(s)?:/.test(item.name)) {
+    item.typeName = '外链';
+    item.menuUrl = item.name;
+  } else if (item.frameSrc) {
+    item.typeName = '内嵌';
+    item.menuUrl = item.frameSrc;
+  } else if (item.component === 'LAYOUT' || !item.component) {
+    item.typeName = '目录';
+  } else {
+    item.typeName = '菜单';
+    item.menuUrl = item.component;
+  }
+};
+
+/**
  * 将数组menu组合成多层数组
  */
 export const levelMenu = (menuMap: Array<any>, parentId: string | number = '0') => {
   const menuArr: any[] = [];
   menuMap.forEach((i) => {
     const item = i;
+    // 查找上级菜单
+    const menuFind = menuMap.find((f) => f._id === item.parentId);
     if (item.parentId === parentId) {
       // 是否有子菜单，并递归处理
       const itemChildren = levelMenu(menuMap, item._id);
@@ -43,25 +63,19 @@ export const levelMenu = (menuMap: Array<any>, parentId: string | number = '0') 
         // 添加子数据
         item.children = itemChildren;
       }
-      // 添加上级菜单的名字
-      const menuFind = menuMap.find((f) => f._id === item.parentId);
+      // 添加上级菜单的名称
       if (menuFind) {
         item.parentName = menuFind.title;
       }
-      // 判断数据类型
-      if (/http(s)?:/.test(item.name)) {
-        item.typeName = '外链';
-        item.menuUrl = item.name;
-      } else if (item.frameSrc) {
-        item.typeName = '内嵌';
-        item.menuUrl = item.frameSrc;
-      } else if (item.component === 'LAYOUT' || !item.component) {
-        item.typeName = '目录';
-      } else {
-        item.typeName = '菜单';
-        item.menuUrl = item.component;
-      }
+      typeNameMenu(item);
       menuArr.push(item);
+    } else if (parentId === '0') {
+      // 判断这个菜单是否没有上级
+      if (!menuFind) {
+        typeNameMenu(item);
+        item.parentName = '查询的数据没有上级菜单';
+        menuArr.push(item);
+      }
     }
   });
   return menuArr;
