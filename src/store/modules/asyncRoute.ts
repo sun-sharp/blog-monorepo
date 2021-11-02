@@ -57,7 +57,7 @@ export const useAsyncRouteStore = defineStore({
       let accessedRouters;
       // 动态获取菜单
       try {
-        accessedRouters = await generatorDynamicRouter(userInfo.grade);
+        accessedRouters = await generatorDynamicRouter(userInfo.roleCode);
       } catch (error) {
         console.log(error);
       }

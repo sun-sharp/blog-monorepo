@@ -190,7 +190,7 @@ const transform: AxiosTransform = {
     const token = userStore.getToken;
     if (token) {
       // jwt token
-      config.headers.token = token;
+      config.headers.Authorization = token;
     }
     return config;
   },

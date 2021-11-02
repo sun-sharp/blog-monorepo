@@ -103,13 +103,14 @@ export const routerOneScreen = (routerMap): any => {
 
 /**
  * 动态生成菜单
- * @param grade
+ * @param roleCode
  * @returns {Promise<Router>}
  */
-export const generatorDynamicRouter = (grade: string): Promise<RouteRecordRaw[]> => {
+export const generatorDynamicRouter = (roleCode: string): Promise<RouteRecordRaw[]> => {
   return new Promise((resolve, reject) => {
-    adminMenus(grade)
+    adminMenus({ roleCode })
       .then((result) => {
+        console.log(result);
         resolve(routerOneScreen(result));
       })
       .catch((err) => {

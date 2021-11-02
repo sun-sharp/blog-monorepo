@@ -65,7 +65,7 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue';
-  import { adminMenus } from '@/api/system/menu';
+  import { getMenuList } from '@/api';
   import { useMessage } from 'naive-ui';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { useConfigure } from './configure';
@@ -106,7 +106,7 @@
   const loadDataTable = () => {
     tableLoading.value = true;
     const params = {};
-    adminMenus({ ...params })
+    getMenuList({ ...params })
       .then((res) => {
         tableData.value = levelMenu(res);
         console.log(tableData.value);

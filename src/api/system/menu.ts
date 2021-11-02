@@ -1,25 +1,25 @@
 import http from '@/api/axios';
 
-const basic = '';
+const basic = '/menu';
 
 /**
  * @description: 根据用户id获取用户菜单
  */
 export function adminMenus(params?) {
   return http.request({
-    url: `${basic}/menus`,
+    url: `${basic}/role_route`,
     method: 'GET',
     params,
   });
 }
 
 /**
- * 获取tree菜单列表
+ * 获取菜单列表
  * @param params
  */
 export function getMenuList(params?) {
   return http.request({
-    url: `${basic}/menu/list`,
+    url: `${basic}/find_term`,
     method: 'GET',
     params,
   });

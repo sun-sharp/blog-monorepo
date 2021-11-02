@@ -99,8 +99,8 @@
   const autoLogin = ref(true);
 
   const formInline = reactive({
-    username: 'admin',
-    password: '123456',
+    username: 'yrr',
+    password: 'yrr123',
     isCaptcha: false,
   });
 

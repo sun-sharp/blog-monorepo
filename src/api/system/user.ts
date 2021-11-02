@@ -2,18 +2,6 @@ import http from '@/api/axios';
 
 const basic = '/user';
 
-export interface BasicResponseModel<T = any> {
-  code: number;
-  message: string;
-  result: T;
-}
-
-export interface BasicPageParams {
-  pageNumber: number;
-  pageSize: number;
-  total: number;
-}
-
 /**
  * @description: 获取用户信息
  */
@@ -28,7 +16,7 @@ export function getUserInfo() {
  * @description: 用户登录
  */
 export function login(params) {
-  return http.request<BasicResponseModel>(
+  return http.request(
     {
       url: `${basic}/login`,
       method: 'POST',

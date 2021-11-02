@@ -79,6 +79,7 @@ export const useUserStore = defineStore({
             resolve(res);
           })
           .catch((error) => {
+            // that.logout();
             reject(error);
           });
       });
