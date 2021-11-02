@@ -30,24 +30,6 @@ export function renderIcon(icon) {
 // }
 
 /**
- * 判断数据类型
- */
-const typeNameMenu = (item) => {
-  if (/http(s)?:/.test(item.name)) {
-    item.typeName = '外链';
-    item.menuUrl = item.name;
-  } else if (item.frameSrc) {
-    item.typeName = '内嵌';
-    item.menuUrl = item.frameSrc;
-  } else if (item.component === 'LAYOUT' || !item.component) {
-    item.typeName = '目录';
-  } else {
-    item.typeName = '菜单';
-    item.menuUrl = item.component;
-  }
-};
-
-/**
  * 将数组menu组合成多层数组
  */
 export const levelMenu = (menuMap: Array<any>, parentId: string | number = '0') => {
@@ -67,12 +49,10 @@ export const levelMenu = (menuMap: Array<any>, parentId: string | number = '0') 
       if (menuFind) {
         item.parentName = menuFind.title;
       }
-      typeNameMenu(item);
       menuArr.push(item);
     } else if (parentId === '0') {
       // 判断这个菜单是否没有上级
       if (!menuFind) {
-        typeNameMenu(item);
         item.parentName = '查询的数据没有上级菜单';
         menuArr.push(item);
       }

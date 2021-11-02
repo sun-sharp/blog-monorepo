@@ -1,7 +1,7 @@
 <template>
   <n-spin :show="loading">
     <div class="frame">
-      <iframe ref="frameRef" :src="frameSrc" class="frame-iframe"></iframe>
+      <iframe ref="frameRef" :src="iframeSrc" class="frame-iframe"></iframe>
     </div>
   </n-spin>
 </template>
@@ -12,10 +12,10 @@
   const currentRoute = useRoute();
   const loading = ref(false);
   const frameRef = ref<HTMLFrameElement | null>(null);
-  const frameSrc = ref<string>('');
+  const iframeSrc = ref<string>('');
 
-  if (unref(currentRoute.meta)?.frameSrc) {
-    frameSrc.value = unref(currentRoute.meta)?.frameSrc as string;
+  if (unref(currentRoute.meta)?.iframeSrc) {
+    iframeSrc.value = unref(currentRoute.meta)?.iframeSrc as string;
   }
 
   function hideLoading() {

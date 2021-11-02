@@ -1,4 +1,8 @@
-export function checkStatus(status: number, msg: string, message: any): void {
+import { PageEnum } from '@/enums/pageEnum';
+import router from '@/router';
+import { storage } from '@/utils/Storage';
+
+export const checkStatus = (status: number, msg: string, message: any): void => {
   switch (status) {
     case 400:
       message.error(`${msg}`);
@@ -8,6 +12,14 @@ export function checkStatus(status: number, msg: string, message: any): void {
     // 在登录成功后返回当前页面，这一步需要在登录页操作。
     case 401:
       message.error('用户没有权限（令牌、用户名、密码错误）!');
+      const LoginName = PageEnum.BASE_LOGIN_NAME;
+      storage.clear();
+      router.replace({
+        name: LoginName,
+        query: {
+          redirect: router.currentRoute.value.fullPath,
+        },
+      });
       break;
     case 403:
       message.error('用户得到授权，但是访问是被禁止的。!');
@@ -43,4 +55,4 @@ export function checkStatus(status: number, msg: string, message: any): void {
     default:
       message.error(msg);
   }
-}
+};

@@ -61,7 +61,7 @@ export const asyncImportRoute = (routes: AppRouteRecordRaw[] | undefined): any[]
   if (!routes) return [];
   return routes.map((i) => {
     const item = i;
-    if (!item.component && item.meta?.frameSrc) {
+    if (!item.component && item.meta?.iframeSrc) {
       item.component = 'IFRAME';
     }
     if (item.component) {
@@ -75,7 +75,6 @@ export const asyncImportRoute = (routes: AppRouteRecordRaw[] | undefined): any[]
       item.component = ParentLayout;
     }
     item.children && (item.children = asyncImportRoute(item.children));
-    // item.children = asyncImportRoute(item.children);
     return item;
   });
 };
@@ -110,7 +109,6 @@ export const generatorDynamicRouter = (roleCode: string): Promise<RouteRecordRaw
   return new Promise((resolve, reject) => {
     adminMenus({ roleCode })
       .then((result) => {
-        console.log(result);
         resolve(routerOneScreen(result));
       })
       .catch((err) => {

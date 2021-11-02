@@ -1,8 +1,9 @@
 import { h } from 'vue';
 import { constantRouterIcon } from '@/router/router-icons';
 import { NButton, NTag } from 'naive-ui';
+import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
 
-export const useConfigure = ({ message, loadDataTable, showModal }) => {
+export const useConfigure = ({ message, loadDataTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -19,10 +20,11 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
    * 表格按钮操作配置
    *  */
   const typeNameObj = {
-    外链: 'error',
-    内嵌: 'warning',
-    目录: 'info',
-    菜单: 'success',
+    1: 'info',
+    2: 'info',
+    5: 'success',
+    6: 'warning',
+    7: 'error',
   };
   // 表格字段配置
   const columns = [
@@ -50,10 +52,10 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
         return h(
           NTag,
           {
-            type: typeNameObj[row.typeName],
+            type: typeNameObj[row.menuType],
           },
           {
-            default: () => row.typeName,
+            default: () => menuTypeObj[row.menuType],
           }
         );
       },
@@ -69,7 +71,7 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
       key: 'menuUrl',
     },
     {
-      title: '菜单是否隐藏',
+      title: '是否隐藏',
       align: 'center',
       key: 'hidden',
       render(row) {
@@ -89,13 +91,13 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
               class: 'mh-3',
               text: true,
               type: 'primary',
-              onClick: handleEdit.bind(null, row),
+              onClick: addUpdateModelRef.value.init.bind(null, row),
             },
             {
               default: () => '编辑',
             }
           ),
-          row.typeName !== '目录'
+          [5, 6, 7].includes(row.menuType)
             ? h(
                 NButton,
                 {
@@ -114,13 +116,11 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
     },
   ];
   // 编辑
-  const handleEdit = (record: Recordable) => {
-    console.log('点击了编辑', record);
-    showModal.value = true;
-  };
+  // const handleEdit = (record: Recordable) => {
+  // };
   // 删除
-  const handleDelete = (record: Recordable) => {
-    console.log('点击了删除', record);
+  const handleDelete = (row: Recordable) => {
+    console.log('点击了删除', row);
     message.info('点击了删除');
     loadDataTable();
   };
@@ -130,15 +130,25 @@ export const useConfigure = ({ message, loadDataTable, showModal }) => {
    * */
   const modelSchemas = [
     {
+      field: 'menuType',
+      component: 'NRadioGroup',
+      label: '类型',
+      componentProps: {
+        options: menuTypeOption,
+        onUpdateChecked: (e: any) => {
+          console.log(e);
+        },
+      },
+      rules: [{ required: true, message: '请输入姓名', trigger: ['change'] }],
+    },
+    {
       field: 'name',
       component: 'NInput',
       label: '名称',
       componentProps: {
         placeholder: '请输入名称',
-        onInput: (e: any) => {
-          console.log(e);
-        },
       },
+      rules: [{ required: true, message: '请输入姓名', trigger: ['blur'] }],
     },
   ];
 

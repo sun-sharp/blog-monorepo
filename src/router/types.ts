@@ -26,7 +26,7 @@ export interface Meta {
   // tab上的图标
   icon?: string;
   // 跳转地址
-  frameSrc?: string;
+  iframeSrc?: string;
   // 外链跳转地址
   externalLink?: string;
   //隐藏

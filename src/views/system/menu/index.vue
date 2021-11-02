@@ -8,7 +8,7 @@
     <div class="table-toolbar">
       <!--顶部左侧区域-->
       <div class="flex items-center table-toolbar-left">
-        <n-button type="primary" @click="showModal = true">
+        <n-button type="primary" @click="addUpdateModelRef.init()">
           <template #icon>
             <n-icon>
               <PlusOutlined />
@@ -47,30 +47,20 @@
       </div>
     </div>
     <n-data-table :size="tableSize" :loading="tableLoading" :columns="columns" :data="tableData" :row-key="rowKey" />
-    <n-modal v-model:show="showModal" class="w-600" :show-icon="false" preset="dialog" title="新建">
-      <basic-form @register="modelRegister">
-        <template #statusSlot="{ model, field }">
-          <n-input v-model:value="model[field]" />
-        </template>
-      </basic-form>
-
-      <template #action>
-        <n-space>
-          <n-button @click="() => (showModal = false)">取消</n-button>
-          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
-        </n-space>
-      </template>
-    </n-modal>
+    <add-update-model ref="addUpdateModelRef" :table-data="tableData" />
   </n-card>
 </template>
 <script lang="ts" setup>
   import { nextTick, onMounted, ref } from 'vue';
   import { getMenuList } from '@/api';
   import { useMessage } from 'naive-ui';
-  import { BasicForm, useForm } from '@/components/Form/index';
   import { useConfigure } from './configure';
   import { levelMenu } from '@/utils';
   import { PlusOutlined, ReloadOutlined, ColumnHeightOutlined } from '@vicons/antd';
+  import { BasicForm, useForm } from '@/components/Form/index';
+  import AddUpdateModel from './AddUpdateModel.vue';
+
+  const addUpdateModelRef = ref();
 
   // 配置表格密度
   const densityOptions = [
@@ -93,8 +83,6 @@
   const tableSize = ref('medium');
 
   // 表格
-  const showModal = ref(false);
-  const formBtnLoading = ref(false);
   const tableData = ref<any>([]);
   const rowKey = (row) => row.name;
   const tableLoading = ref(false);
@@ -117,7 +105,7 @@
 
   // 配置
   const message = useMessage();
-  const { searchSchemas, columns, modelSchemas } = useConfigure({ message, loadDataTable, showModal });
+  const { searchSchemas, columns } = useConfigure({ message, loadDataTable, addUpdateModelRef });
 
   // 查询
   const [searchRegister, {}] = useForm({
@@ -139,35 +127,6 @@
   // 数据重置
   const searchReset = (values: Recordable) => {
     console.log(values);
-  };
-
-  /**
-   * 弹窗
-   *  */
-  const [modelRegister, {}] = useForm({
-    gridProps: { cols: '1' },
-    labelWidth: 80,
-    schemas: modelSchemas,
-    layout: 'screen',
-    showAdvancedButton: false,
-    showResetButton: false,
-    showSubmitButton: false,
-  });
-  const confirmForm = (e) => {
-    e.preventDefault();
-    formBtnLoading.value = true;
-    // formRef.value.validate((errors) => {
-    //   if (!errors) {
-    //     message.success('新建成功');
-    //     setTimeout(() => {
-    //       showModal.value = false;
-    //       reloadTable();
-    //     });
-    //   } else {
-    //     message.error('请填写完整信息');
-    //   }
-    //   formBtnLoading.value = false;
-    // });
   };
 
   //密度切换
