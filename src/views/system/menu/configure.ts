@@ -103,6 +103,7 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
       title: '操作',
       key: 'actions',
       align: 'center',
+      fixed: 'right',
       render(row) {
         return [
           h(

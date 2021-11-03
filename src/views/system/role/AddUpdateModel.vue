@@ -13,10 +13,7 @@
       <n-form-item :label="`${menuTypeName}名称`" path="title">
         <n-input v-model:value="modelForm.title" :placeholder="`请输入${menuTypeName}名称`" />
       </n-form-item>
-      <n-form-item label="上级菜单" path="parentId">
-        <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="_id" />
-      </n-form-item>
-      <n-form-item label="路由" path="path">
+      <n-form-item v-if="![7].includes(modelForm.menuType)" label="路由" path="path">
         <n-input v-model:value="modelForm.path" placeholder="请输入路由" />
       </n-form-item>
       <n-form-item v-if="[7].includes(modelForm.menuType)" label="外链的链接" path="name">
@@ -52,7 +49,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, h, nextTick, reactive, ref, unref, watch } from 'vue';
+  import { defineComponent, h, nextTick, reactive, ref, watch } from 'vue';
   import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
   import { constantHtmlIcon } from '@/utils/icons';
   import { saveMenu, updateMenu } from '@/api';
@@ -71,12 +68,7 @@
   };
 
   export default defineComponent({
-    props: {
-      tableData: {
-        type: Array,
-        default: () => [],
-      },
-    },
+    props: {},
     emits: ['refurbish'],
     setup(props, { emit }) {
       const modelId = ref('');
@@ -135,29 +127,10 @@
           message: '请输入排序号',
         },
       });
-      const parentIdOptions = ref([
-        {
-          _id: '0',
-          title: '根目录',
-          children: props.tableData || [],
-        },
-      ]);
       watch(
         () => modelForm.menuType,
         (menuType) => {
           menuTypeName.value = menuTypeObj[menuType];
-        }
-      );
-      watch(
-        () => unref(props).tableData,
-        (tableData) => {
-          parentIdOptions.value = [
-            {
-              _id: '0',
-              title: '根目录',
-              children: tableData || [],
-            },
-          ];
         }
       );
       // 图标
@@ -215,7 +188,6 @@
           if (!errors) {
             const params: any = {
               menuType: modelForm.menuType,
-              path: modelForm.path,
               title: modelForm.title,
               name: modelForm.name,
               icon: modelForm.icon,
@@ -223,6 +195,10 @@
               parentId: modelForm.parentId,
               hidden: modelForm.hidden,
             };
+            // 当不为外接
+            if (![7].includes(modelForm.menuType)) {
+              params.path = modelForm.path;
+            }
             // 当不为次级目录，内嵌，外接
             if (![2, 6, 7].includes(modelForm.menuType)) {
               params.component = modelForm.component;
@@ -250,7 +226,6 @@
         modelRules,
         formBtnLoading,
         menuTypeOption,
-        parentIdOptions,
         iconOptions,
         iconRenderLabel,
         init,

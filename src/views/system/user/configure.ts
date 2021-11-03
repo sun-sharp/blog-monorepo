@@ -1,8 +1,7 @@
 import { h, reactive } from 'vue';
-import { NAvatar } from 'naive-ui';
 import { TableAction } from '@/components/Table';
 
-export const useConfigure = ({ message }) => {
+export const useConfigure = ({ loadDataTable }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -18,51 +17,12 @@ export const useConfigure = ({ message }) => {
   // 表格字段配置
   const columns = [
     {
-      title: 'id',
-      key: 'id',
-      width: 100,
-      fixed: 'left',
-    },
-    {
-      title: '名称',
+      title: '角色名称',
       key: 'name',
-      width: 100,
     },
     {
-      title: '头像',
-      key: 'avatar',
-      width: 100,
-      render(row) {
-        return h(NAvatar, {
-          size: 48,
-          src: row.avatar,
-        });
-      },
-    },
-    {
-      title: '地址',
-      key: 'address',
-      auth: ['basic_list'], // 同时根据权限控制是否显示
-      // _column
-      ifShow: () => {
-        return true; // 根据业务控制是否显示
-      },
-      width: 150,
-    },
-    {
-      title: '开始日期',
-      key: 'beginTime',
-      width: 160,
-    },
-    {
-      title: '结束日期',
-      key: 'endTime',
-      width: 160,
-    },
-    {
-      title: '创建时间',
-      key: 'date',
-      width: 100,
+      title: '角色标识',
+      key: 'roleCode',
     },
   ];
 
@@ -76,7 +36,7 @@ export const useConfigure = ({ message }) => {
   // 删除
   const handleDelete = (record: Recordable) => {
     console.log('点击了删除', record);
-    message.info('点击了删除');
+    loadDataTable();
   };
   const actionColumn = reactive({
     width: 220,
@@ -126,7 +86,7 @@ export const useConfigure = ({ message }) => {
           },
         ],
         select: (key) => {
-          message.info(`您点击了，${key} 按钮`);
+          console.log(`您点击了，${key} 按钮`);
         },
       });
     },
@@ -134,24 +94,10 @@ export const useConfigure = ({ message }) => {
   /**
    * 弹窗配置
    * */
-  const modelSchemas = [
-    {
-      field: 'name',
-      component: 'NInput',
-      label: '名称',
-      componentProps: {
-        placeholder: '请输入名称',
-        onInput: (e: any) => {
-          console.log(e);
-        },
-      },
-    },
-  ];
 
   return {
     searchSchemas,
     columns,
     actionColumn,
-    modelSchemas,
   };
 };

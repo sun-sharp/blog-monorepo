@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN } from '@/store/mutation-typ
 import { ResultEnum } from '@/enums/httpEnum';
 
 const Storage = createStorage({ storage: localStorage });
-import { getUserInfo, login } from '@/api/system/user';
+import { getUserInfo, login } from '@/api';
 
 export interface IUserState {
   token: string;
