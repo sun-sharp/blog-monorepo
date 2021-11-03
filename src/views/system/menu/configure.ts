@@ -2,8 +2,9 @@ import { h } from 'vue';
 import { constantHtmlIcon } from '@/utils/icons';
 import { NButton, NTag } from 'naive-ui';
 import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
+import { removeMenu } from '@/api';
 
-export const useConfigure = ({ message, loadDataTable, addUpdateModelRef }) => {
+export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -116,20 +117,18 @@ export const useConfigure = ({ message, loadDataTable, addUpdateModelRef }) => {
               default: () => '编辑',
             }
           ),
-          [5, 6, 7].includes(row.menuType)
-            ? h(
-                NButton,
-                {
-                  class: 'mh-3',
-                  text: true,
-                  type: 'error',
-                  onClick: handleDelete.bind(null, row),
-                },
-                {
-                  default: () => '删除',
-                }
-              )
-            : '',
+          h(
+            NButton,
+            {
+              class: 'mh-3',
+              text: true,
+              type: 'error',
+              onClick: handleDelete.bind(null, row),
+            },
+            {
+              default: () => '删除',
+            }
+          ),
         ];
       },
     },
@@ -139,9 +138,9 @@ export const useConfigure = ({ message, loadDataTable, addUpdateModelRef }) => {
   // };
   // 删除
   const handleDelete = (row: Recordable) => {
-    console.log('点击了删除', row);
-    message.info('点击了删除');
-    loadDataTable();
+    removeMenu(row._id).then(() => {
+      loadDataTable();
+    });
   };
 
   /**

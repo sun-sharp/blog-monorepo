@@ -24,3 +24,56 @@ export function getMenuList(params?) {
     params,
   });
 }
+
+/**
+ * 新增菜单
+ * @param data
+ */
+export const saveMenu = (data?) => {
+  return http.request(
+    {
+      url: `${basic}/save`,
+      method: 'POST',
+      data,
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * 修改菜单
+ * @param data
+ */
+export const updateMenu = (data?) => {
+  return http.request(
+    {
+      url: `${basic}/update`,
+      method: 'POST',
+      data,
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * 删除菜单
+ * @param data
+ */
+export const removeMenu = (id?) => {
+  return http.request(
+    {
+      url: `${basic}/remove`,
+      method: 'POST',
+      data: {
+        id,
+      },
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};

@@ -33,13 +33,13 @@ const transform: AxiosTransform = {
     // @ts-ignore
     const { $message: Message, $dialog: Dialog } = window;
     const {
-      isShowMessage = true,
-      isShowErrorMessage,
-      isShowSuccessMessage,
-      successMessageText,
-      errorMessageText,
-      isTransformResponse,
-      isReturnNativeResponse,
+      isShowMessage = true, // 是否显示提示信息
+      isShowErrorMessage, // 是否显示错误信息
+      isShowSuccessMessage, // 是否显示成功信息
+      successMessageText, // 成功信息文本
+      errorMessageText, // 错误信息文本
+      isTransformResponse, // 不进行任何处理，直接返回 res.data
+      isReturnNativeResponse, // 返回原生响应头
     } = options;
 
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性

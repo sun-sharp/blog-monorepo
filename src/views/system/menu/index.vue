@@ -47,13 +47,12 @@
       </div>
     </div>
     <n-data-table :size="tableSize" :loading="tableLoading" :columns="columns" :data="tableData" :row-key="rowKey" />
-    <add-update-model ref="addUpdateModelRef" :table-data="tableData" />
+    <add-update-model ref="addUpdateModelRef" :table-data="tableData" @refurbish="loadDataTable" />
   </n-card>
 </template>
 <script lang="ts" setup>
   import { nextTick, onMounted, ref } from 'vue';
   import { getMenuList } from '@/api';
-  import { useMessage } from 'naive-ui';
   import { useConfigure } from './configure';
   import { levelMenu } from '@/utils';
   import { PlusOutlined } from '@/utils/icons';
@@ -105,8 +104,7 @@
   };
 
   // 配置
-  const message = useMessage();
-  const { searchSchemas, columns } = useConfigure({ message, loadDataTable, addUpdateModelRef });
+  const { searchSchemas, columns } = useConfigure({ loadDataTable, addUpdateModelRef });
 
   // 查询
   const [searchRegister, {}] = useForm({

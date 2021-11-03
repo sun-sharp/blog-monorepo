@@ -25,11 +25,11 @@
       <n-form-item v-if="![6, 7].includes(modelForm.menuType)" label="位置" path="component">
         <n-input v-model:value="modelForm.component" placeholder="请输入位置" />
       </n-form-item>
-      <n-form-item v-if="![6, 7].includes(modelForm.menuType)" label="链接" path="iframeSrc">
+      <n-form-item v-if="[6, 7].includes(modelForm.menuType)" label="链接" path="iframeSrc">
         <n-input v-model:value="modelForm.iframeSrc" placeholder="请输入链接" />
       </n-form-item>
       <n-form-item label="图标" path="icon">
-        <n-select v-model:value="modelForm.icon" :options="iconOptions" :render-label="iconRenderLabel" placeholder="请选择"></n-select>
+        <n-select v-model:value="modelForm.icon" :options="iconOptions" :render-label="iconRenderLabel" :virtual-scroll="false" placeholder="请选择"></n-select>
       </n-form-item>
       <n-form-item label="排序号" path="sort">
         <n-input-number v-model:value="modelForm.sort" class="w-full" />
@@ -51,8 +51,8 @@
 <script lang="ts">
   import { defineComponent, h, nextTick, reactive, ref, unref, watch } from 'vue';
   import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
-  import { useMessage } from 'naive-ui';
   import { constantHtmlIcon } from '@/utils/icons';
+  import { saveMenu, updateMenu } from '@/api';
 
   const modelFields = {
     menuType: 1,
@@ -74,8 +74,8 @@
         default: () => [],
       },
     },
-    setup(props) {
-      const message = useMessage();
+    emits: ['refurbish'],
+    setup(props, { emit }) {
       const modelId = ref('');
       const showModal = ref(false);
 
@@ -169,14 +169,14 @@
           fontSize: '22px',
         },
       }));
-      const iconRenderLabel = (option) => h(option.label);
+      const iconRenderLabel = (option) => h(option.label) || 'jjj';
 
       // 初始化
       const init = (row) => {
         showModal.value = true;
         modelId.value = row?._id;
         resetFields();
-        if (row) {
+        if (modelId.value) {
           modelForm.menuType = row.menuType;
           modelForm.title = row.title;
           modelForm.path = row.path;
@@ -208,11 +208,11 @@
         formBtnLoading.value = true;
         modelFromRef.value.validate((errors) => {
           if (!errors) {
-            console.log(modelId.value);
-            console.log(modelForm);
-            // message.success('新建成功');
-          } else {
-            message.error('请填写完整信息');
+            const request = modelId.value ? updateMenu({ id: modelId.value, ...modelForm }) : saveMenu(modelForm);
+            request.then(() => {
+              showModal.value = false;
+              emit('refurbish');
+            });
           }
           formBtnLoading.value = false;
         });
