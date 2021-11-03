@@ -11,9 +11,6 @@ export const useConfigure = ({ message }) => {
       label: '姓名',
       componentProps: {
         placeholder: '请输入姓名',
-        onInput: (e: any) => {
-          console.log(e);
-        },
       },
     },
   ];

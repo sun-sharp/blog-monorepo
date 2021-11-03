@@ -124,7 +124,6 @@
           const activeMenu: string = currentRoute?.matched[0].meta?.activeMenu as string;
           headerMenuSelectKey.value = (activeMenu ? activeMenu : firstRouteName) || '';
         }
-        console.log(menus.value);
       }
 
       // 点击菜单

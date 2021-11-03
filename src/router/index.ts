@@ -1,8 +1,8 @@
 import type { App } from 'vue';
 import {
   createRouter,
-  // createWebHistory,
-  createWebHashHistory,
+  createWebHistory,
+  // createWebHashHistory,
   RouteRecordRaw,
 } from 'vue-router';
 import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
@@ -22,8 +22,8 @@ export const LoginRoute: RouteRecordRaw = {
 export const constantRouter: any[] = [LoginRoute, RedirectRoute];
 
 const router = createRouter({
-  history: createWebHashHistory(''),
-  // history: createWebHistory('/'),
+  // history: createWebHashHistory(''),
+  history: createWebHistory('/'),
   routes: constantRouter,
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

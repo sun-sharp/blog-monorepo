@@ -16,16 +16,19 @@
       <n-form-item label="上级菜单" path="parentId">
         <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="_id" />
       </n-form-item>
-      <n-form-item label="路由" path="path">
+      <n-form-item v-if="![7].includes(modelForm.menuType)" label="路由" path="path">
         <n-input v-model:value="modelForm.path" placeholder="请输入路由" />
       </n-form-item>
-      <n-form-item label="标识" path="name">
+      <n-form-item v-if="[7].includes(modelForm.menuType)" label="外链的链接" path="name">
+        <n-input v-model:value="modelForm.name" placeholder="请输入外链的链接" />
+      </n-form-item>
+      <n-form-item v-else label="标识" path="name">
         <n-input v-model:value="modelForm.name" placeholder="请输入标识" />
       </n-form-item>
-      <n-form-item v-if="![6, 7].includes(modelForm.menuType)" label="位置" path="component">
+      <n-form-item v-if="![2, 6, 7].includes(modelForm.menuType)" label="位置" path="component">
         <n-input v-model:value="modelForm.component" placeholder="请输入位置" />
       </n-form-item>
-      <n-form-item v-if="[6, 7].includes(modelForm.menuType)" label="链接" path="iframeSrc">
+      <n-form-item v-if="[6].includes(modelForm.menuType)" label="链接" path="iframeSrc">
         <n-input v-model:value="modelForm.iframeSrc" placeholder="请输入链接" />
       </n-form-item>
       <n-form-item label="图标" path="icon">
@@ -190,6 +193,10 @@
         }
       };
 
+      // 改变类型
+      // const menuTypeChange = (e) => {
+
+      // };
       // 重置
       const resetFields = () => {
         Object.keys(modelFields).forEach((key) => {
@@ -198,8 +205,6 @@
         nextTick(() => {
           modelFromRef.value.restoreValidation();
         });
-        // console.log(modelFromRef.value);
-        // modelFromRef.value.restoreValidation();
       };
 
       // 提交
@@ -208,7 +213,28 @@
         formBtnLoading.value = true;
         modelFromRef.value.validate((errors) => {
           if (!errors) {
-            const request = modelId.value ? updateMenu({ id: modelId.value, ...modelForm }) : saveMenu(modelForm);
+            const params: any = {
+              menuType: modelForm.menuType,
+              title: modelForm.title,
+              name: modelForm.name,
+              icon: modelForm.icon,
+              sort: modelForm.sort,
+              parentId: modelForm.parentId,
+              hidden: modelForm.hidden,
+            };
+            // 当不为外接
+            if (![7].includes(modelForm.menuType)) {
+              params.path = modelForm.path;
+            }
+            // 当不为次级目录，内嵌，外接
+            if (![2, 6, 7].includes(modelForm.menuType)) {
+              params.component = modelForm.component;
+            }
+            // 如果为内嵌
+            if ([6].includes(modelForm.menuType)) {
+              params.iframeSrc = modelForm.iframeSrc;
+            }
+            const request = modelId.value ? updateMenu({ id: modelId.value, ...params }) : saveMenu(params);
             request.then(() => {
               showModal.value = false;
               emit('refurbish');

@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import { constantHtmlIcon } from '@/utils/icons';
 import { NButton, NTag } from 'naive-ui';
-import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
+import { menuTypeObj } from '@/enums/apiEnum';
 import { removeMenu } from '@/api';
 
 export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
@@ -30,7 +30,7 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   // 表格字段配置
   const columns = [
     {
-      with: '100px',
+      with: 200,
       title: '名称',
       key: 'title',
     },
@@ -99,7 +99,7 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
       },
     },
     {
-      with: '100px',
+      with: 100,
       title: '操作',
       key: 'actions',
       align: 'center',
@@ -143,36 +143,8 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
     });
   };
 
-  /**
-   * 弹窗配置
-   * */
-  const modelSchemas = [
-    {
-      field: 'menuType',
-      component: 'NRadioGroup',
-      label: '类型',
-      componentProps: {
-        options: menuTypeOption,
-        onUpdateChecked: (e: any) => {
-          console.log(e);
-        },
-      },
-      rules: [{ required: true, message: '请输入姓名', trigger: ['change'] }],
-    },
-    {
-      field: 'name',
-      component: 'NInput',
-      label: '名称',
-      componentProps: {
-        placeholder: '请输入名称',
-      },
-      rules: [{ required: true, message: '请输入姓名', trigger: ['blur'] }],
-    },
-  ];
-
   return {
     searchSchemas,
     columns,
-    modelSchemas,
   };
 };

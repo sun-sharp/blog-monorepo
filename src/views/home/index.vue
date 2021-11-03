@@ -295,11 +295,11 @@
   ];
 
   onMounted(async () => {
-    const { visits, saleroom, orderLarge, volume } = await getConsoleInfo();
-    visits.value = visits;
-    saleroom.value = saleroom;
-    orderLarge.value = orderLarge;
-    volume.value = volume;
+    // const { visits, saleroom, orderLarge, volume } = await getConsoleInfo();
+    // visits.value = visits;
+    // saleroom.value = saleroom;
+    // orderLarge.value = orderLarge;
+    // volume.value = volume;
     loading.value = false;
   });
 </script>

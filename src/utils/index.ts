@@ -93,21 +93,7 @@ export function generatorMenuMix(routerMap: Array<any>, routerName: string, loca
   const cloneRouterMap = cloneDeep(routerMap);
   const newRouter = filterRouter(cloneRouterMap);
   if (location === 'header') {
-    // console.log(getChildrenMix(newRouter));
-    // const firstRouter: any[] = [];
-    // newRouter.forEach((item) => {
-    //   const info = item;
-    //   // info.children = undefined;
-    //   const currentMenu = {
-    //     ...info,
-    //     ...info.meta,
-    //     label: info.meta?.title,
-    //     key: info.name,
-    //   };
-    //   firstRouter.push(currentMenu);
-    // });
     return getChildrenMix(newRouter);
-    // return firstRouter;
   } else {
     return getChildrenRouter(newRouter.filter((item) => item.name === routerName));
   }
