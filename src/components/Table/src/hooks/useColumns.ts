@@ -5,7 +5,7 @@ import { isArray, isString, isBoolean, isFunction } from '@/utils/is';
 import { ActionItem } from '@/components/Table';
 import { renderEditCell } from '../components/editable';
 import { NTooltip, NIcon } from 'naive-ui';
-import { FormOutlined } from '@vicons/antd';
+import { FormOutlined } from '@/utils/icons';
 
 export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;

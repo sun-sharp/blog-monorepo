@@ -72,7 +72,7 @@
   import { useMessage } from 'naive-ui';
   import Draggable from 'vuedraggable';
   import { PageEnum } from '@/enums/pageEnum';
-  import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined } from '@vicons/antd';
+  import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined } from '@/utils/icons';
   import { renderIcon } from '@/utils';
   import elementResizeDetectorMaker from 'element-resize-detector';
   import { useDesignSetting } from '@/utils/setting/useDesignSetting';

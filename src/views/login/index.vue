@@ -84,7 +84,7 @@
   import { useMessage } from 'naive-ui';
   import { ResultEnum } from '@/enums/httpEnum';
   import logo from '@/assets/images/logo.png';
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
+  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@/utils/icons';
 
   interface FormState {
     username: string;

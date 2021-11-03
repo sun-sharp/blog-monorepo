@@ -208,7 +208,7 @@
     MailOutlined,
     TagsOutlined,
     SettingOutlined,
-  } from '@vicons/antd';
+  } from '@/utils/icons';
 
   // const cardHeaderStyle = ref({ 'border-bottom': '1px solid #eee', 'font-size': '16px' });
 

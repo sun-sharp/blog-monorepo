@@ -38,7 +38,7 @@
 </template>
 <script lang="ts" setup>
   import { useRouter } from 'vue-router';
-  import { InfoCircleOutlined } from '@vicons/antd';
+  import { InfoCircleOutlined } from '@/utils/icons';
 
   const router = useRouter();
 

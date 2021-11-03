@@ -85,7 +85,7 @@
   import { useFormValues } from './hooks/useFormValues';
 
   import { basicProps } from './props';
-  import { DownOutlined, UpOutlined, QuestionCircleOutlined } from '@vicons/antd';
+  import { DownOutlined, UpOutlined, QuestionCircleOutlined } from '@/utils/icons';
 
   import type { Ref } from 'vue';
   import type { GridProps } from 'naive-ui/lib/grid';

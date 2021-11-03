@@ -38,7 +38,7 @@
 </template>
 <script lang="ts" setup>
   import { useRouter } from 'vue-router';
-  import { CheckCircleOutlined } from '@vicons/antd';
+  import { CheckCircleOutlined } from '@/utils/icons';
 
   const router = useRouter();
 

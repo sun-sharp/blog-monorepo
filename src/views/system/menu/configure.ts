@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import { constantRouterIcon } from '@/router/router-icons';
+import { constantHtmlIcon } from '@/utils/icons';
 import { NButton, NTag } from 'naive-ui';
 import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
 
@@ -38,11 +38,22 @@ export const useConfigure = ({ message, loadDataTable, addUpdateModelRef }) => {
       key: 'parentName',
     },
     {
+      title: '路由',
+      key: 'path',
+    },
+    {
+      title: '标识',
+      align: 'center',
+      render(row) {
+        return row.menuType === 7 ? '' : row.name;
+      },
+    },
+    {
       title: '图标',
       align: 'center',
       key: 'icon',
       render(row) {
-        return constantRouterIcon[row.icon]();
+        return constantHtmlIcon[row.icon];
       },
     },
     {
@@ -68,12 +79,20 @@ export const useConfigure = ({ message, loadDataTable, addUpdateModelRef }) => {
     {
       title: '菜单URL',
       align: 'center',
-      key: 'menuUrl',
+      render(row) {
+        let menuUrl = row.component;
+        if (row.menuType === 6) {
+          menuUrl = row.iframeSrc;
+        }
+        if (row.menuType === 7) {
+          menuUrl = row.name;
+        }
+        return menuUrl;
+      },
     },
     {
       title: '是否隐藏',
       align: 'center',
-      key: 'hidden',
       render(row) {
         return row.hidden ? '是' : '否';
       },

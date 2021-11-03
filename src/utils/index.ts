@@ -7,9 +7,12 @@ import { cloneDeep } from 'lodash-es';
 /**
  * render 图标
  * */
-export function renderIcon(icon) {
+export const renderIcon = (icon) => {
   return () => h(NIcon, null, { default: () => h(icon) });
-}
+};
+export const hIcon = (icon) => {
+  return renderIcon(icon)();
+};
 
 // /**
 //  * render new Tag

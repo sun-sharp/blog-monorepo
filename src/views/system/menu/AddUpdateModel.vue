@@ -1,6 +1,6 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-600" :show-icon="false" preset="dialog" :title="modelId ? '修改' : '新增'">
-    <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="80">
+  <n-modal v-model:show="showModal" class="menu-model w-600" :show-icon="false" preset="dialog" :title="modelId ? '修改' : '新增'">
+    <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="类型" path="menuType">
         <n-radio-group v-model:value="modelForm.menuType" name="radiogroup">
           <n-space>
@@ -10,11 +10,26 @@
           </n-space>
         </n-radio-group>
       </n-form-item>
-      <n-form-item label="名称" path="name">
-        <n-input v-model:value="modelForm.title" placeholder="请输入名称" />
+      <n-form-item :label="`${menuTypeName}名称`" path="title">
+        <n-input v-model:value="modelForm.title" :placeholder="`请输入${menuTypeName}名称`" />
       </n-form-item>
       <n-form-item label="上级菜单" path="parentId">
         <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="_id" />
+      </n-form-item>
+      <n-form-item label="路由" path="path">
+        <n-input v-model:value="modelForm.path" placeholder="请输入路由" />
+      </n-form-item>
+      <n-form-item label="标识" path="name">
+        <n-input v-model:value="modelForm.name" placeholder="请输入标识" />
+      </n-form-item>
+      <n-form-item v-if="![6, 7].includes(modelForm.menuType)" label="位置" path="component">
+        <n-input v-model:value="modelForm.component" placeholder="请输入位置" />
+      </n-form-item>
+      <n-form-item v-if="![6, 7].includes(modelForm.menuType)" label="链接" path="iframeSrc">
+        <n-input v-model:value="modelForm.iframeSrc" placeholder="请输入链接" />
+      </n-form-item>
+      <n-form-item label="图标" path="icon">
+        <n-select v-model:value="modelForm.icon" :options="iconOptions" :render-label="iconRenderLabel" placeholder="请选择"></n-select>
       </n-form-item>
       <n-form-item label="排序号" path="sort">
         <n-input-number v-model:value="modelForm.sort" class="w-full" />
@@ -34,9 +49,23 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, ref } from 'vue';
-  import { menuTypeOption } from '@/enums/apiEnum';
+  import { defineComponent, h, nextTick, reactive, ref, unref, watch } from 'vue';
+  import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
   import { useMessage } from 'naive-ui';
+  import { constantHtmlIcon } from '@/utils/icons';
+
+  const modelFields = {
+    menuType: 1,
+    title: '',
+    path: '',
+    name: '',
+    component: '',
+    iframeSrc: '',
+    icon: null,
+    sort: 0,
+    parentId: '0',
+    hidden: false,
+  };
 
   export default defineComponent({
     props: {
@@ -47,27 +76,49 @@
     },
     setup(props) {
       const message = useMessage();
+      const modelId = ref('');
       const showModal = ref(false);
+
       const formBtnLoading = ref(false);
       const modelFromRef = ref();
-      const modelForm = reactive({
-        menuType: 1,
-        title: '',
-        sort: 0,
-        parentId: '0',
-        hidden: false,
-      });
-      const modelRules = {
+      const modelForm = reactive(Object.assign({}, modelFields));
+      const menuTypeName = ref(menuTypeObj[modelForm.menuType]);
+      const modelRules = reactive({
         menuType: {
           type: 'number',
           required: true,
           trigger: ['change', 'blur'],
           message: '请选择类型',
         },
+        title: {
+          required: true,
+          trigger: ['blur', 'input'],
+          message: `请输入名称`,
+        },
+        path: {
+          required: true,
+          trigger: ['blur', 'input'],
+          message: `请输入路由`,
+        },
         name: {
           required: true,
           trigger: ['blur', 'input'],
-          message: '请输入名称',
+          message: `请输入标识`,
+        },
+        component: {
+          required: true,
+          trigger: ['blur', 'input'],
+          message: `请输入位置`,
+        },
+        iframeSrc: {
+          required: true,
+          trigger: ['blur', 'input'],
+          message: `请输入链接`,
+        },
+        icon: {
+          required: true,
+          trigger: ['blur', 'change'],
+          message: '请选择',
         },
         parentId: {
           required: true,
@@ -80,27 +131,75 @@
           trigger: ['blur', 'change'],
           message: '请输入排序号',
         },
-      };
-      const modelId = ref();
-      const parentIdOptions = [
+      });
+      const parentIdOptions = ref([
         {
           _id: '0',
           title: '根目录',
           children: props.tableData || [],
         },
-      ];
+      ]);
+      watch(
+        () => modelForm.menuType,
+        (menuType) => {
+          menuTypeName.value = menuTypeObj[menuType];
+        }
+      );
+      watch(
+        () => unref(props).tableData,
+        (tableData) => {
+          parentIdOptions.value = [
+            {
+              _id: '0',
+              title: '根目录',
+              children: tableData || [],
+            },
+          ];
+        }
+      );
+      // 图标
+      const iconOptions = ref<any[]>([]);
+      iconOptions.value = Object.keys(constantHtmlIcon).map((key) => ({
+        label: constantHtmlIcon[key],
+        value: key,
+        style: {
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '22px',
+        },
+      }));
+      const iconRenderLabel = (option) => h(option.label);
 
       // 初始化
       const init = (row) => {
         showModal.value = true;
+        modelId.value = row?._id;
+        resetFields();
         if (row) {
           modelForm.menuType = row.menuType;
           modelForm.title = row.title;
+          modelForm.path = row.path;
+          modelForm.name = row.name;
+          modelForm.component = row.component;
+          modelForm.iframeSrc = row.iframeSrc;
+          modelForm.icon = row.icon;
           modelForm.sort = row.sort;
           modelForm.parentId = row.parentId;
           modelForm.hidden = row.hidden;
-          console.log(row);
         }
+      };
+
+      // 重置
+      const resetFields = () => {
+        Object.keys(modelFields).forEach((key) => {
+          modelForm[key] = modelFields[key];
+        });
+        nextTick(() => {
+          modelFromRef.value.restoreValidation();
+        });
+        // console.log(modelFromRef.value);
+        // modelFromRef.value.restoreValidation();
       };
 
       // 提交
@@ -109,7 +208,9 @@
         formBtnLoading.value = true;
         modelFromRef.value.validate((errors) => {
           if (!errors) {
-            message.success('新建成功');
+            console.log(modelId.value);
+            console.log(modelForm);
+            // message.success('新建成功');
           } else {
             message.error('请填写完整信息');
           }
@@ -120,15 +221,20 @@
       return {
         modelId,
         showModal,
+        menuTypeName,
         modelFromRef,
         modelForm,
         modelRules,
         formBtnLoading,
         menuTypeOption,
         parentIdOptions,
+        iconOptions,
+        iconRenderLabel,
         init,
         confirmForm,
       };
     },
   });
 </script>
+
+<style lang="scss"></style>

@@ -38,7 +38,7 @@
   import type { EditRecordRow } from './index';
 
   import { defineComponent, ref, unref, nextTick, computed, watchEffect, toRaw } from 'vue';
-  import { FormOutlined, CloseOutlined, CheckOutlined } from '@vicons/antd';
+  import { FormOutlined, CloseOutlined, CheckOutlined } from '@/utils/icons';
   import { CellComponent } from './CellComponent';
 
   import { useTableContext } from '../../hooks/useTableContext';

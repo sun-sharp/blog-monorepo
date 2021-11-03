@@ -44,7 +44,7 @@
 <script lang="ts" setup>
   import { reactive, ref } from 'vue';
   import { getTableList } from '@/api/table/list';
-  import { PlusOutlined } from '@vicons/antd';
+  import { PlusOutlined } from '@/utils/icons';
   import { useMessage } from 'naive-ui';
   import { BasicTable } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';

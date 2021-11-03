@@ -56,7 +56,8 @@
   import { useMessage } from 'naive-ui';
   import { useConfigure } from './configure';
   import { levelMenu } from '@/utils';
-  import { PlusOutlined, ReloadOutlined, ColumnHeightOutlined } from '@vicons/antd';
+  import { PlusOutlined } from '@/utils/icons';
+  import { ReloadOutlined, ColumnHeightOutlined } from '@/utils/icons';
   import { BasicForm, useForm } from '@/components/Form/index';
   import AddUpdateModel from './AddUpdateModel.vue';
 

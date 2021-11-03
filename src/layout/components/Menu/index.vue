@@ -22,7 +22,7 @@
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
   import { PageEnum } from '@/enums/pageEnum';
-  import { constantRouterIcon } from '@/router/router-icons';
+  import { constantRouterIcon } from '@/utils/icons';
 
   export default defineComponent({
     name: 'Menu',

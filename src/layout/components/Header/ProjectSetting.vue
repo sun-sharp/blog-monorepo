@@ -203,8 +203,7 @@
   import { defineComponent, reactive, toRefs, unref, watch, computed } from 'vue';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
   import { useDesignSettingStore } from '@/store/modules/designSetting';
-  import { CheckOutlined } from '@vicons/antd';
-  import { Moon, SunnySharp } from '@vicons/ionicons5';
+  import { CheckOutlined, Moon, SunnySharp } from '@/utils/icons';
   import { darkTheme } from 'naive-ui';
   import { animates as animateOptions } from '@/settings/animateSetting';
 

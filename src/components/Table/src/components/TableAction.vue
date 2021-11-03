@@ -31,12 +31,12 @@
   import { defineComponent, PropType, computed, toRaw } from 'vue';
   import { ActionItem } from '@/components/Table';
   import { isBoolean, isFunction } from '@/utils/is';
-  import icons from './icons';
+  import tableIcons from './tableIcons';
   // import { renderIcon } from '@/utils';
 
   export default defineComponent({
     name: 'TableAction',
-    components: { ...icons },
+    components: { ...tableIcons },
     props: {
       actions: {
         type: Array as PropType<ActionItem[]>,

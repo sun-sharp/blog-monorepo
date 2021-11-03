@@ -73,7 +73,7 @@
   import { ref, defineComponent, reactive, unref, toRaw, computed, toRefs, watchEffect } from 'vue';
   import { useTableContext } from '../../hooks/useTableContext';
   import { cloneDeep } from 'lodash-es';
-  import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@vicons/antd';
+  import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@/utils/icons';
   import Draggable from 'vuedraggable/src/vuedraggable';
   import { useDesignSetting } from '@/utils/setting/useDesignSetting';
 
