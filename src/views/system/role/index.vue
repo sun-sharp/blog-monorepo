@@ -5,15 +5,7 @@
         <n-input v-model:value="model[field]" />
       </template>
     </basic-form>
-    <basic-table
-      ref="actionRef"
-      :columns="columns"
-      :request="loadDataTable"
-      :row-key="(row) => row.id"
-      :action-column="actionColumn"
-      :scroll-x="1090"
-      @update:checked-row-keys="onCheckedRow"
-    >
+    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
           <template #icon>
@@ -26,47 +18,33 @@
       </template>
     </basic-table>
     <add-update-model ref="addUpdateModelRef" @refurbish="loadDataTable" />
+    <permission-model ref="permissionModelRef" @refurbish="loadDataTable" />
   </n-card>
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { getRolePage } from '@/api';
   import { PlusOutlined } from '@/utils/icons';
-  import { useMessage } from 'naive-ui';
   import { BasicTable } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { useConfigure } from './configure';
+  import AddUpdateModel from './AddUpdateModel.vue';
+  import PermissionModel from './PermissionModel.vue';
 
   const addUpdateModelRef = ref();
-
-  // 配置
-  const message = useMessage();
-  const { searchSchemas, columns, actionColumn } = useConfigure({ message });
-
-  // 查询
-  const [searchRegister, {}] = useForm({
-    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
-    labelWidth: 80,
-    schemas: searchSchemas,
-    showAdvancedButton: false,
-    showResetButton: false,
-  });
-
-  // 表格
-  const actionRef = ref();
+  const permissionModelRef = ref();
 
   /**
    * 表格
    *  */
+  const actionRef = ref();
   // 获取接口数据
   const searchParams = ref({});
   const loadDataTable = async (tableParams) => {
     return await getRolePage({ ...searchParams.value, ...tableParams });
   };
-  // 选择行
-  const onCheckedRow = (rowKeys) => {
-    console.log(rowKeys);
-  };
+  // 配置
+  const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable, addUpdateModelRef, permissionModelRef });
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();
@@ -75,6 +53,13 @@
   /**
    * 查询
    *  */
+  const [searchRegister, {}] = useForm({
+    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
+    labelWidth: 80,
+    schemas: searchSchemas,
+    showAdvancedButton: false,
+    showResetButton: false,
+  });
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     console.log(values);

@@ -1,7 +1,7 @@
 import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
 
-export const useConfigure = ({ loadDataTable }) => {
+export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -10,6 +10,9 @@ export const useConfigure = ({ loadDataTable }) => {
       label: '姓名',
       componentProps: {
         placeholder: '请输入姓名',
+        onInput: (e: any) => {
+          console.log(e);
+        },
       },
     },
   ];
@@ -19,10 +22,12 @@ export const useConfigure = ({ loadDataTable }) => {
     {
       title: '角色名称',
       key: 'name',
+      align: 'center',
     },
     {
       title: '角色标识',
       key: 'roleCode',
+      align: 'center',
     },
   ];
 
@@ -32,6 +37,7 @@ export const useConfigure = ({ loadDataTable }) => {
   // 编辑
   const handleEdit = (record: Recordable) => {
     console.log('点击了编辑', record);
+    addUpdateModelRef.value.init();
   };
   // 删除
   const handleDelete = (record: Recordable) => {
@@ -68,7 +74,7 @@ export const useConfigure = ({ loadDataTable }) => {
           },
         ],
         // 更多
-        dropDownActions: [
+        /* dropDownActions: [
           {
             label: '启用',
             key: 'enabled',
@@ -86,14 +92,11 @@ export const useConfigure = ({ loadDataTable }) => {
           },
         ],
         select: (key) => {
-          console.log(`您点击了，${key} 按钮`);
-        },
+          message.info(`您点击了，${key} 按钮`);
+        }, */
       });
     },
   });
-  /**
-   * 弹窗配置
-   * */
 
   return {
     searchSchemas,

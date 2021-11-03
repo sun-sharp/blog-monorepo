@@ -41,7 +41,7 @@
     return await getRolePage({ ...searchParams.value, ...tableParams });
   };
   // 配置
-  const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable });
+  const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable, addUpdateModelRef });
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();
