@@ -137,7 +137,7 @@ const transform: AxiosTransform = {
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
-    const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
+    const { blogApiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
 
     // 添加接口前缀
     if (joinPrefix) {
@@ -145,8 +145,8 @@ const transform: AxiosTransform = {
     }
 
     // 添加API接口前缀
-    if (apiUrl && isString(apiUrl)) {
-      config.url = `${apiUrl}${config.url}`;
+    if (blogApiUrl && isString(blogApiUrl)) {
+      config.url = `${blogApiUrl}${config.url}`;
     }
     const params = config.params || {};
     const data = config.data || false;
@@ -233,7 +233,7 @@ const transform: AxiosTransform = {
   },
 };
 
-const Axios = new VAxios({
+export const AxiosBlog = new VAxios({
   timeout: 10 * 1000,
   // 接口前缀
   prefixUrl: urlPrefix,
@@ -255,9 +255,36 @@ const Axios = new VAxios({
     // 消息提示类型
     errorMessageMode: 'none',
     // 接口地址
-    apiUrl: globSetting.apiUrl as string,
+    blogApiUrl: globSetting.blogApiUrl as string,
   },
   withCredentials: false,
 });
 
-export default Axios;
+export const AxiosMock = new VAxios({
+  timeout: 10 * 1000,
+  // 接口前缀
+  prefixUrl: urlPrefix,
+  headers: { 'Content-Type': ContentTypeEnum.JSON },
+  // 数据处理方式
+  transform,
+  // 配置项，下面的选项都可以在独立的接口请求中覆盖
+  requestOptions: {
+    // 默认将prefix 添加到url
+    joinPrefix: true,
+    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+    isReturnNativeResponse: false,
+    // 需要对返回数据进行处理
+    isTransformResponse: true,
+    // post请求的时候添加参数到url
+    joinParamsToUrl: false,
+    // 格式化提交参数时间
+    formatDate: true,
+    // 消息提示类型
+    errorMessageMode: 'none',
+    // 接口地址
+    mockApiUrl: globSetting.blogApiUrl as string,
+  },
+  withCredentials: false,
+});
+
+// default AxiosBlog;

@@ -26,8 +26,10 @@ export interface RequestOptions {
   errorMessageText?: string;
   // 是否加入url
   joinPrefix?: boolean;
-  // 接口地址， 不填则使用默认apiUrl
-  apiUrl?: string;
+  // 接口地址， 不填则使用默认apiUrl 博客的接口地址
+  blogApiUrl?: string;
+  // 接口地址， 不填则使用默认apiUrl 虚拟的接口地址
+  mockApiUrl?: string;
   // 错误消息提示类型
   errorMessageMode?: 'none' | 'dialog';
   // 是否添加时间戳

@@ -1,4 +1,4 @@
-import http from '@/api/axios';
+import { AxiosBlog } from '@/api/axios';
 
 const basic = '/menu';
 
@@ -6,7 +6,7 @@ const basic = '/menu';
  * @description: 根据用户id获取用户菜单
  */
 export function adminMenus(params?) {
-  return http.request({
+  return AxiosBlog.request({
     url: `${basic}/role_route`,
     method: 'GET',
     params,
@@ -18,7 +18,7 @@ export function adminMenus(params?) {
  * @param params
  */
 export function getMenuList(params?) {
-  return http.request({
+  return AxiosBlog.request({
     url: `${basic}/find_term`,
     method: 'GET',
     params,
@@ -30,7 +30,7 @@ export function getMenuList(params?) {
  * @param data
  */
 export const saveMenu = (data?) => {
-  return http.request(
+  return AxiosBlog.request(
     {
       url: `${basic}/save`,
       method: 'POST',
@@ -47,7 +47,7 @@ export const saveMenu = (data?) => {
  * @param data
  */
 export const updateMenu = (data?) => {
-  return http.request(
+  return AxiosBlog.request(
     {
       url: `${basic}/update`,
       method: 'POST',
@@ -64,7 +64,7 @@ export const updateMenu = (data?) => {
  * @param data
  */
 export const removeMenu = (id?) => {
-  return http.request(
+  return AxiosBlog.request(
     {
       url: `${basic}/remove`,
       method: 'POST',

@@ -1,4 +1,4 @@
-import http from '@/api/axios';
+import { AxiosBlog } from '@/api/axios';
 
 const basic = '/user';
 
@@ -6,7 +6,7 @@ const basic = '/user';
  * @description: 获取用户信息
  */
 export function getUserInfo() {
-  return http.request({
+  return AxiosBlog.request({
     url: `${basic}/admin_info`,
     method: 'get',
   });
@@ -16,7 +16,7 @@ export function getUserInfo() {
  * @description: 用户登录
  */
 export function login(params) {
-  return http.request(
+  return AxiosBlog.request(
     {
       url: `${basic}/login`,
       method: 'POST',

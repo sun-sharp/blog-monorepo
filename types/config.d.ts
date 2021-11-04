@@ -45,7 +45,7 @@ export interface ImultiTabsSetting {
 }
 export interface GlobConfig {
   title: string;
-  apiUrl: string;
+  blogApiUrl: string;
   shortName: string;
   urlPrefix?: string;
   uploadUrl?: string;
