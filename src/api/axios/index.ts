@@ -137,17 +137,23 @@ const transform: AxiosTransform = {
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
-    const { blogApiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
+    const { blogApiUrl, mockApiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
 
     // 添加接口前缀
     if (joinPrefix) {
       config.url = `${urlPrefix}${config.url}`;
     }
 
-    // 添加API接口前缀
+    // 添加blog API接口前缀
     if (blogApiUrl && isString(blogApiUrl)) {
       config.url = `${blogApiUrl}${config.url}`;
     }
+
+    // 添加mock API接口前缀
+    if (mockApiUrl && isString(mockApiUrl)) {
+      config.url = `${mockApiUrl}${config.url}`;
+    }
+
     const params = config.params || {};
     const data = config.data || false;
     if (config.method?.toUpperCase() === RequestEnum.GET) {
@@ -282,7 +288,7 @@ export const AxiosMock = new VAxios({
     // 消息提示类型
     errorMessageMode: 'none',
     // 接口地址
-    mockApiUrl: globSetting.blogApiUrl as string,
+    mockApiUrl: globSetting.mockApiUrl as string,
   },
   withCredentials: false,
 });
