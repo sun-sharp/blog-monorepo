@@ -49,25 +49,25 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
     key: 'action',
     align: 'center',
     fixed: 'right',
-    render(record) {
+    render(row) {
       return h(TableAction as any, {
         style: 'button',
         actions: [
           {
             label: '编辑',
             type: 'primary',
-            onClick: handleEdit.bind(null, record),
+            onClick: handleEdit.bind(null, row),
             ifShow: () => {
-              return true;
+              return row.roleCode === 'manager' ? false : true;
             },
           },
           {
             label: '删除',
             type: 'error',
-            onClick: handleDelete.bind(null, record),
+            onClick: handleDelete.bind(null, row),
             // 根据业务控制是否显示 isShow
             ifShow: () => {
-              return true;
+              return row.roleCode === 'manager' ? false : true;
             },
           },
         ],

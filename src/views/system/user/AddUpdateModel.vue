@@ -21,7 +21,6 @@
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { menuTypeOption } from '@/enums/apiEnum';
-  import { saveMenu, updateMenu } from '@/api';
 
   const modelFields = {
     name: '',
@@ -30,7 +29,7 @@
 
   export default defineComponent({
     emits: ['refurbish'],
-    setup(_props, { emit }) {
+    setup() {
       const modelId = ref('');
       const showModal = ref(false);
 
@@ -75,14 +74,14 @@
         formBtnLoading.value = true;
         modelFromRef.value.validate((errors) => {
           if (!errors) {
-            const params: any = {
-              name: modelForm.name,
-            };
-            const request = modelId.value ? updateMenu({ id: modelId.value, ...params }) : saveMenu(params);
-            request.then(() => {
-              showModal.value = false;
-              emit('refurbish');
-            });
+            // const params: any = {
+            //   name: modelForm.name,
+            // };
+            // const request = modelId.value ? update({ id: modelId.value, ...params }) : save(params);
+            // request.then(() => {
+            //   showModal.value = false;
+            //   emit('refurbish');
+            // });
           }
           formBtnLoading.value = false;
         });

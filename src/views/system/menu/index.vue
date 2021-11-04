@@ -52,7 +52,7 @@
 </template>
 <script lang="ts" setup>
   import { nextTick, onMounted, ref } from 'vue';
-  import { getMenuList } from '@/api';
+  import { menuApi } from '@/api';
   import { useConfigure } from './configure';
   import { levelMenu } from '@/utils';
   import { PlusOutlined } from '@/utils/icons';
@@ -94,7 +94,8 @@
   let searchParams = {};
   const loadDataTable = () => {
     tableLoading.value = true;
-    getMenuList({ ...searchParams })
+    menuApi
+      .getMenuList({ ...searchParams })
       .then((res) => {
         tableData.value = levelMenu(res);
       })

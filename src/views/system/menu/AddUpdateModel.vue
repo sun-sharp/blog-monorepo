@@ -55,7 +55,7 @@
   import { defineComponent, h, nextTick, reactive, ref, unref, watch } from 'vue';
   import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
   import { constantHtmlIcon } from '@/utils/icons';
-  import { saveMenu, updateMenu } from '@/api';
+  import { menuApi } from '@/api';
 
   const modelFields = {
     menuType: 1,
@@ -231,7 +231,7 @@
             if ([6].includes(modelForm.menuType)) {
               params.iframeSrc = modelForm.iframeSrc;
             }
-            const request = modelId.value ? updateMenu({ id: modelId.value, ...params }) : saveMenu(params);
+            const request = modelId.value ? menuApi.updateMenu({ id: modelId.value, ...params }) : menuApi.saveMenu(params);
             request.then(() => {
               showModal.value = false;
               emit('refurbish');

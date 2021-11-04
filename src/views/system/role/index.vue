@@ -22,7 +22,7 @@
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { getRolePage } from '@/api';
+  import { roleApi } from '@/api';
   import { PlusOutlined } from '@/utils/icons';
   import { BasicTable } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';
@@ -38,7 +38,7 @@
   // 获取接口数据
   const searchParams = ref({});
   const loadDataTable = async (tableParams) => {
-    return await getRolePage({ ...searchParams.value, ...tableParams });
+    return await roleApi.getPage({ ...searchParams.value, ...tableParams });
   };
   // 配置
   const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable, addUpdateModelRef });

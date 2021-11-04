@@ -29,12 +29,12 @@ export default [
     timeout: 1000,
     method: 'get',
     response: ({ query }) => {
-      const { page = 1, pageSize = 10 } = query;
-      const list = tableList(Number(pageSize));
+      const { current = 1, size = 10 } = query;
+      const list = tableList(Number(size));
       return resultSuccess({
-        page: Number(page),
-        pageSize: Number(pageSize),
-        pageCount: 60,
+        current: Number(current),
+        size: Number(size),
+        total: 200,
         list,
       });
     },

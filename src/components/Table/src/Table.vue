@@ -195,7 +195,6 @@
 
       //获取分页信息
       const pagination = computed(() => toRaw(unref(getPaginationInfo)));
-      console.log(pagination.value);
 
       function setProps(props: Partial<BasicTableProps>) {
         innerPropsRef.value = { ...unref(innerPropsRef), ...props };

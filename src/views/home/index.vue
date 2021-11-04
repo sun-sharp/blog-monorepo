@@ -194,7 +194,7 @@
 </template>
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
-  import { getConsoleInfo } from '@/api';
+  import { homeApi } from '@/api';
   import VisiTab from './components/VisiTab.vue';
   import { CountTo } from '@/components/CountTo/index';
   import {
@@ -295,7 +295,7 @@
   ];
 
   onMounted(async () => {
-    const consoleInfo = await getConsoleInfo();
+    const consoleInfo = await homeApi.getConsoleInfo();
     visits.value = consoleInfo.visits;
     saleroom.value = consoleInfo.saleroom;
     orderLarge.value = consoleInfo.orderLarge;

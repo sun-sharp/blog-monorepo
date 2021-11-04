@@ -31,3 +31,16 @@ export const menuTypeOption = [
   },
 ];
 export const menuTypeObj = arrEnumToObj(menuTypeOption);
+
+// 角色权限类型枚举值
+export const roleTypeOption = [
+  {
+    value: 1,
+    label: '全部权限',
+  },
+  {
+    value: 2,
+    label: '自定义权限',
+  },
+];
+export const roleTypeObj = arrEnumToObj(roleTypeOption);

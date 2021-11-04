@@ -1,4 +1,4 @@
-import { adminMenus } from '@/api';
+import { menuApi } from '@/api';
 import { constantRouterIcon } from '@/utils/icons';
 import { RouteRecordRaw } from 'vue-router';
 import { Layout, ParentLayout } from '@/router/constant';
@@ -107,7 +107,8 @@ export const routerOneScreen = (routerMap): any => {
  */
 export const generatorDynamicRouter = (roleCode: string): Promise<RouteRecordRaw[]> => {
   return new Promise((resolve, reject) => {
-    adminMenus({ roleCode })
+    menuApi
+      .adminMenus({ roleCode })
       .then((result) => {
         resolve(routerOneScreen(result));
       })

@@ -1,8 +1,8 @@
 // blog
-export * from './blog/menu';
-export * from './blog/user';
-export * from './blog/role';
+export * as menuApi from './blog/menu';
+export * as userApi from './blog/user';
+export * as roleApi from './blog/role';
 
 // mock
-export * from './mock/home';
-export * from './mock/list';
+export * as homeApi from './mock/home';
+export * as tableAPi from './mock/table';

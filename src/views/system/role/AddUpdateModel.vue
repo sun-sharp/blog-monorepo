@@ -7,8 +7,21 @@
       <n-form-item label="角色标识" path="roleCode">
         <n-input v-model:value="modelForm.roleCode" placeholder="请输入角色标识" />
       </n-form-item>
-      <n-form-item label="角色权限" path="roleCode">
-        <n-input v-model:value="modelForm.roleCode" placeholder="请输入角色标识" />
+      <n-form-item label="角色权限类型" path="roleType">
+        <n-select v-model:value="modelForm.roleType" :options="roleTypeOption" placeholder="请选择角色权限类型" @update:value="roleTypeChange" />
+      </n-form-item>
+      <n-form-item v-if="modelForm.roleType === 2" label="菜单权限" path="menuList">
+        <n-tree
+          block-line
+          block-node
+          checkable
+          key-field="name"
+          label-field="title"
+          :data="menuData"
+          :default-expand-all="true"
+          :default-checked-keys="defaultCheckedKeys"
+          @update:checked-keys="updateCheckedKeys"
+        />
       </n-form-item>
     </n-form>
 
@@ -23,12 +36,15 @@
 
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
-  import { menuTypeOption } from '@/enums/apiEnum';
-  import { saveMenu, updateMenu } from '@/api';
+  import { menuApi } from '@/api';
+  import { levelMenu } from '@/utils';
+  import { roleTypeOption } from '@/enums/apiEnum';
 
   const modelFields = {
     name: null,
     roleCode: null,
+    roleType: null,
+    menuList: [],
   };
 
   export default defineComponent({
@@ -51,16 +67,25 @@
           trigger: ['blur', 'input'],
           message: `请输入角色标识`,
         },
+        roleType: {
+          required: true,
+          trigger: ['blur', 'change'],
+          message: '请选择角色权限类型',
+        },
       });
 
+      const defaultCheckedKeys = ref([]);
+      const menuData = ref<any[]>([]);
+
       // 初始化
-      const init = (row) => {
+      const init = async (row) => {
         showModal.value = true;
         modelId.value = row?.id;
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
           modelForm.roleCode = row.roleCode;
+          defaultCheckedKeys.value = row.menuList;
         }
       };
       // 重置
@@ -73,6 +98,19 @@
         });
       };
 
+      // 菜单权限类型选择
+      const roleTypeChange = () => {
+        menuApi.getMenuList().then((res) => {
+          menuData.value = levelMenu(res);
+        });
+        // console.log(values);
+      };
+
+      // 菜单权限选择树
+      const updateCheckedKeys = (values) => {
+        modelForm.menuList = values;
+      };
+
       // 提交
       const confirmForm = (e) => {
         e.preventDefault();
@@ -81,12 +119,15 @@
           if (!errors) {
             const params: any = {
               name: modelForm.name,
+              roleCode: modelForm.roleCode,
+              menuList: modelForm.menuList,
             };
-            const request = modelId.value ? updateMenu({ id: modelId.value, ...params }) : saveMenu(params);
-            request.then(() => {
-              showModal.value = false;
-              emit('refurbish');
-            });
+            console.log(params);
+            // const request = modelId.value ? update({ id: modelId.value, ...params }) : save(params);
+            // request.then(() => {
+            //   showModal.value = false;
+            //   emit('refurbish');
+            // });
           }
           formBtnLoading.value = false;
         });
@@ -99,8 +140,12 @@
         modelForm,
         modelRules,
         formBtnLoading,
-        menuTypeOption,
+        roleTypeOption,
+        menuData,
+        defaultCheckedKeys,
+        roleTypeChange,
         init,
+        updateCheckedKeys,
         confirmForm,
       };
     },
