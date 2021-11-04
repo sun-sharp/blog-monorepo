@@ -17,7 +17,7 @@ export function getPage(params) {
  * 新增角色
  * @param data
  */
-export const saveRole = (data?) => {
+export const save = (data?) => {
   return AxiosBlog.request(
     {
       url: `${basic}/save`,
@@ -34,7 +34,7 @@ export const saveRole = (data?) => {
  * 修改菜单
  * @param data
  */
-export const updateRole = (data?) => {
+export const update = (data?) => {
   return AxiosBlog.request(
     {
       url: `${basic}/update`,

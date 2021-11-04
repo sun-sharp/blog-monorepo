@@ -8,12 +8,13 @@
         <n-input v-model:value="modelForm.roleCode" placeholder="请输入角色标识" />
       </n-form-item>
       <n-form-item label="角色权限类型" path="roleType">
-        <n-select v-model:value="modelForm.roleType" :options="roleTypeOption" placeholder="请选择角色权限类型" @update:value="roleTypeChange" />
+        <n-select v-model:value="modelForm.roleType" :options="roleTypeOption" placeholder="请选择角色权限类型" />
       </n-form-item>
-      <n-form-item v-if="modelForm.roleType === 2" label="菜单权限" path="menuList">
+      <n-form-item v-if="modelForm.roleType === 2 && menuListLoading" label="菜单权限" path="menuList">
         <n-tree
           block-line
           block-node
+          cascade
           checkable
           key-field="name"
           label-field="title"
@@ -28,7 +29,7 @@
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="true" @click="confirmForm">确定</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="confirmForm">确定</n-button>
       </n-space>
     </template>
   </n-modal>
@@ -36,7 +37,7 @@
 
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
-  import { menuApi } from '@/api';
+  import { menuApi, roleApi } from '@/api';
   import { levelMenu } from '@/utils';
   import { roleTypeOption } from '@/enums/apiEnum';
 
@@ -55,7 +56,7 @@
 
       const formBtnLoading = ref(false);
       const modelFromRef = ref();
-      const modelForm = reactive(Object.assign({}, modelFields));
+      const modelForm = reactive<any>(Object.assign({}, modelFields));
       const modelRules = reactive({
         name: {
           required: true,
@@ -68,6 +69,7 @@
           message: `请输入角色标识`,
         },
         roleType: {
+          type: 'number',
           required: true,
           trigger: ['blur', 'change'],
           message: '请选择角色权限类型',
@@ -78,15 +80,26 @@
       const menuData = ref<any[]>([]);
 
       // 初始化
+      const menuListLoading = ref(false);
       const init = async (row) => {
         showModal.value = true;
         modelId.value = row?.id;
+        menuListLoading.value = false;
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
           modelForm.roleCode = row.roleCode;
-          defaultCheckedKeys.value = row.menuList;
+          modelForm.roleType = row.roleCode === 'manager' ? 1 : 2;
+          modelForm.menuList = defaultCheckedKeys.value = row.menuList;
+        } else {
+          defaultCheckedKeys.value = [];
         }
+        nextTick(() => {
+          menuApi.getMenuList().then((res) => {
+            menuData.value = levelMenu(res);
+            menuListLoading.value = true;
+          });
+        });
       };
       // 重置
       const resetFields = () => {
@@ -96,14 +109,6 @@
         nextTick(() => {
           modelFromRef.value.restoreValidation();
         });
-      };
-
-      // 菜单权限类型选择
-      const roleTypeChange = () => {
-        menuApi.getMenuList().then((res) => {
-          menuData.value = levelMenu(res);
-        });
-        // console.log(values);
       };
 
       // 菜单权限选择树
@@ -122,12 +127,11 @@
               roleCode: modelForm.roleCode,
               menuList: modelForm.menuList,
             };
-            console.log(params);
-            // const request = modelId.value ? update({ id: modelId.value, ...params }) : save(params);
-            // request.then(() => {
-            //   showModal.value = false;
-            //   emit('refurbish');
-            // });
+            const request = modelId.value ? roleApi.update({ id: modelId.value, ...params }) : roleApi.save(params);
+            request.then(() => {
+              showModal.value = false;
+              emit('refurbish');
+            });
           }
           formBtnLoading.value = false;
         });
@@ -143,7 +147,7 @@
         roleTypeOption,
         menuData,
         defaultCheckedKeys,
-        roleTypeChange,
+        menuListLoading,
         init,
         updateCheckedKeys,
         confirmForm,
