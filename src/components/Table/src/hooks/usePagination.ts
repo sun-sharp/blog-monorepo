@@ -14,7 +14,7 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
     if (!unref(show) || (isBoolean(pagination) && !pagination)) {
       return false;
     }
-    const { totalField } = API_SETTING;
+    const { totalField, pageCountField } = API_SETTING;
     return {
       pageSize: DEFAULT_PAGESIZE,
       pageSizes: PAGE_SIZES,
@@ -22,7 +22,8 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
       showQuickJumper: true,
       ...(isBoolean(pagination) ? {} : pagination),
       ...unref(configRef),
-      pageCount: unref(configRef)[totalField],
+      pageCount: unref(configRef)[pageCountField],
+      itemCount: unref(configRef)[totalField],
     };
   });
 

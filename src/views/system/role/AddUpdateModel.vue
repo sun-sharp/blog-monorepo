@@ -7,6 +7,9 @@
       <n-form-item label="角色标识" path="roleCode">
         <n-input v-model:value="modelForm.roleCode" placeholder="请输入角色标识" />
       </n-form-item>
+      <n-form-item label="角色权限" path="roleCode">
+        <n-input v-model:value="modelForm.roleCode" placeholder="请输入角色标识" />
+      </n-form-item>
     </n-form>
 
     <template #action>
