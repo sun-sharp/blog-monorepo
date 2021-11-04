@@ -24,8 +24,8 @@
   import { saveMenu, updateMenu } from '@/api';
 
   const modelFields = {
-    name: '',
-    roleCode: '',
+    name: null,
+    roleCode: null,
   };
 
   export default defineComponent({
@@ -38,62 +38,26 @@
       const modelFromRef = ref();
       const modelForm = reactive(Object.assign({}, modelFields));
       const modelRules = reactive({
-        menuType: {
-          type: 'number',
-          required: true,
-          trigger: ['change', 'blur'],
-          message: '请选择类型',
-        },
-        title: {
-          required: true,
-          trigger: ['blur', 'input'],
-          message: `请输入名称`,
-        },
-        path: {
-          required: true,
-          trigger: ['blur', 'input'],
-          message: `请输入路由`,
-        },
         name: {
           required: true,
           trigger: ['blur', 'input'],
-          message: `请输入标识`,
+          message: `请输入角色名称`,
         },
-        component: {
+        roleCode: {
           required: true,
           trigger: ['blur', 'input'],
-          message: `请输入位置`,
-        },
-        iframeSrc: {
-          required: true,
-          trigger: ['blur', 'input'],
-          message: `请输入链接`,
-        },
-        icon: {
-          required: true,
-          trigger: ['blur', 'change'],
-          message: '请选择',
-        },
-        parentId: {
-          required: true,
-          trigger: 'change',
-          message: '请输入地址',
-        },
-        sort: {
-          type: 'number',
-          required: true,
-          trigger: ['blur', 'change'],
-          message: '请输入排序号',
+          message: `请输入角色标识`,
         },
       });
 
       // 初始化
       const init = (row) => {
         showModal.value = true;
-        modelId.value = row?._id;
+        modelId.value = row?.id;
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
+          modelForm.roleCode = row.roleCode;
         }
       };
       // 重置

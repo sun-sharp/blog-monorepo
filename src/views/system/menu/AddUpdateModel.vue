@@ -14,7 +14,7 @@
         <n-input v-model:value="modelForm.title" :placeholder="`请输入${menuTypeName}名称`" />
       </n-form-item>
       <n-form-item label="上级菜单" path="parentId">
-        <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="_id" />
+        <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="id" />
       </n-form-item>
       <n-form-item label="路由" path="path">
         <n-input v-model:value="modelForm.path" placeholder="请输入路由" />
@@ -137,7 +137,7 @@
       });
       const parentIdOptions = ref([
         {
-          _id: '0',
+          id: '0',
           title: '根目录',
           children: props.tableData || [],
         },
@@ -153,7 +153,7 @@
         (tableData) => {
           parentIdOptions.value = [
             {
-              _id: '0',
+              id: '0',
               title: '根目录',
               children: tableData || [],
             },
@@ -177,7 +177,7 @@
       // 初始化
       const init = (row) => {
         showModal.value = true;
-        modelId.value = row?._id;
+        modelId.value = row?.id;
         resetFields();
         if (modelId.value) {
           modelForm.menuType = row.menuType;

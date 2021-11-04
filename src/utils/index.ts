@@ -40,10 +40,10 @@ export const levelMenu = (menuMap: Array<any>, parentId: string | number = '0') 
   menuMap.forEach((i) => {
     const item = i;
     // 查找上级菜单
-    const menuFind = menuMap.find((f) => f._id === item.parentId);
+    const menuFind = menuMap.find((f) => f.id === item.parentId);
     if (item.parentId === parentId) {
       // 是否有子菜单，并递归处理
-      const itemChildren = levelMenu(menuMap, item._id);
+      const itemChildren = levelMenu(menuMap, item.id);
       if (itemChildren && itemChildren.length > 0) {
         // 添加子数据
         item.children = itemChildren;

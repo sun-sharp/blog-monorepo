@@ -14,14 +14,14 @@ LayoutMap.set('IFRAME', Iframe);
 /**
  * 格式化 后端 结构信息并递归生成层级路由表
  * @param routerMap
- * @param _id
+ * @param id
  * @param path
  * @returns {*}
  */
 export const routerGenerator = (routerMap, _parentId): any[] => {
   const resultArr: any[] = [];
   routerMap.forEach((i) => {
-    const { _id, path, name, component, parentId, ...other } = i;
+    const { id, path, name, component, parentId, ...other } = i;
     if (_parentId === parentId) {
       const currentRouter: any = {
         // 路由地址 动态拼接生成如 /dashboard/workplace
@@ -39,7 +39,7 @@ export const routerGenerator = (routerMap, _parentId): any[] => {
       // 为了防止出现后端返回结果不规范，处理有可能出现拼接出两个 反斜杠
       currentRouter.path = currentRouter.path.replace('//', '/');
       // 是否有子菜单，并递归处理
-      const itemChildren = routerGenerator(routerMap, _id);
+      const itemChildren = routerGenerator(routerMap, id);
       if (itemChildren && itemChildren.length > 0) {
         //如果未定义 redirect 默认第一个子路由为 redirect
         currentRouter.redirect = `${path}/${itemChildren[0].path}`;

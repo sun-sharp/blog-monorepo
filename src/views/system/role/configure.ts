@@ -1,7 +1,7 @@
 import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
 
-export const useConfigure = ({ loadDataTable, addUpdateModelRef, permissionModelRef }) => {
+export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -34,13 +34,8 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef, permissionModel
   /**
    * 表格按钮操作配置
    *  */
-  // 菜单权限
-  const handlePermission = (row: Recordable) => {
-    permissionModelRef.value.init(row);
-  };
   // 编辑
   const handleEdit = (row: Recordable) => {
-    console.log('点击了编辑', row);
     addUpdateModelRef.value.init(row);
   };
   // 删除
@@ -49,35 +44,28 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef, permissionModel
     loadDataTable();
   };
   const actionColumn = reactive({
-    width: 220,
+    width: 250,
     title: '操作',
     key: 'action',
+    align: 'center',
     fixed: 'right',
     render(record) {
       return h(TableAction as any, {
         style: 'button',
         actions: [
           {
-            label: '菜单权限',
-            onClick: handlePermission.bind(null, record),
+            label: '编辑',
+            type: 'primary',
+            onClick: handleEdit.bind(null, record),
             ifShow: () => {
               return true;
             },
           },
           {
             label: '删除',
-            icon: 'DeleteOutlined',
             type: 'error',
             onClick: handleDelete.bind(null, record),
             // 根据业务控制是否显示 isShow
-            ifShow: () => {
-              return true;
-            },
-          },
-          {
-            label: '编辑',
-            type: 'primary',
-            onClick: handleEdit.bind(null, record),
             ifShow: () => {
               return true;
             },

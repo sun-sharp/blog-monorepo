@@ -4,7 +4,7 @@ const basic = '/mock-api';
 
 const menusList = [
   {
-    _id: 'al123',
+    id: 'al123',
     path: '/example',
     name: 'Example',
     component: 'LAYOUT',
@@ -15,7 +15,7 @@ const menusList = [
     parentId: '0',
   },
   {
-    _id: '100',
+    id: '100',
     path: '/result',
     name: 'ExampleResult',
     component: '',
@@ -26,7 +26,7 @@ const menusList = [
     parentId: 'al123',
   },
   {
-    _id: '101',
+    id: '101',
     path: 'success',
     name: 'ExampleResultSuccess',
     component: '/example/result/success',
@@ -37,7 +37,7 @@ const menusList = [
     parentId: '100',
   },
   {
-    _id: '102',
+    id: '102',
     path: 'fail',
     name: 'ExampleResultFail',
     component: '/example/result/fail',
@@ -49,7 +49,7 @@ const menusList = [
     hidden: false,
   },
   {
-    _id: '103',
+    id: '103',
     // path: 'info',
     // name: 'ExampleResultInfo',
     // component: '/example/result/info',
@@ -61,7 +61,7 @@ const menusList = [
     // hidden: false,
   },
   {
-    _id: '400',
+    id: '400',
     path: 'frame',
     name: 'ExampleFrame',
     component: '',
@@ -72,7 +72,7 @@ const menusList = [
     parentId: 'al123',
   },
   {
-    _id: '401',
+    id: '401',
     path: 'docs',
     name: 'ExampleFrameDocs',
     component: '',
@@ -83,7 +83,7 @@ const menusList = [
     parentId: '400',
   },
   {
-    _id: '500',
+    id: '500',
     path: '/external',
     name: 'https://naive-ui-admin-docs.vercel.app',
     component: '',
@@ -94,7 +94,7 @@ const menusList = [
     parentId: 'al123',
   },
   {
-    _id: '600',
+    id: '600',
     path: '/about',
     name: 'About',
     component: '/about/index',
@@ -105,7 +105,7 @@ const menusList = [
     parentId: '0',
   },
   {
-    _id: '1000',
+    id: '1000',
     path: '/system',
     name: 'System',
     component: 'LAYOUT',
@@ -116,7 +116,7 @@ const menusList = [
     parentId: '0',
   },
   {
-    _id: '1001',
+    id: '1001',
     path: 'menu',
     name: 'SystemMenu',
     component: '/system/menu/index',
@@ -127,7 +127,7 @@ const menusList = [
     parentId: '1000',
   },
   {
-    _id: '1005',
+    id: '1005',
     path: 'role',
     name: 'SystemRole',
     component: '/system/role/index',
@@ -138,7 +138,7 @@ const menusList = [
     parentId: '1000',
   },
   {
-    _id: '1003',
+    id: '1003',
     path: 'user',
     name: 'SystemUser',
     component: '/system/user/index',
@@ -152,7 +152,7 @@ const menusList = [
 
 // const menusList = [
 //   {
-//     _id: '111',
+//     id: '111',
 //     path: '/result',
 //     name: 'Result',
 //     component: 'LAYOUT',
@@ -163,7 +163,7 @@ const menusList = [
 //     parentId: '0',
 //   },
 //   {
-//     _id: '222',
+//     id: '222',
 //     path: 'success',
 //     name: 'ResultSuccess',
 //     component: '/result/success',
@@ -174,7 +174,7 @@ const menusList = [
 //     parentId: '111',
 //   },
 //   {
-//     _id: '333',
+//     id: '333',
 //     path: 'fail',
 //     name: 'ResultFail',
 //     component: '/result/fail',
@@ -186,7 +186,7 @@ const menusList = [
 //     hidden: false,
 //   },
 //   {
-//     _id: '444',
+//     id: '444',
 //     path: '/frame',
 //     name: 'Frame',
 //     component: 'LAYOUT',
@@ -197,7 +197,7 @@ const menusList = [
 //     parentId: '0',
 //   },
 //   {
-//     _id: '555',
+//     id: '555',
 //     path: 'docs',
 //     name: 'FrameDocs',
 //     component: '',
@@ -208,7 +208,7 @@ const menusList = [
 //     parentId: '444',
 //   },
 //   {
-//     _id: '666',
+//     id: '666',
 //     path: '/external',
 //     name: 'https://naive-ui-admin-docs.vercel.app',
 //     component: '',
@@ -219,7 +219,7 @@ const menusList = [
 //     parentId: '0',
 //   },
 //   {
-//     _id: '777',
+//     id: '777',
 //     path: '/about',
 //     name: 'About',
 //     component: '/about/index',

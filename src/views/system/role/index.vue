@@ -18,7 +18,6 @@
       </template>
     </basic-table>
     <add-update-model ref="addUpdateModelRef" @refurbish="loadDataTable" />
-    <permission-model ref="permissionModelRef" @refurbish="loadDataTable" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -29,10 +28,8 @@
   import { BasicForm, useForm } from '@/components/Form/index';
   import { useConfigure } from './configure';
   import AddUpdateModel from './AddUpdateModel.vue';
-  import PermissionModel from './PermissionModel.vue';
 
   const addUpdateModelRef = ref();
-  const permissionModelRef = ref();
 
   /**
    * 表格
@@ -44,7 +41,7 @@
     return await getRolePage({ ...searchParams.value, ...tableParams });
   };
   // 配置
-  const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable, addUpdateModelRef, permissionModelRef });
+  const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable, addUpdateModelRef });
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();

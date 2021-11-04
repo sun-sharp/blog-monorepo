@@ -53,7 +53,7 @@
       // 初始化
       const init = (row) => {
         showModal.value = true;
-        modelId.value = row?._id;
+        modelId.value = row?.id;
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
