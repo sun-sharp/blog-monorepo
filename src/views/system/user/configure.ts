@@ -1,7 +1,8 @@
 import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
+import { userApi } from '@/api';
 
-export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
+export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -20,13 +21,28 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   // 表格字段配置
   const columns = [
     {
-      title: '角色名称',
+      title: '昵称',
       key: 'name',
       align: 'center',
     },
     {
-      title: '角色标识',
-      key: 'roleCode',
+      title: '头像',
+      key: 'avatar',
+      align: 'center',
+    },
+    {
+      title: '用户名',
+      key: 'username',
+      align: 'center',
+    },
+    {
+      title: '上次登录时间',
+      key: 'loginDate',
+      align: 'center',
+    },
+    {
+      title: '角色',
+      key: 'roleName',
       align: 'center',
     },
   ];
@@ -34,66 +50,33 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   /**
    * 表格按钮操作配置
    *  */
-  // 编辑
-  const handleEdit = (record: Recordable) => {
-    console.log('点击了编辑', record);
-    addUpdateModelRef.value.init();
-  };
   // 删除
-  const handleDelete = (record: Recordable) => {
-    console.log('点击了删除', record);
-    loadDataTable();
+  const handleDelete = (row: Recordable) => {
+    userApi.remove(row.id).then(() => {
+      reloadTable();
+    });
   };
   const actionColumn = reactive({
     width: 220,
     title: '操作',
     key: 'action',
+    align: 'center',
     fixed: 'right',
-    render(record) {
+    render(row) {
       return h(TableAction as any, {
         style: 'button',
         actions: [
           {
-            label: '删除',
-            icon: 'DeleteOutlined',
-            type: 'error',
-            // color: '#8a2be2',
-            onClick: handleDelete.bind(null, record),
-            // 根据业务控制是否显示 isShow
-            ifShow: () => {
-              return true;
-            },
-          },
-          {
             label: '编辑',
             type: 'primary',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true;
-            },
-          },
-        ],
-        // 更多
-        /* dropDownActions: [
-          {
-            label: '启用',
-            key: 'enabled',
-            // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-            ifShow: () => {
-              return true;
-            },
+            onClick: addUpdateModelRef.value.init.bind(null, row),
           },
           {
-            label: '禁用',
-            key: 'disabled',
-            ifShow: () => {
-              return true;
-            },
+            label: '删除',
+            type: 'error',
+            onClick: handleDelete.bind(null, row),
           },
         ],
-        select: (key) => {
-          message.info(`您点击了，${key} 按钮`);
-        }, */
       });
     },
   });

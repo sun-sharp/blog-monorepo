@@ -1,6 +1,6 @@
 <template>
   <n-card :bordered="false" class="proCard">
-    <basic-form @register="searchRegister" @submit="searchSubmit" @reset="searchReset">
+    <basic-form @register="searchRegister" @submit="searchSubmit">
       <template #statusSlot="{ model, field }">
         <n-input v-model:value="model[field]" />
       </template>
@@ -40,12 +40,12 @@
   const loadDataTable = async (tableParams) => {
     return await roleApi.getPage({ ...searchParams.value, ...tableParams });
   };
-  // 配置
-  const { searchSchemas, columns, actionColumn } = useConfigure({ loadDataTable, addUpdateModelRef });
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();
   };
+  // 配置
+  const { searchSchemas, columns, actionColumn } = useConfigure({ reloadTable, addUpdateModelRef });
 
   /**
    * 查询
@@ -54,17 +54,12 @@
     gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
     labelWidth: 80,
     schemas: searchSchemas,
-    showAdvancedButton: false,
     showResetButton: false,
   });
   // 数据查询
   const searchSubmit = (values: Recordable) => {
-    console.log(values);
+    searchParams.value = values;
     reloadTable();
-  };
-  // 数据重置
-  const searchReset = (values: Recordable) => {
-    console.log(values);
   };
 </script>
 <style lang="scss" scoped></style>

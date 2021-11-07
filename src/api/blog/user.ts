@@ -14,6 +14,7 @@ export function getUserInfo() {
 
 /**
  * @description: 用户登录
+ * @param params
  */
 export function login(params) {
   return AxiosBlog.request(
@@ -54,3 +55,68 @@ export function login(params) {
 //     params,
 //   });
 // }
+
+/**
+ * @description 用户列表
+ * @param params
+ */
+export function getPage(params) {
+  return AxiosBlog.request({
+    url: `${basic}/find_page`,
+    method: 'GET',
+    params,
+  });
+}
+
+/**
+ * @description 新增用户
+ * @param data
+ */
+export const save = (data?) => {
+  return AxiosBlog.request(
+    {
+      url: `${basic}/save`,
+      method: 'POST',
+      data,
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * @description 修改用户
+ * @param data
+ */
+export const update = (data?) => {
+  return AxiosBlog.request(
+    {
+      url: `${basic}/update`,
+      method: 'POST',
+      data,
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * @description 删除用户
+ * @param id
+ */
+export const remove = (id?) => {
+  return AxiosBlog.request(
+    {
+      url: `${basic}/remove`,
+      method: 'POST',
+      data: {
+        id,
+      },
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};

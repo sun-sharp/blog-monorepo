@@ -1,18 +1,25 @@
 import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
+import { roleTypeObj } from '@/enums/apiEnum';
+import { roleApi } from '@/api';
 
-export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
+export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
       field: 'name',
       component: 'NInput',
-      label: '姓名',
+      label: '角色名称',
       componentProps: {
-        placeholder: '请输入姓名',
-        onInput: (e: any) => {
-          console.log(e);
-        },
+        placeholder: '请输入角色名称',
+      },
+    },
+    {
+      field: 'roleCode',
+      component: 'NInput',
+      label: '角色标识',
+      componentProps: {
+        placeholder: '请输入角色标识',
       },
     },
   ];
@@ -29,22 +36,27 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
       key: 'roleCode',
       align: 'center',
     },
+    {
+      title: '角色权限类型',
+      key: 'roleType',
+      align: 'center',
+      render(row) {
+        return roleTypeObj[row.roleType];
+      },
+    },
   ];
 
   /**
    * 表格按钮操作配置
    *  */
-  // 编辑
-  const handleEdit = (row: Recordable) => {
-    addUpdateModelRef.value.init(row);
-  };
   // 删除
   const handleDelete = (row: Recordable) => {
-    console.log('点击了删除', row);
-    loadDataTable();
+    roleApi.remove(row.id).then(() => {
+      reloadTable();
+    });
   };
   const actionColumn = reactive({
-    width: 250,
+    width: 200,
     title: '操作',
     key: 'action',
     align: 'center',
@@ -56,19 +68,19 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
           {
             label: '编辑',
             type: 'primary',
-            onClick: handleEdit.bind(null, row),
-            ifShow: () => {
-              return row.roleCode === 'manager' ? false : true;
-            },
+            onClick: addUpdateModelRef.value.init.bind(null, row),
+            // ifShow: () => {
+            //   return row.roleCode === 'manager' ? false : true;
+            // },
           },
           {
             label: '删除',
             type: 'error',
             onClick: handleDelete.bind(null, row),
             // 根据业务控制是否显示 isShow
-            ifShow: () => {
-              return row.roleCode === 'manager' ? false : true;
-            },
+            // ifShow: () => {
+            //   return row.roleCode === 'manager' ? false : true;
+            // },
           },
         ],
         // 更多

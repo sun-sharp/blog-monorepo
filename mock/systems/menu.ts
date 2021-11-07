@@ -2,7 +2,7 @@ import { resultSuccess } from '../_util';
 
 const basic = '/mock-api';
 
-const menuList = () => {
+const permission = () => {
   const result: any[] = [
     {
       label: '首页',
@@ -82,7 +82,7 @@ export default [
     timeout: 1000,
     method: 'get',
     response: () => {
-      const list = menuList();
+      const list = permission();
       return resultSuccess({
         list,
       });

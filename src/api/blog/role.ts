@@ -3,7 +3,8 @@ import { AxiosBlog } from '@/api/axios';
 const basic = '/role';
 
 /**
- * @description: 角色列表
+ * @description 分页查询角色列表
+ * @param params
  */
 export function getPage(params) {
   return AxiosBlog.request({
@@ -14,7 +15,19 @@ export function getPage(params) {
 }
 
 /**
- * 新增角色
+ * @description 查询全部角色列表
+ * @param params
+ */
+export function getAll(params?) {
+  return AxiosBlog.request({
+    url: `${basic}/all`,
+    method: 'GET',
+    params,
+  });
+}
+
+/**
+ * @description 新增角色
  * @param data
  */
 export const save = (data?) => {
@@ -31,7 +44,7 @@ export const save = (data?) => {
 };
 
 /**
- * 修改菜单
+ * @description 修改角色
  * @param data
  */
 export const update = (data?) => {
@@ -48,10 +61,10 @@ export const update = (data?) => {
 };
 
 /**
- * 删除菜单
- * @param data
+ * @description 删除角色
+ * @param id
  */
-export const removeRole = (id?) => {
+export const remove = (id?) => {
   return AxiosBlog.request(
     {
       url: `${basic}/remove`,

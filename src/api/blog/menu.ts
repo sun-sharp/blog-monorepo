@@ -3,7 +3,8 @@ import { AxiosBlog } from '@/api/axios';
 const basic = '/menu';
 
 /**
- * @description: 根据用户id获取用户菜单
+ * @description 根据用户id获取用户菜单
+ * @param params
  */
 export function adminMenus(params?) {
   return AxiosBlog.request({
@@ -14,7 +15,7 @@ export function adminMenus(params?) {
 }
 
 /**
- * 获取菜单列表
+ * @description 获取菜单列表
  * @param params
  */
 export function getMenuList(params?) {
@@ -26,7 +27,7 @@ export function getMenuList(params?) {
 }
 
 /**
- * 新增菜单
+ * @description 新增菜单
  * @param data
  */
 export const saveMenu = (data?) => {
@@ -43,7 +44,7 @@ export const saveMenu = (data?) => {
 };
 
 /**
- * 修改菜单
+ * @description 修改菜单
  * @param data
  */
 export const updateMenu = (data?) => {
@@ -60,8 +61,8 @@ export const updateMenu = (data?) => {
 };
 
 /**
- * 删除菜单
- * @param data
+ * @description 删除菜单
+ * @param id
  */
 export const removeMenu = (id?) => {
   return AxiosBlog.request(

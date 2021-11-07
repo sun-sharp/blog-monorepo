@@ -2,7 +2,7 @@ import { h } from 'vue';
 import { constantHtmlIcon } from '@/utils/icons';
 import { NButton, NTag } from 'naive-ui';
 import { menuTypeObj } from '@/enums/apiEnum';
-import { removeMenu } from '@/api';
+import { menuApi } from '@/api';
 
 export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   // 查询配置
@@ -134,12 +134,9 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
       },
     },
   ];
-  // 编辑
-  // const handleEdit = (record: Recordable) => {
-  // };
   // 删除
   const handleDelete = (row: Recordable) => {
-    removeMenu(row.id).then(() => {
+    menuApi.removeMenu(row.id).then(() => {
       loadDataTable();
     });
   };
