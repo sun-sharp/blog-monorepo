@@ -17,7 +17,7 @@
         </n-button>
       </template>
     </basic-table>
-    <add-update-model ref="addUpdateModelRef" @refurbish="loadDataTable" />
+    <add-update-model ref="addUpdateModelRef" @refurbish="reloadTable" />
   </n-card>
 </template>
 <script lang="ts" setup>

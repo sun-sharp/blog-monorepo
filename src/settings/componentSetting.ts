@@ -21,9 +21,9 @@ export default {
     //考虑接口规范不同
     apiSetting: {
       // 集合字段名
-      infoField: 'data',
+      infoField: 'result',
       // 图片地址字段名
-      imgField: 'photo',
+      imgField: 'url',
     },
     //最大上传图片大小
     maxSize: 2,

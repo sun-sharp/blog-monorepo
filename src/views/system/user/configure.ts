@@ -1,6 +1,8 @@
 import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
 import { userApi } from '@/api';
+import { NAvatar } from 'naive-ui';
+import { getImgUrl } from '@/utils/files/image';
 
 export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
   // 查询配置
@@ -8,12 +10,17 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
     {
       field: 'name',
       component: 'NInput',
-      label: '姓名',
+      label: '昵称',
       componentProps: {
-        placeholder: '请输入姓名',
-        onInput: (e: any) => {
-          console.log(e);
-        },
+        placeholder: '请输入昵称',
+      },
+    },
+    {
+      field: 'username',
+      component: 'NInput',
+      label: '用户名',
+      componentProps: {
+        placeholder: '请输入用户名',
       },
     },
   ];
@@ -29,6 +36,12 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
       title: '头像',
       key: 'avatar',
       align: 'center',
+      render(row) {
+        return h(NAvatar, {
+          size: 48,
+          src: getImgUrl(row.avatar),
+        });
+      },
     },
     {
       title: '用户名',
@@ -67,7 +80,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
         style: 'button',
         actions: [
           {
-            label: '编辑',
+            label: '修改角色',
             type: 'primary',
             onClick: addUpdateModelRef.value.init.bind(null, row),
           },

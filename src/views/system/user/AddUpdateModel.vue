@@ -1,14 +1,23 @@
 <template>
-  <n-modal v-model:show="showModal" class="menu-model w-600" :show-icon="false" preset="dialog" :title="modelId ? '修改' : '新增'">
+  <n-modal v-model:show="showModal" class="menu-model w-600" :show-icon="false" preset="dialog" :title="modelId ? '修改用户角色' : '新增'">
     <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="昵称`" path="name">
-        <n-input v-model:value="modelForm.name" placeholder="请输入昵称" />
+        <n-input v-model:value="modelForm.name" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <n-input v-model:value="modelForm.avatar" placeholder="请输入头像" />
+        <BasicUpload
+          v-model:value="modelForm.avatar"
+          :action="`${uploadUrl}/image`"
+          :headers="uploadHeaders"
+          name="files"
+          :width="100"
+          :height="100"
+          :max="1"
+        />
+        <!-- <n-input v-model:value="modelForm.avatar" :disabled="!!modelId" placeholder="请输入头像" /> -->
       </n-form-item>
       <n-form-item label="用户名" path="username">
-        <n-input v-model:value="modelForm.username" placeholder="请输入用户名" />
+        <n-input v-model:value="modelForm.username" :disabled="!!modelId" placeholder="请输入用户名" />
       </n-form-item>
       <n-form-item label="角色" path="roleCode">
         <n-select v-model:value="modelForm.roleCode" :options="roleOption" placeholder="请选择角色" />
@@ -18,7 +27,7 @@
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="true" @click="confirmForm">确定</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="confirmForm">确定</n-button>
       </n-space>
     </template>
   </n-modal>
@@ -26,16 +35,21 @@
 
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
-  import { roleApi } from '@/api';
+  import { roleApi, userApi } from '@/api';
+  import { useGlobSetting } from '@/utils/setting';
+  import { useUserStoreWidthOut } from '@/store/modules/user';
+  import { BasicUpload } from '@/components/UploadImage';
+  import { getImgUrl } from '@/utils/files/image';
 
   const modelFields = {
     name: null,
-    avatar: null,
+    avatar: [],
     username: null,
     roleCode: null,
   };
 
   export default defineComponent({
+    components: { BasicUpload },
     emits: ['refurbish'],
     setup(_props, { emit }) {
       const modelId = ref('');
@@ -43,8 +57,7 @@
 
       const formBtnLoading = ref(false);
       const modelFromRef = ref();
-      const modelForm = reactive(Object.assign({}, modelFields));
-      const roleOption = ref([]);
+      const modelForm = reactive<any>(Object.assign({}, modelFields));
       const modelRules = reactive({
         name: {
           required: true,
@@ -63,6 +76,19 @@
         },
       });
 
+      // 角色列表
+      const roleOption = ref([]);
+
+      // 上传文件
+      const globSetting = useGlobSetting();
+      const { uploadUrl } = globSetting;
+      const userStore = useUserStoreWidthOut();
+      const token = userStore.getToken;
+      const uploadHeaders = reactive({
+        timestamp: new Date().getTime(),
+        Authorization: token,
+      });
+
       // 初始化
       const init = (row) => {
         showModal.value = true;
@@ -70,9 +96,10 @@
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
-          modelForm.avatar = row.avatar;
+          modelForm.avatar = [getImgUrl(row.avatar)];
           modelForm.username = row.username;
           modelForm.roleCode = row.roleCode;
+          console.log(modelForm.avatar);
         }
         nextTick(() => {
           roleApi.getAll().then((res) => {
@@ -99,7 +126,7 @@
             const params: any = {
               name: modelForm.name,
             };
-            const request = modelId.value ? roleApi.update({ id: modelId.value, ...params }) : roleApi.save(params);
+            const request = modelId.value ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode }) : roleApi.save(params);
             request.then(() => {
               showModal.value = false;
               emit('refurbish');
@@ -117,6 +144,8 @@
         modelRules,
         formBtnLoading,
         roleOption,
+        uploadUrl,
+        uploadHeaders,
         init,
         confirmForm,
       };

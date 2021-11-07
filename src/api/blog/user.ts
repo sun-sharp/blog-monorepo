@@ -89,10 +89,10 @@ export const save = (data?) => {
  * @description 修改用户
  * @param data
  */
-export const update = (data?) => {
+export const updateRoleCode = (data?) => {
   return AxiosBlog.request(
     {
-      url: `${basic}/update`,
+      url: `${basic}/update_role_code`,
       method: 'POST',
       data,
     },

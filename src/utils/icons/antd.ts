@@ -44,6 +44,7 @@ import {
   CreditCardOutlined,
   MailOutlined,
   TagsOutlined,
+  EyeOutlined,
 } from '@vicons/antd';
 
 export {
@@ -92,6 +93,7 @@ export {
   CreditCardOutlined,
   MailOutlined,
   TagsOutlined,
+  EyeOutlined,
 };
 
 export default {
@@ -140,4 +142,5 @@ export default {
   CreditCardOutlined,
   MailOutlined,
   TagsOutlined,
+  EyeOutlined,
 };

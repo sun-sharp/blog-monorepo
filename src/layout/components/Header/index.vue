@@ -69,12 +69,12 @@
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
           <div class="avatar">
-            <n-avatar round>
-              {{ username }}
-              <template #icon>
+            <n-avatar round :src="avatar" />
+            <!-- {{ username }} -->
+            <!-- <template #icon>
                 <UserOutlined />
-              </template>
-            </n-avatar>
+              </template> -->
+            <!-- </n-avatar> -->
           </div>
         </n-dropdown>
       </div>
@@ -105,6 +105,7 @@
   import ProjectSetting from './ProjectSetting.vue';
   import { AsideMenu } from '@/layout/components/Menu';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
+  import { getImgUrl } from '@/utils/files/image';
 
   export default defineComponent({
     name: 'PageHeader',
@@ -125,12 +126,14 @@
       const dialog = useDialog();
       const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useProjectSetting();
 
-      const { username } = userStore?.info || {};
+      const { username, avatar } = userStore?.info || {};
+      console.log(avatar);
 
       const drawerSetting = ref();
 
       const state = reactive({
         username: username || '',
+        avatar: getImgUrl(avatar) || '',
         fullscreenIcon: 'FullscreenOutlined',
         navMode: getNavMode,
         navTheme: getNavTheme,
