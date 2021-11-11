@@ -160,6 +160,8 @@
         finish,
         preview,
         remove,
+        maxNumber: props.maxNumber,
+        helpText: props.helpText,
         beforeUpload,
         getCSSProperties,
       };
