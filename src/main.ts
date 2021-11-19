@@ -1,8 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as mongoose from 'mongoose';
 
 async function bootstrap() {
+  mongoose.connect(
+    'mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/blog?authSource=admin',
+  );
   const app = await NestFactory.create(AppModule);
 
   // 加入swagger
