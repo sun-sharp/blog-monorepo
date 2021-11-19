@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Model } from 'mongoose';
-import { UserDocument } from './user.schema';
+import { UserDocument } from '../../schema/user.schema';
 
 @Controller('user')
 @ApiTags('用户')

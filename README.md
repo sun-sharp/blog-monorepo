@@ -52,3 +52,7 @@ $ yarn test:e2e
 $ yarn test:cov
 ```
 
+## 文档
+```bash
+$ yarn compodoc
+```
