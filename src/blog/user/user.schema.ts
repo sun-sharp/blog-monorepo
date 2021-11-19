@@ -1,18 +1,27 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-export class User {
-  @prop()
+export type UserDocument = User & Document;
+
+@Schema()
+export class User extends Document {
+  @Prop()
   name: string;
-  @prop()
+
+  @Prop()
   avatar: string;
-  @prop()
+
+  @Prop()
   username: string;
-  @prop()
+
+  @Prop()
   password: string;
-  @prop()
+
+  @Prop()
   loginDate: string;
-  @prop()
+
+  @Prop()
   roleCode: string;
 }
 
-export const UserSchema = getModelForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
