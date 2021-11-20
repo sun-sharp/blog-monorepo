@@ -1,24 +1,41 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as mongoose from 'mongoose';
 
-async function bootstrap() {
-  mongoose.connect(
-    'mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/blog?authSource=admin',
-  );
-  const app = await NestFactory.create(AppModule);
+const logger = new Logger();
+const title = 'NestJs博客API';
+const desc = '我的测试博客API';
+const version = '1.0.0';
+const globalPrefix = '/';
+const swaggerUrl = 'api-docs';
 
-  // 加入swagger
-  const config = new DocumentBuilder()
-    .setTitle('NestJs博客API')
-    .setDescription('我的测试博客API')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+const port = 3000;
 
-  await app.listen(3000);
-  console.log('http://localhost:3000');
-}
-bootstrap();
+(async () => {
+  // create app
+  Promise.resolve(await NestFactory.create(AppModule))
+    // 配置swagger
+    .then((app) => {
+      const config = new DocumentBuilder()
+        .setTitle(title)
+        .setDescription(desc)
+        .setVersion(version)
+        .addServer(globalPrefix)
+        .build();
+      const document = SwaggerModule.createDocument(app, config);
+      SwaggerModule.setup(swaggerUrl, app, document);
+      return app;
+    })
+    // 设置全局前缀
+    .then((app) => {
+      app.setGlobalPrefix(globalPrefix);
+      return app;
+    })
+    // listen port
+    .then((app) => app.listen(port))
+    .finally(() => {
+      logger.log(`http://localhost:${port}/${swaggerUrl}`);
+      logger.log(`http://localhost:${port}${globalPrefix}`);
+    });
+})();
