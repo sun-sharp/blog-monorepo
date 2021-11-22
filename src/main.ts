@@ -22,6 +22,7 @@ const port = 3000;
         .setDescription(desc)
         .setVersion(version)
         .addServer(globalPrefix)
+        .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
       SwaggerModule.setup(swaggerUrl, app, document);

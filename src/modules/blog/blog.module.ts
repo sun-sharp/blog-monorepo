@@ -5,9 +5,7 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/blog?authSource=admin',
-    ),
+    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/blog?authSource=admin'),
     UserModule,
     RouterModule.register([
       {
@@ -21,5 +19,6 @@ import { UserModule } from './user/user.module';
       },
     ]),
   ],
+  // exports: [BLOG_MONGO_MODULE],
 })
 export class BlogModule {}
