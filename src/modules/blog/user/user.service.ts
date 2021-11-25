@@ -3,22 +3,24 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
-import { hashPassword } from 'src/utils/bcrypt';
+import { hashPassword } from 'src/common/bcrypt';
+import { IResponse } from 'src/interfaces/response.interface';
 
 @Injectable()
 export class UserService {
   private USERNAME_LENGTH_MAX = 10;
   private USERNAME_LENGTH_MIN = 3;
+  response: IResponse;
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   /**
    * @description 创建用户
    * @date 22/11/2021
    * @param {CreateUserDto} createUserDto
-   * @return {*}
+   * @return {*} {Promise<IResponse>}
    * @memberof UserService
    */
-  public create(createUserDto: CreateUserDto): Promise<string> {
+  public create(createUserDto: CreateUserDto): Promise<IResponse> {
     return (
       Promise.resolve(createUserDto)
         // 判断username 是否为合法字符
@@ -26,9 +28,17 @@ export class UserService {
           const { username } = res;
           // if (!username.match(/^[a-z]/i)) throw '首字母应为字母';
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
-            throw `长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`;
+            throw (this.response = {
+              code: -1,
+              result: false,
+              massage: `长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
+            });
           if (!username.match(/[a-z]$/i)) {
-            throw '应全为字母';
+            throw (this.response = {
+              code: -1,
+              result: false,
+              massage: '应全为字母',
+            });
           }
           return res;
         })
@@ -36,7 +46,12 @@ export class UserService {
         .then(async (res) => {
           const { username } = res;
           const user = await this.userModel.findOne({ username });
-          if (user) throw '用户名已注册';
+          if (user)
+            throw (this.response = {
+              code: -1,
+              result: false,
+              massage: '用户名已注册',
+            });
           return res;
         })
         // 注册用户
@@ -46,15 +61,30 @@ export class UserService {
             ...res,
             password,
           });
-          return '用户创建成功！';
+          return (this.response = {
+            code: 0,
+            result: true,
+            massage: '用户创建成功！',
+          });
         })
         // 返回错误
         .catch((err) => {
-          return err;
+          return (this.response = {
+            code: -1,
+            result: false,
+            massage: err,
+          });
         })
     );
   }
 
+  /**
+   * @description 运用username查找用户
+   * @date 25/11/2021
+   * @param {string} username
+   * @return {*}  {Promise<User>}
+   * @memberof UserService
+   */
   public findOneByName(username: string): Promise<User> {
     return (
       Promise.resolve(username)
@@ -69,8 +99,45 @@ export class UserService {
     );
   }
 
-  public findPage() {
-    return this.userModel.find();
+  /**
+   * @description 运用_id查找用户信息
+   * @date 25/11/2021
+   * @param {string} username
+   * @return {*}  {Promise<User>}
+   * @memberof UserService
+   */
+  public findOneById(userId: string): Promise<User> {
+    return (
+      Promise.resolve(userId)
+        // 判断username 是否为合法字符
+        .then((userId) => {
+          return this.userModel.findOne({ _id: userId });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description 分页查询
+   * @date 25/11/2021
+   * @return {*}  {Promise<User>}
+   * @memberof UserService
+   */
+  public findPage(): Promise<User> {
+    return (
+      Promise.resolve()
+        // 判断username 是否为合法字符
+        .then(() => {
+          return this.userModel.find();
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {

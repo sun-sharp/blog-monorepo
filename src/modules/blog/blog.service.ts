@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IResponse } from 'src/interfaces/response.interface';
-import { comparePassword } from 'src/utils/bcrypt';
+import { comparePassword } from 'src/common/bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user/user.service';
 
@@ -14,10 +14,10 @@ export class BlogService {
    * @description 登录
    * @date 22/11/2021
    * @param {LoginUserDto} loginUserDto
-   * @return {*}  {Promise<string>}
+   * @return {*}  {Promise<IResponse>}
    * @memberof UserService
    */
-  public login(loginUserDto: LoginUserDto): Promise<string> {
+  public login(loginUserDto: LoginUserDto): Promise<IResponse> {
     return (
       Promise.resolve(loginUserDto)
         // 判断用户名是否存在,密码是否正确
@@ -55,7 +55,11 @@ export class BlogService {
         })
         // 返回错误
         .catch((err) => {
-          return err;
+          return (this.response = {
+            code: -1,
+            result: false,
+            massage: err,
+          });
         })
     );
   }
