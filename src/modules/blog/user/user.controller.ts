@@ -3,7 +3,6 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginUserDto } from './dto/login-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
@@ -11,14 +10,6 @@ import { AuthGuard } from '@nestjs/passport';
 @ApiBearerAuth('jwt')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post('login')
-  @ApiOperation({
-    summary: '用户登录',
-  })
-  public async userLogin(@Body() loginUserDto: LoginUserDto) {
-    return await this.userService.login(loginUserDto);
-  }
 
   @Post('save')
   @ApiOperation({ summary: '创建用户' })

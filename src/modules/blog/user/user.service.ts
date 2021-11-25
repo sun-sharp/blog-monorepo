@@ -1,45 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-// import { IResponse } from 'src/interfaces/response.interface';
 import { User } from 'src/interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { hashPassword } from 'src/utils/bcrypt';
 
 @Injectable()
 export class UserService {
   private USERNAME_LENGTH_MAX = 10;
   private USERNAME_LENGTH_MIN = 3;
-  constructor(@InjectModel('User') private readonly userModel: Model<User>, private readonly jwtService: JwtService) {}
-
-  /**
-   * @description 验证密码
-   * @date 22/11/2021
-   * @private
-   * @param {string} password
-   * @param {string} hashPassword
-   * @return {*}  {Promise<boolean>}
-   * @memberof UserService
-   */
-  private async comparePassword(password: string, hashPassword: string): Promise<boolean> {
-    return await bcrypt.compare(password, hashPassword);
-  }
-
-  /**
-   * @description 给密码加密
-   * @date 22/11/2021
-   * @private
-   * @param {string} password
-   * @return {*}  {Promise<string>}
-   * @memberof UserService
-   */
-  private async hashPassword(password: string): Promise<string> {
-    const saltOrRounds = 10;
-    return await bcrypt.hash(password, saltOrRounds);
-  }
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   /**
    * @description 创建用户
@@ -71,7 +41,7 @@ export class UserService {
         })
         // 注册用户
         .then(async (res) => {
-          const password = await this.hashPassword(res.password);
+          const password = await hashPassword(res.password);
           await this.userModel.create({
             ...res,
             password,
@@ -85,33 +55,12 @@ export class UserService {
     );
   }
 
-  /**
-   * @description 登录
-   * @date 22/11/2021
-   * @param {LoginUserDto} loginUserDto
-   * @return {*}  {Promise<string>}
-   * @memberof UserService
-   */
-  public login(loginUserDto: LoginUserDto): Promise<string> {
+  public findOneByName(username: string): Promise<User> {
     return (
-      Promise.resolve(loginUserDto)
-        // 判断用户名是否存在,密码是否正确
-        .then(async (res) => {
-          const { username } = res;
-          const user = await this.userModel.findOne({ username });
-          if (!user) throw '用户尚未注册';
-          if (await this.comparePassword(res.password, user.password)) {
-            return {
-              ...res,
-              _id: user._id,
-            };
-          } else {
-            throw '密码错误';
-          }
-        })
-        // 创造token
-        .then((res) => {
-          return this.jwtService.sign(res);
+      Promise.resolve(username)
+        // 判断username 是否为合法字符
+        .then((username) => {
+          return this.userModel.findOne({ username });
         })
         // 返回错误
         .catch((err) => {
