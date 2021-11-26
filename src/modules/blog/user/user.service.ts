@@ -6,6 +6,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { hashPassword } from 'src/common/bcrypt';
 import { IResponse } from 'src/interfaces/response.interface';
 import { ApiCode } from 'src/common/enums/api-code.enum';
+import { PageUserDto } from './dto/page-user.dto';
+import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 
 @Injectable()
 export class UserService {
@@ -132,11 +134,13 @@ export class UserService {
    * @return {*}  {Promise<User>}
    * @memberof UserService
    */
-  public findPage(): Promise<User> {
+  public findPage(pageUserDto: PageUserDto): Promise<User> {
     return (
-      Promise.resolve()
+      Promise.resolve(pageUserDto)
         // 判断username 是否为合法字符
-        .then(() => {
+        .then((pageUserDto) => {
+          const { limit, skip } = PaginateHandle(pageUserDto);
+          console.log(limit, skip);
           return this.userModel.find();
         })
         // 返回错误

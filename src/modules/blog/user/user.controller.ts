@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { PageUserDto } from './dto/page-user.dto';
 
 @Controller('user')
 @ApiTags('用户')
@@ -20,8 +21,8 @@ export class UserController {
   @Get('find_page')
   @ApiOperation({ summary: '获取分页信息' })
   @UseGuards(AuthGuard('jwt'))
-  findAll() {
-    return this.userService.findPage();
+  findPage(pageUserDto: PageUserDto) {
+    return this.userService.findPage(pageUserDto);
   }
 
   @Get('admin_info')
