@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -35,9 +35,13 @@ const port = 3000;
       return app;
     })
     // 设置异常
-    // 设置全局前缀
     .then((app) => {
       app.useGlobalFilters(new HttpExceptionFilter());
+      return app;
+    })
+    // 验证管道
+    .then((app) => {
+      app.useGlobalPipes(new ValidationPipe({ transform: true }));
       return app;
     })
     // listen port

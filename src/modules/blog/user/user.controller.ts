@@ -28,8 +28,7 @@ export class UserController {
   @ApiOperation({ summary: '获取用户信息' })
   @UseGuards(AuthGuard('jwt'))
   findInfo(@Request() req) {
-    console.log(req.user);
-    return req.user;
+    return this.userService.findOneById(req.user.userId);
   }
 
   // @Patch(':id')

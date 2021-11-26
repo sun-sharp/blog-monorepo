@@ -1,12 +1,18 @@
-// import { PageEnum } from '@/enums/pageEnum';
-// import router from '@/router';
-// import { storage } from '@/utils/Storage';
-
-export const checkStatus = (status: number | string) => {
+/**
+ * @description 错误状态码的提示
+ * @date 26/11/2021
+ * @param {(number)} status
+ * @param {(string)} msg
+ * @return {*}  {string}
+ */
+export const checkMessage = (status: number, msg: string): string => {
   let message = '';
   switch (status) {
+    case 200:
+      message = '请求成功！';
+      break;
     case 400:
-      message = '请求参数有误';
+      message = msg || '请求参数有误';
       break;
     // 401: 未登录
     // 未登录则跳转登录页面，并携带当前页面的路径

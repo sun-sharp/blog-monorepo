@@ -6,6 +6,6 @@
  */
 export interface IResponse {
   code: number; // 0 表示成功
-  result: any;
+  result?: any;
   massage: any;
 }

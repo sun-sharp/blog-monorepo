@@ -4,6 +4,7 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { comparePassword } from 'src/common/bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user/user.service';
+import { ApiCode } from 'src/common/enums/api-code.enum';
 
 @Injectable()
 export class BlogService {
@@ -26,19 +27,16 @@ export class BlogService {
           const user = await this.userService.findOneByName(username);
           if (!user)
             throw (this.response = {
-              code: -1,
-              result: false,
+              code: ApiCode.ERROR,
               massage: '用户尚未注册',
             });
           if (await comparePassword(res.password, user.password)) {
             return {
-              // ...res,
               _id: user._id,
             };
           } else {
             throw (this.response = {
-              code: -1,
-              result: false,
+              code: ApiCode.ERROR,
               massage: '密码错误',
             });
           }
@@ -46,7 +44,7 @@ export class BlogService {
         // 创造token
         .then((res) => {
           return (this.response = {
-            code: 0,
+            code: ApiCode.SUCCESS,
             result: {
               token: this.jwtService.sign(res),
             },
@@ -55,11 +53,7 @@ export class BlogService {
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
-            code: -1,
-            result: false,
-            massage: err,
-          });
+          return err;
         })
     );
   }

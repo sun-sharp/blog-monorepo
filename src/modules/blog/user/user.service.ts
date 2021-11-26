@@ -5,6 +5,7 @@ import { User } from 'src/interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hashPassword } from 'src/common/bcrypt';
 import { IResponse } from 'src/interfaces/response.interface';
+import { ApiCode } from 'src/common/enums/api-code.enum';
 
 @Injectable()
 export class UserService {
@@ -29,14 +30,12 @@ export class UserService {
           // if (!username.match(/^[a-z]/i)) throw '首字母应为字母';
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
             throw (this.response = {
-              code: -1,
-              result: false,
+              code: ApiCode.ERROR,
               massage: `长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
             });
           if (!username.match(/[a-z]$/i)) {
             throw (this.response = {
-              code: -1,
-              result: false,
+              code: ApiCode.ERROR,
               massage: '应全为字母',
             });
           }
@@ -48,8 +47,7 @@ export class UserService {
           const user = await this.userModel.findOne({ username });
           if (user)
             throw (this.response = {
-              code: -1,
-              result: false,
+              code: ApiCode.ERROR,
               massage: '用户名已注册',
             });
           return res;
@@ -62,18 +60,14 @@ export class UserService {
             password,
           });
           return (this.response = {
-            code: 0,
+            code: ApiCode.SUCCESS,
             result: true,
             massage: '用户创建成功！',
           });
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
-            code: -1,
-            result: false,
-            massage: err,
-          });
+          return err;
         })
     );
   }
@@ -89,8 +83,8 @@ export class UserService {
     return (
       Promise.resolve(username)
         // 判断username 是否为合法字符
-        .then((username) => {
-          return this.userModel.findOne({ username });
+        .then(async (username) => {
+          return await this.userModel.findOne({ username });
         })
         // 返回错误
         .catch((err) => {
@@ -110,8 +104,20 @@ export class UserService {
     return (
       Promise.resolve(userId)
         // 判断username 是否为合法字符
-        .then((userId) => {
-          return this.userModel.findOne({ _id: userId });
+        .then(async (userId) => {
+          const user = await this.userModel.findOne({ _id: userId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {
+              id: user._id,
+              roleCode: user.roleCode,
+              loginDate: user.loginDate,
+              username: user.username,
+              avatar: user.avatar,
+              name: user.name,
+            },
+            massage: '查询成功！',
+          });
         })
         // 返回错误
         .catch((err) => {
