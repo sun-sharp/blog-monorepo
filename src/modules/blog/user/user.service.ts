@@ -137,11 +137,30 @@ export class UserService {
   public findPage(pageUserDto: PageUserDto): Promise<User> {
     return (
       Promise.resolve(pageUserDto)
-        // 判断username 是否为合法字符
-        .then((pageUserDto) => {
-          const { limit, skip } = PaginateHandle(pageUserDto);
-          console.log(limit, skip);
-          return this.userModel.find();
+        // 分页查询
+        .then(async (pageUserDto) => {
+          const { size, current, name, username } = pageUserDto;
+          const { limit, skip } = PaginateHandle(size, current);
+          const findData = { name: { $regex: name }, username: { $regex: username } };
+          const total = await this.userModel.find(findData).count();
+          const list = await this.userModel.find(findData).limit(limit).skip(skip);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {
+              current,
+              list: list.map((m) => ({
+                id: m._id,
+                roleCode: m.roleCode,
+                loginDate: m.loginDate,
+                username: m.username,
+                avatar: m.avatar,
+                name: m.name,
+              })),
+              size,
+              total,
+            },
+            massage: '查询成功！',
+          });
         })
         // 返回错误
         .catch((err) => {

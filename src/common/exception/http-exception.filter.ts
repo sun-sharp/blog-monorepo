@@ -10,10 +10,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const excRes: any = exception instanceof HttpException && exception.getResponse();
-    const message = checkMessage(status, excRes.message.join('，'));
+    const message = checkMessage(status, excRes.message instanceof Array ? excRes.message.join('，') : '');
     const code = checkCode(status);
     // @todo 记录日志
-    console.log('%s %s error: %s', request.method, request.url, excRes.message.join('，'));
+    console.log('%s %s error: %s', request.method, request.url, message);
     response.status(status).json({
       code,
       message,

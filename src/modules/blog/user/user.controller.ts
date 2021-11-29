@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Request, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,25 +9,26 @@ import { PageUserDto } from './dto/page-user.dto';
 @Controller('user')
 @ApiTags('用户')
 @ApiBearerAuth('jwt')
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('save')
+  @HttpCode(200)
   @ApiOperation({ summary: '创建用户' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Get('find_page')
+  @Post('find_page')
+  @HttpCode(200)
   @ApiOperation({ summary: '获取分页信息' })
-  @UseGuards(AuthGuard('jwt'))
-  findPage(pageUserDto: PageUserDto) {
+  findPage(@Body() pageUserDto: PageUserDto) {
     return this.userService.findPage(pageUserDto);
   }
 
   @Get('admin_info')
   @ApiOperation({ summary: '获取用户信息' })
-  @UseGuards(AuthGuard('jwt'))
   findInfo(@Request() req) {
     return this.userService.findOneById(req.user.userId);
   }

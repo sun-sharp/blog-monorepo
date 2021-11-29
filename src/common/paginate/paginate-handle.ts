@@ -6,7 +6,7 @@ import { paginateDefault } from '../enums/paginate.enum';
  * @param {*} { size = paginateDefault.SIZE, current = paginateDefault.CURRENT }
  * @return {*}  {*}
  */
-export const PaginateHandle = ({ size = paginateDefault.SIZE, current = paginateDefault.CURRENT }): any => {
+export const PaginateHandle = (size = paginateDefault.SIZE, current = paginateDefault.CURRENT): any => {
   const skip = (current - 1) * size;
   return {
     limit: size,
