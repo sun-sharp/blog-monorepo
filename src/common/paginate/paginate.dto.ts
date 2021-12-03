@@ -6,11 +6,11 @@ export class PaginateDto {
     description: '每页数量',
     example: 10,
   })
-  size: number;
+  readonly size: number = 10;
 
   @ApiProperty({
     description: '当前页',
     example: 1,
   })
-  current: number;
+  readonly current: number = 1;
 }

@@ -4,11 +4,13 @@ import { PaginateDto } from 'src/common/paginate/paginate.dto';
 export class PageUserDto extends PaginateDto {
   @ApiProperty({
     description: '昵称',
+    // example: 'text',
   })
-  name: string;
+  readonly name: string = '';
 
   @ApiProperty({
     description: '用户名',
+    example: 'text',
   })
-  username: string;
+  readonly username: string = '';
 }

@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, UseGuards, Request, HttpCode } from '@nestjs/common';
+/*
+ * @Description: 请填写简介
+ */
+import { Controller, Get, Post, Body, UseGuards, Request, HttpCode, Put, Delete, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { PageUserDto } from './dto/page-user.dto';
+import { UpdateRoleCodeUserDto } from './dto/update-role-code-user.dto';
 
 @Controller('user')
 @ApiTags('用户')
@@ -33,13 +37,14 @@ export class UserController {
     return this.userService.findOneById(req.user.userId);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
+  @Put('update_role_code')
+  @ApiOperation({ summary: '修改用户权限' })
+  updateUserRole(@Body() updateRoleCodeUserDto: UpdateRoleCodeUserDto) {
+    return this.userService.updateUserRole(updateRoleCodeUserDto.userId, updateRoleCodeUserDto.roleCode);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('userId') userId: string) {
+    return this.userService.remove(userId);
+  }
 }

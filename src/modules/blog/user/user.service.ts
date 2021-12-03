@@ -69,7 +69,11 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          return err;
+          console.log(err);
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '创建用户失败！',
+          });
         })
     );
   }
@@ -102,7 +106,7 @@ export class UserService {
    * @return {*}  {Promise<User>}
    * @memberof UserService
    */
-  public findOneById(userId: string): Promise<User> {
+  public findOneById(userId: string): Promise<IResponse> {
     return (
       Promise.resolve(userId)
         // 判断username 是否为合法字符
@@ -123,7 +127,11 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          return err;
+          console.log(err);
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '查询报错！',
+          });
         })
     );
   }
@@ -134,7 +142,7 @@ export class UserService {
    * @return {*}  {Promise<User>}
    * @memberof UserService
    */
-  public findPage(pageUserDto: PageUserDto): Promise<User> {
+  public findPage(pageUserDto: PageUserDto): Promise<IResponse> {
     return (
       Promise.resolve(pageUserDto)
         // 分页查询
@@ -164,16 +172,60 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          return err;
+          console.log(err);
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '查询报错！',
+          });
         })
     );
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  /**
+   * @description: 修改用户权限
+   * @param {string} userId
+   * @param {string} roleCode
+   * @return {*}
+   */
+  public updateUserRole(userId: string, roleCode: string): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId, roleCode })
+        .then(async ({ userId, roleCode }) => {
+          await this.userModel.updateOne({ _id: userId }, { roleCode });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          console.log(err);
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '修改失败！',
+          });
+        })
+    );
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  remove(userId: string) {
+    return (
+      Promise.resolve(userId)
+        .then(async (userId) => {
+          await this.userModel.deleteOne({ _id: userId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          console.log(err);
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '删除失败！',
+          });
+        })
+    );
+  }
 }
