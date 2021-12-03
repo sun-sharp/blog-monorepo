@@ -43,7 +43,7 @@ export class UserController {
     return this.userService.updateUserRole(updateRoleCodeUserDto.userId, updateRoleCodeUserDto.roleCode);
   }
 
-  @Delete(':id')
+  @Delete(':userId')
   remove(@Param('userId') userId: string) {
     return this.userService.remove(userId);
   }
