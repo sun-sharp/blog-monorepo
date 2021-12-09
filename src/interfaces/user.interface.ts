@@ -12,6 +12,7 @@ import { Document } from 'mongoose';
 @Schema({
   versionKey: false,
 })
+// @Schema()
 export class User extends Document {
   @Prop()
   @ApiProperty({

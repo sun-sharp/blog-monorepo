@@ -33,12 +33,12 @@ export class UserService {
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: `长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
+              massage: `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
             });
           if (!username.match(/[a-z]$/i)) {
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: '应全为字母',
+              massage: '账号应全为字母',
             });
           }
           return res;

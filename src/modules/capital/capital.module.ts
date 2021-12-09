@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RouterModule } from '@nestjs/core';
-import { BlogController } from './blog.controller';
-import { BlogService } from './blog.service';
+import { CapitalController } from './capital.controller';
+import { CapitalService } from './capital.service';
 import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JWT_CONSTANTS } from 'src/jwt/jwt.constants';
 import { JwtModule } from '@nestjs/jwt';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/blog?authSource=admin'),
+    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/capital?authSource=admin'),
     PassportModule,
     JwtModule.register({
       secret: JWT_CONSTANTS.secret,
@@ -18,7 +19,7 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     RouterModule.register([
       {
-        path: 'blog',
+        path: 'capital',
         children: [
           {
             path: '/',
@@ -27,9 +28,9 @@ import { JwtModule } from '@nestjs/jwt';
         ],
       },
     ]),
+    RoleModule,
   ],
-  controllers: [BlogController],
-  providers: [BlogService],
-  // exports: [BLOG_MONGO_MODULE],
+  controllers: [CapitalController],
+  providers: [CapitalService],
 })
-export class BlogModule {}
+export class CapitalModule {}

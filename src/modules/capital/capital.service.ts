@@ -7,7 +7,7 @@ import { UserService } from './user/user.service';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 
 @Injectable()
-export class BlogService {
+export class CapitalService {
   response: IResponse;
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 

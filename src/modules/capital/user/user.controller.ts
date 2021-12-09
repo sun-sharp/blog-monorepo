@@ -21,6 +21,7 @@ export class UserController {
   @HttpCode(200)
   @ApiOperation({ summary: '创建用户' })
   create(@Body() createUserDto: CreateUserDto) {
+    console.log(createUserDto);
     return this.userService.create(createUserDto);
   }
 

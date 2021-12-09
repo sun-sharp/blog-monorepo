@@ -1,12 +1,12 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BlogService } from './blog.service';
+import { CapitalService } from './capital.service';
 import { LoginUserDto } from './dto/login-user.dto';
 
-@Controller('blog')
-@ApiTags('博客')
-export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+@Controller('capital')
+@ApiTags('系统')
+export class CapitalController {
+  constructor(private readonly capitalService: CapitalService) {}
 
   @Post('login')
   @HttpCode(200)
@@ -14,6 +14,6 @@ export class BlogController {
     summary: '用户登录',
   })
   public async userLogin(@Body() loginUserDto: LoginUserDto) {
-    return await this.blogService.login(loginUserDto);
+    return await this.capitalService.login(loginUserDto);
   }
 }
