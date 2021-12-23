@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User } from 'src/interfaces/user.interface';
-import { UserSchema } from 'src/schemas/user.schema';
+import { User, UserSchema } from 'src/schemas/user.schema';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
 
 const USER_MONGO_MODULE = MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]);
