@@ -17,6 +17,7 @@ import { RoleModule } from './role/role.module';
       secret: JWT_CONSTANTS.secret,
     }),
     UserModule,
+    RoleModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -25,10 +26,13 @@ import { RoleModule } from './role/role.module';
             path: '/',
             module: UserModule,
           },
+          {
+            path: '/',
+            module: RoleModule,
+          },
         ],
       },
     ]),
-    RoleModule,
   ],
   controllers: [CapitalController],
   providers: [CapitalService],

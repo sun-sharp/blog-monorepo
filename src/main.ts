@@ -4,10 +4,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 
+import * as pkg from '../package.json';
+
+const { version } = pkg;
+
 const logger = new Logger();
 const title = 'NestJs博客API';
 const desc = '我的测试博客API';
-const version = '1.0.0';
 const globalPrefix = '/';
 const swaggerUrl = 'api-docs';
 

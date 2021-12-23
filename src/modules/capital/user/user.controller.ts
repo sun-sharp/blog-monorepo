@@ -45,6 +45,7 @@ export class UserController {
   }
 
   @Delete(':userId')
+  @ApiOperation({ summary: '删除用户' })
   remove(@Param('userId') userId: string) {
     return this.userService.remove(userId);
   }
