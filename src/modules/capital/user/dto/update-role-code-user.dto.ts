@@ -1,11 +1,3 @@
-/*
- * @Author: YangRuiRui
- * @LastEditTime: 2021-12-03 16:55:06
- * @Description: 请填写简介
- */
-// import { PartialType } from '@nestjs/swagger';
-// import { CreateUserDto } from './create-user.dto';
-
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 

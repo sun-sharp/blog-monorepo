@@ -11,6 +11,31 @@ export class RoleService {
   constructor(@InjectModel('Role') private readonly roleModel: Model<Role>) {}
 
   /**
+   * @description 条件并分页获取权限列表
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public getRolePage(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 查询
+        .then(async () => {
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
    * @description 获取全部权限列表
    * @return {*}  {Promise<IResponse>}
    * @memberof RoleService
@@ -18,7 +43,7 @@ export class RoleService {
   public findAll(): Promise<IResponse> {
     return (
       Promise.resolve()
-        // 分页查询
+        // 查询
         .then(async () => {
           const roleList = await this.roleModel.find();
           return (this.response = {
@@ -37,7 +62,82 @@ export class RoleService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询报错！',
+            massage: err.codeName || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description 修改权限列表
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public update(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 修改
+        .then(async () => {
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description 新增权限
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public save(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 添加
+        .then(async () => {
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '添加成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '添加失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description 删除权限
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public remove(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 删除
+        .then(async () => {
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '删除失败！',
           });
         })
     );

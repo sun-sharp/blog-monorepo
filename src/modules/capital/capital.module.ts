@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JWT_CONSTANTS } from 'src/jwt/jwt.constants';
 import { JwtModule } from '@nestjs/jwt';
 import { RoleModule } from './role/role.module';
+import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RoleModule } from './role/role.module';
     }),
     UserModule,
     RoleModule,
+    MenuModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -29,6 +31,10 @@ import { RoleModule } from './role/role.module';
           {
             path: '/',
             module: RoleModule,
+          },
+          {
+            path: '/',
+            module: MenuModule,
           },
         ],
       },

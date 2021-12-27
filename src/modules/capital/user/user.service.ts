@@ -130,7 +130,7 @@ export class UserService {
           console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询报错！',
+            massage: err.codeName || '查询失败！',
           });
         })
     );
@@ -175,7 +175,7 @@ export class UserService {
           console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询报错！',
+            massage: err.codeName || '查询失败！',
           });
         })
     );
