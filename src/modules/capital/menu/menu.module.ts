@@ -11,5 +11,6 @@ const MENU_MONGO_MODULE = MongooseModule.forFeature([{ name: Menu.name, schema: 
   imports: [MENU_MONGO_MODULE],
   controllers: [MenuController],
   providers: [MenuService, JwtStrategy],
+  exports: [MenuService],
 })
 export class MenuModule {}

@@ -45,10 +45,10 @@ export class RoleService {
       Promise.resolve()
         // 查询
         .then(async () => {
-          const roleList = await this.roleModel.find();
+          const result = await this.roleModel.find().sort({ sort: 1 });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: roleList.map((m) => ({
+            result: result.map((m) => ({
               id: m._id,
               name: m.name,
               roleCode: m.roleCode,
@@ -139,6 +139,24 @@ export class RoleService {
             code: ApiCode.ERROR,
             massage: err.codeName || '删除失败！',
           });
+        })
+    );
+  }
+
+  /**
+   * @description: 根据roleCode查找权限详情
+   * @param {string} roleCode
+   * @return {*}  {Promise<IResponse>}
+   */
+  public findOneByRoleCode(roleCode: string): Promise<Role> {
+    return (
+      Promise.resolve(roleCode)
+        .then(async (roleCode) => {
+          return await this.roleModel.findOne({ roleCode }, { _id: 0 });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }

@@ -5,11 +5,19 @@ import { comparePassword } from 'src/common/bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user/user.service';
 import { ApiCode } from 'src/common/enums/api-code.enum';
+import { RoleMenuDto } from './dto/role-menu.dto';
+import { RoleService } from './role/role.service';
+import { MenuService } from './menu/menu.service';
 
 @Injectable()
 export class CapitalService {
   response: IResponse;
-  constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly roleService: RoleService,
+    private readonly menuService: MenuService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   /**
    * @description 登录
@@ -54,6 +62,59 @@ export class CapitalService {
         // 返回错误
         .catch((err) => {
           return err;
+        })
+    );
+  }
+
+  public roleMenu(query: RoleMenuDto): Promise<IResponse> {
+    return (
+      Promise.resolve(query)
+        // 判断用户名是否存在,密码是否正确
+        .then(async (res) => {
+          const { roleCode } = res;
+          const routeFind = await this.roleService.findOneByRoleCode(roleCode);
+          if (!routeFind) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              massage: '查询角色失败',
+            });
+          }
+          // 如果你是管理员账号，那就获取全部菜单
+          if (routeFind.roleType === 1) {
+            const result = await this.menuService.findAll();
+            if (result.code === ApiCode.SUCCESS) {
+              return result;
+            }
+          }
+          // 不是管理员账号，执行下面
+          const routePermission = routeFind.permission;
+          const result = await this.menuService.findByPermission(routePermission);
+          if (result) {
+            return (this.response = {
+              code: ApiCode.SUCCESS,
+              result: result.map((m) => ({
+                id: m._id,
+                name: m.name,
+                title: m.title,
+                path: m.path,
+                sort: m.sort,
+                icon: m.icon,
+                parentId: m.parentId,
+                iframeSrc: m.iframeSrc,
+                component: m.component,
+                menuType: m.menuType,
+                hidden: m.hidden,
+              })),
+              massage: '查询成功！',
+            });
+          }
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '查询失败！',
+          });
         })
     );
   }

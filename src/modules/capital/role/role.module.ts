@@ -11,5 +11,6 @@ const ROLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Role.name, schema: 
   imports: [ROLE_MONGO_MODULE],
   controllers: [RoleController],
   providers: [RoleService, JwtStrategy],
+  exports: [RoleService],
 })
 export class RoleModule {}
