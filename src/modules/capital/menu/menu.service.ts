@@ -5,6 +5,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Menu } from 'src/schemas/menu.schema';
 import { CreateMenuDto } from './dto/create-menu.dto';
+import { menuFindAllDto } from './dto/menu-find-all-dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 
 @Injectable()
@@ -42,12 +43,13 @@ export class MenuService {
    * @param {*}
    * @return {Promise<IResponse>}
    */
-  public findAll(): Promise<IResponse> {
+  public findAll(query?: menuFindAllDto): Promise<IResponse> {
     return (
-      Promise.resolve()
+      Promise.resolve(query)
         // 查询
-        .then(async () => {
-          const roleList = await this.menuModel.find({ sort: 1 });
+        .then(async (query) => {
+          const findData = query ? { name: { $regex: query.name } } : {};
+          const roleList = await this.menuModel.find(findData).sort({ sort: 1 });
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: roleList.map((m) => ({
@@ -92,10 +94,6 @@ export class MenuService {
           return err;
         })
     );
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} menu`;
   }
 
   /**

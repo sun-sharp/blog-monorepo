@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Query } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { menuFindAllDto } from './dto/menu-find-all-dto';
 
 @Controller('menu')
 @ApiTags('菜单')
@@ -20,8 +21,8 @@ export class MenuController {
 
   @Get('find_all')
   @ApiOperation({ summary: '条件查询获取管理系统全部菜单列表' })
-  findAll() {
-    return this.menuService.findAll();
+  findAll(@Query() query: menuFindAllDto) {
+    return this.menuService.findAll(query);
   }
 
   @Put('update')

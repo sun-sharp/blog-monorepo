@@ -27,7 +27,7 @@ export class UserController {
 
   @Post('find_page')
   @HttpCode(200)
-  @ApiOperation({ summary: '获取用户分页信息' })
+  @ApiOperation({ summary: '条件并分页获取用户列表' })
   findPage(@Body() pageUserDto: PageUserDto) {
     return this.userService.findPage(pageUserDto);
   }

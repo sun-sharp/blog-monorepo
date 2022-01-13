@@ -137,7 +137,7 @@ export class UserService {
   }
 
   /**
-   * @description 分页查询
+   * @description 条件并分页获取用户列表
    * @date 25/11/2021
    * @return {*}  {Promise<User>}
    * @memberof UserService
