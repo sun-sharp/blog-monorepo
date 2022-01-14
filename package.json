@@ -12,7 +12,7 @@
     "start:prod": "node dist/main",
     "rim:dist": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark"
   },
