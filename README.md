@@ -56,3 +56,21 @@ $ yarn test:cov
 ```bash
 $ yarn compodoc
 ```
+
+## 部署
+```bash
+
+# 在服务器中拉取代码项目
+$ git init
+$ git remote add origin git@github.com:sun-sharp/nest-blog-api.git
+$ git pull origin main
+
+# 安装插件
+$ yarn
+
+# 打包
+$ yarn build
+
+# 进入dist文件
+
+```

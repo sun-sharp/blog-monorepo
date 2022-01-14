@@ -50,7 +50,7 @@ const port = 3000;
     // listen port
     .then((app) => app.listen(port))
     .finally(() => {
-      logger.log(`http://localhost:${port}/${swaggerUrl}`);
-      logger.log(`http://localhost:${port}${globalPrefix}`);
+      logger.log(`http://127.0.0.1:${port}/${swaggerUrl}`);
+      logger.log(`http://127.0.0.1:${port}${globalPrefix}`);
     });
 })();
