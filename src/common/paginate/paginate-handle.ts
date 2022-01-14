@@ -1,12 +1,17 @@
 import { paginateDefault } from '../enums/paginate.enum';
 
+interface PaginateType {
+  limit: number;
+  skip: number;
+}
+
 /**
- * @description 对分页进行处理
- * @date 26/11/2021
- * @param {*} { size = paginateDefault.SIZE, current = paginateDefault.CURRENT }
- * @return {*}  {*}
+ * @description: 对分页进行处理
+ * @param {*} size
+ * @param {*} current
+ * @return {*}
  */
-export const PaginateHandle = (size = paginateDefault.SIZE, current = paginateDefault.CURRENT): any => {
+export const PaginateHandle = (size: number = paginateDefault.SIZE, current: number = paginateDefault.CURRENT): PaginateType => {
   const skip = (current - 1) * size;
   return {
     limit: size,

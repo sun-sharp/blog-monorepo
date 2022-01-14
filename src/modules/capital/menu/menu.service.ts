@@ -18,11 +18,14 @@ export class MenuService {
    * @param {CreateMenuDto} createMenuDto
    * @return {Promise<IResponse>}
    */
-  public save(createMenuDto: CreateMenuDto): Promise<IResponse> {
+  public save(body: CreateMenuDto): Promise<IResponse> {
     return (
-      Promise.resolve(createMenuDto)
+      Promise.resolve(body)
         // 添加
-        .then(async () => {
+        .then(async (body) => {
+          await this.menuModel.create({
+            ...body,
+          });
           return (this.response = {
             code: ApiCode.SUCCESS,
             massage: '添加成功！',
@@ -81,7 +84,7 @@ export class MenuService {
   /**
    * @description: 根据权限的permission查找系统菜单详情
    * @param {Array<string>} permission
-   * @return {Promise<Menu>}
+   * @return {Promise<Array<Menu>>}
    */
   public findByPermission(permission: Array<string>): Promise<Array<Menu>> {
     return (
@@ -98,14 +101,16 @@ export class MenuService {
 
   /**
    * @description: 修改系统菜单
-   * @param {UpdateMenuDto} updateMenuDto
+   * @param {UpdateMenuDto} body
    * @return {Promise<IResponse>}
    */
-  update(updateMenuDto: UpdateMenuDto): Promise<IResponse> {
+  update(body: UpdateMenuDto): Promise<IResponse> {
     return (
-      Promise.resolve(updateMenuDto)
+      Promise.resolve(body)
         // 修改
-        .then(async () => {
+        .then(async (body) => {
+          const { menuId, ...other } = body;
+          await this.menuModel.updateOne({ _id: menuId }, other);
           return (this.response = {
             code: ApiCode.SUCCESS,
             massage: '修改成功！',
@@ -121,7 +126,23 @@ export class MenuService {
     );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} menu`;
+  remove(menuId: string) {
+    return (
+      Promise.resolve(menuId)
+        .then(async (menuId) => {
+          await this.menuModel.deleteOne({ _id: menuId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            massage: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            massage: err.codeName || '删除失败！',
+          });
+        })
+    );
   }
 }

@@ -9,6 +9,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { PageUserDto } from './dto/page-user.dto';
 import { UpdateRoleCodeUserDto } from './dto/update-role-code-user.dto';
+import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 
 @Controller('user')
 @ApiTags('用户')
@@ -18,18 +19,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('save')
-  @HttpCode(200)
+  @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '创建用户' })
-  create(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-    return this.userService.create(createUserDto);
+  create(@Body() body: CreateUserDto) {
+    return this.userService.create(body);
   }
 
   @Post('find_page')
-  @HttpCode(200)
+  @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取用户列表' })
-  findPage(@Body() pageUserDto: PageUserDto) {
-    return this.userService.findPage(pageUserDto);
+  findPage(@Body() body: PageUserDto) {
+    return this.userService.findPage(body);
   }
 
   @Get('admin_info')
@@ -40,8 +40,8 @@ export class UserController {
 
   @Put('update_role_code')
   @ApiOperation({ summary: '修改用户权限' })
-  updateUserRole(@Body() updateRoleCodeUserDto: UpdateRoleCodeUserDto) {
-    return this.userService.updateUserRole(updateRoleCodeUserDto.userId, updateRoleCodeUserDto.roleCode);
+  updateUserRole(@Body() body: UpdateRoleCodeUserDto) {
+    return this.userService.updateUserRole(body.userId, body.roleCode);
   }
 
   @Delete(':userId')

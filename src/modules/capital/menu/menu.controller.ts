@@ -15,8 +15,8 @@ export class MenuController {
 
   @Post('save')
   @ApiOperation({ summary: '新增系统菜单' })
-  save(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.save(createMenuDto);
+  save(@Body() body: CreateMenuDto) {
+    return this.menuService.save(body);
   }
 
   @Get('find_all')
@@ -27,13 +27,13 @@ export class MenuController {
 
   @Put('update')
   @ApiOperation({ summary: '修改系统菜单' })
-  update(@Body() updateMenuDto: UpdateMenuDto) {
-    return this.menuService.update(updateMenuDto);
+  update(@Body() body: UpdateMenuDto) {
+    return this.menuService.update(body);
   }
 
-  @Delete(':id')
+  @Delete(':menuId')
   @ApiOperation({ summary: '删除系统菜单' })
-  remove(@Param('id') id: string) {
-    return this.menuService.remove(+id);
+  remove(@Param('menuId') menuId: string) {
+    return this.menuService.remove(menuId);
   }
 }

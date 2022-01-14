@@ -1,3 +1,5 @@
+import { ApiHttpStatus } from '../enums/api-code.enum';
+
 /**
  * @description 错误状态码的提示
  * @date 26/11/2021
@@ -8,7 +10,7 @@
 export const checkMessage = (status: number, msg: string): string => {
   let message = '';
   switch (status) {
-    case 200:
+    case ApiHttpStatus.SUCCESS:
       message = '请求成功！';
       break;
     case 400:

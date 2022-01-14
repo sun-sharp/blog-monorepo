@@ -19,16 +19,16 @@ export class UserService {
   /**
    * @description 创建用户
    * @date 22/11/2021
-   * @param {CreateUserDto} createUserDto
+   * @param {CreateUserDto} body
    * @return {*} {Promise<IResponse>}
    * @memberof UserService
    */
-  public create(createUserDto: CreateUserDto): Promise<IResponse> {
+  public create(body: CreateUserDto): Promise<IResponse> {
     return (
-      Promise.resolve(createUserDto)
+      Promise.resolve(body)
         // 判断username 是否为合法字符
-        .then((res) => {
-          const { username } = res;
+        .then((body) => {
+          const { username } = body;
           // if (!username.match(/^[a-z]/i)) throw '首字母应为字母';
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
             throw (this.response = {
@@ -41,24 +41,24 @@ export class UserService {
               massage: '账号应全为字母',
             });
           }
-          return res;
+          return body;
         })
         // 判断用户名是否已存在
-        .then(async (res) => {
-          const { username } = res;
+        .then(async (body) => {
+          const { username } = body;
           const user = await this.userModel.findOne({ username });
           if (user)
             throw (this.response = {
               code: ApiCode.ERROR,
               massage: '用户名已注册',
             });
-          return res;
+          return body;
         })
         // 注册用户
-        .then(async (res) => {
-          const password = await hashPassword(res.password);
+        .then(async (body) => {
+          const password = await hashPassword(body.password);
           await this.userModel.create({
-            ...res,
+            ...body,
             password,
           });
           return (this.response = {
@@ -69,7 +69,6 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
             massage: err.codeName || '创建用户失败！',
@@ -127,7 +126,6 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
             massage: err.codeName || '查询失败！',
@@ -137,17 +135,16 @@ export class UserService {
   }
 
   /**
-   * @description 条件并分页获取用户列表
-   * @date 25/11/2021
-   * @return {*}  {Promise<User>}
-   * @memberof UserService
+   * @description: 条件并分页获取用户列表
+   * @param {PageUserDto} body
+   * @return {Promise<IResponse>}
    */
-  public findPage(pageUserDto: PageUserDto): Promise<IResponse> {
+  public findPage(body: PageUserDto): Promise<IResponse> {
     return (
-      Promise.resolve(pageUserDto)
+      Promise.resolve(body)
         // 分页查询
-        .then(async (pageUserDto) => {
-          const { size, current, name, username } = pageUserDto;
+        .then(async (body) => {
+          const { size, current, name, username } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData = { name: { $regex: name }, username: { $regex: username } };
           const total = await this.userModel.find(findData).count();
@@ -172,7 +169,6 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
             massage: err.codeName || '查询失败！',
@@ -199,7 +195,6 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
             massage: err.codeName || '修改失败！',
@@ -220,7 +215,6 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
-          console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
             massage: err.codeName || '删除失败！',

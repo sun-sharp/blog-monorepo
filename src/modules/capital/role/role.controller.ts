@@ -1,6 +1,10 @@
-import { Controller, Get, HttpCode, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { PageRoleDto } from './dto/page-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleService } from './role.service';
 
 @Controller('role')
@@ -10,10 +14,11 @@ import { RoleService } from './role.service';
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
-  @Get('role_page')
+  @Post('role_page')
+  @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取权限列表' })
-  getRolePage() {
-    return this.roleService.getRolePage();
+  getRolePage(@Body() pageRoleDto: PageRoleDto) {
+    return this.roleService.getRolePage(pageRoleDto);
   }
 
   @Get('all')
@@ -23,23 +28,21 @@ export class RoleController {
   }
 
   @Post('save')
-  @HttpCode(200)
+  @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '新增权限' })
-  save() {
-    return this.roleService.save();
+  save(@Body() createRoleDto: CreateRoleDto) {
+    return this.roleService.save(createRoleDto);
   }
 
-  @Post('update')
-  @HttpCode(200)
+  @Put('update')
   @ApiOperation({ summary: '修改权限列表' })
-  update() {
-    return this.roleService.update();
+  update(@Body() updateRoleDto: UpdateRoleDto) {
+    return this.roleService.update(updateRoleDto);
   }
 
-  @Post('remove')
-  @HttpCode(200)
+  @Delete(':roleId')
   @ApiOperation({ summary: '删除权限' })
-  remove() {
-    return this.roleService.remove();
+  remove(@Param('roleId') roleId: string) {
+    return this.roleService.remove(roleId);
   }
 }

@@ -5,7 +5,6 @@ import { comparePassword } from 'src/common/bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user/user.service';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { RoleMenuDto } from './dto/role-menu.dto';
 import { RoleService } from './role/role.service';
 import { MenuService } from './menu/menu.service';
 
@@ -66,12 +65,16 @@ export class CapitalService {
     );
   }
 
-  public roleMenu(query: RoleMenuDto): Promise<IResponse> {
+  /**
+   * @description: 路由权限获取管理系统菜单列表
+   * @param {string} roleCode
+   * @return {*}
+   */
+  public roleMenu(roleCode: string): Promise<IResponse> {
     return (
-      Promise.resolve(query)
+      Promise.resolve(roleCode)
         // 判断用户名是否存在,密码是否正确
-        .then(async (res) => {
-          const { roleCode } = res;
+        .then(async (roleCode) => {
           const routeFind = await this.roleService.findOneByRoleCode(roleCode);
           if (!routeFind) {
             throw (this.response = {

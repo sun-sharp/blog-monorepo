@@ -2,8 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
+import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Role } from 'src/schemas/role.schema';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { PageRoleDto } from './dto/page-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RoleService {
@@ -11,17 +15,34 @@ export class RoleService {
   constructor(@InjectModel('Role') private readonly roleModel: Model<Role>) {}
 
   /**
-   * @description 条件并分页获取权限列表
-   * @return {*}  {Promise<IResponse>}
-   * @memberof RoleService
+   * @description: 条件并分页获取权限列表
+   * @param {PageRoleDto} pageRoleDto
+   * @return {Promise<IResponse>}
    */
-  public getRolePage(): Promise<IResponse> {
+  public getRolePage(pageRoleDto: PageRoleDto): Promise<IResponse> {
     return (
-      Promise.resolve()
+      Promise.resolve(pageRoleDto)
         // 查询
-        .then(async () => {
+        .then(async (body) => {
+          const { size, current, name, roleCode } = body;
+          const { limit, skip } = PaginateHandle(size, current);
+          const findData = { name: { $regex: name }, roleCode: { $regex: roleCode } };
+          const total = await this.roleModel.find(findData).count();
+          const list = await this.roleModel.find(findData).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
+            result: {
+              current,
+              list: list.map((m) => ({
+                id: m._id,
+                name: m.name,
+                roleCode: m.roleCode,
+                roleType: m.roleType,
+                permission: m.permission,
+              })),
+              size,
+              total,
+            },
             massage: '查询成功！',
           });
         })
@@ -69,15 +90,17 @@ export class RoleService {
   }
 
   /**
-   * @description 修改权限列表
-   * @return {*}  {Promise<IResponse>}
-   * @memberof RoleService
+   * @description: 修改权限列表
+   * @param {UpdateRoleDto} body
+   * @return {Promise<IResponse>}
    */
-  public update(): Promise<IResponse> {
+  public update(body: UpdateRoleDto): Promise<IResponse> {
     return (
-      Promise.resolve()
+      Promise.resolve(body)
         // 修改
-        .then(async () => {
+        .then(async (body) => {
+          const { roleId, ...other } = body;
+          await this.roleModel.updateOne({ _id: roleId }, other);
           return (this.response = {
             code: ApiCode.SUCCESS,
             massage: '修改成功！',
@@ -98,11 +121,14 @@ export class RoleService {
    * @return {*}  {Promise<IResponse>}
    * @memberof RoleService
    */
-  public save(): Promise<IResponse> {
+  public save(createRoleDto: CreateRoleDto): Promise<IResponse> {
     return (
-      Promise.resolve()
+      Promise.resolve(createRoleDto)
         // 添加
-        .then(async () => {
+        .then(async (body) => {
+          await this.roleModel.create({
+            ...body,
+          });
           return (this.response = {
             code: ApiCode.SUCCESS,
             massage: '添加成功！',
@@ -119,15 +145,16 @@ export class RoleService {
   }
 
   /**
-   * @description 删除权限
-   * @return {*}  {Promise<IResponse>}
-   * @memberof RoleService
+   * @description: 删除权限
+   * @param {string} roleId
+   * @return {Promise<IResponse>}
    */
-  public remove(): Promise<IResponse> {
+  public remove(roleId: string): Promise<IResponse> {
     return (
-      Promise.resolve()
+      Promise.resolve(roleId)
         // 删除
-        .then(async () => {
+        .then(async (roleId) => {
+          await this.roleModel.deleteOne({ _id: roleId });
           return (this.response = {
             code: ApiCode.SUCCESS,
             massage: '删除成功！',
