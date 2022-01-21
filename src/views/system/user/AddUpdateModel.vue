@@ -99,7 +99,6 @@
           modelForm.avatar = [getImgUrl(row.avatar)];
           modelForm.username = row.username;
           modelForm.roleCode = row.roleCode;
-          console.log(modelForm.avatar);
         }
         nextTick(() => {
           roleApi.getAll().then((res) => {

@@ -8,8 +8,8 @@ const basic = '/role';
  */
 export function getPage(params) {
   return AxiosCapital.request({
-    url: `${basic}/role_page`,
-    method: 'GET',
+    url: `${basic}/find_page`,
+    method: 'POST',
     params,
   });
 }

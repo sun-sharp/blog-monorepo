@@ -46,7 +46,7 @@ export function getUserInfo() {
 export function getPage(params) {
   return AxiosCapital.request({
     url: `${basic}/find_page`,
-    method: 'GET',
+    method: 'POST',
     params,
   });
 }

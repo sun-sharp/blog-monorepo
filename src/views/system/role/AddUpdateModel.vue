@@ -83,7 +83,7 @@
       const menuListLoading = ref(false);
       const init = async (row) => {
         showModal.value = true;
-        modelId.value = row?.id;
+        modelId.value = row?.roleId;
         menuListLoading.value = false;
         resetFields();
         if (modelId.value) {
@@ -128,7 +128,7 @@
               roleType: modelForm.roleType,
               permission: modelForm.permission,
             };
-            const request = modelId.value ? roleApi.update({ id: modelId.value, ...params }) : roleApi.save(params);
+            const request = modelId.value ? roleApi.update({ roleId: modelId.value, ...params }) : roleApi.save(params);
             request.then(() => {
               showModal.value = false;
               emit('refurbish');

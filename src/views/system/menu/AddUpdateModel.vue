@@ -14,7 +14,7 @@
         <n-input v-model:value="modelForm.title" :placeholder="`请输入${menuTypeName}名称`" />
       </n-form-item>
       <n-form-item label="上级菜单" path="parentId">
-        <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="id" />
+        <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="menuId" />
       </n-form-item>
       <n-form-item label="路由" path="path">
         <n-input v-model:value="modelForm.path" placeholder="请输入路由" />
@@ -118,11 +118,11 @@
           trigger: ['blur', 'input'],
           message: `请输入链接`,
         },
-        icon: {
-          required: true,
-          trigger: ['blur', 'change'],
-          message: '请选择',
-        },
+        // icon: {
+        //   required: true,
+        //   trigger: ['blur', 'change'],
+        //   message: '请选择',
+        // },
         parentId: {
           required: true,
           trigger: 'change',
@@ -137,7 +137,7 @@
       });
       const parentIdOptions = ref([
         {
-          id: '0',
+          menuId: '0',
           title: '根目录',
           children: props.tableData || [],
         },
@@ -153,7 +153,7 @@
         (tableData) => {
           parentIdOptions.value = [
             {
-              id: '0',
+              menuId: '0',
               title: '根目录',
               children: tableData || [],
             },
@@ -177,7 +177,7 @@
       // 初始化
       const init = (row) => {
         showModal.value = true;
-        modelId.value = row?.id;
+        modelId.value = row?.menuId;
         resetFields();
         if (modelId.value) {
           modelForm.menuType = row.menuType;
@@ -231,7 +231,7 @@
             if ([6].includes(modelForm.menuType)) {
               params.iframeSrc = modelForm.iframeSrc;
             }
-            const request = modelId.value ? menuApi.updateMenu({ id: modelId.value, ...params }) : menuApi.saveMenu(params);
+            const request = modelId.value ? menuApi.updateMenu({ menuId: modelId.value, ...params }) : menuApi.saveMenu(params);
             request.then(() => {
               showModal.value = false;
               emit('refurbish');
