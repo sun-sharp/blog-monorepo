@@ -51,11 +51,32 @@ yarn reinstall
 ### dependencies
 
 ```bash
+# 从ant设计图标集成的Vue3 SVG图标组件
+@vicons/antd
+
+# ionicons5的图标
+@vicons/ionicons5
+
 # ajax插件
 axios
 
+# 是一个非常好用的JS时间处理库
+date-fns
+
+# echarts图表
+echarts
+
+# 切换左侧菜单展示效果，监听dom元素宽度变化
+element-resize-detector
+
+# 滑块验证码
+makeit-captcha
+
 # 虚拟接口
 mockjs
+
+# naive组件
+naive-ui
 
 # 是一个用于 Vue 的状态管理库，类似 Vuex, 是 Vue 的另一种状态管理方案
 pinia
@@ -66,50 +87,49 @@ vue
 # vue路由
 vue-router
 
-# 从ant设计图标集成的Vue3 SVG图标组件
-@vicons/antd
-
-# ionicons5的图标
-@vicons/ionicons5
-
-# 滑块验证码
-makeit-captcha
-
 # 是一款基于Sortable.js实现的vue拖拽插件
 vuedraggable
-
-# 切换左侧菜单展示效果，监听dom元素宽度变化
-element-resize-detector
-
-# 它是为Vue 2和3服务的一套Vue Composition API的常用工具集
-@vueuse/core
-
-# echarts图表
-echarts
 ```
 
 ### devDependencies
 
 ```bash
-#  ts语法
-typescript
+# ts语法
 @types/node # nodejs的ts文件
 @typescript-eslint/eslint-plugin # ts的eslint插件配置所需
 @typescript-eslint/parser # ts的eslint插件配置所需
-vue-tsc # 在vue中使用tsc
+
+# vite 新型前端构建工具
+@vitejs/plugin-vue # 提供 Vue 3 单文件组件支持
+@vitejs/plugin-vue-jsx # 提供 Vue 3 JSX 支持
+
+# 它是为Vue 2和3服务的一套Vue Composition API的常用工具集
+@vueuse/core
+
+# postcss的插件 添加了 vendor 浏览器前缀，它使用 Can I Use 上面的数据。
+autoprefixer 
 
 # 代码检查 并在eslint中加入prettier配置
 eslint
 eslint-config-prettier
 eslint-plugin-prettier
 eslint-plugin-vue
+
+# 由es build支持的TypeScript/ESNext节点运行时
+esno
+
+# sass
+node-sass
+
+#  是一个允许使用 JS 插件转换样式的工具
+postcss
+
+# 代码检查
 prettier
-vue-eslint-parser # vue的eslint配置
 
 # sass
 sass
 sass-loader
-node-sass
 
 # css, less, scss 代码验证
 stylelint
@@ -118,18 +138,18 @@ stylelint-config-standard
 stylelint-order
 stylelint-scss
 
+# ts语法
+typescript
+
 # vite 新型前端构建工具
 vite
 vite-plugin-compression # gzip压缩
 vite-plugin-html # 一个为index.html提供minify和基于EJS模板功能的Vite插件。
 vite-plugin-mock # 使用mock模拟数据请求
-@vitejs/plugin-vue # 提供 Vue 3 单文件组件支持
-@vitejs/plugin-vue-jsx # 提供 Vue 3 JSX 支持
 
-# 由es build支持的TypeScript/ESNext节点运行时
-esno
+# vue的eslint配置
+vue-eslint-parser
 
-#  是一个允许使用 JS 插件转换样式的工具
-postcss
-autoprefixer # postcss的插件 添加了 vendor 浏览器前缀，它使用 Can I Use 上面的数据。
+# 在vue中使用tsc
+vue-tsc
 ```
