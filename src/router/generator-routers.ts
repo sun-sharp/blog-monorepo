@@ -8,8 +8,8 @@ import type { AppRouteRecordRaw } from '@/router/types';
 const Iframe = () => import('@/views/iframe/index.vue');
 const LayoutMap = new Map<string, () => Promise<typeof import('*.vue')>>();
 
-LayoutMap.set('LAYOUT', Layout);
-LayoutMap.set('IFRAME', Iframe);
+LayoutMap.set('layout', Layout);
+LayoutMap.set('iframe', Iframe);
 
 /**
  * 格式化 后端 结构信息并递归生成层级路由表
@@ -62,7 +62,7 @@ export const asyncImportRoute = (routes: AppRouteRecordRaw[] | undefined): any[]
   return routes.map((i) => {
     const item = i;
     if (!item.component && item.meta?.iframeSrc) {
-      item.component = 'IFRAME';
+      item.component = 'iframe';
     }
     if (item.component) {
       const layoutFound = LayoutMap.get(item.component as string);
