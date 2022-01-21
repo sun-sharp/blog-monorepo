@@ -5,6 +5,8 @@
     "dev": "vite",
     "dev:debug": "vite --debug",
     "build": "vue-tsc --noEmit && vite build && esno ./build/script/postBuild.ts",
+    "dev:egg": "vite --mode dev-egg",
+    "build:egg": "vue-tsc --noEmit && vite build --mode prod-egg && esno ./build/script/postBuild.ts",
     "preview": "vite preview",
     "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",

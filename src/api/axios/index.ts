@@ -200,8 +200,9 @@ const transform: AxiosTransform = {
     const userStore = useUserStoreWidthOut();
     const token = userStore.getToken;
     if (token) {
+      const token_head = import.meta.env.VITE_AUTHORIZATION_HEAD;
       // jwt token
-      config.headers.Authorization = 'Bearer ' + token;
+      config.headers.Authorization = token_head ? token_head + token : token;
     }
     return config;
   },
