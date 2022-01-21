@@ -12,7 +12,7 @@ const logger = new Logger();
 const title = 'NestJs博客API';
 const desc = '我的测试博客API';
 const globalPrefix = '/';
-const swaggerUrl = 'api-docs';
+const swaggerUrl = 'swagger-api';
 
 const port = 3000;
 
