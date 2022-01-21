@@ -1,7 +1,8 @@
-// blog
-export * as menuApi from './blog/menu';
-export * as userApi from './blog/user';
-export * as roleApi from './blog/role';
+// capital
+export * as capitalApi from './capital/index';
+export * as menuApi from './capital/menu';
+export * as userApi from './capital/user';
+export * as roleApi from './capital/role';
 
 // mock
 export * as homeApi from './mock/home';

@@ -1,25 +1,13 @@
-import { AxiosBlog } from '@/api/axios';
+import { AxiosCapital } from '@/api/axios';
 
 const basic = '/menu';
-
-/**
- * @description 根据用户id获取用户菜单
- * @param params
- */
-export function adminMenus(params?) {
-  return AxiosBlog.request({
-    url: `${basic}/role_route`,
-    method: 'GET',
-    params,
-  });
-}
 
 /**
  * @description 获取菜单列表
  * @param params
  */
 export function getMenuList(params?) {
-  return AxiosBlog.request({
+  return AxiosCapital.request({
     url: `${basic}/find_term`,
     method: 'GET',
     params,
@@ -31,7 +19,7 @@ export function getMenuList(params?) {
  * @param data
  */
 export const saveMenu = (data?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/save`,
       method: 'POST',
@@ -48,7 +36,7 @@ export const saveMenu = (data?) => {
  * @param data
  */
 export const updateMenu = (data?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/update`,
       method: 'POST',
@@ -65,7 +53,7 @@ export const updateMenu = (data?) => {
  * @param id
  */
 export const removeMenu = (id?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/remove`,
       method: 'POST',

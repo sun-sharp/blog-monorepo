@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "scripts": {
     "dev": "vite",
+    "dev:debug": "vite --debug",
     "build": "vue-tsc --noEmit && vite build && esno ./build/script/postBuild.ts",
     "preview": "vite preview",
     "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",

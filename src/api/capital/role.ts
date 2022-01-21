@@ -1,4 +1,4 @@
-import { AxiosBlog } from '@/api/axios';
+import { AxiosCapital } from '@/api/axios';
 
 const basic = '/role';
 
@@ -7,7 +7,7 @@ const basic = '/role';
  * @param params
  */
 export function getPage(params) {
-  return AxiosBlog.request({
+  return AxiosCapital.request({
     url: `${basic}/role_page`,
     method: 'GET',
     params,
@@ -19,7 +19,7 @@ export function getPage(params) {
  * @param params
  */
 export function getAll(params?) {
-  return AxiosBlog.request({
+  return AxiosCapital.request({
     url: `${basic}/all`,
     method: 'GET',
     params,
@@ -31,7 +31,7 @@ export function getAll(params?) {
  * @param data
  */
 export const save = (data?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/save`,
       method: 'POST',
@@ -48,7 +48,7 @@ export const save = (data?) => {
  * @param data
  */
 export const update = (data?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/update`,
       method: 'POST',
@@ -65,7 +65,7 @@ export const update = (data?) => {
  * @param id
  */
 export const remove = (id?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/remove`,
       method: 'POST',

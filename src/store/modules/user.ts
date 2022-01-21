@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN } from '@/store/mutation-typ
 import { ResultEnum } from '@/enums/httpEnum';
 
 const Storage = createStorage({ storage: localStorage });
-import { userApi } from '@/api';
+import { capitalApi, userApi } from '@/api';
 
 export interface IUserState {
   token: string;
@@ -51,7 +51,7 @@ export const useUserStore = defineStore({
     // 登录
     async login(userInfo) {
       try {
-        const response = await userApi.login(userInfo);
+        const response = await capitalApi.login(userInfo);
         const { result, code } = response;
         if (code === ResultEnum.SUCCESS) {
           const ex = 7 * 24 * 60 * 60 * 1000;

@@ -1,4 +1,4 @@
-import { AxiosBlog } from '@/api/axios';
+import { AxiosCapital } from '@/api/axios';
 
 const basic = '/user';
 
@@ -6,27 +6,10 @@ const basic = '/user';
  * @description: 获取用户信息
  */
 export function getUserInfo() {
-  return AxiosBlog.request({
+  return AxiosCapital.request({
     url: `${basic}/admin_info`,
     method: 'get',
   });
-}
-
-/**
- * @description: 用户登录
- * @param params
- */
-export function login(params) {
-  return AxiosBlog.request(
-    {
-      url: `${basic}/login`,
-      method: 'POST',
-      params,
-    },
-    {
-      isTransformResponse: false,
-    }
-  );
 }
 
 /**
@@ -61,7 +44,7 @@ export function login(params) {
  * @param params
  */
 export function getPage(params) {
-  return AxiosBlog.request({
+  return AxiosCapital.request({
     url: `${basic}/find_page`,
     method: 'GET',
     params,
@@ -73,7 +56,7 @@ export function getPage(params) {
  * @param data
  */
 export const save = (data?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/save`,
       method: 'POST',
@@ -90,7 +73,7 @@ export const save = (data?) => {
  * @param data
  */
 export const updateRoleCode = (data?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/update_role_code`,
       method: 'POST',
@@ -107,7 +90,7 @@ export const updateRoleCode = (data?) => {
  * @param id
  */
 export const remove = (id?) => {
-  return AxiosBlog.request(
+  return AxiosCapital.request(
     {
       url: `${basic}/remove`,
       method: 'POST',
