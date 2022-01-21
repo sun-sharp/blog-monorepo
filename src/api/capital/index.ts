@@ -1,6 +1,6 @@
 import { AxiosCapital } from '@/api/axios';
 
-const basic = '/';
+const basic = '';
 
 /**
  * @description: 用户登录
