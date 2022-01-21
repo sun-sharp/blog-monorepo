@@ -96,7 +96,7 @@ export {
   EyeOutlined,
 };
 
-export default {
+/* export default {
   DashboardOutlined,
   HomeOutlined,
   CheckCircleOutlined,
@@ -143,4 +143,4 @@ export default {
   MailOutlined,
   TagsOutlined,
   EyeOutlined,
-};
+}; */

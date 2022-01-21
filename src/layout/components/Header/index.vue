@@ -98,7 +98,7 @@
 <script lang="ts">
   import { defineComponent, reactive, toRefs, ref, computed, unref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
-  import components from './components';
+  import icons from './icons';
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
   import { useUserStore } from '@/store/modules/user';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
@@ -109,7 +109,7 @@
 
   export default defineComponent({
     name: 'PageHeader',
-    components: { ...components, NDialogProvider, ProjectSetting, AsideMenu },
+    components: { ...icons, NDialogProvider, ProjectSetting, AsideMenu },
     props: {
       collapsed: {
         type: Boolean,

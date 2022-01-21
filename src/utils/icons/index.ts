@@ -1,6 +1,6 @@
 import { hIcon, renderIcon } from '@/utils/index';
-import Antd from './antd';
-import Ionicons5 from './ionicons5';
+import * as Antd from './antd';
+import * as Ionicons5 from './ionicons5';
 
 export * from './antd';
 export * from './ionicons5';
