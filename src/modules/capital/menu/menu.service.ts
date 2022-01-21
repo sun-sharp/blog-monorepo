@@ -51,12 +51,12 @@ export class MenuService {
       Promise.resolve(query)
         // 查询
         .then(async (query) => {
-          const findData = query ? { name: { $regex: query.name } } : {};
-          const roleList = await this.menuModel.find(findData).sort({ sort: 1 });
+          const findData = query ? { name: { $regex: query.name || '' } } : {};
+          const menuList = await this.menuModel.find(findData).sort({ sort: 1 });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: roleList.map((m) => ({
-              id: m._id,
+            result: menuList.map((m) => ({
+              menuId: m._id,
               name: m.name,
               title: m.title,
               path: m.path,

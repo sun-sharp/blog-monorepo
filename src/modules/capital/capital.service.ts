@@ -96,7 +96,7 @@ export class CapitalService {
             return (this.response = {
               code: ApiCode.SUCCESS,
               result: result.map((m) => ({
-                id: m._id,
+                menuId: m._id,
                 name: m.name,
                 title: m.title,
                 path: m.path,
