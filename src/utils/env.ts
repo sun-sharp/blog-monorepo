@@ -1,5 +1,6 @@
 import { warn } from '@/utils/log';
 import pkg from '../../package.json';
+import { GlobEnvConfig } from '/#/config';
 
 export function getCommonStoragePrefix() {
   const { VITE_GLOB_APP_SHORT_NAME } = getAppEnvConfig();
@@ -12,7 +13,7 @@ export function getStorageShortName() {
 }
 
 export function getAppEnvConfig() {
-  const ENV = import.meta.env;
+  const ENV = import.meta.env as unknown as GlobEnvConfig;
 
   const {
     VITE_PUBLIC_PATH,

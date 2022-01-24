@@ -57,6 +57,8 @@ export interface GlobConfig {
 }
 
 export interface GlobEnvConfig {
+  // 网站根目录
+  VITE_PUBLIC_PATH: string;
   // 标题
   VITE_GLOB_APP_TITLE: string;
   // capital接口地址
