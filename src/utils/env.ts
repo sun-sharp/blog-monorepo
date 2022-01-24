@@ -1,8 +1,5 @@
-import type { GlobEnvConfig } from '/#/config';
-
 import { warn } from '@/utils/log';
 import pkg from '../../package.json';
-import { getConfigFileName } from '../../build/getConfigFileName';
 
 export function getCommonStoragePrefix() {
   const { VITE_GLOB_APP_SHORT_NAME } = getAppEnvConfig();
@@ -15,12 +12,7 @@ export function getStorageShortName() {
 }
 
 export function getAppEnvConfig() {
-  const ENV_NAME = getConfigFileName(import.meta.env);
-
-  const ENV = (import.meta.env.DEV
-    ? // 获取全局配置（打包时将独立提取配置）
-      (import.meta.env as unknown as GlobEnvConfig)
-    : window[ENV_NAME as any]) as unknown as GlobEnvConfig;
+  const ENV = import.meta.env;
 
   const {
     VITE_GLOB_APP_TITLE,
