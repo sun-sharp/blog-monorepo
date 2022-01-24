@@ -44,6 +44,7 @@ export interface ImultiTabsSetting {
   show: boolean;
 }
 export interface GlobConfig {
+  baseUrl: string;
   title: string;
   capitalApiUrl: string;
   blogApiUrl: string;

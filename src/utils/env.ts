@@ -15,6 +15,7 @@ export function getAppEnvConfig() {
   const ENV = import.meta.env;
 
   const {
+    VITE_PUBLIC_PATH,
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_CAPITAL_API_URL,
     VITE_GLOB_BLOG_API_URL,
@@ -31,6 +32,7 @@ export function getAppEnvConfig() {
   }
 
   return {
+    VITE_PUBLIC_PATH,
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_CAPITAL_API_URL,
     VITE_GLOB_BLOG_API_URL,
