@@ -48,6 +48,13 @@ export class CapitalService {
             });
           }
         })
+        // 修改登录时间
+        .then(async (res) => {
+          await this.userService.updateLoginDate(res._id);
+          return {
+            _id: res._id,
+          };
+        })
         // 创造token
         .then((res) => {
           return (this.response = {

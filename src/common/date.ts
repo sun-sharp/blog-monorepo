@@ -1,0 +1,18 @@
+/**
+ * @description 时间，日期转化
+ */
+export function nowDateFun() {
+  const newDate = new Date();
+  const year = `${newDate.getFullYear()}`;
+  let month = `${newDate.getMonth() + 1}`;
+  let day = `${newDate.getDate()}`;
+  let hour = `${newDate.getHours()}`;
+  let min = `${newDate.getMinutes()}`;
+  let sec = `${newDate.getSeconds()}`;
+  month = Number(month) < 10 ? `0${month}` : month;
+  day = Number(day) < 10 ? `0${day}` : day;
+  hour = Number(hour) < 10 ? `0${hour}` : hour;
+  min = Number(min) < 10 ? `0${min}` : min;
+  sec = Number(sec) < 10 ? `0${sec}` : sec;
+  return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
+}

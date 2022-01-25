@@ -8,6 +8,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PageUserDto } from './dto/page-user.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { User } from 'src/schemas/user.schema';
+import { nowDateFun } from 'src/common/date';
 
 @Injectable()
 export class UserService {
@@ -203,7 +204,12 @@ export class UserService {
     );
   }
 
-  remove(userId: string) {
+  /**
+   * @description: 删除用户
+   * @param {string} userId
+   * @return {*}
+   */
+  public remove(userId: string): Promise<IResponse> {
     return (
       Promise.resolve(userId)
         .then(async (userId) => {
@@ -219,6 +225,25 @@ export class UserService {
             code: ApiCode.ERROR,
             massage: err.codeName || '删除失败！',
           });
+        })
+    );
+  }
+
+  /**
+   * @description: 修改登录时间
+   * @param {string} userId
+   * @return {*}
+   */
+  public updateLoginDate(userId: string): Promise<User> {
+    return (
+      Promise.resolve(userId)
+        .then(async (userId) => {
+          const loginData = nowDateFun();
+          return this.userModel.updateOne({ _id: userId }, { loginData });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }
