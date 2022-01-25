@@ -19,7 +19,7 @@ export class MenuController {
     return this.menuService.save(body);
   }
 
-  @Get('find_all')
+  @Get('find_term')
   @ApiOperation({ summary: '条件查询获取管理系统全部菜单列表' })
   findAll(@Query() query: menuFindAllDto) {
     return this.menuService.findAll(query);
