@@ -239,3 +239,5 @@ export function lighten(color: string, amount: number) {
   amount = Math.trunc((255 * amount) / 100);
   return `#${addLight(color.substring(0, 2), amount)}${addLight(color.substring(2, 4), amount)}${addLight(color.substring(4, 6), amount)}`;
 }
+
+export * from './Storage';

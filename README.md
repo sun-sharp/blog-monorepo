@@ -81,6 +81,9 @@ naive-ui
 # 是一个用于 Vue 的状态管理库，类似 Vuex, 是 Vue 的另一种状态管理方案
 pinia
 
+# 传参问题
+qs
+
 # vue3版本
 vue
 
@@ -117,9 +120,6 @@ eslint-plugin-vue
 
 # 由es build支持的TypeScript/ESNext节点运行时
 esno
-
-# sass
-node-sass
 
 #  是一个允许使用 JS 插件转换样式的工具
 postcss
