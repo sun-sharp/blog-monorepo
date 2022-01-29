@@ -64,9 +64,7 @@
   import { LockOutlined, LoadingOutlined, UserOutlined, ApiOutlined, ArrowRightOutlined, WifiOutlined } from '@/utils/icons';
 
   import { useRouter, useRoute } from 'vue-router';
-  import { useOnline } from '@/utils/useOnline';
-  import { useTime } from '@/utils/useTime';
-  import { useBattery } from '@/utils/useBattery';
+  import { useBattery, useOnline, useTime } from '@/hooks';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
   import { useUserStore } from '@/store/modules/user';
 

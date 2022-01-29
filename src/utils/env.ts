@@ -1,10 +1,10 @@
 import { warn } from '@/utils/log';
 import pkg from '../../package.json';
-import { GlobEnvConfig } from '/#/config';
+import { useGlobSetting } from './setting';
 
 export function getCommonStoragePrefix() {
-  const { VITE_GLOB_APP_SHORT_NAME } = getAppEnvConfig();
-  return `${VITE_GLOB_APP_SHORT_NAME}__${getEnv()}`.toUpperCase();
+  const { shortName } = useGlobSetting();
+  return `${shortName}__${getEnv()}`.toUpperCase();
 }
 
 // 根据版本生成缓存密钥
@@ -13,36 +13,36 @@ export function getStorageShortName() {
 }
 
 export function getAppEnvConfig() {
-  const ENV = import.meta.env as unknown as GlobEnvConfig;
+  const ENV = import.meta.env as unknown as ViteEnv;
 
   const {
     VITE_PUBLIC_PATH,
-    VITE_GLOB_APP_TITLE,
-    VITE_GLOB_CAPITAL_API_URL,
-    VITE_GLOB_BLOG_API_URL,
-    VITE_GLOB_MOCK_API_URL,
-    VITE_GLOB_APP_SHORT_NAME,
-    VITE_GLOB_API_URL_PREFIX,
-    VITE_GLOB_UPLOAD_URL,
-    VITE_GLOB_PROD_MOCK,
-    VITE_GLOB_IMG_URL,
+    VITE_APP_TITLE,
+    VITE_CAPITAL_API_URL,
+    VITE_BLOG_API_URL,
+    VITE_MOCK_API_URL,
+    VITE_APP_SHORT_NAME,
+    VITE_API_URL_PREFIX,
+    VITE_UPLOAD_URL,
+    VITE_PROD_MOCK,
+    VITE_IMG_URL,
   } = ENV;
 
-  if (!/^[a-zA-Z\_]*$/.test(VITE_GLOB_APP_SHORT_NAME)) {
-    warn(`VITE_GLOB_APP_SHORT_NAME Variables can only be characters/underscores, please modify in the environment variables and re-running.`);
+  if (!/^[a-zA-Z\_]*$/.test(VITE_APP_SHORT_NAME)) {
+    warn(`VITE_APP_SHORT_NAME Variables can only be characters/underscores, please modify in the environment variables and re-running.`);
   }
 
   return {
     VITE_PUBLIC_PATH,
-    VITE_GLOB_APP_TITLE,
-    VITE_GLOB_CAPITAL_API_URL,
-    VITE_GLOB_BLOG_API_URL,
-    VITE_GLOB_MOCK_API_URL,
-    VITE_GLOB_APP_SHORT_NAME,
-    VITE_GLOB_API_URL_PREFIX,
-    VITE_GLOB_UPLOAD_URL,
-    VITE_GLOB_PROD_MOCK,
-    VITE_GLOB_IMG_URL,
+    VITE_APP_TITLE,
+    VITE_CAPITAL_API_URL,
+    VITE_BLOG_API_URL,
+    VITE_MOCK_API_URL,
+    VITE_APP_SHORT_NAME,
+    VITE_API_URL_PREFIX,
+    VITE_UPLOAD_URL,
+    VITE_PROD_MOCK,
+    VITE_IMG_URL,
   };
 }
 

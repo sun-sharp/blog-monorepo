@@ -1,6 +1,6 @@
 import { PageEnum } from '@/enums/pageEnum';
 import router from '@/router';
-import { storage } from '@/utils/Storage';
+import { storage } from '@/utils/storage';
 
 export const checkStatus = (status: number, msg: string, message: any): void => {
   switch (status) {

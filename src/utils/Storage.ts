@@ -124,4 +124,4 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
 export const storage = createStorage();
 
-export default Storage;
+// export default Storage;

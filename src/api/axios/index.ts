@@ -20,7 +20,7 @@ const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix || '';
 
 import router from '@/router';
-import { storage } from '@/utils/Storage';
+import { storage } from '@/utils/storage';
 
 /**
  * @description: 数据处理，方便区分多种处理方式
