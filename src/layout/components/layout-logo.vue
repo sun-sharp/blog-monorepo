@@ -6,7 +6,9 @@
 </template>
 
 <script>
-  export default {
+  import { defineComponent } from 'vue';
+
+  export default defineComponent({
     name: 'LayoutLogo',
     props: {
       collapsed: {
@@ -19,7 +21,7 @@
         title,
       };
     },
-  };
+  });
 </script>
 
 <style lang="scss" scoped>
