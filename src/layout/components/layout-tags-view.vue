@@ -1,15 +1,15 @@
 <template>
   <div
-    class="tabs-view"
+    class="layout-tabs-view"
     :class="{
-      'tabs-view-fix': multiTabsSetting.fixed,
-      'tabs-view-fixed-header': isMultiHeaderFixed,
-      'tabs-view-default-background': getDarkTheme === false,
-      'tabs-view-dark-background': getDarkTheme === true,
+      'layout-tabs-view-fix': multiTabsSetting.fixed,
+      'layout-tabs-view-fixed-header': isMultiHeaderFixed,
+      'layout-tabs-view-default-background': getDarkTheme === false,
+      'layout-tabs-view-dark-background': getDarkTheme === true,
     }"
     :style="getChangeStyle"
   >
-    <div class="tabs-view-main">
+    <div class="layout-tabs-view-main">
       <div ref="navWrap" class="tabs-card" :class="{ 'tabs-card-scrollable': scrollable }">
         <span class="tabs-card-prev" :class="{ 'tabs-card-prev-hide': !scrollable }" @click="scrollPrev">
           <n-icon size="16" color="#515a6e">
@@ -433,7 +433,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .tabs-view {
+  .layout-tabs-view {
     width: 100%;
     padding: 6px 0;
     display: flex;
@@ -560,22 +560,22 @@
     }
   }
 
-  .tabs-view-default-background {
+  .layout-tabs-view-default-background {
     background: #f5f7f9;
   }
 
-  .tabs-view-dark-background {
+  .layout-tabs-view-dark-background {
     background: #101014;
   }
 
-  .tabs-view-fix {
+  .layout-tabs-view-fix {
     position: fixed;
     z-index: 5;
     padding: 6px 19px 6px 10px;
     left: 200px;
   }
 
-  .tabs-view-fixed-header {
+  .layout-tabs-view-fixed-header {
     top: 0;
   }
 </style>

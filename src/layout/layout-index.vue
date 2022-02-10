@@ -14,13 +14,13 @@
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
-      <Logo :collapsed="collapsed" />
-      <AsideMenu v-model:collapsed="collapsed" v-model:location="getMenuLocation" />
+      <layout-logo :collapsed="collapsed" />
+      <layout-menu v-model:collapsed="collapsed" v-model:location="getMenuLocation" />
     </n-layout-sider>
 
     <n-layout :inverted="inverted">
       <n-layout-header :inverted="getHeaderInverted" :position="fixedHeader">
-        <PageHeader v-model:collapsed="collapsed" :inverted="inverted" />
+        <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
       </n-layout-header>
 
       <n-layout-content class="layout-content" :class="{ 'layout-default-background': getDarkTheme === false }">
@@ -31,7 +31,7 @@
             'fluid-header': fixedHeader === 'static',
           }"
         >
-          <TabsView v-if="isMultiTabs" v-model:collapsed="collapsed" />
+          <layout-tabs-view v-if="isMultiTabs" v-model:collapsed="collapsed" />
           <div
             class="main-view"
             :class="{
@@ -40,7 +40,7 @@
               'mt-3': !isMultiTabs,
             }"
           >
-            <MainView />
+            <layout-main />
           </div>
         </div>
       </n-layout-content>
@@ -51,11 +51,11 @@
 
 <script lang="ts" setup>
   import { ref, unref, computed, onMounted } from 'vue';
-  import { Logo } from './components/Logo';
-  import { TabsView } from './components/TagsView';
-  import { MainView } from './components/Main';
-  import { AsideMenu } from './components/Menu';
-  import { PageHeader } from './components/Header';
+  import LayoutLogo from '@/layout/components/layout-logo.vue';
+  import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
+  import LayoutMain from '@/layout/components/layout-main.vue';
+  import LayoutMenu from '@/layout/components/layout-menu.vue';
+  import LayoutHeader from '@/layout/components/layout-header.vue';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
   import { useDesignSetting } from '@/utils/setting/useDesignSetting';
   import { useLoadingBar } from 'naive-ui';

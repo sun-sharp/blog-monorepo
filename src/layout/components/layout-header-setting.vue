@@ -208,7 +208,7 @@
   import { animates as animateOptions } from '@/settings/animateSetting';
 
   export default defineComponent({
-    name: 'ProjectSetting',
+    name: 'LayoutHeaderSetting',
     components: { CheckOutlined, Moon, SunnySharp },
     props: {
       title: {

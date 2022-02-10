@@ -6,7 +6,7 @@
         <img src="~@/assets/images/logo.png" alt="" />
         <h2 v-show="!collapsed" class="title">NaiveUiAdmin</h2>
       </div>
-      <AsideMenu v-model:location="getMenuLocation" :collapsed="collapsed" :inverted="getInverted" mode="horizontal" />
+      <layout-menu v-model:location="getMenuLocation" :collapsed="collapsed" :inverted="getInverted" mode="horizontal" />
     </div>
     <!--左侧菜单-->
     <div v-else class="layout-header-left">
@@ -98,18 +98,49 @@
 <script lang="ts">
   import { defineComponent, reactive, toRefs, ref, computed, unref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
-  import icons from './icons';
+  import {
+    SettingOutlined,
+    SearchOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    FullscreenOutlined,
+    FullscreenExitOutlined,
+    PoweroffOutlined,
+    GithubOutlined,
+    LockOutlined,
+    ReloadOutlined,
+    LogoutOutlined,
+    UserOutlined,
+    CheckOutlined,
+  } from '@/utils/icons';
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
   import { useUserStore } from '@/store/modules/user';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
-  import ProjectSetting from './ProjectSetting.vue';
-  import { AsideMenu } from '@/layout/components/Menu';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
   import { getImgUrl } from '@/utils/files/image';
+  import ProjectSetting from '@/layout/components/layout-header-setting.vue';
+  import LayoutMenu from '@/layout/components/layout-menu.vue';
 
   export default defineComponent({
-    name: 'PageHeader',
-    components: { ...icons, NDialogProvider, ProjectSetting, AsideMenu },
+    name: 'LayoutHeader',
+    components: {
+      SettingOutlined,
+      SearchOutlined,
+      MenuFoldOutlined,
+      MenuUnfoldOutlined,
+      FullscreenOutlined,
+      FullscreenExitOutlined,
+      PoweroffOutlined,
+      GithubOutlined,
+      LockOutlined,
+      ReloadOutlined,
+      LogoutOutlined,
+      UserOutlined,
+      CheckOutlined,
+      NDialogProvider,
+      ProjectSetting,
+      LayoutMenu,
+    },
     props: {
       collapsed: {
         type: Boolean,

@@ -25,7 +25,7 @@
   import { constantRouterIcon } from '@/utils/icons';
 
   export default defineComponent({
-    name: 'Menu',
+    name: 'LayoutMenu',
     components: {},
     props: {
       mode: {

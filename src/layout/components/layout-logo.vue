@@ -1,5 +1,5 @@
 <template>
-  <div class="logo">
+  <div class="layout-logo">
     <img src="~@/assets/images/logo.png" alt="" :class="{ 'mr-2': !collapsed }" />
     <h2 v-show="!collapsed" class="title">{{ title }}</h2>
   </div>
@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: 'Index',
+    name: 'LayoutLogo',
     props: {
       collapsed: {
         type: Boolean,
@@ -23,7 +23,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .logo {
+  .layout-logo {
     display: flex;
     align-items: center;
     justify-content: center;

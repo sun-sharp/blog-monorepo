@@ -17,7 +17,7 @@
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
 
   export default defineComponent({
-    name: 'MainView',
+    name: 'LayoutMain',
     components: {},
     props: {
       notNeedKey: {
