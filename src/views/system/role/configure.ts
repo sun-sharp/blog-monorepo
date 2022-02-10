@@ -1,6 +1,6 @@
 import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
-import { roleTypeObj } from '@/enums/apiEnum';
+import { roleTypeObj } from '@/enums';
 import { roleApi } from '@/api';
 
 export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {

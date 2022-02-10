@@ -71,7 +71,7 @@
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
   import { useMessage } from 'naive-ui';
   import Draggable from 'vuedraggable';
-  import { PageEnum } from '@/enums/pageEnum';
+  import { PageEnum } from '@/enums';
   import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined } from '@/utils/icons';
   import { renderIcon } from '@/utils';
   import elementResizeDetectorMaker from 'element-resize-detector';

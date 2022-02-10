@@ -59,7 +59,7 @@
 
 <script lang="ts" setup>
   import { reactive } from 'vue';
-  import { ResultEnum } from '@/enums/httpEnum';
+  import { ResultEnum } from '@/enums';
   import recharge from './Recharge.vue';
   import { LockOutlined, LoadingOutlined, UserOutlined, ApiOutlined, ArrowRightOutlined, WifiOutlined } from '@/utils/icons';
 

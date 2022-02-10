@@ -6,7 +6,6 @@ import { isFunction } from '@/utils/is';
 import { cloneDeep } from 'lodash-es';
 
 import type { RequestOptions, CreateAxiosOptions, Result } from './types';
-// import { ContentTypeEnum } from '/@/enums/httpEnum';
 
 export * from './axiosTransform';
 

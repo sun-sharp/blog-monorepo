@@ -21,7 +21,7 @@
   import { generatorMenu, generatorMenuMix } from '@/utils';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
-  import { PageEnum } from '@/enums/pageEnum';
+  import { PageEnum } from '@/enums';
   import { constantRouterIcon } from '@/utils/icons';
 
   export default defineComponent({

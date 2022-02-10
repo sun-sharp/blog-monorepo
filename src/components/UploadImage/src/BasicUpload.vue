@@ -52,7 +52,7 @@
   import { EyeOutlined, DeleteOutlined, PlusOutlined } from '@/utils//icons';
   import { basicProps } from './props';
   import { useMessage, useDialog } from 'naive-ui';
-  import { ResultEnum } from '@/enums/httpEnum';
+  import { ResultEnum } from '@/enums';
   import componentSetting from '@/settings/componentSetting';
   import { isString } from '@/utils/is';
   import { getImgUrl } from '@/utils/files/image';

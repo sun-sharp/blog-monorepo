@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import { constantHtmlIcon } from '@/utils/icons';
 import { NButton, NTag } from 'naive-ui';
-import { menuTypeObj } from '@/enums/apiEnum';
+import { menuTypeObj } from '@/enums';
 import { menuApi } from '@/api';
 
 export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {

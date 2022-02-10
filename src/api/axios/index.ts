@@ -4,8 +4,7 @@ import { AxiosTransform } from './axiosTransform';
 import axios, { AxiosResponse } from 'axios';
 import { checkStatus } from './checkStatus';
 import { joinTimestamp, formatRequestDate } from './helper';
-import { RequestEnum, ResultEnum, ContentTypeEnum } from '@/enums/httpEnum';
-import { PageEnum } from '@/enums/pageEnum';
+import { RequestEnum, ResultEnum, ContentTypeEnum, PageEnum } from '@/enums';
 
 import { useGlobSetting } from '@/utils/setting';
 

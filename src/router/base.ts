@@ -1,6 +1,6 @@
 import type { AppRouteRecordRaw } from '@/router/types';
 import { ErrorPage, RedirectName, Layout } from '@/router/constant';
-import { PageEnum } from '@/enums/pageEnum';
+import { PageEnum } from '@/enums';
 import { RouteRecordRaw } from 'vue-router';
 
 // 首页

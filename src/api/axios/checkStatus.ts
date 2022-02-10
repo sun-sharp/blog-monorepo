@@ -1,4 +1,4 @@
-import { PageEnum } from '@/enums/pageEnum';
+import { PageEnum } from '@/enums';
 import router from '@/router';
 import { storage } from '@/utils/storage';
 

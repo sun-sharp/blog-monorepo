@@ -39,7 +39,7 @@
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { menuApi, roleApi } from '@/api';
   import { levelMenu } from '@/utils';
-  import { roleTypeOption } from '@/enums/apiEnum';
+  import { roleTypeOption } from '@/enums';
 
   const modelFields = {
     name: null,

@@ -82,7 +82,7 @@
   import { useRoute, useRouter } from 'vue-router';
   import { useUserStore } from '@/store/modules/user';
   import { useMessage } from 'naive-ui';
-  import { ResultEnum } from '@/enums/httpEnum';
+  import { ResultEnum } from '@/enums';
   import logo from '@/assets/images/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@/utils/icons';
 

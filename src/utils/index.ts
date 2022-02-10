@@ -1,7 +1,7 @@
 import { h, unref } from 'vue';
 import type { App, Plugin } from 'vue';
 import { NIcon } from 'naive-ui';
-import { PageEnum } from '@/enums/pageEnum';
+import { PageEnum } from '@/enums';
 import { isObject } from './is/index';
 import { cloneDeep } from 'lodash-es';
 /**

@@ -53,7 +53,7 @@
 
 <script lang="ts">
   import { defineComponent, h, nextTick, reactive, ref, unref, watch } from 'vue';
-  import { menuTypeObj, menuTypeOption } from '@/enums/apiEnum';
+  import { menuTypeObj, menuTypeOption } from '@/enums';
   import { constantHtmlIcon } from '@/utils/icons';
   import { menuApi } from '@/api';
 
