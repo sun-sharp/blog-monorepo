@@ -115,7 +115,7 @@ export class UserService {
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
-              id: user._id,
+              userId: user._id,
               roleCode: user.roleCode,
               loginDate: user.loginDate,
               username: user.username,
@@ -155,7 +155,7 @@ export class UserService {
             result: {
               current,
               list: list.map((m) => ({
-                id: m._id,
+                userId: m._id,
                 roleCode: m.roleCode,
                 loginDate: m.loginDate,
                 username: m.username,
