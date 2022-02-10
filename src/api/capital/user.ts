@@ -76,7 +76,7 @@ export const updateRoleCode = (data?) => {
   return AxiosCapital.request(
     {
       url: `${basic}/update_role_code`,
-      method: 'POST',
+      method: 'PUT',
       data,
     },
     {

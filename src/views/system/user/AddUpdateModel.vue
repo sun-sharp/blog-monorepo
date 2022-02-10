@@ -5,14 +5,16 @@
         <n-input v-model:value="modelForm.name" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <BasicUpload
+        <app-upload-image
           v-model:value="modelForm.avatar"
           :action="`${uploadUrl}/image`"
           :headers="uploadHeaders"
+          :disabled="!!modelId"
+          :show-remove-button="!modelId"
           name="files"
           :width="100"
           :height="100"
-          :max="1"
+          :max-number="1"
         />
         <!-- <n-input v-model:value="modelForm.avatar" :disabled="!!modelId" placeholder="请输入头像" /> -->
       </n-form-item>
@@ -38,7 +40,7 @@
   import { roleApi, userApi } from '@/api';
   import { useGlobSetting } from '@/utils/setting';
   import { useUserStoreWidthOut } from '@/store/modules/user';
-  import { BasicUpload } from '@/components/UploadImage';
+  import AppUploadImage from '@/components/app-upload-image.vue';
   import { getImgUrl } from '@/utils/files/image';
 
   const modelFields = {
@@ -49,7 +51,7 @@
   };
 
   export default defineComponent({
-    components: { BasicUpload },
+    components: { AppUploadImage },
     emits: ['refurbish'],
     setup(_props, { emit }) {
       const modelId = ref('');
@@ -90,9 +92,10 @@
       });
 
       // 初始化
-      const init = (row) => {
+      const init = (row: any) => {
         showModal.value = true;
         modelId.value = row?.userId;
+        console.log(row);
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
@@ -102,7 +105,7 @@
         }
         nextTick(() => {
           roleApi.getAll().then((res) => {
-            roleOption.value = res.map((m) => ({ label: m.name, value: m.roleCode }));
+            roleOption.value = res.map((m: any) => ({ label: m.name, value: m.roleCode }));
           });
         });
       };
