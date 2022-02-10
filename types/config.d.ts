@@ -52,6 +52,5 @@ export interface GlobConfig {
   shortName: string;
   urlPrefix?: string;
   uploadUrl?: string;
-  prodMock: boolean;
   imgUrl?: string;
 }

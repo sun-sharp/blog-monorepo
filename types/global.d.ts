@@ -78,7 +78,7 @@ declare global {
     //图片前缀地址
     VITE_IMG_URL?: string;
     //生产环境开启mock
-    VITE_PROD_MOCK: boolean;
+    // VITE_PROD_MOCK: boolean;
     VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
     VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;
   }
