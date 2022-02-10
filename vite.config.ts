@@ -117,7 +117,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         ignore: /^\_/,
         // ↓解析根目录下的mock文件夹
         mockPath: 'mock', //mock文件地址
-        localEnabled: true, // 开发打包开关
+        localEnabled: !isBuild, // 开发打包开关
+        prodEnabled: isBuild, // 生产环境打包开关
         // 这样可以控制关闭mock的时候不让mock打包到最终代码内
         injectCode: `
            import { setupProdMockServer } from './mock/_createProductionServer';
