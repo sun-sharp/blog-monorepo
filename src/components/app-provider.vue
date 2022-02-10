@@ -1,10 +1,11 @@
 <template>
   <n-loading-bar-provider>
+    <app-loading-content />
     <n-dialog-provider>
-      <dialog-content />
+      <app-dialog-content />
       <n-notification-provider>
         <n-message-provider>
-          <message-content />
+          <app-message-content />
           <slot></slot>
         </n-message-provider>
       </n-notification-provider>
@@ -14,6 +15,7 @@
 
 <script lang="ts" setup>
   import { NDialogProvider, NNotificationProvider, NMessageProvider, NLoadingBarProvider } from 'naive-ui';
-  import { MessageContent } from '@/components/MessageContent';
-  import { DialogContent } from '@/components/DialogContent';
+  import AppMessageContent from '@/components/app-message-content.vue';
+  import AppDialogContent from '@/components/app-dialog-content.vue';
+  import AppLoadingContent from '@/components/app-loading-content.vue';
 </script>

@@ -8,9 +8,6 @@ import {
   setupNaive,
   // setupDirectives
 } from '@/plugins';
-import { AppProvider } from '@/components/Application';
-
-const appProvider = createApp(AppProvider);
 
 const app = createApp(App);
 
@@ -22,9 +19,6 @@ setupNaive(app);
 
 // 注册全局自定义指令
 // setupDirectives(app);
-
-// 优先挂载一下 Provider 解决路由守卫，Axios中可使用，Dialog，Message 等之类组件
-appProvider.mount('#appProvider', true);
 
 // 挂载状态管理
 setupStore(app);

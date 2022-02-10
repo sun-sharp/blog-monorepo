@@ -6,15 +6,15 @@
   </n-config-provider>
 
   <transition v-if="isLock && $route.name !== 'login'" name="slide-up">
-    <lock-screen />
+    <app-lock-screen />
   </transition>
 </template>
 
 <script lang="ts" setup>
   import { computed, onMounted, onUnmounted } from 'vue';
   import { zhCN, dateZhCN, darkTheme } from 'naive-ui';
-  import { LockScreen } from '@/components/LockScreen';
-  import { AppProvider } from '@/components/Application';
+  import AppLockScreen from '@/components/app-lock-screen.vue';
+  import AppProvider from '@/components/app-provider.vue';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
   import { useRoute } from 'vue-router';
   import { useDesignSettingStore } from '@/store/modules/designSetting';

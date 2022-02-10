@@ -58,7 +58,6 @@
   import LayoutHeader from '@/layout/components/layout-header.vue';
   import { useProjectSetting } from '@/utils/setting/useProjectSetting';
   import { useDesignSetting } from '@/utils/setting/useDesignSetting';
-  import { useLoadingBar } from 'naive-ui';
   import { useRoute } from 'vue-router';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
 
@@ -133,9 +132,6 @@
 
   onMounted(() => {
     window.addEventListener('resize', watchWidth);
-    //挂载在 window 方便与在js中使用
-    window['$loading'] = useLoadingBar();
-    window['$loading'].finish();
   });
 </script>
 
