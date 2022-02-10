@@ -177,10 +177,10 @@
 
       // 默认tag
       const defaultTag = {
-        fullPath: PageEnum.BASE_HOME,
-        meta: { title: PageEnum.BASE_HOME_LABEL },
-        name: PageEnum.BASE_HOME_KEY,
-        path: PageEnum.BASE_HOME,
+        fullPath: PageEnum.HOME_PATH,
+        meta: { title: PageEnum.HOME_TITLE },
+        name: PageEnum.HOME_NAME,
+        path: PageEnum.HOME_PATH,
       };
       routes = defaultTag.fullPath === route.fullPath ? [getSimpleRoute(route)] : [getSimpleRoute(defaultTag), getSimpleRoute(route)];
 
@@ -207,7 +207,7 @@
 
       // 标签页列表
       const tabsList: any = computed(() => tabsViewStore.tabsList);
-      const whiteList: string[] = [PageEnum.BASE_LOGIN_NAME, PageEnum.REDIRECT_NAME, PageEnum.ERROR_PAGE_NAME];
+      const whiteList: string[] = [PageEnum.LOGIN_NAME, PageEnum.REDIRECT_NAME, PageEnum.ERROR_PAGE_NAME];
 
       watch(
         () => route.fullPath,
@@ -275,7 +275,7 @@
       const closeAll = () => {
         localStorage.removeItem('routes');
         tabsViewStore.closeAllTabs();
-        router.replace(PageEnum.BASE_HOME);
+        router.replace(PageEnum.HOME_PATH);
         updateNavScroll();
       };
 
@@ -366,7 +366,7 @@
 
       function handleContextMenu(e, item) {
         e.preventDefault();
-        isCurrent.value = PageEnum.BASE_HOME === item.path;
+        isCurrent.value = PageEnum.HOME_PATH === item.path;
         state.showDropdown = false;
         nextTick().then(() => {
           state.showDropdown = true;
@@ -410,7 +410,7 @@
         navScroll,
         route,
         tabsList,
-        baseHome: PageEnum.BASE_HOME,
+        baseHome: PageEnum.HOME_PATH,
         goPage,
         closeTabItem,
         closeLeft,

@@ -104,7 +104,7 @@ const transform: AxiosTransform = {
     // 登录超时
     const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
     if (hasTimeout) {
-      const LoginName = PageEnum.BASE_LOGIN_NAME;
+      const LoginName = PageEnum.LOGIN_NAME;
       if (router.currentRoute.value.name == LoginName) return;
       // 到登录页
       const timeoutMsg = '登录超时,请重新登录!';

@@ -127,7 +127,6 @@
       const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useProjectSetting();
 
       const { username, avatar } = userStore?.info || {};
-      console.log(avatar);
 
       const drawerSetting = ref();
 

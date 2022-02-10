@@ -46,7 +46,7 @@ export const useTabsViewStore = defineStore({
     },
     closeOtherTabs(route) {
       // 关闭其他，并且不能关闭首页
-      this.tabsList = this.tabsList.filter((item) => item.fullPath == route.fullPath || item.fullPath === PageEnum.BASE_HOME);
+      this.tabsList = this.tabsList.filter((item) => item.fullPath == route.fullPath || item.fullPath === PageEnum.HOME_PATH);
     },
     closeCurrentTab(route) {
       // 关闭当前页

@@ -16,7 +16,7 @@ export const HomeRoute: AppRouteRecordRaw = {
 // 一级菜单
 export const PageRoute: RouteRecordRaw = {
   path: '/',
-  redirect: PageEnum.BASE_HOME,
+  redirect: PageEnum.HOME_PATH,
   component: Layout,
   children: [],
 };

@@ -110,9 +110,9 @@
         // 默认菜单
         const defaultMenu = [
           {
-            icon: constantRouterIcon[PageEnum.BASE_HOME_ICON],
-            key: PageEnum.BASE_HOME_KEY,
-            label: PageEnum.BASE_HOME_LABEL,
+            icon: constantRouterIcon[PageEnum.HOME_ICON],
+            key: PageEnum.HOME_NAME,
+            label: PageEnum.HOME_TITLE,
           },
         ];
         if (!settingStore.menuSetting.mixMenu) {

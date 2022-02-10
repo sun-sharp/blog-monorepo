@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash-es';
  * */
 export function filterRouter(routerMap: Array<any>) {
   return routerMap.filter((item) => {
-    return (item.meta?.hidden || false) != true && !['/:path(.*)*', '/', PageEnum.REDIRECT, PageEnum.BASE_LOGIN].includes(item.path);
+    return (item.meta?.hidden || false) != true && !['/:path(.*)*', '/', PageEnum.REDIRECT_PATH, PageEnum.LOGIN_PATH].includes(item.path);
   });
 }
 

@@ -12,7 +12,7 @@ export const checkStatus = (status: number, msg: string, message: any): void => 
     // 在登录成功后返回当前页面，这一步需要在登录页操作。
     case 401:
       message.error('用户没有权限（令牌、用户名、密码错误）!');
-      const LoginName = PageEnum.BASE_LOGIN_NAME;
+      const LoginName = PageEnum.LOGIN_NAME;
       storage.clear();
       router.replace({
         name: LoginName,

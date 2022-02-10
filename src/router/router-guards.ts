@@ -7,7 +7,7 @@ import { storage } from '@/utils/storage';
 import { PageEnum } from '@/enums/pageEnum';
 import { ErrorPageRoute } from '@/router/base';
 
-const LOGIN_PATH = PageEnum.BASE_LOGIN;
+const LOGIN_PATH = PageEnum.LOGIN_PATH;
 
 const whitePathList = [LOGIN_PATH]; // 白名单中的重定向
 
@@ -18,7 +18,7 @@ export function createRouterGuards(router: Router) {
     const Loading = window['$loading'] || null;
     Loading && Loading.start();
     if (from.path === LOGIN_PATH && to.name === 'errorPage') {
-      next(PageEnum.BASE_HOME);
+      next(PageEnum.HOME_PATH);
       return;
     }
 
