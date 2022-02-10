@@ -1,5 +1,5 @@
-export * from './pageEnum';
-export * from './httpEnum';
+export * from './page';
+export * from './http';
 // export * from './mutationTypes';
-export * from './breakpointEnum';
-export * from './apiEnum';
+export * from './breakpoint';
+export * from './api';
