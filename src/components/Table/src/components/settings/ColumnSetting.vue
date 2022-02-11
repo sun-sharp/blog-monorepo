@@ -75,7 +75,7 @@
   import { cloneDeep } from 'lodash-es';
   import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@/utils/icons';
   import Draggable from 'vuedraggable/src/vuedraggable';
-  import { useDesignSetting } from '@/hooks/setting/useDesignSetting';
+  import { useDesignSetting } from '@/hooks';
 
   interface Options {
     title: string;

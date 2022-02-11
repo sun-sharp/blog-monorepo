@@ -56,8 +56,8 @@
   import LayoutMain from '@/layout/components/layout-main.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
   import LayoutHeader from '@/layout/components/layout-header.vue';
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting';
-  import { useDesignSetting } from '@/hooks/setting/useDesignSetting';
+  import { useProjectSetting } from '@/hooks';
+  import { useDesignSetting } from '@/hooks';
   import { useRoute } from 'vue-router';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
 

@@ -116,7 +116,7 @@
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
   import { useUserStore } from '@/store/modules/user';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting';
+  import { useProjectSetting } from '@/hooks';
   import { getImgUrl } from '@/utils/files/image';
   import ProjectSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';

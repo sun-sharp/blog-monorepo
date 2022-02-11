@@ -68,14 +68,14 @@
   import { useTabsViewStore } from '@/store/modules/tabsView';
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute';
   import { RouteItem } from '@/store/modules/tabsView';
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting';
+  import { useProjectSetting } from '@/hooks';
   import { useMessage } from 'naive-ui';
   import Draggable from 'vuedraggable';
   import { PageEnum } from '@/enums';
   import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined } from '@/utils/icons';
   import { renderIcon } from '@/utils';
   import elementResizeDetectorMaker from 'element-resize-detector';
-  import { useDesignSetting } from '@/hooks/setting/useDesignSetting';
+  import { useDesignSetting } from '@/hooks';
   import { useProjectSettingStore } from '@/store/modules/projectSetting';
 
   export default defineComponent({
