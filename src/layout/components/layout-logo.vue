@@ -16,7 +16,7 @@
       },
     },
     setup() {
-      const title = import.meta.env.VITE_GLOB_APP_SHORT_NAME;
+      const title = import.meta.env.VITE_APP_SHORT_NAME;
       return {
         title,
       };

@@ -91,8 +91,8 @@
     password: string;
   }
 
-  const title = import.meta.env.VITE_GLOB_APP_TITLE;
-  const shortName = import.meta.env.VITE_GLOB_APP_SHORT_NAME;
+  const title = import.meta.env.VITE_APP_TITLE;
+  const shortName = import.meta.env.VITE_APP_SHORT_NAME;
   const formRef = ref();
   const message = useMessage();
   const loading = ref(false);
