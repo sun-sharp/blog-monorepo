@@ -6,7 +6,7 @@ import { checkStatus } from './checkStatus';
 import { joinTimestamp, formatRequestDate } from './helper';
 import { RequestEnum, ResultEnum, ContentTypeEnum, PageEnum } from '@/enums';
 
-import { useGlobSetting } from '@/hooks/setting';
+import { useEnvSetting } from '@/hooks/setting';
 
 import { isString } from '@/utils/is/';
 import { setObjToUrlParams } from '@/utils/urlUtils';
@@ -15,8 +15,8 @@ import { RequestOptions, Result } from './types';
 
 import { useUserStoreWidthOut } from '@/store/modules/user';
 
-const globSetting = useGlobSetting();
-const urlPrefix = globSetting.urlPrefix || '';
+const envSetting = useEnvSetting();
+const urlPrefix = envSetting.urlPrefix || '';
 
 import router from '@/router';
 import { storage } from '@/utils/storage';
@@ -266,7 +266,7 @@ export const AxiosCapital = new VAxios({
     // 消息提示类型
     errorMessageMode: 'none',
     // 接口地址
-    capitalApiUrl: globSetting.capitalApiUrl as string,
+    capitalApiUrl: envSetting.capitalApiUrl as string,
   },
   withCredentials: false,
 });
@@ -293,7 +293,7 @@ export const AxiosBlog = new VAxios({
     // 消息提示类型
     errorMessageMode: 'none',
     // 接口地址
-    blogApiUrl: globSetting.blogApiUrl as string,
+    blogApiUrl: envSetting.blogApiUrl as string,
   },
   withCredentials: false,
 });
@@ -320,7 +320,7 @@ export const AxiosMock = new VAxios({
     // 消息提示类型
     errorMessageMode: 'none',
     // 接口地址
-    mockApiUrl: globSetting.mockApiUrl as string,
+    mockApiUrl: envSetting.mockApiUrl as string,
   },
   withCredentials: false,
 });

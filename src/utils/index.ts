@@ -218,4 +218,3 @@ export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
 
 export * from './storage';
 export * from './color';
-export * from './env';
