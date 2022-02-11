@@ -1,5 +1,4 @@
 import type { GlobConfig } from '/#/config';
-import { warn } from '@/utils/log';
 
 export const getAppEnvConfig = (): Readonly<GlobConfig> => {
   const ENV = import.meta.env as unknown as ViteEnv;
@@ -16,10 +15,6 @@ export const getAppEnvConfig = (): Readonly<GlobConfig> => {
     // VITE_USE_MOCK,
     VITE_IMG_URL,
   } = ENV;
-
-  if (!/^[a-zA-Z\_]*$/.test(VITE_APP_SHORT_NAME)) {
-    warn(`VITE_APP_SHORT_NAME Variables can only be characters/underscores, please modify in the environment variables and re-running.`);
-  }
 
   // Take global configuration
   const glob: Readonly<GlobConfig> = {

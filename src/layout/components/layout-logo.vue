@@ -7,6 +7,7 @@
 
 <script>
   import { defineComponent } from 'vue';
+  import { getAppEnvConfig } from '@/utils/env';
 
   export default defineComponent({
     name: 'LayoutLogo',
@@ -16,7 +17,8 @@
       },
     },
     setup() {
-      const title = import.meta.env.VITE_APP_SHORT_NAME;
+      const appEnvConfig = getAppEnvConfig();
+      const title = appEnvConfig.shortName;
       return {
         title,
       };

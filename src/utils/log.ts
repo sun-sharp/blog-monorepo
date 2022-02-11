@@ -1,4 +1,7 @@
-const projectName = import.meta.env.VITE_APP_TITLE;
+import { getAppEnvConfig } from './env';
+
+const appEnvConfig = getAppEnvConfig();
+const projectName = appEnvConfig.shortName;
 
 export function warn(message: string) {
   console.warn(`[${projectName} warn]:${message}`);

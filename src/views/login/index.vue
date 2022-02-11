@@ -85,14 +85,16 @@
   import { ResultEnum } from '@/enums';
   import logo from '@/assets/images/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@/utils/icons';
+  import { getAppEnvConfig } from '@/utils/env';
 
   interface FormState {
     username: string;
     password: string;
   }
 
-  const title = import.meta.env.VITE_APP_TITLE;
-  const shortName = import.meta.env.VITE_APP_SHORT_NAME;
+  const appEnvConfig = getAppEnvConfig();
+  const title = appEnvConfig.title;
+  const shortName = appEnvConfig.shortName;
   const formRef = ref();
   const message = useMessage();
   const loading = ref(false);
