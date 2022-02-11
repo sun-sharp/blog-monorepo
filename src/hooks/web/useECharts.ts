@@ -3,7 +3,7 @@ import type { Ref } from 'vue';
 
 import { useTimeoutFn } from '@/utils/core/useTimeout';
 import { Fn, tryOnUnmounted } from '@vueuse/core';
-import { unref, nextTick, watch, computed, ref } from 'vue';
+import { unref, nextTick, watch, computed } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { useEventListener } from '@/utils/event/useEventListener';
 import { useBreakpoint } from '@/utils/event/useBreakpoint';
@@ -18,14 +18,14 @@ export function useECharts(elRef: Ref<HTMLDivElement>, theme: 'light' | 'dark' |
   // const getDarkMode = theme;
   let chartInstance: echarts.ECharts | null = null;
   let resizeFn: Fn = resize;
-  const cacheOptions = ref<EChartsOption>({});
+  let cacheOptions = {};
   let removeResizeFn: Fn = () => {};
 
   resizeFn = useDebounceFn(resize, 200);
 
   const getOptions = computed((): EChartsOption => {
     // if (getDarkMode !== 'dark') {
-    return cacheOptions.value;
+    return cacheOptions;
     // }
     // return {
     //   backgroundColor: 'transparent',
@@ -55,7 +55,7 @@ export function useECharts(elRef: Ref<HTMLDivElement>, theme: 'light' | 'dark' |
   }
 
   function setOptions(options: EChartsOption, clear = true) {
-    cacheOptions.value = options;
+    cacheOptions = options;
     if (unref(elRef)?.offsetHeight === 0) {
       useTimeoutFn(() => {
         setOptions(unref(getOptions));
@@ -86,7 +86,7 @@ export function useECharts(elRef: Ref<HTMLDivElement>, theme: 'light' | 'dark' |
       if (chartInstance) {
         chartInstance.dispose();
         initCharts(theme as 'default');
-        setOptions(cacheOptions.value);
+        setOptions(cacheOptions);
       }
     }
   );

@@ -7,7 +7,7 @@ import {
 } from 'vue-router';
 import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { createRouterGuards } from './router-guards';
-import { useGlobSetting } from '@/utils/setting';
+import { useGlobSetting } from '@/hooks/setting';
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {

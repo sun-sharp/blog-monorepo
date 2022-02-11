@@ -1,4 +1,4 @@
-import { useGlobSetting } from '@/utils/setting';
+import { useGlobSetting } from '@/hooks/setting';
 
 const globSetting = useGlobSetting();
 

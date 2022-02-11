@@ -1,6 +1,6 @@
 import { warn } from '@/utils/log';
 import pkg from '../../package.json';
-import { useGlobSetting } from './setting';
+import { useGlobSetting } from '../hooks/setting';
 
 export function getCommonStoragePrefix() {
   const { shortName } = useGlobSetting();

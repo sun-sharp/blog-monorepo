@@ -14,7 +14,7 @@
 <script>
   import { defineComponent, computed, unref } from 'vue';
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute';
-  import { useProjectSetting } from '@/utils/setting/useProjectSetting';
+  import { useProjectSetting } from '@/hooks/setting/useProjectSetting';
 
   export default defineComponent({
     name: 'LayoutMain',

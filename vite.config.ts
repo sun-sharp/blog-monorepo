@@ -67,7 +67,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const { VITE_APP_TITLE, VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY } = viteEnv;
   const isBuild = command === 'build';
   // 输出文件夹
-  const OUTPUT_DIR = 'admin';
+  const OUTPUT_DIR = 'dist-manage';
   // 在生产环境中输入的配置文件的名称
   const CONFIG_FILE_NAME = 'app.config.js';
   // 处理接口参数默认路径
@@ -121,7 +121,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         prodEnabled: isBuild, // 生产环境打包开关
         // 这样可以控制关闭mock的时候不让mock打包到最终代码内
         injectCode: `
-           import { setupProdMockServer } from './mock/_createProductionServer';
+           import { setupProdMockServer } from '../mock/_createProductionServer';
      
            setupProdMockServer();
            `,
