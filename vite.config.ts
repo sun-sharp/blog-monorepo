@@ -72,18 +72,6 @@ function createProxy(list: ProxyList = []) {
   return ret;
 }
 
-/**
- * @description: 处理代理数据
- */
-// function createProxy(mode: string) {
-//   const proxy = {
-//     development: {
-//       '/capital-api': 'http://127.0.0.1:3000/capital/',
-//     },
-//   };
-//   return proxy[mode] || {};
-// }
-
 // vite 配置
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
