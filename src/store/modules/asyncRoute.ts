@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
 import { store } from '@/store';
 import { constantRouter } from '@/router/index';
-import { generatorDynamicRouter } from '@/router/generator-routers';
+import { generatorDynamicRouter } from '@/utils/routers';
 import { HomeRoute, PageRoute } from '@/router/base';
 
 export interface IAsyncRouteState {
