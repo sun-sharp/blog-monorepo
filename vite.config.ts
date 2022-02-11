@@ -1,4 +1,4 @@
-import type { UserConfig, ConfigEnv } from 'vite';
+import type { UserConfig, ConfigEnv, ProxyOptions } from 'vite';
 import { loadEnv } from 'vite';
 import { resolve } from 'path';
 import pkg from './package.json';
@@ -6,9 +6,13 @@ import { format } from 'date-fns';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import html from 'vite-plugin-html';
-import { createProxy } from './build/vite/proxy';
 import { viteMockServe } from 'vite-plugin-mock';
 
+type ProxyItem = [string, string];
+type ProxyList = ProxyItem[];
+type ProxyTargetList = Record<string, ProxyOptions & { rewrite: (path: string) => string }>;
+
+const httpsRE = /^https:\/\//;
 const { dependencies, devDependencies, name, version } = pkg;
 const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
@@ -26,7 +30,7 @@ function pathResolve(dir: string) {
  * @return {ViteEnv}
  */
 // 将所有环境变量配置文件读取到 process.env
-export function wrapperEnv(envConf: Recordable): ViteEnv {
+function wrapperEnv(envConf: Recordable): ViteEnv {
   const ret: any = {};
 
   for (const envName of Object.keys(envConf)) {
@@ -43,6 +47,27 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
     }
     ret[envName] = realName;
     process.env[envName] = realName;
+  }
+  return ret;
+}
+
+/**
+ * Generate proxy
+ * @param list
+ */
+function createProxy(list: ProxyList = []) {
+  const ret: ProxyTargetList = {};
+  for (const [prefix, target] of list) {
+    const isHttps = httpsRE.test(target);
+    // https://github.com/http-party/node-http-proxy#options
+    ret[prefix] = {
+      target: target,
+      changeOrigin: true,
+      ws: true,
+      rewrite: (path) => path.replace(new RegExp(`^${prefix}`), ''),
+      // https is require secure=false
+      ...(isHttps ? { secure: false } : {}),
+    };
   }
   return ret;
 }
