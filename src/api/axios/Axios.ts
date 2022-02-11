@@ -5,9 +5,7 @@ import { AxiosCanceler } from './axiosCancel';
 import { isFunction } from '@/utils/is';
 import { cloneDeep } from 'lodash-es';
 
-import type { RequestOptions, CreateAxiosOptions, Result } from './types';
-
-export * from './axiosTransform';
+import type { RequestOptions, CreateAxiosOptions, Result } from '../../../types/axios';
 
 /**
  * @description:  axios模块

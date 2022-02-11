@@ -1,6 +1,6 @@
 // axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
 import { VAxios } from './Axios';
-import { AxiosTransform } from './axiosTransform';
+import { AxiosTransform } from '/#/axios';
 import axios, { AxiosResponse } from 'axios';
 import { checkStatus } from './checkStatus';
 import { joinTimestamp, formatRequestDate } from './helper';
@@ -11,7 +11,7 @@ import { getAppEnvConfig } from '@/utils/env';
 import { isString } from '@/utils/is/';
 import { setObjToUrlParams } from '@/utils/urlUtils';
 
-import { RequestOptions, Result } from './types';
+import { RequestOptions, Result } from '../../../types/axios';
 
 import { useUserStoreWidthOut } from '@/store/modules/user';
 
