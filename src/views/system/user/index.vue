@@ -27,7 +27,7 @@
   import { BasicTable } from '@/components/Table';
   import { BasicForm, useForm } from '@/components/Form/index';
   import { useConfigure } from './configure';
-  import AddUpdateModel from './AddUpdateModel.vue';
+  import AddUpdateModel from './add-update-model.vue';
 
   const addUpdateModelRef = ref();
 

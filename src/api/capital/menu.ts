@@ -39,7 +39,7 @@ export const updateMenu = (data?) => {
   return AxiosCapital.request(
     {
       url: `${basic}/update`,
-      method: 'POST',
+      method: 'PUT',
       data,
     },
     {

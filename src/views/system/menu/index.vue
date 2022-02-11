@@ -58,7 +58,7 @@
   import { PlusOutlined } from '@/utils/icons';
   import { ReloadOutlined, ColumnHeightOutlined } from '@/utils/icons';
   import { BasicForm, useForm } from '@/components/Form/index';
-  import AddUpdateModel from './AddUpdateModel.vue';
+  import AddUpdateModel from './add-update-model.vue';
 
   const addUpdateModelRef = ref();
 
