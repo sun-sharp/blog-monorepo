@@ -7,7 +7,7 @@ import {
 } from 'vue-router';
 import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { createRouterGuards } from './router-guards';
-import { useEnvSetting } from '@/hooks/setting';
+import { getAppEnvConfig } from '@/utils/env';
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {
@@ -24,7 +24,7 @@ export const constantRouter: any[] = [LoginRoute, RedirectRoute];
 
 const router = createRouter({
   // history: createWebHashHistory(''),
-  history: createWebHistory(useEnvSetting().baseUrl),
+  history: createWebHistory(getAppEnvConfig().baseUrl),
   routes: constantRouter,
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

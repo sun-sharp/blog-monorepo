@@ -38,7 +38,7 @@
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { roleApi, userApi } from '@/api';
-  import { useEnvSetting } from '@/hooks/setting';
+  import { getAppEnvConfig } from '@/utils/env';
   import { useUserStoreWidthOut } from '@/store/modules/user';
   import AppUploadImage from '@/components/app-upload-image.vue';
   import { getImgUrl } from '@/utils/files/image';
@@ -82,8 +82,8 @@
       const roleOption = ref([]);
 
       // 上传文件
-      const envSetting = useEnvSetting();
-      const { uploadUrl } = envSetting;
+      const appEnvConfig = getAppEnvConfig();
+      const { uploadUrl } = appEnvConfig;
       const userStore = useUserStoreWidthOut();
       const token = userStore.getToken;
       const uploadHeaders = reactive({

@@ -1,7 +1,7 @@
 import type { GlobConfig } from '/#/config';
 import { warn } from '@/utils/log';
 
-export const useEnvSetting = (): Readonly<GlobConfig> => {
+export const getAppEnvConfig = (): Readonly<GlobConfig> => {
   const ENV = import.meta.env as unknown as ViteEnv;
 
   const {

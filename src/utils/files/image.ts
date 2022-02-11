@@ -1,9 +1,9 @@
-import { useEnvSetting } from '@/hooks/setting';
+import { getAppEnvConfig } from '@/utils/env';
 
-const envSetting = useEnvSetting();
+const appEnvConfig = getAppEnvConfig();
 
 //组装完整图片地址
 export const getImgUrl = (url: string): string => {
-  const { imgUrl } = envSetting;
+  const { imgUrl } = appEnvConfig;
   return /(^http|https:\/\/)/g.test(url) ? url : `${imgUrl}${url}`;
 };

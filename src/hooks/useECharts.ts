@@ -1,11 +1,9 @@
 import type { EChartsOption } from 'echarts';
 import type { Ref } from 'vue';
 
-import { useTimeoutFn } from '@/utils/core/useTimeout';
-import { Fn, tryOnUnmounted } from '@vueuse/core';
+import { Fn, tryOnUnmounted, useDebounceFn } from '@vueuse/core';
 import { unref, nextTick, watch, computed } from 'vue';
-import { useDebounceFn } from '@vueuse/core';
-import { useEventListener, useBreakpoint } from '@/hooks';
+import { useEventListener, useBreakpoint, useTimeoutFn } from '@/hooks';
 
 import { echarts } from '@/plugins';
 
