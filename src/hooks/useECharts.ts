@@ -5,8 +5,7 @@ import { useTimeoutFn } from '@/utils/core/useTimeout';
 import { Fn, tryOnUnmounted } from '@vueuse/core';
 import { unref, nextTick, watch, computed } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
-import { useEventListener } from '@/utils/event/useEventListener';
-import { useBreakpoint } from '@/utils/event/useBreakpoint';
+import { useEventListener, useBreakpoint } from '@/hooks';
 
 import { echarts } from '@/plugins';
 

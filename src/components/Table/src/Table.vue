@@ -85,7 +85,7 @@
   import { BasicTableProps } from './types/table';
 
   import { getViewportOffset } from '@/utils/domUtils';
-  import { useWindowSizeFn } from '@/utils/event/useWindowSizeFn';
+  import { useWindowSizeFn } from '@/hooks';
   import { isBoolean } from '@/utils/is';
 
   const densityOptions = [

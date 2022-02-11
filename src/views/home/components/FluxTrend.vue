@@ -4,7 +4,7 @@
 <script lang="ts">
   import { defineComponent, onMounted, ref, Ref } from 'vue';
 
-  import { useECharts } from '@/hooks/web/useECharts';
+  import { useECharts } from '@/hooks';
 
   import { basicProps } from './props';
 
