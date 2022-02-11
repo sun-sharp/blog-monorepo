@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { IS_LOCK_SCREEN } from '@/enums';
+import { IS_LOCK_SCREEN } from '@/constant';
 import { storage } from '@/utils';
 
 // 长时间不操作默认锁屏时间

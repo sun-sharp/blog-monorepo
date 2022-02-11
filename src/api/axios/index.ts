@@ -8,7 +8,7 @@ import { RequestEnum, ResultEnum, ContentTypeEnum, PageEnum } from '@/enums';
 
 import { getAppEnvConfig } from '@/utils/env';
 
-import { isString } from '@/utils/is/';
+import { isString } from '@/utils/is';
 import { setObjToUrlParams } from '@/utils/urlUtils';
 
 import { RequestOptions, Result } from '../../../types/axios';

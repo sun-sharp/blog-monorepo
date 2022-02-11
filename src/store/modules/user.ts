@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { createStorage, storage } from '@/utils';
 import { store } from '@/store';
-import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, ResultEnum } from '@/enums';
+import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN } from '@/constant';
+import { ResultEnum } from '@/enums';
 
 const Storage = createStorage({ storage: localStorage });
 import { capitalApi, userApi } from '@/api';

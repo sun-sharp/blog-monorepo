@@ -13,7 +13,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { menuTypeOption } from '@/enums';
+  import { menuTypeOption } from '@/constant';
 
   export default defineComponent({
     setup() {
