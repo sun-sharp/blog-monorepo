@@ -1,4 +1,4 @@
-import type { AppRouteRecordRaw } from '@/router/types';
+import type { AppRouteRecordRaw } from '/#/router';
 import { ErrorPage, RedirectName, Layout } from '@/router/constant';
 import { PageEnum } from '@/enums';
 import { RouteRecordRaw } from 'vue-router';
