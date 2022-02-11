@@ -8,7 +8,7 @@ export class LoginUserDto {
   @IsNotEmpty({ message: '用户名不能为空' })
   @ApiProperty({
     description: '用户名',
-    example: 'text',
+    example: 'nest',
   })
   username: string;
   @Prop()
@@ -16,7 +16,7 @@ export class LoginUserDto {
   @IsNotEmpty({ message: '密码不能为空' })
   @ApiProperty({
     description: '密码',
-    example: '123123',
+    example: '123456',
   })
   password: string;
 }

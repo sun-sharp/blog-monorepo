@@ -238,8 +238,8 @@ export class UserService {
     return (
       Promise.resolve(userId)
         .then(async (userId) => {
-          const loginData = nowDateFun();
-          return this.userModel.updateOne({ _id: userId }, { loginData });
+          const loginDate = nowDateFun();
+          return this.userModel.updateOne({ _id: userId }, { loginDate });
         })
         // 返回错误
         .catch((err) => {
