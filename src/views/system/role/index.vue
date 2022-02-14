@@ -1,10 +1,12 @@
 <template>
   <n-card :bordered="false" class="proCard">
-    <basic-form @register="searchRegister" @submit="searchSubmit">
-      <template #statusSlot="{ model, field }">
-        <n-input v-model:value="model[field]" />
-      </template>
-    </basic-form>
+    <app-search-form
+      inline
+      :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }"
+      :show-reset-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
+    ></app-search-form>
     <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
@@ -25,9 +27,9 @@
   import { roleApi } from '@/api';
   import { PlusOutlined } from '@/utils/icons';
   import { BasicTable } from '@/components/Table';
-  import { BasicForm, useForm } from '@/components/Form/index';
   import { useConfigure } from './configure';
   import AddUpdateModel from './add-update-model.vue';
+  import AppSearchForm from '@/components/app-search-form.vue';
 
   const addUpdateModelRef = ref();
 
@@ -47,15 +49,6 @@
   // 配置
   const { searchSchemas, columns, actionColumn } = useConfigure({ reloadTable, addUpdateModelRef });
 
-  /**
-   * 查询
-   *  */
-  const [searchRegister, {}] = useForm({
-    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
-    labelWidth: 80,
-    schemas: searchSchemas,
-    showResetButton: false,
-  });
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     searchParams.value = values;

@@ -1,5 +1,5 @@
 <template>
-  <n-form v-bind="getBindValue" ref="formElRef" :model="formModel">
+  <n-form v-bind="getFormBind" ref="formElRef" :model="formModel">
     <n-grid v-bind="getGrid">
       <n-gi v-for="schema in getSchema" v-bind="schema.giProps" :key="schema.field">
         <n-form-item :label="schema.label" :path="schema.field">
@@ -46,7 +46,7 @@
             :is="schema.component"
             v-else
             v-model:value="formModel[schema.field]"
-            :class="{ isFull: schema.isFull != false && getProps.isFull }"
+            :class="{ isFull: schema.isFull != false && isFull }"
           />
           <!--组件后面的内容-->
           <template v-if="schema.suffix">
@@ -55,13 +55,12 @@
         </n-form-item>
       </n-gi>
       <!--提交 重置 展开 收起 按钮-->
-      <n-gi v-if="getProps.showActionButtonGroup" :span="isInline ? '' : 24" :suffix="isInline ? true : false" #="{ overflow }">
-        <n-space align="center" :justify="isInline ? 'end' : 'start'" :style="{ 'margin-left': `${isInline ? 12 : getProps.labelWidth}px` }">
-          <n-button v-if="getProps.showSubmitButton" v-bind="getSubmitBtnOptions" @click="handleSubmit">
-            {{ getProps.submitButtonText }}
+      <n-gi v-if="showActionButtonGroup" :suffix="true" #="{ overflow }">
+        <n-space align="center" justify="end" :style="{ 'margin-left': 12 }">
+          <n-button v-if="showSubmitButton" v-bind="getSubmitBtnOptions" @click="handleSubmit">
+            {{ submitButtonText }}
           </n-button>
-          <n-button v-if="getProps.showResetButton" v-bind="getResetBtnOptions" @click="resetFields">{{ getProps.resetButtonText }}</n-button>
-          <n-button v-if="isInline && getProps.showAdvancedButton" type="primary" text icon-placement="right" @click="unfoldToggle">
+          <n-button v-if="showAdvancedButton" type="primary" text icon-placement="right" @click="unfoldToggle">
             <template #icon>
               <n-icon v-if="overflow" size="14" class="unfold-icon">
                 <DownOutlined />
@@ -79,36 +78,85 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, ref, computed, unref, onMounted, watch } from 'vue';
-  import { createPlaceholderMessage } from './helper';
-  import { useFormEvents } from './hooks/useFormEvents';
-  import { useFormValues } from './hooks/useFormValues';
-
-  import { basicProps } from './props';
-  import { DownOutlined, UpOutlined, QuestionCircleOutlined } from '@/utils/icons';
-
-  import type { Ref } from 'vue';
-  import type { GridProps } from 'naive-ui/lib/grid';
-  import type { FormSchema, FormProps, FormActionType } from './types/form';
-
-  import { isArray } from '@/utils/is';
-  import { deepMerge } from '@/utils';
+  import { computed, CSSProperties, defineComponent, onMounted, reactive, ref, unref, watch } from 'vue';
+  import { ComponentType, FormActionType, SearchFormProps, FormSchema } from '/#/components/form';
+  import { DownOutlined, UpOutlined, QuestionCircleOutlined, propTypes, isNullOrUnDef } from '@/utils';
+  import type { ButtonProps } from 'naive-ui/lib/button';
+  import type { GridItemProps, GridProps } from 'naive-ui/lib/grid';
 
   export default defineComponent({
-    name: 'BasicUpload',
+    name: 'AppSearchForm',
     components: { DownOutlined, UpOutlined, QuestionCircleOutlined },
     props: {
-      ...basicProps,
+      // 标签宽度  固定宽度
+      labelWidth: {
+        type: [Number, String] as PropType<number | string>,
+        default: 80,
+      },
+      // 表单配置规则
+      schemas: {
+        type: [Array] as PropType<FormSchema[]>,
+        default: () => [],
+      },
+      //是否展示为行内表单
+      inline: {
+        type: Boolean,
+        default: false,
+      },
+      //大小
+      size: {
+        type: String,
+        default: 'medium',
+      },
+      //标签位置
+      labelPlacement: {
+        type: String,
+        default: 'left',
+      },
+      //组件是否width 100%
+      isFull: {
+        type: Boolean,
+        default: true,
+      },
+      //是否显示操作按钮（查询）
+      showActionButtonGroup: propTypes.bool.def(true),
+      // 显示确认按钮
+      showSubmitButton: propTypes.bool.def(true),
+      // 确认按钮配置
+      submitButtonOptions: Object as PropType<Partial<ButtonProps>>,
+      //展开收起按钮
+      showAdvancedButton: propTypes.bool.def(true),
+      // 确认按钮文字
+      submitButtonText: {
+        type: String,
+        default: '查询',
+      },
+      //grid 配置
+      gridProps: Object as PropType<GridProps>,
+      //gi配置
+      giProps: Object as PropType<GridItemProps>,
+      //grid 样式
+      baseGridStyle: {
+        type: Object as PropType<CSSProperties>,
+      },
+      //是否折叠
+      collapsed: {
+        type: Boolean,
+        default: false,
+      },
+      //默认展示的行数
+      collapsedRows: {
+        type: Number,
+        default: 1,
+      },
     },
-    emits: ['reset', 'submit', 'register'],
-    setup(props, { emit, attrs }) {
-      const defaultFormModel = ref<Recordable>({});
+    emits: ['submit'],
+    setup(props, { emit }) {
       const formModel = reactive<Recordable>({});
-      const propsRef = ref<Partial<FormProps>>({});
       const schemaRef = ref<Nullable<FormSchema[]>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
       const gridCollapsed = ref(true);
-      const isUpdateDefaultRef = ref(false);
+      const isUpdateDefault = ref(false);
 
       const getSubmitBtnOptions = computed(() => {
         return Object.assign(
@@ -120,17 +168,13 @@
         );
       });
 
-      const getResetBtnOptions = computed(() => {
-        return Object.assign(
-          {
-            size: props.size,
-            type: 'default',
-          },
-          props.resetButtonOptions
-        );
-      });
+      const createPlaceholderMessage = (component: ComponentType) => {
+        if (component === 'NInput') return '请输入';
+        if (['NPicker', 'NSelect', 'NCheckbox', 'NRadio', 'NSwitch', 'NDatePicker', 'NTimePicker'].includes(component)) return '请选择';
+        return '';
+      };
 
-      function getComponentProps(schema) {
+      const getComponentProps = (schema) => {
         const compProps = schema.componentProps ?? {};
         const component = schema.component;
         return {
@@ -138,44 +182,31 @@
           placeholder: createPlaceholderMessage(unref(component)),
           ...compProps,
         };
-      }
+      };
 
-      const getProps = computed((): FormProps => {
-        const formProps = { ...props, ...unref(propsRef) } as FormProps;
-        const rulesObj: any = {
-          rules: {},
+      const getFormBind = computed((): SearchFormProps => {
+        return {
+          labelWidth: props.labelWidth,
+          schemas: props.schemas,
+          inline: props.inline,
+          size: props.size,
+          labelPlacement: props.labelPlacement,
         };
-        const schemas: any = formProps.schemas || [];
-        schemas.forEach((item) => {
-          if (item.rules && isArray(item.rules)) {
-            rulesObj.rules[item.field] = item.rules;
-          }
-        });
-        return { ...formProps, ...unref(rulesObj) };
-      });
-
-      const isInline = computed(() => {
-        const { layout } = unref(getProps);
-        return layout === 'inline';
       });
 
       const getGrid = computed((): GridProps => {
-        const { gridProps } = unref(getProps);
+        const { gridProps } = unref(props);
         return {
           ...gridProps,
-          collapsed: isInline.value ? gridCollapsed.value : false,
+          collapsed: gridCollapsed.value,
           responsive: 'screen',
         };
       });
 
-      const getBindValue = computed(() => ({ ...attrs, ...props, ...unref(getProps) } as Recordable));
-
       const getSchema: any = computed((): FormSchema[] => {
-        const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as any);
+        const schemas: FormSchema[] = unref(schemaRef) || (props.schemas as any);
         for (const schema of schemas) {
           const { defaultValue } = schema;
-          // handle date type
-          // dateItemType.includes(component as string)
           if (defaultValue) {
             schema.defaultValue = defaultValue;
           }
@@ -183,70 +214,54 @@
         return schemas as FormSchema[];
       });
 
-      const { handleFormValues, initDefault } = useFormValues({
-        defaultFormModel,
-        getSchema,
-        formModel,
-      });
+      //初始化默认值
+      const initDefault = () => {
+        const schemas = unref(getSchema);
+        schemas.forEach((item) => {
+          const { defaultValue } = item;
+          if (!isNullOrUnDef(defaultValue)) {
+            formModel[item.field] = defaultValue;
+          }
+        });
+      };
 
-      const { handleSubmit, validate, resetFields, getFieldsValue, clearValidate, setFieldsValue } = useFormEvents({
-        emit,
-        getProps,
-        formModel,
-        getSchema,
-        formElRef: formElRef as Ref<FormActionType>,
-        defaultFormModel,
-        handleFormValues,
-      });
+      // 提交
+      const handleSubmit = async (e?: Event): Promise<void> => {
+        e && e.preventDefault();
+        const formEl = unref(formElRef);
+        if (!formEl) return;
+        emit('submit', formModel);
+      };
 
-      function unfoldToggle() {
+      const unfoldToggle = () => {
         gridCollapsed.value = !gridCollapsed.value;
-      }
-
-      async function setProps(formProps: Partial<FormProps>): Promise<void> {
-        propsRef.value = deepMerge(unref(propsRef) || {}, formProps);
-      }
-
-      const formActionType: Partial<FormActionType> = {
-        getFieldsValue,
-        setFieldsValue,
-        resetFields,
-        validate,
-        clearValidate,
-        setProps,
-        submit: handleSubmit,
       };
 
       watch(
         () => getSchema.value,
         (schema) => {
-          if (unref(isUpdateDefaultRef)) {
+          if (unref(isUpdateDefault)) {
             return;
           }
           if (schema?.length) {
             initDefault();
-            isUpdateDefaultRef.value = true;
+            isUpdateDefault.value = true;
           }
         }
       );
 
       onMounted(() => {
         initDefault();
-        emit('register', formActionType);
       });
 
       return {
         formElRef,
         formModel,
         getGrid,
-        getProps,
-        getBindValue,
+        getFormBind,
         getSchema,
         getSubmitBtnOptions,
-        getResetBtnOptions,
         handleSubmit,
-        resetFields,
-        isInline,
         getComponentProps,
         unfoldToggle,
       };

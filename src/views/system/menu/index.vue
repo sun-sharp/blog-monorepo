@@ -1,10 +1,13 @@
 <template>
   <n-card :bordered="false" class="proCard">
-    <basic-form @register="searchRegister" @submit="searchSubmit" @reset="searchReset">
-      <template #statusSlot="{ model, field }">
-        <n-input v-model:value="model[field]" />
-      </template>
-    </basic-form>
+    <app-search-form
+      inline
+      :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }"
+      :show-reset-button="false"
+      :show-advanced-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
+    ></app-search-form>
     <div class="table-toolbar">
       <!--顶部左侧区域-->
       <div class="flex items-center table-toolbar-left">
@@ -57,7 +60,7 @@
   import { levelMenu } from '@/utils';
   import { PlusOutlined } from '@/utils/icons';
   import { ReloadOutlined, ColumnHeightOutlined } from '@/utils/icons';
-  import { BasicForm, useForm } from '@/components/Form/index';
+  import AppSearchForm from '@/components/app-search-form.vue';
   import AddUpdateModel from './add-update-model.vue';
 
   const addUpdateModelRef = ref();
@@ -107,15 +110,6 @@
   // 配置
   const { searchSchemas, columns } = useConfigure({ loadDataTable, addUpdateModelRef });
 
-  // 查询
-  const [searchRegister, {}] = useForm({
-    gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
-    labelWidth: 80,
-    schemas: searchSchemas,
-    showAdvancedButton: false,
-    showResetButton: false,
-  });
-
   /**
    * 查询
    *  */
@@ -123,10 +117,6 @@
   const searchSubmit = (values: Recordable) => {
     searchParams = values;
     loadDataTable();
-  };
-  // 数据重置
-  const searchReset = (values: Recordable) => {
-    console.log(values);
   };
 
   //密度切换

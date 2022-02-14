@@ -7,3 +7,7 @@ export * from './object';
 export * from './files';
 export * from './is';
 export * from './env';
+export * from './domUtils';
+export * from './log';
+export * from './routers';
+export * from './urlUtils';

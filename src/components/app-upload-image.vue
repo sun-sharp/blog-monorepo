@@ -21,7 +21,14 @@
 
         <!--上传图片-->
         <div v-if="imgList.length < maxNumber" class="upload-card-item upload-card-item-select-picture" :style="getCSSProperties">
-          <n-upload v-bind="$props" :file-list-style="{ display: 'none' }" @before-upload="beforeUpload" @finish="finish">
+          <n-upload
+            v-bind="$props"
+            :action="`${uploadUrl}/image`"
+            :headers="uploadHeaders"
+            :file-list-style="{ display: 'none' }"
+            @before-upload="beforeUpload"
+            @finish="finish"
+          >
             <div class="flex justify-center flex-col">
               <n-icon size="18" class="m-auto">
                 <PlusOutlined />
@@ -53,9 +60,10 @@
   import { useMessage, useDialog } from 'naive-ui';
   import { ResultEnum } from '@/enums';
   import componentSetting from '@/settings/componentSetting';
-  import { getImgUrl, isString } from '@/utils';
+  import { getAppEnvConfig, getImgUrl, isString } from '@/utils';
   import type { PropType } from 'vue';
   import { NUpload } from 'naive-ui';
+  import { useUserStoreWidthOut } from '@/store/modules/user';
 
   export default defineComponent({
     name: 'UploadImage',
@@ -112,6 +120,17 @@
         previewUrl: '',
         originalImgList: [] as string[],
         imgList: [] as string[],
+      });
+
+      // 上传文件
+      const appEnvConfig = getAppEnvConfig();
+      const { uploadUrl } = appEnvConfig;
+      const userStore = useUserStoreWidthOut();
+      const token = userStore.getToken;
+      const uploadHeaders = reactive({
+        ...props.headers,
+        timestamp: new Date().getTime(),
+        Authorization: token,
       });
 
       //赋值默认图片显示
@@ -189,6 +208,8 @@
 
       return {
         ...toRefs(state),
+        uploadUrl,
+        uploadHeaders,
         finish,
         preview,
         remove,
