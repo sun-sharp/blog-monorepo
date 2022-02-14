@@ -38,10 +38,9 @@
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { roleApi, userApi } from '@/api';
-  import { getAppEnvConfig } from '@/utils/env';
   import { useUserStoreWidthOut } from '@/store/modules/user';
   import AppUploadImage from '@/components/app-upload-image.vue';
-  import { getImgUrl } from '@/utils/files/image';
+  import { getImgUrl, getAppEnvConfig } from '@/utils';
 
   const modelFields = {
     name: null,

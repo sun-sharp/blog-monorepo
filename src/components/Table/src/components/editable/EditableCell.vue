@@ -45,7 +45,7 @@
 
   import clickOutside from './clickOutside';
 
-  import { propTypes } from '@/utils/propTypes';
+  import { propTypes } from '@/utils';
   import { isString, isBoolean, isFunction, isNumber, isArray } from '@/utils/is';
   import { createPlaceholderMessage } from './helper';
   import { set, omit } from 'lodash-es';

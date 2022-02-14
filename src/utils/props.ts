@@ -1,5 +1,6 @@
 import { createTypes } from 'vue-types';
 import { PropTypes } from '/#/basics';
+import { unref } from 'vue';
 
 const propTypes = createTypes({
   func: undefined,
@@ -24,3 +25,14 @@ propTypes.extend([
   },
 ]);
 export { propTypes };
+
+// dynamic use hook props
+export function getDynamicProps<T, U>(props: T): Partial<U> {
+  const ret: Recordable = {};
+
+  Object.keys(props).map((key) => {
+    ret[key] = unref((props as Recordable)[key]);
+  });
+
+  return ret as Partial<U>;
+}

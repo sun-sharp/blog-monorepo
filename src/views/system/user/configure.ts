@@ -2,7 +2,7 @@ import { h, reactive } from 'vue';
 import { TableAction } from '@/components/Table';
 import { userApi } from '@/api';
 import { NAvatar } from 'naive-ui';
-import { getImgUrl } from '@/utils/files/image';
+import { getImgUrl } from '@/utils';
 
 export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
   // 查询配置

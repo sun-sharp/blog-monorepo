@@ -119,7 +119,7 @@
   import { useUserStore } from '@/store/modules/user';
   import { useLockScreenStore } from '@/store/modules/lockScreen';
   import { useProjectSetting } from '@/hooks';
-  import { getImgUrl } from '@/utils/files/image';
+  import { getImgUrl } from '@/utils';
   import ProjectSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
   import AppAvatar from '@/components/app-avatar.vue';

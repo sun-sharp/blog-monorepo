@@ -53,8 +53,7 @@
   import { useMessage, useDialog } from 'naive-ui';
   import { ResultEnum } from '@/enums';
   import componentSetting from '@/settings/componentSetting';
-  import { isString } from '@/utils/is';
-  import { getImgUrl } from '@/utils/files/image';
+  import { getImgUrl, isString } from '@/utils';
   import type { PropType } from 'vue';
   import { NUpload } from 'naive-ui';
 
