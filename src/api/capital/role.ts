@@ -8,7 +8,7 @@ const basic = '/role';
  */
 export function getPage(params) {
   return AxiosCapital.request({
-    url: `${basic}/find_page`,
+    url: `${basic}/role_page`,
     method: 'POST',
     params,
   });
@@ -51,7 +51,7 @@ export const update = (data?) => {
   return AxiosCapital.request(
     {
       url: `${basic}/update`,
-      method: 'POST',
+      method: 'PUT',
       data,
     },
     {
@@ -62,16 +62,13 @@ export const update = (data?) => {
 
 /**
  * @description 删除角色
- * @param id
+ * @param roleId
  */
-export const remove = (id?) => {
+export const remove = (roleId?) => {
   return AxiosCapital.request(
     {
-      url: `${basic}/remove`,
-      method: 'POST',
-      data: {
-        id,
-      },
+      url: `${basic}/${roleId}`,
+      method: 'DELETE',
     },
     {
       isShowSuccessMessage: true,

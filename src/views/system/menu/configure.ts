@@ -136,7 +136,7 @@ export const useConfigure = ({ loadDataTable, addUpdateModelRef }) => {
   ];
   // 删除
   const handleDelete = (row: Recordable) => {
-    menuApi.removeMenu(row.id).then(() => {
+    menuApi.removeMenu(row.menuId).then(() => {
       loadDataTable();
     });
   };

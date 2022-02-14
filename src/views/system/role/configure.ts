@@ -51,7 +51,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
    *  */
   // 删除
   const handleDelete = (row: Recordable) => {
-    roleApi.remove(row.id).then(() => {
+    roleApi.remove(row.roleId).then(() => {
       reloadTable();
     });
   };

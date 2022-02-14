@@ -89,6 +89,7 @@ const transform: AxiosTransform = {
     // 接口请求错误，统一提示错误信息
     const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
     if (hasError) {
+      console.log(message);
       if (message) {
         Message.error(data.message);
         Promise.reject(new Error(message));

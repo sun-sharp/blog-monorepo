@@ -50,16 +50,13 @@ export const updateMenu = (data?) => {
 
 /**
  * @description 删除菜单
- * @param id
+ * @param menuId
  */
-export const removeMenu = (id?) => {
+export const removeMenu = (menuId?) => {
   return AxiosCapital.request(
     {
-      url: `${basic}/remove`,
-      method: 'POST',
-      data: {
-        id,
-      },
+      url: `${basic}/${menuId}`,
+      method: 'DELETE',
     },
     {
       isShowSuccessMessage: true,
