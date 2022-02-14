@@ -19,6 +19,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: '昵称',
   })
+  @IsNotEmpty({ message: '昵称不能为空' })
   name: string;
 
   @ApiProperty({
@@ -27,12 +28,8 @@ export class CreateUserDto {
   avatar: string;
 
   @ApiProperty({
-    description: '上传登录时间',
-  })
-  loginDate: string;
-
-  @ApiProperty({
     description: '角色标识',
   })
+  @IsNotEmpty({ message: '角色标识不能为空' })
   roleCode: string;
 }
