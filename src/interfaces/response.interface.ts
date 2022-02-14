@@ -7,5 +7,5 @@
 export interface IResponse {
   code: number; // 0 表示成功
   result?: any;
-  massage: any;
+  message: any;
 }

@@ -34,12 +34,12 @@ export class UserService {
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
+              message: `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
             });
           if (!username.match(/[a-z]$/i)) {
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: '账号应全为字母',
+              message: '账号应全为字母',
             });
           }
           return body;
@@ -51,7 +51,7 @@ export class UserService {
           if (user)
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: '用户名已注册',
+              message: '用户名已注册',
             });
           return body;
         })
@@ -65,14 +65,14 @@ export class UserService {
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: true,
-            massage: '用户创建成功！',
+            message: '用户创建成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '创建用户失败！',
+            message: err.codeName || '创建用户失败！',
           });
         })
     );
@@ -122,14 +122,14 @@ export class UserService {
               avatar: user.avatar,
               name: user.name,
             },
-            massage: '查询成功！',
+            message: '查询成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询失败！',
+            message: err.codeName || '查询失败！',
           });
         })
     );
@@ -165,14 +165,14 @@ export class UserService {
               size,
               total,
             },
-            massage: '查询成功！',
+            message: '查询成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询失败！',
+            message: err.codeName || '查询失败！',
           });
         })
     );
@@ -191,14 +191,14 @@ export class UserService {
           await this.userModel.updateOne({ _id: userId }, { roleCode });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            massage: '修改成功！',
+            message: '修改成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '修改失败！',
+            message: err.codeName || '修改失败！',
           });
         })
     );
@@ -216,14 +216,14 @@ export class UserService {
           await this.userModel.deleteOne({ _id: userId });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            massage: '删除成功！',
+            message: '删除成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '删除失败！',
+            message: err.codeName || '删除失败！',
           });
         })
     );

@@ -28,14 +28,14 @@ export class MenuService {
           });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            massage: '添加成功！',
+            message: '添加成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '添加失败！',
+            message: err.codeName || '添加失败！',
           });
         })
     );
@@ -68,14 +68,14 @@ export class MenuService {
               menuType: m.menuType,
               hidden: m.hidden,
             })),
-            massage: '查询成功！',
+            message: '查询成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询失败！',
+            message: err.codeName || '查询失败！',
           });
         })
     );
@@ -113,14 +113,14 @@ export class MenuService {
           await this.menuModel.updateOne({ _id: menuId }, other);
           return (this.response = {
             code: ApiCode.SUCCESS,
-            massage: '修改成功！',
+            message: '修改成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '修改失败！',
+            message: err.codeName || '修改失败！',
           });
         })
     );
@@ -129,18 +129,28 @@ export class MenuService {
   remove(menuId: string) {
     return (
       Promise.resolve(menuId)
+        // 查询当前以下有菜单
+        .then(async (menuId) => {
+          const findResult = await this.menuModel.findOne({ parentId: menuId });
+          if (findResult)
+            throw {
+              message: '请先删除当前下面的菜单',
+            };
+          return menuId;
+        })
+        // 删除
         .then(async (menuId) => {
           await this.menuModel.deleteOne({ _id: menuId });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            massage: '删除成功！',
+            message: '删除成功！',
           });
         })
         // 返回错误
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '删除失败！',
+            message: err.message || '删除失败！',
           });
         })
     );

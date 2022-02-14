@@ -35,7 +35,7 @@ export class CapitalService {
           if (!user)
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: '用户尚未注册',
+              message: '用户尚未注册',
             });
           if (await comparePassword(res.password, user.password)) {
             return {
@@ -44,7 +44,7 @@ export class CapitalService {
           } else {
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: '密码错误',
+              message: '密码错误',
             });
           }
         })
@@ -62,7 +62,7 @@ export class CapitalService {
             result: {
               token: this.jwtService.sign(res),
             },
-            massage: '请求成功！',
+            message: '请求成功！',
           });
         })
         // 返回错误
@@ -86,7 +86,7 @@ export class CapitalService {
           if (!routeFind) {
             throw (this.response = {
               code: ApiCode.ERROR,
-              massage: '查询角色失败',
+              message: '查询角色失败',
             });
           }
           // 如果你是管理员账号，那就获取全部菜单
@@ -115,7 +115,7 @@ export class CapitalService {
                 menuType: m.menuType,
                 hidden: m.hidden,
               })),
-              massage: '查询成功！',
+              message: '查询成功！',
             });
           }
         })
@@ -123,7 +123,7 @@ export class CapitalService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            massage: err.codeName || '查询失败！',
+            message: err.codeName || '查询失败！',
           });
         })
     );
