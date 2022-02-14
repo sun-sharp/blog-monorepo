@@ -87,16 +87,13 @@ export const updateRoleCode = (data?) => {
 
 /**
  * @description 删除用户
- * @param id
+ * @param userId
  */
-export const remove = (id?) => {
+export const remove = (userId?) => {
   return AxiosCapital.request(
     {
-      url: `${basic}/remove`,
-      method: 'POST',
-      data: {
-        id,
-      },
+      url: `${basic}/${userId}`,
+      method: 'DELETE',
     },
     {
       isShowSuccessMessage: true,
