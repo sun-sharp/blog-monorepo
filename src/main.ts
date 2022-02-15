@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 
 import * as pkg from '../package.json';
+import { join } from 'path';
+import * as express from 'express';
 
 const { version } = pkg;
 
@@ -30,6 +32,12 @@ const port = 3000;
         .build();
       const document = SwaggerModule.createDocument(app, config);
       SwaggerModule.setup(swaggerUrl, app, document);
+      return app;
+    })
+    // 配置 public 文件夹为静态目录，以达到可直接访问下面文件的目的
+    .then((app) => {
+      const rootDir = join(__dirname, '..');
+      app.use('/public', express.static(join(rootDir, 'public')));
       return app;
     })
     // 设置全局前缀

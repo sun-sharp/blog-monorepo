@@ -2,7 +2,7 @@ import { SchemaFactory, Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 /**
- * @description 用户数据字段
+ * @description 菜单数据字段
  * @date 21/11/2021
  * @export
  * @class Menu

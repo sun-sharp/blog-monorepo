@@ -123,7 +123,7 @@ export class CapitalService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '查询失败！',
+            message: err.message || '查询失败！',
           });
         })
     );

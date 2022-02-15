@@ -50,7 +50,7 @@ export class RoleService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '查询失败！',
+            message: err.message || '查询失败！',
           });
         })
     );
@@ -83,7 +83,7 @@ export class RoleService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '查询失败！',
+            message: err.message || '查询失败！',
           });
         })
     );
@@ -110,7 +110,7 @@ export class RoleService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '修改失败！',
+            message: err.message || '修改失败！',
           });
         })
     );
@@ -138,7 +138,7 @@ export class RoleService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '添加失败！',
+            message: err.message || '添加失败！',
           });
         })
     );
@@ -164,7 +164,7 @@ export class RoleService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '删除失败！',
+            message: err.message || '删除失败！',
           });
         })
     );

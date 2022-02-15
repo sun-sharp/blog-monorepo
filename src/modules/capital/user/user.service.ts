@@ -72,7 +72,7 @@ export class UserService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '创建用户失败！',
+            message: err.message || '创建用户失败！',
           });
         })
     );
@@ -129,7 +129,7 @@ export class UserService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '查询失败！',
+            message: err.message || '查询失败！',
           });
         })
     );
@@ -172,7 +172,7 @@ export class UserService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '查询失败！',
+            message: err.message || '查询失败！',
           });
         })
     );
@@ -198,7 +198,7 @@ export class UserService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '修改失败！',
+            message: err.message || '修改失败！',
           });
         })
     );
@@ -223,7 +223,7 @@ export class UserService {
         .catch((err) => {
           return (this.response = {
             code: ApiCode.ERROR,
-            message: err.codeName || '删除失败！',
+            message: err.message || '删除失败！',
           });
         })
     );
