@@ -18,7 +18,7 @@ export class Image extends Document {
   src: string; // 图片的链接
 
   @Prop()
-  size: string; // 图片的大小
+  size: number; // 图片的大小
 
   @Prop()
   imageType: string; // 图片类型

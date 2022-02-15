@@ -31,16 +31,26 @@ export class ImageService {
             size,
             name,
             imageType,
-            src: path.replace('\\', '/'),
+            src: path.replace(/\\/g, '/'),
             createTime: nowDateFun(),
           };
         })
         .then(async (body) => {
           const result = await this.imageModel.create(body);
-          console.log(result);
+          if (!result)
+            throw {
+              message: '图片类型出错！',
+            };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: body,
+            result: {
+              imageId: result._id,
+              size: result.size,
+              name: result.name,
+              imageType: result.imageType,
+              src: result.src,
+              createTime: result.createTime,
+            },
             message: '上传成功！',
           });
         })
