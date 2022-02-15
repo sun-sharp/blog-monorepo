@@ -5,7 +5,7 @@ import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Menu, MenuSchema } from 'src/schemas/menu.schema';
 
-const MENU_MONGO_MODULE = MongooseModule.forFeature([{ name: Menu.name, schema: MenuSchema }]);
+const MENU_MONGO_MODULE = MongooseModule.forFeature([{ name: Menu.name, schema: MenuSchema }], 'capital');
 
 @Module({
   imports: [MENU_MONGO_MODULE],

@@ -12,7 +12,9 @@ import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/capital?authSource=admin'),
+    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/capital?authSource=admin', {
+      connectionName: 'capital',
+    }),
     PassportModule,
     JwtModule.register({
       secret: JWT_CONSTANTS.secret,

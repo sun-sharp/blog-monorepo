@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Role, RoleSchema } from 'src/schemas/role.schema';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
 
-const ROLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }]);
+const ROLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }], 'capital');
 
 @Module({
   imports: [ROLE_MONGO_MODULE],

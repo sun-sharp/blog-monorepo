@@ -7,7 +7,9 @@ import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/file?authSource=admin'),
+    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/file?authSource=admin', {
+      connectionName: 'file',
+    }),
     ImageModule,
     RouterModule.register([
       {

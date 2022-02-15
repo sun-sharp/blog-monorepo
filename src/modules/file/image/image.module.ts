@@ -6,7 +6,7 @@ import { diskStorage } from 'multer';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Image, ImageSchema } from 'src/schemas/image.schema';
 
-const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }]);
+const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], 'file');
 
 @Module({
   imports: [
@@ -30,5 +30,6 @@ const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema
   ],
   controllers: [ImageController],
   providers: [ImageService],
+  exports: [ImageService],
 })
 export class ImageModule {}
