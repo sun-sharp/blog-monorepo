@@ -14,14 +14,12 @@
       <n-form-item label="头像" path="avatar">
         <app-upload-image
           v-model:value="modelForm.avatar"
-          :action="`${uploadUrl}/image`"
-          :headers="uploadHeaders"
           :disabled="!!modelId"
           :show-remove-button="!modelId"
-          name="files"
           :width="100"
           :height="100"
           :max-number="1"
+          source="用户头像"
         />
       </n-form-item>
       <n-form-item label="用户名" path="username">
@@ -64,9 +62,8 @@
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { roleApi, userApi } from '@/api';
-  import { useUserStoreWidthOut } from '@/store/modules/user';
   import AppUploadImage from '@/components/app-upload-image.vue';
-  import { getImgUrl, getAppEnvConfig } from '@/utils';
+  import { getImgUrl } from '@/utils';
 
   const modelFields = {
     name: null,
@@ -134,16 +131,6 @@
       // 角色列表
       const roleOption = ref([]);
 
-      // 上传文件
-      const appEnvConfig = getAppEnvConfig();
-      const { uploadUrl } = appEnvConfig;
-      const userStore = useUserStoreWidthOut();
-      const token = userStore.getToken;
-      const uploadHeaders = reactive({
-        timestamp: new Date().getTime(),
-        Authorization: token,
-      });
-
       // 初始化
       const init = (row: any) => {
         showModal.value = true;
@@ -203,8 +190,6 @@
         modelRules,
         formBtnLoading,
         roleOption,
-        uploadUrl,
-        uploadHeaders,
         init,
         confirmForm,
       };

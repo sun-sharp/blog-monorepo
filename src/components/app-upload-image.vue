@@ -23,8 +23,10 @@
         <div v-if="imgList.length < maxNumber" class="upload-card-item upload-card-item-select-picture" :style="getCSSProperties">
           <n-upload
             v-bind="$props"
-            :action="`${uploadUrl}/image`"
+            :action="uploadAction"
             :headers="uploadHeaders"
+            name="image"
+            :data="uploadData"
             :file-list-style="{ display: 'none' }"
             @before-upload="beforeUpload"
             @finish="finish"
@@ -60,7 +62,7 @@
   import { useMessage, useDialog } from 'naive-ui';
   import { ResultEnum } from '@/enums';
   import componentSetting from '@/settings/componentSetting';
-  import { getAppEnvConfig, getImgUrl, isString } from '@/utils';
+  import { getUploadAction, getImgUrl, isString } from '@/utils';
   import type { PropType } from 'vue';
   import { NUpload } from 'naive-ui';
   import { useUserStoreWidthOut } from '@/store/modules/user';
@@ -102,6 +104,10 @@
         type: Boolean,
         default: true,
       },
+      source: {
+        type: String,
+        default: '',
+      },
     },
     emits: ['uploadChange', 'delete'],
     setup(props, { emit }) {
@@ -123,14 +129,18 @@
       });
 
       // 上传文件
-      const appEnvConfig = getAppEnvConfig();
-      const { uploadUrl } = appEnvConfig;
+      const uploadAction = getUploadAction();
       const userStore = useUserStoreWidthOut();
       const token = userStore.getToken;
       const uploadHeaders = reactive({
         ...props.headers,
         timestamp: new Date().getTime(),
         Authorization: token,
+      });
+      const uploadData = computed(() => {
+        return {
+          source: props.source,
+        };
       });
 
       //赋值默认图片显示
@@ -208,8 +218,9 @@
 
       return {
         ...toRefs(state),
-        uploadUrl,
+        uploadAction,
         uploadHeaders,
+        uploadData,
         finish,
         preview,
         remove,
