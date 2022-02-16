@@ -1,4 +1,4 @@
-import { PathLike, readdir } from 'fs';
+import { PathLike, readdir, readFile, unlink } from 'fs';
 
 /**
  * @description: 获取文件夹目录里的文件
@@ -18,6 +18,40 @@ export const readdirHandle = (pathName: PathLike): any => {
         fileName: item,
       }));
       resolve(result);
+    });
+  });
+};
+
+/**
+ * @description: 删除文件夹目录里的文件
+ * @param {PathLike} pathName
+ * @return {*}
+ */
+export const unlinkHandle = (pathName: PathLike): any => {
+  return new Promise((resolve, reject) => {
+    unlink(pathName, (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(true);
+    });
+  });
+};
+
+/**
+ * @description: 读取文件夹目录里的文件
+ * @param {PathLike} pathName
+ * @return {*}
+ */
+export const readFileHandle = (pathName: PathLike): any => {
+  return new Promise((resolve, reject) => {
+    readFile(pathName, (err) => {
+      if (err) {
+        reject({ ...err, message: '文件夹里不存在当前文件' });
+        return;
+      }
+      resolve(true);
     });
   });
 };

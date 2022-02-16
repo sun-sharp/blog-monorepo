@@ -15,7 +15,10 @@ export class Image extends Document {
   name: string; // 图片的唯一标识
 
   @Prop()
-  src: string; // 图片的链接
+  url: string; // 图片的链接
+
+  @Prop()
+  fileName: string; // 图片的链接
 
   @Prop()
   size: number; // 图片的大小
@@ -24,7 +27,7 @@ export class Image extends Document {
   imageType: string; // 图片类型
 
   @Prop()
-  createTime: string; // 图片创建的时间
+  uploadTime: string; // 图片创建的时间
 }
 
 export const ImageSchema = SchemaFactory.createForClass(Image);
