@@ -4,8 +4,10 @@ import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { readdirHandle, readFileHandle, unlinkHandle } from 'src/common/fs-handle';
+import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Image } from 'src/schemas/image.schema';
+import { PageImageDto } from './dto/page-image.dto';
 import { UploadImageDto } from './dto/upload-image.dto';
 
 const basicPublic = 'public/files/image';
@@ -125,6 +127,51 @@ export class ImageService {
               uploadTime: m.uploadTime,
               source: m.source,
             })),
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 条件并分页获取图片数据列表
+   * @param {*}
+   * @return {*}
+   */
+  public findPage(pageImageDto: PageImageDto): Promise<IResponse> {
+    return (
+      Promise.resolve(pageImageDto)
+        // 查询
+        .then(async (body) => {
+          const { size, current } = body;
+          const { limit, skip } = PaginateHandle(size, current);
+          const findData = {};
+          const total = await this.imageModel.find(findData).count();
+          const list = await this.imageModel.find(findData).limit(limit).skip(skip);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {
+              current,
+              list: (list || []).map((m) => ({
+                imageId: m._id,
+                size: m.size,
+                fileName: m.fileName,
+                name: m.name,
+                imageType: m.imageType,
+                url: m.url,
+                uploadTime: m.uploadTime,
+                source: m.source,
+              })),
+              size,
+              total,
+            },
             message: '查询成功！',
           });
         })

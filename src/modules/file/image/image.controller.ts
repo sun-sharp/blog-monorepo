@@ -4,6 +4,7 @@ import { UploadImageDto } from './dto/upload-image.dto';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { PageImageDto } from './dto/page-image.dto';
 
 @Controller('image')
 @ApiTags('图片')
@@ -32,6 +33,12 @@ export class ImageController {
   @Get('find_all')
   findAll() {
     return this.imageService.findAll();
+  }
+
+  @ApiOperation({ summary: '条件并分页获取图片数据列表' })
+  @Post('find_page')
+  findPage(@Body() pageImageDto: PageImageDto) {
+    return this.imageService.findPage(pageImageDto);
   }
 
   @Delete('remove_public/:fileName')
