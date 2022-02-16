@@ -259,24 +259,19 @@ export class ImageService {
             };
           return { imageId, fileName: findOne.fileName };
         })
-        // 读取文件
-        .then(async ({ imageId, fileName }) => {
-          const publicName = `${basicPublic}/${fileName}`;
-          await readFileHandle(publicName);
-          return { imageId, publicName };
-        })
         // 删除文件
-        .then(async ({ imageId, publicName }) => {
-          await unlinkHandle(publicName);
+        .then(async ({ imageId, fileName }) => {
+          const { code, message } = await this.removePublic(fileName);
+          if (code === ApiCode.ERROR) {
+            throw {
+              message,
+            };
+          }
           return imageId;
         })
         // 删除数据
         .then(async (imageId) => {
-          await this.imageModel.deleteOne({ _id: imageId });
-          return (this.response = {
-            code: ApiCode.SUCCESS,
-            message: '删除成功！',
-          });
+          return await this.removeData(imageId);
         })
         // 返回错误
         .catch((err) => {
