@@ -1,8 +1,9 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, HttpCode, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { UploadImageDto } from './dto/upload-image.dto';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 
 @Controller('image')
 @ApiTags('图片')
@@ -17,7 +18,20 @@ export class ImageController {
   })
   @UseInterceptors(FileInterceptor('image'))
   @Post('upload')
+  @HttpCode(ApiHttpStatus.SUCCESS)
   uploadImage(@UploadedFile() image) {
     return this.imageService.uploadImage(image);
+  }
+
+  @ApiOperation({ summary: '获取图片目录' })
+  @Get('public')
+  getPublic() {
+    return this.imageService.getPublic();
+  }
+
+  @ApiOperation({ summary: '获取图片全部列表数据' })
+  @Get('find_all')
+  findAll() {
+    return this.imageService.findAll();
   }
 }

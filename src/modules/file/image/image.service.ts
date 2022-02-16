@@ -3,15 +3,23 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
+import { readdirHandle } from 'src/common/fs-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Image } from 'src/schemas/image.schema';
+
+const basicPublic = 'public/files/image';
 
 @Injectable()
 export class ImageService {
   response: IResponse;
   constructor(@InjectModel('Image') private readonly imageModel: Model<Image>) {}
 
-  uploadImage(image: any) {
+  /**
+   * @description: 单图片上传
+   * @param {any} image
+   * @return {*}
+   */
+  uploadImage(image: any): Promise<IResponse> {
     return (
       Promise.resolve(image)
         // 上传参数是否有问题
@@ -59,6 +67,65 @@ export class ImageService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '上传失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 获取图片目录
+   * @param {*}
+   * @return {*}
+   */
+  getPublic(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          const result = await readdirHandle(basicPublic);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 获取图片全部列表数据
+   * @param {*}
+   * @return {*}
+   */
+  findAll(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          const result = await this.imageModel.find();
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: (result || []).map((m) => ({
+              imageId: m._id,
+              size: m.size,
+              name: m.name,
+              imageType: m.imageType,
+              src: m.src,
+              createTime: m.createTime,
+            })),
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
           });
         })
     );
