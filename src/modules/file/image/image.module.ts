@@ -19,7 +19,7 @@ const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema
           const image = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
           const mimeType = file.mimetype.split('/')[1];
           if (image.filter((item) => item === mimeType).length <= 0) {
-            return cb(new BadRequestException('文件格式错误！'), '');
+            return cb(new BadRequestException('图片格式错误！'), '');
           }
           // 在此处自定义保存后的文件名称
           const filename = `${new Date().getTime()}.${file.originalname.split('.')[1]}`;

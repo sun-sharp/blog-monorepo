@@ -19,7 +19,7 @@ export class ImageController {
   @UseInterceptors(FileInterceptor('image'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  uploadImage(@UploadedFile() image, @Body() body: UploadImageDto) {
+  uploadImage(@Body() body: UploadImageDto, @UploadedFile() image) {
     return this.imageService.uploadImage(image, body);
   }
 
