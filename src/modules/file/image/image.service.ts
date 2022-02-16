@@ -6,6 +6,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { readdirHandle, readFileHandle, unlinkHandle } from 'src/common/fs-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Image } from 'src/schemas/image.schema';
+import { UploadImageDto } from './dto/upload-image.dto';
 
 const basicPublic = 'public/files/image';
 
@@ -19,11 +20,11 @@ export class ImageService {
    * @param {any} image
    * @return {*}
    */
-  uploadImage(image: any): Promise<IResponse> {
+  uploadImage(image: any, body: UploadImageDto): Promise<IResponse> {
     return (
-      Promise.resolve(image)
+      Promise.resolve({ image, body })
         // 上传参数是否有问题
-        .then(async (image) => {
+        .then(async ({ image, body }) => {
           const { filename, size, path } = image;
           const name = filename.split('.')[0];
           if (!name)
@@ -42,6 +43,7 @@ export class ImageService {
             fileName: filename,
             url: path.replace(/\\/g, '/'),
             uploadTime: nowDateFun(),
+            source: body.source,
           };
         })
         .then(async (body) => {
@@ -60,6 +62,7 @@ export class ImageService {
               fileName: result.fileName,
               url: result.url,
               uploadTime: result.uploadTime,
+              source: result.source,
             },
             message: '上传成功！',
           });
@@ -120,6 +123,7 @@ export class ImageService {
               imageType: m.imageType,
               url: m.url,
               uploadTime: m.uploadTime,
+              source: m.source,
             })),
             message: '查询成功！',
           });

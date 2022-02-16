@@ -24,6 +24,9 @@ export class Image extends Document {
   size: number; // 图片的大小
 
   @Prop()
+  source: string; // 图片的来源
+
+  @Prop()
   imageType: string; // 图片类型
 
   @Prop()

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpCode, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { UploadImageDto } from './dto/upload-image.dto';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -13,14 +13,13 @@ export class ImageController {
   @ApiOperation({ summary: '单图片上传，接收 multipart/form-data 的数据' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: '单图片上传',
     type: UploadImageDto,
   })
   @UseInterceptors(FileInterceptor('image'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  uploadImage(@UploadedFile() image) {
-    return this.imageService.uploadImage(image);
+  uploadImage(@UploadedFile() image, @Body() body: UploadImageDto) {
+    return this.imageService.uploadImage(image, body);
   }
 
   @ApiOperation({ summary: '获取图片目录' })
