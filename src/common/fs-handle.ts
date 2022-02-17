@@ -1,5 +1,7 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
 
+const basicPublic = 'public/files/image';
+
 /**
  * @description: 获取文件夹目录里的文件
  * @param {PathLike} pathName
@@ -16,6 +18,7 @@ export const readdirHandle = (pathName: PathLike): any => {
         name: item.split('.')[0] || '',
         imageType: item.split('.')[1] || '',
         fileName: item,
+        url: `${basicPublic}/${item}`,
       }));
       resolve(result);
     });
