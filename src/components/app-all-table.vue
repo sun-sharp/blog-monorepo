@@ -1,18 +1,22 @@
 <template>
+  <app-table-toolbar v-model:dropdown-size="tableSize" @reload="reloadClick" />
   <n-data-table v-bind="getTableBind" :size="tableSize" :loading="tableLoading" />
 </template>
 
 <script lang="ts">
   import { NDataTable } from 'naive-ui/lib/components';
   import { ref, defineComponent, computed } from 'vue';
+  import AppTableToolbar from './app-table-toolbar.vue';
 
   export default defineComponent({
-    components: {},
+    components: {
+      AppTableToolbar,
+    },
     props: {
       ...NDataTable.props, // 这里继承原 UI 组件的 props
     },
-    emits: [],
-    setup(props) {
+    emits: ['reload'],
+    setup(props, { emit }) {
       const tableSize = ref('medium');
       const tableLoading = ref(false);
 
@@ -25,10 +29,22 @@
         };
       });
 
+      // 刷新
+      const reloadClick = () => {
+        emit('reload');
+      };
+
+      //密度切换
+      const densitySelect = (val: string) => {
+        tableSize.value = val;
+      };
+
       return {
         tableSize,
         tableLoading,
         getTableBind,
+        reloadClick,
+        densitySelect,
       };
     },
   });

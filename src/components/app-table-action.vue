@@ -1,5 +1,5 @@
 <template>
-  <div class="tableAction">
+  <div class="app-table-action">
     <div class="flex items-center justify-center">
       <n-button v-for="(action, index) in getActions" :key="`${index}-${action.label}`" v-bind="action" class="mh-3">
         <template v-if="action.icon" #icon>
@@ -100,7 +100,7 @@
           });
       });
 
-      function isIfShow(action: ActionItem): boolean {
+      const isIfShow = (action: ActionItem): boolean => {
         const ifShow = action.ifShow;
 
         let isIfShow = true;
@@ -112,7 +112,7 @@
           isIfShow = ifShow(action);
         }
         return isIfShow;
-      }
+      };
 
       const getActions = computed(() => {
         return (toRaw(props.actions) || [])
