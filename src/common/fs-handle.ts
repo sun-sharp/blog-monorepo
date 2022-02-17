@@ -1,4 +1,4 @@
-import { PathLike, readdir, readFile, unlink } from 'fs';
+import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
 
 /**
  * @description: 获取文件夹目录里的文件
@@ -53,5 +53,29 @@ export const readFileHandle = (pathName: PathLike): any => {
       }
       resolve(true);
     });
+  });
+};
+
+/**
+ * @description: 判断文件夹目录里的文件是否存在
+ * @param {PathLike} pathName
+ * @return {*}
+ */
+export const existsSyncHandle = (pathName: PathLike): boolean => {
+  return existsSync(pathName);
+};
+
+/**
+ * @description: 判断文件夹目录里的文件是否存在
+ * @param {PathLike} list
+ * @return {*}
+ */
+export const existsSyncListHandle = (list: any[]): any[] => {
+  return list.map((m) => {
+    const doc = m._doc;
+    return {
+      ...doc,
+      exists: existsSync(m.url),
+    };
   });
 };

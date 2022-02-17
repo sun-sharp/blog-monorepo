@@ -117,16 +117,18 @@ export class ImageService {
           const result = await this.imageModel.find();
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: (result || []).map((m) => ({
-              imageId: m._id,
-              size: m.size,
-              fileName: m.fileName,
-              name: m.name,
-              imageType: m.imageType,
-              url: m.url,
-              uploadTime: m.uploadTime,
-              source: m.source,
-            })),
+            result: (result || []).map((m) => {
+              return {
+                imageId: m._id,
+                size: m.size,
+                fileName: m.fileName,
+                name: m.name,
+                imageType: m.imageType,
+                url: m.url,
+                uploadTime: m.uploadTime,
+                source: m.source,
+              };
+            }),
             message: '查询成功！',
           });
         })
@@ -150,25 +152,27 @@ export class ImageService {
       Promise.resolve(pageImageDto)
         // 查询
         .then(async (body) => {
-          const { size, current } = body;
+          const { size, current, name } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = {};
+          const findData = { name: { $regex: name } };
           const total = await this.imageModel.find(findData).count();
           const list = await this.imageModel.find(findData).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
               current,
-              list: (list || []).map((m) => ({
-                imageId: m._id,
-                size: m.size,
-                fileName: m.fileName,
-                name: m.name,
-                imageType: m.imageType,
-                url: m.url,
-                uploadTime: m.uploadTime,
-                source: m.source,
-              })),
+              list: (list || []).map((m) => {
+                return {
+                  imageId: m._id,
+                  size: m.size,
+                  fileName: m.fileName,
+                  name: m.name,
+                  imageType: m.imageType,
+                  url: m.url,
+                  uploadTime: m.uploadTime,
+                  source: m.source,
+                };
+              }),
               size,
               total,
             },
