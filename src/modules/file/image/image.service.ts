@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { readdirHandle, readFileHandle, unlinkHandle } from 'src/common/fs-handle';
+import { existsSyncHandle, readdirHandle, readFileHandle, unlinkHandle } from 'src/common/fs-handle';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Image } from 'src/schemas/image.schema';
@@ -106,6 +106,45 @@ export class ImageService {
   }
 
   /**
+   * @description: 查询只有图片文件没有数据的文件
+   * @param {*}
+   * @return {*}
+   */
+  getOnlyPublic(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 查询图片目录的全部文件
+        .then(async () => {
+          return await readdirHandle(basicPublic);
+        })
+        // 查询全部的图片数据
+        .then(async (imagePublic) => {
+          const imageData = await this.imageModel.find();
+          return { imagePublic, imageData };
+        })
+        // 获取只有图片文件没有数据的文件
+        .then(({ imagePublic, imageData }) => {
+          const result = imagePublic.filter((p: { name: string }) => {
+            const findIndex = imageData.findIndex((d) => p.name === d.name);
+            return findIndex === -1;
+          });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
    * @description: 获取图片全部列表数据
    * @param {*}
    * @return {*}
@@ -171,6 +210,7 @@ export class ImageService {
                   url: m.url,
                   uploadTime: m.uploadTime,
                   source: m.source,
+                  exists: existsSyncHandle(m.url),
                 };
               }),
               size,

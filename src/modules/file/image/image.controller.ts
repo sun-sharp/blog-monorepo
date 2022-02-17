@@ -29,6 +29,12 @@ export class ImageController {
     return this.imageService.getPublic();
   }
 
+  @ApiOperation({ summary: '查询只有图片文件没有数据的文件' })
+  @Get('only_public')
+  getOnlyPublic() {
+    return this.imageService.getOnlyPublic();
+  }
+
   @ApiOperation({ summary: '获取图片全部列表数据' })
   @Get('find_all')
   findAll() {
@@ -37,6 +43,7 @@ export class ImageController {
 
   @ApiOperation({ summary: '条件并分页获取图片数据列表' })
   @Post('find_page')
+  @HttpCode(ApiHttpStatus.SUCCESS)
   findPage(@Body() pageImageDto: PageImageDto) {
     return this.imageService.findPage(pageImageDto);
   }
