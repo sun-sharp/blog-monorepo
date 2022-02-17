@@ -70,6 +70,8 @@ export interface RequestOptions {
   blogApiUrl?: string;
   // 接口地址， 不填则使用默认apiUrl 虚拟的接口地址
   mockApiUrl?: string;
+  // 接口地址， 不填则使用默认apiUrl 文件的接口地址
+  fileApiUrl?: string;
   // 错误消息提示类型
   errorMessageMode?: 'none' | 'dialog';
   // 是否添加时间戳

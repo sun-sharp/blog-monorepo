@@ -49,8 +49,8 @@ export interface GlobConfig {
   capitalApiUrl: string;
   blogApiUrl: string;
   mockApiUrl: string;
+  fileApiUrl: string;
   shortName: string;
   urlPrefix?: string;
-  uploadUrl?: string;
   imgUrl?: string;
 }

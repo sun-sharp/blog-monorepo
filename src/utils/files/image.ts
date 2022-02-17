@@ -10,6 +10,6 @@ export const getImgUrl = (url: string): string => {
 
 // 上传接口路径
 export const getUploadAction = (): string => {
-  const { uploadUrl } = appEnvConfig;
-  return `${uploadUrl}/image/upload`;
+  const { fileApiUrl } = appEnvConfig;
+  return `${fileApiUrl}/image/upload`;
 };

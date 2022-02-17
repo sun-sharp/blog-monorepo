@@ -1,0 +1,145 @@
+import { h, reactive } from 'vue';
+import { TableAction } from '@/components/Table';
+import { imageApi } from '@/api';
+import { NImage } from 'naive-ui';
+import { getImgUrl } from '@/utils';
+
+export const imageConfigure = ({ reloadTable }) => {
+  // 查询配置
+  const searchSchemas = [
+    {
+      field: 'name',
+      component: 'NInput',
+      label: '图片名称',
+      componentProps: {
+        placeholder: '请输入图片名称',
+      },
+    },
+  ];
+
+  // 表格字段配置
+  const columns = [
+    {
+      title: '图片名称',
+      key: 'name',
+      align: 'center',
+    },
+    {
+      title: '图片展示',
+      key: 'url',
+      align: 'center',
+      width: 100,
+      render(row) {
+        return h(NImage, {
+          src: getImgUrl(row.url),
+        });
+      },
+    },
+    {
+      title: '图片全称',
+      key: 'fileName',
+      align: 'center',
+    },
+    {
+      title: '图片链接',
+      align: 'center',
+      render(row) {
+        return h(
+          'a',
+          {
+            href: getImgUrl(row.url),
+          },
+          getImgUrl(row.url)
+        );
+      },
+    },
+    {
+      title: '图片类型',
+      key: 'imageType',
+      align: 'center',
+    },
+    {
+      title: '图片来源',
+      key: 'source',
+      align: 'center',
+    },
+    {
+      title: '上传时间',
+      key: 'uploadTime',
+      align: 'center',
+    },
+  ];
+
+  /**
+   * 表格按钮操作配置
+   *  */
+  // 删除图片和数据
+  const removePublicAndData = (row: Recordable) => {
+    imageApi.removePublicAndData(row.imageId).then(() => {
+      reloadTable();
+    });
+  };
+  // 删除没有图片文件的数据
+  const removeData = (row: Recordable) => {
+    imageApi.removeData(row.imageId).then(() => {
+      reloadTable();
+    });
+  };
+  const actionColumn = reactive({
+    width: 200,
+    title: '操作',
+    key: 'action',
+    align: 'center',
+    fixed: 'right',
+    render(row) {
+      return h(TableAction as any, {
+        style: 'button',
+        actions: [
+          {
+            label: '删除图片和数据',
+            type: 'error',
+            onClick: removePublicAndData.bind(null, row),
+            ifShow: () => {
+              return row.exists;
+            },
+          },
+          {
+            label: '删除数据',
+            type: 'error',
+            onClick: removeData.bind(null, row),
+            ifShow: () => {
+              return !row.exists;
+            },
+          },
+        ],
+        // 更多
+        /* dropDownActions: [
+          {
+            label: '启用',
+            key: 'enabled',
+            // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+            ifShow: () => {
+              return true;
+            },
+          },
+          {
+            label: '禁用',
+            key: 'disabled',
+            ifShow: () => {
+              return true;
+            },
+          },
+        ],
+        select: (key) => {
+          message.info(`您点击了，${key} 按钮`);
+        }, */
+      });
+    },
+  });
+
+  return {
+    searchSchemas,
+    columns,
+    actionColumn,
+  };
+};
