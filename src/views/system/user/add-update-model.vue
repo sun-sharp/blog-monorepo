@@ -19,7 +19,7 @@
           :width="100"
           :height="100"
           :max-number="1"
-          source="用户头像"
+          source="userAvatar"
         />
       </n-form-item>
       <n-form-item label="用户名" path="username">

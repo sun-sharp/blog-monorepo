@@ -39,6 +39,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
       render(row) {
         return h(NAvatar, {
           size: 48,
+          round: true,
           src: getImgUrl(row.avatar),
         });
       },

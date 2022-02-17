@@ -44,3 +44,12 @@ export const roleTypeOption = [
   },
 ];
 export const roleTypeObj = arrEnumToObj(roleTypeOption);
+
+// 图片来源枚举值
+export const sourceOption = [
+  {
+    value: 'userAvatar',
+    label: '用户头像',
+  },
+];
+export const sourceObj = arrEnumToObj(sourceOption);

@@ -69,14 +69,7 @@
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
           <div class="avatar">
-            <!-- <n-avatar round :src="avatar" /> -->
-            <app-avatar round :src="avatar" />
-            <!-- <app-avatar round src="~@/assets/images/schoolboy.png" /> -->
-            <!-- {{ username }} -->
-            <!-- <template #icon>
-                <UserOutlined />
-              </template> -->
-            <!-- </n-avatar> -->
+            <n-avatar round :src="avatar" />
           </div>
         </n-dropdown>
       </div>
@@ -122,7 +115,6 @@
   import { getImgUrl } from '@/utils';
   import ProjectSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
-  import AppAvatar from '@/components/app-avatar.vue';
 
   export default defineComponent({
     name: 'LayoutHeader',
@@ -143,7 +135,6 @@
       NDialogProvider,
       ProjectSetting,
       LayoutMenu,
-      AppAvatar,
     },
     props: {
       collapsed: {

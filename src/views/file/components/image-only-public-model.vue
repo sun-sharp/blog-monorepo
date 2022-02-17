@@ -1,0 +1,93 @@
+<template>
+  <n-modal v-model:show="showModal" class="w-800" :show-icon="false" :mask-closable="false" preset="dialog" title="处理只有图片文件的数据">
+    <app-all-table :data="imageOnlyData" :columns="columns" />
+  </n-modal>
+</template>
+
+<script lang="ts">
+  import { imageApi } from '@/api';
+  import { defineComponent, h, ref } from 'vue';
+  import AppAllTable from '@/components/app-all-table.vue';
+  import AppTableAction from '@/components/app-table-action.vue';
+  import { NImage } from 'naive-ui';
+  import { getImgUrl } from '@/utils';
+
+  export default defineComponent({
+    name: 'ImageOnlyPublicModel',
+    components: { AppAllTable },
+    setup() {
+      const showModal = ref(false);
+      const imageOnlyData = ref([]);
+      // 获取接口数据
+      const getOnlyPublicData = async () => {
+        imageOnlyData.value = await imageApi.getOnlyPublic();
+      };
+      // 删除图片文件
+      const removePublic = (row: Recordable) => {
+        imageApi.removePublic(row.fileName).then(() => {
+          getOnlyPublicData();
+        });
+      };
+      const columns = [
+        {
+          title: '图片名称',
+          key: 'name',
+          align: 'center',
+        },
+        {
+          title: '图片展示',
+          key: 'url',
+          align: 'center',
+          width: 100,
+          render(row) {
+            return h(NImage, {
+              src: getImgUrl(row.url),
+            });
+          },
+        },
+        {
+          title: '图片全称',
+          key: 'fileName',
+          align: 'center',
+        },
+        {
+          title: '图片类型',
+          key: 'imageType',
+          align: 'center',
+        },
+        {
+          width: 200,
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          fixed: 'right',
+          render(row) {
+            return h(AppTableAction as any, {
+              style: 'button',
+              actions: [
+                {
+                  label: '删除图片文件',
+                  type: 'error',
+                  onClick: removePublic.bind(null, row),
+                },
+              ],
+            });
+          },
+        },
+      ];
+      // 初始化
+      const init = async () => {
+        showModal.value = true;
+        await getOnlyPublicData();
+      };
+      return {
+        showModal,
+        imageOnlyData,
+        columns,
+        init,
+      };
+    },
+  });
+</script>
+
+<style lang="scss" scoped></style>

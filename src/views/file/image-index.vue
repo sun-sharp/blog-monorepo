@@ -7,14 +7,12 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     ></app-search-form>
-    <basic-table
-      ref="actionRef"
-      :columns="columns"
-      :request="loadDataTable"
-      :row-key="(row) => row.id"
-      :action-column="actionColumn"
-      :scroll-x="1090"
-    ></basic-table>
+    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
+      <template #tableTitle>
+        <n-button type="primary" @click="imageOnlyPublicModelRef.init()">处理只有图片文件的数据</n-button>
+      </template>
+    </basic-table>
+    <image-only-public-model ref="imageOnlyPublicModelRef" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -23,6 +21,10 @@
   import { BasicTable } from '@/components/Table';
   import { imageConfigure } from './configure/image';
   import AppSearchForm from '@/components/app-search-form.vue';
+  import ImageOnlyPublicModel from './components/image-only-public-model.vue';
+
+  // 处理只有图片文件的数据
+  const imageOnlyPublicModelRef = ref();
 
   /**
    * 表格
@@ -45,5 +47,9 @@
     searchParams.value = values;
     reloadTable();
   };
+
+  // const onlyPublicImage = async () => {
+  //   await imageApi.getOnlyPublic();
+  // };
 </script>
 <style lang="scss" scoped></style>

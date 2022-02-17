@@ -68,7 +68,7 @@
   import { useUserStoreWidthOut } from '@/store/modules/user';
 
   export default defineComponent({
-    name: 'UploadImage',
+    name: 'AppUploadImage',
     components: { EyeOutlined, DeleteOutlined, PlusOutlined },
     props: {
       ...NUpload.props,
@@ -132,15 +132,16 @@
       const uploadAction = getUploadAction();
       const userStore = useUserStoreWidthOut();
       const token = userStore.getToken;
-      const uploadHeaders = reactive({
-        ...props.headers,
-        timestamp: new Date().getTime(),
-        Authorization: token,
+      const uploadHeaders = computed(() => {
+        return {
+          ...props.headers,
+          source: props.source,
+          timestamp: new Date().getTime(),
+          Authorization: token,
+        };
       });
       const uploadData = computed(() => {
-        return {
-          source: props.source,
-        };
+        return {};
       });
 
       //赋值默认图片显示

@@ -16,7 +16,35 @@ export const getPage = (params: any): Promise<any> => {
 };
 
 /**
- * @description: 删除 图片目录下的图片 和 图片下的数据
+ * @description: 查询图片分页列表
+ * @return {*}
+ */
+export const getOnlyPublic = (): Promise<any> => {
+  return AxiosFile.request({
+    url: `${basic}/only_public`,
+    method: 'GET',
+  });
+};
+
+/**
+ * @description: 删除图片目录下的图片
+ * @param {string} fileName
+ * @return {*}
+ */
+export const removePublic = (fileName: string): Promise<any> => {
+  return AxiosFile.request(
+    {
+      url: `${basic}/remove_public/${fileName}`,
+      method: 'DELETE',
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * @description: 删除图片下的数据
  * @param {string} imageId
  * @return {*}
  */
@@ -33,7 +61,7 @@ export const removeData = (imageId: string): Promise<any> => {
 };
 
 /**
- * @description: 删除图片下的数据
+ * @description: 删除 图片目录下的图片 和 图片下的数据
  * @param {string} imageId
  * @return {*}
  */
