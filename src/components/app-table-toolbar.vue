@@ -69,7 +69,10 @@
       ColumnHeightOutlined,
     },
     props: {
-      dropdownSize: String,
+      dropdownSize: {
+        type: String,
+        default: 'medium',
+      },
     },
     emits: ['reload', 'update:dropdownSize'],
     setup(_props, { emit }) {

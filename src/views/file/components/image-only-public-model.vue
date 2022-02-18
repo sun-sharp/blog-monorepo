@@ -1,6 +1,12 @@
 <template>
   <n-modal v-model:show="showModal" class="w-800" :show-icon="false" :mask-closable="false" preset="dialog" title="处理只有图片文件的数据">
     <app-all-table :data="imageOnlyData" :columns="columns" />
+    <template #action>
+      <n-space>
+        <n-button @click="() => (showModal = false)">取消</n-button>
+        <n-button type="error" :loading="btnLoading" :disabled="btnLoading" @click="clearList">清空列表</n-button>
+      </n-space>
+    </template>
   </n-modal>
 </template>
 
@@ -8,7 +14,7 @@
   import { imageApi } from '@/api';
   import { defineComponent, h, ref } from 'vue';
   import AppAllTable from '@/components/app-all-table.vue';
-  import AppTableAction from '@/components/app-table-action.vue';
+  // import AppTableAction from '@/components/app-table-action.vue';
   import { NImage } from 'naive-ui';
   import { getImgUrl } from '@/utils';
 
@@ -17,17 +23,18 @@
     components: { AppAllTable },
     setup() {
       const showModal = ref(false);
-      const imageOnlyData = ref([]);
+      const btnLoading = ref(false);
+      const imageOnlyData = ref<any>([]);
       // 获取接口数据
       const getOnlyPublicData = async () => {
         imageOnlyData.value = await imageApi.getOnlyPublic();
       };
       // 删除图片文件
-      const removePublic = (row: Recordable) => {
-        imageApi.removePublic(row.fileName).then(() => {
-          getOnlyPublicData();
-        });
-      };
+      // const removePublic = (row: Recordable) => {
+      //   imageApi.removePublic(row.fileName).then(() => {
+      //     getOnlyPublicData();
+      //   });
+      // };
       const columns = [
         {
           title: '图片名称',
@@ -39,7 +46,7 @@
           key: 'url',
           align: 'center',
           width: 100,
-          render(row) {
+          render(row: { url: string }) {
             return h(NImage, {
               src: getImgUrl(row.url),
             });
@@ -55,36 +62,46 @@
           key: 'imageType',
           align: 'center',
         },
-        {
-          width: 200,
-          title: '操作',
-          key: 'action',
-          align: 'center',
-          fixed: 'right',
-          render(row) {
-            return h(AppTableAction as any, {
-              style: 'button',
-              actions: [
-                {
-                  label: '删除图片文件',
-                  type: 'error',
-                  onClick: removePublic.bind(null, row),
-                },
-              ],
-            });
-          },
-        },
+        // {
+        //   width: 200,
+        //   title: '操作',
+        //   key: 'action',
+        //   align: 'center',
+        //   fixed: 'right',
+        //   render(row) {
+        //     return h(AppTableAction as any, {
+        //       style: 'button',
+        //       actions: [
+        //         {
+        //           label: '删除图片文件',
+        //           type: 'error',
+        //           onClick: removePublic.bind(null, row),
+        //         },
+        //       ],
+        //     });
+        //   },
+        // },
       ];
       // 初始化
       const init = async () => {
         showModal.value = true;
         await getOnlyPublicData();
       };
+
+      // 清空列表数据
+      const clearList = () => {
+        const fileNameArr = imageOnlyData.value.map((m: { fileName: string }) => m.fileName);
+        imageApi.removePublicAll(fileNameArr).then(() => {
+          getOnlyPublicData();
+        });
+      };
       return {
         showModal,
+        btnLoading,
         imageOnlyData,
         columns,
         init,
+        clearList,
       };
     },
   });

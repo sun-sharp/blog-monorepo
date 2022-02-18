@@ -1,5 +1,5 @@
 <template>
-  <n-modal v-model:show="showModal" class="menu-model w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改' : '新增'">
+  <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改' : '新增'">
     <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="类型" path="menuType">
         <n-radio-group v-model:value="modelForm.menuType" name="radiogroup">

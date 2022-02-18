@@ -1,6 +1,8 @@
 <template>
   <app-table-toolbar v-model:dropdown-size="tableSize" @reload="reloadClick" />
-  <n-data-table v-bind="getTableBind" :size="tableSize" :loading="tableLoading" />
+  <div class="s-table">
+    <n-data-table v-bind="getTableBind" :size="tableSize" :loading="tableLoading" />
+  </div>
 </template>
 
 <script lang="ts">

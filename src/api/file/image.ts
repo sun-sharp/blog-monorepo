@@ -4,14 +4,14 @@ const basic = '/image';
 
 /**
  * @description: 查询图片分页列表
- * @param {any} params
+ * @param {any} data
  * @return {*}
  */
-export const getPage = (params: any): Promise<any> => {
+export const getPage = (data: any): Promise<any> => {
   return AxiosFile.request({
     url: `${basic}/find_page`,
     method: 'POST',
-    params,
+    data,
   });
 };
 
@@ -36,6 +36,26 @@ export const removePublic = (fileName: string): Promise<any> => {
     {
       url: `${basic}/remove_public/${fileName}`,
       method: 'DELETE',
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * @description: 批量删除图片目录下的图片
+ * @param {string[]} fileName
+ * @return {*}
+ */
+export const removePublicAll = (fileNameArr: string[]): Promise<any> => {
+  return AxiosFile.request(
+    {
+      url: `${basic}/remove_public_all`,
+      method: 'DELETE',
+      data: {
+        fileNameArr,
+      },
     },
     {
       isShowSuccessMessage: true,

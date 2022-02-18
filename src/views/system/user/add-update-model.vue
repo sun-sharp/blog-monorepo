@@ -1,12 +1,5 @@
 <template>
-  <n-modal
-    v-model:show="showModal"
-    class="menu-model w-600"
-    :show-icon="false"
-    :mask-closable="false"
-    preset="dialog"
-    :title="modelId ? '修改用户角色' : '新增'"
-  >
+  <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改用户角色' : '新增'">
     <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="昵称`" path="name">
         <n-input v-model:value="modelForm.name" :disabled="!!modelId" placeholder="请输入昵称" />
