@@ -1,6 +1,6 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
 
-const basicPublic = 'public/files/image';
+const basicPublicFilesImage = 'public/files/image';
 
 /**
  * @description: 获取文件夹目录里的文件
@@ -14,11 +14,11 @@ export const readdirHandle = (pathName: PathLike): any => {
         reject(err);
         return;
       }
-      const result = files.map((item) => ({
-        name: item.split('.')[0] || '',
-        imageType: item.split('.')[1] || '',
-        fileName: item,
-        url: `${basicPublic}/${item}`,
+      const result = files.map((fileName) => ({
+        name: fileName.split('.')[0] || '',
+        imageType: fileName.split('.')[1] || '',
+        fileName: fileName,
+        url: `${basicPublicFilesImage}/${fileName}`,
       }));
       resolve(result);
     });
@@ -43,6 +43,36 @@ export const unlinkHandle = (pathName: PathLike): any => {
 };
 
 /**
+ * @description: 批量删除文件夹目录里的文件
+ * @param {string[]} list
+ */
+export const unlinkListHandle = async (list: string[]) => {
+  const promiseArr = list.map(
+    (fileName) =>
+      new Promise((resolve, reject) => {
+        unlink(`${basicPublicFilesImage}/${fileName}`, (err) => {
+          if (err) {
+            reject({ err, fileName });
+            return;
+          }
+          resolve({ fileName });
+        });
+      }),
+  );
+  const allValues = await Promise.allSettled(promiseArr);
+  return allValues.map((m: any) => {
+    let item: any = {};
+    if (m.status === 'fulfilled') {
+      item.message = `${m.fileName}删除成功！`;
+    } else if (m.status === 'rejected') {
+      item = { ...m.err };
+      item.message = `${m.fileName}删除成功！`;
+    }
+    return item;
+  });
+};
+
+/**
  * @description: 读取文件夹目录里的文件
  * @param {PathLike} pathName
  * @return {*}
@@ -57,6 +87,27 @@ export const readFileHandle = (pathName: PathLike): any => {
       resolve(true);
     });
   });
+};
+
+/**
+ * @description: 批量读取文件夹目录里的文件
+ * @param {string[]} list
+ * @return {*}
+ */
+export const readFileListHandle = (list: string[]): any => {
+  const promiseArr = list.map(
+    (fileName) =>
+      new Promise((resolve, reject) => {
+        readFile(`${basicPublicFilesImage}/${fileName}`, (err) => {
+          if (err) {
+            reject({ ...err, message: '文件夹里不存在文件' + fileName });
+            return;
+          }
+          resolve(true);
+        });
+      }),
+  );
+  return Promise.all(promiseArr);
 };
 
 /**

@@ -5,6 +5,7 @@ import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageImageDto } from './dto/page-image.dto';
+import { RemovePublicAllImageDto } from './dto/remove-public-all-image.dto';
 
 @Controller('image')
 @ApiTags('图片')
@@ -52,6 +53,12 @@ export class ImageController {
   @ApiOperation({ summary: '删除图片目录下的图片' })
   removePublic(@Param('fileName') fileName: string) {
     return this.imageService.removePublic(fileName);
+  }
+
+  @Delete('remove_public_all')
+  @ApiOperation({ summary: '多条删除图片目录下的图片' })
+  removePublicAll(@Body() removePublicAllImageDto: RemovePublicAllImageDto) {
+    return this.imageService.removePublicAll(removePublicAllImageDto);
   }
 
   @Delete('remove_data/:imageId')

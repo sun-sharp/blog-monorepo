@@ -3,11 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { existsSyncHandle, readdirHandle, readFileHandle, unlinkHandle } from 'src/common/fs-handle';
+import { existsSyncHandle, readdirHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Image } from 'src/schemas/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
+import { RemovePublicAllImageDto } from './dto/remove-public-all-image.dto';
 import { UploadImageDto } from './dto/upload-image.dto';
 
 const basicPublic = 'public/files/image';
@@ -248,6 +249,38 @@ export class ImageService {
           await unlinkHandle(publicName);
           return (this.response = {
             code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 删除图片目录下的图片
+   * @param {string} removePublicAllImageDto
+   * @return {*}
+   */
+  public removePublicAll(removePublicAllImageDto: RemovePublicAllImageDto): Promise<IResponse> {
+    return (
+      Promise.resolve(removePublicAllImageDto)
+        // 读取文件
+        .then(async ({ fileNameArr }) => {
+          await readFileListHandle(fileNameArr);
+          return fileNameArr;
+        })
+        // 删除文件
+        .then(async (fileNameArr) => {
+          const result = await unlinkListHandle(fileNameArr);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result,
             message: '删除成功！',
           });
         })
