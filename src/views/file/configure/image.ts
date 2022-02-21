@@ -3,6 +3,7 @@ import { TableAction } from '@/components/Table';
 import { imageApi } from '@/api';
 import { NImage } from 'naive-ui';
 import { getImgUrl } from '@/utils';
+import { sourceObj, sourceOption } from '@/constant';
 
 export const imageConfigure = ({ reloadTable }) => {
   // 查询配置
@@ -13,6 +14,17 @@ export const imageConfigure = ({ reloadTable }) => {
       label: '图片名称',
       componentProps: {
         placeholder: '请输入图片名称',
+      },
+    },
+    {
+      field: 'source',
+      component: 'NSelect',
+      label: '图片来源',
+      componentProps: {
+        defaultValue: '',
+        clearable: false,
+        placeholder: '请选择图片名称',
+        options: [{ value: '', label: '全部' }].concat(sourceOption),
       },
     },
   ];
@@ -29,9 +41,10 @@ export const imageConfigure = ({ reloadTable }) => {
       key: 'url',
       align: 'center',
       width: 100,
-      render(row) {
+      render(row: Recordable) {
         return h(NImage, {
           src: getImgUrl(row.url),
+          alt: '图片文件不存在',
         });
       },
     },
@@ -39,19 +52,6 @@ export const imageConfigure = ({ reloadTable }) => {
       title: '图片全称',
       key: 'fileName',
       align: 'center',
-    },
-    {
-      title: '图片链接',
-      align: 'center',
-      render(row) {
-        return h(
-          'a',
-          {
-            href: getImgUrl(row.url),
-          },
-          getImgUrl(row.url)
-        );
-      },
     },
     {
       title: '图片类型',
@@ -62,6 +62,9 @@ export const imageConfigure = ({ reloadTable }) => {
       title: '图片来源',
       key: 'source',
       align: 'center',
+      render(row: Recordable) {
+        return sourceObj[row.source] || `*${row.source}`;
+      },
     },
     {
       title: '上传时间',
@@ -91,7 +94,7 @@ export const imageConfigure = ({ reloadTable }) => {
     key: 'action',
     align: 'center',
     fixed: 'right',
-    render(row) {
+    render(row: Recordable) {
       return h(TableAction as any, {
         style: 'button',
         actions: [

@@ -12,7 +12,7 @@
           :width="100"
           :height="100"
           :max-number="1"
-          source="userAvatar"
+          source="user_avatar"
         />
       </n-form-item>
       <n-form-item label="用户名" path="username">

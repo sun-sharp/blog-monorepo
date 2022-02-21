@@ -27,6 +27,17 @@ export const getOnlyPublic = (): Promise<any> => {
 };
 
 /**
+ * @description: 查询未使用的图片
+ * @return {*}
+ */
+export const getOntUse = (): Promise<any> => {
+  return AxiosFile.request({
+    url: `${basic}/not_use`,
+    method: 'GET',
+  });
+};
+
+/**
  * @description: 删除图片目录下的图片
  * @param {string} fileName
  * @return {*}
@@ -45,7 +56,7 @@ export const removePublic = (fileName: string): Promise<any> => {
 
 /**
  * @description: 批量删除图片目录下的图片
- * @param {string[]} fileName
+ * @param {string[]} fileNameArr
  * @return {*}
  */
 export const removePublicAll = (fileNameArr: string[]): Promise<any> => {
@@ -90,6 +101,26 @@ export const removePublicAndData = (imageId: string): Promise<any> => {
     {
       url: `${basic}/remove_public_data/${imageId}`,
       method: 'DELETE',
+    },
+    {
+      isShowSuccessMessage: true,
+    }
+  );
+};
+
+/**
+ * @description: 批量删除图片目录下的图片 和 图片下的数据
+ * @param {string[]} imageIdArr
+ * @return {*}
+ */
+export const removePublicAndDataAll = (imageIdArr: string[]): Promise<any> => {
+  return AxiosFile.request(
+    {
+      url: `${basic}/remove_public_data_all`,
+      method: 'DELETE',
+      data: {
+        imageIdArr,
+      },
     },
     {
       isShowSuccessMessage: true,

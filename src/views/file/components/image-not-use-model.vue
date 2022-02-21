@@ -1,6 +1,6 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-800" :show-icon="false" :mask-closable="false" preset="dialog" title="处理只有图片文件的数据">
-    <app-all-table :data="imageOnlyData" :columns="columns" />
+  <n-modal v-model:show="showModal" class="w-800" :show-icon="false" :mask-closable="false" preset="dialog" title="查询未使用的图片">
+    <app-all-table :data="tableData" :columns="columns" />
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
@@ -14,20 +14,21 @@
   import { imageApi } from '@/api';
   import { defineComponent, h, ref } from 'vue';
   import AppAllTable from '@/components/app-all-table.vue';
-  // import AppTableAction from '@/components/app-table-action.vue';
   import { NImage } from 'naive-ui';
   import { getImgUrl } from '@/utils';
+  import { sourceObj } from '@/constant';
 
   export default defineComponent({
-    name: 'ImageOnlyPublicModel',
+    name: 'ImageNotUseModel',
     components: { AppAllTable },
-    setup() {
+    emits: ['refresh'],
+    setup(_props, { emit }) {
       const showModal = ref(false);
       const btnLoading = ref(false);
-      const imageOnlyData = ref<any>([]);
+      const tableData = ref<any>([]);
       // 获取接口数据
-      const getOnlyPublicData = async () => {
-        imageOnlyData.value = await imageApi.getOnlyPublic();
+      const getTableData = async () => {
+        tableData.value = await imageApi.getOntUse();
       };
       const columns = [
         {
@@ -40,9 +41,10 @@
           key: 'url',
           align: 'center',
           width: 100,
-          render(row: { url: string }) {
+          render(row: Recordable) {
             return h(NImage, {
               src: getImgUrl(row.url),
+              alt: '图片文件不存在',
             });
           },
         },
@@ -56,24 +58,38 @@
           key: 'imageType',
           align: 'center',
         },
+        {
+          title: '图片来源',
+          key: 'source',
+          align: 'center',
+          render(row: Recordable) {
+            return sourceObj[row.source] || `*${row.source}`;
+          },
+        },
+        {
+          title: '上传时间',
+          key: 'uploadTime',
+          align: 'center',
+        },
       ];
       // 初始化
       const init = async () => {
         showModal.value = true;
-        await getOnlyPublicData();
+        await getTableData();
       };
 
       // 清空列表数据
       const clearList = () => {
-        const fileNameArr = imageOnlyData.value.map((m: { fileName: string }) => m.fileName);
-        imageApi.removePublicAll(fileNameArr).then(() => {
+        const imageIdArr = tableData.value.map((m: { imageId: string }) => m.imageId);
+        imageApi.removePublicAndDataAll(imageIdArr).then(() => {
           showModal.value = false;
+          emit('refresh');
         });
       };
       return {
         showModal,
         btnLoading,
-        imageOnlyData,
+        tableData,
         columns,
         init,
         clearList,

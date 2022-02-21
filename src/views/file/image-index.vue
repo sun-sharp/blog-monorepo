@@ -7,12 +7,21 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     ></app-search-form>
-    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
+    <basic-table
+      ref="actionRef"
+      :columns="columns"
+      :request="loadDataTable"
+      :row-key="(row: Recordable) => row.imageId"
+      :action-column="actionColumn"
+      :scroll-x="1090"
+    >
       <template #tableTitle>
-        <n-button type="primary" @click="imageOnlyPublicModelRef.init()">处理只有图片文件的数据</n-button>
+        <n-button class="mr-10" type="success" @click="imageOnlyPublicModelRef.init()">处理只有图片文件的数据</n-button>
+        <n-button type="primary" @click="imageNotUseModelRef.init()">查询未使用的图片</n-button>
       </template>
     </basic-table>
     <image-only-public-model ref="imageOnlyPublicModelRef" />
+    <image-not-use-model ref="imageNotUseModelRef" @refresh="reloadTable" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -22,9 +31,13 @@
   import { imageConfigure } from './configure/image';
   import AppSearchForm from '@/components/app-search-form.vue';
   import ImageOnlyPublicModel from './components/image-only-public-model.vue';
+  import ImageNotUseModel from './components/image-not-use-model.vue';
 
   // 处理只有图片文件的数据
   const imageOnlyPublicModelRef = ref();
+
+  // 查询未使用的图片
+  const imageNotUseModelRef = ref();
 
   /**
    * 表格
