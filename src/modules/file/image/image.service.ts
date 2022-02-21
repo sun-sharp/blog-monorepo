@@ -6,28 +6,28 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { existsSyncHandle, readdirHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
+import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
-import { RemovePublicAllImageDto } from './dto/remove-public-all-image.dto';
-import { UploadImageDto } from './dto/upload-image.dto';
+import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
 
 const basicPublic = 'public/files/image';
 
 @Injectable()
 export class ImageService {
   response: IResponse;
-  constructor(@InjectModel('Image') private readonly imageModel: Model<Image>) {}
+  constructor(@InjectModel('Image') private readonly imageModel: Model<Image>, private readonly userService: UserService) {}
 
   /**
    * @description: 单图片上传
    * @param {any} image
    * @return {*}
    */
-  uploadImage(image: any, body: UploadImageDto): Promise<IResponse> {
+  uploadImage(image: any, source: string | string[]): Promise<IResponse> {
     return (
-      Promise.resolve({ image, body })
+      Promise.resolve({ image, source })
         // 上传参数是否有问题
-        .then(async ({ image, body }) => {
+        .then(async ({ image, source }) => {
           const { filename, size, path } = image;
           const name = filename.split('.')[0];
           if (!name)
@@ -46,7 +46,7 @@ export class ImageService {
             fileName: filename,
             url: path.replace(/\\/g, '/'),
             uploadTime: nowDateFun(),
-            source: body.source,
+            source: source,
           };
         })
         .then(async (body) => {
@@ -146,6 +146,59 @@ export class ImageService {
   }
 
   /**
+   * @description: 查询未使用的图片
+   * @param {*}
+   * @return {*}
+   */
+  getOntUse(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 查询全部的图片数据
+        .then(async () => {
+          const imageData = await this.imageModel.find();
+          return { imageData };
+        })
+        // 获取只有图片文件没有数据的文件
+        .then(async ({ imageData }) => {
+          const result = [];
+          for (let i = 0; i < imageData.length; i++) {
+            const f = imageData[i];
+            const [lib] = f.source.split('_');
+            let useStatus = false;
+            if (lib === 'user') {
+              const userFindOne = await this.userService.findOneByAvatar(f.url);
+              useStatus = !userFindOne;
+            }
+            if (useStatus) result.push(f);
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: (result || []).map((m) => {
+              return {
+                imageId: m._id,
+                size: m.size,
+                fileName: m.fileName,
+                name: m.name,
+                imageType: m.imageType,
+                url: m.url,
+                uploadTime: m.uploadTime,
+                source: m.source,
+              };
+            }),
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
    * @description: 获取图片全部列表数据
    * @param {*}
    * @return {*}
@@ -196,7 +249,7 @@ export class ImageService {
           const { limit, skip } = PaginateHandle(size, current);
           const findData = { name: { $regex: name } };
           const total = await this.imageModel.find(findData).count();
-          const list = await this.imageModel.find(findData).limit(limit).skip(skip);
+          const list = await this.imageModel.find(findData).limit(limit).skip(skip).sort({ uploadTime: -1 });
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
@@ -263,8 +316,8 @@ export class ImageService {
   }
 
   /**
-   * @description: 删除图片目录下的图片
-   * @param {string} removePublicAllImageDto
+   * @description: 批量删除图片目录下的图片
+   * @param {RemovePublicAllImageDto} removePublicAllImageDto
    * @return {*}
    */
   public removePublicAll(removePublicAllImageDto: RemovePublicAllImageDto): Promise<IResponse> {
@@ -320,6 +373,31 @@ export class ImageService {
   }
 
   /**
+   * @description: 批量删除图片下的数据
+   * @param {RemoveDataAllImageDto} removeDataAllImageDto
+   * @return {*}
+   */
+  public removeDataAll(removeDataAllImageDto: RemoveDataAllImageDto): Promise<IResponse> {
+    return (
+      Promise.resolve(removeDataAllImageDto)
+        .then(async ({ imageIdArr }) => {
+          await this.imageModel.deleteMany({ _id: { $in: imageIdArr } });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          });
+        })
+    );
+  }
+
+  /**
    * @description: 删除 图片目录下的图片 和 图片下的数据
    * @param {string} imageId
    * @return {*}
@@ -349,6 +427,47 @@ export class ImageService {
         // 删除数据
         .then(async (imageId) => {
           return await this.removeData(imageId);
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 批量删除 图片目录下的图片 和 图片下的数据
+   * @param {RemovePublicAndDataAllImageDto} removePublicAndDataAllImageDto
+   * @return {*}
+   */
+  public removePublicAndDataAll(removePublicAndDataAllImageDto: RemovePublicAndDataAllImageDto): Promise<IResponse> {
+    return (
+      Promise.resolve(removePublicAndDataAllImageDto)
+        // 先查找数据
+        .then(async ({ imageIdArr }) => {
+          const find = await this.imageModel.find({ _id: { $in: imageIdArr } });
+          if (find.length <= 0)
+            throw {
+              message: '未找到当前图片数据！',
+            };
+          return { imageIdArr, fileNameArr: find.map((m) => m.fileName) };
+        })
+        // 删除文件
+        .then(async ({ imageIdArr, fileNameArr }) => {
+          const { code, message } = await this.removePublicAll({ fileNameArr });
+          if (code === ApiCode.ERROR) {
+            throw {
+              message,
+            };
+          }
+          return imageIdArr;
+        })
+        // 删除数据
+        .then(async (imageIdArr) => {
+          return await this.removeDataAll({ imageIdArr });
         })
         // 返回错误
         .catch((err) => {

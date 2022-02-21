@@ -100,6 +100,26 @@ export class UserService {
   }
 
   /**
+   * @description 运用avatar查找用户
+   * @param {string} avatar
+   * @return {*}  {Promise<User>}
+   * @memberof UserService
+   */
+  public findOneByAvatar(avatar: string): Promise<User> {
+    return (
+      Promise.resolve(avatar)
+        // 判断username 是否为合法字符
+        .then(async (avatar) => {
+          return await this.userModel.findOne({ avatar });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
    * @description 运用_id查找用户信息
    * @date 25/11/2021
    * @param {string} username
