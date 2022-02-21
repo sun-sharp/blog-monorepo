@@ -11,7 +11,7 @@
     "start:debug": "rimraf dist && nest start --debug --watch",
     "start:prod": "node dist/main",
     "rim:dist": "rimraf dist",
-    "build": "rimraf dist && nest build --webpack",
+    "build": "rimraf dist && nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark"
