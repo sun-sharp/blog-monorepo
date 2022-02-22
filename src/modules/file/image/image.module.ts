@@ -9,6 +9,9 @@ import { UserModule } from 'src/modules/capital/user/user.module';
 
 const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], 'file');
 
+const lib = '/www/wwwroot/nestApi';
+// const lib = '.';
+
 @Module({
   imports: [
     UserModule,
@@ -16,7 +19,7 @@ const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema
     MulterModule.register({
       storage: diskStorage({
         // 配置文件上传后的文件夹路径
-        destination: `./public/files/image`,
+        destination: `${lib}/public/files/image`,
         filename: (req, file, cb) => {
           const image = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
           const mimeType = file.mimetype.split('/')[1];
