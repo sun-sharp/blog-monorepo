@@ -1,11 +1,20 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CapitalModule } from './modules/capital/capital.module';
 import { FileModule } from './modules/file/file.module';
+import customConfig from './config';
 
 @Module({
-  imports: [CapitalModule, FileModule],
+  imports: [
+    CapitalModule,
+    FileModule,
+    ConfigModule.forRoot({
+      isGlobal: true, // 作用于全局
+      load: [customConfig], // 加载自定义配置项
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
