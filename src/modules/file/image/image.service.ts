@@ -28,7 +28,7 @@ export class ImageService {
       Promise.resolve({ image, source })
         // 上传参数是否有问题
         .then(async ({ image, source }) => {
-          const { filename, size, path } = image;
+          const { filename, size } = image;
           const name = filename.split('.')[0];
           if (!name)
             throw {
@@ -44,7 +44,7 @@ export class ImageService {
             name,
             imageType,
             fileName: filename,
-            url: path.replace(/\\/g, '/'),
+            url: `${basicPublic}/${filename}`,
             uploadTime: nowDateFun(),
             source: source,
           };
