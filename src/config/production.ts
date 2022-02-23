@@ -5,6 +5,8 @@ export default {
   enableSwagger: true,
   // 文件
   file: {
-    lib: '/www/wwwroot/nestApi',
+    // lib: '/www/wwwroot/nestApi',
+    lib: '.',
+    fsPath: '',
   },
 };

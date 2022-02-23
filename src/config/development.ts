@@ -6,5 +6,6 @@ export default {
   // 文件
   file: {
     lib: '.',
+    fsPath: '',
   },
 };

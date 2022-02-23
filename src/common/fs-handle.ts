@@ -2,7 +2,7 @@ import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
 import customConfig from 'src/config';
 
 const config = customConfig();
-const basicPublicFilesImage = `${config.file.lib}/public/files/image`;
+const basicPublicFilesImage = `${config.file.fsPath}public/files/image`;
 
 /**
  * @description: 获取文件夹目录里的文件
