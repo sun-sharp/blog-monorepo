@@ -1,6 +1,8 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
+import customConfig from 'src/config';
 
-const basicPublicFilesImage = 'public/files/image';
+const config = customConfig();
+const basicPublicFilesImage = `${config.file.lib}/public/files/image`;
 
 /**
  * @description: 获取文件夹目录里的文件
