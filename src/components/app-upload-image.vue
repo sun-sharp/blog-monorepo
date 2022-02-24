@@ -202,7 +202,9 @@
 
       //上传结束
       function finish({ event: Event }) {
-        const res = eval('(' + Event.target.response + ')');
+        console.log(Event);
+        // const res = eval('(' + Event.target.response + ')');
+        const res = JSON.parse(Event.target.response);
         const infoField = componentSetting.upload.apiSetting.infoField;
         const imgField = componentSetting.upload.apiSetting.imgField;
         const { code } = res;
