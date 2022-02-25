@@ -31,8 +31,10 @@
 </template>
 
 <script lang="ts">
-  import { imageApi } from '@/api';
+  // import { imageApi } from '@/api';
   import { useUserStoreWidthOut } from '@/store/modules/user';
+  import { getUploadAction } from '@/utils';
+  import axios, { AxiosRequestConfig } from 'axios';
   import { UploadCustomRequestOptions, useMessage } from 'naive-ui';
   import { defineComponent, toRefs, reactive, computed } from 'vue';
 
@@ -87,7 +89,7 @@
     },
     emits: ['uploadChange', 'delete'],
     setup(props, { emit }) {
-      console.log(props);
+      console.log(props, 'props');
       // const getCSSProperties = computed(() => {
       //   return {
       //     width: `${props.width}px`,
@@ -106,6 +108,7 @@
       });
 
       // 上传文件
+      const uploadAction = getUploadAction();
       const userStore = useUserStoreWidthOut();
       const token = userStore.getToken;
       const uploadHeaders = computed(() => {
@@ -196,19 +199,35 @@
       // }
 
       const customRequest = ({ file, headers, data, withCredentials, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
-        console.log(file);
-        imageApi
-          .uploadImage({
-            data: {
-              image: file.file as File,
-              ...data,
-            },
-            headers,
+        // console.log(file);
+        const formData = new FormData();
+        if (data) {
+          Object.keys(data).forEach((key) => {
+            formData.append(key, data[key as keyof UploadCustomRequestOptions['data']]);
+          });
+        }
+        formData.append('image', file.file as File);
+        // imageApi
+        //   .uploadImage({
+        //     data: formData,
+        //     // data: {
+        //     //   ...data,
+        //     //   image: file.file as File,
+        //     // },
+        //     headers,
+        //     withCredentials,
+        //     onUploadProgress: ({ loaded, total }) => {
+        //       onProgress({ percent: Math.ceil((loaded / total) * 100) });
+        //     },
+        //   })
+        axios
+          .post(uploadAction as string, formData, {
             withCredentials,
+            headers,
             onUploadProgress: ({ loaded, total }) => {
               onProgress({ percent: Math.ceil((loaded / total) * 100) });
             },
-          })
+          } as AxiosRequestConfig)
           .then((res) => {
             console.log(res);
             // const infoField = componentSetting.upload.apiSetting.infoField;
