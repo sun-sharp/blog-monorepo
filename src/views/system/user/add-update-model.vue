@@ -5,15 +5,7 @@
         <n-input v-model:value="modelForm.name" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <app-upload-image
-          v-model:value="modelForm.avatar"
-          :disabled="!!modelId"
-          :show-remove-button="!modelId"
-          :width="100"
-          :height="100"
-          :max-number="1"
-          source="user_avatar"
-        />
+        <app-upload-image v-model:value="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
       </n-form-item>
       <n-form-item label="用户名" path="username">
         <n-input v-model:value="modelForm.username" :disabled="!!modelId" placeholder="请输入用户名" />

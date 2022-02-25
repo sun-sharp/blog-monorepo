@@ -81,13 +81,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const isBuild = command === 'build';
   // 输出文件夹
   const OUTPUT_DIR = 'dist-manage';
-  // 在生产环境中输入的配置文件的名称
-  const CONFIG_FILE_NAME = 'app.config.js';
-  // 处理接口参数默认路径
-  const getAppConfigSrc = () => {
-    const path = VITE_PUBLIC_PATH.endsWith('/') ? VITE_PUBLIC_PATH : `${VITE_PUBLIC_PATH}/`;
-    return `${path || '/'}${CONFIG_FILE_NAME}?v=${pkg.version}-${new Date().getTime()}`;
-  };
 
   return {
     base: VITE_PUBLIC_PATH,
@@ -111,17 +104,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           injectData: {
             title: VITE_APP_TITLE,
           },
-          // 嵌入生成的app.config.js文件
-          tags: isBuild
-            ? [
-                {
-                  tag: 'script',
-                  attrs: {
-                    src: getAppConfigSrc(),
-                  },
-                },
-              ]
-            : [],
         },
       }),
       // vite-plugin-mock

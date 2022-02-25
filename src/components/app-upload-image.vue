@@ -1,54 +1,28 @@
 <template>
-  <div class="w-full">
-    <div class="upload">
-      <div class="upload-card">
-        <!--图片列表-->
-        <div v-for="(item, index) in imgList" :key="`img_${index}`" class="upload-card-item" :style="getCSSProperties">
-          <div class="upload-card-item-info">
-            <div class="img-box">
-              <img :src="item" />
-            </div>
-            <div class="img-box-actions">
-              <n-icon size="18" class="action-icon mx-2" @click="preview(item)">
-                <EyeOutlined />
-              </n-icon>
-              <n-icon v-if="showRemoveButton" size="18" class="action-icon mx-2" @click="remove(index)">
-                <DeleteOutlined />
-              </n-icon>
-            </div>
-          </div>
-        </div>
+  <!-- <n-upload
+    v-bind="$props"
+    :action="uploadAction"
+    :headers="uploadHeaders"
+    name="image"
+    :data="uploadData"
+    :file-list-style="{ display: 'none' }"
+    @before-upload="beforeUpload"
+    @finish="finish"
+  >
+    上传图片
+  </n-upload> -->
 
-        <!--上传图片-->
-        <div v-if="imgList.length < maxNumber" class="upload-card-item upload-card-item-select-picture" :style="getCSSProperties">
-          <n-upload
-            v-bind="$props"
-            :action="uploadAction"
-            :headers="uploadHeaders"
-            name="image"
-            :data="uploadData"
-            :file-list-style="{ display: 'none' }"
-            @before-upload="beforeUpload"
-            @finish="finish"
-          >
-            <div class="flex justify-center flex-col">
-              <n-icon size="18" class="m-auto">
-                <PlusOutlined />
-              </n-icon>
-              <span class="upload-title">上传图片</span>
-            </div>
-          </n-upload>
-        </div>
-      </div>
-    </div>
-
-    <!--上传图片-->
-    <n-space>
-      <n-alert v-if="helpText" title="提示" type="info" class="flex w-full">
-        {{ helpText }}
-      </n-alert>
-    </n-space>
-  </div>
+  <n-upload
+    list-type="image-card"
+    :headers="uploadHeaders"
+    :show-remove-button="showRemoveButton"
+    :data="uploadData"
+    :disabled="disabled"
+    :max="max"
+    :custom-request="customRequest"
+  >
+    上传图片
+  </n-upload>
 
   <!--预览图片-->
   <n-modal v-model:show="showModal" preset="card" title="预览" :bordered="false" :style="{ width: '520px' }">
@@ -57,49 +31,51 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, toRefs, reactive, computed } from 'vue';
-  import { EyeOutlined, DeleteOutlined, PlusOutlined } from '@/utils//icons';
-  import { useMessage, useDialog } from 'naive-ui';
-  import { ResultEnum } from '@/enums';
-  import componentSetting from '@/settings/componentSetting';
-  import { getUploadAction, getImgUrl, isString } from '@/utils';
-  import type { PropType } from 'vue';
-  import { NUpload } from 'naive-ui';
+  import { imageApi } from '@/api';
   import { useUserStoreWidthOut } from '@/store/modules/user';
+  import { UploadCustomRequestOptions, useMessage } from 'naive-ui';
+  import { defineComponent, toRefs, reactive, computed } from 'vue';
 
   export default defineComponent({
     name: 'AppUploadImage',
-    components: { EyeOutlined, DeleteOutlined, PlusOutlined },
     props: {
-      ...NUpload.props,
-      accept: {
-        type: String,
-        default: '.jpg,.png,.jpeg,.svg,.gif',
+      headers: {
+        type: Object,
+        default: () => ({}),
       },
-      helpText: {
-        type: String as PropType<string>,
-        default: '',
+      disabled: {
+        type: Boolean,
+        default: false,
       },
-      maxSize: {
-        type: Number as PropType<number>,
-        default: 2,
-      },
-      maxNumber: {
-        type: Number as PropType<number>,
+      // ...NUpload.props,
+      // accept: {
+      //   type: String,
+      //   default: '.jpg,.png,.jpeg,.svg,.gif',
+      // },
+      // helpText: {
+      //   type: String as PropType<string>,
+      //   default: '',
+      // },
+      // maxSize: {
+      //   type: Number as PropType<number>,
+      //   default: 2,
+      // },
+      max: {
+        type: Number,
         default: Infinity,
       },
       value: {
-        type: Array as PropType<string[]>,
+        type: Array,
         default: () => [],
       },
-      width: {
-        type: Number as PropType<number>,
-        default: 104,
-      },
-      height: {
-        type: Number as PropType<number>,
-        default: 104, //建议不小于这个尺寸 太小页面可能显示有异常
-      },
+      // width: {
+      //   type: Number as PropType<number>,
+      //   default: 104,
+      // },
+      // height: {
+      //   type: Number as PropType<number>,
+      //   default: 104, //建议不小于这个尺寸 太小页面可能显示有异常
+      // },
       showRemoveButton: {
         type: Boolean,
         default: true,
@@ -111,15 +87,16 @@
     },
     emits: ['uploadChange', 'delete'],
     setup(props, { emit }) {
-      const getCSSProperties = computed(() => {
-        return {
-          width: `${props.width}px`,
-          height: `${props.height}px`,
-        };
-      });
+      console.log(props);
+      // const getCSSProperties = computed(() => {
+      //   return {
+      //     width: `${props.width}px`,
+      //     height: `${props.height}px`,
+      //   };
+      // });
 
       const message = useMessage();
-      const dialog = useDialog();
+      // const dialog = useDialog();
 
       const state = reactive({
         showModal: false,
@@ -129,12 +106,12 @@
       });
 
       // 上传文件
-      const uploadAction = getUploadAction();
       const userStore = useUserStoreWidthOut();
       const token = userStore.getToken;
       const uploadHeaders = computed(() => {
         return {
           ...props.headers,
+          'Content-Type': 'application/x-www-form-urlencoded',
           source: props.source,
           timestamp: new Date().getTime(),
           Authorization: token,
@@ -144,97 +121,127 @@
         return {};
       });
 
-      //赋值默认图片显示
-      if (props.value.length) {
-        state.imgList = props.value.map((item) => {
-          return getImgUrl(item);
-        });
-      }
+      // //赋值默认图片显示
+      // if (props.value.length) {
+      //   state.imgList = props.value.map((item) => {
+      //     return getImgUrl(item);
+      //   });
+      // }
 
-      //预览
-      function preview(url: string) {
-        state.showModal = true;
-        state.previewUrl = url;
-      }
+      // //预览
+      // function preview(url: string) {
+      //   state.showModal = true;
+      //   state.previewUrl = url;
+      // }
 
-      //删除
-      function remove(index: number) {
-        dialog.info({
-          title: '提示',
-          content: '你确定要删除吗？',
-          positiveText: '确定',
-          negativeText: '取消',
-          onPositiveClick: () => {
-            state.imgList.splice(index, 1);
-            state.originalImgList.splice(index, 1);
-            emit('uploadChange', state.originalImgList);
-            emit('delete', state.originalImgList);
-          },
-          onNegativeClick: () => {},
-        });
-      }
+      // //删除
+      // function remove(index: number) {
+      //   dialog.info({
+      //     title: '提示',
+      //     content: '你确定要删除吗？',
+      //     positiveText: '确定',
+      //     negativeText: '取消',
+      //     onPositiveClick: () => {
+      //       state.imgList.splice(index, 1);
+      //       state.originalImgList.splice(index, 1);
+      //       emit('uploadChange', state.originalImgList);
+      //       emit('delete', state.originalImgList);
+      //     },
+      //     onNegativeClick: () => {},
+      //   });
+      // }
 
-      function checkFileType(fileType: string) {
-        return componentSetting.upload.fileType.includes(fileType);
-      }
+      // function checkFileType(fileType: string) {
+      //   return componentSetting.upload.fileType.includes(fileType);
+      // }
 
-      //上传之前
-      function beforeUpload({ file }) {
-        const fileInfo = file.file;
-        const { maxSize, accept } = props;
-        const acceptRef = (isString(accept) && accept.split(',')) || [];
+      // //上传之前
+      // function beforeUpload({ file }) {
+      //   const fileInfo = file.file;
+      //   const { maxSize, accept } = props;
+      //   const acceptRef = (isString(accept) && accept.split(',')) || [];
 
-        // 设置最大值，则判断
-        if (maxSize && fileInfo.size / 1024 / 1024 >= maxSize) {
-          message.error(`上传文件最大值不能超过${maxSize}M`);
-          return false;
-        }
+      //   // 设置最大值，则判断
+      //   if (maxSize && fileInfo.size / 1024 / 1024 >= maxSize) {
+      //     message.error(`上传文件最大值不能超过${maxSize}M`);
+      //     return false;
+      //   }
 
-        // 设置类型,则判断
-        const fileType = componentSetting.upload.fileType;
-        if (acceptRef.length > 0 && !checkFileType(fileInfo.type)) {
-          message.error(`只能上传文件类型为${fileType.join(',')}`);
-          return false;
-        }
+      //   // 设置类型,则判断
+      //   const fileType = componentSetting.upload.fileType;
+      //   if (acceptRef.length > 0 && !checkFileType(fileInfo.type)) {
+      //     message.error(`只能上传文件类型为${fileType.join(',')}`);
+      //     return false;
+      //   }
 
-        return true;
-      }
+      //   return true;
+      // }
 
-      //上传结束
-      function finish({ event: Event }) {
-        console.log(Event);
-        // const res = eval('(' + Event.target.response + ')');
-        const res = JSON.parse(Event.target.response);
-        const infoField = componentSetting.upload.apiSetting.infoField;
-        const imgField = componentSetting.upload.apiSetting.imgField;
-        const { code } = res;
-        const message = res.msg || res.message || '上传失败';
-        const result = res[infoField];
-        //成功
-        if (code === ResultEnum.SUCCESS) {
-          let imgUrl: string = getImgUrl(result[imgField]);
-          state.imgList.push(imgUrl);
-          state.originalImgList.push(result[imgField]);
-          emit('uploadChange', state.originalImgList);
-        } else message.error(message);
-      }
+      // //上传结束
+      // function finish({ event: Event }) {
+      //   console.log(Event, 'event');
+      //   const res = JSON.parse(Event.target.response);
+      //   const infoField = componentSetting.upload.apiSetting.infoField;
+      //   const imgField = componentSetting.upload.apiSetting.imgField;
+      //   const { code } = res;
+      //   const message = res.msg || res.message || '上传失败';
+      //   const result = res[infoField];
+      //   //成功
+      //   if (code === ResultEnum.SUCCESS) {
+      //     let imgUrl: string = getImgUrl(result[imgField]);
+      //     state.imgList.push(imgUrl);
+      //     state.originalImgList.push(result[imgField]);
+      //     emit('uploadChange', state.originalImgList);
+      //   } else message.error(message);
+      // }
+
+      const customRequest = ({ file, headers, data, withCredentials, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
+        console.log(file);
+        imageApi
+          .uploadImage({
+            data: {
+              image: file.file as File,
+              ...data,
+            },
+            headers,
+            withCredentials,
+            onUploadProgress: ({ loaded, total }) => {
+              onProgress({ percent: Math.ceil((loaded / total) * 100) });
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            // const infoField = componentSetting.upload.apiSetting.infoField;
+            // const imgField = componentSetting.upload.apiSetting.imgField;
+            // const { code } = res;
+            // const message = res.msg || res.message || '上传失败';
+            // const result = res[infoField];
+            // message.success(e.data);
+            onFinish();
+          })
+          .catch((error) => {
+            message.success(error.message);
+            onError();
+          });
+      };
 
       return {
         ...toRefs(state),
-        uploadAction,
         uploadHeaders,
         uploadData,
-        finish,
-        preview,
-        remove,
-        // eslint-disable-next-line vue/no-dupe-keys
-        maxNumber: props.maxNumber,
-        // eslint-disable-next-line vue/no-dupe-keys
-        helpText: props.helpText,
-        // eslint-disable-next-line vue/no-dupe-keys
-        showRemoveButton: props.showRemoveButton,
-        beforeUpload,
-        getCSSProperties,
+        // uploadAction,
+        // finish,
+        // preview,
+        // remove,
+        // // eslint-disable-next-line vue/no-dupe-keys
+        // maxNumber: props.maxNumber,
+        // // eslint-disable-next-line vue/no-dupe-keys
+        // helpText: props.helpText,
+        // // eslint-disable-next-line vue/no-dupe-keys
+        // showRemoveButton: props.showRemoveButton,
+        // beforeUpload,
+        // getCSSProperties,
+        customRequest,
       };
     },
   });
