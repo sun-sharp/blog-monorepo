@@ -1,21 +1,18 @@
 import { AxiosFile } from '@/api/axios';
 
 const basic = '/image';
-// import qs from 'qs';
 
-export const uploadImage = ({ data, headers, onUploadProgress, withCredentials }): Promise<any> => {
+/**
+ * @description: 图片上传
+ * @param {any} { data, headers, onUploadProgress, withCredentials }
+ * @return {*}
+ */
+export const uploadImage = ({ data, headers, onUploadProgress, withCredentials }: any): Promise<any> => {
   return AxiosFile.request({
     url: `${basic}/upload`,
     method: 'POST',
     data,
-    headers: {
-      ...headers,
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-    // transformRequest: function (data) {
-    //   console.log(data, qs.stringify(data));
-    //   return JSON.stringify(data);
-    // },
+    headers,
     onUploadProgress,
     withCredentials,
   });

@@ -94,26 +94,6 @@ export class VAxios {
     responseInterceptorsCatch && isFunction(responseInterceptorsCatch) && this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 
-  // /**
-  //  * @description:  文件上传
-  //  */
-  // uploadFiles(config: AxiosRequestConfig, params: File[]) {
-  //   const formData = new FormData();
-
-  //   Object.keys(params).forEach((key) => {
-  //     formData.append(key, params[key as any]);
-  //   });
-
-  //   return this.request({
-  //     ...config,
-  //     method: 'POST',
-  //     data: formData,
-  //     headers: {
-  //       'Content-type': ContentTypeEnum.FORM_DATA,
-  //     },
-  //   });
-  // }
-
   /**
    * @description:   请求方法
    */

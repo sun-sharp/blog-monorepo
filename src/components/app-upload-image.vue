@@ -114,7 +114,6 @@
       const uploadHeaders = computed(() => {
         return {
           ...props.headers,
-          'Content-Type': 'application/x-www-form-urlencoded',
           source: props.source,
           timestamp: new Date().getTime(),
           Authorization: token,
@@ -220,8 +219,19 @@
         //       onProgress({ percent: Math.ceil((loaded / total) * 100) });
         //     },
         //   })
+        // axios
+        //   .post(uploadAction as string, formData, {
+        //     withCredentials,
+        //     headers,
+        //     onUploadProgress: ({ loaded, total }) => {
+        //       onProgress({ percent: Math.ceil((loaded / total) * 100) });
+        //     },
+        //   } as AxiosRequestConfig)
         axios
-          .post(uploadAction as string, formData, {
+          .request({
+            url: uploadAction as string,
+            method: 'POST',
+            data: formData,
             withCredentials,
             headers,
             onUploadProgress: ({ loaded, total }) => {
