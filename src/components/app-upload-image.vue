@@ -88,7 +88,7 @@
       },
     },
     emits: ['uploadChange', 'delete'],
-    setup(props, { emit }) {
+    setup(props) {
       console.log(props, 'props');
       // const getCSSProperties = computed(() => {
       //   return {

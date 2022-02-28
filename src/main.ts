@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { setupRouter } from './router';
-import { setupStore } from '@/store';
+import { setupStore } from './store';
 import MakeitCaptcha from 'makeit-captcha';
 import 'makeit-captcha/dist/captcha.min.css';
 import {
