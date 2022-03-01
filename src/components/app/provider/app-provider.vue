@@ -17,34 +17,33 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { zhCN, dateZhCN } from 'naive-ui';
+  import { zhCN, dateZhCN, darkTheme } from 'naive-ui';
   import AppProviderLoading from '@/components/app/provider/app-provider-loading.vue';
   import AppProviderDialog from '@/components/app/provider/app-provider-dialog.vue';
   import AppProviderMessage from '@/components/app/provider/app-provider-message.vue';
-  import { store } from '@/store';
+  import { useDesignSettingStore } from '@/store';
+  import { lighten } from '@/utils';
 
-  // const designStore = useDesignSettingStore();
+  const designStore = useDesignSettingStore();
 
   /**
    * @type import('naive-ui').GlobalThemeOverrides 设置主题样式
    */
   const getThemeOverrides = computed(() => {
-    // const appTheme = designStore.appTheme;
-    // const lightenStr = lighten(designStore.appTheme, 6);
+    const appTheme = designStore.appTheme;
+    const lightenStr = lighten(designStore.appTheme, 6);
     return {
       common: {
-        // primaryColor: appTheme,
-        // primaryColorHover: lightenStr,
-        // primaryColorPressed: lightenStr,
+        primaryColor: appTheme,
+        primaryColorHover: lightenStr,
+        primaryColorPressed: lightenStr,
       },
       LoadingBar: {
-        // colorLoading: appTheme,
+        colorLoading: appTheme,
       },
     };
   });
 
   // 获取主题样式
-  // const getDarkTheme = computed(() => (designStore.darkTheme ? darkTheme : undefined));
-  const getDarkTheme = undefined;
-  console.log(store);
+  const getDarkTheme = computed(() => (designStore.darkTheme ? darkTheme : undefined));
 </script>

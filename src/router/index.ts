@@ -1,16 +1,7 @@
-import { getAppEnvConfig } from '@/utils';
 import type { App } from 'vue';
-import {
-  createRouter,
-  createWebHistory,
-  // createWebHashHistory,
-  RouteRecordRaw,
-} from 'vue-router';
-
-export const PageRoute: RouteRecordRaw = {
-  path: '/',
-  redirect: '/login',
-};
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { getAppEnvConfig } from '@/utils';
+import { PageRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {
@@ -26,7 +17,6 @@ export const LoginRoute: RouteRecordRaw = {
 export const constantRouter: any[] = [PageRoute, LoginRoute];
 
 const router = createRouter({
-  // history: createWebHistory(''),
   history: createWebHistory(getAppEnvConfig().baseUrl),
   routes: constantRouter,
   strict: true,

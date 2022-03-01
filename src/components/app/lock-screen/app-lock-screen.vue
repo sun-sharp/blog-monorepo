@@ -72,13 +72,11 @@
 
 <script lang="ts" setup>
   import { reactive } from 'vue';
-  import { ResultEnum } from '@/enums';
-  import { LockOutlined, LoadingOutlined, UserOutlined, ApiOutlined, ArrowRightOutlined, WifiOutlined } from '@/utils/icons';
-
   import { useRouter, useRoute } from 'vue-router';
+  import { ResultEnum } from '@/constant';
+  import { LockOutlined, LoadingOutlined, UserOutlined, ApiOutlined, ArrowRightOutlined, WifiOutlined } from '@/utils';
   import { useBattery, useOnline, useTime } from '@/hooks';
-  import { useLockScreenStore } from '@/store/modules/lockScreen';
-  import { useUserStore } from '@/store/modules/user';
+  import { useLockScreenStore, useUserStore } from '@/store';
 
   const useLockScreen = useLockScreenStore();
   const userStore = useUserStore();
