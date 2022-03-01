@@ -71,6 +71,10 @@ export const useUserStore = defineStore({
       //   return Promise.reject(e);
       // }
     },
+    async GetInfo() {
+      // userApi.getUserInfo();
+      return {};
+    },
 
     // 获取用户信息
     // GetInfo() {

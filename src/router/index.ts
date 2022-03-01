@@ -2,6 +2,7 @@ import type { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getAppEnvConfig } from '@/utils';
 import { PageRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
+import { createRouterGuards } from './router-guards';
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {
@@ -25,6 +26,8 @@ const router = createRouter({
 
 export function setupRouter(app: App) {
   app.use(router);
+  // 创建路由守卫
+  createRouterGuards(router);
 }
 
 export default router;

@@ -4,10 +4,11 @@ import { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-s
 import { useUserStore, useUserStoreWidthOut } from './modules/user';
 import { useProjectSettingStore, useProjectSettingStoreWithOut } from '@/store/modules/project-setting';
 import { useDesignSettingStore, useDesignSettingWithOut } from '@/store/modules/design-setting';
+import { useRouteStore, useRouteStoreWidthOut } from './modules/route';
 
-export { useLockScreenStore, useUserStore, useProjectSettingStore, useDesignSettingStore };
+export { useLockScreenStore, useUserStore, useProjectSettingStore, useDesignSettingStore, useRouteStore };
 
-export { useLockScreenStoreWidthOut, useUserStoreWidthOut, useProjectSettingStoreWithOut, useDesignSettingWithOut };
+export { useLockScreenStoreWidthOut, useUserStoreWidthOut, useProjectSettingStoreWithOut, useDesignSettingWithOut, useRouteStoreWidthOut };
 
 const pinia = createPinia();
 
