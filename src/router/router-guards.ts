@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN, PageEnum } from '@/constant';
 import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
-import { storage } from '@/utils';
+import { getAppEnvConfig, storage } from '@/utils';
 import { Router } from 'vue-router';
 
 const LOGIN_PATH = PageEnum.LOGIN_PATH;
@@ -10,6 +10,7 @@ const whitePathList = [LOGIN_PATH]; // 白名单中的重定向
 export function createRouterGuards(router: Router) {
   const userStore = useUserStoreWidthOut();
   const routeStore = useRouteStoreWidthOut();
+  const appEnvConfig = getAppEnvConfig();
   router.beforeEach(async (to, from, next) => {
     const Loading = window['$loading'] || null;
     Loading && Loading.start();
@@ -24,23 +25,23 @@ export function createRouterGuards(router: Router) {
       return;
     }
 
-    const token = storage.get(ACCESS_TOKEN);
+    // const token = storage.get(ACCESS_TOKEN);
 
-    if (!token) {
-      // 重定向登录页面
-      const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
-        path: LOGIN_PATH,
-        replace: true,
-      };
-      if (to.path) {
-        redirectData.query = {
-          ...redirectData.query,
-          redirect: to.path,
-        };
-      }
-      next(redirectData);
-      return;
-    }
+    // if (!token) {
+    //   // 重定向登录页面
+    //   const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
+    //     path: LOGIN_PATH,
+    //     replace: true,
+    //   };
+    //   if (to.path) {
+    //     redirectData.query = {
+    //       ...redirectData.query,
+    //       redirect: to.path,
+    //     };
+    //   }
+    //   next(redirectData);
+    //   return;
+    // }
 
     if (routeStore.getIsDynamicAddedRoute) {
       next();
@@ -56,7 +57,7 @@ export function createRouterGuards(router: Router) {
   });
 
   router.afterEach((to) => {
-    document.title = (to?.meta?.title as string) || document.title;
+    document.title = `${appEnvConfig.title}-${(to?.meta?.title as string) || document.title}`;
 
     const Loading = window['$loading'] || null;
     Loading && Loading.finish();
