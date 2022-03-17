@@ -2,6 +2,12 @@ import { useUserStoreWidthOut } from '@/store';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, RequestOptions, Result } from '/#/axios';
 import { cloneDeep } from 'lodash-es';
+import { formatRequestDate, getAppEnvConfig, isString, joinTimestamp, setObjToUrlParams, storage } from '@/utils';
+import { PageEnum, RequestEnum, ResultEnum } from '@/constant';
+import router from '@/router';
+
+const appEnvConfig = getAppEnvConfig();
+const urlPrefix = appEnvConfig.urlPrefix || '';
 
 /**
  * @description:  axios自定义模块
@@ -54,7 +60,7 @@ export class CustomAxios {
    * @description: 拦截器配置
    */
   private setupInterceptors() {
-    // 请求拦截器错误捕获
+    // 请求拦截器捕获
     this.axiosInstance.interceptors.request.use(this.requestInterceptors, this.requestInterceptorsCatch);
 
     // 响应结果拦截器处理
@@ -63,7 +69,6 @@ export class CustomAxios {
 
   // 请求拦截器配置
   private requestInterceptors(config: AxiosRequestConfig) {
-    debugger;
     // 请求之前处理config
     const newConfig: any = Object.assign({}, config);
     const userStore = useUserStoreWidthOut();
@@ -78,109 +83,211 @@ export class CustomAxios {
 
   // 请求拦截器错误配置
   private requestInterceptorsCatch(error: any) {
-    debugger;
     return error;
   }
 
   // 响应结果拦截器配置
   private responseInterceptors(res: AxiosResponse<any>) {
-    debugger;
-    console.log(res);
     return res;
   }
 
   // 响应结果拦截器错误配置
   private responseInterceptorsCatch(error: any) {
-    debugger;
     return error;
   }
 
   // 请求之前处理config
-  beforeRequestHook(config, options) {
-    // const { capitalApiUrl, blogApiUrl, mockApiUrl, fileApiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
+  private beforeRequestHook(config: AxiosRequestConfig, options: RequestOptions) {
+    const { capitalApiUrl, blogApiUrl, mockApiUrl, fileApiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
 
-    // // 添加接口前缀
-    // if (joinPrefix) {
-    //   config.url = `${urlPrefix}${config.url}`;
-    // }
+    // 添加接口前缀
+    if (joinPrefix) {
+      config.url = `${urlPrefix}${config.url}`;
+    }
 
-    // // 添加capital API接口前缀
-    // if (capitalApiUrl && isString(capitalApiUrl)) {
-    //   config.url = `${capitalApiUrl}${config.url}`;
-    // }
+    // 添加capital API接口前缀
+    if (capitalApiUrl && isString(capitalApiUrl)) {
+      config.url = `${capitalApiUrl}${config.url}`;
+    }
 
-    // // 添加blog API接口前缀
-    // if (blogApiUrl && isString(blogApiUrl)) {
-    //   config.url = `${blogApiUrl}${config.url}`;
-    // }
+    // 添加blog API接口前缀
+    if (blogApiUrl && isString(blogApiUrl)) {
+      config.url = `${blogApiUrl}${config.url}`;
+    }
 
-    // // 添加mock API接口前缀
-    // if (mockApiUrl && isString(mockApiUrl)) {
-    //   config.url = `${mockApiUrl}${config.url}`;
-    // }
+    // 添加mock API接口前缀
+    if (mockApiUrl && isString(mockApiUrl)) {
+      config.url = `${mockApiUrl}${config.url}`;
+    }
 
-    // // 添加file API接口前缀
-    // if (fileApiUrl && isString(fileApiUrl)) {
-    //   config.url = `${fileApiUrl}${config.url}`;
-    // }
+    // 添加file API接口前缀
+    if (fileApiUrl && isString(fileApiUrl)) {
+      config.url = `${fileApiUrl}${config.url}`;
+    }
 
-    // const params = config.params || {};
-    // const data = config.data || false;
-    // if (config.method?.toUpperCase() === RequestEnum.GET) {
-    //   if (!isString(params)) {
-    //     // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
-    //     config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
-    //   } else {
-    //     // 兼容restful风格
-    //     config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
-    //     config.params = undefined;
-    //   }
-    // } else {
-    //   if (!isString(params)) {
-    //     formatDate && formatRequestDate(params);
-    //     if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length) {
-    //       config.data = data;
-    //       config.params = params;
-    //     } else {
-    //       config.data = params;
-    //       config.params = undefined;
-    //     }
-    //     if (joinParamsToUrl) {
-    //       config.url = setObjToUrlParams(config.url as string, Object.assign({}, config.params, config.data));
-    //     }
-    //   } else {
-    //     // 兼容restful风格
-    //     config.url = config.url + params;
-    //     config.params = undefined;
-    //   }
-    // }
+    const params = config.params || {};
+    const data = config.data || false;
+    if (config.method?.toUpperCase() === RequestEnum.GET) {
+      if (!isString(params)) {
+        // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
+        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
+      } else {
+        // 兼容restful风格
+        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
+        config.params = undefined;
+      }
+    } else {
+      if (!isString(params)) {
+        formatDate && formatRequestDate(params);
+        if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length) {
+          config.data = data;
+          config.params = params;
+        } else {
+          config.data = params;
+          config.params = undefined;
+        }
+        if (joinParamsToUrl) {
+          config.url = setObjToUrlParams(config.url as string, Object.assign({}, config.params, config.data));
+        }
+      } else {
+        // 兼容restful风格
+        config.url = config.url + params;
+        config.params = undefined;
+      }
+    }
     return config;
   }
 
+  /**
+   * @description: 处理请求数据
+   */
+  private transformRequestData(res: AxiosResponse<Result>, options: RequestOptions) {
+    // @ts-ignore
+    const { $message: Message, $dialog: Dialog } = window;
+    const {
+      isShowMessage = true, // 是否显示提示信息
+      isShowErrorMessage, // 是否显示错误信息
+      isShowSuccessMessage, // 是否显示成功信息
+      successMessageText, // 成功信息文本
+      errorMessageText, // 错误信息文本
+      isTransformResponse, // 不进行任何处理，直接返回 res.data
+      isReturnNativeResponse, // 返回原生响应头
+    } = options;
+
+    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+    if (isReturnNativeResponse) {
+      return res;
+    }
+    // 不进行任何处理，直接返回
+    // 用于页面代码可能需要直接获取code，data，message这些信息时开启
+    if (!isTransformResponse) {
+      return res.data;
+    }
+
+    const reject = Promise.reject;
+
+    const { data } = res;
+
+    if (!data) {
+      // return '[HTTP] Request has no return value';
+      return reject(data);
+    }
+    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    const { code, result, message } = data;
+    // 请求成功
+    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    // 是否显示提示信息
+    if (isShowMessage) {
+      if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
+        // 是否显示自定义信息提示
+        Message.success(successMessageText || message || '操作成功！');
+      } else if (!hasSuccess && (errorMessageText || isShowErrorMessage)) {
+        // 是否显示自定义信息提示
+        Message.error(message || errorMessageText || '操作失败！');
+      } else if (!hasSuccess && options.errorMessageMode === 'dialog') {
+        // errorMessageMode=‘dialog’的时候会显示dialog错误弹窗，而不是消息提示，用于一些比较重要的错误
+        Dialog.info({
+          title: '提示',
+          content: message,
+          positiveText: '确定',
+          onPositiveClick: () => {},
+        });
+      }
+    }
+
+    // 接口请求成功，直接返回结果
+    if (hasSuccess) {
+      return result;
+    }
+    // 接口请求错误，统一提示错误信息
+    const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
+    if (hasError) {
+      if (message) {
+        Message.error(data.message);
+        Promise.reject(new Error(message));
+      } else {
+        const msg = '操作失败,系统异常!';
+        Message.error(msg);
+        Promise.reject(new Error(msg));
+      }
+      return reject();
+    }
+
+    // 登录超时
+    const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
+    if (hasTimeout) {
+      const LoginName = PageEnum.LOGIN_NAME;
+      if (router.currentRoute.value.name == LoginName) return;
+      // 到登录页
+      const timeoutMsg = '登录超时,请重新登录!';
+      Dialog.warning({
+        title: '提示',
+        content: '登录身份已失效，请重新登录!',
+        positiveText: '确定',
+        negativeText: '取消',
+        onPositiveClick: () => {
+          storage.clear();
+          router.replace({
+            name: LoginName,
+            query: {
+              redirect: router.currentRoute.value.fullPath,
+            },
+          });
+        },
+        onNegativeClick: () => {},
+      });
+      return reject(new Error(timeoutMsg));
+    }
+
+    // 这里逻辑可以根据项目进行修改
+    if (!hasSuccess) {
+      return reject(new Error(message));
+    }
+
+    return data;
+  }
+
   request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    console.log(options);
-    const conf: AxiosRequestConfig = cloneDeep(config);
-    const { requestOptions } = this.options;
+    const self = this;
+    let conf: AxiosRequestConfig = cloneDeep(config);
+    const { requestOptions } = self.options;
     const opt: RequestOptions = Object.assign({}, requestOptions, options);
+    // 请求之前处理config
+    conf = self.beforeRequestHook(conf, opt);
     return new Promise((resolve, reject) => {
-      this.axiosInstance
+      self.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
-          debugger;
           // 请求是否被取消
           const isCancel = axios.isCancel(res);
           if (!isCancel) {
-            // const ret = transformRequestData(res, opt);
+            const ret = self.transformRequestData(res, opt);
             // ret !== undefined ? resolve(ret) : reject(new Error('request error!'));
-            return resolve(res as unknown as Promise<T>);
+            return resolve(ret);
           }
           reject(res as unknown as Promise<T>);
         })
         .catch((e: Error) => {
-          // if (requestCatch && isFunction(requestCatch)) {
-          //   reject(requestCatch(e));
-          //   return;
-          // }
           reject(e);
         });
     });
