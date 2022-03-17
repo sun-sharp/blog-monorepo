@@ -4,11 +4,14 @@ import { store } from '@/store';
 import {
   ACCESS_TOKEN,
   CURRENT_USER,
+  IS_LOCK_SCREEN,
+  ResultEnum,
   // IS_LOCK_SCREEN, ResultEnum
 } from '@/constant';
 
 const Storage = createStorage({ storage: localStorage });
-// import { capitalApi, userApi } from '@/api';
+import { capitalApi, userApi } from '@/api';
+import at from 'await-to-js';
 
 export interface IUserState {
   token: string;
@@ -52,9 +55,8 @@ export const useUserStore = defineStore({
       this.info = info;
     },
     // 登录
-    async login(userInfo) {
+    async login(userInfo: any) {
       console.log(userInfo);
-
       // try {
       //   const response = await capitalApi.login(userInfo);
       //   const { result, code } = response;
@@ -72,8 +74,9 @@ export const useUserStore = defineStore({
       // }
     },
     async GetInfo() {
-      // userApi.getUserInfo();
-      return {};
+      const [err, resp] = await at(userApi.getUserInfo());
+      if (err) return {};
+      return resp;
     },
 
     // 获取用户信息

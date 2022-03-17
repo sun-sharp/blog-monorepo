@@ -5,16 +5,15 @@ const Random = Mock.Random;
 
 const token = Random.string('upper', 32, 32);
 
-const basic = '/mock-api/user';
+const basic = '/capital-api/user';
 
 const adminInfo = {
-  userId: '1',
-  username: 'admin',
-  realName: 'Admin',
+  userId: '617551d8e809524e0c005bf2',
+  roleCode: 'manager',
+  loginDate: '2022-01-21 22:51:49',
+  username: 'yrr',
   avatar: Random.image(),
-  desc: 'manager',
-  password: Random.string('upper', 4, 16),
-  token,
+  name: 'yrr',
 };
 
 export default [

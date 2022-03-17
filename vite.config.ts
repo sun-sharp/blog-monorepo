@@ -77,8 +77,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
   const env = loadEnv(mode, root);
   const viteEnv = wrapperEnv(env);
-  const { VITE_APP_TITLE, VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY } = viteEnv;
+  const { VITE_APP_TITLE, VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY, VITE_USE_MOCK } = viteEnv;
   const isBuild = command === 'build';
+  const useMock = VITE_USE_MOCK;
   // 输出文件夹
   const OUTPUT_DIR = 'dist-manage';
 
@@ -112,8 +113,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         ignore: /^\_/,
         // ↓解析根目录下的mock文件夹
         mockPath: 'mock', //mock文件地址
-        localEnabled: !isBuild, // 开发打包开关
-        prodEnabled: isBuild, // 生产环境打包开关
+        localEnabled: useMock, // 开发打包开关
+        prodEnabled: useMock, // 生产环境打包开关
         // 这样可以控制关闭mock的时候不让mock打包到最终代码内
         injectCode: `
            import { setupProdMockServer } from '../mock/_createProductionServer';

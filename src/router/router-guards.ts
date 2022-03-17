@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN, PageEnum } from '@/constant';
 import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
 import { getAppEnvConfig, storage } from '@/utils';
-import { Router } from 'vue-router';
+import { Router, RouteRecordRaw } from 'vue-router';
 
 const LOGIN_PATH = PageEnum.LOGIN_PATH;
 
@@ -50,7 +50,13 @@ export function createRouterGuards(router: Router) {
 
     // 获取用户信息
     const userInfo = await userStore.GetInfo();
-    console.log(userInfo);
+    // 获取动态路由
+    const routes = await routeStore.generateRoutes(userInfo);
+
+    // 动态添加可访问路由表
+    routes.forEach((item) => {
+      router.addRoute(item as unknown as RouteRecordRaw);
+    });
 
     next();
     Loading && Loading.finish();

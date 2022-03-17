@@ -1,7 +1,7 @@
 import { Random } from 'mockjs';
 import { resultSuccess } from '../_util';
 
-const basic = '/mock-api/dashboard';
+const basic = '/blog-api/dashboard';
 
 const consoleInfo = {
   //访问量
