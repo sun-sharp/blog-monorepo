@@ -56,47 +56,30 @@ export const useUserStore = defineStore({
     },
     // 登录
     async login(userInfo: any) {
-      console.log(userInfo);
-      // try {
-      //   const response = await capitalApi.login(userInfo);
-      //   const { result, code } = response;
-      //   if (code === ResultEnum.SUCCESS) {
-      //     const ex = 7 * 24 * 60 * 60 * 1000;
-      //     storage.set(ACCESS_TOKEN, result.token, ex);
-      //     storage.set(CURRENT_USER, result, ex);
-      //     storage.set(IS_LOCK_SCREEN, false);
-      //     this.setToken(result.token);
-      //     this.setUserInfo(result);
-      //   }
-      //   return Promise.resolve(response);
-      // } catch (e) {
-      //   return Promise.reject(e);
-      // }
-    },
-    async GetInfo() {
-      const [err, resp] = await at(userApi.getUserInfo());
-      if (err) return {};
+      const [err, resp] = await at(capitalApi.login(userInfo));
+      if (err) return err;
+      const { result, code } = resp;
+      if (code === ResultEnum.SUCCESS) {
+        const ex = 7 * 24 * 60 * 60 * 1000;
+        storage.set(ACCESS_TOKEN, result.token, ex);
+        storage.set(CURRENT_USER, result, ex);
+        storage.set(IS_LOCK_SCREEN, false);
+        this.setToken(result.token);
+        this.setUserInfo(result);
+      }
       return resp;
     },
 
     // 获取用户信息
-    // GetInfo() {
-    //   const that = this;
-    //   return new Promise((resolve, reject) => {
-    //     userApi
-    //       .getUserInfo()
-    //       .then((res) => {
-    //         const result = res;
-    //         that.setUserInfo(result);
-    //         that.setAvatar(result.avatar);
-    //         resolve(res);
-    //       })
-    //       .catch((error) => {
-    //         // that.logout();
-    //         reject(error);
-    //       });
-    //   });
-    // },
+    async GetInfo() {
+      const that = this;
+      const [err, resp] = await at(userApi.getUserInfo());
+      console.log(err, resp, 'err, resp');
+      if (err) return false;
+      that.setUserInfo(resp);
+      that.setAvatar(resp.avatar);
+      return resp;
+    },
 
     // 登出
     async logout() {

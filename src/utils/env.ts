@@ -12,8 +12,8 @@ export const getAppEnvConfig = (): Readonly<GlobConfig> => {
     VITE_APP_SHORT_NAME,
     VITE_API_URL_PREFIX,
     VITE_FILE_API_URL,
-    // VITE_USE_MOCK,
     VITE_IMG_URL,
+    VITE_AUTHORIZATION_HEAD,
   } = ENV;
 
   // Take global configuration
@@ -27,6 +27,7 @@ export const getAppEnvConfig = (): Readonly<GlobConfig> => {
     shortName: VITE_APP_SHORT_NAME,
     urlPrefix: VITE_API_URL_PREFIX,
     imgUrl: VITE_IMG_URL,
+    tokenHead: VITE_AUTHORIZATION_HEAD,
   };
   return glob as Readonly<GlobConfig>;
 };

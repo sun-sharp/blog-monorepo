@@ -5,8 +5,8 @@ import { store } from '@/store';
 import { constantRouter } from '@/router';
 import { capitalApi } from '@/api';
 import at from 'await-to-js';
-// import { generatorDynamicRouter } from '@/utils/routers';
-// import { HomeRoute, PageRoute } from '@/router/base';
+import { routerOneScreen } from '@/utils';
+import { HomeRoute, PageRoute } from '@/router/base';
 
 export interface IRouteState {
   menus: RouteRecordRaw[];
@@ -56,22 +56,15 @@ export const useRouteStore = defineStore({
     },
     // 动态获取权限
     async generateRoutes(userInfo?: any) {
-      let accessedRouters = [];
       const { roleCode } = userInfo;
       // 动态获取菜单
       const [err, resp] = await at(capitalApi.adminMenus({ roleCode }));
-      if (!err) accessedRouters = [];
-      console.log(resp);
-      //   try {
-      //     accessedRouters = await generatorDynamicRouter(userInfo.roleCode);
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      //   PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
-      //   this.setRouters([PageRoute, ...accessedRouters.routeList]);
-      //   this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
-      //   return toRaw([PageRoute, ...accessedRouters.routeList]);
-      return toRaw(accessedRouters);
+      if (err) return toRaw([]);
+      const accessedRouters = await routerOneScreen(resp);
+      PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
+      this.setRouters([PageRoute, ...accessedRouters.routeList]);
+      this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
+      return toRaw([PageRoute, ...accessedRouters.routeList]);
     },
   },
 });

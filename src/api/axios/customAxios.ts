@@ -5,6 +5,7 @@ import { cloneDeep } from 'lodash-es';
 import { formatRequestDate, getAppEnvConfig, isString, joinTimestamp, setObjToUrlParams, storage } from '@/utils';
 import { PageEnum, RequestEnum, ResultEnum } from '@/constant';
 import router from '@/router';
+import { checkStatus } from './checkStatus';
 
 const appEnvConfig = getAppEnvConfig();
 const urlPrefix = appEnvConfig.urlPrefix || '';
@@ -70,15 +71,16 @@ export class CustomAxios {
   // 请求拦截器配置
   private requestInterceptors(config: AxiosRequestConfig) {
     // 请求之前处理config
-    const newConfig: any = Object.assign({}, config);
+    const { requestOption, ...conf }: any = Object.assign({}, config);
+    console.log(requestOption);
     const userStore = useUserStoreWidthOut();
     const token = userStore.getToken;
     if (token) {
-      const token_head = import.meta.env.VITE_AUTHORIZATION_HEAD;
+      const tokenHead = getAppEnvConfig().tokenHead;
       // jwt token
-      newConfig.headers.Authorization = token_head ? token_head + token : token;
+      conf.headers.Authorization = tokenHead ? tokenHead + token : token;
     }
-    return newConfig;
+    return conf;
   }
 
   // 请求拦截器错误配置
@@ -93,11 +95,41 @@ export class CustomAxios {
 
   // 响应结果拦截器错误配置
   private responseInterceptorsCatch(error: any) {
+    // @ts-ignore
+    // const { $message: Message, $dialog: Modal } = window;
+    // const { response, code, message } = error || {};
+    // // TODO 此处要根据后端接口返回格式修改
+    // const msg: string = response && response.data && response.data.message ? response.data.message : '';
+    // const err: string = error.toString();
+    // try {
+    //   if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
+    //     Message.error('接口请求超时,请刷新页面重试!');
+    //     return;
+    //   }
+    //   if (err && err.includes('Network Error')) {
+    //     Modal.info({
+    //       title: '网络异常',
+    //       content: '请检查您的网络连接是否正常!',
+    //       positiveText: '确定',
+    //       onPositiveClick: () => {},
+    //     });
+    //     return;
+    //   }
+    // } catch (error: any) {
+    //   throw new Error(error);
+    // }
+    // // 请求是否被取消
+    // const isCancel = axios.isCancel(error);
+    // if (!isCancel) {
+    //   checkStatus(error.response && error.response.status, msg, Message);
+    // } else {
+    //   console.warn(error, '请求被取消！');
+    // }
     return error;
   }
 
   // 请求之前处理config
-  private beforeRequestHook(config: AxiosRequestConfig, options: RequestOptions) {
+  /* private beforeRequestHook(config: AxiosRequestConfig, options: RequestOptions) {
     const { capitalApiUrl, blogApiUrl, mockApiUrl, fileApiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = options;
 
     // 添加接口前缀
@@ -156,12 +188,14 @@ export class CustomAxios {
       }
     }
     return config;
-  }
+  } */
 
   /**
    * @description: 处理请求数据
    */
-  private transformRequestData(res: AxiosResponse<Result>, options: RequestOptions) {
+  /* private transformRequestData(res: AxiosResponse<Result>, options: RequestOptions) {
+    console.log(res, options);
+
     // @ts-ignore
     const { $message: Message, $dialog: Dialog } = window;
     const {
@@ -173,7 +207,6 @@ export class CustomAxios {
       isTransformResponse, // 不进行任何处理，直接返回 res.data
       isReturnNativeResponse, // 返回原生响应头
     } = options;
-
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;
@@ -183,113 +216,87 @@ export class CustomAxios {
     if (!isTransformResponse) {
       return res.data;
     }
+    // const reject = Promise.reject;
+    // const { data } = res;
+    // if (!data) {
+    //   // return '[HTTP] Request has no return value';
+    //   return data;
+    // }
+    // //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    // const { code, result, message } = data;
+    // // 请求成功
+    // const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    // // 是否显示提示信息
+    // if (isShowMessage) {
+    //   if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
+    //     // 是否显示自定义信息提示
+    //     Message.success(successMessageText || message || '操作成功！');
+    //   } else if (!hasSuccess && (errorMessageText || isShowErrorMessage)) {
+    //     // 是否显示自定义信息提示
+    //     Message.error(message || errorMessageText || '操作失败！');
+    //   } else if (!hasSuccess && options.errorMessageMode === 'dialog') {
+    //     // errorMessageMode=‘dialog’的时候会显示dialog错误弹窗，而不是消息提示，用于一些比较重要的错误
+    //     Dialog.info({
+    //       title: '提示',
+    //       content: message,
+    //       positiveText: '确定',
+    //       onPositiveClick: () => {},
+    //     });
+    //   }
+    // }
+    // // 接口请求成功，直接返回结果
+    // if (hasSuccess) {
+    //   return result;
+    // }
+    // // 接口请求错误，统一提示错误信息
+    // const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
+    // if (hasError) {
+    //   if (message) {
+    //     Message.error(message);
+    //     Promise.reject(message);
+    //   } else {
+    //     const msg = '操作失败,系统异常!';
+    //     Message.error(msg);
+    //     Promise.reject(msg);
+    //   }
+    //   return reject();
+    // }
+    // // 登录超时
+    // const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
+    // if (hasTimeout) {
+    //   const LoginName = PageEnum.LOGIN_NAME;
+    //   if (router.currentRoute.value.name == LoginName) return;
+    //   // 到登录页
+    //   const timeoutMsg = '登录超时,请重新登录!';
+    //   Dialog.warning({
+    //     title: '提示',
+    //     content: '登录身份已失效，请重新登录!',
+    //     positiveText: '确定',
+    //     negativeText: '取消',
+    //     onPositiveClick: () => {
+    //       storage.clear();
+    //       router.replace({
+    //         name: LoginName,
+    //         query: {
+    //           redirect: router.currentRoute.value.fullPath,
+    //         },
+    //       });
+    //     },
+    //     onNegativeClick: () => {},
+    //   });
+    //   return reject(timeoutMsg);
+    // }
+    // // 这里逻辑可以根据项目进行修改
+    // if (!hasSuccess) {
+    //   return reject(message);
+    // }
+    // return data;
+  } */
 
-    const reject = Promise.reject;
-
-    const { data } = res;
-
-    if (!data) {
-      // return '[HTTP] Request has no return value';
-      return reject(data);
-    }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
-    // 请求成功
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
-    // 是否显示提示信息
-    if (isShowMessage) {
-      if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
-        // 是否显示自定义信息提示
-        Message.success(successMessageText || message || '操作成功！');
-      } else if (!hasSuccess && (errorMessageText || isShowErrorMessage)) {
-        // 是否显示自定义信息提示
-        Message.error(message || errorMessageText || '操作失败！');
-      } else if (!hasSuccess && options.errorMessageMode === 'dialog') {
-        // errorMessageMode=‘dialog’的时候会显示dialog错误弹窗，而不是消息提示，用于一些比较重要的错误
-        Dialog.info({
-          title: '提示',
-          content: message,
-          positiveText: '确定',
-          onPositiveClick: () => {},
-        });
-      }
-    }
-
-    // 接口请求成功，直接返回结果
-    if (hasSuccess) {
-      return result;
-    }
-    // 接口请求错误，统一提示错误信息
-    const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
-    if (hasError) {
-      if (message) {
-        Message.error(data.message);
-        Promise.reject(new Error(message));
-      } else {
-        const msg = '操作失败,系统异常!';
-        Message.error(msg);
-        Promise.reject(new Error(msg));
-      }
-      return reject();
-    }
-
-    // 登录超时
-    const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
-    if (hasTimeout) {
-      const LoginName = PageEnum.LOGIN_NAME;
-      if (router.currentRoute.value.name == LoginName) return;
-      // 到登录页
-      const timeoutMsg = '登录超时,请重新登录!';
-      Dialog.warning({
-        title: '提示',
-        content: '登录身份已失效，请重新登录!',
-        positiveText: '确定',
-        negativeText: '取消',
-        onPositiveClick: () => {
-          storage.clear();
-          router.replace({
-            name: LoginName,
-            query: {
-              redirect: router.currentRoute.value.fullPath,
-            },
-          });
-        },
-        onNegativeClick: () => {},
-      });
-      return reject(new Error(timeoutMsg));
-    }
-
-    // 这里逻辑可以根据项目进行修改
-    if (!hasSuccess) {
-      return reject(new Error(message));
-    }
-
-    return data;
-  }
-
-  request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    const self = this;
-    let conf: AxiosRequestConfig = cloneDeep(config);
-    const { requestOptions } = self.options;
-    const opt: RequestOptions = Object.assign({}, requestOptions, options);
-    // 请求之前处理config
-    conf = self.beforeRequestHook(conf, opt);
-    return new Promise((resolve, reject) => {
-      self.axiosInstance
-        .request<any, AxiosResponse<Result>>(conf)
-        .then((res: AxiosResponse<Result>) => {
-          // 请求是否被取消
-          const isCancel = axios.isCancel(res);
-          if (!isCancel) {
-            const ret = self.transformRequestData(res, opt);
-            // ret !== undefined ? resolve(ret) : reject(new Error('request error!'));
-            return resolve(ret);
-          }
-          reject(res as unknown as Promise<T>);
-        })
-        .catch((e: Error) => {
-          reject(e);
-        });
-    });
+  /**
+   * @description: axios的request请求
+   */
+  request(config: AxiosRequestConfig) {
+    return this.axiosInstance.request(config);
   }
 }

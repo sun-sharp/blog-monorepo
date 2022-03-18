@@ -2,10 +2,10 @@
   <router-view>
     <template #default="{ Component, route }">
       <transition :name="getTransitionName" mode="out-in" appear>
-        <!-- <keep-alive v-if="keepAliveComponents" :include="keepAliveComponents">
+        <keep-alive v-if="keepAliveComponents" :include="keepAliveComponents">
           <component :is="Component" :key="route.fullPath" />
-        </keep-alive> -->
-        <component :is="Component" :key="route.fullPath" />
+        </keep-alive>
+        <component :is="Component" v-else :key="route.fullPath" />
       </transition>
     </template>
   </router-view>
@@ -13,7 +13,7 @@
 
 <script>
   import { defineComponent, computed, unref } from 'vue';
-  // import { useAsyncRouteStore } from '@/store/modules/asyncRoute';
+  import { useRouteStore } from '@/store';
   import { useProjectSetting } from '@/hooks';
 
   export default defineComponent({
@@ -31,16 +31,16 @@
     },
     setup() {
       const { getIsPageAnimate, getPageAnimateType } = useProjectSetting();
-      // const asyncRouteStore = useAsyncRouteStore();
-      // // 需要缓存的路由组件
-      // const keepAliveComponents = computed(() => asyncRouteStore.keepAliveComponents);
+      const routeStore = useRouteStore();
+      // 需要缓存的路由组件
+      const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
 
       const getTransitionName = computed(() => {
         return unref(getIsPageAnimate) ? unref(getPageAnimateType) : '';
       });
 
       return {
-        // keepAliveComponents,
+        keepAliveComponents,
         getTransitionName,
       };
     },

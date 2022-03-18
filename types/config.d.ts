@@ -8,6 +8,7 @@ export interface GlobConfig {
   shortName: string;
   urlPrefix?: string;
   imgUrl?: string;
+  tokenHead?: string;
 }
 
 export interface ProjectSettingState {

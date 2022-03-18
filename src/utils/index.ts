@@ -4,3 +4,4 @@ export * from './icons';
 export * from './color';
 export * from './is';
 export * from './axios';
+export * from './routers';

@@ -51,14 +51,6 @@ declare global {
   }
 
   declare interface ViteEnv {
-    // 端口
-    VITE_PORT: number;
-    // 是否使用mock
-    VITE_USE_MOCK: boolean;
-    // console是否使用
-    VITE_DROP_CONSOLE: boolean;
-    // 跨越代理
-    VITE_PROXY: [string, string][];
     // 网站根目录
     VITE_PUBLIC_PATH: string;
     // 标题
@@ -77,6 +69,17 @@ declare global {
     VITE_APP_SHORT_NAME: string;
     //图片前缀地址
     VITE_IMG_URL?: string;
+    // token前缀
+    VITE_AUTHORIZATION_HEAD?: string;
+    /* vite运行部署配置 */
+    // 端口
+    VITE_PORT: number;
+    // 是否使用mock
+    VITE_USE_MOCK: boolean;
+    // console是否使用
+    VITE_DROP_CONSOLE: boolean;
+    // 跨越代理
+    VITE_PROXY: [string, string][];
     //生产环境打包
     VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
     VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;

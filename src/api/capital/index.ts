@@ -7,16 +7,14 @@ const basic = '';
  * @param params
  */
 export function login(params) {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/login`,
-      method: 'POST',
-      params,
-    },
-    {
-      isTransformResponse: false,
-    }
-  );
+  return AxiosCapital.request({
+    url: `${basic}/login`,
+    method: 'POST',
+    params,
+    // requestOption: {
+    //   isTransformResponse: false,
+    // },
+  });
 }
 
 /**
