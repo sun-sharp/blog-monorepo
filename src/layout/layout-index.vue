@@ -1,11 +1,29 @@
 <template>
   <n-layout class="layout" :position="fixedMenu" has-sider>
-    <n-layout-sider class="layout-sider" show-trigger="bar" collapse-mode="width" :collapsed-width="64">12121313554545</n-layout-sider>
+    <n-layout-sider
+      v-if="isMixMenuNoneSub && (navMode === 'vertical' || navMode === 'horizontal-mix')"
+      class="layout-sider"
+      show-trigger="bar"
+      collapse-mode="width"
+      :collapsed-width="64"
+      :position="fixedMenu"
+      :collapsed="collapsed"
+      :width="leftMenuWidth"
+      :native-scrollbar="false"
+      :inverted="inverted"
+      @collapse="collapsed = true"
+      @expand="collapsed = false"
+    >
+      <layout-logo :collapsed="collapsed" />
+      <layout-menu v-model:collapsed="collapsed" v-model:location="getMenuLocation" />
+    </n-layout-sider>
 
     <n-layout :inverted="inverted">
-      <n-layout-header :inverted="getHeaderInverted" :position="fixedHeader">12454545454545454</n-layout-header>
+      <n-layout-header :inverted="getHeaderInverted" :position="fixedHeader">
+        <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
+      </n-layout-header>
 
-      <n-layout-content class="layout-content">
+      <n-layout-content class="layout-content" :class="{ 'layout-default-background': getDarkTheme === false }">
         <div
           class="layout-content-main"
           :class="{
@@ -13,7 +31,7 @@
             'fluid-header': fixedHeader === 'static',
           }"
         >
-          <!-- <layout-tabs-view v-if="isMultiTabs" v-model:collapsed="collapsed" /> -->
+          <layout-tabs-view v-if="isMultiTabs" v-model:collapsed="collapsed" />
           <div
             class="main-view"
             :class="{
@@ -33,28 +51,21 @@
 
 <script lang="ts" setup>
   import { ref, unref, computed, onMounted } from 'vue';
-  // import LayoutLogo from '@/layout/components/layout-logo.vue';
-  // import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
+  import LayoutLogo from '@/layout/components/layout-logo.vue';
+  import LayoutMenu from '@/layout/components/layout-menu.vue';
+  import LayoutHeader from '@/layout/components/layout-header.vue';
+  import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
   import LayoutMain from '@/layout/components/layout-main.vue';
-  // import LayoutMenu from '@/layout/components/layout-menu.vue';
-  // import LayoutHeader from '@/layout/components/layout-header.vue';
-  import { useProjectSetting } from '@/hooks';
-  // import { useDesignSetting } from '@/hooks';
-  // import { useRoute } from 'vue-router';
-  // import { useProjectSettingStore } from '@/store/modules/projectSetting';
+  import { useDesignSetting, useProjectSetting } from '@/hooks';
+  import { useRoute } from 'vue-router';
+  import { useProjectSettingStore } from '@/store';
 
-  // const { getDarkTheme } = useDesignSetting();
-  const {
-    // getNavMode,
-    getNavTheme,
-    getHeaderSetting,
-    // getMenuSetting,
-    getMultiTabsSetting,
-  } = useProjectSetting();
+  const { getDarkTheme } = useDesignSetting();
+  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useProjectSetting();
 
-  // const settingStore = useProjectSettingStore();
+  const settingStore = useProjectSettingStore();
 
-  // const navMode = getNavMode;
+  const navMode = getNavMode;
 
   const collapsed = ref<boolean>(false);
 
@@ -63,15 +74,15 @@
     return fixed ? 'absolute' : 'static';
   });
 
-  // const isMixMenuNoneSub = computed(() => {
-  //   const mixMenu = getMenuSetting.value.mixMenu;
-  //   const currentRoute = useRoute();
-  //   if (unref(navMode) != 'horizontal-mix') return true;
-  //   if (unref(navMode) === 'horizontal-mix' && mixMenu && currentRoute.meta.isRoot) {
-  //     return false;
-  //   }
-  //   return true;
-  // });
+  const isMixMenuNoneSub = computed(() => {
+    const mixMenu = settingStore.menuSetting.mixMenu;
+    const currentRoute = useRoute();
+    if (unref(navMode) != 'horizontal-mix') return true;
+    if (unref(navMode) === 'horizontal-mix' && mixMenu && currentRoute.meta.isRoot) {
+      return false;
+    }
+    return true;
+  });
 
   const fixedMenu = computed(() => {
     const { fixed } = unref(getHeaderSetting);
@@ -95,21 +106,14 @@
     return ['light', 'header-dark'].includes(navTheme) ? unref(inverted) : !unref(inverted);
   });
 
-  // const leftMenuWidth = computed(() => {
-  //   const { minMenuWidth, menuWidth } = unref(getMenuSetting);
-  //   return collapsed.value ? minMenuWidth : menuWidth;
-  // });
+  const leftMenuWidth = computed(() => {
+    const { minMenuWidth, menuWidth } = unref(getMenuSetting);
+    return collapsed.value ? minMenuWidth : menuWidth;
+  });
 
-  // const getChangeStyle = computed(() => {
-  //   const { minMenuWidth, menuWidth } = unref(getMenuSetting);
-  //   return {
-  //     'padding-left': collapsed.value ? `${minMenuWidth}px` : `${menuWidth}px`,
-  //   };
-  // });
-
-  // const getMenuLocation = computed(() => {
-  //   return 'left';
-  // });
+  const getMenuLocation = computed(() => {
+    return 'left';
+  });
 
   const watchWidth = () => {
     const Width = document.body.clientWidth;

@@ -4,3 +4,4 @@ export * from './page-enum';
 export * from './routers';
 export * from './design-setting';
 export * from './project-setting';
+export * from './animate-setting';

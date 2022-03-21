@@ -1,5 +1,6 @@
 import type { RouteRecordRaw, RouteMeta } from 'vue-router';
 import { defineComponent } from 'vue';
+import { RouteLocationNormalized } from 'vue-router';
 
 export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Promise<typeof import('*.vue')>) | (() => Promise<T>);
 
@@ -49,3 +50,8 @@ export interface Menu {
   redirect?: string;
   sort?: number;
 }
+
+export type RouteItem = Partial<RouteLocationNormalized> & {
+  fullPath: string;
+  name: string;
+};

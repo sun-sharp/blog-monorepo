@@ -5,3 +5,5 @@ export * from './color';
 export * from './is';
 export * from './axios';
 export * from './routers';
+export * from './menu';
+export * from './files';

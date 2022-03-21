@@ -5,8 +5,9 @@ import { useUserStore, useUserStoreWidthOut } from './modules/user';
 import { useProjectSettingStore, useProjectSettingStoreWithOut } from '@/store/modules/project-setting';
 import { useDesignSettingStore, useDesignSettingWithOut } from '@/store/modules/design-setting';
 import { useRouteStore, useRouteStoreWidthOut } from './modules/route';
+import { useTabsViewStore } from './modules/tabs-view';
 
-export { useLockScreenStore, useUserStore, useProjectSettingStore, useDesignSettingStore, useRouteStore };
+export { useLockScreenStore, useUserStore, useProjectSettingStore, useDesignSettingStore, useRouteStore, useTabsViewStore };
 
 export { useLockScreenStoreWidthOut, useUserStoreWidthOut, useProjectSettingStoreWithOut, useDesignSettingWithOut, useRouteStoreWidthOut };
 
