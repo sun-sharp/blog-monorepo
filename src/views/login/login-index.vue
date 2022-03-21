@@ -1,6 +1,5 @@
 <template>
   <div class="view-account">
-    <div class="view-account-header"></div>
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
@@ -163,14 +162,12 @@
 
 <style lang="scss" scoped>
   .view-account {
-    display: flex;
-    flex-direction: column;
     height: 100vh;
     overflow: auto;
+    display: flex;
+    align-items: center;
 
     &-container {
-      flex: 1;
-      padding: 32px 0;
       width: 384px;
       margin: 0 auto;
     }

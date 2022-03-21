@@ -1,5 +1,8 @@
 import Mock from 'mockjs';
-import { resultError, resultSuccess } from '../_util';
+import {
+  // resultError,
+  resultSuccess,
+} from '../_util';
 
 const Random = Mock.Random;
 
@@ -29,12 +32,12 @@ export default [
     url: `${basic}/admin_info`,
     timeout: 1000,
     method: 'get',
-    statusCode: 401,
+    // statusCode: 401,
     response: () => {
-      return resultError('用户没有权限（令牌、用户名、密码错误）!', { code: 401 });
+      // return resultError('用户没有权限（令牌、用户名、密码错误）!', { code: 401 });
       // const token = getRequestToken(request);
       // if (!token) return resultError('Invalid token');
-      // return resultSuccess(adminInfo);
+      return resultSuccess(adminInfo);
     },
   },
 ];

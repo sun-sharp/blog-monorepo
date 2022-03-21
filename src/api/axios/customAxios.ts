@@ -14,15 +14,17 @@ const urlPrefix = appEnvConfig.urlPrefix || '';
 export class CustomAxios {
   private axiosInstance: AxiosInstance;
   private options: CreateAxiosOptions;
-  private requestOptions: RequestOptions;
-  private responseOptions: ResponseOptions;
+  private initRequestOptions: RequestOptions;
+  private initResponseOptions: ResponseOptions;
+  private requestOptions: RequestOptions = {};
+  private responseOptions: ResponseOptions = {};
 
   constructor(options: CreateAxiosOptions) {
     const { requestOptions = {}, responseOptions = {}, ...otherOptions } = options;
     this.axiosInstance = axios.create(otherOptions);
     this.options = otherOptions;
-    this.requestOptions = requestOptions;
-    this.responseOptions = responseOptions;
+    this.initRequestOptions = requestOptions;
+    this.initResponseOptions = responseOptions;
     this.setupInterceptors();
   }
 
@@ -33,8 +35,8 @@ export class CustomAxios {
     const { requestOptions = {}, responseOptions = {}, ...otherOptions } = options;
     this.axiosInstance = axios.create(otherOptions);
     this.options = otherOptions;
-    this.requestOptions = requestOptions;
-    this.responseOptions = responseOptions;
+    this.initRequestOptions = requestOptions;
+    this.initResponseOptions = responseOptions;
   }
 
   /**
@@ -361,8 +363,8 @@ export class CustomAxios {
   request<T = any>(config: CustomAxiosRequest): Promise<T> {
     const { requestOptions, responseOptions, ...otherConfig } = config;
     const conf: CustomAxiosConfig = Object.assign({}, this.options, otherConfig);
-    this.requestOptions = Object.assign({}, this.requestOptions, requestOptions);
-    this.responseOptions = Object.assign({}, this.responseOptions, responseOptions);
+    this.requestOptions = Object.assign({}, this.initRequestOptions, requestOptions);
+    this.responseOptions = Object.assign({}, this.initResponseOptions, responseOptions);
     return this.axiosInstance.request(conf);
   }
 }

@@ -60,6 +60,7 @@ export const useRouteStore = defineStore({
       const { roleCode } = userInfo;
       // 动态获取菜单
       const [err, resp] = await at(capitalApi.adminMenus({ roleCode }));
+      console.log(err, resp);
       if (err) return toRaw([]);
       const accessedRouters = await routerOneScreen(resp);
       PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
