@@ -8,7 +8,7 @@ const Random = Mock.Random;
 const token = Random.string('upper', 32, 32);
 
 const menusList = [
-  /* {
+  {
     menuId: '6167d18f45e23c7808001334',
     name: 'system',
     title: '系统管理',
@@ -94,7 +94,7 @@ const menusList = [
     component: '/about/index',
     menuType: 5,
     hidden: false,
-  }, */
+  },
 ];
 
 export default [

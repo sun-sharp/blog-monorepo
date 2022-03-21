@@ -31,16 +31,14 @@ export function getAll(params?) {
  * @param data
  */
 export const save = (data?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/save`,
-      method: 'POST',
-      data,
-    },
-    {
+  return AxiosCapital.request({
+    url: `${basic}/save`,
+    method: 'POST',
+    data,
+    responseOptions: {
       isShowSuccessMessage: true,
-    }
-  );
+    },
+  });
 };
 
 /**
@@ -48,16 +46,14 @@ export const save = (data?) => {
  * @param data
  */
 export const update = (data?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/update`,
-      method: 'PUT',
-      data,
-    },
-    {
+  return AxiosCapital.request({
+    url: `${basic}/update`,
+    method: 'PUT',
+    data,
+    responseOptions: {
       isShowSuccessMessage: true,
-    }
-  );
+    },
+  });
 };
 
 /**
@@ -65,13 +61,11 @@ export const update = (data?) => {
  * @param roleId
  */
 export const remove = (roleId?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/${roleId}`,
-      method: 'DELETE',
-    },
-    {
+  return AxiosCapital.request({
+    url: `${basic}/${roleId}`,
+    method: 'DELETE',
+    responseOptions: {
       isShowSuccessMessage: true,
-    }
-  );
+    },
+  });
 };

@@ -19,16 +19,14 @@ export function getMenuList(params?) {
  * @param data
  */
 export const saveMenu = (data?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/save`,
-      method: 'POST',
-      data,
-    },
-    {
+  return AxiosCapital.request({
+    url: `${basic}/save`,
+    method: 'POST',
+    data,
+    responseOptions: {
       isShowSuccessMessage: true,
-    }
-  );
+    },
+  });
 };
 
 /**
@@ -36,16 +34,14 @@ export const saveMenu = (data?) => {
  * @param data
  */
 export const updateMenu = (data?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/update`,
-      method: 'PUT',
-      data,
-    },
-    {
+  return AxiosCapital.request({
+    url: `${basic}/update`,
+    method: 'PUT',
+    data,
+    responseOptions: {
       isShowSuccessMessage: true,
-    }
-  );
+    },
+  });
 };
 
 /**
@@ -53,13 +49,11 @@ export const updateMenu = (data?) => {
  * @param menuId
  */
 export const removeMenu = (menuId?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/${menuId}`,
-      method: 'DELETE',
-    },
-    {
+  return AxiosCapital.request({
+    url: `${basic}/${menuId}`,
+    method: 'DELETE',
+    responseOptions: {
       isShowSuccessMessage: true,
-    }
-  );
+    },
+  });
 };

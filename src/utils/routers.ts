@@ -8,6 +8,19 @@ LayoutMap.set('layout', Layout);
 LayoutMap.set('iframe', IframeComponent);
 
 /**
+ * 对路由的path进行处理
+ * @param component
+ * @return {*}
+ *  */
+export const pathFormat = (component: string): string => {
+  let path = component;
+  if (component.indexOf('/') >= 0) {
+    path = component.replace(/(.*)[/]/, '$1-');
+  }
+  return path;
+};
+
+/**
  * 格式化 后端 结构信息并递归生成层级路由表
  * @param routerMap
  * @param routerMap
@@ -17,7 +30,8 @@ LayoutMap.set('iframe', IframeComponent);
 export const routerGenerator = (routerMap, _parentId): any[] => {
   const resultArr: any[] = [];
   routerMap.forEach((i) => {
-    const { menuId, path, name, component, parentId, ...other } = i;
+    const { menuId, name, component, parentId, ...other } = i;
+    const path = pathFormat(component);
     if (_parentId === parentId) {
       const currentRouter: any = {
         // 路由地址 动态拼接生成如 /dashboard/workplace

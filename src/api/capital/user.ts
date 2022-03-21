@@ -13,6 +13,62 @@ export function getUserInfo() {
 }
 
 /**
+ * @description 用户列表
+ * @param params
+ */
+export function getPage(params) {
+  return AxiosCapital.request({
+    url: `${basic}/find_page`,
+    method: 'POST',
+    params,
+  });
+}
+
+/**
+ * @description 新增用户
+ * @param data
+ */
+export const save = (data?) => {
+  return AxiosCapital.request({
+    url: `${basic}/save`,
+    method: 'POST',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
+ * @description 修改用户
+ * @param data
+ */
+export const updateRoleCode = (data?) => {
+  return AxiosCapital.request({
+    url: `${basic}/update_role_code`,
+    method: 'PUT',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
+ * @description 删除用户
+ * @param userId
+ */
+export const remove = (userId?) => {
+  return AxiosCapital.request({
+    url: `${basic}/${userId}`,
+    method: 'DELETE',
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
  * @description: 用户修改密码
  */
 // export function changePassword(params, uid) {
@@ -38,65 +94,3 @@ export function getUserInfo() {
 //     params,
 //   });
 // }
-
-/**
- * @description 用户列表
- * @param params
- */
-export function getPage(params) {
-  return AxiosCapital.request({
-    url: `${basic}/find_page`,
-    method: 'POST',
-    params,
-  });
-}
-
-/**
- * @description 新增用户
- * @param data
- */
-export const save = (data?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/save`,
-      method: 'POST',
-      data,
-    },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
-};
-
-/**
- * @description 修改用户
- * @param data
- */
-export const updateRoleCode = (data?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/update_role_code`,
-      method: 'PUT',
-      data,
-    },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
-};
-
-/**
- * @description 删除用户
- * @param userId
- */
-export const remove = (userId?) => {
-  return AxiosCapital.request(
-    {
-      url: `${basic}/${userId}`,
-      method: 'DELETE',
-    },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
-};
