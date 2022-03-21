@@ -136,6 +136,7 @@
         };
 
         const { code, message: msg } = await userStore.login(params);
+        loading.value = false;
 
         if (code == ResultEnum.SUCCESS) {
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);

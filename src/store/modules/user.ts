@@ -74,7 +74,6 @@ export const useUserStore = defineStore({
     async GetInfo() {
       const that = this;
       const [err, resp] = await at(userApi.getUserInfo());
-      console.log(err, resp, 'err, resp');
       if (err) return false;
       that.setUserInfo(resp);
       that.setAvatar(resp.avatar);

@@ -11,9 +11,9 @@ export function login(params) {
     url: `${basic}/login`,
     method: 'POST',
     params,
-    // requestOption: {
-    //   isTransformResponse: false,
-    // },
+    responseOptions: {
+      isTransformResponse: false,
+    },
   });
 }
 

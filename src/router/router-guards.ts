@@ -22,6 +22,8 @@ export function createRouterGuards(router: Router) {
 
     // 可以直接输入白名单
     if (whitePathList.includes(to.path as PageEnum)) {
+      // 如果去登录页，那么删除token
+      if (to.path === LOGIN_PATH) userStore.setToken('');
       next();
       return;
     }
@@ -51,9 +53,7 @@ export function createRouterGuards(router: Router) {
 
     // 获取用户信息
     const userInfo = await userStore.GetInfo();
-    // if (!userInfo) {
 
-    // }
     // 获取动态路由
     const routes = await routeStore.generateRoutes(userInfo);
 

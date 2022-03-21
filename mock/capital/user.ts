@@ -31,7 +31,7 @@ export default [
     method: 'get',
     statusCode: 401,
     response: () => {
-      return resultError('Request failed', { code: -1, result: null });
+      return resultError('用户没有权限（令牌、用户名、密码错误）!', { code: 401 });
       // const token = getRequestToken(request);
       // if (!token) return resultError('Invalid token');
       // return resultSuccess(adminInfo);

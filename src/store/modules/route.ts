@@ -56,6 +56,7 @@ export const useRouteStore = defineStore({
     },
     // 动态获取权限
     async generateRoutes(userInfo?: any) {
+      if (!userInfo) return toRaw([]);
       const { roleCode } = userInfo;
       // 动态获取菜单
       const [err, resp] = await at(capitalApi.adminMenus({ roleCode }));
