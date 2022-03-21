@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { ErrorPage, RedirectName, Layout, PageEnum } from '@/constant';
+import { ErrorComponent, Layout, PageEnum, RedirectComponent } from '@/constant';
 import { RouteRecordRaw } from 'vue-router';
 
 // 首页
@@ -23,19 +23,19 @@ export const PageRoute: RouteRecordRaw = {
 // 404 on a page
 export const ErrorPageRoute: AppRouteRecordRaw = {
   path: '/:path(.*)*',
-  name: 'ErrorPage',
+  name: PageEnum.ERROR_PAGE_NAME,
   component: Layout,
   meta: {
-    title: 'ErrorPage',
+    title: PageEnum.ERROR_PAGE_TITLE,
     hideBreadcrumb: true,
   },
   children: [
     {
       path: '/:path(.*)*',
-      name: 'ErrorPageSon',
-      component: ErrorPage,
+      name: PageEnum.ERROR_CHILD_PAGE_NAME,
+      component: ErrorComponent,
       meta: {
-        title: 'ErrorPage',
+        title: PageEnum.ERROR_PAGE_TITLE,
         hideBreadcrumb: true,
       },
     },
@@ -45,19 +45,19 @@ export const ErrorPageRoute: AppRouteRecordRaw = {
 // 重定向
 export const RedirectRoute: AppRouteRecordRaw = {
   path: '/redirect',
-  name: RedirectName,
+  name: PageEnum.REDIRECT_PAGE_NAME,
   component: Layout,
   meta: {
-    title: RedirectName,
+    title: PageEnum.REDIRECT_PAGE_TITLE,
     hideBreadcrumb: true,
   },
   children: [
     {
       path: '/redirect/:path(.*)',
-      name: RedirectName,
-      component: () => import('@/views/redirect/index.vue'),
+      name: PageEnum.REDIRECT_CHILD_PAGE_NAME,
+      component: RedirectComponent,
       meta: {
-        title: RedirectName,
+        title: PageEnum.REDIRECT_PAGE_TITLE,
         hideBreadcrumb: true,
       },
     },

@@ -12,4 +12,10 @@ export enum PageEnum {
   HOME_ICON = 'HomeOutlined',
   // 错误
   ERROR_PAGE_NAME = 'ErrorPage',
+  ERROR_PAGE_TITLE = '错误404',
+  ERROR_CHILD_PAGE_NAME = 'ErrorPageSon',
+  // 重定向
+  REDIRECT_PAGE_NAME = 'RedirectPage',
+  REDIRECT_PAGE_TITLE = '重定向页面',
+  REDIRECT_CHILD_PAGE_NAME = 'RedirectPageSon',
 }

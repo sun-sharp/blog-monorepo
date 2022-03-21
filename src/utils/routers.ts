@@ -1,12 +1,11 @@
-import { Layout, ParentLayout } from '@/constant';
+import { IframeComponent, Layout, ParentLayout } from '@/constant';
 import { constantRouterIcon } from './icons';
 import { AppRouteRecordRaw } from '/#/router';
 
-const Iframe = () => import('@/views/iframe/index.vue');
 const LayoutMap = new Map<string, () => Promise<typeof import('*.vue')>>();
 
 LayoutMap.set('layout', Layout);
-LayoutMap.set('iframe', Iframe);
+LayoutMap.set('iframe', IframeComponent);
 
 /**
  * 格式化 后端 结构信息并递归生成层级路由表

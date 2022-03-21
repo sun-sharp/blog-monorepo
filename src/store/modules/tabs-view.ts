@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { RouteItem } from '/#/router';
 
 // 不需要出现在标签页中的路由
-const whiteList = ['Redirect', 'login'];
+const whiteList = [PageEnum.ERROR_PAGE_NAME, PageEnum.REDIRECT_CHILD_PAGE_NAME, PageEnum.LOGIN_NAME];
 
 export type ITabsViewState = {
   tabsList: RouteItem[]; // 标签页
