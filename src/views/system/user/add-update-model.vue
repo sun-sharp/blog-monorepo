@@ -5,7 +5,7 @@
         <n-input v-model:value="modelForm.name" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <app-upload-image v-model:value="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
+        <form-upload-image v-model:value="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
       </n-form-item>
       <n-form-item label="用户名" path="username">
         <n-input v-model:value="modelForm.username" :disabled="!!modelId" placeholder="请输入用户名" />
@@ -47,7 +47,7 @@
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { roleApi, userApi } from '@/api';
-  import AppUploadImage from '@/components/app-upload-image.vue';
+  import FormUploadImage from '@/components/form/form-upload-image.vue';
   import { getImgUrl } from '@/utils';
 
   const modelFields = {
@@ -60,7 +60,7 @@
   };
 
   export default defineComponent({
-    components: { AppUploadImage },
+    components: { FormUploadImage },
     emits: ['refurbish'],
     setup(_props, { emit }) {
       const modelId = ref('');

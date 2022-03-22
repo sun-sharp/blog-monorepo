@@ -59,15 +59,13 @@ export const getOntUse = (): Promise<any> => {
  * @return {*}
  */
 export const removePublic = (fileName: string): Promise<any> => {
-  return AxiosFile.request(
-    {
-      url: `${basic}/remove_public/${fileName}`,
-      method: 'DELETE',
+  return AxiosFile.request({
+    url: `${basic}/remove_public/${fileName}`,
+    method: 'DELETE',
+    responseOptions: {
+      isShowSuccessMessage: false,
     },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
+  });
 };
 
 /**
@@ -76,18 +74,16 @@ export const removePublic = (fileName: string): Promise<any> => {
  * @return {*}
  */
 export const removePublicAll = (fileNameArr: string[]): Promise<any> => {
-  return AxiosFile.request(
-    {
-      url: `${basic}/remove_public_all`,
-      method: 'DELETE',
-      data: {
-        fileNameArr,
-      },
+  return AxiosFile.request({
+    url: `${basic}/remove_public_all`,
+    method: 'DELETE',
+    data: {
+      fileNameArr,
     },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
+    responseOptions: {
+      isShowSuccessMessage: false,
+    },
+  });
 };
 
 /**
@@ -96,15 +92,13 @@ export const removePublicAll = (fileNameArr: string[]): Promise<any> => {
  * @return {*}
  */
 export const removeData = (imageId: string): Promise<any> => {
-  return AxiosFile.request(
-    {
-      url: `${basic}/remove_data/${imageId}`,
-      method: 'DELETE',
+  return AxiosFile.request({
+    url: `${basic}/remove_data/${imageId}`,
+    method: 'DELETE',
+    responseOptions: {
+      isShowSuccessMessage: false,
     },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
+  });
 };
 
 /**
@@ -113,15 +107,13 @@ export const removeData = (imageId: string): Promise<any> => {
  * @return {*}
  */
 export const removePublicAndData = (imageId: string): Promise<any> => {
-  return AxiosFile.request(
-    {
-      url: `${basic}/remove_public_data/${imageId}`,
-      method: 'DELETE',
+  return AxiosFile.request({
+    url: `${basic}/remove_public_data/${imageId}`,
+    method: 'DELETE',
+    responseOptions: {
+      isShowSuccessMessage: false,
     },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
+  });
 };
 
 /**
@@ -130,16 +122,14 @@ export const removePublicAndData = (imageId: string): Promise<any> => {
  * @return {*}
  */
 export const removePublicAndDataAll = (imageIdArr: string[]): Promise<any> => {
-  return AxiosFile.request(
-    {
-      url: `${basic}/remove_public_data_all`,
-      method: 'DELETE',
-      data: {
-        imageIdArr,
-      },
+  return AxiosFile.request({
+    url: `${basic}/remove_public_data_all`,
+    method: 'DELETE',
+    data: {
+      imageIdArr,
     },
-    {
-      isShowSuccessMessage: true,
-    }
-  );
+    responseOptions: {
+      isShowSuccessMessage: false,
+    },
+  });
 };

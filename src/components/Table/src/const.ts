@@ -1,4 +1,4 @@
-import componentSetting from '@/settings/componentSetting';
+import { componentSetting } from '@/constant';
 
 const { table } = componentSetting;
 

@@ -5,5 +5,6 @@ export * from './router-component';
 export * from './design-setting';
 export * from './project-setting';
 export * from './animate-setting';
+export * from './component-setting';
 export * from './screen-enum';
 export * from './options';

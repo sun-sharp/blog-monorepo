@@ -1,5 +1,5 @@
 <template>
-  <app-table-toolbar v-model:dropdown-size="tableSize" @reload="reloadClick" />
+  <table-toolbar v-model:dropdown-size="tableSize" @reload="reloadClick" />
   <div class="s-table">
     <n-data-table v-bind="getTableBind" :size="tableSize" :loading="tableLoading" />
   </div>
@@ -8,11 +8,11 @@
 <script lang="ts">
   import { NDataTable } from 'naive-ui/lib/components';
   import { ref, defineComponent, computed } from 'vue';
-  import AppTableToolbar from './app-table-toolbar.vue';
+  import TableToolbar from './table-toolbar.vue';
 
   export default defineComponent({
     components: {
-      AppTableToolbar,
+      TableToolbar,
     },
     props: {
       ...NDataTable.props, // 这里继承原 UI 组件的 props
