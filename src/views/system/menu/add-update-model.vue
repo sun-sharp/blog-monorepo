@@ -16,9 +16,6 @@
       <n-form-item label="上级菜单" path="parentId">
         <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="menuId" />
       </n-form-item>
-      <n-form-item label="路由" path="path">
-        <n-input v-model:value="modelForm.path" placeholder="请输入路由" />
-      </n-form-item>
       <n-form-item v-if="[7].includes(modelForm.menuType)" label="外链的链接" path="name">
         <n-input v-model:value="modelForm.name" placeholder="请输入外链的链接" />
       </n-form-item>
@@ -60,7 +57,6 @@
   const modelFields = {
     menuType: 1,
     title: '',
-    path: '',
     name: '',
     component: '',
     iframeSrc: '',
@@ -97,11 +93,6 @@
           required: true,
           trigger: ['blur', 'input'],
           message: `请输入名称`,
-        },
-        path: {
-          required: true,
-          trigger: ['blur', 'input'],
-          message: `请输入路由`,
         },
         name: {
           required: true,
@@ -182,7 +173,6 @@
         if (modelId.value) {
           modelForm.menuType = row.menuType;
           modelForm.title = row.title;
-          modelForm.path = row.path;
           modelForm.name = row.name;
           modelForm.component = row.component;
           modelForm.iframeSrc = row.iframeSrc;
@@ -215,7 +205,6 @@
           if (!errors) {
             const params: any = {
               menuType: modelForm.menuType,
-              path: modelForm.path,
               title: modelForm.title,
               name: modelForm.name,
               icon: modelForm.icon,

@@ -37,7 +37,7 @@ let menusList = [
     sort: 1,
     icon: 'DocumentTextOutline',
     parentId: '620dae82e6f0ff83c48685d2',
-    component: '/file/image-index',
+    component: '/file/image/index',
     menuType: 5,
     hidden: false,
   },

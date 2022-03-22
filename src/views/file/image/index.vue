@@ -22,10 +22,10 @@
   import { ref } from 'vue';
   import { imageApi } from '@/api';
   import BasicTable from '@/components/Table/basic-table.vue';
-  import { imageConfigure } from './configure/image';
+  import { imageConfigure } from '@/views/file/configure/image';
   import FormSearch from '@/components/form/form-search.vue';
-  import ImageOnlyPublicModel from './components/image-only-public-model.vue';
-  import ImageNotUseModel from './components/image-not-use-model.vue';
+  import ImageOnlyPublicModel from '@/views/file/components/image-only-public-model.vue';
+  import ImageNotUseModel from '@/views/file/components/image-not-use-model.vue';
 
   // 处理只有图片文件的数据
   const imageOnlyPublicModelRef = ref();
