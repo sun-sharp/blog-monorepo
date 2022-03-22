@@ -1,5 +1,5 @@
 import { h, reactive } from 'vue';
-import { TableAction } from '@/components/Table';
+import TableAction from '@/components/Table/table-action.vue';
 import { roleTypeObj } from '@/constant';
 import { roleApi } from '@/api';
 
