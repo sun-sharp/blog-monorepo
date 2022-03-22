@@ -57,9 +57,7 @@
   import { nextTick, onMounted, ref } from 'vue';
   import { menuApi } from '@/api';
   import { useConfigure } from './configure';
-  import { levelMenu } from '@/utils';
-  import { PlusOutlined } from '@/utils/icons';
-  import { ReloadOutlined, ColumnHeightOutlined } from '@/utils/icons';
+  import { levelMenu, ReloadOutlined, ColumnHeightOutlined, PlusOutlined } from '@/utils';
   import FormSearch from '@/components/form/form-search.vue';
   import AddUpdateModel from './add-update-model.vue';
 

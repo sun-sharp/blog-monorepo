@@ -20,10 +20,10 @@
   import { ref } from 'vue';
   import { userApi } from '@/api';
   import { PlusOutlined } from '@/utils/icons';
-  import { BasicTable } from '@/components/Table';
+  import FormSearch from '@/components/form/form-search.vue';
+  import BasicTable from '@/components/Table/basic-table.vue';
   import { useConfigure } from './configure';
   import AddUpdateModel from './add-update-model.vue';
-  import FormSearch from '@/components/form/form-search.vue';
 
   const addUpdateModelRef = ref();
 

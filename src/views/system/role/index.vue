@@ -19,11 +19,11 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { roleApi } from '@/api';
-  import { PlusOutlined } from '@/utils/icons';
-  import { BasicTable } from '@/components/Table';
-  import { useConfigure } from './configure';
-  import AddUpdateModel from './add-update-model.vue';
+  import { PlusOutlined } from '@/utils';
+  import BasicTable from '@/components/Table/basic-table.vue';
   import FormSearch from '@/components/form/form-search.vue';
+  import AddUpdateModel from './add-update-model.vue';
+  import { useConfigure } from './configure';
 
   const addUpdateModelRef = ref();
 

@@ -21,7 +21,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { imageApi } from '@/api';
-  import { BasicTable } from '@/components/Table';
+  import BasicTable from '@/components/Table/basic-table.vue';
   import { imageConfigure } from './configure/image';
   import FormSearch from '@/components/form/form-search.vue';
   import ImageOnlyPublicModel from './components/image-only-public-model.vue';
