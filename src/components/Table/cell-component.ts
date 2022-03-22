@@ -1,10 +1,8 @@
 import type { FunctionalComponent, defineComponent } from 'vue';
-import type { ComponentType } from '../../types/componentType';
-import { componentMap } from '@/components/Table/src/componentMap';
-
+import { componentMap } from '@/components/Table/componentMap';
 import { h } from 'vue';
-
 import { NPopover } from 'naive-ui';
+import type { ComponentType } from '/#/components/table';
 
 export interface ComponentProps {
   component: ComponentType;

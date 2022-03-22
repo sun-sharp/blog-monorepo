@@ -1,11 +1,9 @@
 import { ref, Ref, ComputedRef, unref, computed, watch, toRaw, h } from 'vue';
-import type { BasicColumn, BasicTableProps } from '../types/table';
 import { isEqual, cloneDeep } from 'lodash-es';
-import { isArray, isString, isBoolean, isFunction } from '@/utils/is';
-import { ActionItem } from '@/components/Table';
-import { renderEditCell } from '../components/editable';
+import { isArray, isString, isBoolean, isFunction, FormOutlined } from '@/utils';
 import { NTooltip, NIcon } from 'naive-ui';
-import { FormOutlined } from '@/utils/icons';
+import { ActionItem, BasicColumn, BasicTableProps } from '/#/components/table';
+import { renderEditCell } from '@/components/Table/render-edit-cell';
 
 export function useColumns(propsRef: ComputedRef<BasicTableProps>) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;

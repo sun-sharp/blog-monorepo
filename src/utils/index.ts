@@ -9,3 +9,4 @@ export * from './menu';
 export * from './files';
 export * from './props';
 export * from './domUtils';
+export * from './table';

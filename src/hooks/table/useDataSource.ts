@@ -1,8 +1,7 @@
 import { ref, ComputedRef, unref, computed, onMounted, watchEffect, watch } from 'vue';
-import type { BasicTableProps } from '../types/table';
-import type { PaginationProps } from '../types/pagination';
-import { isBoolean } from '@/utils/is';
-import { API_SETTING } from '../const';
+import { BasicTableProps, PaginationProps } from '/#/components/table';
+import { isBoolean } from '@/utils';
+import { API_SETTING } from '@/constant';
 
 export function useDataSource(propsRef: ComputedRef<BasicTableProps>, { getPaginationInfo, setPagination, setLoading, tableData }, emit) {
   const dataSourceRef = ref([]);

@@ -23,7 +23,7 @@
       </div>
       <div v-if="!getRowEditable" class="editable-cell-action">
         <n-icon class="mx-2 cursor-pointer">
-          <CheckOutlined @click="handleSubmit" />
+          <CheckOutlined @click="handleSubmit()" />
         </n-icon>
         <n-icon class="mx-2 cursor-pointer">
           <CloseOutlined @click="handleCancel" />
@@ -34,31 +34,22 @@
 </template>
 <script lang="ts">
   import type { CSSProperties, PropType } from 'vue';
-  import type { BasicColumn } from '../../types/table';
-  import type { EditRecordRow } from './index';
-
   import { defineComponent, ref, unref, nextTick, computed, watchEffect, toRaw } from 'vue';
-  import { FormOutlined, CloseOutlined, CheckOutlined } from '@/utils/icons';
-  import { CellComponent } from './CellComponent';
-
-  import { useTableContext } from '../../hooks/useTableContext';
-
-  import clickOutside from './clickOutside';
-
-  import { propTypes } from '@/utils';
-  import { isString, isBoolean, isFunction, isNumber, isArray } from '@/utils/is';
-  import { createPlaceholderMessage } from './helper';
+  import { FormOutlined, CloseOutlined, CheckOutlined, propTypes, isString, isBoolean, isFunction, isNumber, isArray, createPlaceholderMessage } from '@/utils';
+  import { ClickOutside } from '@/directives';
   import { set, omit } from 'lodash-es';
-  import { EventEnum } from '@/components/Table/src/componentMap';
-
+  import { EventEnum } from '@/components/Table/componentMap';
   import { milliseconds } from 'date-fns';
   import { Fn } from '@vueuse/core';
+  import { CellComponent } from './cell-component';
+  import { BasicColumn, EditRecordRow } from '/#/components/table';
+  import { useTableContext } from '@/hooks';
 
   export default defineComponent({
     name: 'EditableCell',
     components: { FormOutlined, CloseOutlined, CheckOutlined, CellComponent },
     directives: {
-      clickOutside,
+      ClickOutside,
     },
     props: {
       value: {

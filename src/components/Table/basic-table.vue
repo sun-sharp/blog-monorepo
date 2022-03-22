@@ -69,24 +69,12 @@
 </template>
 
 <script lang="ts">
-  import { ref, defineComponent, reactive, unref, toRaw, computed, toRefs, onMounted, nextTick } from 'vue';
-  import { ReloadOutlined, ColumnHeightOutlined, QuestionCircleOutlined } from '@/utils/icons';
-  import { createTableContext } from './hooks/useTableContext';
-
-  import ColumnSetting from './components/settings/ColumnSetting.vue';
-
-  import { useLoading } from './hooks/useLoading';
-  import { useColumns } from './hooks/useColumns';
-  import { useDataSource } from './hooks/useDataSource';
-  import { usePagination } from './hooks/usePagination';
-
-  import { basicProps } from './props';
-
-  import { BasicTableProps } from './types/table';
-
-  import { getViewportOffset } from '@/utils/domUtils';
-  import { useWindowSizeFn } from '@/hooks';
-  import { isBoolean } from '@/utils/is';
+  import { ref, defineComponent, reactive, unref, toRaw, computed, toRefs, onMounted, nextTick, PropType } from 'vue';
+  import { ReloadOutlined, ColumnHeightOutlined, QuestionCircleOutlined, getViewportOffset, isBoolean, propTypes } from '@/utils';
+  import ColumnSetting from './table-column-setting.vue';
+  import { useColumns, useDataSource, useLoading, usePagination, useWindowSizeFn, createTableContext } from '@/hooks';
+  import { NDataTable } from 'naive-ui';
+  import { BasicColumn, BasicTableProps } from '/#/components/table';
 
   const densityOptions = [
     {
@@ -114,7 +102,48 @@
       QuestionCircleOutlined,
     },
     props: {
-      ...basicProps,
+      ...NDataTable.props, // 这里继承原 UI 组件的 props
+      title: {
+        type: String,
+        default: null,
+      },
+      titleTooltip: {
+        type: String,
+        default: null,
+      },
+      size: {
+        type: String,
+        default: 'medium',
+      },
+      tableData: {
+        type: Array,
+        default: () => [],
+      },
+      columns: {
+        type: [Array] as PropType<BasicColumn[]>,
+        default: () => [],
+        required: true,
+      },
+      request: {
+        type: Function as PropType<(...arg: any[]) => Promise<any>>,
+        default: null,
+        required: true,
+      },
+      rowKey: {
+        type: [String, Function] as PropType<string | ((record) => string)>,
+        default: undefined,
+      },
+      //废弃
+      showPagination: {
+        type: [String, Boolean],
+        default: 'auto',
+      },
+      actionColumn: {
+        type: Object as PropType<BasicColumn>,
+        default: null,
+      },
+      canResize: propTypes.bool.def(true),
+      resizeHeightOffset: propTypes.number.def(0),
     },
     emits: ['fetch-success', 'fetch-error', 'update:checked-row-keys', 'edit-end', 'edit-cancel', 'edit-row-end', 'edit-change'],
     setup(props, { emit }) {

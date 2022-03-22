@@ -71,11 +71,10 @@
 
 <script lang="ts">
   import { ref, defineComponent, reactive, unref, toRaw, computed, toRefs, watchEffect } from 'vue';
-  import { useTableContext } from '../../hooks/useTableContext';
   import { cloneDeep } from 'lodash-es';
-  import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@/utils/icons';
+  import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@/utils';
   import Draggable from 'vuedraggable/src/vuedraggable';
-  import { useDesignSetting } from '@/hooks';
+  import { useDesignSetting, useTableContext } from '@/hooks';
 
   interface Options {
     title: string;

@@ -9,7 +9,7 @@ const roleList = (size) => {
       roleId: '@integer(10,100)',
       name: '@cname()',
       roleCode: '@word(5)',
-      roleType: '@pick([1, 2, 5, 6, 7])',
+      roleType: '@integer(1,2)',
       permission: ['system', 'menu', 'image'],
     });
   });

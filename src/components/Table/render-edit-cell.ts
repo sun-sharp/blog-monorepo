@@ -1,8 +1,6 @@
-import type { BasicColumn } from '@/components/Table/src/types/table';
-import { Fn } from '@vueuse/core';
-import { h, Ref } from 'vue';
-
-import EditableCell from './EditableCell.vue';
+import { h } from 'vue';
+import TableEditCell from './table-edit-cell.vue';
+import { BasicColumn } from '/#/components/table';
 
 export function renderEditCell(column: BasicColumn) {
   return (record, index) => {
@@ -27,7 +25,7 @@ export function renderEditCell(column: BasicColumn) {
       }
       return true;
     };
-    return h(EditableCell, {
+    return h(TableEditCell, {
       value,
       record,
       column,
@@ -35,16 +33,3 @@ export function renderEditCell(column: BasicColumn) {
     });
   };
 }
-
-export type EditRecordRow<T = Recordable> = Partial<
-  {
-    onEdit: (editable: boolean, submit?: boolean) => Promise<boolean>;
-    editable: boolean;
-    onCancel: Fn;
-    onSubmit: Fn;
-    submitCbs: Fn[];
-    cancelCbs: Fn[];
-    validCbs: Fn[];
-    editValueRefs: Recordable<Ref>;
-  } & T
->;
