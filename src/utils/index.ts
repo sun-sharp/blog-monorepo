@@ -7,3 +7,5 @@ export * from './axios';
 export * from './routers';
 export * from './menu';
 export * from './files';
+export * from './props';
+// export * from './files';

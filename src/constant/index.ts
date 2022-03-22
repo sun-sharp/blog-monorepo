@@ -6,3 +6,4 @@ export * from './design-setting';
 export * from './project-setting';
 export * from './animate-setting';
 export * from './screen-enum';
+export * from './options';

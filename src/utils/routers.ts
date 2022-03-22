@@ -12,9 +12,14 @@ LayoutMap.set('iframe', IframeComponent);
  * @param component
  * @return {*}
  *  */
-export const pathFormat = (component: string): string => {
+export const pathFormat = (item: AppRouteRecordRaw): string => {
+  const { component, name, meta } = item;
   let path = component;
-  if (component.indexOf('/') >= 0) {
+  if (!component && meta?.iframeSrc) {
+    path = '';
+  } else if (component === 'layout') {
+    path = `/${name.toLowerCase()}`;
+  } else if (component.indexOf('/') >= 0) {
     path = component.replace(/(.*)[/]/, '$1-');
   }
   return path;
@@ -31,7 +36,7 @@ export const routerGenerator = (routerMap, _parentId): any[] => {
   const resultArr: any[] = [];
   routerMap.forEach((i) => {
     const { menuId, name, component, parentId, ...other } = i;
-    const path = pathFormat(component);
+    const path = pathFormat(i);
     if (_parentId === parentId) {
       const currentRouter: any = {
         // 路由地址 动态拼接生成如 /dashboard/workplace
