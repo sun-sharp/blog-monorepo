@@ -106,7 +106,6 @@ export class CapitalService {
                 menuId: m._id,
                 name: m.name,
                 title: m.title,
-                path: m.path,
                 sort: m.sort,
                 icon: m.icon,
                 parentId: m.parentId,

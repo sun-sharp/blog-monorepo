@@ -19,9 +19,6 @@ export class Menu extends Document {
   title: string; // 菜单的名称
 
   @Prop()
-  path: string; // 菜单的路由
-
-  @Prop()
   sort: number; // 菜单的排序
 
   @Prop()
