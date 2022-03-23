@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.0.2
+- 去掉菜单的路由参数path
+
 ## 1.0.1
 - file 文件数据库
 - 多数据库mongodb链接
