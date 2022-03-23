@@ -71,10 +71,13 @@ $ yarn
 # 打包
 $ yarn build
 
+# 删除进程/应用
+$ pm2 delete nest
+
 # 列出所有进程/应用 
 $ pm2 list
 
-# 重新启动进程/应用 
-$ pm2 restart xxx
+# 添加进程/应用 nest
+$ pm2 start --name nest dist/main.js
 
 ```
