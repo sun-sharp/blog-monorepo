@@ -71,6 +71,10 @@ $ yarn
 # 打包
 $ yarn build
 
-# 进入dist文件
+# 列出所有进程/应用 
+$ pm2 list
+
+# 重新启动进程/应用 
+$ pm2 restart xxx
 
 ```
