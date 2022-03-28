@@ -4,6 +4,7 @@ import { CreateWeChatDto } from './dto/create-we-chat.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { PageWeChatDto } from './dto/page-we-chat.dto';
 
 @Controller('we-chat')
 @ApiTags('微信')
@@ -17,6 +18,13 @@ export class WeChatController {
   @ApiOperation({ summary: '创建微信账单' })
   save(@Request() req, @Body() body: CreateWeChatDto) {
     return this.weChatService.save(req.user.userId, body);
+  }
+
+  @Post('find_page')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '条件并分页获取微信账单列表' })
+  findPage(@Request() req, @Body() body: PageWeChatDto) {
+    return this.weChatService.findPage(req.user.userId, body);
   }
 
   // @Get()
