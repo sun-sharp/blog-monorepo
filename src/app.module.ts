@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CapitalModule } from './modules/capital/capital.module';
 import { FileModule } from './modules/file/file.module';
+import { MoneyModule } from './modules/money/money.module';
 import customConfig from './config';
 
 @Module({
@@ -14,6 +15,7 @@ import customConfig from './config';
       isGlobal: true, // 作用于全局
       load: [customConfig], // 加载自定义配置项
     }),
+    MoneyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

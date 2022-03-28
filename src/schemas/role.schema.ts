@@ -12,16 +12,16 @@ import { Document } from 'mongoose';
 })
 export class Role extends Document {
   @Prop()
-  name: string;
+  name: string; // 角色名
 
   @Prop()
-  roleCode: string;
+  roleCode: string; // 角色唯一标识
 
   @Prop()
-  roleType: number;
+  roleType: number; // 角色类型
 
   @Prop()
-  permission: Array<string>;
+  permission: Array<string>; // 角色权限
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
