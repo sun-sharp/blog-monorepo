@@ -15,8 +15,8 @@ export class WeChatController {
   @Post('save')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '创建微信账单' })
-  create(@Request() req, @Body() body: CreateWeChatDto) {
-    return this.weChatService.create(req.user.userId, body);
+  save(@Request() req, @Body() body: CreateWeChatDto) {
+    return this.weChatService.save(req.user.userId, body);
   }
 
   // @Get()

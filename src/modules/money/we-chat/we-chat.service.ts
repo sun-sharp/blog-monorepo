@@ -15,7 +15,7 @@ export class WeChatService {
    * @return {*}  {Promise<IResponse>}
    * @memberof RoleService
    */
-  public create(userId: string, createWeChatDto: CreateWeChatDto): Promise<IResponse> {
+  public save(userId: string, createWeChatDto: CreateWeChatDto): Promise<IResponse> {
     return (
       Promise.resolve({ userId, body: createWeChatDto })
         // 添加
