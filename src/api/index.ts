@@ -7,6 +7,9 @@ export * as roleApi from './capital/role';
 // file
 export * as imageApi from './file/image';
 
-// mock
+// blog
 export * as homeApi from './blog/home';
 export * as tableAPi from './blog/table';
+
+// money
+export * as weChatApi from './money/we-chat';

@@ -3,8 +3,8 @@ export interface GlobConfig {
   title: string;
   capitalApiUrl: string;
   blogApiUrl: string;
-  mockApiUrl: string;
   fileApiUrl: string;
+  moneyApiUrl: string;
   shortName: string;
   urlPrefix?: string;
   imgUrl?: string;
