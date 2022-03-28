@@ -56,11 +56,12 @@ export const useRouteStore = defineStore({
     },
     // 动态获取权限
     async generateRoutes(userInfo?: any) {
-      if (!userInfo) return toRaw([]);
+      PageRoute.children = [HomeRoute];
+      if (!userInfo) return toRaw([PageRoute]);
       const { roleCode } = userInfo;
       // 动态获取菜单
       const [err, resp] = await at(capitalApi.adminMenus({ roleCode }));
-      if (err) return toRaw([]);
+      if (err) return toRaw([PageRoute]);
       const accessedRouters = await routerOneScreen(resp);
       PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
       this.setRouters([PageRoute, ...accessedRouters.routeList]);
