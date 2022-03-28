@@ -1,5 +1,8 @@
 <template>
-  <table-toolbar v-model:dropdown-size="tableSize" @reload="reloadClick" />
+  <table-toolbar v-model:dropdown-size="tableSize" @reload="reloadClick">
+    <template #tableTitle><slot name="tableTitle"></slot></template>
+    <template #toolbar><slot name="toolbar"></slot></template>
+  </table-toolbar>
   <div class="s-table">
     <n-data-table v-bind="getTableBind" :size="tableSize" :loading="tableLoading" />
   </div>

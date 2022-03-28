@@ -3,7 +3,7 @@
     <form-search inline :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
     <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :scroll-x="1090">
       <template #tableTitle>
-        <n-button>
+        <n-button type="success" @click="uploadFileModelRef.init()">
           <template #icon>
             <n-icon>
               <UploadOutlined />
@@ -13,6 +13,7 @@
         </n-button>
       </template>
     </basic-table>
+    <upload-file-model ref="uploadFileModelRef" @refurbish="reloadTable" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -22,6 +23,9 @@
   import BasicTable from '@/components/Table/basic-table.vue';
   import { useConfigure } from './configure';
   import { UploadOutlined } from '@/utils';
+  import UploadFileModel from './upload-file-model.vue';
+
+  const uploadFileModelRef = ref();
 
   /**
    * 表格
