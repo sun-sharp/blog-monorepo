@@ -2,6 +2,8 @@ export const Layout = () => import('@/layout/layout-index.vue');
 
 export const ParentLayout = () => import('@/layout/layout-parent.vue');
 
+export const HomeComponent = () => import('@/views/home/index.vue');
+
 export const IframeComponent = () => import('@/views/iframe.vue');
 
 export const ErrorComponent = () => import('@/views/404.vue');

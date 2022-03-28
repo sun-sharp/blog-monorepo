@@ -2,17 +2,19 @@
   "name": "vue3-ts-manage",
   "version": "0.1.2",
   "scripts": {
-    "dev": "vite",
-    "dev:debug": "vite --debug",
-    "build": "vue-tsc --noEmit && vite build",
+    "dev": "vite --mode dev",
+    "dev:prod": "vite --mode prod-local",
+    "dev:debug": "vite --mode dev --debug",
+    "build": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview",
     "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
-    "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm run bootstrap"
+    "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && yarn"
   },
   "dependencies": {
     "@vicons/antd": "^0.11.0",
     "@vicons/ionicons5": "^0.11.0",
+    "await-to-js": "^3.0.0",
     "axios": "^0.23.0",
     "date-fns": "^2.25.0",
     "echarts": "^5.2.1",

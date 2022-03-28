@@ -1,14 +1,14 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { ErrorComponent, Layout, PageEnum, RedirectComponent } from '@/constant';
+import { ErrorComponent, HomeComponent, Layout, PageEnum, RedirectComponent } from '@/constant';
 import { RouteRecordRaw } from 'vue-router';
 
 // 首页
 export const HomeRoute: AppRouteRecordRaw = {
-  path: 'home',
-  name: `Home`,
-  component: () => import('@/views/home/home-index.vue'),
+  path: PageEnum.HOME_PATH,
+  name: PageEnum.HOME_NAME,
+  component: HomeComponent,
   meta: {
-    title: '首页',
+    title: PageEnum.HOME_TITLE,
   },
 };
 

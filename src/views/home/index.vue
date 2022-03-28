@@ -294,14 +294,24 @@
     },
   ];
 
-  onMounted(async () => {
-    const consoleInfo = await homeApi.getConsoleInfo();
-    visits.value = consoleInfo.visits;
-    saleroom.value = consoleInfo.saleroom;
-    orderLarge.value = consoleInfo.orderLarge;
-    volume.value = consoleInfo.volume;
-    loading.value = false;
-  });
+  const init = () => {
+    homeApi
+      .getConsoleInfo()
+      .then((info) => {
+        visits.value = info.visits;
+        saleroom.value = info.saleroom;
+        orderLarge.value = info.orderLarge;
+        volume.value = info.volume;
+      })
+      .catch((err) => {
+        console.log(err, 'err');
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  };
+
+  onMounted(init);
 </script>
 
 <style lang="scss" scoped></style>
