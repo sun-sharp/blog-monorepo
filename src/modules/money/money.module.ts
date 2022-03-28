@@ -4,6 +4,7 @@ import { MoneyController } from './money.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 // import { RouterModule } from '@nestjs/core';
 import { WeChatModule } from './we-chat/we-chat.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -11,17 +12,17 @@ import { WeChatModule } from './we-chat/we-chat.module';
       connectionName: 'money',
     }),
     WeChatModule,
-    // RouterModule.register([
-    //   {
-    //     path: 'money',
-    //     children: [
-    //       {
-    //         path: '/',
-    //         module: ImageModule,
-    //       },
-    //     ],
-    //   },
-    // ]),
+    RouterModule.register([
+      {
+        path: 'money',
+        children: [
+          {
+            path: '/',
+            module: WeChatModule,
+          },
+        ],
+      },
+    ]),
   ],
   controllers: [MoneyController],
   providers: [MoneyService],
