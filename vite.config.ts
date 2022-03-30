@@ -79,7 +79,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const viteEnv = wrapperEnv(env);
   const { VITE_APP_TITLE, VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY, VITE_USE_MOCK } = viteEnv;
   const isBuild = command === 'build';
-  const useMock = VITE_USE_MOCK;
+  const useMock = !!VITE_USE_MOCK;
+  console.log(useMock);
   // 输出文件夹
   const OUTPUT_DIR = 'dist-manage';
 
