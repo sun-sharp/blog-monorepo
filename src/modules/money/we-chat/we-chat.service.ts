@@ -28,7 +28,20 @@ export class WeChatService {
         .then(async ({ userId, file }) => {
           const { buffer } = file; // file为前端上传的excel
           // 微信的菜单处理
-          const excelArr = await excelCsvHandleBuffer(buffer, 17, weCharExcelCellHandle, { userId });
+          const excelArr = await excelCsvHandleBuffer({
+            buffer: buffer,
+            startNum: 17,
+            cellHandler: weCharExcelCellHandle,
+            otherObj: { userId },
+          });
+          if (!excelArr)
+            throw {
+              message: '导入的数据失败！',
+            };
+          if (excelArr.length === 0)
+            throw {
+              message: '导入的数据为空！',
+            };
           const find = await this.weChatModel.find();
           const result = twoArrForTimeSameFilter(excelArr, find, 'tradeTime');
           if (result.length === 0)
