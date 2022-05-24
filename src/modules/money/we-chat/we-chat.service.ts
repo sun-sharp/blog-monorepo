@@ -7,15 +7,61 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { WeChat } from 'src/schemas/we-chat.schema';
 import { CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
+import * as ExcelJS from 'exceljs';
 
 @Injectable()
 export class WeChatService {
   response: IResponse;
   constructor(@InjectModel('WeChat') private readonly weChatModel: Model<WeChat>) {}
+
+  public upload(file: any): Promise<IResponse> {
+    return (
+      Promise.resolve({ file })
+        // 导入数据处理
+        .then(async ({ file }) => {
+          console.log(file, 'file');
+          const { buffer } = file; // file为前端上传的excel
+          const workbook = new ExcelJS.Workbook();
+          await workbook.xlsx.load(buffer); // 加载buffer文件
+          const worksheet = workbook.getWorksheet(1); // 获取excel表格的第一个sheet
+          if (!worksheet)
+            throw {
+              message: '获取表格数据出错',
+            };
+          // console.log(worksheet);
+          // const result = [];
+          // worksheet.eachRow((row, rowNumber) => {
+          //   console.log(row, rowNumber, 'row, rowNumber');
+          //   // 第一行是表头，故从第二行获取数据
+          //   // if (rowNumber > 1) {
+          //   //   console.log();
+          //   // }
+          // });
+          // console.log(result);
+          // await this.weChatModel.create({
+          //   ...body,
+          //   userId,
+          // });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '导入成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '导入失败！',
+          });
+        })
+    );
+  }
+
   /**
-   * @description 新增微信账单
-   * @return {*}  {Promise<IResponse>}
-   * @memberof RoleService
+   * @description: 新增微信账单
+   * @param {string} userId
+   * @param {CreateWeChatDto} createWeChatDto
+   * @return {Promise<IResponse>}
    */
   public save(userId: string, createWeChatDto: CreateWeChatDto): Promise<IResponse> {
     return (

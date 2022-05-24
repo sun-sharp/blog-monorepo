@@ -1,10 +1,12 @@
-import { Controller, Post, Body, UseGuards, HttpCode, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { WeChatService } from './we-chat.service';
 import { CreateWeChatDto } from './dto/create-we-chat.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadWeChatDto } from './dto/upload-we-chat.dto';
 
 @Controller('we-chat')
 @ApiTags('微信')
@@ -12,6 +14,18 @@ import { PageWeChatDto } from './dto/page-we-chat.dto';
 @UseGuards(AuthGuard('jwt'))
 export class WeChatController {
   constructor(private readonly weChatService: WeChatService) {}
+
+  @ApiOperation({ summary: '微信账单导入' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: UploadWeChatDto,
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('upload')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  upload(@UploadedFile() file) {
+    return this.weChatService.upload(file);
+  }
 
   @Post('save')
   @HttpCode(ApiHttpStatus.SUCCESS)
