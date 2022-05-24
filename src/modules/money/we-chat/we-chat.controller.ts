@@ -23,8 +23,8 @@ export class WeChatController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  upload(@UploadedFile() file) {
-    return this.weChatService.upload(file);
+  upload(@Request() req, @UploadedFile() file: Express.Multer.File) {
+    return this.weChatService.upload(req.user.userId, file);
   }
 
   @Post('save')

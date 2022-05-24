@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 // import { IsNotEmpty } from 'class-validator';
 
 export class UploadWeChatDto {
-  @ApiProperty({ description: '单图片上传', type: 'string', format: 'binary' })
+  @ApiProperty({ description: '单文件上传', type: 'string', format: 'binary' })
   file: any;
 
   // @ApiProperty({ description: '来源', type: 'string' })

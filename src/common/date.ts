@@ -1,7 +1,7 @@
 /**
  * @description 时间，日期转化
  */
-export function nowDateFun() {
+export const nowDateFun = () => {
   const newDate = new Date();
   const year = `${newDate.getFullYear()}`;
   let month = `${newDate.getMonth() + 1}`;
@@ -15,4 +15,14 @@ export function nowDateFun() {
   min = Number(min) < 10 ? `0${min}` : min;
   sec = Number(sec) < 10 ? `0${sec}` : sec;
   return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
-}
+};
+
+/**
+ * @description: 获取时间戳
+ * @param {string} defaultTime
+ * @return {number}
+ */
+export const getTimeStamp = (defaultTime: string): number => {
+  const time = defaultTime ? new Date(defaultTime) : new Date();
+  return time.getTime();
+};
