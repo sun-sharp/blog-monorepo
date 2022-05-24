@@ -9,7 +9,7 @@ export class MoneyController {
 
   @Get()
   @ApiOperation({
-    summary: '文件内容',
+    summary: '金钱内容',
   })
   index() {
     return this.moneyService.index();

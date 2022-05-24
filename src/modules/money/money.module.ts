@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MoneyService } from './money.service';
 import { MoneyController } from './money.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { RouterModule } from '@nestjs/core';
 import { WeChatModule } from './we-chat/we-chat.module';
 import { RouterModule } from '@nestjs/core';
 
