@@ -4,6 +4,7 @@ import { MoneyController } from './money.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WeChatModule } from './we-chat/we-chat.module';
 import { RouterModule } from '@nestjs/core';
+import { AliPayModule } from './ali-pay/ali-pay.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RouterModule } from '@nestjs/core';
         ],
       },
     ]),
+    AliPayModule,
   ],
   controllers: [MoneyController],
   providers: [MoneyService],
