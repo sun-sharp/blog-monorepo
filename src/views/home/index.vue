@@ -9,14 +9,14 @@
           </template>
           <div class="p-3 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
-            <transition-count-to v-else :start-val="1" :end-val="visits.dayVisits" class="f-sz-30 lh-40" />
+            <transition-count-to v-else :start-val="0" :end-val="visits.dayVisits" class="f-sz-30 lh-40" />
           </div>
           <div class="p-3 flex justify-between">
             <div>
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
                 日同比
-                <transition-count-to :start-val="1" suffix="%" :end-val="visits.rise" />
+                <transition-count-to :start-val="0" suffix="%" :end-val="visits.rise" />
                 <n-icon size="12" color="#00ff6f">
                   <CaretUpOutlined />
                 </n-icon>
@@ -26,7 +26,7 @@
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
                 周同比
-                <transition-count-to :start-val="1" suffix="%" :end-val="visits.decline" />
+                <transition-count-to :start-val="0" suffix="%" :end-val="visits.decline" />
                 <n-icon size="12" color="#ffde66">
                   <CaretDownOutlined />
                 </n-icon>
@@ -39,7 +39,7 @@
               <template v-else>
                 <div>总访问量：</div>
                 <div>
-                  <transition-count-to :start-val="1" :end-val="visits.amount" />
+                  <transition-count-to :start-val="0" :end-val="visits.amount" />
                 </div>
               </template>
             </div>
@@ -53,7 +53,7 @@
           </template>
           <div class="p-3 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
-            <transition-count-to v-else prefix="￥" :start-val="1" :end-val="saleroom.weekSaleroom" class="f-sz-30 lh-40" />
+            <transition-count-to v-else prefix="￥" :start-val="0" :end-val="saleroom.weekSaleroom" class="f-sz-30 lh-40" />
           </div>
           <div class="p-6 flex justify-between">
             <div class="text-sn flex-1">
@@ -66,7 +66,7 @@
               <template v-else>
                 <div>总销售额：</div>
                 <div>
-                  <transition-count-to prefix="￥" :start-val="1" :end-val="saleroom.amount" />
+                  <transition-count-to prefix="￥" :start-val="0" :end-val="saleroom.amount" />
                 </div>
               </template>
             </div>
@@ -80,14 +80,14 @@
           </template>
           <div class="p-3 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
-            <transition-count-to v-else :start-val="1" :end-val="orderLarge.weekLarge" class="f-sz-30 lh-40" />
+            <transition-count-to v-else :start-val="0" :end-val="orderLarge.weekLarge" class="f-sz-30 lh-40" />
           </div>
           <div class="p-3 flex justify-between">
             <div>
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
                 日同比
-                <transition-count-to :start-val="1" suffix="%" :end-val="orderLarge.rise" />
+                <transition-count-to :start-val="0" suffix="%" :end-val="orderLarge.rise" />
                 <n-icon size="12" color="#00ff6f">
                   <CaretUpOutlined />
                 </n-icon>
@@ -97,7 +97,7 @@
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
                 周同比
-                <transition-count-to :start-val="1" suffix="%" :end-val="orderLarge.rise" />
+                <transition-count-to :start-val="0" suffix="%" :end-val="orderLarge.rise" />
                 <n-icon size="12" color="#ffde66">
                   <CaretDownOutlined />
                 </n-icon>
@@ -110,7 +110,7 @@
               <template v-else>
                 <div>转化率：</div>
                 <div>
-                  <transition-count-to :start-val="1" suffix="%" :end-val="orderLarge.amount" />
+                  <transition-count-to :start-val="0" suffix="%" :end-val="orderLarge.amount" />
                 </div>
               </template>
             </div>
@@ -124,14 +124,14 @@
           </template>
           <div class="p-3 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
-            <transition-count-to v-else prefix="￥" :start-val="1" :end-val="volume.weekLarge" class="f-sz-30 lh-40" />
+            <transition-count-to v-else prefix="￥" :start-val="0" :end-val="volume.weekLarge" class="f-sz-30 lh-40" />
           </div>
           <div class="p-3 flex justify-between">
             <div>
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
                 月同比
-                <transition-count-to :start-val="1" suffix="%" :end-val="volume.rise" />
+                <transition-count-to :start-val="0" suffix="%" :end-val="volume.rise" />
                 <n-icon size="12" color="#00ff6f">
                   <CaretUpOutlined />
                 </n-icon>
@@ -141,7 +141,7 @@
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
                 月同比
-                <transition-count-to :start-val="1" suffix="%" :end-val="volume.decline" />
+                <transition-count-to :start-val="0" suffix="%" :end-val="volume.decline" />
                 <n-icon size="12" color="#ffde66">
                   <CaretDownOutlined />
                 </n-icon>
@@ -154,7 +154,7 @@
               <template v-else>
                 <div>总成交额：</div>
                 <div>
-                  <transition-count-to prefix="￥" :start-val="1" :end-val="volume.amount" />
+                  <transition-count-to prefix="￥" :start-val="0" :end-val="volume.amount" />
                 </div>
               </template>
             </div>

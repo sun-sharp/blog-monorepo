@@ -9,31 +9,31 @@
   import { isNumber } from '@/utils';
 
   const props = {
-    startVal: { type: Number, default: 0 },
-    endVal: { type: Number, default: 2021 },
-    duration: { type: Number, default: 1500 },
-    autoplay: { type: Boolean, default: true },
+    startVal: { type: Number, default: 0 }, // 开始数字
+    endVal: { type: Number, default: 0 }, // 最终数字
+    duration: { type: Number, default: 1500 }, // 变化时长
+    autoplay: { type: Boolean, default: true }, // 是否启动变化
     decimals: {
       type: Number,
       default: 0,
       validator(value: number) {
         return value >= 0;
       },
-    },
-    prefix: { type: String, default: '' },
-    suffix: { type: String, default: '' },
-    separator: { type: String, default: ',' },
-    decimal: { type: String, default: '.' },
+    }, // 精度，保留小数点后几位
+    prefix: { type: String, default: '' }, // 数值前
+    suffix: { type: String, default: '' }, // 数值后
+    separator: { type: String, default: ',' }, // 数字每三级，用什么分割
+    decimal: { type: String, default: '.' }, // 小数点
     /**
-     * font color
+     * 字体颜色
      */
     color: { type: String, default: '' },
     /**
-     * Turn on digital animation
+     * 打开数字动画
      */
     useEasing: { type: Boolean, default: true },
     /**
-     * Digital animation
+     * 数字动画
      */
     transition: { type: String, default: 'linear' },
   };
@@ -84,7 +84,7 @@
       }
 
       function formatNumber(num: number | string) {
-        if (!num) {
+        if (typeof num !== 'number') {
           return '';
         }
         const { decimals, decimal, separator, suffix, prefix } = props;
