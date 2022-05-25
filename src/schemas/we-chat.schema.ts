@@ -33,7 +33,7 @@ export class WeChat extends Document {
   incomeOrPay: string; // 收/支
 
   @Prop()
-  moneyAmount: number; // 金额(元)
+  moneyAmount: string; // 金额(元)
 
   @Prop()
   paymentMethod: string; // 支付方式
@@ -54,7 +54,7 @@ export class WeChat extends Document {
   place: string; // 使用地点
 
   @Prop()
-  billType: number; // 账单类型
+  billType: Array<number>; // 账单类型
 }
 
 export const WeChatSchema = SchemaFactory.createForClass(WeChat);

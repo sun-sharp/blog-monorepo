@@ -27,7 +27,7 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
   const rowCount = worksheet.rowCount;
   // 处理表格的数据
   worksheet.eachRow((row, rowNumber) => {
-    if (rowNumber > startNum && rowNumber < rowCount - endNum) {
+    if (rowNumber >= startNum && rowNumber <= rowCount - endNum) {
       const target = Object.assign({}, otherObj);
       row.eachCell((cell, cellNumber) => {
         let cellVal: any = cell.value;

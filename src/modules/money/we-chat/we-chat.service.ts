@@ -30,7 +30,7 @@ export class WeChatService {
           // 微信的菜单处理
           const result = await excelCsvHandleBuffer({
             buffer: buffer,
-            startNum: 17,
+            startNum: 18,
             cellHandler: weCharExcelCellHandle,
           });
           if (!result)

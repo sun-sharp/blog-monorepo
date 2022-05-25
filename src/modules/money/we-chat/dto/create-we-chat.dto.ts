@@ -78,7 +78,7 @@ export class CreateWeChatDto {
     description: '账单类型',
   })
   @IsNotEmpty({ message: '账单类型不能为空！' })
-  readonly billType: string;
+  readonly billType: Array<number>;
 }
 
 export class CreateWeChatBatchDto {

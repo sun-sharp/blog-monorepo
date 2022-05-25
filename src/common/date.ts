@@ -1,8 +1,10 @@
 /**
- * @description 时间，日期转化
+ * @description: 时间，日期转化
+ * @param {string} defaultTime
+ * @return {string}
  */
-export const nowDateFun = () => {
-  const newDate = new Date();
+export const nowDateFun = (defaultTime?: string): string => {
+  const newDate = defaultTime ? new Date(defaultTime) : new Date();
   const year = `${newDate.getFullYear()}`;
   let month = `${newDate.getMonth() + 1}`;
   let day = `${newDate.getDate()}`;
@@ -22,7 +24,7 @@ export const nowDateFun = () => {
  * @param {string} defaultTime
  * @return {number}
  */
-export const getTimeStamp = (defaultTime: string): number => {
+export const getTimeStamp = (defaultTime?: string): number => {
   const time = defaultTime ? new Date(defaultTime) : new Date();
   return time.getTime();
 };
