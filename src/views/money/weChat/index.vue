@@ -13,7 +13,7 @@
         </n-button>
       </template>
     </basic-table>
-    <upload-file-model ref="uploadFileModelRef" @refurbish="reloadTable" />
+    <upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
   </n-card>
 </template>
 <script lang="ts" setup>

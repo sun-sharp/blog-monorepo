@@ -74,7 +74,8 @@
 
 @include basePaddingMargin(100);
 @include baseFontSize(12, 40);
-@include baseWidth(1, 800, 5);
+@include baseWidth(1, 400, 5);
+@include baseWidth(400, 2000, 100);
 @include baseLineHeight(30, 100);
 
 .w-full {

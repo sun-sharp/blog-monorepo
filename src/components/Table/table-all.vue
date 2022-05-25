@@ -31,6 +31,8 @@
           data: props.data,
           columns: props.columns,
           actionColumn: props.actionColumn,
+          maxHeight: props.maxHeight,
+          scrollX: props.scrollX,
         };
       });
 

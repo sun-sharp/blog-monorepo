@@ -8,10 +8,12 @@ import {
   ResultEnum,
   // IS_LOCK_SCREEN, ResultEnum
 } from '@/constant';
-
-const Storage = createStorage({ storage: localStorage });
 import { capitalApi, userApi } from '@/api';
 import at from 'await-to-js';
+import { getAppEnvConfig } from '@/utils/env';
+
+const Storage = createStorage({ storage: localStorage });
+const appEnvConfig = getAppEnvConfig();
 
 export interface IUserState {
   token: string;
@@ -33,6 +35,10 @@ export const useUserStore = defineStore({
   getters: {
     getToken(): string {
       return this.token;
+    },
+    getCompleteToken(): string {
+      const { tokenHead } = appEnvConfig;
+      return tokenHead ? tokenHead + this.token : this.token;
     },
     // getAvatar(): string {
     //   return this.avatar;

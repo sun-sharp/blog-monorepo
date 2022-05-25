@@ -11,7 +11,7 @@
       <div class="view-account-form">
         <n-form ref="formRef" label-placement="left" size="large" :model="formInline" :rules="rules">
           <n-form-item path="username">
-            <n-input v-model:value="formInline.username" placeholder="请输入用户名">
+            <n-input v-model:value="formInline.username" placeholder="请输入用户名" @keyup.enter="handleSubmit">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -20,7 +20,7 @@
             </n-input>
           </n-form-item>
           <n-form-item path="password">
-            <n-input v-model:value="formInline.password" type="password" show-password-on="click" placeholder="请输入密码">
+            <n-input v-model:value="formInline.password" type="password" show-password-on="click" placeholder="请输入密码" @keyup.enter="handleSubmit">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <LockClosedOutline />

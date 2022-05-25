@@ -1,20 +1,21 @@
 <template>
   <n-upload
     :headers="uploadHeaders"
-    :show-remove-button="showRemoveButton"
     :data="uploadData"
+    :show-remove-button="showRemoveButton"
     :disabled="disabled"
     :max="max"
+    :multiple="multiple"
     :custom-request="customRequest"
-    :create-thumbnail-url="createThumbnailUrl"
+    list-type="image"
+    :file-list="fileList"
   >
-    <n-button>上传文件</n-button>
+    <n-button :type="buttonType">{{ buttonText }}</n-button>
   </n-upload>
 </template>
 
 <script lang="ts">
   import { useUserStoreWidthOut } from '@/store/modules/user';
-  import { getUploadAction } from '@/utils';
   import axios, { AxiosRequestConfig } from 'axios';
   import { UploadCustomRequestOptions, useMessage } from 'naive-ui';
   import { defineComponent, toRefs, reactive, computed } from 'vue';
@@ -46,37 +47,48 @@
         type: String,
         default: '',
       },
+      buttonType: {
+        type: String,
+        default: '',
+      },
+      buttonText: {
+        type: String,
+        default: '上传文件',
+      },
+      action: {
+        type: String,
+        required: true,
+      },
+      multiple: {
+        type: Boolean,
+        default: false,
+      },
+      fileList: {
+        type: Array,
+        default: () => [],
+      },
     },
-    emits: ['uploadChange', 'delete'],
-    setup(props) {
-      console.log(props, 'props');
-      // const getCSSProperties = computed(() => {
-      //   return {
-      //     width: `${props.width}px`,
-      //     height: `${props.height}px`,
-      //   };
-      // });
-
-      const message = useMessage();
-      // const dialog = useDialog();
+    emits: ['update:fileList', 'uploadChange'],
+    setup(props, { emit }) {
+      const { action, headers, source } = toRefs(props);
+      const nMessage = useMessage();
 
       const state = reactive({
         showModal: false,
-        previewUrl: '',
-        originalImgList: [] as string[],
-        imgList: [] as string[],
       });
 
       // 上传文件
-      const uploadAction = getUploadAction();
+      const uploadAction = computed(() => {
+        return action.value;
+      });
       const userStore = useUserStoreWidthOut();
-      const token = userStore.getToken;
+      const completeToken = userStore.getCompleteToken;
       const uploadHeaders = computed(() => {
         return {
-          ...props.headers,
-          source: props.source,
+          ...headers.value,
+          source: source.value,
           timestamp: new Date().getTime(),
-          Authorization: token,
+          Authorization: completeToken,
         };
       });
       const uploadData = computed(() => {
@@ -84,18 +96,16 @@
       });
 
       const customRequest = ({ file, headers, data, withCredentials, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
-        console.log(file, headers, withCredentials);
         const formData = new FormData();
         if (data) {
           Object.keys(data).forEach((key) => {
             formData.append(key, data[key as keyof UploadCustomRequestOptions['data']]);
           });
         }
-        formData.append('image', file.file as File);
-        console.log(formData);
+        formData.append('file', file.file as File);
         axios
           .request({
-            url: uploadAction as string,
+            url: uploadAction.value as string,
             method: 'POST',
             data: formData,
             withCredentials,
@@ -104,30 +114,22 @@
               onProgress({ percent: Math.ceil((loaded / total) * 100) });
             },
           } as AxiosRequestConfig)
-          .then((res) => {
-            console.log(res);
-            // const infoField = componentSetting.upload.apiSetting.infoField;
-            // const imgField = componentSetting.upload.apiSetting.imgField;
-            // const { code } = res;
-            // const message = res.msg || res.message || '上传失败';
-            // const result = res[infoField];
-            // message.success(e.data);
-            onFinish();
+          .then((res: any) => {
+            const { code, message = '上传失败', result } = res.data;
+            if (code === 0 && typeof result === 'object' && result instanceof Array && result.length > 0) {
+              nMessage.success(message);
+              emit('uploadChange', result);
+              emit('update:fileList', result);
+              onFinish();
+            } else {
+              nMessage.error(message);
+              onError();
+            }
           })
           .catch((error) => {
-            message.success(error.message);
+            nMessage.error(error.message);
             onError();
           });
-      };
-
-      // 自定义文件的缩略图
-      const createThumbnailUrl = (file: File): Promise<string> => {
-        console.log(file);
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve('https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg');
-          }, 1000);
-        });
       };
 
       return {
@@ -135,7 +137,6 @@
         uploadHeaders,
         uploadData,
         customRequest,
-        createThumbnailUrl,
       };
     },
   });

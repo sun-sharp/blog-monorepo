@@ -3,13 +3,25 @@ import { AxiosMoney } from '@/api/axios';
 const basic = '/we-chat';
 
 /**
- * @description 用户列表
- * @param params
+ * @description: 微信账单列表
+ * @param {any} data
  */
-export function getPage(params) {
+export const getPage = (data: any) => {
   return AxiosMoney.request({
     url: `${basic}/find_page`,
     method: 'POST',
-    params,
+    data,
   });
-}
+};
+
+/**
+ * @description: 批量保存账单
+ * @param {any} data
+ */
+export const batchSave = (data: any) => {
+  return AxiosMoney.request({
+    url: `${basic}/batch-save`,
+    method: 'POST',
+    data,
+  });
+};

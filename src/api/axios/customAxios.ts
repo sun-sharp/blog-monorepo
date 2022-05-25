@@ -90,11 +90,10 @@ export class CustomAxios {
     const conf: any = Object.assign({}, config);
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = this.requestOptions;
     const userStore = useUserStoreWidthOut();
-    const token = userStore.getToken;
-    if (token) {
-      const tokenHead = getAppEnvConfig().tokenHead;
+    const completeToken = userStore.getCompleteToken;
+    if (completeToken) {
       // jwt token
-      conf.headers.Authorization = tokenHead ? tokenHead + token : token;
+      conf.headers.Authorization = completeToken;
     }
 
     // 添加接口前缀

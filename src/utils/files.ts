@@ -8,8 +8,14 @@ export const getImgUrl = (url: string): string => {
   return /(^http|https:\/\/)/g.test(url) ? url : `${imgUrl}/${url}`;
 };
 
-// 上传接口路径
-export const getUploadAction = (): string => {
+// 上传图片接口路径
+export const getUploadImageAction = (): string => {
   const { fileApiUrl } = appEnvConfig;
   return `${fileApiUrl}/image/upload`;
+};
+
+// 上传微信账单接口路径
+export const getUploadWeCharAction = (): string => {
+  const { moneyApiUrl } = appEnvConfig;
+  return `${moneyApiUrl}/we-chat/upload`;
 };

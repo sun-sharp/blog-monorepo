@@ -1,17 +1,4 @@
 <template>
-  <!-- <n-upload
-    v-bind="$props"
-    :action="uploadAction"
-    :headers="uploadHeaders"
-    name="image"
-    :data="uploadData"
-    :file-list-style="{ display: 'none' }"
-    @before-upload="beforeUpload"
-    @finish="finish"
-  >
-    上传图片
-  </n-upload> -->
-
   <n-upload
     list-type="image-card"
     :headers="uploadHeaders"
@@ -33,7 +20,7 @@
 <script lang="ts">
   // import { imageApi } from '@/api';
   import { useUserStoreWidthOut } from '@/store/modules/user';
-  import { getUploadAction } from '@/utils';
+  import { getUploadImageAction } from '@/utils';
   import axios, { AxiosRequestConfig } from 'axios';
   import { UploadCustomRequestOptions, useMessage } from 'naive-ui';
   import { defineComponent, toRefs, reactive, computed } from 'vue';
@@ -108,15 +95,15 @@
       });
 
       // 上传文件
-      const uploadAction = getUploadAction();
+      const uploadAction = getUploadImageAction();
       const userStore = useUserStoreWidthOut();
-      const token = userStore.getToken;
+      const completeToken = userStore.getCompleteToken;
       const uploadHeaders = computed(() => {
         return {
           ...props.headers,
           source: props.source,
           timestamp: new Date().getTime(),
-          Authorization: token,
+          Authorization: completeToken,
         };
       });
       const uploadData = computed(() => {
@@ -249,7 +236,7 @@
             onFinish();
           })
           .catch((error) => {
-            message.success(error.message);
+            message.error(error.message);
             onError();
           });
       };
