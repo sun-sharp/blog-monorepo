@@ -34,6 +34,10 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
         if (['/', '-', '—'].includes(cellVal)) {
           cellVal = '';
         }
+        const reg = /^\s+|\s+$/g;
+        if (typeof cellVal === 'string' && cellVal.search(reg) > 0) {
+          cellVal = cellVal.replace(reg, '');
+        }
         cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
       });
       result.push(target);
