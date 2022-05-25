@@ -24,10 +24,13 @@ export class WeChat extends Document {
   tradeOtherPerson: string; // 交易对方
 
   @Prop()
+  tradeOtherPersonRemarks: string; // 交易对方备注
+
+  @Prop()
   goods: string; // 商品
 
   @Prop()
-  incomeOrPay: string; // 收入
+  incomeOrPay: string; // 收/支
 
   @Prop()
   moneyAmount: number; // 金额(元)
@@ -39,13 +42,19 @@ export class WeChat extends Document {
   currentStatus: string; // 当前状态
 
   @Prop()
-  transactionNo: string; // 交易单号
-
-  @Prop()
-  merchantNo: string; // 商户单号
-
-  @Prop()
   remarks: string; // 备注
+
+  @Prop()
+  inflowOrOutflow: number; // 流入/流出
+
+  @Prop()
+  explain: string; // 账单说明
+
+  @Prop()
+  place: string; // 使用地点
+
+  @Prop()
+  billType: number; // 账单类型
 }
 
 export const WeChatSchema = SchemaFactory.createForClass(WeChat);

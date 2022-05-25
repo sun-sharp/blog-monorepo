@@ -7,7 +7,7 @@ interface excelCsvHandleBufferObj {
   startNum: number;
   endNum?: number;
   cellHandler: object;
-  otherObj: object;
+  otherObj?: object;
 }
 
 /**

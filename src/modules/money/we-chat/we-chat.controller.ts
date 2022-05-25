@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { WeChatService } from './we-chat.service';
-import { CreateWeChatDto } from './dto/create-we-chat.dto';
+import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -23,8 +23,8 @@ export class WeChatController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  upload(@Request() req, @UploadedFile() file: Express.Multer.File) {
-    return this.weChatService.upload(req.user.userId, file);
+  upload(@UploadedFile() file: Express.Multer.File) {
+    return this.weChatService.upload(file);
   }
 
   @Post('save')
@@ -32,6 +32,13 @@ export class WeChatController {
   @ApiOperation({ summary: '创建微信账单' })
   save(@Request() req, @Body() body: CreateWeChatDto) {
     return this.weChatService.save(req.user.userId, body);
+  }
+
+  @Post('batch-save')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '批量创建微信账单' })
+  batchSave(@Request() req, @Body() body: CreateWeChatBatchDto) {
+    return this.weChatService.batchSave(req.user.userId, body);
   }
 
   @Post('find_page')
