@@ -1,6 +1,6 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-1000" :show-icon="false" :mask-closable="false" preset="dialog" title="导入微信账单">
-    <table-all :data="tableData" :columns="columns" max-height="60vh" :scroll-x="2000" @reload="reload">
+  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" title="导入微信账单">
+    <table-all :data="tableData" :columns="columns" max-height="50vh" @reload="reload">
       <template #tableTitle>
         <form-upload-excel
           v-model:file-list="uploadFileList"
@@ -37,7 +37,7 @@
       const showModal = ref(false);
       const tableData = ref<any[]>([]);
       const btnDisabled = computed(() => {
-        return tableData.value.filter((f) => f.inflowOrOutflow && f.billType).length === 0;
+        return tableData.value.filter((f) => !!f.inflowOrOutflow && !!f.billType).length === 0;
       });
       const columns = uploadColumns();
       const uploadFileList = ref([]);

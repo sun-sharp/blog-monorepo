@@ -1,7 +1,16 @@
 <template>
   <n-card :bordered="false" class="proCard">
     <form-search inline :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
-    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :scroll-x="1090">
+    <basic-table
+      ref="actionRef"
+      :pagination="{
+        pageSize: 10,
+      }"
+      :columns="columns"
+      :request="loadDataTable"
+      :row-key="(row: any) => row.id"
+      :scroll-x="1090"
+    >
       <template #tableTitle>
         <n-button type="success" @click="uploadFileModelRef.init()">
           <template #icon>
