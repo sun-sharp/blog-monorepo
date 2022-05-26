@@ -3,12 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { weCharExcelCellHandle } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { excelCsvHandleBuffer } from 'src/common/excel';
+import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { WeChat } from 'src/schemas/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
+import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 
 @Injectable()
 export class WeChatService {
@@ -110,7 +111,14 @@ export class WeChatService {
         // 添加
         .then(async ({ userId, body }) => {
           const { batches } = body;
-          await this.weChatModel.create(...batches.map((m) => ({ ...m, userId })));
+          // 过滤掉相同交易时间的数据
+          const find = await this.weChatModel.find();
+          const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
+          if (filterArr.length === 0)
+            throw {
+              message: '导入的数据交易时间全部和数据库的相同！',
+            };
+          await this.weChatModel.create(...filterArr.map((m) => ({ ...m, userId })));
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
@@ -136,28 +144,57 @@ export class WeChatService {
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson } = body;
+          const { size, current, tradeOtherPerson, inflowOrOutflow, billType } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { userId, tradeOtherPerson: { $regex: tradeOtherPerson } };
+          const findData: any = {
+            userId,
+            $or: [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }],
+          };
+          if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
+          if (billType) findData.billType = billType;
           const total = await this.weChatModel.find(findData).count();
-          const list = await this.weChatModel.find(findData).limit(limit).skip(skip);
+          const list = await this.weChatModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
               current,
-              list: list.map((m) => ({
-                weChatId: m._id,
-                userId: m.userId,
-                tradeTime: m.tradeTime,
-                tradeType: m.tradeType,
-                tradeOtherPerson: m.tradeOtherPerson, // 交易对方
-                goods: m.goods, // 商品
-                incomeOrPay: m.incomeOrPay, // 收入
-                moneyAmount: m.moneyAmount, // 金额(元)
-                paymentMethod: m.paymentMethod, // 支付方式
-                currentStatus: m.currentStatus, // 当前状态
-                remarks: m.remarks, // 备注
-              })),
+              list: list.map(
+                ({
+                  _id,
+                  userId,
+                  tradeTime,
+                  tradeType,
+                  tradeOtherPerson,
+                  tradeOtherPersonRemarks,
+                  goods,
+                  incomeOrPay,
+                  moneyAmount,
+                  paymentMethod,
+                  currentStatus,
+                  remarks,
+                  inflowOrOutflow,
+                  explain,
+                  place,
+                  billType,
+                }) => ({
+                  weChatId: _id,
+                  userId,
+                  tradeTime,
+                  tradeType,
+                  tradeOtherPerson,
+                  tradeOtherPersonRemarks,
+                  goods,
+                  incomeOrPay,
+                  moneyAmount,
+                  paymentMethod,
+                  currentStatus,
+                  remarks,
+                  inflowOrOutflow,
+                  explain,
+                  place,
+                  billType,
+                }),
+              ),
               size,
               total,
             },
@@ -169,6 +206,32 @@ export class WeChatService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 修改微信账单
+   * @param {UpdateWeChatDto} body
+   * @return {Promise<IResponse>}
+   */
+  public update(body: UpdateWeChatDto): Promise<IResponse> {
+    return (
+      Promise.resolve({ body })
+        .then(async ({ body }) => {
+          const { weChatId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType } = body;
+          await this.weChatModel.updateOne({ _id: weChatId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '修改失败！',
           });
         })
     );

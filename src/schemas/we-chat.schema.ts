@@ -54,7 +54,7 @@ export class WeChat extends Document {
   place: string; // 使用地点
 
   @Prop()
-  billType: Array<number>; // 账单类型
+  billType: number; // 账单类型
 }
 
 export const WeChatSchema = SchemaFactory.createForClass(WeChat);

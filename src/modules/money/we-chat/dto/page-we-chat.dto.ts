@@ -8,4 +8,16 @@ export class PageWeChatDto extends PaginateDto {
     default: '',
   })
   readonly tradeOtherPerson: string = '';
+
+  @ApiProperty({
+    description: '流入/流出',
+    required: false,
+  })
+  inflowOrOutflow: number;
+
+  @ApiProperty({
+    description: '账单类型',
+    required: false,
+  })
+  billType: number;
 }

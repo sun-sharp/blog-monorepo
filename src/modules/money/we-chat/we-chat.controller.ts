@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
 import { WeChatService } from './we-chat.service';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -7,6 +7,7 @@ import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadWeChatDto } from './dto/upload-we-chat.dto';
+import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 
 @Controller('we-chat')
 @ApiTags('微信')
@@ -46,6 +47,12 @@ export class WeChatController {
   @ApiOperation({ summary: '条件并分页获取微信账单列表' })
   findPage(@Request() req, @Body() body: PageWeChatDto) {
     return this.weChatService.findPage(req.user.userId, body);
+  }
+
+  @Put('update')
+  @ApiOperation({ summary: '修改微信账单' })
+  update(@Body() body: UpdateWeChatDto) {
+    return this.weChatService.update(body);
   }
 
   // @Get()
