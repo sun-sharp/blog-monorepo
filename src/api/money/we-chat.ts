@@ -25,3 +25,15 @@ export const batchSave = (data: any) => {
     data,
   });
 };
+
+/**
+ * @description: 修改微信账单
+ * @param {any} data
+ */
+export const update = (data: any) => {
+  return AxiosMoney.request({
+    url: `${basic}/update`,
+    method: 'PUT',
+    data,
+  });
+};

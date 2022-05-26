@@ -1,16 +1,7 @@
 <template>
   <n-card :bordered="false" class="proCard">
-    <form-search inline :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
-    <basic-table
-      ref="actionRef"
-      :pagination="{
-        pageSize: 10,
-      }"
-      :columns="columns"
-      :request="loadDataTable"
-      :row-key="(row: any) => row.id"
-      :scroll-x="1090"
-    >
+    <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:4 xl:5 2xl:6' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
+    <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="(row: any) => row.id" :action-column="actionColumn">
       <template #tableTitle>
         <n-button type="success" @click="uploadFileModelRef.init()">
           <template #icon>
@@ -23,6 +14,7 @@
       </template>
     </basic-table>
     <upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
+    <update-model ref="updateModelRef" @refurbish="reloadTable" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -33,8 +25,13 @@
   import { useConfigure } from './configure';
   import { UploadOutlined } from '@/utils';
   import UploadFileModel from './upload-file-model.vue';
+  import UpdateModel from './update-model.vue';
 
+  // 导入弹窗
   const uploadFileModelRef = ref();
+
+  // 编辑弹窗
+  const updateModelRef = ref();
 
   /**
    * 表格
@@ -50,7 +47,7 @@
     actionRef.value.reload();
   };
   // 配置
-  const { searchSchemas, columns } = useConfigure();
+  const { searchSchemas, actionColumn, columns } = useConfigure({ updateModelRef });
 
   // 数据查询
   const searchSubmit = (values: Recordable) => {

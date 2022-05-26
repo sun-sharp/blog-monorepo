@@ -51,7 +51,7 @@
       // 初始化
       const init = async () => {
         showModal.value = true;
-        tableData.value = [];
+        reload();
       };
 
       // 保存列表数据
