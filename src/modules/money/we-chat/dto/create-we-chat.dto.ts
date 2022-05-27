@@ -81,6 +81,9 @@ export class CreateWeChatDto {
   readonly billType: number;
 }
 
+/**
+ * @description: 批量创建微信账单验证
+ */
 export class CreateWeChatBatchDto {
   @ApiProperty({
     description: '批量导入',

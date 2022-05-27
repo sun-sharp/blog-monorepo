@@ -18,7 +18,6 @@ export class WeChatService {
 
   /**
    * @description: 微信账单导入
-   * @param {string} userId
    * @param {any} file
    * @return {Promise<IResponse>}
    */
@@ -46,13 +45,6 @@ export class WeChatService {
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
-          // const find = await this.weChatModel.find();
-          // const result = twoArrForTimeSameFilter(excelArr, find, 'tradeTime');
-          // if (result.length === 0)
-          //   throw {
-          //     message: '导入的数据交易时间全部和数据库的相同！',
-          //   };
-          // await this.weChatModel.create(...result);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,
@@ -100,7 +92,7 @@ export class WeChatService {
   }
 
   /**
-   * @description: 新增微信账单
+   * @description: 批量新增微信账单
    * @param {string} userId
    * @param {CreateWeChatBatchDto} createWeChatBatchDto
    * @return {Promise<IResponse>}
@@ -136,7 +128,8 @@ export class WeChatService {
 
   /**
    * @description: 条件并分页获取微信账单
-   * @param {PageUserDto} body
+   * @param {string} userId
+   * @param {PageWeChatDto} body
    * @return {Promise<IResponse>}
    */
   public findPage(userId: string, body: PageWeChatDto): Promise<IResponse> {
