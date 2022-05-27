@@ -197,3 +197,70 @@ export const billTypeOption = [
   },
 ];
 export const billTypeMap = arrEnumToObj(billTypeOption);
+
+// 账单“银行类型”枚举值
+export const bankTypeOption = [
+  {
+    value: 1,
+    label: '中国工商银行',
+  },
+  {
+    value: 2,
+    label: '中国农业银行',
+  },
+  {
+    value: 3,
+    label: '中国建设银行',
+  },
+  {
+    value: 4,
+    label: '民生银行',
+  },
+  {
+    value: 5,
+    label: '招商银行',
+  },
+];
+export const bankTypeMap = arrEnumToObj(bankTypeOption);
+
+// 账单“凭证类型”枚举值
+export const voucherTypeOption = [
+  {
+    value: 1,
+    label: '存折',
+  },
+  {
+    value: 2,
+    label: '储蓄卡',
+  },
+  {
+    value: 3,
+    label: '信用卡',
+  },
+];
+export const voucherTypeMap = arrEnumToObj(voucherTypeOption);
+
+// 账单“银行账单类型”枚举值
+export const bankBillTypeOption = [
+  {
+    value: 1,
+    label: '支付宝',
+  },
+  {
+    value: 2,
+    label: '微信',
+  },
+  {
+    value: 3,
+    label: '现金',
+  },
+  {
+    value: 4,
+    label: '工资',
+  },
+  {
+    value: 101,
+    label: '其它',
+  },
+];
+export const bankBillTypeMap = arrEnumToObj(bankBillTypeOption);

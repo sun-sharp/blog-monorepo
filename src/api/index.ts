@@ -14,3 +14,4 @@ export * as tableAPi from './blog/table';
 // money
 export * as weChatApi from './money/we-chat';
 export * as aliPayApi from './money/ali-pay';
+export * as bankApi from './money/bank';

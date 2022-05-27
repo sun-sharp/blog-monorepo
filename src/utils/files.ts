@@ -25,3 +25,9 @@ export const getUploadAliPayAction = (): string => {
   const { moneyApiUrl } = appEnvConfig;
   return `${moneyApiUrl}/ali-pay/upload`;
 };
+
+// 上传银行账单接口路径
+export const getUploadBankAction = (): string => {
+  const { moneyApiUrl } = appEnvConfig;
+  return `${moneyApiUrl}/bank/upload`;
+};

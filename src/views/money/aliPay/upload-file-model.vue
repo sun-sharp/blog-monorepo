@@ -6,7 +6,6 @@
           v-model:file-list="uploadFileList"
           :action="uploadAction"
           button-type="primary"
-          source="we-chat"
           :show-remove-button="false"
           @uploadChange="excelUploadChange"
         />

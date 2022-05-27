@@ -21,8 +21,8 @@
 </template>
 
 <script lang="ts">
-  import { weChatApi } from '@/api';
-  import { getUploadWeCharAction } from '@/utils';
+  import { bankApi } from '@/api';
+  import { getUploadBankAction } from '@/utils';
   import { computed, defineComponent, ref } from 'vue';
   import TableAll from '@/components/Table/table-all.vue';
   import FormUploadExcel from '@/components/form/form-upload-excel.vue';
@@ -36,7 +36,8 @@
       const showModal = ref(false);
       const tableData = ref<any[]>([]);
       const btnDisabled = computed(() => {
-        return tableData.value.filter((f) => !!f.inflowOrOutflow && !!f.billType).length === 0;
+        console.log(tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length);
+        return tableData.value.filter((f) => !!f.inflowOrOutflow && !!f.bankBillType).length === 0;
       });
       const columns = uploadColumns();
       const uploadFileList = ref([]);
@@ -55,7 +56,7 @@
 
       // 保存列表数据
       const confirmForm = () => {
-        weChatApi
+        bankApi
           .batchSave({
             batches: tableData.value,
           })
@@ -74,7 +75,7 @@
         btnDisabled,
         tableData,
         columns,
-        uploadAction: getUploadWeCharAction(),
+        uploadAction: getUploadBankAction(),
         uploadFileList,
         init,
         reload,
