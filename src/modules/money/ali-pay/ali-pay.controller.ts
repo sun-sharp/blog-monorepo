@@ -1,4 +1,4 @@
-import { Controller, UseGuards, UseInterceptors, HttpCode, UploadedFile, Request, Post, Body } from '@nestjs/common';
+import { Controller, UseGuards, UseInterceptors, HttpCode, UploadedFile, Request, Post, Body, Put } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -6,6 +6,7 @@ import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { AliPayService } from './ali-pay.service';
 import { CreateAliPayBatchDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
+import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
 import { UploadAliPayDto } from './dto/upload-we-chat.dto';
 
 @Controller('ali-pay')
@@ -36,33 +37,14 @@ export class AliPayController {
 
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '条件并分页获取微信账单列表' })
+  @ApiOperation({ summary: '条件并分页获取支付宝账单列表' })
   findPage(@Request() req, @Body() body: PageAliPayDto) {
     return this.aliPayService.findPage(req.user.userId, body);
   }
 
-  // @Post()
-  // create(@Body() createAliPayDto: CreateAliPayDto) {
-  //   return this.aliPayService.create(createAliPayDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.aliPayService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.aliPayService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAliPayDto: UpdateAliPayDto) {
-  //   return this.aliPayService.update(+id, updateAliPayDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.aliPayService.remove(+id);
-  // }
+  @Put('update')
+  @ApiOperation({ summary: '修改支付宝账单' })
+  update(@Body() body: UpdateAliPayDto) {
+    return this.aliPayService.update(body);
+  }
 }

@@ -12,6 +12,7 @@ import { AliPayModule } from './ali-pay/ali-pay.module';
       connectionName: 'money',
     }),
     WeChatModule,
+    AliPayModule,
     RouterModule.register([
       {
         path: 'money',
@@ -20,10 +21,13 @@ import { AliPayModule } from './ali-pay/ali-pay.module';
             path: '/',
             module: WeChatModule,
           },
+          {
+            path: '/',
+            module: AliPayModule,
+          },
         ],
       },
     ]),
-    AliPayModule,
   ],
   controllers: [MoneyController],
   providers: [MoneyService],

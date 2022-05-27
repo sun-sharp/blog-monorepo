@@ -30,7 +30,7 @@ export class AliPayService {
           // 微信的菜单处理
           const result = await excelCsvHandleBuffer({
             buffer: buffer,
-            startNum: 2,
+            startNum: 3,
             endNum: 21,
             cellHandler: aliPayExcelCellHandle,
           });
