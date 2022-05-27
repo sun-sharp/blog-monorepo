@@ -19,3 +19,9 @@ export const getUploadWeCharAction = (): string => {
   const { moneyApiUrl } = appEnvConfig;
   return `${moneyApiUrl}/we-chat/upload`;
 };
+
+// 上传支付宝账单接口路径
+export const getUploadAliPayAction = (): string => {
+  const { moneyApiUrl } = appEnvConfig;
+  return `${moneyApiUrl}/ali-pay/upload`;
+};

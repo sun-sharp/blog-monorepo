@@ -4,8 +4,8 @@
       <n-form-item label="交易时间">
         {{ modelForm.tradeTime }}
       </n-form-item>
-      <n-form-item label="交易类型">
-        {{ modelForm.tradeType }}
+      <n-form-item label="交易分类">
+        {{ modelForm.transactionClassification }}
       </n-form-item>
       <n-form-item label="交易对方">
         {{ modelForm.tradeOtherPerson }}
@@ -13,23 +13,20 @@
       <n-form-item label="交易对方备注" path="tradeOtherPersonRemarks">
         <n-input v-model:value="modelForm.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" />
       </n-form-item>
-      <n-form-item label="商品">
-        {{ modelForm.goods }}
+      <n-form-item label="商品说明">
+        {{ modelForm.productDescription }}
       </n-form-item>
       <n-form-item label="收/支">
         {{ modelForm.incomeOrPay }}
       </n-form-item>
-      <n-form-item label="金额(元)">
+      <n-form-item label="金额">
         {{ modelForm.moneyAmount }}
       </n-form-item>
-      <n-form-item label="支付方式">
+      <n-form-item label="收/付款方式">
         {{ modelForm.paymentMethod }}
       </n-form-item>
-      <n-form-item label="当前状态">
-        {{ modelForm.currentStatus }}
-      </n-form-item>
-      <n-form-item label="备注">
-        {{ modelForm.remarks }}
+      <n-form-item label="对方账号">
+        {{ modelForm.oppositeAccount }}
       </n-form-item>
       <n-form-item label="流入/流出" path="inflowOrOutflow">
         <n-radio-group v-model:value="modelForm.inflowOrOutflow" name="radiogroup">
@@ -63,19 +60,18 @@
 <script lang="ts">
   import { billTypeOption, inflowOrOutflowOption } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
-  import { weChatApi } from '@/api';
+  import { aliPayApi } from '@/api';
 
   const modelFields = {
     tradeTime: '',
-    tradeType: '',
+    transactionClassification: '',
     tradeOtherPerson: '',
     tradeOtherPersonRemarks: '',
-    goods: '',
+    productDescription: '',
     incomeOrPay: '',
     moneyAmount: '',
     paymentMethod: '',
-    currentStatus: '',
-    remarks: '',
+    oppositeAccount: '',
     explain: '',
     place: '',
     inflowOrOutflow: null,
@@ -113,7 +109,7 @@
       // 初始化
       const init = (row: any) => {
         showModal.value = true;
-        modelId.value = row?.weChatId;
+        modelId.value = row?.aliPayId;
         resetFields();
         if (modelId.value) {
           Object.assign(modelForm, row);
@@ -133,9 +129,9 @@
         formBtnLoading.value = true;
         modelFromRef.value.validate((errors) => {
           if (!errors && modelId.value) {
-            weChatApi
+            aliPayApi
               .update({
-                weChatId: modelId.value,
+                aliPayId: modelId.value,
                 tradeOtherPersonRemarks: modelForm.tradeOtherPersonRemarks,
                 inflowOrOutflow: modelForm.inflowOrOutflow,
                 explain: modelForm.explain,

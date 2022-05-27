@@ -54,14 +54,14 @@ export const sourceOption = [
 ];
 export const sourceObj = arrEnumToObj(sourceOption);
 
-// 微信账单“收入/支出”枚举值
-export const weChatIncomeOrPayMap = {
+// 账单“收入/支出”枚举值
+export const incomeOrPayMap = {
   收入: 1,
   支出: 2,
 };
 
-// 微信账单“流入/流出”枚举值
-export const weChatInflowOrOutflowOption = [
+// 账单“流入/流出”枚举值
+export const inflowOrOutflowOption = [
   {
     value: 1,
     label: '流入',
@@ -71,10 +71,10 @@ export const weChatInflowOrOutflowOption = [
     label: '流出',
   },
 ];
-export const weChatInflowOrOutflowMap = arrEnumToObj(weChatInflowOrOutflowOption);
+export const inflowOrOutflowMap = arrEnumToObj(inflowOrOutflowOption);
 
-// 微信账单“账单类型”枚举值
-export const weChatBillTypeOption = [
+// 账单“账单类型”枚举值
+export const billTypeOption = [
   {
     value: 1,
     label: '聚餐-AA',
@@ -90,6 +90,22 @@ export const weChatBillTypeOption = [
   {
     value: 4,
     label: '妹妹',
+  },
+  {
+    value: 5,
+    label: '理财',
+  },
+  {
+    value: 6,
+    label: '贷款',
+  },
+  {
+    value: 7,
+    label: '保险',
+  },
+  {
+    value: 8,
+    label: '利息',
   },
   {
     value: 102,
@@ -156,6 +172,10 @@ export const weChatBillTypeOption = [
     label: '提现',
   },
   {
+    value: 202,
+    label: '话费',
+  },
+  {
     value: 501,
     label: '退还',
   },
@@ -176,4 +196,4 @@ export const weChatBillTypeOption = [
     label: '无效账单',
   },
 ];
-export const weChatBillTypeMap = arrEnumToObj(weChatBillTypeOption);
+export const billTypeMap = arrEnumToObj(billTypeOption);

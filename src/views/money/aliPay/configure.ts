@@ -44,8 +44,8 @@ export const useConfigure = ({ updateModelRef }) => {
       width: 170,
     },
     {
-      title: '交易类型',
-      key: 'tradeType',
+      title: '交易分类',
+      key: 'transactionClassification',
       align: 'center',
     },
     {
@@ -59,8 +59,13 @@ export const useConfigure = ({ updateModelRef }) => {
       align: 'center',
     },
     {
-      title: '金额(元)',
+      title: '金额',
       key: 'moneyAmount',
+      align: 'center',
+    },
+    {
+      title: '商品说明',
+      key: 'productDescription',
       align: 'center',
     },
     {
@@ -90,7 +95,7 @@ export const useConfigure = ({ updateModelRef }) => {
         style: 'button',
         actions: [
           {
-            ifShow: !!row.weChatId,
+            ifShow: !!row.aliPayId,
             label: '修改',
             type: 'primary',
             text: true,
@@ -126,8 +131,8 @@ export const uploadColumns = () => {
       width: 170,
     },
     {
-      title: '交易类型',
-      key: 'tradeType',
+      title: '交易分类',
+      key: 'transactionClassification',
       align: 'center',
     },
     {
@@ -136,8 +141,8 @@ export const uploadColumns = () => {
       align: 'center',
     },
     {
-      title: '商品',
-      key: 'goods',
+      title: '商品说明',
+      key: 'productDescription',
       align: 'center',
     },
     {
@@ -147,23 +152,18 @@ export const uploadColumns = () => {
       width: 70,
     },
     {
-      title: '金额(元)',
+      title: '金额',
       key: 'moneyAmount',
       align: 'center',
     },
     {
-      title: '支付方式',
+      title: '收/付款方式',
       key: 'paymentMethod',
       align: 'center',
     },
     {
-      title: '当前状态',
-      key: 'currentStatus',
-      align: 'center',
-    },
-    {
-      title: '备注',
-      key: 'remarks',
+      title: '对方账号',
+      key: 'oppositeAccount',
       align: 'center',
     },
     {
@@ -203,6 +203,14 @@ export const uploadColumns = () => {
       title: '账单类型',
       width: 180,
       render(row: any) {
+        // 交通-地铁
+        if (
+          row.transactionClassification === '交通出行' &&
+          row.tradeOtherPerson === '成都金控数据服务有限公司' &&
+          row.productDescription === '天府通扫码乘车'
+        ) {
+          row.billType = 136;
+        }
         return h(NSelect, {
           value: row.billType,
           filterable: true,

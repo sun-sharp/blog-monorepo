@@ -51,4 +51,5 @@ export {
   FileOutlined,
   FileImageFilled,
   MenuOutlined,
+  AlipayCircleOutlined,
 } from '@vicons/antd';

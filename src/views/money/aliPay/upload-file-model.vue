@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts">
-  import { weChatApi } from '@/api';
-  import { getUploadWeCharAction } from '@/utils';
+  import { aliPayApi } from '@/api';
+  import { getUploadAliPayAction } from '@/utils';
   import { computed, defineComponent, ref } from 'vue';
   import TableAll from '@/components/Table/table-all.vue';
   import FormUploadExcel from '@/components/form/form-upload-excel.vue';
@@ -56,7 +56,7 @@
 
       // 保存列表数据
       const confirmForm = () => {
-        weChatApi
+        aliPayApi
           .batchSave({
             batches: tableData.value,
           })
@@ -75,7 +75,7 @@
         btnDisabled,
         tableData,
         columns,
-        uploadAction: getUploadWeCharAction(),
+        uploadAction: getUploadAliPayAction(),
         uploadFileList,
         init,
         reload,

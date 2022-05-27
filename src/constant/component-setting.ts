@@ -14,7 +14,7 @@ export const componentTable = {
   //默认分页数量
   defaultPageSize: 10,
   //可切换每页数量集合
-  pageSizes: [10, 20, 30, 40, 50],
+  pageSizes: [10, 20, 30, 40, 50, 100],
 };
 
 const { apiSetting, defaultPageSize, pageSizes } = componentTable;
