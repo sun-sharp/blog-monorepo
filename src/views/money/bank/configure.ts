@@ -189,13 +189,17 @@ export const uploadColumns = () => {
     },
     {
       title: '金额(元)',
-      key: 'moneyAmount',
       align: 'center',
+      render(row: any) {
+        return '￥' + (row.moneyAmount || 0);
+      },
     },
     {
       title: '余额',
-      key: 'balance',
       align: 'center',
+      render(row: any) {
+        return '￥' + (row.balance || 0);
+      },
     },
     {
       title: '账单说明',

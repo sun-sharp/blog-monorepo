@@ -60,8 +60,10 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '金额',
-      key: 'moneyAmount',
       align: 'center',
+      render(row: any) {
+        return '￥' + (row.moneyAmount || 0);
+      },
     },
     {
       title: '商品说明',
@@ -153,8 +155,10 @@ export const uploadColumns = () => {
     },
     {
       title: '金额',
-      key: 'moneyAmount',
       align: 'center',
+      render(row: any) {
+        return '￥' + (row.moneyAmount || 0);
+      },
     },
     {
       title: '收/付款方式',

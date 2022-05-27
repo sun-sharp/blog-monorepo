@@ -19,9 +19,7 @@
       <n-form-item label="收/支">
         {{ modelForm.incomeOrPay }}
       </n-form-item>
-      <n-form-item label="金额">
-        {{ modelForm.moneyAmount }}
-      </n-form-item>
+      <n-form-item label="金额">￥{{ modelForm.moneyAmount }}</n-form-item>
       <n-form-item label="收/付款方式">
         {{ modelForm.paymentMethod }}
       </n-form-item>
