@@ -1,3 +1,5 @@
+import { nowDateFun } from '../date';
+
 // 微信账单key值重命名
 export const weCharExcelCellHandle = {
   1: (tar: any, val: any) => {
@@ -25,12 +27,6 @@ export const weCharExcelCellHandle = {
   8: (tar: any, val: any) => {
     tar['currentStatus'] = val;
   }, // 当前状态
-  // 9: (tar: any, val: any) => {
-  //   tar['transactionNo'] = val;
-  // }, // 交易单号
-  // 10: (tar: any, val: any) => {
-  //   tar['merchantNo'] = val;
-  // }, // 商户单号
   11: (tar: any, val: any) => {
     tar['remarks'] = val;
   }, // 备注
@@ -63,13 +59,109 @@ export const aliPayExcelCellHandle = {
   8: (tar: any, val: any) => {
     tar['transactionClassification'] = val;
   }, // 交易分类
-  // 9: (tar: any, val: any) => {
-  //   tar['transactionNo'] = val;
-  // }, // 交易订单号
-  // 10: (tar: any, val: any) => {
-  //   tar['merchantNo'] = val;
-  // }, // 商户订单号
   11: (tar: any, val: any) => {
     tar['tradeTime'] = val;
   }, // 交易时间
+};
+
+// 银行账单所属类型
+export const bankExcelCellMap = {
+  1: {
+    sheetName: '中国工商银行',
+    voucherType: 2,
+    excelCellHandle: {
+      1: (tar: any, val: any) => {
+        tar['tradeTime'] = val;
+      }, // 交易日期
+      2: (tar: any, val: any) => {
+        tar['voucherNo'] = val;
+      }, // 摘要
+      7: (tar: any, val: any) => {
+        tar['explain'] = val;
+      }, // 摘要
+      9: (tar: any, val: any) => {
+        if (typeof val !== 'number') {
+          tar['incomeOrPay'] = '';
+          tar['moneyAmount'] = val;
+          return;
+        }
+        if (val < 0) tar['incomeOrPay'] = '支出';
+        else tar['incomeOrPay'] = '收入';
+        tar['moneyAmount'] = Math.abs(val);
+      }, // 收入/支出金额
+      10: (tar: any, val: any) => {
+        tar['balance'] = val;
+      }, // 余额
+      11: (tar: any, val: any) => {
+        tar['tradeOtherPerson'] = val;
+      }, // 对方户名
+      12: (tar: any, val: any) => {
+        tar['tradeOtherPersonAccount'] = val;
+      }, // 对方账号
+      13: (tar: any, val: any) => {
+        tar['tradeType'] = val;
+      }, // 渠道
+    },
+  },
+  2: {
+    sheetName: '中国农业银行',
+    excelCellHandle: {
+      1: (tar: any, val: any) => {
+        tar['tradeTime'] = val;
+      }, // 交易时间
+    },
+  },
+  3: {
+    sheetName: '中国建设银行',
+    excelCellHandle: {
+      1: (tar: any, val: any) => {
+        tar['tradeTime'] = val;
+      }, // 交易时间
+    },
+  },
+  4: {
+    sheetName: '民生银行',
+    voucherType: 2,
+    excelCellHandle: {
+      2: (tar: any, val: any) => {
+        tar['voucherNo'] = val;
+      }, // 凭证号码
+      3: (tar: any, val: any) => {
+        tar['tradeTime'] = nowDateFun(val);
+      }, // 交易时间
+      4: (tar: any, val: any) => {
+        tar['explain'] = val;
+      }, // 摘要
+      5: (tar: any, val: any) => {
+        if (typeof val !== 'number') {
+          tar['incomeOrPay'] = '';
+          tar['moneyAmount'] = val;
+          return;
+        }
+        if (val < 0) tar['incomeOrPay'] = '支出';
+        else tar['incomeOrPay'] = '收入';
+        tar['moneyAmount'] = Math.abs(val);
+      }, // 交易金额
+      6: (tar: any, val: any) => {
+        tar['balance'] = val;
+      }, // 账户余额
+      8: (tar: any, val: any) => {
+        tar['tradeType'] = val;
+      }, // 交易渠道
+      10: (tar: any, val: any) => {
+        tar['tradeOtherPerson'] = val;
+      }, // 对方户名/账号
+      11: (tar: any, val: any) => {
+        tar['tradeOtherPersonRemarks'] = val;
+      }, // 对方行名
+    },
+  },
+  5: {
+    sheetName: '招商银行',
+    excelCellHandle: {
+      1: (tar: any, val: any) => {
+        tar['tradeTime'] = val;
+      }, // 交易时间
+    },
+  },
 };

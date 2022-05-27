@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { WeChatModule } from './we-chat/we-chat.module';
 import { RouterModule } from '@nestjs/core';
 import { AliPayModule } from './ali-pay/ali-pay.module';
+import { BankModule } from './bank/bank.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AliPayModule } from './ali-pay/ali-pay.module';
     }),
     WeChatModule,
     AliPayModule,
+    BankModule,
     RouterModule.register([
       {
         path: 'money',
@@ -24,6 +26,10 @@ import { AliPayModule } from './ali-pay/ali-pay.module';
           {
             path: '/',
             module: AliPayModule,
+          },
+          {
+            path: '/',
+            module: BankModule,
           },
         ],
       },

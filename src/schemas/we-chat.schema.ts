@@ -36,6 +36,9 @@ export class WeChat extends Document {
   moneyAmount: string; // 金额(元)
 
   @Prop()
+  otherCost: number; // 其它费用
+
+  @Prop()
   paymentMethod: string; // 支付方式
 
   @Prop()

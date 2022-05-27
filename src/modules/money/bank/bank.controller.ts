@@ -1,0 +1,50 @@
+import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { BankService } from './bank.service';
+import { CreateBankBatchDto } from './dto/create-bank.dto';
+import { PageBankDto } from './dto/page-bank.dto';
+import { UpdateBankDto } from './dto/update-bank.dto';
+import { UploadBankDto } from './dto/upload-bank.dto';
+
+@Controller('bank')
+@ApiTags('银行')
+@ApiBearerAuth('jwt')
+@UseGuards(AuthGuard('jwt'))
+export class BankController {
+  constructor(private readonly bankService: BankService) {}
+
+  @ApiOperation({ summary: '银行账单导入' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: UploadBankDto,
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('upload')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  upload(@UploadedFile() file: Express.Multer.File) {
+    return this.bankService.upload(file);
+  }
+
+  @Post('batch-save')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '批量创建银行账单' })
+  batchSave(@Request() req, @Body() body: CreateBankBatchDto) {
+    return this.bankService.batchSave(req.user.userId, body);
+  }
+
+  @Post('find_page')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '条件并分页获取银行账单列表' })
+  findPage(@Request() req, @Body() body: PageBankDto) {
+    return this.bankService.findPage(req.user.userId, body);
+  }
+
+  @Put('update')
+  @ApiOperation({ summary: '修改银行账单' })
+  update(@Body() body: UpdateBankDto) {
+    return this.bankService.update(body);
+  }
+}

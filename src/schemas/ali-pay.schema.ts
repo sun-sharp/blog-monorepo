@@ -36,6 +36,9 @@ export class AliPay extends Document {
   moneyAmount: string; // 金额
 
   @Prop()
+  otherCost: number; // 其它费用
+
+  @Prop()
   paymentMethod: string; // 收/付款方式
 
   @Prop()

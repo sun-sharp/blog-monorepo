@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { aliPayExcelCellHandle } from 'src/common/constant/excel';
+import { bankExcelCellMap } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
+import { excelXlsxHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
-import { AliPay } from 'src/schemas/ali-pay.schema';
-import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
-import { PageAliPayDto } from './dto/page-ali-pay.dto';
-import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
+import { Bank } from 'src/schemas/bank.schema';
+import { CreateBankBatchDto } from './dto/create-bank.dto';
+import { PageBankDto } from './dto/page-bank.dto';
+import { UpdateBankDto } from './dto/update-bank.dto';
 
 @Injectable()
-export class AliPayService {
+export class BankService {
   response: IResponse;
-  constructor(@InjectModel('AliPay') private readonly aliPayModel: Model<AliPay>) {}
+  constructor(@InjectModel('Bank') private readonly bankModul: Model<Bank>) {}
 
   /**
-   * @description: 支付宝账单导入
+   * @description: 银行账单导入
    * @param {any} file
    * @return {Promise<IResponse>}
    */
@@ -27,17 +27,22 @@ export class AliPayService {
         // 导入数据处理
         .then(async ({ file }) => {
           const { buffer } = file; // file为前端上传的excel
-          // 微信的菜单处理
-          const result = await excelCsvHandleBuffer({
-            buffer: buffer,
-            startNum: 3,
-            endNum: 21,
-            cellHandler: aliPayExcelCellHandle,
-          });
-          if (!result)
-            throw {
-              message: '导入的数据失败！',
-            };
+          let result = [];
+          for (const itKey in bankExcelCellMap) {
+            const { sheetName, excelCellHandle, voucherType } = bankExcelCellMap[itKey];
+            const excelArr = await excelXlsxHandleBuffer({
+              sheetName,
+              buffer: buffer,
+              startNum: 2,
+              cellHandler: excelCellHandle,
+              otherObj: { bankType: Number(itKey), voucherType },
+            });
+            if (!excelArr)
+              throw {
+                message: sheetName + '表导入的数据失败！',
+              };
+            result = result.concat(excelArr);
+          }
           if (result.length === 0)
             throw {
               message: '导入的数据为空！',
@@ -63,55 +68,25 @@ export class AliPayService {
   }
 
   /**
-   * @description: 新增微信账单
+   * @description: 批量新增银行账单
    * @param {string} userId
-   * @param {CreateAliPayDto} createAliPayDto
+   * @param {CreateBankBatchDto} createBankBatchDto
    * @return {Promise<IResponse>}
    */
-  public save(userId: string, createAliPayDto: CreateAliPayDto): Promise<IResponse> {
+  public batchSave(userId: string, createBankBatchDto: CreateBankBatchDto): Promise<IResponse> {
     return (
-      Promise.resolve({ userId, body: createAliPayDto })
-        // 添加
-        .then(async ({ userId, body }) => {
-          await this.aliPayModel.create({
-            ...body,
-            userId,
-          });
-          return (this.response = {
-            code: ApiCode.SUCCESS,
-            message: '添加成功！',
-          });
-        })
-        // 返回错误
-        .catch((err) => {
-          return (this.response = {
-            code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
-          });
-        })
-    );
-  }
-
-  /**
-   * @description: 批量新增支付宝账单
-   * @param {string} userId
-   * @param {CreateAliPayBatchDto} createAliPayBatchDto
-   * @return {Promise<IResponse>}
-   */
-  public batchSave(userId: string, createAliPayBatchDto: CreateAliPayBatchDto): Promise<IResponse> {
-    return (
-      Promise.resolve({ userId, body: createAliPayBatchDto })
+      Promise.resolve({ userId, body: createBankBatchDto })
         // 添加
         .then(async ({ userId, body }) => {
           const { batches } = body;
           // 过滤掉相同交易时间的数据
-          const find = await this.aliPayModel.find();
+          const find = await this.bankModul.find();
           const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
           if (filterArr.length === 0)
             throw {
               message: '导入的数据交易时间全部和数据库的相同！',
             };
-          await this.aliPayModel.create(...filterArr.map((m) => ({ ...m, userId })));
+          await this.bankModul.create(...filterArr.map((m) => ({ ...m, userId })));
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
@@ -128,26 +103,26 @@ export class AliPayService {
   }
 
   /**
-   * @description: 条件并分页获取支付宝账单列表
+   * @description: 条件并分页获取银行账单
    * @param {string} userId
-   * @param {PageAliPayDto} body
+   * @param {PageBankDto} body
    * @return {Promise<IResponse>}
    */
-  public findPage(userId: string, body: PageAliPayDto): Promise<IResponse> {
+  public findPage(userId: string, body: PageBankDto): Promise<IResponse> {
     return (
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson, inflowOrOutflow, billType } = body;
+          const { size, current, tradeOtherPerson, inflowOrOutflow, bankBillType } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: any = {
             userId,
             $or: [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }],
           };
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
-          if (billType) findData.billType = billType;
-          const total = await this.aliPayModel.find(findData).count();
-          const list = await this.aliPayModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
+          if (bankBillType) findData.bankBillType = bankBillType;
+          const total = await this.bankModul.find(findData).count();
+          const list = await this.bankModul.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
@@ -157,36 +132,40 @@ export class AliPayService {
                   _id,
                   userId,
                   tradeTime,
-                  transactionClassification,
+                  tradeType,
+                  bankType,
+                  voucherType,
+                  voucherNo,
                   tradeOtherPerson,
+                  tradeOtherPersonAccount,
                   tradeOtherPersonRemarks,
-                  productDescription,
                   incomeOrPay,
                   moneyAmount,
+                  balance,
                   otherCost,
-                  paymentMethod,
-                  oppositeAccount,
                   inflowOrOutflow,
                   explain,
                   place,
-                  billType,
+                  bankBillType,
                 }) => ({
-                  aliPayId: _id,
+                  bankId: _id,
                   userId,
                   tradeTime,
-                  transactionClassification,
+                  tradeType,
+                  bankType,
+                  voucherType,
+                  voucherNo,
                   tradeOtherPerson,
+                  tradeOtherPersonAccount,
                   tradeOtherPersonRemarks,
-                  productDescription,
                   incomeOrPay,
                   moneyAmount,
+                  balance,
                   otherCost,
-                  paymentMethod,
-                  oppositeAccount,
                   inflowOrOutflow,
                   explain,
                   place,
-                  billType,
+                  bankBillType,
                 }),
               ),
               size,
@@ -206,16 +185,16 @@ export class AliPayService {
   }
 
   /**
-   * @description: 修改支付宝账单
-   * @param {UpdateAliPayDto} body
+   * @description: 修改银行账单
+   * @param {UpdateBankDto} body
    * @return {Promise<IResponse>}
    */
-  public update(body: UpdateAliPayDto): Promise<IResponse> {
+  public update(body: UpdateBankDto): Promise<IResponse> {
     return (
       Promise.resolve({ body })
         .then(async ({ body }) => {
-          const { aliPayId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType } = body;
-          await this.aliPayModel.updateOne({ _id: aliPayId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType });
+          const { bankId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost } = body;
+          await this.bankModul.updateOne({ _id: bankId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost });
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '修改成功！',

@@ -54,24 +54,4 @@ export class WeChatController {
   update(@Body() body: UpdateWeChatDto) {
     return this.weChatService.update(body);
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.weChatService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.weChatService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateWeChatDto: UpdateWeChatDto) {
-  //   return this.weChatService.update(+id, updateWeChatDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.weChatService.remove(+id);
-  // }
 }

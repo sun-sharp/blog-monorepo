@@ -169,6 +169,7 @@ export class WeChatService {
                   explain,
                   place,
                   billType,
+                  otherCost,
                 }) => ({
                   weChatId: _id,
                   userId,
@@ -186,6 +187,7 @@ export class WeChatService {
                   explain,
                   place,
                   billType,
+                  otherCost,
                 }),
               ),
               size,
