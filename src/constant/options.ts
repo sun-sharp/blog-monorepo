@@ -108,6 +108,22 @@ export const billTypeOption = [
     label: '利息',
   },
   {
+    value: 9,
+    label: '腾讯云',
+  },
+  {
+    value: 10,
+    label: '阿里云',
+  },
+  {
+    value: 11,
+    label: '请客',
+  },
+  {
+    value: 12,
+    label: '饭卡',
+  },
+  {
     value: 102,
     label: '消费-衣',
   },
@@ -122,6 +138,18 @@ export const billTypeOption = [
   {
     value: 105,
     label: '消费-水果',
+  },
+  {
+    value: 106,
+    label: '消费-电器',
+  },
+  {
+    value: 107,
+    label: '消费-打印',
+  },
+  {
+    value: 108,
+    label: '消费-理发',
   },
   {
     value: 111,
@@ -174,6 +202,18 @@ export const billTypeOption = [
   {
     value: 202,
     label: '话费',
+  },
+  {
+    value: 211,
+    label: '医院-挂号',
+  },
+  {
+    value: 212,
+    label: '医院-买药',
+  },
+  {
+    value: 241,
+    label: '学习-网课',
   },
   {
     value: 501,

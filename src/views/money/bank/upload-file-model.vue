@@ -14,7 +14,7 @@
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="success" :disabled="btnDisabled" @click="confirmForm">保存</n-button>
+        <n-button type="success" :loading="btnLoading" :disabled="btnDisabled" @click="confirmForm">保存</n-button>
       </n-space>
     </template>
   </n-modal>
@@ -36,8 +36,7 @@
       const showModal = ref(false);
       const tableData = ref<any[]>([]);
       const btnDisabled = computed(() => {
-        console.log(tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length);
-        return tableData.value.filter((f) => !!f.inflowOrOutflow && !!f.bankBillType).length === 0;
+        return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length !== 0;
       });
       const columns = uploadColumns();
       const uploadFileList = ref([]);
@@ -55,7 +54,9 @@
       };
 
       // 保存列表数据
+      const btnLoading = ref(false);
       const confirmForm = () => {
+        btnLoading.value = true;
         bankApi
           .batchSave({
             batches: tableData.value,
@@ -63,6 +64,9 @@
           .then(() => {
             showModal.value = false;
             emit('refresh');
+          })
+          .finally(() => {
+            btnLoading.value = false;
           });
       };
 
@@ -77,6 +81,7 @@
         columns,
         uploadAction: getUploadBankAction(),
         uploadFileList,
+        btnLoading,
         init,
         reload,
         confirmForm,
