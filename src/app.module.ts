@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { CapitalModule } from './modules/capital/capital.module';
 import { FileModule } from './modules/file/file.module';
 import { MoneyModule } from './modules/money/money.module';
+import { BlogModule } from './modules/blog/blog.module';
 import customConfig from './config';
 
 @Module({
@@ -16,6 +17,7 @@ import customConfig from './config';
       load: [customConfig], // 加载自定义配置项
     }),
     MoneyModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
