@@ -4,11 +4,12 @@ import { ArticleController } from './article.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Article, ArticleSchema } from 'src/schemas/blog/article.schema';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
+import { ArticleCategoryModule } from '../article-category/article-category.module';
 
 const ARTICLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }], 'blog');
 
 @Module({
-  imports: [ARTICLE_MONGO_MODULE],
+  imports: [ARTICLE_MONGO_MODULE, ArticleCategoryModule],
   controllers: [ArticleController],
   providers: [ArticleService, JwtStrategy],
   exports: [ArticleService],

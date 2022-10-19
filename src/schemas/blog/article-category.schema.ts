@@ -12,7 +12,7 @@ import { Document } from 'mongoose';
 })
 export class ArticleCategory extends Document {
   @Prop()
-  value: string; // 文章分类标识
+  value: number; // 文章分类标识
 
   @Prop()
   name: string; // 文章分类名称

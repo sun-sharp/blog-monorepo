@@ -32,21 +32,21 @@ export class WeChatController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '创建微信账单' })
   save(@Request() req, @Body() body: CreateWeChatDto) {
-    return this.weChatService.save(req.user.userId, body);
+    return this.weChatService.save(req.user._id, body);
   }
 
   @Post('batch-save')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '批量创建微信账单' })
   batchSave(@Request() req, @Body() body: CreateWeChatBatchDto) {
-    return this.weChatService.batchSave(req.user.userId, body);
+    return this.weChatService.batchSave(req.user._id, body);
   }
 
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取微信账单列表' })
   findPage(@Request() req, @Body() body: PageWeChatDto) {
-    return this.weChatService.findPage(req.user.userId, body);
+    return this.weChatService.findPage(req.user._id, body);
   }
 
   @Put('update')

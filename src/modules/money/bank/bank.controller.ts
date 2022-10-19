@@ -32,14 +32,14 @@ export class BankController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '批量创建银行账单' })
   batchSave(@Request() req, @Body() body: CreateBankBatchDto) {
-    return this.bankService.batchSave(req.user.userId, body);
+    return this.bankService.batchSave(req.user._id, body);
   }
 
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取银行账单列表' })
   findPage(@Request() req, @Body() body: PageBankDto) {
-    return this.bankService.findPage(req.user.userId, body);
+    return this.bankService.findPage(req.user._id, body);
   }
 
   @Put('update')

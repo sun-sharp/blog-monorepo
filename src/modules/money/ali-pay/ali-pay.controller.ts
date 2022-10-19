@@ -32,14 +32,14 @@ export class AliPayController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '批量创建支付宝账单' })
   batchSave(@Request() req, @Body() body: CreateAliPayBatchDto) {
-    return this.aliPayService.batchSave(req.user.userId, body);
+    return this.aliPayService.batchSave(req.user._id, body);
   }
 
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取支付宝账单列表' })
   findPage(@Request() req, @Body() body: PageAliPayDto) {
-    return this.aliPayService.findPage(req.user.userId, body);
+    return this.aliPayService.findPage(req.user._id, body);
   }
 
   @Put('update')

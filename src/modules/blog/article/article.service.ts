@@ -6,13 +6,15 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Article } from 'src/schemas/blog/article.schema';
+import { User } from 'src/schemas/capital/user.schema';
+import { ArticleCategoryService } from '../article-category/article-category.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 
 @Injectable()
 export class ArticleService {
   response: IResponse;
-  constructor(@InjectModel('Article') private readonly articleModel: Model<Article>) {}
+  constructor(@InjectModel('Article') private readonly articleModel: Model<Article>, private readonly articleCategoryService: ArticleCategoryService) {}
 
   /**
    * @description: 条件并分页获取文章列表
@@ -61,18 +63,31 @@ export class ArticleService {
     );
   }
 
-  public save(user, createArticleDto: CreateArticleDto): Promise<IResponse> {
+  /**
+   * @description: 新增文章
+   * @param {User} user
+   * @param {CreateArticleDto} createArticleDto
+   * @return {*}
+   */
+  public save(user: User, createArticleDto: CreateArticleDto): Promise<IResponse> {
     return (
       Promise.resolve({ user, body: createArticleDto })
         // 添加
         .then(async ({ user, body }) => {
           const { categoryVal } = body;
-          console.log(categoryVal, 'categoryVal');
+          const categoryFind = await this.articleCategoryService.findOneByValue(categoryVal);
+          if (!categoryFind) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '查询文章分类失败',
+            });
+          }
           await this.articleModel.create({
             ...body,
             createTime: nowDateFun(),
-            authorId: user.userId,
+            authorId: user._id,
             authorNickname: user.nickname,
+            categoryName: categoryFind.name,
           });
           return (this.response = {
             code: ApiCode.SUCCESS,
