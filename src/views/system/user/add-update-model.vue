@@ -1,8 +1,8 @@
 <template>
   <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改用户角色' : '新增'">
     <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
-      <n-form-item label="昵称`" path="name">
-        <n-input v-model:value="modelForm.name" :disabled="!!modelId" placeholder="请输入昵称" />
+      <n-form-item label="昵称`" path="nickname">
+        <n-input v-model:value="modelForm.nickname" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
         <form-upload-image v-model:value="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
@@ -51,7 +51,7 @@
   import { getImgUrl } from '@/utils';
 
   const modelFields = {
-    name: null,
+    nickname: null,
     avatar: [],
     username: null,
     roleCode: null,
@@ -74,10 +74,10 @@
         modelForm.password && modelForm.password.startsWith(value) && modelForm.password.length >= value.length;
       const validatePasswordSame = (_rule, value) => value === modelForm.password;
       const modelRules = reactive({
-        name: {
+        nickname: {
           required: true,
           trigger: ['blur', 'input'],
-          message: `请输入角色名称`,
+          message: `请输入角色昵称`,
         },
         username: {
           required: true,
@@ -122,7 +122,7 @@
         modelId.value = row?.userId;
         resetFields();
         if (modelId.value) {
-          modelForm.name = row.name;
+          modelForm.nickname = row.nickname;
           modelForm.avatar = row.avatar ? [getImgUrl(row.avatar)] : [];
           modelForm.username = row.username;
           modelForm.roleCode = row.roleCode;
@@ -152,7 +152,7 @@
             const request = modelId.value
               ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode })
               : userApi.save({
-                  name: modelForm.name,
+                  nickname: modelForm.nickname,
                   avatar: modelForm.avatar[0],
                   username: modelForm.username,
                   roleCode: modelForm.roleCode,

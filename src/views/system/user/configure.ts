@@ -8,7 +8,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
-      field: 'name',
+      field: 'nickname',
       component: 'NInput',
       label: '昵称',
       componentProps: {
@@ -29,7 +29,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
   const columns = [
     {
       title: '昵称',
-      key: 'name',
+      key: 'nickname',
       align: 'center',
     },
     {
