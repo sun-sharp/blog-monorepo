@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
-import { Role } from 'src/schemas/role.schema';
+import { Role } from 'src/schemas/capital/role.schema';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PageRoleDto } from './dto/page-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';

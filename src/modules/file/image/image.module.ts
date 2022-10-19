@@ -4,7 +4,7 @@ import { ImageController } from './image.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Image, ImageSchema } from 'src/schemas/image.schema';
+import { Image, ImageSchema } from 'src/schemas/file/image.schema';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import customConfig from 'src/config';
 

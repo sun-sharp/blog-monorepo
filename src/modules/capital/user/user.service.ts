@@ -7,7 +7,7 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PageUserDto } from './dto/page-user.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { User } from 'src/schemas/user.schema';
+import { User } from 'src/schemas/capital/user.schema';
 import { nowDateFun } from 'src/common/date';
 
 @Injectable()

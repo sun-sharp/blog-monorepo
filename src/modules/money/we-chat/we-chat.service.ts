@@ -6,7 +6,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
-import { WeChat } from 'src/schemas/we-chat.schema';
+import { WeChat } from 'src/schemas/money/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';

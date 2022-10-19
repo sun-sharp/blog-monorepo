@@ -6,7 +6,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
-import { AliPay } from 'src/schemas/ali-pay.schema';
+import { AliPay } from 'src/schemas/money/ali-pay.schema';
 import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
