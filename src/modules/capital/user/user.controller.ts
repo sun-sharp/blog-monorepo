@@ -35,7 +35,7 @@ export class UserController {
   @Get('admin_info')
   @ApiOperation({ summary: '获取用户信息' })
   findInfo(@Request() req) {
-    return this.userService.findOneById(req.user.userId);
+    return this.userService.findOneById(req.user._id);
   }
 
   @Put('update_role_code')
