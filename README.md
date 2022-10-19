@@ -68,6 +68,9 @@ $ git pull origin main
 # 安装插件
 $ yarn
 
+# 暂停进程/应用
+$ pm2 stop nest
+
 # 打包
 $ yarn build
 

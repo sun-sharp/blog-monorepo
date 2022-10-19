@@ -62,11 +62,12 @@ export class CapitalService {
         })
         // 创造token
         .then((res) => {
-          logger.log(`修改登录时间`);
+          const token = this.jwtService.sign(res);
+          logger.log(`创造token，请求成功！`, token);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
-              token: this.jwtService.sign(res),
+              token,
             },
             message: '请求成功！',
           });
