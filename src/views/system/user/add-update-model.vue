@@ -5,7 +5,7 @@
         <n-input v-model:value="modelForm.nickname" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <form-upload-image v-model:value="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
+        <form-upload-image v-model:imageList="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
       </n-form-item>
       <n-form-item label="用户名" path="username">
         <n-input v-model:value="modelForm.username" :disabled="!!modelId" placeholder="请输入用户名" />
@@ -123,7 +123,13 @@
         resetFields();
         if (modelId.value) {
           modelForm.nickname = row.nickname;
-          modelForm.avatar = row.avatar ? [getImgUrl(row.avatar)] : [];
+          modelForm.avatar = row.avatar
+            ? [
+                {
+                  url: getImgUrl(row.avatar),
+                },
+              ]
+            : [];
           modelForm.username = row.username;
           modelForm.roleCode = row.roleCode;
         }
