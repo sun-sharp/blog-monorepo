@@ -7,6 +7,7 @@ import { UserService } from './user/user.service';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { RoleService } from './role/role.service';
 import { MenuService } from './menu/menu.service';
+import { logger } from 'src/common/journal';
 
 @Injectable()
 export class CapitalService {
@@ -32,16 +33,19 @@ export class CapitalService {
         .then(async (res) => {
           const { username } = res;
           const user = await this.userService.findOneByName(username);
-          if (!user)
+          if (!user) {
+            logger.error(`登录${username}用户尚未注册`);
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '用户尚未注册',
             });
+          }
           if (await comparePassword(res.password, user.password)) {
             return {
               _id: user._id,
             };
           } else {
+            logger.error(`登录${username}密码错误`);
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '密码错误',
@@ -51,12 +55,14 @@ export class CapitalService {
         // 修改登录时间
         .then(async (res) => {
           await this.userService.updateLoginDate(res._id);
+          logger.log(`修改登录时间`);
           return {
             _id: res._id,
           };
         })
         // 创造token
         .then((res) => {
+          logger.log(`修改登录时间`);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
@@ -67,6 +73,7 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`登录返回错误`, err);
           return err;
         })
     );
