@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## 1.1.0__03
+## 1.1.1
 - 修改报错日志问题
 - 添加blog的article和article-category的schemas目录
+- 添加blog的article内容
 
 ## 1.1.0__02
 - 修改登录日志
