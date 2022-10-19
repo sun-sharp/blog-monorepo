@@ -1,4 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import { logger } from '../journal';
 import { checkCode } from './check-code';
 import { checkMessage } from './check-message';
 
@@ -16,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     );
     const code = checkCode(status);
     // @todo 记录日志
-    console.log('%s %s error: %s', request.method, request.url, message);
+    logger.log('%s %s error: %s', request.method, request.url, message);
     response.status(status).json({
       code,
       message,
