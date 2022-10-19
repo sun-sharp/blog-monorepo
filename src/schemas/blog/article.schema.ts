@@ -27,7 +27,7 @@ export class Article extends Document {
   authorId: string; // 文章的作者
 
   @Prop()
-  authorName: string; // 文章的作者名称
+  authorNickname: string; // 文章的作者昵称
 
   @Prop()
   categoryVal: number; // 文章的类型标识

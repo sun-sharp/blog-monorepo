@@ -3,7 +3,11 @@
 ## 1.1.1
 - 修改报错日志问题
 - 添加blog的article和article-category的schemas目录
-- 添加blog的article内容
+- 创建文章article 数据库集合
+- 用户昵称字段name改成nickName
+##### 文章接口
+- 条件并分页获取文章列表
+- 新增文章
 
 ## 1.1.0__02
 - 修改登录日志

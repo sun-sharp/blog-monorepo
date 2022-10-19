@@ -140,7 +140,7 @@ export class UserService {
               loginDate: user.loginDate,
               username: user.username,
               avatar: user.avatar,
-              name: user.name,
+              nickname: user.nickname,
             },
             message: '查询成功！',
           });
@@ -165,9 +165,9 @@ export class UserService {
       Promise.resolve(body)
         // 分页查询
         .then(async (body) => {
-          const { size, current, name, username } = body;
+          const { size, current, nickname, username } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { name: { $regex: name }, username: { $regex: username } };
+          const findData = { nickname: { $regex: nickname }, username: { $regex: username } };
           const total = await this.userModel.find(findData).count();
           const list = await this.userModel.find(findData).limit(limit).skip(skip);
           return (this.response = {
@@ -180,7 +180,7 @@ export class UserService {
                 loginDate: m.loginDate,
                 username: m.username,
                 avatar: m.avatar,
-                name: m.name,
+                nickname: m.nickname,
               })),
               size,
               total,

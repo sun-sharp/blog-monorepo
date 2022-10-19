@@ -12,7 +12,7 @@ import { Document } from 'mongoose';
 })
 export class User extends Document {
   @Prop()
-  name: string; // 昵称
+  nickname: string; // 昵称
 
   @Prop()
   avatar: string; // 用户头像

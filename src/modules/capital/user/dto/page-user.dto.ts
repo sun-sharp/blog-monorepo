@@ -7,7 +7,7 @@ export class PageUserDto extends PaginateDto {
     required: false,
     default: '',
   })
-  readonly name: string = '';
+  readonly nickname: string = '';
 
   @ApiProperty({
     description: '用户名',

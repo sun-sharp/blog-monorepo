@@ -10,29 +10,18 @@ import { ArticleModule } from './article/article.module';
     MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/money?authSource=admin', {
       connectionName: 'blog',
     }),
-    // WeChatModule,
-    // AliPayModule,
-    // BankModule,
+    ArticleModule,
     RouterModule.register([
       {
         path: 'blog',
         children: [
           {
-            path: '/article',
+            path: '/',
             module: ArticleModule,
           },
-          // {
-          //   path: '/',
-          //   module: AliPayModule,
-          // },
-          // {
-          //   path: '/',
-          //   module: BankModule,
-          // },
         ],
       },
     ]),
-    ArticleModule,
   ],
   controllers: [BlogController],
   providers: [BlogService],
