@@ -1,4 +1,25 @@
-import { ApiHttpStatus } from '../enums/api-code.enum';
+import { ApiCode, ApiHttpStatus } from '../enums/api-code.enum';
+import { logger } from '../journal';
+
+/**
+ * @description 状态码的变化
+ * @date 26/11/2021
+ * @param {(number)} status
+ * @return {*}  {number}
+ */
+export const checkCode = (status: number): number => {
+  let code = null;
+  switch (status) {
+    case 200:
+      code = ApiCode.SUCCESS;
+      break;
+    case 408:
+    case 504:
+      code = ApiCode.TIMEOUT;
+      break;
+  }
+  return code === null ? status : code;
+};
 
 /**
  * @description 错误状态码的提示
@@ -57,4 +78,23 @@ export const checkMessage = (status: number, msg: string): string => {
       message = '请求失败';
   }
   return message;
+};
+
+/**
+ * @description: 错误状态码的日志
+ * @param {number} status
+ * @param {string} method
+ * @param {string} url
+ * @param {string} msg
+ * @return {*}
+ */
+export const checkHttpLog = (status: number, method: string, url: string, msg: string): any => {
+  switch (status) {
+    case ApiHttpStatus.SUCCESS:
+      logger.log(`success: ${method} ${url} ${msg}`);
+      break;
+    default:
+      logger.error(`error: ${method} ${url} ${msg}`);
+      break;
+  }
 };
