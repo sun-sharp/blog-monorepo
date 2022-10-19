@@ -34,7 +34,6 @@ export class CapitalService {
           const { username } = res;
           const user = await this.userService.findOneByName(username);
           if (!user) {
-            logger.error(`登录${username}用户尚未注册`);
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '用户尚未注册',
@@ -45,7 +44,6 @@ export class CapitalService {
               _id: user._id,
             };
           } else {
-            logger.error(`登录${username}密码错误`);
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '密码错误',
@@ -74,7 +72,7 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`登录返回错误`, err);
+          logger.error(`返回错误`, err);
           return err;
         })
     );
