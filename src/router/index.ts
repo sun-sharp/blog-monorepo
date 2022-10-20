@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getAppEnvConfig } from '@/utils';
-import { RedirectRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
+import { RedirectRoute, SettingRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { createRouterGuards } from './router-guards';
 import { LoginComponent } from '@/constant';
 
@@ -16,7 +16,7 @@ export const LoginRoute: RouteRecordRaw = {
 };
 
 //普通路由 无需验证权限
-export const constantRouter: any[] = [LoginRoute, RedirectRoute];
+export const constantRouter: any[] = [LoginRoute, RedirectRoute, SettingRoute];
 
 const router = createRouter({
   history: createWebHistory(getAppEnvConfig().baseUrl),

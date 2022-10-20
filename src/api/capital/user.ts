@@ -55,6 +55,21 @@ export const updateRoleCode = (data?) => {
 };
 
 /**
+ * @description 修改用户基本信息
+ * @param data
+ */
+export const updateUserInfo = (data?) => {
+  return AxiosCapital.request({
+    url: `${basic}/update_user_info`,
+    method: 'PUT',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
  * @description 删除用户
  * @param userId
  */

@@ -69,7 +69,12 @@
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
           <div class="avatar">
-            <n-avatar round :src="avatar" />
+            <n-avatar v-if="hasAvatar" round :src="avatar" :on-error="avatarOnError"></n-avatar>
+            <n-avatar v-else round>
+              <n-icon size="40" color="#2080f0">
+                <Person />
+              </n-icon>
+            </n-avatar>
           </div>
         </n-dropdown>
       </div>
@@ -108,6 +113,7 @@
     UserOutlined,
     CheckOutlined,
     getImgUrl,
+    Person,
   } from '@/utils';
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
   import { useUserStore, useLockScreenStore } from '@/store';
@@ -134,6 +140,7 @@
       NDialogProvider,
       ProjectSetting,
       LayoutMenu,
+      Person,
     },
     props: {
       collapsed: {
@@ -152,6 +159,12 @@
       const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useProjectSetting();
 
       const { username, avatar } = userStore?.info || {};
+
+      const hasAvatar = ref(true);
+
+      const avatarOnError = () => {
+        hasAvatar.value = false;
+      };
 
       const drawerSetting = ref();
 
@@ -190,8 +203,8 @@
       const router = useRouter();
       const route = useRoute();
 
-      const generator: any = (routerMap) => {
-        return routerMap.map((item) => {
+      const generator: any = (routerMap: any[]) => {
+        return routerMap.map((item: { meta: { title: any }; name: any; path: string; children: string | any[] }) => {
           const currentMenu = {
             ...item,
             label: item.meta.title,
@@ -211,7 +224,7 @@
         return generator(route.matched);
       });
 
-      const dropdownSelect = (key) => {
+      const dropdownSelect = (key: any) => {
         router.push({ name: key });
       };
 
@@ -296,7 +309,7 @@
       ];
 
       //头像下拉菜单
-      const avatarSelect = (key) => {
+      const avatarSelect = (key: any) => {
         switch (key) {
           case 1:
             router.push({ name: 'Setting' });
@@ -329,6 +342,8 @@
         getInverted,
         getMenuLocation,
         mixMenu,
+        hasAvatar,
+        avatarOnError,
       };
     },
   });

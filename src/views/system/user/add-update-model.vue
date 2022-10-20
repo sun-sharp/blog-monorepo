@@ -127,11 +127,13 @@
             ? [
                 {
                   url: getImgUrl(row.avatar),
+                  status: 'finished',
                 },
               ]
             : [];
           modelForm.username = row.username;
           modelForm.roleCode = row.roleCode;
+          console.log(modelForm.avatar);
         }
         nextTick(() => {
           roleApi.getAll().then((res) => {
@@ -159,7 +161,7 @@
               ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode })
               : userApi.save({
                   nickname: modelForm.nickname,
-                  avatar: modelForm.avatar[0],
+                  avatar: modelForm.avatar.length > 0 ? modelForm.avatar[0].url : '',
                   username: modelForm.username,
                   roleCode: modelForm.roleCode,
                   password: modelForm.verifyPassword,

@@ -11,3 +11,5 @@ export const ErrorComponent = () => import('@/views/404.vue');
 export const RedirectComponent = () => import('@/views/redirect.vue');
 
 export const LoginComponent = () => import('@/views/common/login.vue');
+
+export const SettingAccountComponent = () => import('@/views/common/setting-account.vue');

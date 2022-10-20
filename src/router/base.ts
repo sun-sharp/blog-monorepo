@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { ErrorComponent, HomeComponent, Layout, PageEnum, RedirectComponent } from '@/constant';
+import { ErrorComponent, HomeComponent, Layout, PageEnum, RedirectComponent, SettingAccountComponent } from '@/constant';
 import { RouteRecordRaw } from 'vue-router';
 
 // 首页
@@ -60,6 +60,28 @@ export const RedirectRoute: AppRouteRecordRaw = {
         title: PageEnum.REDIRECT_PAGE_TITLE,
         hideBreadcrumb: true,
       },
+    },
+  ],
+};
+
+// 设置
+export const SettingRoute: AppRouteRecordRaw = {
+  path: PageEnum.SETTING_PATH,
+  name: PageEnum.SETTING_NAME,
+  component: Layout,
+  meta: {
+    title: PageEnum.SETTING_TITLE,
+  },
+  redirect: PageEnum.SETTING_ACCOUNT_PATH,
+  children: [
+    {
+      path: PageEnum.SETTING_ACCOUNT_PATH,
+      name: PageEnum.SETTING_ACCOUNT_NAME,
+      meta: {
+        title: PageEnum.SETTING_ACCOUNT_TITLE,
+        // hideBreadcrumb: true,
+      },
+      component: SettingAccountComponent,
     },
   ],
 };
