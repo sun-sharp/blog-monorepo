@@ -18,7 +18,7 @@
 
 ## 简介
 
-运用nestjs开发博客的接口
+运用 nestjs 开发博客的接口
 
 ## 安装
 
@@ -53,11 +53,13 @@ $ yarn test:cov
 ```
 
 ## 文档
+
 ```bash
 $ yarn compodoc
 ```
 
 ## 部署
+
 ```bash
 
 # 在服务器中拉取代码项目
@@ -71,13 +73,13 @@ $ yarn
 # 暂停进程/应用
 $ pm2 stop nest
 
-# 打包
-$ yarn build
-
 # 删除进程/应用
 $ pm2 delete nest
 
-# 列出所有进程/应用 
+# 打包
+$ yarn build
+
+# 列出所有进程/应用
 $ pm2 list
 
 # 添加进程/应用 nest

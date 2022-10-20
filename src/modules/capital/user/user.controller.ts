@@ -10,6 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { PageUserDto } from './dto/page-user.dto';
 import { UpdateRoleCodeUserDto } from './dto/update-role-code-user.dto';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 
 @Controller('user')
 @ApiTags('用户')
@@ -34,7 +35,7 @@ export class UserController {
 
   @Get('admin_info')
   @ApiOperation({ summary: '获取用户信息' })
-  findInfo(@Request() req) {
+  findInfo(@Request() req: any) {
     return this.userService.findOneById(req.user._id);
   }
 
@@ -42,6 +43,12 @@ export class UserController {
   @ApiOperation({ summary: '修改用户权限' })
   updateUserRole(@Body() body: UpdateRoleCodeUserDto) {
     return this.userService.updateUserRole(body.userId, body.roleCode);
+  }
+
+  @Put('update_user_info')
+  @ApiOperation({ summary: '修改用户基本信息' })
+  updateUserInfo(@Request() req: any, @Body() body: UpdateUserInfoDto) {
+    return this.userService.updateUserInfo(req.user._id, body);
   }
 
   @Delete(':userId')

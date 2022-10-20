@@ -9,6 +9,7 @@ import { PageUserDto } from './dto/page-user.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { User } from 'src/schemas/capital/user.schema';
 import { nowDateFun } from 'src/common/date';
+import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 
 @Injectable()
 export class UserService {
@@ -209,6 +210,32 @@ export class UserService {
       Promise.resolve({ userId, roleCode })
         .then(async ({ userId, roleCode }) => {
           await this.userModel.updateOne({ _id: userId }, { roleCode });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 修改用户基本信息
+   * @param {string} userId
+   * @param {UpdateUserInfoDto} updateUserInfoDto
+   * @return {*}
+   */
+  public updateUserInfo(userId: string, updateUserInfoDto: UpdateUserInfoDto): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId, body: updateUserInfoDto })
+        .then(async ({ userId, body }) => {
+          await this.userModel.updateOne({ _id: userId }, body);
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
