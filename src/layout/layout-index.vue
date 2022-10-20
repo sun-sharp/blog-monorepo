@@ -44,6 +44,9 @@
           </div>
         </div>
       </n-layout-content>
+      <n-layout-footer :position="'absolute'" :bottom="0">
+        <layout-footer />
+      </n-layout-footer>
       <n-back-top :right="100" />
     </n-layout>
   </n-layout>
@@ -59,6 +62,7 @@
   import { useDesignSetting, useProjectSetting } from '@/hooks';
   import { useRoute } from 'vue-router';
   import { useProjectSettingStore } from '@/store';
+  import LayoutFooter from './components/layout-footer.vue';
 
   const { getDarkTheme } = useDesignSetting();
   const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useProjectSetting();
@@ -180,10 +184,12 @@
     margin: 0 10px 10px;
     position: relative;
     padding-top: 64px;
+    padding-bottom: 44px;
   }
 
   .layout-content-main-fix {
     padding-top: 64px;
+    padding-bottom: 44px;
   }
 
   .fluid-header {

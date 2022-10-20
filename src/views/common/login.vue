@@ -73,6 +73,7 @@
         </n-form>
       </div>
     </div>
+    <layout-footer />
   </div>
 </template>
 
@@ -84,6 +85,7 @@
   import logo from '@/assets/images/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { ResultEnum } from '@/constant';
+  import LayoutFooter from '@/layout/components/layout-footer.vue';
 
   interface FormState {
     username: string;
@@ -165,11 +167,17 @@
     height: 100vh;
     overflow: auto;
     display: flex;
+    flex-direction: column;
     align-items: center;
 
     &-container {
       width: 384px;
-      margin: 0 auto;
+      flex: 1;
+      height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     &-top {
