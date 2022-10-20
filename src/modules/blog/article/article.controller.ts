@@ -30,12 +30,16 @@ export class ArticleController {
 
   @Put('update')
   @ApiOperation({ summary: '修改文章' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   update(@Body() updateArticleDto: UpdateArticleDto) {
     return this.articleService.update(updateArticleDto);
   }
 
   @Delete(':articleId')
   @ApiOperation({ summary: '删除文章' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   remove(@Param('articleId') articleId: string) {
     return this.articleService.remove(articleId);
   }
