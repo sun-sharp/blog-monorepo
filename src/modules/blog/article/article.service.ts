@@ -139,4 +139,28 @@ export class ArticleService {
         })
     );
   }
+
+  /**
+   * @description: 删除文章
+   * @return {*}
+   */
+  public remove(articleId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(articleId)
+        .then(async (articleId) => {
+          await this.articleModel.deleteOne({ _id: articleId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          });
+        })
+    );
+  }
 }

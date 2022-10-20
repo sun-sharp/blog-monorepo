@@ -1,4 +1,4 @@
-import { Controller, Post, Request, UseGuards, HttpCode, Body, Put } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -32,5 +32,11 @@ export class ArticleController {
   @ApiOperation({ summary: '修改文章' })
   update(@Body() updateArticleDto: UpdateArticleDto) {
     return this.articleService.update(updateArticleDto);
+  }
+
+  @Delete(':articleId')
+  @ApiOperation({ summary: '删除文章' })
+  remove(@Param('articleId') articleId: string) {
+    return this.articleService.remove(articleId);
   }
 }
