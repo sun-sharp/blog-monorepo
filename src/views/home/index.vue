@@ -194,7 +194,7 @@
 </template>
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
-  import { homeApi } from '@/api';
+  // import { homeApi } from '@/api';
   import VisiTab from './components/VisiTab.vue';
   import TransitionCountTo from '@/components/transition/transition-count-to.vue';
   import {
@@ -295,20 +295,20 @@
   ];
 
   const init = () => {
-    homeApi
-      .getConsoleInfo()
-      .then((info) => {
-        visits.value = info.visits;
-        saleroom.value = info.saleroom;
-        orderLarge.value = info.orderLarge;
-        volume.value = info.volume;
-      })
-      .catch((err) => {
-        console.log(err, 'err');
-      })
-      .finally(() => {
-        loading.value = false;
-      });
+    // homeApi
+    //   .getConsoleInfo()
+    //   .then((info) => {
+    //     visits.value = info.visits;
+    //     saleroom.value = info.saleroom;
+    //     orderLarge.value = info.orderLarge;
+    //     volume.value = info.volume;
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, 'err');
+    //   })
+    //   .finally(() => {
+    //     loading.value = false;
+    //   });
   };
 
   onMounted(init);
