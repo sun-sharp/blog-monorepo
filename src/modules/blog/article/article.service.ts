@@ -10,6 +10,7 @@ import { User } from 'src/schemas/capital/user.schema';
 import { ArticleCategoryService } from '../article-category/article-category.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
+import { UpdateArticleDto } from './dto/update-article.dto';
 
 @Injectable()
 export class ArticleService {
@@ -99,6 +100,41 @@ export class ArticleService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 修改文章
+   * @param {UpdateArticleDto} body
+   * @return {Promise<IResponse>}
+   */
+  public update(body: UpdateArticleDto): Promise<IResponse> {
+    return (
+      Promise.resolve(body)
+        // 修改
+        .then(async (body) => {
+          const { articleId, categoryVal, ...other } = body;
+          const categoryFind = await this.articleCategoryService.findOneByValue(categoryVal);
+          if (!categoryFind) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '查询文章分类失败',
+            });
+          }
+          const updateData = { categoryVal, categoryName: categoryFind.name, ...other };
+          await this.articleModel.updateOne({ _id: articleId }, updateData);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '修改失败！',
           });
         })
     );
