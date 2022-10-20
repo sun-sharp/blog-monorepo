@@ -84,6 +84,10 @@ export class ArticleCategoryService {
     );
   }
 
+  /**
+   * @description: 获取全部文章分类列表
+   * @return {*}
+   */
   public findAll(): Promise<IResponse> {
     return (
       Promise.resolve()
@@ -105,6 +109,30 @@ export class ArticleCategoryService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 删除文章分类
+   * @return {*}
+   */
+  public remove(articleCategoryId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(articleCategoryId)
+        .then(async (articleCategoryId) => {
+          await this.articleCategoryModel.deleteOne({ _id: articleCategoryId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
           });
         })
     );

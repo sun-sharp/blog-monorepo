@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, UseGuards, Get, Delete, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -24,5 +24,11 @@ export class ArticleCategoryController {
   @ApiOperation({ summary: '获取全部文章分类列表' })
   findAll() {
     return this.articleCategoryService.findAll();
+  }
+
+  @Delete(':articleCategoryId')
+  @ApiOperation({ summary: '删除文章分类' })
+  remove(@Param('articleCategoryId') articleCategoryId: string) {
+    return this.articleCategoryService.remove(articleCategoryId);
   }
 }
