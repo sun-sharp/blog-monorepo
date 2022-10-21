@@ -114,6 +114,7 @@
                   ? [
                       {
                         url: getImgUrl(url),
+                        key: url,
                         status: 'finished',
                       },
                     ]

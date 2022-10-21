@@ -67,6 +67,7 @@
       ? [
           {
             url: getImgUrl(userInfo.avatar),
+            key: userInfo.avatar,
             status: 'finished',
           },
         ]
@@ -80,7 +81,7 @@
     modelFromRef.value.validate((errors) => {
       if (!errors) {
         formLoading.value = true;
-        const avatar = modelForm.avatar.length > 0 ? modelForm.avatar[0].url : '';
+        const avatar = modelForm.avatar.length > 0 ? modelForm.avatar[0].key : '';
         userApi
           .updateUserInfo({ ...modelForm, avatar })
           .then(() => {
