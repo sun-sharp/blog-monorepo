@@ -10,6 +10,7 @@ import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { User } from 'src/schemas/capital/user.schema';
 import { nowDateFun } from 'src/common/date';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
+import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 
 @Injectable()
 export class UserService {
@@ -53,6 +54,17 @@ export class UserService {
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '用户名已注册',
+            });
+          return body;
+        })
+        // 判断头像是否合理
+        .then(async (body) => {
+          const { avatar } = body;
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
+          if (hasHttpOrHttps)
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '头像保存的不合理，请处理之后再上传！',
             });
           return body;
         })
@@ -109,6 +121,16 @@ export class UserService {
   public findOneByAvatar(avatar: string): Promise<User> {
     return (
       Promise.resolve(avatar)
+        // 判断头像是否合理
+        .then(async (avatar) => {
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
+          if (hasHttpOrHttps)
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '头像保存的不合理，请处理之后再上传！',
+            });
+          return avatar;
+        })
         // 判断username 是否为合法字符
         .then(async (avatar) => {
           return await this.userModel.findOne({ avatar });
@@ -234,6 +256,18 @@ export class UserService {
   public updateUserInfo(userId: string, updateUserInfoDto: UpdateUserInfoDto): Promise<IResponse> {
     return (
       Promise.resolve({ userId, body: updateUserInfoDto })
+        // 判断头像是否合理
+        .then(async ({ userId, body }) => {
+          const { avatar } = body;
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
+          if (hasHttpOrHttps)
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '头像保存的不合理，请处理之后再上传！',
+            });
+          return { userId, body };
+        })
+        // 修改用户基本信息
         .then(async ({ userId, body }) => {
           await this.userModel.updateOne({ _id: userId }, body);
           return (this.response = {
