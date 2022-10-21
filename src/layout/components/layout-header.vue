@@ -69,12 +69,7 @@
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
           <div class="avatar">
-            <n-avatar v-if="hasAvatar" round :src="avatar" :on-error="avatarOnError"></n-avatar>
-            <n-avatar v-else round>
-              <n-icon size="40" color="#2080f0">
-                <Person />
-              </n-icon>
-            </n-avatar>
+            <n-avatar round :src="avatar" :fallback-src="defaultAvatar" />
           </div>
         </n-dropdown>
       </div>
@@ -120,6 +115,7 @@
   import { useProjectSetting } from '@/hooks';
   import ProjectSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
+  import defaultAvatar from '@/assets/images/common/default-avatar.png';
 
   export default defineComponent({
     name: 'LayoutHeader',
@@ -159,12 +155,6 @@
       const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useProjectSetting();
 
       const { username, avatar } = userStore?.info || {};
-
-      const hasAvatar = ref(true);
-
-      const avatarOnError = () => {
-        hasAvatar.value = false;
-      };
 
       const drawerSetting = ref();
 
@@ -342,8 +332,7 @@
         getInverted,
         getMenuLocation,
         mixMenu,
-        hasAvatar,
-        avatarOnError,
+        defaultAvatar,
       };
     },
   });
