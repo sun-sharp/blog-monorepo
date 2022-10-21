@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { existsSyncHandle, readdirHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
+import { logger } from 'src/common/journal';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { UserService } from 'src/modules/capital/user/user.service';
@@ -171,6 +172,7 @@ export class ImageService {
             }
             if (useStatus) result.push(f);
           }
+          logger.log(`获取只有图片文件没有数据的文件`, result);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
