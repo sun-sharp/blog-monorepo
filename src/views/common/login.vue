@@ -82,7 +82,7 @@
   import { useRoute, useRouter } from 'vue-router';
   import { useUserStore } from '@/store';
   import { useMessage } from 'naive-ui';
-  import logo from '@/assets/images/logo.png';
+  import logo from '@/assets/images/common/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { ResultEnum } from '@/constant';
   import LayoutFooter from '@/layout/components/layout-footer.vue';
@@ -213,7 +213,7 @@
 
   @media (min-width: 768px) {
     .view-account {
-      background-image: url('@/assets/images/login.svg');
+      background-image: url('@/assets/images/login/login.svg');
       background-repeat: no-repeat;
       background-position: 50%;
       background-size: 100%;

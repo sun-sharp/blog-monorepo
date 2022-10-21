@@ -59,6 +59,8 @@ export function generatorMenu(routerMap: Array<any>) {
     if (info.children && info.children.length > 0) {
       // Recursion
       currentMenu.children = generatorMenu(info.children);
+    } else if (info.meta?.menuType === 1) {
+      currentMenu.children = [];
     }
     return currentMenu;
   });

@@ -3,7 +3,7 @@
     <!--顶部菜单-->
     <div v-if="navMode === 'horizontal' || (navMode === 'horizontal-mix' && mixMenu)" class="layout-header-left">
       <div v-if="navMode === 'horizontal'" class="logo">
-        <img src="~@/assets/images/logo.png" alt="" />
+        <img src="~@/assets/images/common/logo.png" alt="" />
         <h2 v-show="!collapsed" class="title">NaiveUiAdmin</h2>
       </div>
       <layout-menu v-model:location="getMenuLocation" :collapsed="collapsed" :inverted="getInverted" mode="horizontal" />
