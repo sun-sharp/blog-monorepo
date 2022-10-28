@@ -175,21 +175,21 @@
       z-index: 11;
     }
 
-    .n-layout-footer {
-      background: none;
+    .n-layout-footer.n-layout-footer--absolute-positioned {
+      z-index: 11;
     }
   }
 
   .layout-content-main {
     margin: 0 10px 10px;
     position: relative;
-    padding-top: 64px;
-    padding-bottom: 44px;
+    padding-top: $header-height;
+    padding-bottom: $footer-height;
   }
 
   .layout-content-main-fix {
-    padding-top: 64px;
-    padding-bottom: 44px;
+    padding-top: $header-height;
+    padding-bottom: $footer-height;
   }
 
   .fluid-header {

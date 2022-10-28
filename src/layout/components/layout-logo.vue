@@ -31,8 +31,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 64px;
-    line-height: 64px;
+    height: $header-height;
+    line-height: $header-height;
     overflow: hidden;
     white-space: nowrap;
 
