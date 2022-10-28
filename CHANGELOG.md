@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.1.2
+- 文章分类列表id字段添加
+
 ## 1.1.1
 - 修改报错日志问题
 - 添加blog的article和article-category的schemas目录

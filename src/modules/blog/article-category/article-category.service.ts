@@ -97,6 +97,7 @@ export class ArticleCategoryService {
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: result.map((m) => ({
+              articleCategoryId: m._id,
               value: m.value,
               name: m.name,
             })),
