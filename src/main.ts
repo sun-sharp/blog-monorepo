@@ -13,11 +13,11 @@ import { writeFileSync } from 'fs';
 const { version } = pkg;
 
 const title = 'NestJs博客API';
-const desc = '我的测试博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
-
+const swaggerJsonUrl = `public/json/${swaggerUrl}.json`;
 const port = 3000;
+const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUrl}`;
 
 (async () => {
   // create app
@@ -32,7 +32,8 @@ const port = 3000;
         .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
-      writeFileSync(`./public/json/${swaggerUrl}.json`, JSON.stringify(document));
+
+      writeFileSync(`./${swaggerJsonUrl}`, JSON.stringify(document));
       SwaggerModule.setup(swaggerUrl, app, document);
       return app;
     })
