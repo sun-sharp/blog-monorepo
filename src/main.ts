@@ -8,6 +8,7 @@ import * as pkg from '../package.json';
 import { join } from 'path';
 import * as express from 'express';
 import { logger } from './common/journal';
+import { writeFileSync } from 'fs';
 
 const { version } = pkg;
 
@@ -31,6 +32,7 @@ const port = 3000;
         .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
+      writeFileSync(`./public/json/${swaggerUrl}.json`, JSON.stringify(document));
       SwaggerModule.setup(swaggerUrl, app, document);
       return app;
     })
