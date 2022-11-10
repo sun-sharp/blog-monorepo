@@ -143,6 +143,25 @@ export class UserService {
   }
 
   /**
+   * @description: 运用_id获取用户信息
+   * @param {string} userId
+   * @return {*}
+   */
+  public findById(userId: string): Promise<User> {
+    return (
+      Promise.resolve(userId)
+        // 判断username 是否为合法字符
+        .then(async (userId) => {
+          return await this.userModel.findOne({ _id: userId });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
    * @description 运用_id查找用户信息
    * @date 25/11/2021
    * @param {string} username
