@@ -6,16 +6,16 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { PageUserDto } from './dto/page-user.dto';
 import { UpdateRoleCodeUserDto } from './dto/update-role-code-user.dto';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 
 @Controller('user')
 @ApiTags('用户')
 @ApiBearerAuth('jwt')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

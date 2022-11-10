@@ -338,7 +338,7 @@ export class UserService {
     return (
       Promise.resolve(userId)
         .then(async (userId) => {
-          return await this.userModel.findOne({ _id: userId + 1 });
+          return await this.userModel.findOne({ _id: userId });
         })
         // 返回错误
         .catch(() => {

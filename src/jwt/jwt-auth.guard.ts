@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/modules/capital/user/user.service';
 
@@ -13,8 +13,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return (
       Promise.resolve({ req, res })
         .then(async ({ req, res }) => {
-          console.log({ req, res }, '{ req, res }');
-          return true;
+          const accessToken = req.get('Authorization');
+          if (!accessToken) throw new UnauthorizedException('请先登录');
+          return this.activate(context);
         })
         // 返回错误
         .catch(() => {

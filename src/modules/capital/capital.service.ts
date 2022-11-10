@@ -42,8 +42,8 @@ export class CapitalService {
           if (await comparePassword(res.password, user.password)) {
             return {
               _id: user._id,
-              nickname: user.nickname,
-              username: user.username,
+              // nickname: user.nickname,
+              // username: user.username,
             };
           } else {
             throw (this.response = {
@@ -58,8 +58,8 @@ export class CapitalService {
           logger.log(`修改登录时间`);
           return {
             _id: res._id,
-            nickname: res.nickname,
-            username: res.username,
+            // nickname: res.nickname,
+            // username: res.username,
           };
         })
         // 创造token
