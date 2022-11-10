@@ -347,4 +347,13 @@ export class UserService {
         })
     );
   }
+
+  /**
+   * @description: 根据JWT解析的ID校验用户
+   * @param {string} userId
+   * @return {*}
+   */
+  async validateUserByJwt(userId: string): Promise<User> {
+    return await this.findById(userId);
+  }
 }

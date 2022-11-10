@@ -1,12 +1,14 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JWT_CONSTANTS } from './jwt.constants';
 import { User } from 'src/schemas/capital/user.schema';
+import { UserService } from 'src/modules/capital/user/user.service';
+// import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,6 +17,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: User) {
-    return { _id: payload._id, nickname: payload.nickname, username: payload.username };
+    const user = await this.userService.validateUserByJwt(payload._id);
+    console.log(user);
+
+    // 如果有用户信息，代表 token 没有过期，没有则 token 已失效
+    if (!user) throw new UnauthorizedException();
+    return user;
   }
 }
