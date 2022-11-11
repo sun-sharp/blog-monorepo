@@ -10,6 +10,8 @@ import { PageRoleDto } from './dto/page-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import customConfig from 'src/config';
 import { readFileDataHandle } from 'src/common/fs-handle';
+import { logger } from 'src/common/journal';
+import { groupArray } from 'src/common/array';
 
 @Injectable()
 export class RoleService {
@@ -191,6 +193,84 @@ export class RoleService {
   }
 
   /**
+   * @description
+   * @return {*}  {Promise<any>}
+   * @memberof RoleService
+   */
+  /**
+   * @description: 获取全部swagger-api.json数据
+   * @return {*}
+   */
+  public findSwaggerApi(): Promise<any> {
+    return (
+      Promise.resolve()
+        // 查询
+        .then(async () => {
+          const config = customConfig();
+          const jsonPath = `${config.file.lib}/public/json/swagger-api.json`;
+          const jsonData = await readFileDataHandle(jsonPath);
+          return JSON.parse(jsonData.toString()); //将二进制的数据转换为字符串， 将字符串转换为json对象
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description 获取全部接口列表的一维数据
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public findApiAllOneDimensional(): Promise<Array<any>> {
+    return (
+      Promise.resolve()
+        // 查询
+        .then(async () => {
+          const { paths: swaggerApiPaths = {} } = await this.findSwaggerApi();
+          const oneArr = [];
+          for (const url in swaggerApiPaths) {
+            const methodObj = swaggerApiPaths[url];
+            if (methodObj && Object.keys(methodObj).length > 0) {
+              for (const method in methodObj) {
+                const itemObj = methodObj[method];
+                const item: any = { url, method };
+                if (itemObj.operationId) {
+                  item.operationId = itemObj.operationId;
+                  const operationIdSplit = itemObj.operationId.split('_');
+                  if (operationIdSplit.length > 0) item.tagId = operationIdSplit[0];
+                }
+                if (itemObj.summary) item.summary = itemObj.summary;
+                let itemParameters = [];
+                if (itemObj.parameters && itemObj.parameters.length > 0)
+                  itemParameters = itemParameters.concat(
+                    itemObj.parameters
+                      .map((m: any) => m.in)
+                      .filter((f: string, index: number, arr: any) => {
+                        return arr.indexOf(f, 0) === index;
+                      }),
+                  );
+                if (itemObj.requestBody) itemParameters.push('body');
+                if (itemParameters.length > 0) item.parameterTransferMode = itemParameters;
+                if (itemObj.tags && itemObj.tags.length > 0) item.tagName = itemObj.tags[0] || '';
+                if (itemObj.security && itemObj.security.length > 0 && !('jwt' in itemObj.security[0])) item.jwt = true;
+                oneArr.push(item);
+              }
+            }
+          }
+
+          return oneArr;
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`获取全部接口列表的一维数据`, err);
+          return [];
+        })
+    );
+  }
+
+  /**
    * @description 获取全部接口列表
    * @return {*}  {Promise<IResponse>}
    * @memberof RoleService
@@ -200,19 +280,17 @@ export class RoleService {
       Promise.resolve()
         // 查询
         .then(async () => {
-          const config = customConfig();
-          const jsonPath = `${config.file.lib}/public/json/swagger-api.json`;
-          const jsonData = await readFileDataHandle(jsonPath);
-          console.log(jsonData);
-
+          const oneArr = await this.findApiAllOneDimensional();
+          const result = groupArray(oneArr, 'children', ['tagId', 'tagName']);
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {},
+            result,
             message: '查询成功！',
           });
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`返回错误`, err);
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
