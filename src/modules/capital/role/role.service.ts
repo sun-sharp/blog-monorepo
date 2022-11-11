@@ -8,6 +8,8 @@ import { Role } from 'src/schemas/capital/role.schema';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PageRoleDto } from './dto/page-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import customConfig from 'src/config';
+import { readFileDataHandle } from 'src/common/fs-handle';
 
 @Injectable()
 export class RoleService {
@@ -184,6 +186,37 @@ export class RoleService {
         // 返回错误
         .catch((err) => {
           return err;
+        })
+    );
+  }
+
+  /**
+   * @description 获取全部接口列表
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public findApiAll(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 查询
+        .then(async () => {
+          const config = customConfig();
+          const jsonPath = `${config.file.lib}/public/json/swagger-api.json`;
+          const jsonData = await readFileDataHandle(jsonPath);
+          console.log(jsonData);
+
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {},
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
         })
     );
   }

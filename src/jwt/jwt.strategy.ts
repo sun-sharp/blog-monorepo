@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: User) {
-    const user = await this.userService.validateUserByJwt(payload._id);
+    const user = await this.userService.validateUserByUserId(payload._id);
     // 如果有用户信息，代表 token 没有过期，没有则 token 已失效
     if (!user) throw new UnauthorizedException();
     return user;

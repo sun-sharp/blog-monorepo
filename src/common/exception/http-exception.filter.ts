@@ -9,6 +9,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const excRes: any = exception instanceof HttpException && exception.getResponse();
+    console.log(excRes, 'excRes');
+
     const message = checkMessage(
       status,
       excRes.message instanceof Array ? excRes.message.join('，') : typeof excRes.message === 'string' ? excRes.message : '',

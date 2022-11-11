@@ -75,7 +75,7 @@ export const unlinkListHandle = async (list: string[]) => {
 };
 
 /**
- * @description: 读取文件夹目录里的文件
+ * @description: 读取文件夹目录里的文件，并判断是否存在
  * @param {PathLike} pathName
  * @return {*}
  */
@@ -87,6 +87,23 @@ export const readFileHandle = (pathName: PathLike): any => {
         return;
       }
       resolve(true);
+    });
+  });
+};
+
+/**
+ * @description: 读取某文件的数据
+ * @param {PathLike} pathName
+ * @return {*}
+ */
+export const readFileDataHandle = (pathName: PathLike): any => {
+  return new Promise((resolve, reject) => {
+    readFile(pathName, (err, data) => {
+      if (err) {
+        reject({ ...err, message: '文件夹里不存在当前文件' });
+        return;
+      }
+      resolve(data);
     });
   });
 };

@@ -32,7 +32,6 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUr
         .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
-
       writeFileSync(`./${swaggerJsonUrl}`, JSON.stringify(document));
       SwaggerModule.setup(swaggerUrl, app, document);
       return app;

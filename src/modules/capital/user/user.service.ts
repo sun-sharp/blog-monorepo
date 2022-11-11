@@ -11,13 +11,14 @@ import { User } from 'src/schemas/capital/user.schema';
 import { nowDateFun } from 'src/common/date';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   private USERNAME_LENGTH_MAX = 10;
   private USERNAME_LENGTH_MIN = 3;
   response: IResponse;
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>, private readonly jwtService: JwtService) {}
 
   /**
    * @description 创建用户
@@ -330,11 +331,31 @@ export class UserService {
   }
 
   /**
-   * @description: 根据JWT解析的ID校验用户
+   * @description: 校验 token
+   * @param {string} token
+   * @return {*}
+   */
+  verifyToken(token: string): Promise<string> {
+    return (
+      Promise.resolve(token)
+        .then(async (token) => {
+          if (!token) return '';
+          const id = this.jwtService.verify(token.replace('Bearer ', ''));
+          return id;
+        })
+        // 返回错误
+        .catch(() => {
+          return '';
+        })
+    );
+  }
+
+  /**
+   * @description: 根据用户ID校验用户
    * @param {string} userId
    * @return {*}
    */
-  async validateUserByJwt(userId: string): Promise<User | boolean> {
+  async validateUserByUserId(userId: string): Promise<User | boolean> {
     return (
       Promise.resolve(userId)
         .then(async (userId) => {

@@ -45,4 +45,10 @@ export class RoleController {
   remove(@Param('roleId') roleId: string) {
     return this.roleService.remove(roleId);
   }
+
+  @Get('api_all')
+  @ApiOperation({ summary: '获取全部api接口列表' })
+  findApiAll() {
+    return this.roleService.findApiAll();
+  }
 }
