@@ -4,6 +4,7 @@
 - 文章分类列表id字段添加
 - 获取全部api接口列表
 - 修改jwt验证问题
+- 权限role的角色权限修改字段“permission”为“menuPermission”，添加字段“apiPermission”
 
 ## 1.1.1
 - 修改报错日志问题
