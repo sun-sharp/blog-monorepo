@@ -9,9 +9,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse();
-    console.log(req, 'req');
-    console.log(res, 'res');
+    // const res = context.switchToHttp().getResponse();
+    // console.log(req, 'req');
+    // console.log(res, 'res');
 
     return (
       Promise.resolve({ req })
@@ -19,7 +19,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
           const accessToken = req.get('Authorization');
           if (!accessToken) throw '请先登录';
           const atUserId = await this.userService.verifyToken(accessToken);
-          if (atUserId) throw '当前登录已过期，请重新登录';
+          if (!atUserId) throw '当前登录已过期，请重新登录';
           const user = await this.userService.validateUserByUserId(atUserId);
           if (!user) throw '用户不存在';
           // 将当前请求交给下一级

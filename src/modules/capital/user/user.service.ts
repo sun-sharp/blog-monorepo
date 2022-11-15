@@ -340,8 +340,9 @@ export class UserService {
       Promise.resolve(token)
         .then(async (token) => {
           if (!token) return '';
-          const id = this.jwtService.verify(token.replace('Bearer ', ''));
-          return id;
+          const { _id } = this.jwtService.verify(token.replace('Bearer ', ''));
+          console.log(_id, 'id');
+          return _id;
         })
         // 返回错误
         .catch(() => {

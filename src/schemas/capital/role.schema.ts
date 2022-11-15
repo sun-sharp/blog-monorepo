@@ -21,7 +21,7 @@ export class Role extends Document {
   roleType: number; // 角色类型
 
   @Prop()
-  menuPermission: Array<string>; // 角色菜单权限
+  permission: Array<string>; // 角色菜单权限
 
   @Prop()
   apiPermission: Array<string>; // 角色api权限
