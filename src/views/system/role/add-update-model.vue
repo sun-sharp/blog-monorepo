@@ -12,6 +12,7 @@
       </n-form-item>
       <n-form-item v-if="modelForm.roleType === 2 && menuListLoading" label="菜单权限" path="permission">
         <n-tree
+          style="width: 100%"
           block-line
           block-node
           cascade
@@ -19,7 +20,7 @@
           key-field="name"
           label-field="title"
           :data="menuData"
-          :default-expand-all="true"
+          :default-expand-all="false"
           :default-checked-keys="defaultCheckedKeys"
           @update:checked-keys="updateCheckedKeys"
         />
