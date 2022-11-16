@@ -69,3 +69,15 @@ export const remove = (roleId?) => {
     },
   });
 };
+
+/**
+ * @description 获取全部api接口列表
+ * @param params
+ */
+export function getApiAll(params?: any) {
+  return AxiosCapital.request({
+    url: `${basic}/api_all`,
+    method: 'GET',
+    params,
+  });
+}

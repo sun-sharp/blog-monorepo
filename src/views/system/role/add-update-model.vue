@@ -21,8 +21,21 @@
           label-field="title"
           :data="menuData"
           :default-expand-all="false"
-          :default-checked-keys="defaultCheckedKeys"
-          @update:checked-keys="updateCheckedKeys"
+          :default-checked-keys="defaultMenuChecked"
+          @update:checked-keys="updateMenuChecked"
+        />
+      </n-form-item>
+      <n-form-item v-if="modelForm.roleType === 2 && apiAllLoading" label="接口权限" path="apiPermission">
+        <n-tree
+          style="width: 100%"
+          block-line
+          block-node
+          cascade
+          checkable
+          :data="apiAllData"
+          :default-expand-all="false"
+          :default-checked-keys="defaultApiChecked"
+          @update:checked-keys="updateApiChecked"
         />
       </n-form-item>
     </n-form>
@@ -47,6 +60,7 @@
     roleCode: null,
     roleType: null,
     permission: [],
+    apiPermission: [],
   };
 
   export default defineComponent({
@@ -77,29 +91,60 @@
         },
       });
 
-      const defaultCheckedKeys = ref([]);
+      const defaultMenuChecked = ref([]);
       const menuData = ref<any[]>([]);
+      const defaultApiChecked = ref([]);
+      const apiAllData = ref<any[]>([]);
 
       // 初始化
       const menuListLoading = ref(false);
-      const init = async (row) => {
+      const apiAllLoading = ref(false);
+      const init = async (row: any) => {
         showModal.value = true;
         modelId.value = row?.roleId;
         menuListLoading.value = false;
+        apiAllLoading.value = false;
         resetFields();
         if (modelId.value) {
           modelForm.name = row.name;
           modelForm.roleCode = row.roleCode;
           modelForm.roleType = row.roleType;
-          modelForm.permission = defaultCheckedKeys.value = row.permission;
+          modelForm.permission = defaultMenuChecked.value = row.permission;
+          modelForm.apiPermission = defaultApiChecked.value = row.apiPermission;
         } else {
-          defaultCheckedKeys.value = [];
+          defaultMenuChecked.value = [];
+          defaultApiChecked.value = [];
         }
         nextTick(() => {
-          menuApi.getMenuList().then((res) => {
-            menuData.value = levelMenu(res);
-            menuListLoading.value = true;
-          });
+          loadMenuList();
+          loadApiAll();
+        });
+      };
+
+      const loadApiAll = () => {
+        roleApi.getApiAll().then((res) => {
+          apiAllData.value = (res || [])
+            .map((m: any) => {
+              let children = [];
+              if (m.children && m.children.length > 0) {
+                children = m.children.filter((f: any) => f.jwt).map((c: any) => ({ key: c.operationId, label: `${c.method}__${c.summary}` }));
+              }
+              return {
+                children,
+                key: m.tagId,
+                label: m.tagName,
+              };
+            })
+            .filter((f: any) => f.children.length > 0);
+          apiAllLoading.value = true;
+        });
+      };
+
+      // 获取菜单列表
+      const loadMenuList = () => {
+        menuApi.getMenuList().then((res) => {
+          menuData.value = levelMenu(res);
+          menuListLoading.value = true;
         });
       };
       // 重置
@@ -113,21 +158,27 @@
       };
 
       // 菜单权限选择树
-      const updateCheckedKeys = (values) => {
+      const updateMenuChecked = (values: any) => {
         modelForm.permission = values;
       };
 
+      // 菜单权限选择树
+      const updateApiChecked = (values: any) => {
+        modelForm.apiPermission = values;
+      };
+
       // 提交
-      const confirmForm = (e) => {
+      const confirmForm = (e: any) => {
         e.preventDefault();
         formBtnLoading.value = true;
-        modelFromRef.value.validate((errors) => {
+        modelFromRef.value.validate((errors: any) => {
           if (!errors) {
             const params: any = {
               name: modelForm.name,
               roleCode: modelForm.roleCode,
               roleType: modelForm.roleType,
               permission: modelForm.permission,
+              apiPermission: modelForm.apiPermission,
             };
             const request = modelId.value ? roleApi.update({ roleId: modelId.value, ...params }) : roleApi.save(params);
             request.then(() => {
@@ -148,10 +199,14 @@
         formBtnLoading,
         roleTypeOption,
         menuData,
-        defaultCheckedKeys,
+        defaultMenuChecked,
         menuListLoading,
+        defaultApiChecked,
+        apiAllLoading,
+        apiAllData,
         init,
-        updateCheckedKeys,
+        updateMenuChecked,
+        updateApiChecked,
         confirmForm,
       };
     },
