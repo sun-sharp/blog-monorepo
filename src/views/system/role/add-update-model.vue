@@ -144,6 +144,8 @@
       const loadMenuList = () => {
         menuApi.getMenuList().then((res) => {
           menuData.value = levelMenu(res);
+          console.log(menuData.value, 'menuData.value');
+
           menuListLoading.value = true;
         });
       };
@@ -159,7 +161,9 @@
 
       // 菜单权限选择树
       const updateMenuChecked = (values: any) => {
-        modelForm.permission = values;
+        console.log(values);
+
+        // modelForm.permission = values;
       };
 
       // 菜单权限选择树
