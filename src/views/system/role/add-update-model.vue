@@ -161,9 +161,7 @@
 
       // 菜单权限选择树
       const updateMenuChecked = (values: any) => {
-        console.log(values);
-
-        // modelForm.permission = values;
+        modelForm.permission = values;
       };
 
       // 菜单权限选择树
