@@ -109,6 +109,7 @@ export class RoleService {
           await this.roleModel.updateOne({ _id: roleId }, other);
           return (this.response = {
             code: ApiCode.SUCCESS,
+            // result: true,
             message: '修改成功！',
           });
         })
@@ -256,7 +257,7 @@ export class RoleService {
                 if (itemObj.requestBody) itemParameters.push('body');
                 if (itemParameters.length > 0) item.parameterTransferMode = itemParameters;
                 if (itemObj.tags && itemObj.tags.length > 0) item.tagName = itemObj.tags[0] || '';
-                if (itemObj.security && itemObj.security.length > 0 && !('jwt' in itemObj.security[0])) item.jwt = true;
+                if (itemObj.security && itemObj.security.length > 0 && !!('jwt' in itemObj.security[0])) item.jwt = true;
                 oneArr.push(item);
               }
             }
