@@ -341,7 +341,6 @@ export class UserService {
         .then(async (token) => {
           if (!token) return '';
           const { _id } = this.jwtService.verify(token.replace('Bearer ', ''));
-          console.log(_id, 'id');
           return _id;
         })
         // 返回错误

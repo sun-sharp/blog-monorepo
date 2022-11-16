@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PageRoleDto } from './dto/page-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -10,7 +10,7 @@ import { RoleService } from './role.service';
 @Controller('role')
 @ApiTags('权限')
 @ApiBearerAuth('jwt')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 

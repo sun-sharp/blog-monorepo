@@ -94,6 +94,8 @@ export class CapitalService {
         .then(async (roleCode) => {
           const routeFind = await this.roleService.findOneByRoleCode(roleCode);
           if (!routeFind) {
+            console.log(routeFind);
+
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '查询角色失败',

@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/schemas/capital/user.schema';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
+import { RoleModule } from '../role/role.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_CONSTANTS } from 'src/jwt/jwt.constants';
 
@@ -15,6 +16,7 @@ const USER_MONGO_MODULE = MongooseModule.forFeature([{ name: User.name, schema: 
     JwtModule.register({
       secret: JWT_CONSTANTS.secret,
     }),
+    forwardRef(() => RoleModule),
   ],
   controllers: [UserController],
   providers: [UserService, JwtStrategy],

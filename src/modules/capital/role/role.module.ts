@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -9,7 +9,7 @@ import { UserModule } from '../user/user.module';
 const ROLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }], 'capital');
 
 @Module({
-  imports: [ROLE_MONGO_MODULE, UserModule],
+  imports: [ROLE_MONGO_MODULE, forwardRef(() => UserModule)],
   controllers: [RoleController],
   providers: [RoleService, JwtStrategy],
   exports: [RoleService],

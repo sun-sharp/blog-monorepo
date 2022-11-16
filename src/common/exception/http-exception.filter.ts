@@ -11,10 +11,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const excRes: any = exception instanceof HttpException && exception.getResponse();
     console.log(excRes, 'excRes');
 
-    const message = checkMessage(
-      status,
-      excRes.message instanceof Array ? excRes.message.join('，') : typeof excRes.message === 'string' ? excRes.message : '',
-    );
+    let excResMessage = '';
+    if (excRes.message instanceof Array) {
+      excResMessage = excRes.message.join('，');
+    } else if (typeof excRes.message === 'string') {
+      excResMessage = excRes.message;
+    } else if (typeof excRes === 'string') {
+      excResMessage = excRes;
+    }
+    const message = checkMessage(status, excResMessage);
     const code = checkCode(status);
     // @todo 记录日志
     checkHttpLog(status, request.method, request.url, message);

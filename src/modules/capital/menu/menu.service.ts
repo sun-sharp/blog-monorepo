@@ -89,7 +89,29 @@ export class MenuService {
     return (
       Promise.resolve(permission)
         .then(async (permission) => {
-          return await this.menuModel.find({ name: { $in: permission } }).sort({ sort: 1 });
+          const findAll = await this.menuModel.find();
+          const findNameArr = [];
+          const menuFindById = (parentId: string) => {
+            const arr = [];
+            const findById = findAll.find((c) => String(c._id) === parentId);
+            if (findById && findById.parentId) {
+              if (findById.parentId === '0') {
+                arr.push(findById.name);
+              } else {
+                arr.push(...menuFindById(findById.parentId));
+              }
+            }
+            return arr;
+          };
+          findAll.forEach((f) => {
+            if (permission.includes(f.name)) {
+              findNameArr.push(f.name);
+              if (f.parentId !== '0') {
+                findNameArr.push(...menuFindById(f.parentId));
+              }
+            }
+          });
+          return await this.menuModel.find({ name: { $in: findNameArr } }).sort({ sort: 1 });
         })
         // 返回错误
         .catch((err) => {

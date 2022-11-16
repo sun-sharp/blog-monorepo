@@ -274,7 +274,60 @@ export class RoleService {
   }
 
   /**
-   * @description 获取全部接口列表
+   * @description 获取需要jwt验证的接口一维列表
+   * @return {*}  {Promise<IResponse>}
+   * @memberof RoleService
+   */
+  public findApiJwtAll(): Promise<Array<any>> {
+    return (
+      Promise.resolve()
+        // 查询
+        .then(async () => {
+          const oneArr = await this.findApiAllOneDimensional();
+          return oneArr.filter((f) => f.jwt);
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`查询需要jwt验证的接口列表失败`, err);
+          return [];
+        })
+    );
+  }
+
+  /**
+   * @description: jwt权限接口认证
+   * @param {string} roleCode
+   * @return {*}
+   */
+  public validateRoleByRoleCode(roleCode: string, url: string, method: string): Promise<boolean> {
+    return (
+      Promise.resolve(roleCode)
+        // 查询
+        .then(async (roleCode) => {
+          if (!roleCode) return false;
+          const roleFind = await this.findOneByRoleCode(roleCode);
+          const apiPermission = roleFind.apiPermission;
+          const apiJwtAll = await this.findApiJwtAll();
+          const filterArr = apiJwtAll.filter((f) => apiPermission.includes(f.operationId));
+          const urlFind = filterArr.find((f) => {
+            if (f.url.includes(['{']) && f.url.includes(['}'])) {
+              return f.url.replace('{', '').replace('}', '') === url.replace(':', '') && f.method === method;
+            } else {
+              return f.url === url && f.method === method;
+            }
+          });
+          return !!urlFind;
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`查询需要jwt验证的接口列表失败`, err);
+          return false;
+        })
+    );
+  }
+
+  /**
+   * @description 获取全部接口列表并关联
    * @return {*}  {Promise<IResponse>}
    * @memberof RoleService
    */
