@@ -25,7 +25,7 @@ export class CreateRoleDto {
   @ApiProperty({
     description: '菜单权限',
   })
-  readonly permission: Array<string>;
+  readonly menuPermission: Array<string>;
 
   @ApiProperty({
     description: 'api权限',

@@ -81,14 +81,14 @@ export class MenuService {
   }
 
   /**
-   * @description: 根据权限的permission查找系统菜单详情
-   * @param {Array<string>} permission
+   * @description: 根据权限的menuPermission查找系统菜单详情
+   * @param {Array<string>} menuPermission
    * @return {Promise<Array<Menu>>}
    */
-  public findByPermission(permission: Array<string>): Promise<Array<Menu>> {
+  public findByMenuPermission(menuPermission: Array<string>): Promise<Array<Menu>> {
     return (
-      Promise.resolve(permission)
-        .then(async (permission) => {
+      Promise.resolve(menuPermission)
+        .then(async (menuPermission) => {
           const findAll = await this.menuModel.find();
           const findNameArr = [];
           const menuFindById = (parentId: string) => {
@@ -104,7 +104,7 @@ export class MenuService {
             return arr;
           };
           findAll.forEach((f) => {
-            if (permission.includes(f.name)) {
+            if (menuPermission.includes(f.name)) {
               findNameArr.push(f.name);
               if (f.parentId !== '0') {
                 findNameArr.push(...menuFindById(f.parentId));

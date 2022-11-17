@@ -109,8 +109,8 @@ export class CapitalService {
             }
           }
           // 不是管理员账号，执行下面
-          const routePermission = routeFind.permission;
-          const result = await this.menuService.findByPermission(routePermission);
+          const routePermission = routeFind.menuPermission;
+          const result = await this.menuService.findByMenuPermission(routePermission);
           if (result) {
             return (this.response = {
               code: ApiCode.SUCCESS,
