@@ -1,12 +1,12 @@
 <template>
   <article-list v-show="showType === 'list'" />
-  <article-add v-if="showType === 'add'" />
+  <!-- <article-add v-if="showType === 'add'" /> -->
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
   import articleList from './article-list.vue';
-  import articleAdd from './article-add.vue';
+  // import articleAdd from './article-add.vue';
 
-  const showType = ref('add');
+  const showType = ref('list');
 </script>
 <style lang="scss" scoped></style>
