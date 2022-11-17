@@ -85,4 +85,8 @@ $ pm2 list
 # 添加进程/应用 nest
 $ pm2 start --name nest dist/main.js
 
+# 或者
+# 重新在服务器更新分支main并打包部署应用 nest
+$ yarn update_main_pm2
+
 ```
