@@ -10,7 +10,7 @@
       <n-form-item label="角色权限类型" path="roleType">
         <n-select v-model:value="modelForm.roleType" :options="roleTypeOption" placeholder="请选择角色权限类型" />
       </n-form-item>
-      <n-form-item v-if="modelForm.roleType === 2 && menuListLoading" label="菜单权限" path="permission">
+      <n-form-item v-if="modelForm.roleType === 2 && menuListLoading" label="菜单权限" path="menuPermission">
         <n-tree
           style="width: 100%"
           block-line
@@ -59,7 +59,7 @@
     name: null,
     roleCode: null,
     roleType: null,
-    permission: [],
+    menuPermission: [],
     apiPermission: [],
   };
 
@@ -109,7 +109,7 @@
           modelForm.name = row.name;
           modelForm.roleCode = row.roleCode;
           modelForm.roleType = row.roleType;
-          modelForm.permission = defaultMenuChecked.value = row.permission;
+          modelForm.menuPermission = defaultMenuChecked.value = row.menuPermission;
           modelForm.apiPermission = defaultApiChecked.value = row.apiPermission;
         } else {
           defaultMenuChecked.value = [];
@@ -161,7 +161,7 @@
 
       // 菜单权限选择树
       const updateMenuChecked = (values: any) => {
-        modelForm.permission = values;
+        modelForm.menuPermission = values;
       };
 
       // 菜单权限选择树
@@ -179,7 +179,7 @@
               name: modelForm.name,
               roleCode: modelForm.roleCode,
               roleType: modelForm.roleType,
-              permission: modelForm.permission,
+              menuPermission: modelForm.menuPermission,
               apiPermission: modelForm.apiPermission,
             };
             const request = modelId.value ? roleApi.update({ roleId: modelId.value, ...params }) : roleApi.save(params);
