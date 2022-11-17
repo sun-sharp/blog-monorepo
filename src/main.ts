@@ -6,7 +6,9 @@ import MakeitCaptcha from 'makeit-captcha';
 import 'makeit-captcha/dist/captcha.min.css';
 import {
   setupNaive,
-  // setupDirectives
+  // setupDirectives,
+  setupVMdEditor,
+  setupVMdPreview,
 } from '@/plugins';
 
 const app = createApp(App);
@@ -25,5 +27,9 @@ setupStore(app);
 
 // 挂载路由
 setupRouter(app);
+
+// 挂载 markdown 编辑器
+setupVMdEditor(app);
+setupVMdPreview(app);
 
 app.mount('#app');
