@@ -5,11 +5,11 @@ import '@kangc/v-md-editor/lib/style/base-editor.css';
 import VMdPreview from '@kangc/v-md-editor/lib/preview';
 
 // github主题
-// import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
+// import githubTheme from '@kangc/v-md-editor/lib/theme/github';
 // import '@kangc/v-md-editor/lib/theme/style/github.css';
 
 // vuepress主题
-import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 
 import Prism from 'prismjs';
@@ -25,7 +25,7 @@ VMdPreview.use(vuepressTheme, {
 // VMdEditor.lang.use('en-US', enUS);
 
 // katex
-import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn.js';
+import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn';
 VMdEditor.use(createKatexPlugin());
 VMdPreview.use(createKatexPlugin());
 
@@ -36,7 +36,7 @@ VMdEditor.use(createEmojiPlugin());
 VMdPreview.use(createEmojiPlugin());
 
 // 流程图
-import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn.js';
+import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
 import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
 VMdEditor.use(createMermaidPlugin());
 VMdPreview.use(createMermaidPlugin());

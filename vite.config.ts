@@ -129,8 +129,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       // vite-plugin-prismjs
       prismjs({
-        // languages: ['json'],
-        languages: 'all',
+        languages: ['json'],
+        // languages: 'all',
       }),
     ],
     // 定义全局常量替换方式。
