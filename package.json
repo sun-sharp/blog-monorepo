@@ -12,7 +12,6 @@
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && yarn"
   },
   "dependencies": {
-    "@kangc/v-md-editor": "^2.3.15",
     "@vicons/antd": "^0.11.0",
     "@vicons/ionicons5": "^0.11.0",
     "await-to-js": "^3.0.0",
@@ -21,6 +20,7 @@
     "echarts": "^5.2.1",
     "element-resize-detector": "^1.2.3",
     "makeit-captcha": "^1.2.5",
+    "md-editor-v3": "^2.4.1",
     "mockjs": "^1.1.0",
     "naive-ui": "^2.19.11",
     "pinia": "^2.0.0-rc.10",
@@ -57,7 +57,6 @@
     "vite-plugin-compression": "^0.3.5",
     "vite-plugin-html": "^2.1.1",
     "vite-plugin-mock": "^2.9.6",
-    "vite-plugin-prismjs": "^0.0.8",
     "vue-eslint-parser": "^8.0.0",
     "vue-tsc": "^0.3.0"
   },

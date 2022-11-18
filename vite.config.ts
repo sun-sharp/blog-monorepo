@@ -7,7 +7,6 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import html from 'vite-plugin-html';
 import { viteMockServe } from 'vite-plugin-mock';
-import prismjs from 'vite-plugin-prismjs';
 
 type ProxyItem = [string, string];
 type ProxyList = ProxyItem[];
@@ -126,11 +125,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
            `,
         logger: false, //是否在控制台显示请求日志
         supportTs: false, //打开后，可以读取 ts 文件模块。 请注意，打开后将无法监视.js 文件
-      }),
-      // vite-plugin-prismjs
-      prismjs({
-        languages: ['json'],
-        // languages: 'all',
       }),
     ],
     // 定义全局常量替换方式。
