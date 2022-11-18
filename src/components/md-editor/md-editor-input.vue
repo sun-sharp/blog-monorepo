@@ -1,10 +1,10 @@
 <template>
-  <md-editor-v3 v-model="text" :toolbars="toolbars" />
+  <md-editor-v3 v-model="text" v-bind="getMdEditorBind" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
 
-  const props = {
+  const joinProps = {
     toolbars: {
       type: Array,
       default: [
@@ -40,16 +40,57 @@
         'catalog', // 目录
         'github', // 源码地址
       ],
-    }, // 开始数字
+    }, // 选择性展示工具栏（通过'-'分割两个工具，通过'='实现左右放置）
+    editorId: { type: String, default: 'md-editor-v3' }, // 单页面多编辑器时做区别
+    placeholder: { type: String, default: '请输入' },
+    codeTheme: {
+      validator(value: string) {
+        return ['atom', 'a11y', 'github', 'gradient', 'kimbie', 'paraiso', 'qtcreator', 'stackoverflow'].includes(value);
+      },
+      default: 'atom',
+    }, // 代码块高亮样式名称
   };
 
   export default defineComponent({
     name: 'CountTo',
-    props,
+    props: joinProps,
     emits: ['onStarted', 'onFinished'],
-    setup() {
+    setup(props) {
       const text = ref('');
-      return { text };
+
+      const getMdEditorBind = computed(() => {
+        return {
+          toolbars: props.toolbars,
+          editorId: props.editorId,
+          placeholder: props.placeholder,
+        };
+      });
+
+      // 保存
+      const onSave = (val: string) => {
+        console.log(val, 'onSave');
+      };
+
+      // 上传图片
+      const onUploadImg = async (files: any[], callback: (arg: any[]) => void) => {
+        const res = await Promise.all(
+          files.map((file: any) => {
+            return new Promise((resolve, reject) => {
+              console.log(file);
+              console.log(resolve, reject);
+            });
+          })
+        );
+
+        // callback(res.map((item) => item.data.url));
+        callback(res);
+      };
+
+      // html 变化回调事件
+      const onHtmlChanged = (h: string) => {
+        console.log(h, 'onHtmlChanged');
+      };
+      return { text, getMdEditorBind, onSave, onUploadImg, onHtmlChanged };
     },
   });
 </script>
