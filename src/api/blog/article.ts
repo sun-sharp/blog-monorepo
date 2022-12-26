@@ -13,3 +13,17 @@ export const getFindPage = (data?: any) => {
     data,
   });
 };
+
+/**
+ * @description 删除文章
+ * @param articleId
+ */
+export const remove = (articleId?: string) => {
+  return AxiosBlog.request({
+    url: `${basic}/${articleId}`,
+    method: 'DELETE',
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};

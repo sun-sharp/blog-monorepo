@@ -1,9 +1,12 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { articleAPi } from '@/api';
+  import { PlusOutlined } from '@/utils';
   import { useConfigure } from './configure';
   import FormSearch from '@/components/form/form-search.vue';
   import BasicTable from '@/components/Table/basic-table.vue';
+
+  const emit = defineEmits(['changeShowType']);
 
   /**
    * 表格
@@ -32,24 +35,26 @@
 </script>
 
 <template>
-  <form-search
-    inline
-    :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }"
-    :show-reset-button="false"
-    :show-advanced-button="false"
-    :schemas="searchSchemas"
-    @submit="searchSubmit"
-  />
-  <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
-    <template #tableTitle>
-      <n-button type="primary">
-        <template #icon>
-          <n-icon>
-            <PlusOutlined />
-          </n-icon>
-        </template>
-        新建
-      </n-button>
-    </template>
-  </basic-table>
+  <div>
+    <form-search
+      inline
+      :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }"
+      :show-reset-button="false"
+      :show-advanced-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
+    />
+    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
+      <template #tableTitle>
+        <n-button type="primary" @click="emit('changeShowType', 'add')">
+          <template #icon>
+            <n-icon>
+              <PlusOutlined />
+            </n-icon>
+          </template>
+          新建
+        </n-button>
+      </template>
+    </basic-table>
+  </div>
 </template>

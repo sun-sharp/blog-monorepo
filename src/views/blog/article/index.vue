@@ -1,6 +1,6 @@
 <template>
   <n-card :bordered="false" class="pro-card">
-    <article-list v-show="showType === 'list'" />
+    <article-list v-show="showType === 'list'" @changeShowType="changeShowType" />
     <article-add v-if="showType === 'add'" @changeShowType="changeShowType" />
   </n-card>
 </template>

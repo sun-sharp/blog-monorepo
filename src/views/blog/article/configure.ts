@@ -1,5 +1,6 @@
 import { h, reactive } from 'vue';
 import { NButton } from 'naive-ui';
+import { articleAPi } from '@/api';
 
 export const useConfigure = ({ reloadTable }) => {
   // 查询配置
@@ -63,7 +64,9 @@ export const useConfigure = ({ reloadTable }) => {
   });
   // 删除
   const handleDelete = (row: Recordable) => {
-    console.log(row, reloadTable);
+    articleAPi.remove(row.articleId).then(() => {
+      reloadTable();
+    });
   };
 
   return {
