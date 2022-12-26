@@ -1,5 +1,5 @@
 <template>
-  <n-card :bordered="false" class="proCard">
+  <n-card :bordered="false" class="pro-card">
     <form-search inline :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
     <basic-table
       ref="actionRef"

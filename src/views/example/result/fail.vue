@@ -1,5 +1,5 @@
 <template>
-  <n-card :bordered="false" class="proCard">
+  <n-card :bordered="false" class="pro-card">
     <div class="result-box">
       <n-result status="error" title="操作失败" description="请核对并修改以下信息后，再重新提交。">
         <div class="result-box-extra">

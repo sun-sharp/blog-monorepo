@@ -10,6 +10,7 @@ export * as imageApi from './file/image';
 // blog
 export * as homeApi from './blog/home';
 export * as articleCategoryAPi from './blog/article-category';
+export * as articleAPi from './blog/article';
 
 // money
 export * as weChatApi from './money/we-chat';
