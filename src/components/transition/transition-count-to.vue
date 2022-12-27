@@ -47,7 +47,7 @@
       const disabled = ref(false);
       let outputValue = useTransition(source);
 
-      const value = computed(() => formatNumber(unref(outputValue)));
+      const value = computed(() => formatNumber(unref(outputValue)) || 0);
 
       watchEffect(() => {
         source.value = props.startVal;
@@ -63,17 +63,17 @@
         props.autoplay && start();
       });
 
-      function start() {
+      const start = () => {
         run();
         source.value = props.endVal;
-      }
+      };
 
-      function reset() {
+      const reset = () => {
         source.value = props.startVal;
         run();
-      }
+      };
 
-      function run() {
+      const run = () => {
         outputValue = useTransition(source, {
           disabled,
           duration: props.duration,
@@ -81,9 +81,9 @@
           onStarted: () => emit('onStarted'),
           ...(props.useEasing ? { transition: TransitionPresets[props.transition] } : {}),
         });
-      }
+      };
 
-      function formatNumber(num: number | string) {
+      const formatNumber = (num) => {
         if (typeof num !== 'number') {
           return '';
         }
@@ -102,7 +102,7 @@
           }
         }
         return prefix + x1 + x2 + suffix;
-      }
+      };
 
       return { value, start, reset };
     },
