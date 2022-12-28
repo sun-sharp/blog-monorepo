@@ -2,19 +2,7 @@ import { h, reactive } from 'vue';
 import { NButton } from 'naive-ui';
 import { articleAPi } from '@/api';
 
-export const useConfigure = ({ reloadTable }) => {
-  // 查询配置
-  const searchSchemas = [
-    {
-      field: 'name',
-      component: 'NInput',
-      label: '名称',
-      componentProps: {
-        placeholder: '请输入名称',
-      },
-    },
-  ];
-
+export const useConfigure = ({ reloadTable, emit }) => {
   /**
    * 表格按钮操作配置
    *  */
@@ -52,6 +40,18 @@ export const useConfigure = ({ reloadTable }) => {
           {
             class: 'mh-3',
             text: true,
+            type: 'primary',
+            onClick: handleEdit.bind(null, row),
+          },
+          {
+            default: () => '编辑',
+          }
+        ),
+        h(
+          NButton,
+          {
+            class: 'mh-3',
+            text: true,
             type: 'error',
             onClick: handleDelete.bind(null, row),
           },
@@ -62,6 +62,10 @@ export const useConfigure = ({ reloadTable }) => {
       ];
     },
   });
+  // 编辑
+  const handleEdit = (row: Recordable) => {
+    emit('editChange', row);
+  };
   // 删除
   const handleDelete = (row: Recordable) => {
     articleAPi.remove(row.articleId).then(() => {
@@ -70,7 +74,6 @@ export const useConfigure = ({ reloadTable }) => {
   };
 
   return {
-    searchSchemas,
     actionColumn,
     columns,
   };

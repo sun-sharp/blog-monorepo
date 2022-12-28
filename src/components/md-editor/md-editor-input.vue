@@ -1,13 +1,12 @@
 <template>
-  <md-editor-v3 v-model="text" v-bind="getMdEditorBind" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
+  <md-editor-v3 v-model="text" v-bind="getMdEditorBind" @onChange="onChange" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
 </template>
-<script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
-
-  const joinProps = {
+<script lang="ts" setup>
+  import { computed, ref, watchEffect } from 'vue';
+  const props = defineProps({
     toolbars: {
       type: Array,
-      default: [
+      default: () => [
         'bold', // 加粗
         'underline', // 加下划线
         'italic', // 斜体
@@ -38,7 +37,7 @@
         'preview', // 预览
         'htmlPreview', // html代码预览
         'catalog', // 目录
-        'github', // 源码地址
+        // 'github', // 源码地址
       ],
     }, // 选择性展示工具栏（通过'-'分割两个工具，通过'='实现左右放置）
     editorId: { type: String, default: 'md-editor-v3' }, // 单页面多编辑器时做区别
@@ -49,48 +48,66 @@
       },
       default: 'atom',
     }, // 代码块高亮样式名称
-  };
-
-  export default defineComponent({
-    name: 'CountTo',
-    props: joinProps,
-    emits: ['onStarted', 'onFinished'],
-    setup(props) {
-      const text = ref('');
-
-      const getMdEditorBind = computed(() => {
-        return {
-          toolbars: props.toolbars,
-          editorId: props.editorId,
-          placeholder: props.placeholder,
-        };
-      });
-
-      // 保存
-      const onSave = (val: string) => {
-        console.log(val, 'onSave');
-      };
-
-      // 上传图片
-      const onUploadImg = async (files: any[], callback: (arg: any[]) => void) => {
-        const res = await Promise.all(
-          files.map((file: any) => {
-            return new Promise((resolve, reject) => {
-              console.log(file);
-              console.log(resolve, reject);
-            });
-          })
-        );
-
-        // callback(res.map((item) => item.data.url));
-        callback(res);
-      };
-
-      // html 变化回调事件
-      const onHtmlChanged = (h: string) => {
-        console.log(h, 'onHtmlChanged');
-      };
-      return { text, getMdEditorBind, onSave, onUploadImg, onHtmlChanged };
+    htmlText: {
+      type: String,
+      default: '',
+    },
+    markdownText: {
+      type: String,
+      default: '',
     },
   });
+  const emit = defineEmits(['onSave', 'update:htmlText', 'update:markdownText']);
+  const text = ref('');
+
+  const getMdEditorBind = computed(() => {
+    return {
+      toolbars: props.toolbars,
+      editorId: props.editorId,
+      placeholder: props.placeholder,
+    };
+  });
+
+  watchEffect(() => {
+    text.value = props.markdownText;
+  });
+
+  // 保存
+  const onSave = (v: string, h: Promise<string>) => {
+    emit('update:markdownText', v || '');
+    if (h) {
+      h.then((html) => {
+        emit('update:htmlText', html);
+        emit('onSave', v, html);
+      });
+    } else {
+      emit('update:htmlText', '');
+      emit('onSave', v, '');
+    }
+  };
+
+  // 上传图片
+  const onUploadImg = async (files: any[], callback: (arg: any[]) => void) => {
+    const res = await Promise.all(
+      files.map((file: any) => {
+        return new Promise((resolve, reject) => {
+          console.log(file);
+          console.log(resolve, reject);
+        });
+      })
+    );
+
+    // callback(res.map((item) => item.data.url));
+    callback(res);
+  };
+
+  // html 变化回调事件
+  const onHtmlChanged = (h: string) => {
+    emit('update:htmlText', h);
+  };
+
+  // 内容变化回调事件
+  const onChange = (v: string) => {
+    emit('update:markdownText', v);
+  };
 </script>

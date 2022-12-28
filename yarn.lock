@@ -2758,10 +2758,10 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.npmmirror.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-md-editor-v3@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.npmmirror.com/md-editor-v3/-/md-editor-v3-2.4.1.tgz#1a9f28f0758844bf271362b14d5fd6b8961dc390"
-  integrity sha512-ORI1g4bQK+6NkTKriizqXYd0wtrchhP2bnnxS8u0P2UX8/A7kWBjb9jSUAqiTDVWpi8RrJ4/OyUh+Njb5krEEg==
+md-editor-v3@^2.7.0:
+  version "2.7.2"
+  resolved "https://registry.npmmirror.com/md-editor-v3/-/md-editor-v3-2.7.2.tgz#433883f21b1133775c2d4433e38bc4833bd8201e"
+  integrity sha512-CyLG7yZhMyKplXO/MYIccpL0AOcnys74cMpbBG77rmXWlANAmzLrznUU++g6MohTv3DCRNTz+5Uh/w9h9P2sSA==
 
 mdast-util-from-markdown@^0.8.0:
   version "0.8.5"

@@ -27,7 +27,7 @@ propTypes.extend([
 export { propTypes };
 
 // dynamic use hook props
-export function getDynamicProps<T, U>(props: T): Partial<U> {
+export function getDynamicProps<U>(props: object): Partial<U> {
   const ret: Recordable = {};
 
   Object.keys(props).map((key) => {

@@ -27,3 +27,33 @@ export const remove = (articleId?: string) => {
     },
   });
 };
+
+/**
+ * @description: 保存
+ * @param {any} data
+ */
+export const save = (data?: any) => {
+  return AxiosBlog.request({
+    url: `${basic}/save`,
+    method: 'POST',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
+ * @description: 修改文章
+ * @param {any} data
+ */
+export const update = (data?: any) => {
+  return AxiosBlog.request({
+    url: `${basic}/update`,
+    method: 'PUT',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};

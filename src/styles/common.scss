@@ -102,6 +102,14 @@
   justify-content: center;
 }
 
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
 .flex-initial {
   flex: 0 1 auto;
 }
