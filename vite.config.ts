@@ -134,6 +134,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     css: {
       preprocessorOptions: {
         scss: {
+          charset: false,
           additionalData: '@import "./src/styles/variable.scss";', // 添加公共样式
         },
       },

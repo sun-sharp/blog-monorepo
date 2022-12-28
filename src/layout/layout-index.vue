@@ -193,7 +193,7 @@
   }
 
   .fluid-header {
-    padding-top: 0px;
+    padding-top: 0;
   }
 
   .main-view-fix {

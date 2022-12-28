@@ -428,7 +428,7 @@
   });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .layout-tabs-view {
     width: 100%;
     padding: 6px 0;
@@ -524,7 +524,7 @@
           }
 
           .active-item {
-            color: v-bind(getAppTheme);
+            color: v-bind(getapptheme);
           }
         }
       }

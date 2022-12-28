@@ -3,7 +3,7 @@ import { ErrorComponent, HomeComponent, Layout, PageEnum, RedirectComponent, Set
 import { RouteRecordRaw } from 'vue-router';
 
 // 首页
-export const HomeRoute: AppRouteRecordRaw = {
+export const HomeRoute: RouteRecordRaw = {
   path: PageEnum.HOME_PATH,
   name: PageEnum.HOME_NAME,
   component: HomeComponent,

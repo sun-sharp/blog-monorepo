@@ -159,6 +159,33 @@
 
 <style lang="scss" scoped>
   .lock-screen {
+    @keyframes rotate {
+      50% {
+        border-radius: 45% / 42% 38% 58% 49%;
+      }
+
+      100% {
+        transform: translate(-50%, -50%) rotate(720deg);
+      }
+    }
+
+    @keyframes moveToTop {
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.1;
+        transform: translate(-50%, -180px);
+      }
+    }
+
+    @keyframes hueRotate {
+      100% {
+        filter: contrast(15) hue-rotate(360deg);
+      }
+    }
+
     position: fixed;
     top: 0;
     left: 0;
@@ -353,33 +380,6 @@
           background-color: red;
           z-index: 10;
         }
-      }
-    }
-
-    @keyframes rotate {
-      50% {
-        border-radius: 45% / 42% 38% 58% 49%;
-      }
-
-      100% {
-        transform: translate(-50%, -50%) rotate(720deg);
-      }
-    }
-
-    @keyframes moveToTop {
-      90% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0.1;
-        transform: translate(-50%, -180px);
-      }
-    }
-
-    @keyframes hueRotate {
-      100% {
-        filter: contrast(15) hue-rotate(360deg);
       }
     }
   }

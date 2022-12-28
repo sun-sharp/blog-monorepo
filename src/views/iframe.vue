@@ -10,7 +10,7 @@
   import { useRoute } from 'vue-router';
 
   const currentRoute = useRoute();
-  const loading = ref(false);
+  const loading = ref<boolean>(false);
   const frameRef = ref<HTMLFrameElement | null>(null);
   const iframeSrc = ref<string>('');
 
