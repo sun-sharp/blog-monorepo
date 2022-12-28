@@ -9,10 +9,9 @@ export class PageArticleDto extends PaginateDto {
   })
   readonly title: string = '';
 
-  // @ApiProperty({
-  //   description: '用户名',
-  //   required: false,
-  //   default: '',
-  // })
-  // readonly username: string = '';
+  @ApiProperty({
+    description: '文章分类',
+    required: false,
+  })
+  readonly categoryVal: number;
 }

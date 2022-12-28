@@ -12,6 +12,11 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
+interface FindPageData {
+  title: object; // 0 表示成功
+  categoryVal?: number;
+}
+
 @Injectable()
 export class ArticleService {
   response: IResponse;
@@ -27,9 +32,12 @@ export class ArticleService {
       Promise.resolve(body)
         // 分页查询
         .then(async (body) => {
-          const { size, current, title } = body;
+          const { size, current, title, categoryVal } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { title: { $regex: title } };
+          const findData: FindPageData = { title: { $regex: title } };
+          if (categoryVal) {
+            findData.categoryVal = categoryVal;
+          }
           const total = await this.articleModel.find(findData).count();
           const list = await this.articleModel.find(findData).limit(limit).skip(skip);
           return (this.response = {
