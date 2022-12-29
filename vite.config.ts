@@ -161,7 +161,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
       minify: 'terser',
-      brotliSize: false,
       chunkSizeWarningLimit: 2000,
     },
   };
