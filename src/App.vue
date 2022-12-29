@@ -17,7 +17,7 @@
 
   const route = useRoute();
   const useLockScreen = useLockScreenStore();
-  const isLock = computed(() => useLockScreen.isLock);
+  const isLock = computed<boolean>(() => useLockScreen.isLock);
   const lockTime = computed(() => useLockScreen.lockTime);
 
   // 设置锁屏

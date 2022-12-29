@@ -5,9 +5,9 @@
     "dev": "vite --mode dev",
     "dev:prod": "vite --mode prod-local",
     "dev:debug": "vite --mode dev --debug",
-    "build": "vite build --mode prod",
+    "build": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview",
-    "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix",
+    "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && yarn"
   },
@@ -59,7 +59,7 @@
     "vite-plugin-html": "^2.1.1",
     "vite-plugin-mock": "^2.9.6",
     "vue-eslint-parser": "^8.0.0",
-    "vue-tsc": "^0.3.0"
+    "vue-tsc": "^1.0.18"
   },
   "lint-staged": {
     "*.{vue,js,ts,tsx}": "eslint --fix"

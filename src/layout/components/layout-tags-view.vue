@@ -24,6 +24,7 @@
         <div ref="navScroll" class="tabs-card-scroll">
           <Draggable :list="tabsList" animation="300" item-key="fullPath" class="flex">
             <template #item="{ element }">
+              <!--                 :style="`color: ${getAppTheme}`" -->
               <div
                 :id="`tag${element.fullPath.split('/').join('\/')}`"
                 class="tabs-card-scroll-item"
@@ -524,7 +525,7 @@
           }
 
           .active-item {
-            color: v-bind(getapptheme);
+            color: v-bind(getAppTheme);
           }
         }
       }
