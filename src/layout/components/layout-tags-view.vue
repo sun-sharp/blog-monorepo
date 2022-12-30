@@ -22,9 +22,8 @@
           </n-icon>
         </span>
         <div ref="navScroll" class="tabs-card-scroll">
-          <Draggable :list="tabsList" animation="300" item-key="fullPath" class="flex">
+          <Draggable v-model="tabsList" animation="300" item-key="fullPath" class="flex">
             <template #item="{ element }">
-              <!--                 :style="`color: ${getAppTheme}`" -->
               <div
                 :id="`tag${element.fullPath.split('/').join('\/')}`"
                 class="tabs-card-scroll-item"
@@ -32,6 +31,7 @@
                 @click.stop="goPage(element)"
                 @contextmenu="handleContextMenu($event, element)"
               >
+                <!--                 :style="`color: ${getAppTheme}`" -->
                 <span>{{ element.meta.title }}</span>
                 <n-icon v-if="element.path !== baseHome" size="14" @click.stop="closeTabItem(element)">
                   <CloseOutlined />
@@ -204,6 +204,8 @@
 
       // 标签页列表
       const tabsList: any = computed(() => tabsViewStore.tabsList);
+      console.log(tabsList.value);
+
       const whiteList: string[] = [PageEnum.LOGIN_NAME, PageEnum.REDIRECT_NAME, PageEnum.ERROR_PAGE_NAME];
 
       watch(
