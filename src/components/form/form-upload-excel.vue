@@ -110,7 +110,7 @@
             data: formData,
             withCredentials,
             headers,
-            onUploadProgress: ({ loaded, total }) => {
+            onUploadProgress: ({ loaded, total = 1 }) => {
               onProgress({ percent: Math.ceil((loaded / total) * 100) });
             },
           } as AxiosRequestConfig)
