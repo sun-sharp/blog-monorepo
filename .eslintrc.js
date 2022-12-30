@@ -39,5 +39,7 @@ module.exports = {
     'vue/valid-template-root': 'off',
     // 'vue/require-explicit-emits': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    'vue/v-on-event-hyphenation': 'off',
+    'vue/multi-word-component-names': 'off',
   },
 };

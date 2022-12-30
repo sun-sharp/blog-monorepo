@@ -1,12 +1,12 @@
-import type { UserConfig, ConfigEnv, ProxyOptions } from 'vite';
-import { loadEnv } from 'vite';
+import type { ProxyOptions } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { resolve } from 'path';
 import pkg from './package.json';
 import { format } from 'date-fns';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import html from 'vite-plugin-html';
-import { viteMockServe } from 'vite-plugin-mock';
+import { createHtmlPlugin } from 'vite-plugin-html';
+// import { viteMockServe } from 'vite-plugin-mock';
 
 type ProxyItem = [string, string];
 type ProxyList = ProxyItem[];
@@ -19,18 +19,21 @@ const __APP_INFO__ = {
   lastBuildTime: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
 };
 
-// 处理replacement链接
-function pathResolve(dir: string) {
-  return resolve(__dirname, dir);
-}
+/**
+ * @description: 处理文件路径
+ * @param {string} dir
+ * @return {string}
+ */
+const pathResolve = (dir: string): string => {
+  return resolve(process.cwd(), '.', dir);
+};
 
 /**
- * @description: 处理env文件
+ * @description: 处理env文件（将所有环境变量配置文件读取到 process.env）
  * @param {Recordable} envConf
  * @return {ViteEnv}
  */
-// 将所有环境变量配置文件读取到 process.env
-function wrapperEnv(envConf: Recordable): ViteEnv {
+const wrapperEnv = (envConf: Recordable): ViteEnv => {
   const ret: any = {};
 
   for (const envName of Object.keys(envConf)) {
@@ -49,13 +52,13 @@ function wrapperEnv(envConf: Recordable): ViteEnv {
     process.env[envName] = realName;
   }
   return ret;
-}
+};
 
 /**
- * Generate proxy
+ * 创建dev运行跨越
  * @param list
  */
-function createProxy(list: ProxyList = []) {
+const createProxy = (list: ProxyList = []) => {
   const ret: ProxyTargetList = {};
   for (const [prefix, target] of list) {
     const isHttps = httpsRE.test(target);
@@ -70,10 +73,10 @@ function createProxy(list: ProxyList = []) {
     };
   }
   return ret;
-}
+};
 
 // vite 配置
-export default ({ command, mode }: ConfigEnv): UserConfig => {
+export default defineConfig(({ command, mode }) => {
   const root = process.cwd();
   const env = loadEnv(mode, root);
   const viteEnv = wrapperEnv(env);
@@ -88,10 +91,16 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   return {
     base: VITE_PUBLIC_PATH,
     resolve: {
-      alias: {
-        '@': pathResolve('src'),
-        '/#/': pathResolve('types'),
-      },
+      alias: [
+        {
+          find: /\/#\//,
+          replacement: pathResolve('types') + '/',
+        },
+        {
+          find: '@',
+          replacement: pathResolve('src') + '/',
+        },
+      ],
       dedupe: ['vue'],
     },
     plugins: [
@@ -100,32 +109,31 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       // @vitejs/plugin-vue-jsx
       vueJsx(),
       // vite-plugin-html
-      html({
+      createHtmlPlugin({
         minify: isBuild, // 压缩index.html代码
         inject: {
           // 将数据注入ejs模板
-          injectData: {
+          data: {
             title: VITE_APP_TITLE,
           },
         },
       }),
       // vite-plugin-mock
-      viteMockServe({
-        // ↓忽略以_开头的文件
-        ignore: /^\_/,
-        // ↓解析根目录下的mock文件夹
-        mockPath: 'mock', //mock文件地址
-        localEnabled: useMock, // 开发打包开关
-        prodEnabled: useMock, // 生产环境打包开关
-        // 这样可以控制关闭mock的时候不让mock打包到最终代码内
-        injectCode: `
-           import { setupProdMockServer } from '../mock/_createProductionServer';
-     
-           setupProdMockServer();
-           `,
-        logger: false, //是否在控制台显示请求日志
-        supportTs: false, //打开后，可以读取 ts 文件模块。 请注意，打开后将无法监视.js 文件
-      }),
+      // viteMockServe({
+      //   // ↓忽略以_开头的文件
+      //   ignore: /^\_/,
+      //   // ↓解析根目录下的mock文件夹
+      //   mockPath: 'mock', //mock文件地址
+      //   localEnabled: useMock, // 开发打包开关
+      //   prodEnabled: useMock, // 生产环境打包开关
+      //   // 这样可以控制关闭mock的时候不让mock打包到最终代码内
+      //   injectCode: `
+      //      import { setupProdMockServer } from '../mock/_createProductionServer';
+      //      setupProdMockServer();
+      //      `,
+      //   logger: false, //是否在控制台显示请求日志
+      //   supportTs: false, //打开后，可以读取 ts 文件模块。 请注意，打开后将无法监视.js 文件
+      // }),
     ],
     // 定义全局常量替换方式。
     define: {
@@ -134,7 +142,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     css: {
       preprocessorOptions: {
         scss: {
-          charset: false,
           additionalData: '@import "./src/styles/variable.scss";', // 添加公共样式
         },
       },
@@ -145,10 +152,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       proxy: createProxy(VITE_PROXY),
     },
     // 依赖优化选项
-    optimizeDeps: {
-      include: [],
-      exclude: ['vue-demi'],
-    },
+    // optimizeDeps: {
+    //   include: [],
+    //   exclude: ['vue-demi'],
+    // },
     // 打包
     build: {
       target: 'es2015',
@@ -161,7 +168,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
       minify: 'terser',
+      brotliSize: false,
       chunkSizeWarningLimit: 2000,
     },
   };
-};
+});

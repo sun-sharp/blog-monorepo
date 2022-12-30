@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "types": ["vite/client"],
+    "typeRoots": ["./node_modules/@types/", "./types"],
+    "paths": {
+			"@/*": ["src/*"],
+			"/#/*": ["types/*"]
+		}
+  },
+  "include": ["vite.config.ts", "types/**/*.d.ts", "types/**/*.ts", "package.json"]
+}

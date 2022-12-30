@@ -21,7 +21,7 @@
   const lockTime = computed(() => useLockScreen.lockTime);
 
   // 设置锁屏
-  let timer: NodeJS.Timeout;
+  let timer: number | undefined;
   const timekeeping = () => {
     clearInterval(timer);
     if (route.name == 'login' || isLock.value) return;

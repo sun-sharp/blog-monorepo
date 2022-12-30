@@ -118,9 +118,6 @@ eslint-config-prettier
 eslint-plugin-prettier
 eslint-plugin-vue
 
-# 由es build支持的TypeScript/ESNext节点运行时
-esno
-
 #  是一个允许使用 JS 插件转换样式的工具
 postcss
 
@@ -143,7 +140,6 @@ typescript
 
 # vite 新型前端构建工具
 vite
-vite-plugin-compression # gzip压缩
 vite-plugin-html # 一个为index.html提供minify和基于EJS模板功能的Vite插件。
 vite-plugin-mock # 使用mock模拟数据请求
 
