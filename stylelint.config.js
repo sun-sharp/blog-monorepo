@@ -55,5 +55,6 @@ module.exports = {
       { severity: 'warning' },
     ],
   },
+  customSyntax: 'postcss-html',
   ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
 };
