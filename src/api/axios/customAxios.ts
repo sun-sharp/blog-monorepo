@@ -254,6 +254,36 @@ export class CustomAxios {
   }
 
   /**
+   * @description: 导出功能
+   */
+  downloadExportFile(config: CustomAxiosConfig, options: { fileName: string }) {
+    const { fileName = 'name.xlsx' } = options;
+    return new Promise((resolve, reject) => {
+      this.request({
+        ...config,
+        responseType: 'blob', // 设置请求数据格式
+      })
+        .then((res) => {
+          // 将文件流转成blob形式
+          const blob = new Blob([res]);
+          // 创建一个超链接，将文件流赋进去，然后实现这个超链接的单击事件
+          const eLink = document.createElement('a');
+          eLink.download = fileName;
+          eLink.style.display = 'none';
+          eLink.href = URL.createObjectURL(blob);
+          document.body.appendChild(eLink);
+          eLink.click();
+          URL.revokeObjectURL(eLink.href); // 释放URL 对象
+          document.body.removeChild(eLink);
+          resolve(true);
+        })
+        .catch(() => {
+          reject(false);
+        });
+    });
+  }
+
+  /**
    * @description: axios的request请求
    */
   request<T = any>(config: CustomAxiosRequest): Promise<T> {
