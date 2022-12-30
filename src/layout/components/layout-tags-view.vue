@@ -31,7 +31,6 @@
                 @click.stop="goPage(element)"
                 @contextmenu="handleContextMenu($event, element)"
               >
-                <!--                 :style="`color: ${getAppTheme}`" -->
                 <span>{{ element.meta.title }}</span>
                 <n-icon v-if="element.path !== baseHome" size="14" @click.stop="closeTabItem(element)">
                   <CloseOutlined />
@@ -425,7 +424,7 @@
         handleContextMenu,
         onClickOutside,
         getDarkTheme,
-        getAppTheme,
+        get_app_theme: getAppTheme,
       };
     },
   });
@@ -527,7 +526,7 @@
           }
 
           .active-item {
-            color: v-bind(getAppTheme);
+            color: v-bind(get_app_theme);
           }
         }
       }
