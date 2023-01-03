@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { FileService } from './file.service';
 import { FileController } from './file.controller';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ImageModule } from './image/image.module';
 import { RouterModule } from '@nestjs/core';
+import { fileMongooseModuleForRoot } from 'src/common/constant/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://yrr:AlyYrrAdmin123@120.79.162.189:5606/file?authSource=admin', {
-      connectionName: 'file',
-    }),
+    fileMongooseModuleForRoot,
     ImageModule,
     RouterModule.register([
       {
