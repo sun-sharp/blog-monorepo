@@ -17,15 +17,15 @@ export interface SettingState {
   //导航风格
   navTheme: string;
   //顶部设置
-  headerSetting: object;
+  headerSetting: IHeaderSetting;
   //页脚
   showFooter: boolean;
   //菜单设置
-  menuSetting: object;
+  menuSetting: IMenuSetting;
   //多标签
-  multiTabsSetting: object;
+  multiTabsSetting: IMultiTabsSetting;
   //面包屑
-  crumbsSetting: object;
+  crumbsSetting: ICrumbsSetting;
   //是否开启路由动画
   isPageAnimate: boolean;
   //路由动画类型
@@ -43,7 +43,6 @@ export interface IBodySetting {
 }
 
 export interface IHeaderSetting {
-  bgColor: string;
   fixed: boolean;
   isReload: boolean;
 }
@@ -62,7 +61,6 @@ export interface ICrumbsSetting {
 }
 
 export interface IMultiTabsSetting {
-  bgColor: string;
   fixed: boolean;
   show: boolean;
 }

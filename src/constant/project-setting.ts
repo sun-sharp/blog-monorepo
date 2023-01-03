@@ -1,24 +1,20 @@
 // 整体配置
 export const projectSetting = {
-  //导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
+  // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
   navMode: 'vertical',
-  //导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
+  // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
   navTheme: 'dark',
   //顶部
   headerSetting: {
-    //背景色
-    bgColor: '#fff',
     //固定顶部
     fixed: true,
     //显示重载按钮
     isReload: true,
   },
-  //页脚
+  // 页脚
   showFooter: true,
   //多标签
   multiTabsSetting: {
-    //背景色
-    bgColor: '#fff',
     //是否显示
     show: true,
     //固定多标签
@@ -50,7 +46,7 @@ export const projectSetting = {
   pageAnimateType: 'zoom-fade',
 };
 
-// 全局颜色数组
+// 系统内置主题色列表
 export const appThemeList: string[] = [
   '#2d8cf0',
   '#0960bd',
@@ -78,8 +74,6 @@ export const designSetting = {
   darkTheme: false,
   //系统主题色
   appTheme: '#2d8cf0',
-  //系统内置主题色列表
-  appThemeList,
 };
 
 // 动画全部类型

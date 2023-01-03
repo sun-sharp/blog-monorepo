@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import { projectSetting, designSetting } from '@/constant';
-import type { SettingState } from '/#/config';
+import { projectSetting, designSetting, appThemeList } from '@/constant';
+import type { ICrumbsSetting, IHeaderSetting, IMenuSetting, IMultiTabsSetting, SettingState } from '/#/config';
 
 const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } = projectSetting;
 
-const { darkTheme, appTheme, appThemeList } = designSetting;
+const { darkTheme, appTheme } = designSetting;
 
 export const useSettingStore = defineStore({
   id: 'app-project-setting',
@@ -30,20 +30,20 @@ export const useSettingStore = defineStore({
     getNavTheme(): string {
       return this.navTheme;
     },
-    getHeaderSetting(): object {
+    getHeaderSetting(): IHeaderSetting {
       return this.headerSetting;
     },
     getShowFooter(): boolean {
       return this.showFooter;
     },
-    getMenuSetting(): object {
+    getMenuSetting(): IMenuSetting {
       return this.menuSetting;
     },
-    getMultiTabsSetting(): object {
+    getMultiTabsSetting(): IMultiTabsSetting {
       return this.multiTabsSetting;
     },
-    getCrumbsSetting(): object {
-      return this.multiTabsSetting;
+    getCrumbsSetting(): ICrumbsSetting {
+      return this.crumbsSetting;
     },
     getIsPageAnimate(): boolean {
       return this.isPageAnimate;
