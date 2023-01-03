@@ -8,6 +8,7 @@ import { JwtModuleRegister } from 'src/jwt/jwt.constants';
 import { RoleModule } from './role/role.module';
 import { MenuModule } from './menu/menu.module';
 import { capitalMongooseModuleForRoot } from 'src/common/constant/mongoose';
+import { ConfigurationModule } from './configuration/configuration.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { capitalMongooseModuleForRoot } from 'src/common/constant/mongoose';
         ],
       },
     ]),
+    ConfigurationModule,
   ],
   controllers: [CapitalController],
   providers: [CapitalService],
