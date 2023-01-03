@@ -17,7 +17,7 @@
 <script lang="ts">
   import { defineComponent, ref, onMounted, reactive, computed, watch, toRefs, unref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { useRouteStore, useProjectSettingStore } from '@/store';
+  import { useRouteStore, useSettingStore } from '@/store';
   import { generatorMenu, generatorMenuMix, constantRouterIcon } from '@/utils';
   import { useProjectSetting } from '@/hooks';
   import { PageEnum } from '@/constant';
@@ -47,7 +47,7 @@
       const currentRoute = useRoute();
       const router = useRouter();
       const routeStore = useRouteStore();
-      const settingStore = useProjectSettingStore();
+      const settingStore = useSettingStore();
       const menus = ref<any[]>([]);
       const selectedKeys = ref<string>(currentRoute.name as string);
       const headerMenuSelectKey = ref<string>('');

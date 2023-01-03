@@ -74,7 +74,7 @@
   import { cloneDeep } from 'lodash-es';
   import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@/utils';
   import Draggable from 'vuedraggable/src/vuedraggable';
-  import { useDesignSetting, useTableContext } from '@/hooks';
+  import { useProjectSetting, useTableContext } from '@/hooks';
 
   interface Options {
     title: string;
@@ -92,7 +92,7 @@
       VerticalLeftOutlined,
     },
     setup() {
-      const { getDarkTheme } = useDesignSetting();
+      const { getDarkTheme } = useProjectSetting();
       const table: any = useTableContext();
       const columnsList = ref<Options[]>([]);
       const cacheColumnsList = ref<Options[]>([]);

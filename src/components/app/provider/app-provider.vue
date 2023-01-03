@@ -21,17 +21,17 @@
   import AppProviderLoading from '@/components/app/provider/app-provider-loading.vue';
   import AppProviderDialog from '@/components/app/provider/app-provider-dialog.vue';
   import AppProviderMessage from '@/components/app/provider/app-provider-message.vue';
-  import { useDesignSettingStore } from '@/store';
+  import { useSettingStore } from '@/store';
   import { lighten } from '@/utils';
 
-  const designStore = useDesignSettingStore();
+  const settingStore = useSettingStore();
 
   /**
    * @type import('naive-ui').GlobalThemeOverrides 设置主题样式
    */
   const getThemeOverrides = computed(() => {
-    const appTheme = designStore.appTheme;
-    const lightenStr = lighten(designStore.appTheme, 6);
+    const appTheme = settingStore.appTheme;
+    const lightenStr = lighten(settingStore.appTheme, 6);
     return {
       common: {
         primaryColor: appTheme,
@@ -45,5 +45,5 @@
   });
 
   // 获取主题样式
-  const getDarkTheme = computed(() => (designStore.darkTheme ? darkTheme : undefined));
+  const getDarkTheme = computed(() => (settingStore.darkTheme ? darkTheme : undefined));
 </script>

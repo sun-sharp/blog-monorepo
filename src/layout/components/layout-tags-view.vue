@@ -65,12 +65,12 @@
 <script lang="ts">
   import { defineComponent, reactive, computed, ref, toRefs, unref, provide, watch, onMounted, nextTick } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { useProjectSettingStore, useRouteStore, useTabsViewStore } from '@/store';
+  import { useSettingStore, useRouteStore, useTabsViewStore } from '@/store';
   import { useMessage } from 'naive-ui';
   import Draggable from 'vuedraggable';
   import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined, renderIcon } from '@/utils';
   import elementResizeDetectorMaker from 'element-resize-detector';
-  import { useDesignSetting, useProjectSetting } from '@/hooks';
+  import { useProjectSetting, useProjectSetting } from '@/hooks';
   import { PageEnum } from '@/constant';
   import { RouteItem } from '/#/router';
 
@@ -89,9 +89,9 @@
       },
     },
     setup(props) {
-      const { getDarkTheme, getAppTheme } = useDesignSetting();
+      const { getDarkTheme, getAppTheme } = useProjectSetting();
       const { getNavMode, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useProjectSetting();
-      const settingStore = useProjectSettingStore();
+      const settingStore = useSettingStore();
 
       const message = useMessage();
       const route = useRoute();

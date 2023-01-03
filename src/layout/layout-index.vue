@@ -59,15 +59,14 @@
   import LayoutHeader from '@/layout/components/layout-header.vue';
   import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
   import LayoutMain from '@/layout/components/layout-main.vue';
-  import { useDesignSetting, useProjectSetting } from '@/hooks';
+  import { useProjectSetting } from '@/hooks';
   import { useRoute } from 'vue-router';
-  import { useProjectSettingStore } from '@/store';
+  import { useSettingStore } from '@/store';
   import LayoutFooter from './components/layout-footer.vue';
 
-  const { getDarkTheme } = useDesignSetting();
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useProjectSetting();
+  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getDarkTheme } = useProjectSetting();
 
-  const settingStore = useProjectSettingStore();
+  const settingStore = useSettingStore();
 
   const navMode = getNavMode;
 

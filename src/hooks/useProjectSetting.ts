@@ -1,26 +1,32 @@
 import { computed } from 'vue';
-import { useProjectSettingStore } from '@/store';
+import { useSettingStore } from '@/store';
 
 export function useProjectSetting() {
-  const projectStore = useProjectSettingStore();
+  const settingStore = useSettingStore();
 
-  const getNavMode = computed(() => projectStore.navMode);
+  const getNavMode = computed(() => settingStore.navMode);
 
-  const getNavTheme = computed(() => projectStore.navTheme);
+  const getNavTheme = computed(() => settingStore.navTheme);
 
-  const getHeaderSetting = computed(() => projectStore.headerSetting);
+  const getHeaderSetting = computed(() => settingStore.headerSetting);
 
-  const getMultiTabsSetting = computed(() => projectStore.multiTabsSetting);
+  const getMultiTabsSetting = computed(() => settingStore.multiTabsSetting);
 
-  const getMenuSetting = computed(() => projectStore.menuSetting);
+  const getMenuSetting = computed(() => settingStore.menuSetting);
 
-  const getCrumbsSetting = computed(() => projectStore.crumbsSetting);
+  const getCrumbsSetting = computed(() => settingStore.crumbsSetting);
 
-  const getShowFooter = computed(() => projectStore.showFooter);
+  const getShowFooter = computed(() => settingStore.showFooter);
 
-  const getIsPageAnimate = computed(() => projectStore.isPageAnimate);
+  const getIsPageAnimate = computed(() => settingStore.isPageAnimate);
 
-  const getPageAnimateType = computed(() => projectStore.pageAnimateType);
+  const getPageAnimateType = computed(() => settingStore.pageAnimateType);
+
+  const getDarkTheme = computed(() => settingStore.darkTheme);
+
+  const getAppTheme = computed(() => settingStore.appTheme);
+
+  const getAppThemeList = computed(() => settingStore.appThemeList);
 
   return {
     getNavMode,
@@ -32,5 +38,8 @@ export function useProjectSetting() {
     getShowFooter,
     getIsPageAnimate,
     getPageAnimateType,
+    getDarkTheme,
+    getAppTheme,
+    getAppThemeList,
   };
 }

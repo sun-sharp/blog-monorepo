@@ -172,7 +172,7 @@ export class CustomAxios {
     const { data } = res;
 
     if (!data) {
-      return Promise.reject(data);
+      throw data;
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, result, message } = data;
@@ -205,19 +205,19 @@ export class CustomAxios {
     const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
     if (hasError) {
       Message.error(message || '操作失败,系统异常!');
-      return Promise.reject(new Error(message));
+      throw message;
     }
 
     // 登录超时
     const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
     if (hasTimeout) {
       Message.error(message || '登录超时!');
-      return Promise.reject(new Error(message));
+      throw message;
     }
 
     // 这里逻辑可以根据项目进行修改
     if (!hasSuccess) {
-      return Promise.reject(new Error(message));
+      throw message;
     }
     return data;
   }
@@ -232,7 +232,7 @@ export class CustomAxios {
     const err: string = error.toString();
     if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
       Message.error('接口请求超时,请刷新页面重试!');
-      return Promise.reject(new Error(msg));
+      return msg;
     }
     if (err && err.includes('Network Error')) {
       Modal.info({
@@ -241,7 +241,7 @@ export class CustomAxios {
         positiveText: '确定',
         onPositiveClick: () => {},
       });
-      return Promise.reject(new Error(msg));
+      return msg;
     }
     // 请求是否被取消
     const isCancel = axios.isCancel(error);
@@ -250,7 +250,7 @@ export class CustomAxios {
     } else {
       console.warn(error, '请求被取消！');
     }
-    return Promise.reject(new Error(msg));
+    return error;
   }
 
   /**

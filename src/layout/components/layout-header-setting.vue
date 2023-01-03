@@ -7,7 +7,7 @@
         <div class="drawer-setting-item justify-center dark-switch">
           <n-tooltip placement="bottom">
             <template #trigger>
-              <n-switch v-model:value="designStore.darkTheme" class="dark-theme-switch">
+              <n-switch v-model:value="settingStore.darkTheme" class="dark-theme-switch">
                 <template #checked>
                   <n-icon size="14" color="#ffd93b">
                     <SunnySharp />
@@ -20,7 +20,7 @@
                 </template>
               </n-switch>
             </template>
-            <span>{{ designStore.darkTheme ? '深' : '浅' }}色主题</span>
+            <span>{{ settingStore.darkTheme ? '深' : '浅' }}色主题</span>
           </n-tooltip>
         </div>
 
@@ -28,7 +28,7 @@
 
         <div class="drawer-setting-item align-items-top">
           <span v-for="(item, index) in appThemeList" :key="index" class="theme-item" :style="{ 'background-color': item }" @click="togTheme(item)">
-            <n-icon v-if="item === designStore.appTheme" size="12">
+            <n-icon v-if="item === settingStore.appTheme" size="12">
               <CheckOutlined />
             </n-icon>
           </span>
@@ -201,7 +201,7 @@
 
 <script lang="ts">
   import { defineComponent, reactive, toRefs, unref, watch, computed } from 'vue';
-  import { useProjectSettingStore, useDesignSettingStore } from '@/store';
+  import { useSettingStore } from '@/store';
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
   import { darkTheme } from 'naive-ui';
   import { animateSetting } from '@/constant';
@@ -220,19 +220,18 @@
       },
     },
     setup(props) {
-      const settingStore = useProjectSettingStore();
-      const designStore = useDesignSettingStore();
+      const settingStore = useSettingStore();
       const state = reactive({
         width: props.width,
         title: props.title,
         isDrawer: false,
         placement: 'right',
         alertText: '该功能主要实时预览各种布局效果，更多完整配置在 projectSetting.ts 中设置，建议在生产环境关闭该布局预览功能。',
-        appThemeList: designStore.appThemeList,
+        appThemeList: settingStore.appThemeList,
       });
 
       watch(
-        () => designStore.darkTheme,
+        () => settingStore.darkTheme,
         (to) => {
           settingStore.navTheme = to ? 'header-dark' : 'dark';
         }
@@ -258,7 +257,7 @@
       }
 
       function togTheme(color) {
-        designStore.appTheme = color;
+        settingStore.appTheme = color;
       }
 
       function togNavMode(mode) {
@@ -269,7 +268,6 @@
       return {
         ...toRefs(state),
         settingStore,
-        designStore,
         togNavTheme,
         togNavMode,
         togTheme,
