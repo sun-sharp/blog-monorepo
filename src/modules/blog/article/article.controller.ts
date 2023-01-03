@@ -1,7 +1,7 @@
 import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
@@ -23,7 +23,7 @@ export class ArticleController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '新增文章' })
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   save(@Request() req: any, @Body() createArticleDto: CreateArticleDto) {
     return this.articleService.save(req.user, createArticleDto);
   }
@@ -31,7 +31,7 @@ export class ArticleController {
   @Put('update')
   @ApiOperation({ summary: '修改文章' })
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   update(@Body() updateArticleDto: UpdateArticleDto) {
     return this.articleService.update(updateArticleDto);
   }
@@ -39,7 +39,7 @@ export class ArticleController {
   @Delete(':articleId')
   @ApiOperation({ summary: '删除文章' })
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   remove(@Param('articleId') articleId: string) {
     return this.articleService.remove(articleId);
   }

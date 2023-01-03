@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpCode, UseGuards, Get, Delete, Param } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { ArticleCategoryService } from './article-category.service';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
 // import { UpdateArticleCategoryDto } from './dto/update-article-category.dto';
@@ -15,7 +15,7 @@ export class ArticleCategoryController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '新增文章分类' })
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   save(@Body() createArticleCategoryDto: CreateArticleCategoryDto) {
     return this.articleCategoryService.save(createArticleCategoryDto);
   }
@@ -28,6 +28,8 @@ export class ArticleCategoryController {
 
   @Delete(':articleCategoryId')
   @ApiOperation({ summary: '删除文章分类' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('articleCategoryId') articleCategoryId: string) {
     return this.articleCategoryService.remove(articleCategoryId);
   }

@@ -1,8 +1,8 @@
 import { Controller, UseGuards, UseInterceptors, HttpCode, UploadedFile, Request, Post, Body, Put } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { AliPayService } from './ali-pay.service';
 import { CreateAliPayBatchDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
@@ -12,7 +12,7 @@ import { UploadAliPayDto } from './dto/upload-we-chat.dto';
 @Controller('ali-pay')
 @ApiTags('支付宝')
 @ApiBearerAuth('jwt')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class AliPayController {
   constructor(private readonly aliPayService: AliPayService) {}
 

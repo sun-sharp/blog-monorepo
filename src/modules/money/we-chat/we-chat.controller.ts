@@ -2,17 +2,17 @@ import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, 
 import { WeChatService } from './we-chat.service';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadWeChatDto } from './dto/upload-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 
 @Controller('we-chat')
 @ApiTags('微信')
 @ApiBearerAuth('jwt')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class WeChatController {
   constructor(private readonly weChatService: WeChatService) {}
 

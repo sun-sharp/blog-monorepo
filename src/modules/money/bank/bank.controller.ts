@@ -1,8 +1,8 @@
 import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { BankService } from './bank.service';
 import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
@@ -12,7 +12,7 @@ import { UploadBankDto } from './dto/upload-bank.dto';
 @Controller('bank')
 @ApiTags('银行')
 @ApiBearerAuth('jwt')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class BankController {
   constructor(private readonly bankService: BankService) {}
 

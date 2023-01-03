@@ -3,13 +3,13 @@ import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { menuFindAllDto } from './dto/menu-find-all-dto';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 
 @Controller('menu')
 @ApiTags('菜单')
 @ApiBearerAuth('jwt')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
