@@ -1,4 +1,4 @@
-import { IframeComponent, Layout, ParentLayout } from '@/constant';
+import { IframeComponent, Layout, ParentLayout } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { AppRouteRecordRaw } from '/#/router';
 

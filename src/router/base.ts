@@ -1,6 +1,7 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { ErrorComponent, HomeComponent, Layout, PageEnum, RedirectComponent, SettingAccountComponent } from '@/constant';
+import { ErrorComponent, HomeComponent, Layout, RedirectComponent, SettingAccountComponent } from './router-component';
 import { RouteRecordRaw } from 'vue-router';
+import { PageEnum } from '@/constant';
 
 // 首页
 export const HomeRoute: RouteRecordRaw = {

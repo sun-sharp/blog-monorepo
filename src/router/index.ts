@@ -3,7 +3,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getAppEnvConfig } from '@/utils';
 import { RedirectRoute, SettingRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { createRouterGuards } from './router-guards';
-import { LoginComponent } from '@/constant';
+import { LoginComponent } from './router-component';
 
 // 登录页
 export const LoginRoute: RouteRecordRaw = {
