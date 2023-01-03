@@ -1,34 +1,16 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { projectSetting, designSetting } from '@/constant';
-import type { IHeaderSetting, IMenuSetting, IMultiTabsSetting, ICrumbsSetting } from '/#/config';
+import type { SettingState } from '/#/config';
 
 const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } = projectSetting;
 
 const { darkTheme, appTheme, appThemeList } = designSetting;
 
-interface ProjectSettingState {
-  navMode: string; //导航模式
-  navTheme: string; //导航风格
-  headerSetting: IHeaderSetting; //顶部设置
-  showFooter: boolean; //页脚
-  menuSetting: IMenuSetting; //多标签
-  multiTabsSetting: IMultiTabsSetting; //多标签
-  crumbsSetting: ICrumbsSetting; //面包屑
-  isPageAnimate: boolean; //是否开启路由动画
-  pageAnimateType: string; //路由动画类型
-  //深色主题
-  darkTheme: boolean;
-  //系统风格
-  appTheme: string;
-  //系统内置风格
-  appThemeList: string[];
-}
-
 export const useSettingStore = defineStore({
   id: 'app-project-setting',
-  state: (): ProjectSettingState => ({
-    navMode: navMode,
+  state: (): SettingState => ({
+    navMode,
     navTheme,
     headerSetting,
     showFooter,

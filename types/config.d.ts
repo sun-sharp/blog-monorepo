@@ -11,7 +11,7 @@ export interface GlobConfig {
   tokenHead?: string;
 }
 
-export interface ProjectSettingState {
+export interface SettingState {
   //导航模式
   navMode: string;
   //导航风格
@@ -26,6 +26,16 @@ export interface ProjectSettingState {
   multiTabsSetting: object;
   //面包屑
   crumbsSetting: object;
+  //是否开启路由动画
+  isPageAnimate: boolean;
+  //路由动画类型
+  pageAnimateType: string;
+  //深色主题
+  darkTheme: boolean;
+  //系统风格
+  appTheme: string;
+  //系统内置风格
+  appThemeList: string[];
 }
 
 export interface IBodySetting {
