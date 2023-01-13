@@ -18,6 +18,7 @@ import { ConfigurationModule } from './configuration/configuration.module';
     UserModule,
     RoleModule,
     MenuModule,
+    ConfigurationModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -34,10 +35,13 @@ import { ConfigurationModule } from './configuration/configuration.module';
             path: '/',
             module: MenuModule,
           },
+          {
+            path: '/',
+            module: ConfigurationModule,
+          },
         ],
       },
     ]),
-    ConfigurationModule,
   ],
   controllers: [CapitalController],
   providers: [CapitalService],
