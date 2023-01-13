@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { projectSetting, designSetting, appThemeList } from '@/constant';
 import type { ICrumbsSetting, IHeaderSetting, IMenuSetting, IMultiTabsSetting, SettingState } from '/#/config';
+import at from 'await-to-js';
+import { configurationApi } from '@/api';
 
 const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } = projectSetting;
 
@@ -62,8 +64,13 @@ export const useSettingStore = defineStore({
     },
   },
   actions: {
-    setNavTheme(value: string): void {
-      this.navTheme = value;
+    // 获取用户配置
+    async GetConfigInfo() {
+      // const self = this;
+      const [err, resp] = await at(configurationApi.getConfigInfo());
+      if (err) return false;
+      console.log(resp);
+      return resp;
     },
   },
 });

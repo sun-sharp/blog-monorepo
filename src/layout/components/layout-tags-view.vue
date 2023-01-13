@@ -70,7 +70,7 @@
   import Draggable from 'vuedraggable';
   import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined, renderIcon } from '@/utils';
   import elementResizeDetectorMaker from 'element-resize-detector';
-  import { useProjectSetting, useProjectSetting } from '@/hooks';
+  import { useProjectSetting } from '@/hooks';
   import { PageEnum } from '@/constant';
   import { RouteItem } from '/#/router';
 
@@ -203,7 +203,6 @@
 
       // 标签页列表
       const tabsList: any = computed(() => tabsViewStore.tabsList);
-      console.log(tabsList.value);
 
       const whiteList: string[] = [PageEnum.LOGIN_NAME, PageEnum.REDIRECT_NAME, PageEnum.ERROR_PAGE_NAME];
 
