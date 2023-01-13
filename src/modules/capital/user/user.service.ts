@@ -22,10 +22,8 @@ export class UserService {
 
   /**
    * @description 创建用户
-   * @date 22/11/2021
    * @param {CreateUserDto} body
-   * @return {*} {Promise<IResponse>}
-   * @memberof UserService
+   * @return {Promise<IResponse>}
    */
   public create(body: CreateUserDto): Promise<IResponse> {
     return (
@@ -94,10 +92,8 @@ export class UserService {
 
   /**
    * @description 运用username查找用户
-   * @date 25/11/2021
    * @param {string} username
-   * @return {*}  {Promise<User>}
-   * @memberof UserService
+   * @return {Promise<User>}
    */
   public findOneByName(username: string): Promise<User> {
     return (
@@ -116,8 +112,7 @@ export class UserService {
   /**
    * @description 运用avatar查找用户
    * @param {string} avatar
-   * @return {*}  {Promise<User>}
-   * @memberof UserService
+   * @return {Promise<User>}
    */
   public findOneByAvatar(avatar: string): Promise<User> {
     return (
@@ -144,16 +139,14 @@ export class UserService {
   }
 
   /**
-   * @description 运用_id查找用户信息
-   * @date 25/11/2021
-   * @param {string} username
-   * @return {*}  {Promise<User>}
-   * @memberof UserService
+   * @description: 运用_id查找用户信息
+   * @param {string} userId
+   * @return {Promise<User>}
    */
   public findOneById(userId: string): Promise<IResponse> {
     return (
       Promise.resolve(userId)
-        // 判断username 是否为合法字符
+        // 获取信息
         .then(async (userId) => {
           const user = await this.userModel.findOne({ _id: userId });
           return (this.response = {
