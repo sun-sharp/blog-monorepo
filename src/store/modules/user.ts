@@ -1,36 +1,29 @@
-import { defineStore } from 'pinia';
-import { createStorage, storage } from '@/utils';
-import { store } from '@/store';
-import {
-  ACCESS_TOKEN,
-  CURRENT_USER,
-  IS_LOCK_SCREEN,
-  ResultEnum,
-  // IS_LOCK_SCREEN, ResultEnum
-} from '@/constant';
-import { capitalApi, userApi } from '@/api';
 import at from 'await-to-js';
+import { defineStore } from 'pinia';
+import { storage } from '@/utils';
+import { store } from '@/store';
+import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, ResultEnum } from '@/constant';
+import { capitalApi, userApi } from '@/api';
 import { getAppEnvConfig } from '@/utils/env';
+import { PiniaUserState, UserInfo } from '/#/config';
 
-const Storage = createStorage({ storage: localStorage });
 const appEnvConfig = getAppEnvConfig();
 
-export interface IUserState {
-  token: string;
-  // username: string;
-  // welcome: string;
-  avatar: string;
-  info: any;
-}
+// 默认用户信息
+const defaultUserInfo = {
+  avatar: '',
+  loginDate: '',
+  nickname: '',
+  roleCode: '',
+  userId: '',
+  username: '',
+};
 
 export const useUserStore = defineStore({
   id: 'app-user',
-  state: (): IUserState => ({
-    token: Storage.get(ACCESS_TOKEN, ''),
-    // username: '',
-    // welcome: '',
-    avatar: '',
-    info: Storage.get(CURRENT_USER, {}),
+  state: (): PiniaUserState => ({
+    token: storage.get(ACCESS_TOKEN, ''),
+    info: storage.get(CURRENT_USER, defaultUserInfo),
   }),
   getters: {
     getToken(): string {
@@ -40,13 +33,7 @@ export const useUserStore = defineStore({
       const { tokenHead } = appEnvConfig;
       return tokenHead ? tokenHead + this.token : this.token;
     },
-    // getAvatar(): string {
-    //   return this.avatar;
-    // },
-    // getNickname(): string {
-    //   return this.username;
-    // }
-    getUserInfo(): object {
+    getUserInfo(): UserInfo {
       return this.info;
     },
   },
@@ -54,41 +41,33 @@ export const useUserStore = defineStore({
     setToken(token: string) {
       this.token = token;
     },
-    setAvatar(avatar: string) {
-      this.avatar = avatar;
-    },
-    setUserInfo(info) {
+    setUserInfo(info: UserInfo) {
       this.info = info;
     },
     // 登录
-    async login(userInfo: any) {
+    async login(userInfo: UserInfo) {
       const [err, resp] = await at(capitalApi.login(userInfo));
       if (err) return err;
       const { result, code } = resp;
       if (code === ResultEnum.SUCCESS) {
-        const ex = 7 * 24 * 60 * 60 * 1000;
-        storage.set(ACCESS_TOKEN, result.token, ex);
-        storage.set(CURRENT_USER, result, ex);
+        storage.set(ACCESS_TOKEN, result.token);
         storage.set(IS_LOCK_SCREEN, false);
         this.setToken(result.token);
-        this.setUserInfo(result);
       }
       return resp;
     },
-
     // 获取用户信息
     async GetInfo() {
       const that = this;
       const [err, resp] = await at(userApi.getUserInfo());
       if (err) return false;
+      storage.set(CURRENT_USER, resp);
       that.setUserInfo(resp);
-      that.setAvatar(resp.avatar);
       return resp;
     },
-
     // 登出
     async logout() {
-      this.setUserInfo('');
+      this.setUserInfo(defaultUserInfo);
       storage.remove(ACCESS_TOKEN);
       storage.remove(CURRENT_USER);
       return Promise.resolve('');

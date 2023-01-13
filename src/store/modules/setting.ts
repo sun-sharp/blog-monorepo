@@ -1,30 +1,36 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import { projectSetting, designSetting, appThemeList } from '@/constant';
-import type { ICrumbsSetting, IHeaderSetting, IMenuSetting, IMultiTabsSetting, SettingState } from '/#/config';
+import { projectSetting, designSetting, USER_CONFIG } from '@/constant';
+import type { ICrumbsSetting, IHeaderSetting, IMenuSetting, IMultiTabsSetting, UserConfigInfo } from '/#/config';
 import at from 'await-to-js';
 import { configurationApi } from '@/api';
+import { storage } from '@/utils';
 
-const { navMode, navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } = projectSetting;
+const { navTheme, headerSetting, showFooter, menuSetting, multiTabsSetting, crumbsSetting, isPageAnimate, pageAnimateType } = projectSetting;
 
 const { darkTheme, appTheme } = designSetting;
 
 export const useSettingStore = defineStore({
   id: 'app-project-setting',
-  state: (): SettingState => ({
-    navMode,
-    navTheme,
-    headerSetting,
-    showFooter,
-    menuSetting,
-    multiTabsSetting,
-    crumbsSetting,
-    isPageAnimate,
-    pageAnimateType,
-    darkTheme,
-    appTheme,
-    appThemeList,
-  }),
+  state: (): UserConfigInfo => {
+    const userConfig = storage.get(USER_CONFIG, {});
+    console.log(userConfig, 'userConfig');
+    const { navMode = '' } = userConfig;
+
+    return {
+      navMode,
+      navTheme,
+      headerSetting,
+      showFooter,
+      menuSetting,
+      multiTabsSetting,
+      crumbsSetting,
+      isPageAnimate,
+      pageAnimateType,
+      darkTheme,
+      appTheme,
+    };
+  },
   getters: {
     getNavMode(): string {
       return this.navMode;
@@ -59,9 +65,6 @@ export const useSettingStore = defineStore({
     getAppTheme(): string {
       return this.appTheme;
     },
-    getAppThemeList(): string[] {
-      return this.appThemeList;
-    },
   },
   actions: {
     // 获取用户配置
@@ -69,6 +72,7 @@ export const useSettingStore = defineStore({
       // const self = this;
       const [err, resp] = await at(configurationApi.getConfigInfo());
       if (err) return false;
+      storage.set(USER_CONFIG, resp);
       console.log(resp);
       return resp;
     },

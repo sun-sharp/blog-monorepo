@@ -26,8 +26,6 @@ export function useProjectSetting() {
 
   const getAppTheme = computed(() => settingStore.appTheme);
 
-  const getAppThemeList = computed(() => settingStore.appThemeList);
-
   return {
     getNavMode,
     getNavTheme,
@@ -40,6 +38,5 @@ export function useProjectSetting() {
     getPageAnimateType,
     getDarkTheme,
     getAppTheme,
-    getAppThemeList,
   };
 }
