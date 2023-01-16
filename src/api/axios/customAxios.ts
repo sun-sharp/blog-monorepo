@@ -151,7 +151,7 @@ export class CustomAxios {
     }
 
     // 先关闭以前的消息
-    Message.closeAll();
+    Message.destroyAll();
 
     const { data } = res;
 
@@ -210,6 +210,9 @@ export class CustomAxios {
   private responseInterceptorsCatch(error: any) {
     // @ts-ignore
     const { $message: Message, $dialog: Modal } = window;
+    // 先关闭以前的消息
+    Message.destroyAll();
+
     const { response, code, message } = error || {};
     // TODO 此处要根据后端接口返回格式修改
     const msg: string = response && response.data && response.data.message ? response.data.message : '';

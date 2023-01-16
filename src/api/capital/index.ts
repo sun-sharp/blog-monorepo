@@ -6,11 +6,11 @@ const basic = '';
  * @description: 用户登录
  * @param params
  */
-export function login(params) {
+export function login(data) {
   return AxiosCapital.request({
     url: `${basic}/login`,
     method: 'POST',
-    params,
+    data,
     responseOptions: {
       isTransformResponse: false,
     },

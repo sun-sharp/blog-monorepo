@@ -5,7 +5,7 @@ import { store } from '@/store';
 import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, ResultEnum } from '@/constant';
 import { capitalApi, userApi } from '@/api';
 import { getAppEnvConfig } from '@/utils/env';
-import { PiniaUserState, UserInfo } from '/#/config';
+import { LoginFormState, PiniaUserState, UserInfo } from '/#/config';
 
 const appEnvConfig = getAppEnvConfig();
 
@@ -45,8 +45,8 @@ export const useUserStore = defineStore({
       this.info = info;
     },
     // 登录
-    async login(userInfo: UserInfo) {
-      const [err, resp] = await at(capitalApi.login(userInfo));
+    async login(loginForm: LoginFormState) {
+      const [err, resp] = await at(capitalApi.login(loginForm));
       if (err) return err;
       const { result, code } = resp;
       if (code === ResultEnum.SUCCESS) {

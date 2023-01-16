@@ -82,3 +82,9 @@ export interface PiniaUserState {
   configInfo?: UserConfigInfo;
 }
 
+// 登录传参
+export interface LoginFormState {
+  username: string;
+  password: string;
+}
+

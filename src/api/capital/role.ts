@@ -4,13 +4,13 @@ const basic = '/role';
 
 /**
  * @description 分页查询角色列表
- * @param params
+ * @param data
  */
-export function getPage(params) {
+export function getPage(data: any) {
   return AxiosCapital.request({
     url: `${basic}/role_page`,
     method: 'POST',
-    params,
+    data,
   });
 }
 

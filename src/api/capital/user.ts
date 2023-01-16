@@ -14,13 +14,13 @@ export function getUserInfo() {
 
 /**
  * @description 用户列表
- * @param params
+ * @param data
  */
-export function getPage(params) {
+export function getPage(data) {
   return AxiosCapital.request({
     url: `${basic}/find_page`,
     method: 'POST',
-    params,
+    data,
   });
 }
 

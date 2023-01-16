@@ -86,11 +86,7 @@
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { ResultEnum } from '@/constant';
   import LayoutFooter from '@/layout/components/layout-footer.vue';
-
-  interface FormState {
-    username: string;
-    password: string;
-  }
+  import { LoginFormState } from '/#/config';
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.title;
@@ -132,12 +128,12 @@
         message.loading('登录中...');
         loading.value = true;
 
-        const params: FormState = {
+        const params: LoginFormState = {
           username,
           password,
         };
 
-        const { code, message: msg } = await userStore.login(params);
+        const { code } = await userStore.login(params);
         loading.value = false;
 
         if (code == ResultEnum.SUCCESS) {
@@ -148,8 +144,6 @@
               router.replace('/');
             }
           });
-        } else {
-          message.info(msg || '登录失败');
         }
       } else {
         message.error('请填写完整信息，并且进行验证码校验');
