@@ -86,7 +86,7 @@
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { ResultEnum } from '@/constant';
   import LayoutFooter from '@/layout/components/layout-footer.vue';
-  import { LoginFormState } from '/#/config';
+  import { CLoginFormState } from '/#/config';
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.title;
@@ -128,7 +128,7 @@
         message.loading('登录中...');
         loading.value = true;
 
-        const params: LoginFormState = {
+        const params: CLoginFormState = {
           username,
           password,
         };

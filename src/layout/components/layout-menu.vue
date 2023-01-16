@@ -17,7 +17,7 @@
 <script lang="ts">
   import { defineComponent, ref, onMounted, reactive, computed, watch, toRefs, unref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { useRouteStore, useSettingStore } from '@/store';
+  import { useRouteStore, useUserStore } from '@/store';
   import { generatorMenu, generatorMenuMix, constantRouterIcon } from '@/utils';
   import { useProjectSetting } from '@/hooks';
   import { PageEnum } from '@/constant';
@@ -47,7 +47,7 @@
       const currentRoute = useRoute();
       const router = useRouter();
       const routeStore = useRouteStore();
-      const settingStore = useSettingStore();
+      const userStore = useUserStore();
       const menus = ref<any[]>([]);
       const selectedKeys = ref<string>(currentRoute.name as string);
       const headerMenuSelectKey = ref<string>('');
@@ -66,7 +66,7 @@
       });
 
       const inverted = computed(() => {
-        return ['dark', 'header-dark'].includes(settingStore.navTheme);
+        return ['dark', 'header-dark'].includes(userStore.getNavTheme);
       });
 
       const getSelectedKeys = computed(() => {
@@ -76,7 +76,7 @@
 
       // 监听分割菜单
       watch(
-        () => settingStore.menuSetting.mixMenu,
+        () => userStore.getMenuSetting.mixMenu,
         () => {
           updateMenu();
           if (props.collapsed) {
@@ -113,7 +113,7 @@
             label: PageEnum.HOME_TITLE,
           },
         ];
-        if (!settingStore.menuSetting.mixMenu) {
+        if (!userStore.getMenuSetting.mixMenu) {
           menus.value = [...defaultMenu, ...generatorMenu(routeStore.getMenus)];
         } else {
           //混合菜单

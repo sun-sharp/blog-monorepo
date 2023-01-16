@@ -87,11 +87,11 @@
     </div>
   </div>
   <!--项目配置-->
-  <ProjectSetting ref="drawerSetting" />
+  <!-- <ProjectSetting ref="drawerSetting" /> -->
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, toRefs, ref, computed, unref } from 'vue';
+  import { defineComponent, reactive, toRefs, computed, unref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {
     SettingOutlined,
@@ -156,7 +156,7 @@
 
       const { username, avatar } = userStore?.info || {};
 
-      const drawerSetting = ref();
+      // const drawerSetting = ref();
 
       const state = reactive({
         username: username || '',
@@ -311,8 +311,8 @@
       };
 
       function openSetting() {
-        const { openDrawer } = drawerSetting.value;
-        openDrawer();
+        // const { openDrawer } = drawerSetting.value;
+        // openDrawer();
       }
 
       return {
@@ -327,7 +327,7 @@
         avatarSelect,
         breadcrumbList,
         reloadPage,
-        drawerSetting,
+        // drawerSetting,
         openSetting,
         getInverted,
         getMenuLocation,

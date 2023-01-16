@@ -65,7 +65,7 @@
 <script lang="ts">
   import { defineComponent, reactive, computed, ref, toRefs, unref, provide, watch, onMounted, nextTick } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { useSettingStore, useRouteStore, useTabsViewStore } from '@/store';
+  import { useRouteStore, useTabsViewStore } from '@/store';
   import { useMessage } from 'naive-ui';
   import Draggable from 'vuedraggable';
   import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined, renderIcon } from '@/utils';
@@ -91,7 +91,6 @@
     setup(props) {
       const { getDarkTheme, getAppTheme } = useProjectSetting();
       const { getNavMode, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useProjectSetting();
-      const settingStore = useSettingStore();
 
       const message = useMessage();
       const route = useRoute();
@@ -119,7 +118,7 @@
       };
 
       const isMixMenuNoneSub = computed(() => {
-        const mixMenu = settingStore.menuSetting.mixMenu;
+        const mixMenu = getMenuSetting.value.mixMenu;
         const currentRoute = useRoute();
         const navMode = unref(getNavMode);
         if (unref(navMode) != 'horizontal-mix') return true;

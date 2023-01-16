@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN, PageEnum } from '@/constant';
-import { useRouteStoreWidthOut, useUserStoreWidthOut, useSettingStoreWithOut } from '@/store';
+import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
 import { getAppEnvConfig, storage } from '@/utils';
 import { Router, RouteRecordRaw } from 'vue-router';
 import { ErrorPageRoute } from './base';
@@ -10,7 +10,6 @@ const whitePathList = [LOGIN_PATH]; // 白名单中的重定向
 
 export function createRouterGuards(router: Router) {
   const userStore = useUserStoreWidthOut();
-  const settingStore = useSettingStoreWithOut();
   const routeStore = useRouteStoreWidthOut();
   const appEnvConfig = getAppEnvConfig();
   router.beforeEach(async (to, from, next) => {
@@ -56,7 +55,7 @@ export function createRouterGuards(router: Router) {
     const userInfo = await userStore.GetInfo();
 
     // 获取用户配置信息
-    await settingStore.GetConfigInfo();
+    await userStore.GetConfigInfo();
 
     // 获取动态路由
     const routes = await routeStore.generateRoutes(userInfo);

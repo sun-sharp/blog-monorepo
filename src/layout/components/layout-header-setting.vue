@@ -201,7 +201,7 @@
 
 <script lang="ts">
   import { defineComponent, reactive, toRefs, unref, watch, computed } from 'vue';
-  import { useSettingStore } from '@/store';
+  // import { useSettingStore } from '@/store';
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
   import { darkTheme } from 'naive-ui';
   import { animateSetting, appThemeList } from '@/constant';
@@ -220,7 +220,7 @@
       },
     },
     setup(props) {
-      const settingStore = useSettingStore();
+      const settingStore: any = {};
       const state = reactive({
         width: props.width,
         title: props.title,

@@ -61,12 +61,9 @@
   import LayoutMain from '@/layout/components/layout-main.vue';
   import { useProjectSetting } from '@/hooks';
   import { useRoute } from 'vue-router';
-  import { useSettingStore } from '@/store';
   import LayoutFooter from './components/layout-footer.vue';
 
   const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getDarkTheme } = useProjectSetting();
-
-  const settingStore = useSettingStore();
 
   const navMode = getNavMode;
 
@@ -78,7 +75,7 @@
   });
 
   const isMixMenuNoneSub = computed(() => {
-    const mixMenu = settingStore.menuSetting.mixMenu;
+    const mixMenu = getMenuSetting.value.mixMenu;
     const currentRoute = useRoute();
     if (unref(navMode) != 'horizontal-mix') return true;
     if (unref(navMode) === 'horizontal-mix' && mixMenu && currentRoute.meta.isRoot) {
