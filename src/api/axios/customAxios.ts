@@ -1,8 +1,8 @@
 import { useUserStoreWidthOut } from '@/store';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
-import { formatRequestDate, getAppEnvConfig, isString, joinTimestamp, setObjToUrlParams } from '@/utils';
-import { RequestEnum, ResultEnum } from '@/constant';
+import { formatRequestDate, getAppEnvConfig, isEmpty, isString, joinTimestamp } from '@/utils';
+import { ResultEnum } from '@/constant';
 import { checkStatus } from './checkStatus';
 
 const appEnvConfig = getAppEnvConfig();
@@ -88,7 +88,7 @@ export class CustomAxios {
   private requestInterceptors(config: CustomAxiosConfig) {
     // 请求之前处理config
     const conf: any = Object.assign({}, config);
-    const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true } = this.requestOptions;
+    const { apiUrl, joinPrefix, formatDate, joinTime = true } = this.requestOptions;
     const userStore = useUserStoreWidthOut();
     const completeToken = userStore.getCompleteToken;
     if (completeToken) {
@@ -108,35 +108,16 @@ export class CustomAxios {
 
     const params = conf.params || {};
     const data = conf.data || false;
-    if (conf.method?.toUpperCase() === RequestEnum.GET) {
-      if (!isString(params)) {
-        // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
-        conf.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
-      } else {
-        // 兼容restful风格
-        conf.url = conf.url + params + `${joinTimestamp(joinTime, true)}`;
-        conf.params = undefined;
-      }
+    if (!isEmpty(params)) {
+      formatDate && formatRequestDate(params);
+      conf.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
+    } else if (Reflect.has(conf, 'data') && conf.data && Object.keys(conf.data).length) {
+      conf.data = data;
     } else {
-      if (!isString(params)) {
-        formatDate && formatRequestDate(params);
-        if (Reflect.has(conf, 'data') && conf.data && Object.keys(conf.data).length) {
-          conf.data = data;
-          conf.params = params;
-        } else {
-          conf.data = params;
-          conf.params = undefined;
-        }
-        if (joinParamsToUrl) {
-          conf.url = setObjToUrlParams(conf.url as string, Object.assign({}, conf.params, conf.data));
-        }
-      } else {
-        // 兼容restful风格
-        conf.url = conf.url + params;
-        conf.params = undefined;
-      }
+      // 兼容restful风格
+      conf.params = undefined;
+      conf.data = undefined;
     }
-
     return conf;
   }
 
@@ -168,6 +149,9 @@ export class CustomAxios {
     if (!isTransformResponse) {
       return res.data;
     }
+
+    // 先关闭以前的消息
+    Message.closeAll();
 
     const { data } = res;
 

@@ -16,8 +16,6 @@ export interface CustomAxiosRequest extends AxiosRequestConfig {
 }
 
 export interface RequestOptions {
-  // 请求参数拼接到url
-  joinParamsToUrl?: boolean;
   // 是否加入url
   joinPrefix?: boolean;
   // 格式化请求参数时间

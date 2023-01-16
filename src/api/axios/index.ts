@@ -13,8 +13,6 @@ export const AxiosCapital = new CustomAxios({
   requestOptions: {
     // 默认将prefix 添加到url
     joinPrefix: true,
-    // post请求的时候添加参数到url
-    joinParamsToUrl: false,
     // 格式化提交参数时间
     formatDate: true,
     // 接口地址
@@ -39,8 +37,6 @@ export const AxiosBlog = new CustomAxios({
   requestOptions: {
     // 默认将prefix 添加到url
     joinPrefix: true,
-    // post请求的时候添加参数到url
-    joinParamsToUrl: false,
     // 格式化提交参数时间
     formatDate: true,
     // 接口地址
@@ -65,8 +61,6 @@ export const AxiosFile = new CustomAxios({
   requestOptions: {
     // 默认将prefix 添加到url
     joinPrefix: true,
-    // post请求的时候添加参数到url
-    joinParamsToUrl: false,
     // 格式化提交参数时间
     formatDate: true,
     // 接口地址
@@ -91,8 +85,6 @@ export const AxiosMoney = new CustomAxios({
   requestOptions: {
     // 默认将prefix 添加到url
     joinPrefix: true,
-    // post请求的时候添加参数到url
-    joinParamsToUrl: false,
     // 格式化提交参数时间
     formatDate: true,
     // 接口地址

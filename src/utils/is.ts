@@ -124,3 +124,8 @@ export function isNullAndUnDef(val: unknown): val is null | undefined {
 export function isNullOrUnDef(val: unknown): val is null | undefined {
   return isUnDef(val) || isNull(val);
 }
+
+// 是否为空
+export function isEmpty(val: any): val is Record<any, any> | null | undefined | string {
+  return JSON.stringify(val) === '{}' || isUnDef(val) || isNull(val) || val === '';
+}
