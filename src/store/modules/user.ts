@@ -5,7 +5,7 @@ import { store } from '@/store';
 import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, ResultEnum, USER_CONFIG } from '@/constant';
 import { capitalApi, configurationApi, userApi } from '@/api';
 import { getAppEnvConfig } from '@/utils/env';
-import { CLoginFormState, CUserState, CUserInfo, CUserConfigInfo, CCrumbsSetting, CMultiTabsSetting, CMenuSetting, CHeaderSetting } from '/#/config';
+import { CLoginFormState, CUserState, CUserInfo, CUserConfigInfo } from '/#/config';
 
 const appEnvConfig = getAppEnvConfig();
 
@@ -92,39 +92,6 @@ export const useUserStore = defineStore({
     getConfigInfo(): CUserConfigInfo {
       return this.configInfo;
     },
-    getNavMode(): string {
-      return this.configInfo.navMode;
-    },
-    getNavTheme(): string {
-      return this.configInfo.navTheme;
-    },
-    getHeaderSetting(): CHeaderSetting {
-      return this.configInfo.headerSetting;
-    },
-    getShowFooter(): boolean {
-      return this.configInfo.showFooter;
-    },
-    getMenuSetting(): CMenuSetting {
-      return this.configInfo.menuSetting;
-    },
-    getMultiTabsSetting(): CMultiTabsSetting {
-      return this.configInfo.multiTabsSetting;
-    },
-    getCrumbsSetting(): CCrumbsSetting {
-      return this.configInfo.crumbsSetting;
-    },
-    getIsPageAnimate(): boolean {
-      return this.configInfo.isPageAnimate;
-    },
-    getPageAnimateType(): string {
-      return this.configInfo.pageAnimateType;
-    },
-    getIsDarkTheme(): boolean {
-      return this.configInfo.isDarkTheme;
-    },
-    getAppTheme(): string {
-      return this.configInfo.appTheme;
-    },
   },
   actions: {
     // 设置token
@@ -167,8 +134,6 @@ export const useUserStore = defineStore({
       if (err) return false;
       storage.set(USER_CONFIG, resp);
       self.setConfigInfo(resp);
-
-      console.log(resp);
       return resp;
     },
     // 登出

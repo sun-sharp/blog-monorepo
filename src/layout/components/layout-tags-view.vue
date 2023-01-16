@@ -184,7 +184,7 @@
       //监听滚动条
       function onScroll(e) {
         let scrollTop = e.target.scrollTop || document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop; // 滚动条偏移量
-        state.isMultiHeaderFixed = !!(!getHeaderSetting.value.fixed && getMultiTabsSetting.value.fixed && scrollTop >= 64);
+        state.isMultiHeaderFixed = !!(!unref(getHeaderSetting).fixed && unref(getMultiTabsSetting).fixed && scrollTop >= 64);
       }
 
       window.addEventListener('scroll', onScroll, true);

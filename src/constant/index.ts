@@ -3,4 +3,4 @@ export * from './http-enum';
 export * from './page-enum';
 export * from './project-setting';
 export * from './screen-enum';
-export * from './options';
+export * from './api-type';

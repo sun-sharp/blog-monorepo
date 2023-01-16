@@ -1,3 +1,9 @@
+/*
+ * @Author: YangRuiRui
+ * @LastEditTime: 2023-01-16 16:06:13
+ * @Description: 接口类型
+ */
+
 // 将枚举值的数组形式转化成对象形式
 const arrEnumToObj = (arr: Array<any>, value = 'value', label = 'label') => {
   const obj = {};
