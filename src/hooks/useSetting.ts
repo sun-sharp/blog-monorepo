@@ -17,8 +17,6 @@ export const useSetting = () => {
 
   const getCrumbsSetting = computed<CCrumbsSetting>(() => userStore.getConfigInfo.crumbsSetting);
 
-  const getShowFooter = computed<boolean>(() => userStore.getConfigInfo.showFooter);
-
   const getIsPageAnimate = computed<boolean>(() => userStore.getConfigInfo.isPageAnimate);
 
   const getPageAnimateType = computed<string>(() => userStore.getConfigInfo.pageAnimateType);
@@ -26,6 +24,8 @@ export const useSetting = () => {
   const getIsDarkTheme = computed<boolean>(() => userStore.getConfigInfo.isDarkTheme);
 
   const getAppTheme = computed<string>(() => userStore.getConfigInfo.appTheme);
+
+  const getShowFooter = computed<boolean>(() => userStore.getConfigInfo.showFooter);
 
   return {
     getNavMode,

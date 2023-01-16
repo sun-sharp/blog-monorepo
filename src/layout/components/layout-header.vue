@@ -87,11 +87,11 @@
     </div>
   </div>
   <!--项目配置-->
-  <!-- <ProjectSetting ref="drawerSetting" /> -->
+  <LayoutHeaderSetting ref="headerSettingRef" />
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, toRefs, computed, unref } from 'vue';
+  import { defineComponent, reactive, toRefs, computed, unref, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {
     SettingOutlined,
@@ -113,7 +113,7 @@
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
   import { useUserStore, useLockScreenStore } from '@/store';
   import { useSetting } from '@/hooks';
-  import ProjectSetting from '@/layout/components/layout-header-setting.vue';
+  import LayoutHeaderSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
   import defaultAvatar from '@/assets/images/common/default-avatar.png';
 
@@ -134,7 +134,7 @@
       UserOutlined,
       CheckOutlined,
       NDialogProvider,
-      ProjectSetting,
+      LayoutHeaderSetting,
       LayoutMenu,
       Person,
     },
@@ -156,7 +156,7 @@
 
       const { username, avatar } = userStore?.info || {};
 
-      // const drawerSetting = ref();
+      const headerSettingRef = ref();
 
       const state = reactive({
         username: username || '',
@@ -311,8 +311,8 @@
       };
 
       function openSetting() {
-        // const { openDrawer } = drawerSetting.value;
-        // openDrawer();
+        const { openDrawer } = headerSettingRef.value;
+        openDrawer();
       }
 
       return {
@@ -327,7 +327,7 @@
         avatarSelect,
         breadcrumbList,
         reloadPage,
-        // drawerSetting,
+        headerSettingRef,
         openSetting,
         getInverted,
         getMenuLocation,

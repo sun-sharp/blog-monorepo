@@ -137,7 +137,7 @@ export const useUserStore = defineStore({
       return resp;
     },
     // 登出
-    async logout() {
+    logout() {
       this.setToken('');
       storage.remove(ACCESS_TOKEN);
       this.setUserInfo(defaultUserInfo);
@@ -145,6 +145,14 @@ export const useUserStore = defineStore({
       this.setConfigInfo(defaultConfigInfo);
       storage.remove(USER_CONFIG);
       return Promise.resolve('');
+    },
+    // 接口修改配置
+    async updateApiConfigInfo(configInfo: CUserConfigInfo) {
+      const [err, resp] = await at(configurationApi.update(configInfo));
+      if (err) return false;
+      storage.set(USER_CONFIG, configInfo);
+      this.setConfigInfo(configInfo);
+      return resp;
     },
   },
 });
