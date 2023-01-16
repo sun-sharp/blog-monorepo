@@ -14,7 +14,7 @@
 <script>
   import { defineComponent, computed, unref } from 'vue';
   import { useRouteStore } from '@/store';
-  import { useProjectSetting } from '@/hooks';
+  import { useSetting } from '@/hooks';
 
   export default defineComponent({
     name: 'LayoutMain',
@@ -30,7 +30,7 @@
       },
     },
     setup() {
-      const { getIsPageAnimate, getPageAnimateType } = useProjectSetting();
+      const { getIsPageAnimate, getPageAnimateType } = useSetting();
       const routeStore = useRouteStore();
       // 需要缓存的路由组件
       const keepAliveComponents = computed(() => routeStore.keepAliveComponents);

@@ -4,8 +4,8 @@
     :class="{
       'layout-tabs-view-fix': multiTabsSetting.fixed,
       'layout-tabs-view-fixed-header': isMultiHeaderFixed,
-      'layout-tabs-view-default-background': getDarkTheme === false,
-      'layout-tabs-view-dark-background': getDarkTheme === true,
+      'layout-tabs-view-default-background': getIsDarkTheme === false,
+      'layout-tabs-view-dark-background': getIsDarkTheme === true,
     }"
     :style="getChangeStyle"
   >
@@ -70,7 +70,7 @@
   import Draggable from 'vuedraggable';
   import { DownOutlined, ReloadOutlined, CloseOutlined, ColumnWidthOutlined, MinusOutlined, LeftOutlined, RightOutlined, renderIcon } from '@/utils';
   import elementResizeDetectorMaker from 'element-resize-detector';
-  import { useProjectSetting } from '@/hooks';
+  import { useSetting } from '@/hooks';
   import { PageEnum } from '@/constant';
   import { RouteItem } from '/#/router';
 
@@ -89,8 +89,7 @@
       },
     },
     setup(props) {
-      const { getDarkTheme, getAppTheme } = useProjectSetting();
-      const { getNavMode, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useProjectSetting();
+      const { getIsDarkTheme, getAppTheme, getNavMode, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useSetting();
 
       const message = useMessage();
       const route = useRoute();
@@ -118,7 +117,7 @@
       };
 
       const isMixMenuNoneSub = computed(() => {
-        const mixMenu = getMenuSetting.value.mixMenu;
+        const mixMenu = unref(getMenuSetting).mixMenu;
         const currentRoute = useRoute();
         const navMode = unref(getNavMode);
         if (unref(navMode) != 'horizontal-mix') return true;
@@ -421,7 +420,7 @@
         scrollPrev,
         handleContextMenu,
         onClickOutside,
-        getDarkTheme,
+        getIsDarkTheme,
         get_app_theme: getAppTheme,
       };
     },

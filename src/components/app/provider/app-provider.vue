@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :locale="zhCN" :theme="getDarkTheme" :theme-overrides="getThemeOverrides" :date-locale="dateZhCN">
+  <n-config-provider :locale="zhCN" :theme="getTheme" :theme-overrides="getThemeOverrides" :date-locale="dateZhCN">
     <n-loading-bar-provider>
       <app-provider-loading />
       <n-dialog-provider>
@@ -45,5 +45,5 @@
   });
 
   // 获取主题样式
-  const getDarkTheme = computed(() => (userStore.getDarkTheme ? darkTheme : undefined));
+  const getTheme = computed(() => (userStore.getIsDarkTheme ? darkTheme : undefined));
 </script>

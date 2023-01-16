@@ -112,7 +112,7 @@
   } from '@/utils';
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
   import { useUserStore, useLockScreenStore } from '@/store';
-  import { useProjectSetting } from '@/hooks';
+  import { useSetting } from '@/hooks';
   import ProjectSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
   import defaultAvatar from '@/assets/images/common/default-avatar.png';
@@ -152,7 +152,7 @@
       const useLockScreen = useLockScreenStore();
       const message = useMessage();
       const dialog = useDialog();
-      const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useProjectSetting();
+      const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useSetting();
 
       const { username, avatar } = userStore?.info || {};
 

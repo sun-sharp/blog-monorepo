@@ -21,7 +21,7 @@
             <n-checkbox-group v-model:value="checkList" @update:value="onChange">
               <Draggable v-model="columnsList" animation="300" item-key="key" @end="draggableEnd">
                 <template #item="{ element }">
-                  <div class="table-toolbar-inner-checkbox" :class="{ 'table-toolbar-inner-checkbox-dark': getDarkTheme === true }">
+                  <div class="table-toolbar-inner-checkbox" :class="{ 'table-toolbar-inner-checkbox-dark': getIsDarkTheme === true }">
                     <span class="drag-icon">
                       <n-icon size="18">
                         <DragOutlined />
@@ -74,7 +74,7 @@
   import { cloneDeep } from 'lodash-es';
   import { SettingOutlined, DragOutlined, VerticalRightOutlined, VerticalLeftOutlined } from '@/utils';
   import Draggable from 'vuedraggable/src/vuedraggable';
-  import { useProjectSetting, useTableContext } from '@/hooks';
+  import { useSetting, useTableContext } from '@/hooks';
 
   interface Options {
     title: string;
@@ -92,7 +92,7 @@
       VerticalLeftOutlined,
     },
     setup() {
-      const { getDarkTheme } = useProjectSetting();
+      const { getIsDarkTheme } = useSetting();
       const table: any = useTableContext();
       const columnsList = ref<Options[]>([]);
       const cacheColumnsList = ref<Options[]>([]);
@@ -213,7 +213,7 @@
       return {
         ...toRefs(state),
         columnsList,
-        getDarkTheme,
+        getIsDarkTheme,
         onChange,
         onCheckAll,
         onSelection,

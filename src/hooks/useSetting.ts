@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
 
-export function useProjectSetting() {
+export function useSetting() {
   const userStore = useUserStore();
 
   const getNavMode = computed(() => userStore.getNavMode);
@@ -22,7 +22,7 @@ export function useProjectSetting() {
 
   const getPageAnimateType = computed(() => userStore.getPageAnimateType);
 
-  const getDarkTheme = computed(() => userStore.getDarkTheme);
+  const getIsDarkTheme = computed(() => userStore.getIsDarkTheme);
 
   const getAppTheme = computed(() => userStore.getAppTheme);
 
@@ -36,7 +36,7 @@ export function useProjectSetting() {
     getShowFooter,
     getIsPageAnimate,
     getPageAnimateType,
-    getDarkTheme,
+    getIsDarkTheme,
     getAppTheme,
   };
 }

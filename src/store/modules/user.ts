@@ -119,7 +119,7 @@ export const useUserStore = defineStore({
     getPageAnimateType(): string {
       return this.configInfo.pageAnimateType;
     },
-    getDarkTheme(): boolean {
+    getIsDarkTheme(): boolean {
       return this.configInfo.isDarkTheme;
     },
     getAppTheme(): string {

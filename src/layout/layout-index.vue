@@ -23,7 +23,7 @@
         <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
       </n-layout-header>
 
-      <n-layout-content class="layout-content" :class="{ 'layout-default-background': getDarkTheme === false }">
+      <n-layout-content class="layout-content" :class="{ 'layout-default-background': getIsDarkTheme === false }">
         <div
           class="layout-content-main"
           :class="{
@@ -59,11 +59,11 @@
   import LayoutHeader from '@/layout/components/layout-header.vue';
   import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
   import LayoutMain from '@/layout/components/layout-main.vue';
-  import { useProjectSetting } from '@/hooks';
+  import { useSetting } from '@/hooks';
   import { useRoute } from 'vue-router';
   import LayoutFooter from './components/layout-footer.vue';
 
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getDarkTheme } = useProjectSetting();
+  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme } = useSetting();
 
   const navMode = getNavMode;
 
@@ -75,7 +75,7 @@
   });
 
   const isMixMenuNoneSub = computed(() => {
-    const mixMenu = getMenuSetting.value.mixMenu;
+    const mixMenu = unref(getMenuSetting).mixMenu;
     const currentRoute = useRoute();
     if (unref(navMode) != 'horizontal-mix') return true;
     if (unref(navMode) === 'horizontal-mix' && mixMenu && currentRoute.meta.isRoot) {
