@@ -1,21 +1,13 @@
 <template>
   <n-drawer v-model:show="isDrawer" :width="width" :placement="placement">
-    <n-drawer-content :header-style="{ width: '100%', display: 'block' }">
-      <template #header>
-        <div class="drawer-header">
-          <div class="drawer-header__title">{{ title }}</div>
-          <div class="drawer-header__btn">
-            <n-button type="primary" size="small" @click="drawerSettingSubmit">保存</n-button>
-          </div>
-        </div>
-      </template>
+    <n-drawer-content :title="title">
       <div class="drawer">
         <n-divider title-placement="center">主题</n-divider>
 
         <div class="drawer-setting-item justify-center dark-switch">
           <n-tooltip placement="bottom">
             <template #trigger>
-              <n-switch v-model:value="isDarkTheme" class="dark-theme-switch">
+              <n-switch v-model:value="isDarkTheme" :loading="submitLoading" class="dark-theme-switch" @update:value="switchChange">
                 <template #checked>
                   <n-icon size="14" color="#ffd93b">
                     <SunnySharp />
@@ -45,70 +37,28 @@
         <n-divider title-placement="center">导航栏模式</n-divider>
 
         <div class="drawer-setting-item align-items-top">
-          <div class="drawer-setting-item-style align-items-top">
+          <div v-for="(item, index) in navModeArr" :key="index" class="drawer-setting-item-style">
             <n-tooltip placement="top">
               <template #trigger>
-                <img src="~@/assets/images/setting/nav-theme-dark.svg" alt="左侧菜单模式" @click="togNavMode('vertical')" />
+                <img :src="item.image" :alt="item.title" @click="togNavMode(item.name)" />
               </template>
-              <span>左侧菜单模式</span>
+              <span>{{ item.title }}</span>
             </n-tooltip>
-            <n-badge v-show="navMode === 'vertical'" dot color="#19be6b" />
-          </div>
-
-          <div class="drawer-setting-item-style">
-            <n-tooltip placement="top">
-              <template #trigger>
-                <img src="~@/assets/images/setting/nav-horizontal.svg" alt="顶部菜单模式" @click="togNavMode('horizontal')" />
-              </template>
-              <span>顶部菜单模式</span>
-            </n-tooltip>
-            <n-badge v-show="navMode === 'horizontal'" dot color="#19be6b" />
-          </div>
-
-          <div class="drawer-setting-item-style">
-            <n-tooltip placement="top">
-              <template #trigger>
-                <img src="~@/assets/images/setting/nav-horizontal-mix.svg" alt="顶部菜单混合模式" @click="togNavMode('horizontal-mix')" />
-              </template>
-              <span>顶部菜单混合模式</span>
-            </n-tooltip>
-            <n-badge v-show="navMode === 'horizontal-mix'" dot color="#19be6b" />
+            <n-badge v-if="navMode === item.name" dot color="#19be6b" />
           </div>
         </div>
 
         <n-divider title-placement="center">导航栏风格</n-divider>
 
         <div class="drawer-setting-item align-items-top">
-          <div class="drawer-setting-item-style align-items-top">
+          <div v-for="(item, index) in navThemeArr" :key="index" class="drawer-setting-item-style">
             <n-tooltip placement="top">
               <template #trigger>
-                <img src="~@/assets/images/setting/nav-theme-dark.svg" alt="暗色侧边栏" @click="togNavTheme('dark')" />
+                <img :src="item.image" :alt="item.title" @click="togNavTheme(item.name)" />
               </template>
-              <span>暗色侧边栏</span>
+              <span>{{ item.title }}</span>
             </n-tooltip>
-            <n-badge v-if="navTheme === 'dark'" dot color="#19be6b" />
-          </div>
-
-          <div class="drawer-setting-item-style">
-            <n-tooltip placement="top">
-              <template #trigger>
-                <img src="~@/assets/images/setting/nav-theme-light.svg" alt="白色侧边栏" @click="togNavTheme('light')" />
-              </template>
-              <span>白色侧边栏</span>
-            </n-tooltip>
-            <n-badge v-if="navTheme === 'light'" dot color="#19be6b" />
-          </div>
-        </div>
-
-        <div class="drawer-setting-item align-items-top">
-          <div class="drawer-setting-item-style">
-            <n-tooltip placement="top">
-              <template #trigger>
-                <img src="~@/assets/images/setting/header-theme-dark.svg" alt="暗色顶栏" @click="togNavTheme('header-dark')" />
-              </template>
-              <span>暗色顶栏</span>
-            </n-tooltip>
-            <n-badge v-if="navTheme === 'header-dark'" dot color="#19be6b" />
+            <n-badge v-if="navTheme === item.name" dot color="#19be6b" />
           </div>
         </div>
 
@@ -117,30 +67,21 @@
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">分割菜单</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="menuSetting.mixMenu" :disabled="navMode !== 'horizontal-mix'" />
+            <n-switch v-model:value="menuSetting.mixMenu" :loading="submitLoading" :disabled="navMode !== 'horizontal-mix'" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">固定顶栏</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="headerSetting.fixed" />
+            <n-switch v-model:value="headerSetting.fixed" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
-
-        <!--        <div class="drawer-setting-item">-->
-        <!--          <div class="drawer-setting-item-title">-->
-        <!--            固定侧边栏-->
-        <!--          </div>-->
-        <!--          <div class="drawer-setting-item-action">-->
-        <!--            <n-switch v-model:value="menuSetting.fixed" />-->
-        <!--          </div>-->
-        <!--        </div>-->
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">固定多页签</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="multiTabsSetting.fixed" />
+            <n-switch v-model:value="multiTabsSetting.fixed" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
@@ -149,35 +90,35 @@
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="headerSetting.isReload" />
+            <n-switch v-model:value="headerSetting.isReload" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑导航</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="crumbsSetting.show" />
+            <n-switch v-model:value="crumbsSetting.show" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑显示图标</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="crumbsSetting.showIcon" />
+            <n-switch v-model:value="crumbsSetting.showIcon" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示多页签</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="multiTabsSetting.show" />
+            <n-switch v-model:value="multiTabsSetting.show" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示页脚</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="showFooter" />
+            <n-switch v-model:value="showFooter" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
@@ -186,14 +127,14 @@
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">禁用动画</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="isPageAnimate" />
+            <n-switch v-model:value="isPageAnimate" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">动画类型</div>
           <div class="drawer-setting-item-select">
-            <n-select v-model:value="pageAnimateType" :options="animateSetting" />
+            <n-select v-model:value="pageAnimateType" :loading="submitLoading" :options="animateSetting" @update:value="selectChange" />
           </div>
         </div>
       </div>
@@ -202,12 +143,17 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, toRefs, unref } from 'vue';
+  import { defineComponent, reactive, toRefs, unref, ref, ComputedRef } from 'vue';
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
   import { animateSetting, appThemeList } from '@/constant';
   import { useSetting } from '@/hooks';
   import { CUserConfigInfo } from '/#/config';
   import { useUserStore } from '@/store';
+  import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
+  import navHorizontalImage from '@/assets/images/setting/nav-horizontal.svg';
+  import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
+  import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
+  import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
 
   export default defineComponent({
     name: 'LayoutHeaderSetting',
@@ -247,13 +193,18 @@
         getPageAnimateType,
         getShowFooter,
       } = useSetting();
+
+      // 复制computed的内容
+      const copyComputedObj = (obj: ComputedRef) => {
+        return Object.assign({}, unref(obj));
+      };
       const configInfo: CUserConfigInfo = reactive({
         navTheme: unref(getNavTheme),
         isDarkTheme: unref(getIsDarkTheme),
-        menuSetting: unref(getMenuSetting),
-        headerSetting: unref(getHeaderSetting),
-        multiTabsSetting: unref(getMultiTabsSetting),
-        crumbsSetting: unref(getCrumbsSetting),
+        menuSetting: copyComputedObj(getMenuSetting),
+        headerSetting: copyComputedObj(getHeaderSetting),
+        multiTabsSetting: copyComputedObj(getMultiTabsSetting),
+        crumbsSetting: copyComputedObj(getCrumbsSetting),
         appTheme: unref(getAppTheme),
         navMode: unref(getNavMode),
         isPageAnimate: unref(getIsPageAnimate),
@@ -271,41 +222,94 @@
         state.isDrawer = false;
       };
 
+      // 提交并保存
+      const submitLoading = ref(false);
+      const drawerSettingSubmit = () => {
+        submitLoading.value = true;
+        userStore.updateApiConfigInfo(Object.assign({}, configInfo)).finally(() => {
+          submitLoading.value = false;
+        });
+      };
+
+      // 切换导航模式
+      const navModeArr = [
+        {
+          title: '左侧菜单模式',
+          name: 'vertical',
+          image: navThemeDarkImage,
+        },
+        {
+          title: '顶部菜单模式',
+          name: 'horizontal',
+          image: navHorizontalImage,
+        },
+        {
+          title: '顶部菜单混合模式',
+          name: 'horizontal-mix',
+          image: navHorizontalMixImage,
+        },
+      ];
+      const togNavMode = (mode: string) => {
+        configInfo.navMode = mode;
+        configInfo.menuSetting.mixMenu = false;
+        drawerSettingSubmit();
+      };
+
       // 设置导航风格
+      const navThemeArr = [
+        {
+          title: '暗色侧边栏',
+          name: 'dark',
+          image: navThemeDarkImage,
+        },
+        {
+          title: '白色侧边栏',
+          name: 'light',
+          image: navThemeLightImage,
+        },
+        {
+          title: '暗色顶栏',
+          name: 'header-dark',
+          image: headerThemeDarkImage,
+        },
+      ];
       const togNavTheme = (theme: string) => {
         let navTheme = theme;
-        if (unref(getNavMode) === 'horizontal' && ['light'].includes(theme)) {
+        if (configInfo.navMode === 'horizontal' && ['light'].includes(theme)) {
           navTheme = 'dark';
         }
+        if (configInfo.navTheme === navTheme) return;
         configInfo.navTheme = navTheme;
+        drawerSettingSubmit();
       };
 
       // 切换主题色
       const togTheme = (color: string) => {
         configInfo.appTheme = color;
+        drawerSettingSubmit();
       };
 
-      // 切换导航模式
-      const togNavMode = (mode: string) => {
-        configInfo.navMode = mode;
-        configInfo.menuSetting.mixMenu = false;
-      };
+      // 开关组件变化
+      const switchChange = () => drawerSettingSubmit();
 
-      // 提交并保存
-      const drawerSettingSubmit = () => {
-        userStore.updateApiConfigInfo(JSON.parse(JSON.stringify(configInfo)));
-      };
+      // 选择器
+      const selectChange = () => drawerSettingSubmit();
 
       return {
         ...toRefs(state),
         ...toRefs(configInfo),
+        animateSetting,
+        submitLoading,
+        navModeArr,
+        navThemeArr,
         togNavTheme,
         togNavMode,
         togTheme,
         openDrawer,
         closeDrawer,
-        animateSetting,
         drawerSettingSubmit,
+        switchChange,
+        selectChange,
       };
     },
   });
