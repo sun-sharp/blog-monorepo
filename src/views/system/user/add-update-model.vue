@@ -49,6 +49,7 @@
   import { roleApi, userApi, capitalApi } from '@/api';
   import FormUploadImage from '@/components/form/form-upload-image.vue';
   import { getImgUrl } from '@/utils';
+  import { FormItemRule } from 'naive-ui';
 
   const modelFields = {
     nickname: null,
@@ -69,10 +70,17 @@
       const formBtnLoading = ref(false);
       const modelFromRef = ref();
       const modelForm = reactive<any>(Object.assign({}, modelFields));
-      // 判断两次密码
-      const validatePasswordStartWith = (_rule, value) =>
+      // 验证用户名
+      const validateUsername = (_rule: FormItemRule, value: string) => {
+        if (!value) return new Error('请输入用户名');
+        else if (!/^[a-z][a-z_`~@*|()+-]{3,40}$/.test(value)) return new Error('用户名不符合规定');
+        return true;
+      };
+      // 判断正在输入的密码是否输入
+      const validatePasswordStartWith = (_rule: FormItemRule, value: string) =>
         modelForm.password && modelForm.password.startsWith(value) && modelForm.password.length >= value.length;
-      const validatePasswordSame = (_rule, value) => value === modelForm.password;
+      // 判断输入完成的密码是否完全相同
+      const validatePasswordSame = (_rule: FormItemRule, value: string) => value === modelForm.password;
       const modelRules = reactive({
         nickname: {
           required: true,
@@ -81,8 +89,8 @@
         },
         username: {
           required: true,
+          validator: validateUsername,
           trigger: ['blur', 'input'],
-          message: `请输入用户名`,
         },
         roleCode: {
           required: true,
@@ -152,7 +160,7 @@
       };
 
       // 提交
-      const confirmForm = (e) => {
+      const confirmForm = (e: { preventDefault: () => void }) => {
         e.preventDefault();
         formBtnLoading.value = true;
         modelFromRef.value.validate((errors) => {
