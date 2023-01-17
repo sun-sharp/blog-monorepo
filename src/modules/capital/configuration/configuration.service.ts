@@ -5,7 +5,6 @@ import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Configuration } from 'src/schemas/capital/configuration.schema';
-import { User } from 'src/schemas/capital/user.schema';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
 
@@ -16,29 +15,29 @@ export class ConfigurationService {
 
   /**
    * @description: 创建配置信息
-   * @param {User} user
+   * @param {string} userId
    * @param {CreateConfigurationDto} createConfigurationDto
    * @return {Promise<IResponse>}
    */
-  public save(user: User, createConfigurationDto: CreateConfigurationDto): Promise<IResponse> {
+  public save(userId: string, createConfigurationDto: CreateConfigurationDto): Promise<IResponse> {
     return (
-      Promise.resolve({ user, body: createConfigurationDto })
+      Promise.resolve({ userId, body: createConfigurationDto })
         // 判断是否已经添加
-        .then(async ({ user, body }) => {
-          const configFind = await this.configurationModel.findOne({ userId: user._id });
+        .then(async ({ userId, body }) => {
+          const configFind = await this.configurationModel.findOne({ userId });
           if (configFind)
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '用户已添加配置',
             });
-          return { user, body };
+          return { userId, body };
         })
         // 添加
-        .then(async ({ user, body }) => {
+        .then(async ({ userId, body }) => {
           await this.configurationModel.create({
             ...body,
             createTime: nowDateFun(),
-            userId: user._id,
+            userId,
           });
           return (this.response = {
             code: ApiCode.SUCCESS,
@@ -117,6 +116,31 @@ export class ConfigurationService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 删除用户的配置信息
+   * @param {string} userId
+   * @return {Promise<IResponse>}
+   */
+  public remove(userId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(userId)
+        .then(async (userId) => {
+          await this.configurationModel.deleteOne({ userId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
           });
         })
     );

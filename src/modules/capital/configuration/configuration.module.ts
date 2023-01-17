@@ -13,5 +13,6 @@ const CONFIGURATION_MONGO_MODULE = MongooseModule.forFeature([{ name: Configurat
   imports: [CONFIGURATION_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],
   controllers: [ConfigurationController],
   providers: [ConfigurationService, JwtStrategy],
+  exports: [ConfigurationService],
 })
 export class ConfigurationModule {}

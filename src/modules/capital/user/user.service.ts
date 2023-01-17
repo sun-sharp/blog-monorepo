@@ -70,13 +70,14 @@ export class UserService {
         // 注册用户
         .then(async (body) => {
           const password = await hashPassword(body.password);
-          await this.userModel.create({
+          const result = await this.userModel.create({
             ...body,
             password,
           });
+          console.log(result._id);
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: true,
+            result: result._id,
             message: '用户创建成功！',
           });
         })
