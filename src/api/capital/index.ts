@@ -4,7 +4,7 @@ const basic = '';
 
 /**
  * @description: 用户登录
- * @param params
+ * @param data
  */
 export function login(data) {
   return AxiosCapital.request({
