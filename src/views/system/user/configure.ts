@@ -1,6 +1,6 @@
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
-import { userApi } from '@/api';
+import { capitalApi } from '@/api';
 import { NAvatar } from 'naive-ui';
 import { getImgUrl } from '@/utils';
 
@@ -66,7 +66,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
    *  */
   // 删除
   const handleDelete = (row: Recordable) => {
-    userApi.remove(row.userId).then(() => {
+    capitalApi.removeUser(row.userId).then(() => {
       reloadTable();
     });
   };

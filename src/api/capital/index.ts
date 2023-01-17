@@ -28,3 +28,32 @@ export function adminMenus(params?) {
     params,
   });
 }
+
+/**
+ * @description 注册用户
+ * @param data
+ */
+export function signUp(data?) {
+  return AxiosCapital.request({
+    url: `${basic}/sign_up`,
+    method: 'POST',
+    data,
+    responseOptions: {
+      isTransformResponse: false,
+    },
+  });
+}
+
+/**
+ * @description 删除用户和用户相关数据
+ * @param userId
+ */
+export function removeUser(userId: string) {
+  return AxiosCapital.request({
+    url: `${basic}/remove_user/${userId}`,
+    method: 'DELETE',
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+}

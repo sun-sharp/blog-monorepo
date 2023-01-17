@@ -46,7 +46,7 @@
 
 <script lang="ts">
   import { defineComponent, nextTick, reactive, ref } from 'vue';
-  import { roleApi, userApi } from '@/api';
+  import { roleApi, userApi, capitalApi } from '@/api';
   import FormUploadImage from '@/components/form/form-upload-image.vue';
   import { getImgUrl } from '@/utils';
 
@@ -159,7 +159,7 @@
           if (!errors) {
             const request = modelId.value
               ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode })
-              : userApi.save({
+              : capitalApi.signUp({
                   nickname: modelForm.nickname,
                   avatar: modelForm.avatar.length > 0 ? modelForm.avatar[0].key : '',
                   username: modelForm.username,
