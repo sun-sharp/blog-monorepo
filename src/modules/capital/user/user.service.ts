@@ -31,16 +31,15 @@ export class UserService {
         // 判断username 是否为合法字符
         .then((body) => {
           const { username } = body;
-          // if (!username.match(/^[a-z]/i)) throw '首字母应为字母';
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
             throw (this.response = {
               code: ApiCode.ERROR,
               message: `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
             });
-          if (!username.match(/[a-z]$/i)) {
+          if (!/^[a-z][a-z_`~@*|()+-]{3,40}$/.test(username)) {
             throw (this.response = {
               code: ApiCode.ERROR,
-              message: '账号应全为字母',
+              message: '账号不符合规定',
             });
           }
           return body;
