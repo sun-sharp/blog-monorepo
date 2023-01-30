@@ -75,7 +75,7 @@ export const bankExcelCellMap = {
       }, // 交易日期
       2: (tar: any, val: any) => {
         tar['voucherNo'] = val;
-      }, // 摘要
+      }, // 凭证号码
       7: (tar: any, val: any) => {
         tar['explain'] = val;
       }, // 摘要
@@ -107,8 +107,33 @@ export const bankExcelCellMap = {
     sheetName: '中国农业银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
+        tar['voucherNo'] = val;
+      }, // 凭证号码
+      2: (tar: any, val: any) => {
         tar['tradeTime'] = val;
       }, // 交易时间
+      3: (tar: any, val: any) => {
+        tar['explain'] = val;
+      }, // 摘要
+      4: (tar: any, val: any) => {
+        if (typeof val !== 'number') {
+          tar['incomeOrPay'] = '';
+          tar['moneyAmount'] = val;
+          return;
+        }
+        if (val < 0) tar['incomeOrPay'] = '支出';
+        else tar['incomeOrPay'] = '收入';
+        tar['moneyAmount'] = Math.abs(val);
+      }, // 收入/支出金额
+      5: (tar: any, val: any) => {
+        tar['balance'] = val;
+      }, // 余额
+      6: (tar: any, val: any) => {
+        tar['tradeOtherPerson'] = val;
+      }, // 对方户名
+      7: (tar: any, val: any) => {
+        tar['tradeType'] = val;
+      }, // 渠道
     },
   },
   3: {
