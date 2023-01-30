@@ -29,6 +29,7 @@
           :class="{
             'layout-content-main-fix': fixedMulti,
             'fluid-header': fixedHeader === 'static',
+            'layout-content-main-foot': showFooter,
           }"
         >
           <layout-tabs-view v-if="isMultiTabs" v-model:collapsed="collapsed" />
@@ -44,7 +45,7 @@
           </div>
         </div>
       </n-layout-content>
-      <n-layout-footer :position="'absolute'" :bottom="0">
+      <n-layout-footer v-if="showFooter" :position="'absolute'" :bottom="0">
         <layout-footer />
       </n-layout-footer>
       <n-back-top :right="100" />
@@ -63,7 +64,7 @@
   import { useRoute } from 'vue-router';
   import LayoutFooter from './components/layout-footer.vue';
 
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme } = useSetting();
+  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getShowFooter } = useSetting();
 
   const navMode = getNavMode;
 
@@ -113,6 +114,11 @@
 
   const getMenuLocation = computed(() => {
     return 'left';
+  });
+
+  // 展示底部
+  const showFooter = computed(() => {
+    return unref(getShowFooter);
   });
 
   const watchWidth = () => {
@@ -180,11 +186,13 @@
     margin: 0 10px 10px;
     position: relative;
     padding-top: $header-height;
-    padding-bottom: $footer-height;
   }
 
   .layout-content-main-fix {
     padding-top: $header-height;
+  }
+
+  .layout-content-main-foot {
     padding-bottom: $footer-height;
   }
 
