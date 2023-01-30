@@ -14,7 +14,7 @@ import { UpdateBankDto } from './dto/update-bank.dto';
 @Injectable()
 export class BankService {
   response: IResponse;
-  constructor(@InjectModel('Bank') private readonly bankModul: Model<Bank>) {}
+  constructor(@InjectModel('Bank') private readonly bankModel: Model<Bank>) {}
 
   /**
    * @description: 银行账单导入
@@ -80,13 +80,13 @@ export class BankService {
         .then(async ({ userId, body }) => {
           const { batches } = body;
           // 过滤掉相同交易时间的数据
-          const find = await this.bankModul.find();
+          const find = await this.bankModel.find();
           const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
           if (filterArr.length === 0)
             throw {
               message: '导入的数据交易时间全部和数据库的相同！',
             };
-          await this.bankModul.create(...filterArr.map((m) => ({ ...m, userId })));
+          await this.bankModel.create(...filterArr.map((m) => ({ ...m, userId })));
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
@@ -113,7 +113,7 @@ export class BankService {
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson, inflowOrOutflow, bankBillType } = body;
+          const { size, current, tradeOtherPerson, inflowOrOutflow, bankBillType, bankType } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: any = {
             userId,
@@ -121,8 +121,9 @@ export class BankService {
           };
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (bankBillType) findData.bankBillType = bankBillType;
-          const total = await this.bankModul.find(findData).count();
-          const list = await this.bankModul.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
+          if (bankType) findData.bankType = bankType;
+          const total = await this.bankModel.find(findData).count();
+          const list = await this.bankModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
@@ -194,7 +195,7 @@ export class BankService {
       Promise.resolve({ body })
         .then(async ({ body }) => {
           const { bankId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost } = body;
-          await this.bankModul.updateOne({ _id: bankId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost });
+          await this.bankModel.updateOne({ _id: bankId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost });
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '修改成功！',

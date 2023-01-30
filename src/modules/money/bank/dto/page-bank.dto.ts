@@ -20,4 +20,10 @@ export class PageBankDto extends PaginateDto {
     required: false,
   })
   bankBillType: number;
+
+  @ApiProperty({
+    description: '银行类型',
+    required: false,
+  })
+  bankType: number;
 }
