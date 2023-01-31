@@ -56,22 +56,24 @@
       </n-gi>
       <!--提交 重置 展开 收起 按钮-->
       <n-gi v-if="showActionButtonGroup" :suffix="true" #="{ overflow }">
-        <n-space align="center" justify="end" :style="{ 'margin-left': 12 }">
-          <n-button v-if="showSubmitButton" v-bind="getSubmitBtnOptions" @click="handleSubmit">
-            {{ submitButtonText }}
-          </n-button>
-          <n-button v-if="showAdvancedButton" type="primary" text icon-placement="right" @click="unfoldToggle">
-            <template #icon>
-              <n-icon v-if="overflow" size="14" class="unfold-icon">
-                <DownOutlined />
-              </n-icon>
-              <n-icon v-else size="14" class="unfold-icon">
-                <UpOutlined />
-              </n-icon>
-            </template>
-            {{ overflow ? '展开' : '收起' }}
-          </n-button>
-        </n-space>
+        <n-form-item class="form-item-right">
+          <n-space align="center" justify="end" :style="{ 'margin-left': 12 }">
+            <n-button v-if="showSubmitButton" v-bind="getSubmitBtnOptions" @click="handleSubmit">
+              {{ submitButtonText }}
+            </n-button>
+            <n-button v-if="showAdvancedButton" type="primary" text icon-placement="right" @click="unfoldToggle">
+              <template #icon>
+                <n-icon v-if="overflow" size="14" class="unfold-icon">
+                  <DownOutlined />
+                </n-icon>
+                <n-icon v-else size="14" class="unfold-icon">
+                  <UpOutlined />
+                </n-icon>
+              </template>
+              {{ overflow ? '展开' : '收起' }}
+            </n-button>
+          </n-space>
+        </n-form-item>
       </n-gi>
     </n-grid>
   </n-form>
@@ -280,5 +282,11 @@
     align-items: center;
     height: 100%;
     margin-left: -3px;
+  }
+
+  .form-item-right {
+    :deep(.n-form-item-blank) {
+      justify-content: flex-end;
+    }
   }
 </style>

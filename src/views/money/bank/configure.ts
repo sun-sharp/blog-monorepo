@@ -1,4 +1,13 @@
-import { bankBillTypeMap, bankBillTypeOption, bankTypeMap, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
+import {
+  bankBillTypeMap,
+  bankBillTypeOption,
+  bankTypeMap,
+  bankTypeOption,
+  incomeOrPayMap,
+  inflowOrOutflowMap,
+  inflowOrOutflowOption,
+  voucherTypeMap,
+} from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
@@ -24,10 +33,21 @@ export const useConfigure = ({ updateModelRef }) => {
       },
     },
     {
+      field: 'bankType',
+      component: 'NSelect',
+      label: '银行类型',
+      labelWidth: 110,
+      componentProps: {
+        filterable: true,
+        placeholder: '请选择银行类型',
+        options: bankTypeOption,
+      },
+    },
+    {
       field: 'bankBillType',
       component: 'NSelect',
       label: '银行账单类型',
-      labelWidth: 120,
+      labelWidth: 110,
       componentProps: {
         filterable: true,
         placeholder: '请选择银行账单类型',
