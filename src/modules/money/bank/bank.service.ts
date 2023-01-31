@@ -29,13 +29,13 @@ export class BankService {
           const { buffer } = file; // file为前端上传的excel
           let result = [];
           for (const itKey in bankExcelCellMap) {
-            const { sheetName, excelCellHandle, voucherType } = bankExcelCellMap[itKey];
+            const { sheetName, excelCellHandle } = bankExcelCellMap[itKey];
             const excelArr = await excelXlsxHandleBuffer({
               sheetName,
               buffer: buffer,
               startNum: 2,
               cellHandler: excelCellHandle,
-              otherObj: { bankType: Number(itKey), voucherType },
+              otherObj: { bankType: Number(itKey) },
             });
             if (!excelArr)
               throw {
@@ -79,12 +79,12 @@ export class BankService {
         // 添加
         .then(async ({ userId, body }) => {
           const { batches } = body;
-          // 过滤掉相同交易时间的数据
+          // 过滤掉相同交易时间，凭证类型，凭证号码的数据
           const find = await this.bankModel.find();
-          const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
+          const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime', ['voucherType', 'voucherNo']);
           if (filterArr.length === 0)
             throw {
-              message: '导入的数据交易时间全部和数据库的相同！',
+              message: '导入的数据交易时间，凭证类型，凭证号码全部和数据库的相同！',
             };
           await this.bankModel.create(...filterArr.map((m) => ({ ...m, userId })));
           return (this.response = {
@@ -117,8 +117,8 @@ export class BankService {
           const { limit, skip } = PaginateHandle(size, current);
           const findData: any = {
             userId,
-            $or: [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }],
           };
+          if (tradeOtherPerson) findData.$or = [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }];
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (bankBillType) findData.bankBillType = bankBillType;
           if (bankType) findData.bankType = bankType;

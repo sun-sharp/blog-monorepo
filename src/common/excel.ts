@@ -70,9 +70,6 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
       const target = Object.assign({}, otherObj);
       row.eachCell((cell, cellNumber) => {
         let cellVal: any = cell.value;
-        if (['/', '-', '—'].includes(cellVal)) {
-          cellVal = '';
-        }
         // 去掉尾部的一些空格
         const reg = /^\s+|\s+$/g;
         if (typeof cellVal === 'string' && cellVal.search(reg) > 0) {
@@ -87,15 +84,22 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
 };
 
 /**
- * @description: 两个数组比较，过滤掉相同时间的元素
+ * @description: 两个数组比较，过滤掉相同时间，或更多条件的元素
  * @param {any} arrFilter
  * @param {any} findArr
- * @param {string} key
- * @return {any}
+ * @param {string} timeKey
+ * @param {string[]} keyArr
+ * @return {*}
  */
-export const twoArrForTimeSameFilter = (arrFilter: any[], findArr: any[], key: string): any[] => {
+export const twoArrForTimeSameFilter = (arrFilter: any[], findArr: any[], timeKey: string, keyArr: string[] = []): any[] => {
   return arrFilter.filter((fil) => {
-    const find = findArr.find((f) => getTimeStamp(fil[key]) === getTimeStamp(f[key]));
+    const find = findArr.find((f) => {
+      let dis = getTimeStamp(fil[timeKey]) === getTimeStamp(f[timeKey]);
+      if (keyArr.length > 0) {
+        dis = dis && keyArr.filter((fKey) => fil[fKey] === f[fKey]).length > 0;
+      }
+      return dis;
+    });
     return !find;
   });
 };

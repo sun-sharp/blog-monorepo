@@ -5,9 +5,8 @@ export class PageBankDto extends PaginateDto {
   @ApiProperty({
     description: '交易对方',
     required: false,
-    default: '',
   })
-  readonly tradeOtherPerson: string = '';
+  readonly tradeOtherPerson: string;
 
   @ApiProperty({
     description: '流入/流出',

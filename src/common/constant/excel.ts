@@ -68,14 +68,14 @@ export const aliPayExcelCellHandle = {
 export const bankExcelCellMap = {
   1: {
     sheetName: '中国工商银行',
-    voucherType: 2,
     excelCellHandle: {
       1: (tar: any, val: any) => {
-        tar['tradeTime'] = val;
+        tar['tradeTime'] = nowDateFun(val);
       }, // 交易日期
       2: (tar: any, val: any) => {
         tar['voucherNo'] = val;
-      }, // 凭证号码
+        tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
+      }, // 账号
       7: (tar: any, val: any) => {
         tar['explain'] = val;
       }, // 摘要
@@ -94,9 +94,15 @@ export const bankExcelCellMap = {
       }, // 余额
       11: (tar: any, val: any) => {
         tar['tradeOtherPerson'] = val;
+        if (val === '支付宝（中国）网络技术有限公司') {
+          tar['bankBillType'] = 1; // 1 支付宝，2 微信，4 工资
+        }
       }, // 对方户名
       12: (tar: any, val: any) => {
         tar['tradeOtherPersonAccount'] = val;
+        if (val === '215500690') {
+          tar['bankBillType'] = 1; // 1 支付宝，2 微信，4 工资
+        }
       }, // 对方账号
       13: (tar: any, val: any) => {
         tar['tradeType'] = val;
@@ -108,12 +114,20 @@ export const bankExcelCellMap = {
     excelCellHandle: {
       1: (tar: any, val: any) => {
         tar['voucherNo'] = val;
-      }, // 凭证号码
+        tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
+      }, // 账号
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = val;
+        tar['tradeTime'] = nowDateFun(val);
       }, // 交易时间
       3: (tar: any, val: any) => {
         tar['explain'] = val;
+        if (['⽀付宝'].includes(val)) {
+          tar['bankBillType'] = 1; // 1 支付宝，2 微信，4 工资
+        } else if (['财付通'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        } else if (['⼯资', '劳务'].includes(val)) {
+          tar['bankBillType'] = 4; // 1 支付宝，2 微信，4 工资
+        }
       }, // 摘要
       4: (tar: any, val: any) => {
         if (typeof val !== 'number') {
@@ -130,7 +144,12 @@ export const bankExcelCellMap = {
       }, // 余额
       6: (tar: any, val: any) => {
         tar['tradeOtherPerson'] = val;
-      }, // 对方户名
+        if (['⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690'].includes(val)) {
+          tar['bankBillType'] = 1; // 1 支付宝，2 微信，4 工资
+        } else if (['243300133'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        }
+      }, // 对⼿信息
       7: (tar: any, val: any) => {
         tar['tradeType'] = val;
       }, // 渠道
@@ -140,14 +159,57 @@ export const bankExcelCellMap = {
     sheetName: '中国建设银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
-        tar['tradeTime'] = val;
-      }, // 交易时间
+        tar['voucherNo'] = val;
+        tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
+      }, // 卡号/账号
+      2: (tar: any, val: any) => {
+        tar['explain'] = val;
+      }, // 摘要
+      5: (tar: any, val: any) => {
+        tar['tradeTime'] = nowDateFun(val);
+      }, // 交易日期
+      6: (tar: any, val: any) => {
+        if (typeof val !== 'number') {
+          tar['incomeOrPay'] = '';
+          tar['moneyAmount'] = val;
+          return;
+        }
+        if (val < 0) tar['incomeOrPay'] = '支出';
+        else tar['incomeOrPay'] = '收入';
+        tar['moneyAmount'] = Math.abs(val);
+      }, // 交易金额
+      7: (tar: any, val: any) => {
+        tar['balance'] = val;
+      }, // 账户余额
+      8: (tar: any, val: any) => {
+        tar['place'] = val;
+      }, // 交易地点
+      9: (tar: any, val: any) => {
+        tar['tradeType'] = val;
+        if (['微信零钱提现'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        }
+      }, // 附言
+      10: (tar: any, val: any) => {
+        tar['tradeOtherPersonAccount'] = val;
+        if (['243300133'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        }
+      }, // 对方账号
+      11: (tar: any, val: any) => {
+        tar['tradeOtherPerson'] = val;
+        if (['财付通支付科技有限公司'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        }
+      }, // 户名
     },
   },
   4: {
     sheetName: '民生银行',
-    voucherType: 2,
     excelCellHandle: {
+      1: (tar: any, val: any) => {
+        tar['voucherType'] = val === '卡' ? 2 : 1; // 1 存折，2 储蓄卡，3 信用卡
+      }, // 凭证类型
       2: (tar: any, val: any) => {
         tar['voucherNo'] = val;
       }, // 凭证号码
@@ -175,9 +237,19 @@ export const bankExcelCellMap = {
       }, // 交易渠道
       10: (tar: any, val: any) => {
         tar['tradeOtherPerson'] = val;
+        if (['⽀付宝（中国）⽹络技术有限公司', '蚂蚁基金'].includes(val)) {
+          tar['bankBillType'] = 1; // 1 支付宝，2 微信，4 工资
+        } else if (['微信转账', '微信零钱充值账户'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        }
       }, // 对方户名/账号
       11: (tar: any, val: any) => {
         tar['tradeOtherPersonRemarks'] = val;
+        if (['支付宝'].includes(val)) {
+          tar['bankBillType'] = 1; // 1 支付宝，2 微信，4 工资
+        } else if (['财付通'].includes(val)) {
+          tar['bankBillType'] = 2; // 1 支付宝，2 微信，4 工资
+        }
       }, // 对方行名
     },
   },
@@ -185,8 +257,31 @@ export const bankExcelCellMap = {
     sheetName: '招商银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
-        tar['tradeTime'] = val;
+        tar['voucherNo'] = val;
+        tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 交易时间
+      2: (tar: any, val: any) => {
+        tar['tradeTime'] = nowDateFun(val);
+      }, // 交易时间
+      3: (tar: any, val: any) => {
+        if (typeof val !== 'number') {
+          tar['incomeOrPay'] = '';
+          tar['moneyAmount'] = val;
+          return;
+        }
+        if (val < 0) tar['incomeOrPay'] = '支出';
+        else tar['incomeOrPay'] = '收入';
+        tar['moneyAmount'] = Math.abs(val);
+      }, // 交易金额
+      4: (tar: any, val: any) => {
+        tar['balance'] = val;
+      }, // 余额
+      5: (tar: any, val: any) => {
+        tar['tradeType'] = val;
+      }, // 交易说明
+      6: (tar: any, val: any) => {
+        tar['tradeOtherPerson'] = val;
+      }, // 交易对方
     },
   },
 };
