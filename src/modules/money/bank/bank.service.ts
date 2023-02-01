@@ -47,9 +47,13 @@ export class BankService {
             throw {
               message: '导入的数据为空！',
             };
-          // 对数据按照交易时间排序
+          // 对数据进行排序，排序优先级（银行类型，交易时间）
           result.sort(function (a, b) {
-            return b.tradeTime > a.tradeTime ? -1 : 1;
+            if (a.bankType === b.bankType) {
+              return b.tradeTime > a.tradeTime ? -1 : 1;
+            } else {
+              return b.bankType > a.bankType ? -1 : 1;
+            }
           });
           return (this.response = {
             code: ApiCode.SUCCESS,
@@ -123,7 +127,7 @@ export class BankService {
           if (bankBillType) findData.bankBillType = bankBillType;
           if (bankType) findData.bankType = bankType;
           const total = await this.bankModel.find(findData).count();
-          const list = await this.bankModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
+          const list = await this.bankModel.find(findData).sort({ bankType: 1, tradeTime: 1 }).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
