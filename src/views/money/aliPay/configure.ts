@@ -211,7 +211,7 @@ export const uploadColumns = () => {
         if (
           row.transactionClassification === '交通出行' &&
           row.tradeOtherPerson === '成都金控数据服务有限公司' &&
-          row.productDescription === '天府通扫码乘车'
+          ['天府通扫码乘车', '天府通APP乘车'].includes(row.productDescription)
         ) {
           row.billType = 136;
         }
