@@ -214,4 +214,24 @@ export class BankService {
         })
     );
   }
+
+  /**
+   * @description: 根据交易时间范围查询全部银行账单
+   * @param {string} startTime
+   * @param {string} endTime
+   * @return {Promise<IResponse>}
+   */
+  public findModelAll(startTime: string, endTime: string): Promise<Bank> {
+    return (
+      Promise.resolve({ startTime, endTime })
+        .then(async ({ startTime, endTime }) => {
+          const findData = startTime && endTime ? { $and: [{ createdAt: { $gt: startTime } }, { createdAt: { $lt: endTime } }] } : {};
+          return await this.bankModel.find(findData);
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
 }
