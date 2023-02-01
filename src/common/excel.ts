@@ -40,9 +40,6 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
       const target = Object.assign({}, otherObj);
       row.eachCell((cell, cellNumber) => {
         let cellVal: any = cell.value;
-        if (['/', '-', '—'].includes(cellVal)) {
-          cellVal = '';
-        }
         // 去掉尾部的一些空格
         const reg = /^\s+|\s+$/g;
         if (typeof cellVal === 'string' && cellVal.search(reg) > 0) {
