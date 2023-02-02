@@ -9,6 +9,7 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { Bank } from 'src/schemas/money/bank.schema';
 import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
+import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 
 @Injectable()
@@ -233,6 +234,56 @@ export class BankService {
         // 返回错误
         .catch((err) => {
           return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 批量删除银行账单的数据
+   * @param {batchRemoveDto} body
+   * @return {*}
+   */
+  public batchRemove(body: batchRemoveDto): Promise<IResponse> {
+    return (
+      Promise.resolve(body)
+        .then(async ({ bankIdArr }) => {
+          await this.bankModel.deleteMany({ _id: { $in: bankIdArr } });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 删除银行账单的数据
+   * @param {string} bankId
+   * @return {*}
+   */
+  public remove(bankId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(bankId)
+        .then(async (bankId) => {
+          await this.bankModel.deleteOne({ _id: bankId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          });
         })
     );
   }

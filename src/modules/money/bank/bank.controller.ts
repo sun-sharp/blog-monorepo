@@ -1,4 +1,4 @@
-import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put } from '@nestjs/common';
+import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put, Delete, Param } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -6,6 +6,7 @@ import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { BankService } from './bank.service';
 import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
+import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 import { UploadBankDto } from './dto/upload-bank.dto';
 
@@ -46,5 +47,17 @@ export class BankController {
   @ApiOperation({ summary: '修改银行账单' })
   update(@Body() body: UpdateBankDto) {
     return this.bankService.update(body);
+  }
+
+  @Delete('batch_remove')
+  @ApiOperation({ summary: '批量删除银行账单' })
+  batchRemove(@Body() body: batchRemoveDto) {
+    return this.bankService.batchRemove(body);
+  }
+
+  @Delete('remove/:bankId')
+  @ApiOperation({ summary: '删除银行账单' })
+  remove(@Param('bankId') bankId: string) {
+    return this.bankService.remove(bankId);
   }
 }
