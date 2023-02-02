@@ -8,6 +8,7 @@ import { BankModule } from './bank/bank.module';
 import { moneyMongooseModuleForRoot } from 'src/common/constant/mongoose';
 import { JwtModuleRegister } from 'src/jwt/jwt.constants';
 import { RoleModule } from '../capital/role/role.module';
+import { UserModule } from '../capital/user/user.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RoleModule } from '../capital/role/role.module';
       },
     ]),
     JwtModuleRegister,
+    UserModule,
     forwardRef(() => RoleModule),
   ],
   controllers: [MoneyController],

@@ -217,15 +217,17 @@ export class BankService {
 
   /**
    * @description: 根据交易时间范围查询全部银行账单
+   * @param {string} userId
    * @param {string} startTime
    * @param {string} endTime
-   * @return {Promise<IResponse>}
+   * @return {Promise<Array<Bank>>}
    */
-  public findModelAll(startTime: string, endTime: string): Promise<Bank> {
+  public findModelAll(userId: string, startTime: string, endTime: string): Promise<Array<Bank>> {
     return (
       Promise.resolve({ startTime, endTime })
         .then(async ({ startTime, endTime }) => {
-          const findData = startTime && endTime ? { $and: [{ createdAt: { $gt: startTime } }, { createdAt: { $lt: endTime } }] } : {};
+          const findData: any = { userId };
+          if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
           return await this.bankModel.find(findData);
         })
         // 返回错误

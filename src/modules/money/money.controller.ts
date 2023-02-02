@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Request, UseGuards } from '@nestjs/common';
 import { MoneyService } from './money.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -21,7 +21,7 @@ export class MoneyController {
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '统计银行数据的流动' })
-  statisticsBankFlow(@Query() query: StatisticsBankFlowDto) {
-    return this.moneyService.statisticsBankFlow(query);
+  statisticsBankFlow(@Request() req, @Query() query: StatisticsBankFlowDto) {
+    return this.moneyService.statisticsBankFlow(req.user._id, query);
   }
 }

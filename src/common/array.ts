@@ -53,3 +53,35 @@ export const groupArray = (jsonArr: any[], keyInfo: string, conditions: any[]): 
   });
   return newJson;
 };
+
+/**
+ * @description: 利用ES6 Set去重
+ * @param {string[]} arr
+ * @return {string[]}
+ */
+export const uniqueArray = (arr: string[]): string[] => {
+  return Array.from(new Set(arr));
+};
+
+/**
+ * @description: 数组相加sum
+ * @param {number[]} arr
+ * @return {number}
+ */
+export const sumArray = (arr: number[]): number => {
+  if (arr.length === 0) return 0;
+  return arr.reduce((prev, curr) => {
+    return prev + curr;
+  });
+};
+
+/**
+ * @description: 将数组相加后转化为金额
+ * @param {any[]} arr
+ * @param {string} key
+ * @return {number}
+ */
+export const sumArrayToMoney = (arr: any[], key: string): number => {
+  const moneyNum = Number(sumArray(arr.map((m) => m[key])).toFixed(2));
+  return isNaN(moneyNum) ? 0 : moneyNum;
+};
