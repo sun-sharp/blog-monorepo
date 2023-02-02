@@ -28,7 +28,7 @@ export class BankService {
         // 导入数据处理
         .then(async ({ file }) => {
           const { buffer } = file; // file为前端上传的excel
-          let result = [];
+          let list = [];
           for (const itKey in bankExcelCellMap) {
             const { sheetName, excelCellHandle } = bankExcelCellMap[itKey];
             const excelArr = await excelXlsxHandleBuffer({
@@ -42,20 +42,27 @@ export class BankService {
               throw {
                 message: sheetName + '表导入的数据失败！',
               };
-            result = result.concat(excelArr);
+            list = list.concat(excelArr);
           }
-          if (result.length === 0)
+          if (list.length === 0)
             throw {
               message: '导入的数据为空！',
             };
           // 对数据进行排序，排序优先级（银行类型，交易时间）
-          result.sort(function (a, b) {
+          list.sort(function (a, b) {
             if (a.bankType === b.bankType) {
               return b.tradeTime > a.tradeTime ? -1 : 1;
             } else {
               return b.bankType > a.bankType ? -1 : 1;
             }
           });
+          // 过滤掉相同的数据
+          const find = await this.bankModel.find();
+          const result = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
+          if (result.length === 0)
+            throw {
+              message: '导入的数据全部和数据库的相同！',
+            };
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,
@@ -89,7 +96,7 @@ export class BankService {
           const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
           if (filterArr.length === 0)
             throw {
-              message: '导入的数据全部和数据库的相同！',
+              message: '新增的数据全部和数据库的相同！',
             };
           await this.bankModel.create(...filterArr.map((m) => ({ ...m, userId })));
           return (this.response = {
