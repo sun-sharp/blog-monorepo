@@ -14,6 +14,7 @@ export * as articleCategoryAPi from './blog/article-category';
 export * as articleAPi from './blog/article';
 
 // money
+export * as moneyApi from './money/index';
 export * as weChatApi from './money/we-chat';
 export * as aliPayApi from './money/ali-pay';
 export * as bankApi from './money/bank';

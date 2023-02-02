@@ -1,7 +1,7 @@
 <template>
   <n-card :bordered="false" class="pro-card">
     <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:3 xl:4 2xl:5' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
-    <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="(row: any) => row.id" :action-column="actionColumn">
+    <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="(row: any) => row.bankId" :action-column="actionColumn">
       <template #tableTitle>
         <n-button type="success" @click="uploadFileModelRef.init()">
           <template #icon>
@@ -39,7 +39,7 @@
   const actionRef = ref();
   // 获取接口数据
   const searchParams = ref({});
-  const loadDataTable = async (tableParams) => {
+  const loadDataTable = async (tableParams: any) => {
     return await bankApi.getPage({ ...searchParams.value, ...tableParams });
   };
   // 刷新数据
@@ -47,7 +47,7 @@
     actionRef.value.reload();
   };
   // 配置
-  const { searchSchemas, actionColumn, columns } = useConfigure({ updateModelRef });
+  const { searchSchemas, actionColumn, columns } = useConfigure({ reloadTable, updateModelRef });
 
   // 数据查询
   const searchSubmit = (values: Recordable) => {

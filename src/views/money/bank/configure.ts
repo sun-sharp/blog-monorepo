@@ -11,8 +11,9 @@ import {
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
+import { bankApi } from '@/api';
 
-export const useConfigure = ({ updateModelRef }) => {
+export const useConfigure = ({ reloadTable, updateModelRef }) => {
   // 查询配置
   const searchSchemas = [
     {
@@ -71,6 +72,7 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '银行类型',
+      key: 'bankType',
       align: 'center',
       render(row: any) {
         return bankTypeMap[row.bankType] || '';
@@ -88,6 +90,7 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '交易金额',
+      key: 'moneyAmount',
       align: 'center',
       render(row: any) {
         return '￥' + (row.moneyAmount || 0);
@@ -95,6 +98,7 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '余额',
+      key: 'balance',
       align: 'center',
       render(row: any) {
         return '￥' + (row.balance || 0);
@@ -102,6 +106,7 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '银行账单类型',
+      key: 'bankBillType',
       align: 'center',
       render(row: any) {
         return bankBillTypeMap[row.bankBillType] || '';
@@ -109,12 +114,20 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '流入/流出',
+      key: 'inflowOrOutflow',
       align: 'center',
       render(row: any) {
         return inflowOrOutflowMap[row.inflowOrOutflow] || '';
       },
     },
   ];
+
+  // 删除表格数据
+  const handleDelete = (bankId: string) => {
+    bankApi.remove(bankId).then(() => {
+      reloadTable();
+    });
+  };
 
   const actionColumn = reactive({
     width: 150,
@@ -132,6 +145,13 @@ export const useConfigure = ({ updateModelRef }) => {
             type: 'primary',
             text: true,
             onClick: updateModelRef.value.init.bind(null, row),
+          },
+          {
+            ifShow: !!row.bankId,
+            label: '删除',
+            type: 'error',
+            text: true,
+            onClick: handleDelete.bind(null, row.bankId),
           },
         ],
       });
