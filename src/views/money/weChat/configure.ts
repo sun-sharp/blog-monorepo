@@ -24,6 +24,16 @@ export const useConfigure = ({ updateModelRef }) => {
       },
     },
     {
+      field: 'billMethod',
+      component: 'NSelect',
+      label: '账单方式',
+      componentProps: {
+        filterable: true,
+        placeholder: '请选择账单类型',
+        options: billMethodOption,
+      },
+    },
+    {
       field: 'billType',
       component: 'NSelect',
       label: '账单类型',
