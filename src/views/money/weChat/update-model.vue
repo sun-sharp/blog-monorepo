@@ -47,6 +47,9 @@
       <n-form-item label="账单类型" path="billType">
         <n-select v-model:value="modelForm.billType" filterable :options="billTypeOption" placeholder="请选择账单类型" />
       </n-form-item>
+      <n-form-item label="账单方式" path="billMethod">
+        <n-select v-model:value="modelForm.billMethod" filterable :options="billMethodOption" placeholder="请选择账单类型" />
+      </n-form-item>
     </n-form>
 
     <template #action>
@@ -59,7 +62,7 @@
 </template>
 
 <script lang="ts">
-  import { billTypeOption, inflowOrOutflowOption } from '@/constant';
+  import { billTypeOption, billMethodOption, inflowOrOutflowOption } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { weChatApi } from '@/api';
 
@@ -78,6 +81,7 @@
     place: '',
     inflowOrOutflow: null,
     billType: null,
+    billMethod: null,
   };
 
   export default defineComponent({
@@ -102,6 +106,12 @@
           required: true,
           trigger: 'change',
           message: `请选择账单类型`,
+        },
+        billMethod: {
+          type: 'number',
+          required: true,
+          trigger: 'change',
+          message: `请选择账单方式`,
         },
       });
 
@@ -139,6 +149,7 @@
                 explain: modelForm.explain,
                 place: modelForm.place,
                 billType: modelForm.billType,
+                billMethod: modelForm.billMethod,
               })
               .then(() => {
                 showModal.value = false;
@@ -159,6 +170,7 @@
         roleOption,
         inflowOrOutflowOption,
         billTypeOption,
+        billMethodOption,
         init,
         confirmForm,
       };

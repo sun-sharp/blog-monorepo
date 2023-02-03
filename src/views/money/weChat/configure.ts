@@ -1,4 +1,4 @@
-import { billTypeMap, billTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
+import { billMethodMap, billMethodOption, billTypeMap, billTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
@@ -60,23 +60,34 @@ export const useConfigure = ({ updateModelRef }) => {
     },
     {
       title: '金额(元)',
+      key: 'moneyAmount',
       align: 'center',
       render(row: any) {
         return '￥' + (row.moneyAmount || 0);
       },
     },
     {
-      title: '账单类型',
+      title: '账单方式',
+      key: 'billMethod',
       align: 'center',
       render(row: any) {
-        return billTypeMap[row.billType] || '';
+        return billMethodMap[row.billMethod] || '';
       },
     },
     {
       title: '流入/流出',
+      key: 'inflowOrOutflow',
       align: 'center',
       render(row: any) {
         return inflowOrOutflowMap[row.inflowOrOutflow] || '';
+      },
+    },
+    {
+      title: '账单类型',
+      key: 'billType',
+      align: 'center',
+      render(row: any) {
+        return billTypeMap[row.billType] || '';
       },
     },
   ];
@@ -171,6 +182,11 @@ export const uploadColumns = () => {
       align: 'center',
     },
     {
+      title: '备注',
+      key: 'remarks',
+      align: 'center',
+    },
+    {
       title: '流入/流出',
       align: 'center',
       width: 170,
@@ -204,9 +220,32 @@ export const uploadColumns = () => {
       },
     },
     {
-      title: '账单类型',
+      title: '账单方式',
+      align: 'center',
       width: 180,
       render(row: any) {
+        // 微信零钱
+        if (row.currentStatus === '已存入零钱') {
+          row.billMethod = 101;
+        }
+        return h(NSelect, {
+          value: row.billMethod,
+          filterable: true,
+          placeholder: '请选择',
+          options: billMethodOption,
+          'on-update:value': (value: string) => (row.billMethod = value),
+        });
+      },
+    },
+    {
+      title: '账单类型',
+      align: 'center',
+      width: 180,
+      render(row: any) {
+        // 红包
+        if (row.tradeType === '微信红包') {
+          row.billType = 2;
+        }
         return h(NSelect, {
           value: row.billType,
           filterable: true,
