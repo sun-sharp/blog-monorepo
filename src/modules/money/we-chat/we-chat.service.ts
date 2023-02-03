@@ -151,7 +151,7 @@ export class WeChatService {
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson, inflowOrOutflow, billType } = body;
+          const { size, current, tradeOtherPerson, inflowOrOutflow, billType, billMethod } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: any = {
             userId,
@@ -159,6 +159,7 @@ export class WeChatService {
           };
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (billType) findData.billType = billType;
+          if (billMethod) findData.billMethod = billMethod;
           const total = await this.weChatModel.find(findData).count();
           const list = await this.weChatModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
           return (this.response = {
@@ -184,6 +185,7 @@ export class WeChatService {
                   place,
                   billType,
                   otherCost,
+                  billMethod,
                 }) => ({
                   weChatId: _id,
                   userId,
@@ -202,6 +204,7 @@ export class WeChatService {
                   place,
                   billType,
                   otherCost,
+                  billMethod,
                 }),
               ),
               size,
@@ -229,8 +232,8 @@ export class WeChatService {
     return (
       Promise.resolve({ body })
         .then(async ({ body }) => {
-          const { weChatId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType } = body;
-          await this.weChatModel.updateOne({ _id: weChatId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType });
+          const { weChatId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod } = body;
+          await this.weChatModel.updateOne({ _id: weChatId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '修改成功！',

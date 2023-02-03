@@ -58,6 +58,9 @@ export class WeChat extends Document {
 
   @Prop()
   billType: number; // 账单类型
+
+  @Prop()
+  billMethod: number; // 账单方式
 }
 
 export const WeChatSchema = SchemaFactory.createForClass(WeChat);

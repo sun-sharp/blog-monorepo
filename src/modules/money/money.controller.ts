@@ -24,4 +24,12 @@ export class MoneyController {
   statisticsBankFlow(@Request() req, @Query() query: StatisticsBankFlowDto) {
     return this.moneyService.statisticsBankFlow(req.user._id, query);
   }
+
+  // @Get('statistics_money_bl')
+  // @ApiBearerAuth('jwt')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiOperation({ summary: '统计银行数据的流动' })
+  // statisticsBankFlow(@Request() req, @Query() query: StatisticsBankFlowDto) {
+  //   return this.moneyService.statisticsBankFlow(req.user._id, query);
+  // }
 }
