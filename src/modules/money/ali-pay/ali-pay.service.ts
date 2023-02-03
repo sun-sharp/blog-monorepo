@@ -28,19 +28,26 @@ export class AliPayService {
         .then(async ({ file }) => {
           const { buffer } = file; // file为前端上传的excel
           // 微信的菜单处理
-          const result = await excelCsvHandleBuffer({
+          const list = await excelCsvHandleBuffer({
             buffer: buffer,
             startNum: 3,
             endNum: 21,
             cellHandler: aliPayExcelCellHandle,
           });
-          if (!result)
+          if (!list)
             throw {
               message: '导入的数据失败！',
             };
-          if (result.length === 0)
+          if (list.length === 0)
             throw {
               message: '导入的数据为空！',
+            };
+          // 过滤掉相同交易时间的数据
+          const find = await this.aliPayModel.find();
+          const result = twoArrForTimeSameFilter(list, find, 'tradeTime');
+          if (result.length === 0)
+            throw {
+              message: '导入的数据交易时间全部和数据库的相同！',
             };
           // 对数据按照交易时间排序
           result.sort(function (a, b) {
@@ -73,6 +80,13 @@ export class AliPayService {
       Promise.resolve({ userId, body: createAliPayDto })
         // 添加
         .then(async ({ userId, body }) => {
+          // 查询是否已经存在某交易时间的数据
+          const { tradeTime = '' } = body;
+          const find = await this.aliPayModel.find({ userId, tradeTime });
+          if (!find)
+            throw {
+              message: '保存的数据交易时间和数据库的相同！',
+            };
           await this.aliPayModel.create({
             ...body,
             userId,
@@ -109,7 +123,7 @@ export class AliPayService {
           const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
           if (filterArr.length === 0)
             throw {
-              message: '导入的数据交易时间全部和数据库的相同！',
+              message: '保存的数据交易时间全部和数据库的相同！',
             };
           await this.aliPayModel.create(...filterArr.map((m) => ({ ...m, userId })));
           return (this.response = {

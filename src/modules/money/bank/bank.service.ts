@@ -48,14 +48,6 @@ export class BankService {
             throw {
               message: '导入的数据为空！',
             };
-          // 对数据进行排序，排序优先级（银行类型，交易时间）
-          list.sort(function (a, b) {
-            if (a.bankType === b.bankType) {
-              return b.tradeTime > a.tradeTime ? -1 : 1;
-            } else {
-              return b.bankType > a.bankType ? -1 : 1;
-            }
-          });
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
           const result = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
@@ -63,6 +55,14 @@ export class BankService {
             throw {
               message: '导入的数据全部和数据库的相同！',
             };
+          // 对数据进行排序，排序优先级（银行类型，交易时间）
+          result.sort(function (a, b) {
+            if (a.bankType === b.bankType) {
+              return b.tradeTime > a.tradeTime ? -1 : 1;
+            } else {
+              return b.bankType > a.bankType ? -1 : 1;
+            }
+          });
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,
