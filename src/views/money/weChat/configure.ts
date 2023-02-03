@@ -77,6 +77,14 @@ export const useConfigure = ({ updateModelRef }) => {
       },
     },
     {
+      title: '余额(元)',
+      key: 'balance',
+      align: 'center',
+      render(row: any) {
+        return '￥' + (row.balance || 0);
+      },
+    },
+    {
       title: '流入/流出',
       key: 'inflowOrOutflow',
       align: 'center',
