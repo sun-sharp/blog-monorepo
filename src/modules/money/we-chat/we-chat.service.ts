@@ -89,6 +89,7 @@ export class WeChatService {
           await this.weChatModel.create({
             ...body,
             userId,
+            balance: 0,
           });
           return (this.response = {
             code: ApiCode.SUCCESS,
@@ -124,7 +125,7 @@ export class WeChatService {
             throw {
               message: '保存的数据交易时间全部和数据库的相同！',
             };
-          await this.weChatModel.create(...filterArr.map((m) => ({ ...m, userId })));
+          await this.weChatModel.create(...filterArr.map((m) => ({ ...m, userId, balance: 0 })));
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
@@ -186,6 +187,7 @@ export class WeChatService {
                   billType,
                   otherCost,
                   billMethod,
+                  balance,
                 }) => ({
                   weChatId: _id,
                   userId,
@@ -205,6 +207,7 @@ export class WeChatService {
                   billType,
                   otherCost,
                   billMethod,
+                  balance,
                 }),
               ),
               size,

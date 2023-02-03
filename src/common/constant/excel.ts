@@ -3,7 +3,7 @@ import { nowDateFun } from '../date';
 // 微信账单key值重命名
 export const weCharExcelCellHandle = {
   1: (tar: any, val: any) => {
-    tar['tradeTime'] = val;
+    tar['tradeTime'] = nowDateFun(val);
   }, // 交易时间
   2: (tar: any, val: any) => {
     tar['tradeType'] = val;
@@ -18,8 +18,8 @@ export const weCharExcelCellHandle = {
     tar['incomeOrPay'] = val;
   }, // 收入
   6: (tar: any, val: any) => {
-    const money = val.replace('¥', '');
-    tar['moneyAmount'] = money;
+    const money = val.replace(/[¥￥]/, '');
+    tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
   }, // 金额(元)
   7: (tar: any, val: any) => {
     tar['paymentMethod'] = val;
@@ -35,7 +35,7 @@ export const weCharExcelCellHandle = {
 // 支付宝账单key值重命名
 export const aliPayExcelCellHandle = {
   1: (tar: any, val: any) => {
-    tar['incomeOrPay'] = val;
+    tar['incomeOrPay'] = nowDateFun(val);
   }, // 收/支
   2: (tar: any, val: any) => {
     tar['tradeOtherPerson'] = val;
@@ -51,7 +51,7 @@ export const aliPayExcelCellHandle = {
   }, // 收/付款方式
   6: (tar: any, val: any) => {
     const money = val;
-    tar['moneyAmount'] = money;
+    tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
   }, // 金额
   7: (tar: any, val: any) => {
     tar['transactionStatus'] = val;

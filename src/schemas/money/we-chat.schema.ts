@@ -61,6 +61,9 @@ export class WeChat extends Document {
 
   @Prop()
   billMethod: number; // 账单方式
+
+  @Prop()
+  balance: number; // 余额
 }
 
 export const WeChatSchema = SchemaFactory.createForClass(WeChat);
