@@ -67,19 +67,19 @@ export const useConfigure = ({ updateModelRef }) => {
       },
     },
     {
-      title: '账单方式',
-      key: 'billMethod',
-      align: 'center',
-      render(row: any) {
-        return billMethodMap[row.billMethod] || '';
-      },
-    },
-    {
       title: '流入/流出',
       key: 'inflowOrOutflow',
       align: 'center',
       render(row: any) {
         return inflowOrOutflowMap[row.inflowOrOutflow] || '';
+      },
+    },
+    {
+      title: '账单方式',
+      key: 'billMethod',
+      align: 'center',
+      render(row: any) {
+        return billMethodMap[row.billMethod] || '';
       },
     },
     {
