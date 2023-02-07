@@ -251,4 +251,45 @@ export class WeChatService {
         })
     );
   }
+
+  /**
+   * @description: 处理微信余额
+   * @param {string} userId
+   * @return {Promise<IResponse>}
+   */
+  public updateBalance(userId: string): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId })
+        .then(async ({ userId }) => {
+          const find = await this.weChatModel.find({ userId }).sort({ tradeTime: 1 });
+          // 获取零钱的零钱
+          const filterArr = find.filter((f) => f.billMethod === 101);
+          for (let fI = 0; fI < filterArr.length; fI++) {
+            const fe = filterArr[fI];
+            if (fI !== 0) {
+              const preId = filterArr[fI - 1]._id;
+              const findOne = await this.weChatModel.findOne({ _id: preId });
+              let balance = findOne.balance || 0;
+              if (fe.inflowOrOutflow === 1) {
+                balance = balance + fe.moneyAmount;
+              } else if (fe.inflowOrOutflow === 2) {
+                balance = balance - fe.moneyAmount;
+              }
+              await this.weChatModel.updateOne({ _id: fe._id }, { balance: Number(balance.toFixed(2)) });
+            }
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '处理成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '处理失败！',
+          });
+        })
+    );
+  }
 }

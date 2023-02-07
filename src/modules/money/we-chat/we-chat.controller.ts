@@ -54,4 +54,10 @@ export class WeChatController {
   update(@Body() body: UpdateWeChatDto) {
     return this.weChatService.update(body);
   }
+
+  @Put('update_balance')
+  @ApiOperation({ summary: '处理微信余额' })
+  updateBalance(@Request() req: any) {
+    return this.weChatService.updateBalance(req.user._id);
+  }
 }

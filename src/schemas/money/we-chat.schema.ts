@@ -33,7 +33,7 @@ export class WeChat extends Document {
   incomeOrPay: string; // 收/支
 
   @Prop()
-  moneyAmount: string; // 金额(元)
+  moneyAmount: number; // 金额(元)
 
   @Prop()
   otherCost: number; // 其它费用

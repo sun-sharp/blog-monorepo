@@ -21,15 +21,15 @@ export class MoneyController {
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '统计银行数据的流动' })
-  statisticsBankFlow(@Request() req, @Query() query: StatisticsBankFlowDto) {
+  statisticsBankFlow(@Request() req: any, @Query() query: StatisticsBankFlowDto) {
     return this.moneyService.statisticsBankFlow(req.user._id, query);
   }
 
-  // @Get('statistics_money_bl')
+  // @Get('statistics_money_balance')
   // @ApiBearerAuth('jwt')
   // @UseGuards(JwtAuthGuard)
-  // @ApiOperation({ summary: '统计银行数据的流动' })
-  // statisticsBankFlow(@Request() req, @Query() query: StatisticsBankFlowDto) {
+  // @ApiOperation({ summary: '统计各个的方式的余额' })
+  // statisticsBankBalance(@Request() req, @Query() query: StatisticsBankFlowDto) {
   //   return this.moneyService.statisticsBankFlow(req.user._id, query);
   // }
 }
