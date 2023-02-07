@@ -12,7 +12,7 @@
             </template>
             导入
           </n-button>
-          <n-button type="info" @click="handleBalance">处理余额</n-button>
+          <n-button :loading="btnBalanceLoading" type="info" @click="handleBalance">处理零钱余额</n-button>
         </n-space>
       </template>
     </basic-table>
@@ -59,6 +59,18 @@
   };
 
   // 处理余额
-  const handleBalance = () => {};
+  const btnBalanceLoading = ref(false);
+  const handleBalance = () => {
+    btnBalanceLoading.value = true;
+    weChatApi
+      .updateBalance()
+      .then((res) => {
+        console.log(res);
+        reloadTable();
+      })
+      .finally(() => {
+        btnBalanceLoading.value = false;
+      });
+  };
 </script>
 <style lang="scss" scoped></style>

@@ -200,11 +200,6 @@ export const uploadColumns = () => {
       align: 'center',
     },
     {
-      title: '备注',
-      key: 'remarks',
-      align: 'center',
-    },
-    {
       title: '流入/流出',
       align: 'center',
       width: 170,
@@ -243,7 +238,7 @@ export const uploadColumns = () => {
       width: 180,
       render(row: any) {
         // 微信零钱
-        if (row.currentStatus === '已存入零钱') {
+        if (row.currentStatus === '已存入零钱' || row.paymentMethod === '零钱' || row.tradeType === '零钱充值') {
           row.billMethod = 101;
         }
         return h(NSelect, {
@@ -263,6 +258,8 @@ export const uploadColumns = () => {
         // 红包
         if (row.tradeType === '微信红包') {
           row.billType = 2;
+        } else {
+          row.billType = 1001;
         }
         return h(NSelect, {
           value: row.billType,

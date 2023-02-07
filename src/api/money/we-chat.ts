@@ -37,3 +37,13 @@ export const update = (data: any) => {
     data,
   });
 };
+
+/**
+ * @description: 修改微信账单
+ */
+export const updateBalance = () => {
+  return AxiosMoney.request({
+    url: `${basic}/update_balance`,
+    method: 'PUT',
+  });
+};
