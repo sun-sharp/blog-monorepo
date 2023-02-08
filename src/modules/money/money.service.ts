@@ -35,20 +35,18 @@ export class MoneyService {
     return (
       Promise.resolve({ userId, query })
         .then(async ({ userId, query }) => {
-          const modelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
-          const sortModelAll = modelAll.sort((a, b) => {
-            return new Date(b.tradeTime).getTime() > new Date(a.tradeTime).getTime() ? -1 : 1;
-          });
+          // 查询银行账单
+          const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
           // 工商银行
-          const businessArr = sortModelAll.filter((f) => f.bankType === 1);
+          const businessArr = bankModelAll.filter((f) => f.bankType === 1);
           // 农业银行
-          const agricultureArr = sortModelAll.filter((f) => f.bankType === 2);
+          const agricultureArr = bankModelAll.filter((f) => f.bankType === 2);
           // 建设银行
-          const buildArr = sortModelAll.filter((f) => f.bankType === 3);
+          const buildArr = bankModelAll.filter((f) => f.bankType === 3);
           // 民生银行
-          const civilArr = sortModelAll.filter((f) => f.bankType === 4);
+          const civilArr = bankModelAll.filter((f) => f.bankType === 4);
           // 招商银行
-          const attractInvestmentArr = sortModelAll.filter((f) => f.bankType === 5);
+          const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
           // 获取银行数据
           const bankFlowFun = (flowArr: any[]) => {
             const bankFlow: IBankFlow = {
@@ -58,7 +56,7 @@ export class MoneyService {
               inflowMoneyAmount: 0,
               outflowMoneyAmount: 0,
             };
-            // 判断工商数据是否为空
+            // 判断数据是否为空
             if (flowArr.length > 0) {
               // 判断凭证是否是一个
               const voucherArr = uniqueArray(flowArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
@@ -122,11 +120,30 @@ export class MoneyService {
         })
         // 返回错误
         .catch((err) => {
-          console.log(err);
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '获取失败！',
           });
+        })
+    );
+  }
+
+  /**
+   * @description: 统计各个的方式的余额
+   * @param {string} userId
+   * @return {*}
+   */
+  public statisticsMoneyBalance(userId: string): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId })
+        .then(async ({ userId }) => {
+          // const findData: any = { userId };
+          // if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
+          // return await this.bankModel.find(findData).sort({ tradeTime: 1 });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }

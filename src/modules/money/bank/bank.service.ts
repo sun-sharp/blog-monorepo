@@ -236,7 +236,7 @@ export class BankService {
         .then(async ({ startTime, endTime }) => {
           const findData: any = { userId };
           if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
-          return await this.bankModel.find(findData);
+          return await this.bankModel.find(findData).sort({ tradeTime: 1 });
         })
         // 返回错误
         .catch((err) => {

@@ -227,6 +227,47 @@ export class WeChatService {
   }
 
   /**
+   * @description: 根据交易时间范围查询全部微信账单
+   * @param {string} userId
+   * @param {string} startTime
+   * @param {string} endTime
+   * @return {Promise<Array<WeChat>>}
+   */
+  public findModelAll(userId: string, startTime: string, endTime: string): Promise<Array<WeChat>> {
+    return (
+      Promise.resolve({ userId, startTime, endTime })
+        .then(async ({ userId, startTime, endTime }) => {
+          const findData: any = { userId };
+          if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
+          return await this.weChatModel.find(findData).sort({ tradeTime: 1 });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 获取交易时间最新一条的数据
+   * @param {string} userId
+   * @return {Promise<Array<WeChat>>}
+   */
+  public findLastOne(userId: string): Promise<Array<WeChat>> {
+    return (
+      Promise.resolve({ userId })
+        .then(async ({ userId }) => {
+          const findData: any = { userId };
+          return await this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(1);
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
    * @description: 修改微信账单
    * @param {UpdateWeChatDto} body
    * @return {Promise<IResponse>}
@@ -266,7 +307,7 @@ export class WeChatService {
           const filterArr = find.filter((f) => f.billMethod === 101);
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];
-            if (fI !== 0) {
+            if (fI !== 0 && fe.balance === 0) {
               const preId = filterArr[fI - 1]._id;
               const findOne = await this.weChatModel.findOne({ _id: preId });
               let balance = findOne.balance || 0;
