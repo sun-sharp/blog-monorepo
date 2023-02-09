@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-02-09 15:42:44
+ * @LastEditTime: 2023-02-09 17:03:35
  * @Description: 接口类型
  */
 
@@ -236,6 +236,14 @@ export const billTypeOption = [
   {
     value: 601,
     label: '零钱充值',
+  },
+  {
+    value: 602,
+    label: '支付宝余额充值',
+  },
+  {
+    value: 603,
+    label: '支付宝余额宝充值',
   },
   {
     value: 1001,

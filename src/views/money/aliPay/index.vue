@@ -3,14 +3,17 @@
     <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:4 xl:5 2xl:6' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
     <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="(row: any) => row.id" :action-column="actionColumn">
       <template #tableTitle>
-        <n-button type="success" @click="uploadFileModelRef.init()">
-          <template #icon>
-            <n-icon>
-              <UploadOutlined />
-            </n-icon>
-          </template>
-          导入
-        </n-button>
+        <n-space>
+          <n-button type="success" @click="uploadFileModelRef.init()">
+            <template #icon>
+              <n-icon>
+                <UploadOutlined />
+              </n-icon>
+            </template>
+            导入
+          </n-button>
+          <n-button :loading="btnBalanceLoading" type="info" @click="handleBalance">处理余额</n-button>
+        </n-space>
       </template>
     </basic-table>
     <upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
@@ -52,7 +55,21 @@
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     searchParams.value = values;
-    reloadTable();
+    actionRef.value.updatePage(1);
+  };
+
+  // 处理余额
+  const btnBalanceLoading = ref(false);
+  const handleBalance = () => {
+    btnBalanceLoading.value = true;
+    aliPayApi
+      .updateBalance()
+      .then(() => {
+        reloadTable();
+      })
+      .finally(() => {
+        btnBalanceLoading.value = false;
+      });
   };
 </script>
 <style lang="scss" scoped></style>

@@ -258,8 +258,6 @@ export const uploadColumns = () => {
         // 红包
         if (row.tradeType === '微信红包') {
           row.billType = 2;
-        } else {
-          row.billType = 1001;
         }
         return h(NSelect, {
           value: row.billType,

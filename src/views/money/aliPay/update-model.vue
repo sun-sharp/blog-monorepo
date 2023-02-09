@@ -1,11 +1,11 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改微信账单' : ''">
+  <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改支付宝账单' : ''">
     <n-form ref="modelFromRef" class="we-chat-update-model__body" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="交易时间">
         {{ modelForm.tradeTime }}
       </n-form-item>
-      <n-form-item label="交易分类">
-        {{ modelForm.transactionClassification }}
+      <n-form-item label="交易类型">
+        {{ modelForm.tradeType }}
       </n-form-item>
       <n-form-item label="交易对方">
         {{ modelForm.tradeOtherPerson }}
@@ -19,7 +19,7 @@
       <n-form-item label="收/支">
         {{ modelForm.incomeOrPay }}
       </n-form-item>
-      <n-form-item label="金额">￥{{ modelForm.moneyAmount }}</n-form-item>
+      <n-form-item label="金额(元)">￥{{ modelForm.moneyAmount }}</n-form-item>
       <n-form-item label="收/付款方式">
         {{ modelForm.paymentMethod }}
       </n-form-item>
@@ -44,6 +44,9 @@
       <n-form-item label="账单类型" path="billType">
         <n-select v-model:value="modelForm.billType" filterable :options="billTypeOption" placeholder="请选择账单类型" />
       </n-form-item>
+      <n-form-item label="账单方式" path="billMethod">
+        <n-select v-model:value="modelForm.billMethod" filterable :options="billMethodOption" placeholder="请选择账单类型" />
+      </n-form-item>
     </n-form>
 
     <template #action>
@@ -56,13 +59,13 @@
 </template>
 
 <script lang="ts">
-  import { billTypeOption, inflowOrOutflowOption } from '@/constant';
+  import { billMethodOption, billTypeOption, inflowOrOutflowOption } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { aliPayApi } from '@/api';
 
   const modelFields = {
     tradeTime: '',
-    transactionClassification: '',
+    tradeType: '',
     tradeOtherPerson: '',
     tradeOtherPersonRemarks: '',
     productDescription: '',
@@ -74,6 +77,7 @@
     place: '',
     inflowOrOutflow: null,
     billType: null,
+    billMethod: null,
   };
 
   export default defineComponent({
@@ -98,6 +102,12 @@
           required: true,
           trigger: 'change',
           message: `请选择账单类型`,
+        },
+        billMethod: {
+          type: 'number',
+          required: true,
+          trigger: 'change',
+          message: `请选择账单方式`,
         },
       });
 
@@ -135,6 +145,7 @@
                 explain: modelForm.explain,
                 place: modelForm.place,
                 billType: modelForm.billType,
+                billMethod: modelForm.billMethod,
               })
               .then(() => {
                 showModal.value = false;
@@ -155,6 +166,7 @@
         roleOption,
         inflowOrOutflowOption,
         billTypeOption,
+        billMethodOption,
         init,
         confirmForm,
       };

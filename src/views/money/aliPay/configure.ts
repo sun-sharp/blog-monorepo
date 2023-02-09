@@ -1,4 +1,4 @@
-import { billTypeMap, billTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
+import { billMethodMap, billMethodOption, billTypeMap, billTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
@@ -24,6 +24,16 @@ export const useConfigure = ({ updateModelRef }) => {
       },
     },
     {
+      field: 'billMethod',
+      component: 'NSelect',
+      label: '账单方式',
+      componentProps: {
+        filterable: true,
+        placeholder: '请选择账单类型',
+        options: billMethodOption,
+      },
+    },
+    {
       field: 'billType',
       component: 'NSelect',
       label: '账单类型',
@@ -44,8 +54,8 @@ export const useConfigure = ({ updateModelRef }) => {
       width: 170,
     },
     {
-      title: '交易分类',
-      key: 'transactionClassification',
+      title: '交易类型',
+      key: 'tradeType',
       align: 'center',
     },
     {
@@ -59,29 +69,43 @@ export const useConfigure = ({ updateModelRef }) => {
       align: 'center',
     },
     {
-      title: '金额',
+      title: '金额(元)',
+      key: 'moneyAmount',
       align: 'center',
       render(row: any) {
         return '￥' + (row.moneyAmount || 0);
       },
     },
     {
-      title: '商品说明',
-      key: 'productDescription',
-      align: 'center',
-    },
-    {
-      title: '账单类型',
+      title: '余额(元)',
+      key: 'balance',
       align: 'center',
       render(row: any) {
-        return billTypeMap[row.billType] || '';
+        return '￥' + (row.balance || 0);
       },
     },
     {
       title: '流入/流出',
+      key: 'inflowOrOutflow',
       align: 'center',
       render(row: any) {
         return inflowOrOutflowMap[row.inflowOrOutflow] || '';
+      },
+    },
+    {
+      title: '账单方式',
+      key: 'billMethod',
+      align: 'center',
+      render(row: any) {
+        return billMethodMap[row.billMethod] || '';
+      },
+    },
+    {
+      title: '账单类型',
+      key: 'billType',
+      align: 'center',
+      render(row: any) {
+        return billTypeMap[row.billType] || '';
       },
     },
   ];
@@ -133,8 +157,8 @@ export const uploadColumns = () => {
       width: 170,
     },
     {
-      title: '交易分类',
-      key: 'transactionClassification',
+      title: '交易类型',
+      key: 'tradeType',
       align: 'center',
     },
     {
@@ -154,7 +178,7 @@ export const uploadColumns = () => {
       width: 70,
     },
     {
-      title: '金额',
+      title: '金额(元)',
       align: 'center',
       render(row: any) {
         return '￥' + (row.moneyAmount || 0);
@@ -175,7 +199,11 @@ export const uploadColumns = () => {
       align: 'center',
       width: 170,
       render(row: any) {
-        row.inflowOrOutflow = incomeOrPayMap[row.incomeOrPay] || null;
+        let inflowOrOutflow = incomeOrPayMap[row.incomeOrPay] || null;
+        if (!inflowOrOutflow && ['余额宝-笔笔攒-单笔攒入'].includes(row.productDescription)) {
+          inflowOrOutflow = 1;
+        }
+        row.inflowOrOutflow = inflowOrOutflow;
         return h(
           NSpace,
           {
@@ -204,7 +232,34 @@ export const uploadColumns = () => {
       },
     },
     {
+      title: '账单方式',
+      align: 'center',
+      width: 180,
+      render(row: any) {
+        const { paymentMethod = '', tradeType = '' } = row;
+        if (tradeType !== '账户存取' && paymentMethod === '余额') {
+          row.billMethod = 111;
+        } else if (['余额宝'].includes(paymentMethod)) {
+          row.billMethod = 112;
+        } else if (['花呗'].includes(paymentMethod)) {
+          row.billMethod = 113;
+        } else if (paymentMethod.includes('中国农业银行')) {
+          row.billMethod = 2;
+        } else if (paymentMethod.includes('中国工商银行')) {
+          row.billMethod = 1;
+        }
+        return h(NSelect, {
+          value: row.billMethod,
+          filterable: true,
+          placeholder: '请选择',
+          options: billMethodOption,
+          'on-update:value': (value: string) => (row.billMethod = value),
+        });
+      },
+    },
+    {
       title: '账单类型',
+      align: 'center',
       width: 180,
       render(row: any) {
         // 交通-地铁
@@ -214,6 +269,8 @@ export const uploadColumns = () => {
           ['天府通扫码乘车', '天府通APP乘车'].includes(row.productDescription)
         ) {
           row.billType = 136;
+        } else if (['余额宝-笔笔攒-单笔攒入'].includes(row.productDescription)) {
+          row.billType = 603;
         }
         return h(NSelect, {
           value: row.billType,

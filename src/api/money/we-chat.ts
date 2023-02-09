@@ -39,7 +39,7 @@ export const update = (data: any) => {
 };
 
 /**
- * @description: 修改微信账单
+ * @description: 处理微信账单余额
  */
 export const updateBalance = () => {
   return AxiosMoney.request({

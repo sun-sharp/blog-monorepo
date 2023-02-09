@@ -1,5 +1,5 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" title="导入微信账单">
+  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" title="导入支付宝账单">
     <table-all :data="tableData" :columns="columns" max-height="50vh" @reload="reload">
       <template #tableTitle>
         <form-upload-excel
