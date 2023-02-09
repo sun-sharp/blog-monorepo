@@ -55,7 +55,7 @@
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     searchParams.value = values;
-    reloadTable();
+    actionRef.value.updatePage(1);
   };
 
   // 处理余额
@@ -64,8 +64,7 @@
     btnBalanceLoading.value = true;
     weChatApi
       .updateBalance()
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         reloadTable();
       })
       .finally(() => {

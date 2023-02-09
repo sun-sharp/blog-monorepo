@@ -1,7 +1,10 @@
 <template>
   <n-card :bordered="false">
     <n-date-picker v-model:formatted-value="datePickerRange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" type="daterange" clearable />
-    <n-button type="info" @click="getBankFlow">确定</n-button>
+    <n-space>
+      <n-button type="info" @click="getBankFlow">银行流动</n-button>
+      <n-button type="info" @click="getMoneyBalance">余额</n-button>
+    </n-space>
   </n-card>
 </template>
 
@@ -20,6 +23,16 @@
     }
     moneyApi
       .getStatisticsBankFlow(params)
+      .then((info) => {
+        console.log(info);
+      })
+      .finally(() => {});
+  };
+
+  // 统计各个的方式的余额
+  const getMoneyBalance = () => {
+    moneyApi
+      .statisticsMoneyBalance()
       .then((info) => {
         console.log(info);
       })

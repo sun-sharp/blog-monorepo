@@ -13,3 +13,15 @@ export const getStatisticsBankFlow = (params?: any) => {
     params,
   });
 };
+
+/**
+ * @description: 统计银行数据的流动
+ * @param {any} params
+ */
+export const statisticsMoneyBalance = (params?: any) => {
+  return AxiosMoney.request({
+    url: `${basic}/statistics_money_balance`,
+    method: 'GET',
+    params,
+  });
+};

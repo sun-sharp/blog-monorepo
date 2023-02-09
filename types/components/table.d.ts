@@ -1,6 +1,7 @@
 import type { TableBaseColumn } from 'naive-ui/lib/data-table/src/interface';
 import { ButtonProps } from 'naive-ui';
 import { Fn } from '@vueuse/core';
+import { Ref } from 'vue';
 
 export type ComponentType = 'NInput' | 'NInputNumber' | 'NSelect' | 'NCheckbox' | 'NSwitch' | 'NDatePicker' | 'NTimePicker';
 

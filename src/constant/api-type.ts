@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-02-03 14:51:55
+ * @LastEditTime: 2023-02-09 15:42:44
  * @Description: 接口类型
  */
 
@@ -234,8 +234,8 @@ export const billTypeOption = [
     label: '奖金',
   },
   {
-    value: 504,
-    label: '充值',
+    value: 601,
+    label: '零钱充值',
   },
   {
     value: 1001,
