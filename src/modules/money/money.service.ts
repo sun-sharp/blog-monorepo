@@ -4,6 +4,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { IResponse } from 'src/interfaces/response.interface';
 import { BankService } from './bank/bank.service';
 import { StatisticsBankFlowDto } from './dto/statistics-bank-flow.dto';
+import { WeChatService } from './we-chat/we-chat.service';
 
 interface IBankFlow {
   voucherNum?: number;
@@ -19,7 +20,7 @@ interface IBankFlow {
 @Injectable()
 export class MoneyService {
   response: IResponse;
-  constructor(private readonly bankService: BankService) {}
+  constructor(private readonly bankService: BankService, private readonly weChatService: WeChatService) {}
 
   index() {
     return '金钱内容';
@@ -48,7 +49,7 @@ export class MoneyService {
           // 招商银行
           const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
           // 获取银行数据
-          const bankFlowFun = (flowArr: any[]) => {
+          const bankFlowFun = (balanceArr: any[]) => {
             const bankFlow: IBankFlow = {
               voucherNum: 0,
               startBalance: 0,
@@ -57,9 +58,9 @@ export class MoneyService {
               outflowMoneyAmount: 0,
             };
             // 判断数据是否为空
-            if (flowArr.length > 0) {
+            if (balanceArr.length > 0) {
               // 判断凭证是否是一个
-              const voucherArr = uniqueArray(flowArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
+              const voucherArr = uniqueArray(balanceArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
               const voucherNum = voucherArr.length;
               bankFlow.voucherNum = voucherNum;
               const voucherArrChildren = voucherArr.map((m) => {
@@ -73,10 +74,10 @@ export class MoneyService {
                   voucherNo: voucherNoM,
                   voucherType: voucherTypeM,
                 };
-                const voucherFlowArr = flowArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
-                if (voucherFlowArr.length > 0) {
+                const voucherbalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
+                if (voucherbalanceArr.length > 0) {
                   // 获取开始金额
-                  const firstObjCh = voucherFlowArr[0];
+                  const firstObjCh = voucherbalanceArr[0];
                   let startBalanceNum = 0;
                   if (firstObjCh.inflowOrOutflow === 1) {
                     startBalanceNum = firstObjCh.balance - firstObjCh.moneyAmount;
@@ -84,13 +85,13 @@ export class MoneyService {
                     startBalanceNum = firstObjCh.balance + firstObjCh.moneyAmount;
                   }
                   item.startBalance = Number(startBalanceNum.toFixed(2));
-                  item.endBalance = voucherFlowArr[voucherFlowArr.length - 1].balance;
+                  item.endBalance = voucherbalanceArr[voucherbalanceArr.length - 1].balance;
                   item.inflowMoneyAmount = sumArrayToMoney(
-                    voucherFlowArr.filter((f) => f.inflowOrOutflow === 1),
+                    voucherbalanceArr.filter((f) => f.inflowOrOutflow === 1),
                     'moneyAmount',
                   );
                   item.outflowMoneyAmount = sumArrayToMoney(
-                    voucherFlowArr.filter((f) => f.inflowOrOutflow === 2),
+                    voucherbalanceArr.filter((f) => f.inflowOrOutflow === 2),
                     'moneyAmount',
                   );
                 }
@@ -135,15 +136,62 @@ export class MoneyService {
    */
   public statisticsMoneyBalance(userId: string): Promise<IResponse> {
     return (
-      Promise.resolve({ userId })
-        .then(async ({ userId }) => {
-          // const findData: any = { userId };
-          // if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
-          // return await this.bankModel.find(findData).sort({ tradeTime: 1 });
+      Promise.resolve()
+        .then(async () => {
+          // 微信零钱
+          const weChat = await this.weChatService.findLastOne(userId);
+          // 查询银行账单
+          const bankModelAll = await this.bankService.findModelAll(userId);
+          // 工商银行
+          const businessArr = bankModelAll.filter((f) => f.bankType === 1);
+          // 农业银行
+          const agricultureArr = bankModelAll.filter((f) => f.bankType === 2);
+          // 建设银行
+          const buildArr = bankModelAll.filter((f) => f.bankType === 3);
+          // 民生银行
+          const civilArr = bankModelAll.filter((f) => f.bankType === 4);
+          // 招商银行
+          const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
+          // 获取银行的余额
+          const bankBalanceFun = (balanceArr: any[]) => {
+            let bankBalance = 0;
+            // 判断数据是否为空
+            if (balanceArr.length > 0) {
+              // 判断凭证是否是一个
+              const voucherArr = uniqueArray(balanceArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
+              const voucherArrChildren = voucherArr.map((m) => {
+                const voucherTypeM = Number(m.split('--')[0]) || 0;
+                const voucherNoM = m.split('--')[1] || '';
+                let voucherBalance = 0;
+                const voucherbalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
+                if (voucherbalanceArr.length > 0) {
+                  voucherBalance = voucherbalanceArr[voucherbalanceArr.length - 1].balance;
+                }
+                return voucherBalance;
+              });
+              bankBalance = sumArrayToMoney(voucherArrChildren);
+            }
+            return bankBalance;
+          };
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {
+              weChatChange: weChat.length > 0 ? weChat[0].balance : 0,
+              business: bankBalanceFun(businessArr),
+              agriculture: bankBalanceFun(agricultureArr),
+              build: bankBalanceFun(buildArr),
+              civil: bankBalanceFun(civilArr),
+              attractInvestment: bankBalanceFun(attractInvestmentArr),
+            },
+            message: '获取成功！',
+          });
         })
         // 返回错误
         .catch((err) => {
-          return err;
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '获取失败！',
+          });
         })
     );
   }

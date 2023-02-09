@@ -78,10 +78,10 @@ export const sumArray = (arr: number[]): number => {
 /**
  * @description: 将数组相加后转化为金额
  * @param {any[]} arr
- * @param {string} key
+ * @param {string} key?
  * @return {number}
  */
-export const sumArrayToMoney = (arr: any[], key: string): number => {
-  const moneyNum = Number(sumArray(arr.map((m) => m[key])).toFixed(2));
+export const sumArrayToMoney = (arr: any[], key?: string): number => {
+  const moneyNum = Number(sumArray(arr.map((m) => (key ? m[key] : m))).toFixed(2));
   return isNaN(moneyNum) ? 0 : moneyNum;
 };

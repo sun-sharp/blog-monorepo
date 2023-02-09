@@ -226,17 +226,37 @@ export class BankService {
   /**
    * @description: 根据交易时间范围查询全部银行账单
    * @param {string} userId
-   * @param {string} startTime
-   * @param {string} endTime
+   * @param {string} startTime?
+   * @param {string} endTime?
    * @return {Promise<Array<Bank>>}
    */
-  public findModelAll(userId: string, startTime: string, endTime: string): Promise<Array<Bank>> {
+  public findModelAll(userId: string, startTime?: string, endTime?: string): Promise<Array<Bank>> {
     return (
-      Promise.resolve({ startTime, endTime })
-        .then(async ({ startTime, endTime }) => {
+      Promise.resolve()
+        .then(async () => {
           const findData: any = { userId };
           if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
           return await this.bankModel.find(findData).sort({ tradeTime: 1 });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 获取某种银行交易时间最新一条的数据
+   * @param {string} userId
+   * @param {number} bankType
+   * @return {Promise<Array<Bank>>}
+   */
+  public findLastOne(userId: string, bankType: number): Promise<Array<Bank>> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          const findData: any = { userId, bankType };
+          return await this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(1);
         })
         // 返回错误
         .catch((err) => {
