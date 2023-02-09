@@ -49,7 +49,7 @@ export class MoneyService {
           // 招商银行
           const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
           // 获取银行数据
-          const bankFlowFun = (balanceArr: any[]) => {
+          const bankFlowFun = (flowArr: any[]) => {
             const bankFlow: IBankFlow = {
               voucherNum: 0,
               startBalance: 0,
@@ -58,9 +58,9 @@ export class MoneyService {
               outflowMoneyAmount: 0,
             };
             // 判断数据是否为空
-            if (balanceArr.length > 0) {
+            if (flowArr.length > 0) {
               // 判断凭证是否是一个
-              const voucherArr = uniqueArray(balanceArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
+              const voucherArr = uniqueArray(flowArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
               const voucherNum = voucherArr.length;
               bankFlow.voucherNum = voucherNum;
               const voucherArrChildren = voucherArr.map((m) => {
@@ -74,10 +74,10 @@ export class MoneyService {
                   voucherNo: voucherNoM,
                   voucherType: voucherTypeM,
                 };
-                const voucherbalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
-                if (voucherbalanceArr.length > 0) {
+                const voucherFlowArr = flowArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
+                if (voucherFlowArr.length > 0) {
                   // 获取开始金额
-                  const firstObjCh = voucherbalanceArr[0];
+                  const firstObjCh = voucherFlowArr[0];
                   let startBalanceNum = 0;
                   if (firstObjCh.inflowOrOutflow === 1) {
                     startBalanceNum = firstObjCh.balance - firstObjCh.moneyAmount;
@@ -85,13 +85,13 @@ export class MoneyService {
                     startBalanceNum = firstObjCh.balance + firstObjCh.moneyAmount;
                   }
                   item.startBalance = Number(startBalanceNum.toFixed(2));
-                  item.endBalance = voucherbalanceArr[voucherbalanceArr.length - 1].balance;
+                  item.endBalance = voucherFlowArr[voucherFlowArr.length - 1].balance;
                   item.inflowMoneyAmount = sumArrayToMoney(
-                    voucherbalanceArr.filter((f) => f.inflowOrOutflow === 1),
+                    voucherFlowArr.filter((f) => f.inflowOrOutflow === 1),
                     'moneyAmount',
                   );
                   item.outflowMoneyAmount = sumArrayToMoney(
-                    voucherbalanceArr.filter((f) => f.inflowOrOutflow === 2),
+                    voucherFlowArr.filter((f) => f.inflowOrOutflow === 2),
                     'moneyAmount',
                   );
                 }
@@ -163,9 +163,9 @@ export class MoneyService {
                 const voucherTypeM = Number(m.split('--')[0]) || 0;
                 const voucherNoM = m.split('--')[1] || '';
                 let voucherBalance = 0;
-                const voucherbalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
-                if (voucherbalanceArr.length > 0) {
-                  voucherBalance = voucherbalanceArr[voucherbalanceArr.length - 1].balance;
+                const voucherBalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
+                if (voucherBalanceArr.length > 0) {
+                  voucherBalance = voucherBalanceArr[voucherBalanceArr.length - 1].balance;
                 }
                 return voucherBalance;
               });
@@ -177,11 +177,11 @@ export class MoneyService {
             code: ApiCode.SUCCESS,
             result: {
               weChatChange: weChat.length > 0 ? weChat[0].balance : 0,
-              business: bankBalanceFun(businessArr),
-              agriculture: bankBalanceFun(agricultureArr),
-              build: bankBalanceFun(buildArr),
-              civil: bankBalanceFun(civilArr),
-              attractInvestment: bankBalanceFun(attractInvestmentArr),
+              businessBank: bankBalanceFun(businessArr),
+              agricultureBank: bankBalanceFun(agricultureArr),
+              buildBank: bankBalanceFun(buildArr),
+              civilBank: bankBalanceFun(civilArr),
+              attractInvestmentBank: bankBalanceFun(attractInvestmentArr),
             },
             message: '获取成功！',
           });

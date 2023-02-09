@@ -246,26 +246,6 @@ export class BankService {
   }
 
   /**
-   * @description: 获取某种银行交易时间最新一条的数据
-   * @param {string} userId
-   * @param {number} bankType
-   * @return {Promise<Array<Bank>>}
-   */
-  public findLastOne(userId: string, bankType: number): Promise<Array<Bank>> {
-    return (
-      Promise.resolve()
-        .then(async () => {
-          const findData: any = { userId, bankType };
-          return await this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(1);
-        })
-        // 返回错误
-        .catch((err) => {
-          return err;
-        })
-    );
-  }
-
-  /**
    * @description: 批量删除银行账单的数据
    * @param {batchRemoveDto} body
    * @return {*}

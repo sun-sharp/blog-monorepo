@@ -6,61 +6,58 @@ export const weCharExcelCellHandle = {
     tar['tradeTime'] = nowDateFun(val);
   }, // 交易时间
   2: (tar: any, val: any) => {
-    tar['tradeType'] = val;
+    tar['tradeType'] = val || '';
   }, // 交易类型
   3: (tar: any, val: any) => {
-    tar['tradeOtherPerson'] = val;
+    tar['tradeOtherPerson'] = val || '';
   }, // 交易对方
   4: (tar: any, val: any) => {
-    tar['goods'] = val;
+    tar['goods'] = val || '';
   }, // 商品
   5: (tar: any, val: any) => {
-    tar['incomeOrPay'] = val;
+    tar['incomeOrPay'] = val || '';
   }, // 收入
   6: (tar: any, val: any) => {
     const money = val.replace(/[¥￥]/, '');
     tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
   }, // 金额(元)
   7: (tar: any, val: any) => {
-    tar['paymentMethod'] = val;
+    tar['paymentMethod'] = val || '';
   }, // 支付方式
   8: (tar: any, val: any) => {
-    tar['currentStatus'] = val;
+    tar['currentStatus'] = val || '';
   }, // 当前状态
   11: (tar: any, val: any) => {
-    tar['remarks'] = val;
+    tar['remarks'] = val || '';
   }, // 备注
 };
 
 // 支付宝账单key值重命名
 export const aliPayExcelCellHandle = {
   1: (tar: any, val: any) => {
-    tar['incomeOrPay'] = nowDateFun(val);
+    tar['incomeOrPay'] = val || '';
   }, // 收/支
   2: (tar: any, val: any) => {
-    tar['tradeOtherPerson'] = val;
+    tar['tradeOtherPerson'] = val || '';
   }, // 交易对方
   3: (tar: any, val: any) => {
-    tar['oppositeAccount'] = val;
+    tar['oppositeAccount'] = val || '';
   }, // 对方账号
   4: (tar: any, val: any) => {
-    tar['productDescription'] = val;
+    tar['productDescription'] = val || '';
   }, // 商品说明
   5: (tar: any, val: any) => {
-    tar['paymentMethod'] = val;
+    tar['paymentMethod'] = val || '';
   }, // 收/付款方式
   6: (tar: any, val: any) => {
     const money = val;
     tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
   }, // 金额
-  7: (tar: any, val: any) => {
-    tar['transactionStatus'] = val;
-  }, // 交易状态
   8: (tar: any, val: any) => {
-    tar['transactionClassification'] = val;
+    tar['tradeType'] = val || '';
   }, // 交易分类
   11: (tar: any, val: any) => {
-    tar['tradeTime'] = val;
+    tar['tradeTime'] = nowDateFun(val);
   }, // 交易时间
 };
 

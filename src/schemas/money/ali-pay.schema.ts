@@ -18,7 +18,7 @@ export class AliPay extends Document {
   tradeTime: string; // 交易时间
 
   @Prop()
-  transactionClassification: string; // 交易分类
+  tradeType: string; // 交易类型
 
   @Prop()
   tradeOtherPerson: string; // 交易对方
@@ -33,7 +33,7 @@ export class AliPay extends Document {
   incomeOrPay: string; // 收/支
 
   @Prop()
-  moneyAmount: string; // 金额
+  moneyAmount: number; // 金额(元)
 
   @Prop()
   otherCost: number; // 其它费用
@@ -55,6 +55,12 @@ export class AliPay extends Document {
 
   @Prop()
   billType: number; // 账单类型
+
+  @Prop()
+  billMethod: number; // 账单方式
+
+  @Prop()
+  balance: number; // 余额
 }
 
 export const AliPaySchema = SchemaFactory.createForClass(AliPay);

@@ -303,8 +303,8 @@ export class WeChatService {
       Promise.resolve({ userId })
         .then(async ({ userId }) => {
           const find = await this.weChatModel.find({ userId }).sort({ tradeTime: 1 });
-          // 获取零钱的零钱
-          const filterArr = find.filter((f) => f.billMethod === 101);
+          // 获取零钱的零钱(账单方式-微信零钱，账单类型-零钱充值)
+          const filterArr = find.filter((f) => f.billMethod === 101 || f.billType === 601);
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];
             if (fI !== 0 && fe.balance === 0) {
