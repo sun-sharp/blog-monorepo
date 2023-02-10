@@ -1,7 +1,7 @@
 import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class StatisticsBankFlowDto {
+export class StatisticsStartEndTimeDto {
   @Prop()
   @ApiProperty({
     description: '开始时间',

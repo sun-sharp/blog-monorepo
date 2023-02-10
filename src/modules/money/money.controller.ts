@@ -2,7 +2,7 @@ import { Controller, Get, Query, Request, UseGuards } from '@nestjs/common';
 import { MoneyService } from './money.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
-import { StatisticsBankFlowDto } from './dto/statistics-bank-flow.dto';
+import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
 
 @Controller('money')
 @ApiTags('金钱')
@@ -21,7 +21,7 @@ export class MoneyController {
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '统计银行数据的流动' })
-  statisticsBankFlow(@Request() req: any, @Query() query: StatisticsBankFlowDto) {
+  statisticsBankFlow(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
     return this.moneyService.statisticsBankFlow(req.user._id, query);
   }
 
@@ -37,7 +37,7 @@ export class MoneyController {
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '统计某时间范围内的方式支出的金额' })
-  statisticsFlowOutMoney(@Request() req: any) {
-    return this.moneyService.statisticsFlowOutMoney(req.user._id);
+  statisticsFlowOutMoney(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
+    return this.moneyService.statisticsFlowOutMoney(req.user._id, query);
   }
 }

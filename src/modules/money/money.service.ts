@@ -4,7 +4,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { IResponse } from 'src/interfaces/response.interface';
 import { AliPayService } from './ali-pay/ali-pay.service';
 import { BankService } from './bank/bank.service';
-import { StatisticsBankFlowDto } from './dto/statistics-bank-flow.dto';
+import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
 import { WeChatService } from './we-chat/we-chat.service';
 
 interface IBankFlow {
@@ -30,10 +30,10 @@ export class MoneyService {
   /**
    * @description: 统计银行数据的流动
    * @param {string} userId
-   * @param {StatisticsBankFlowDto} query
+   * @param {StatisticsStartEndTimeDto} query
    * @return {Promise<IResponse>}
    */
-  public statisticsBankFlow(userId: string, query?: StatisticsBankFlowDto): Promise<IResponse> {
+  public statisticsBankFlow(userId: string, query?: StatisticsStartEndTimeDto): Promise<IResponse> {
     return (
       Promise.resolve({ userId, query })
         .then(async ({ userId, query }) => {
@@ -206,10 +206,10 @@ export class MoneyService {
   /**
    * @description: 统计某时间范围内的方式支出的金额
    * @param {string} userId
-   * @param {StatisticsBankFlowDto} query
+   * @param {StatisticsStartEndTimeDto} query
    * @return {Promise<IResponse>}
    */
-  public statisticsFlowOutMoney(userId: string, query?: StatisticsBankFlowDto): Promise<IResponse> {
+  public statisticsFlowOutMoney(userId: string, query?: StatisticsStartEndTimeDto): Promise<IResponse> {
     return (
       Promise.resolve({ userId, query })
         .then(async ({ userId, query }) => {
