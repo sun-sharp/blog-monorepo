@@ -4,9 +4,33 @@ import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptio
 import { formatRequestDate, getAppEnvConfig, isEmpty, isString, joinTimestamp } from '@/utils';
 import { ResultEnum } from '@/constant';
 import { checkStatus } from './checkStatus';
+import { VNodeChild } from 'vue';
 
 const appEnvConfig = getAppEnvConfig();
 const urlPrefix = appEnvConfig.urlPrefix || '';
+
+/**
+ * @description: 消息弹窗
+ * @param {'success' | 'error' | 'warning' | 'info' | 'loading'} type
+ * @param {string} msg
+ */
+export const messageFun = (type: 'success' | 'error' | 'warning' | 'info' | 'loading', msg: string | (() => VNodeChild)) => {
+  // @ts-ignore
+  const { $message: Message } = window;
+  // 先关闭以前的消息
+  Message.destroyAll();
+  if (type === 'success') {
+    Message.success(msg);
+  } else if (type === 'error') {
+    Message.error(msg);
+  } else if (type === 'warning') {
+    Message.warning(msg);
+  } else if (type === 'info') {
+    Message.info(msg);
+  } else if (type === 'loading') {
+    Message.loading(msg);
+  }
+};
 
 /**
  * @description:  axios自定义模块
@@ -129,7 +153,7 @@ export class CustomAxios {
   // 响应结果拦截器配置
   private responseInterceptors(res: AxiosResponse<any>) {
     // @ts-ignore
-    const { $message: Message, $dialog: Dialog } = window;
+    const { $dialog: Dialog } = window;
     const {
       isShowMessage = true, // 是否显示提示信息
       isShowErrorMessage, // 是否显示错误信息
@@ -150,13 +174,12 @@ export class CustomAxios {
       return res.data;
     }
 
-    // 先关闭以前的消息
-    Message.destroyAll();
-
     const { data } = res;
 
     if (!data) {
-      throw data;
+      const msg = '服务器返回为空！';
+      messageFun('error', msg);
+      throw msg;
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, result, message } = data;
@@ -166,10 +189,10 @@ export class CustomAxios {
     if (isShowMessage) {
       if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
         // 是否显示自定义信息提示
-        Message.success(successMessageText || message || '操作成功！');
+        messageFun('success', successMessageText || message || '操作成功！');
       } else if (!hasSuccess && (errorMessageText || isShowErrorMessage)) {
         // 是否显示自定义信息提示
-        Message.error(message || errorMessageText || '操作失败！');
+        messageFun('error', message || errorMessageText || '操作失败！');
       } else if (!hasSuccess && errorMessageMode === 'dialog') {
         // errorMessageMode=‘dialog’的时候会显示dialog错误弹窗，而不是消息提示，用于一些比较重要的错误
         Dialog.info({
@@ -183,24 +206,22 @@ export class CustomAxios {
     // 接口请求成功，直接返回结果
     if (hasSuccess) {
       return result;
+    } else if (message) {
+      messageFun('error', message || '请求失败！');
+      throw message;
     }
 
     // 接口请求错误，统一提示错误信息
     const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
     if (hasError) {
-      Message.error(message || '操作失败,系统异常!');
+      messageFun('error', message || '操作失败,系统异常!');
       throw message;
     }
 
     // 登录超时
     const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
     if (hasTimeout) {
-      Message.error(message || '登录超时!');
-      throw message;
-    }
-
-    // 这里逻辑可以根据项目进行修改
-    if (!hasSuccess) {
+      messageFun('error', message || '登录超时!');
       throw message;
     }
     return data;
@@ -209,16 +230,14 @@ export class CustomAxios {
   // 响应结果拦截器错误配置
   private responseInterceptorsCatch(error: any) {
     // @ts-ignore
-    const { $message: Message, $dialog: Modal } = window;
-    // 先关闭以前的消息
-    Message.destroyAll();
+    const { $dialog: Modal } = window;
 
     const { response, code, message } = error || {};
     // TODO 此处要根据后端接口返回格式修改
     const msg: string = response && response.data && response.data.message ? response.data.message : '';
     const err: string = error.toString();
     if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-      Message.error('接口请求超时,请刷新页面重试!');
+      messageFun('error', '接口请求超时,请刷新页面重试!');
       return msg;
     }
     if (err && err.includes('Network Error')) {
@@ -233,7 +252,7 @@ export class CustomAxios {
     // 请求是否被取消
     const isCancel = axios.isCancel(error);
     if (!isCancel) {
-      checkStatus(error.response && error.response.status, msg, Message);
+      checkStatus(error.response && error.response.status, msg, messageFun);
     } else {
       console.warn(error, '请求被取消！');
     }

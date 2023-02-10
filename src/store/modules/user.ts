@@ -122,7 +122,7 @@ export const useUserStore = defineStore({
     async GetInfo() {
       const self = this;
       const [err, resp] = await at(userApi.getUserInfo());
-      if (err) return false;
+      if (err || !resp) return false;
       storage.set(CURRENT_USER, resp);
       self.setUserInfo(resp);
       return resp;
@@ -131,7 +131,7 @@ export const useUserStore = defineStore({
     async GetConfigInfo() {
       const self = this;
       const [err, resp] = await at(configurationApi.getConfigInfo());
-      if (err) return false;
+      if (err || !resp) return false;
       storage.set(USER_CONFIG, resp);
       self.setConfigInfo(resp);
       return resp;
