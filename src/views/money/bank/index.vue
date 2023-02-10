@@ -1,6 +1,13 @@
 <template>
   <n-card :bordered="false" class="pro-card">
-    <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:3 xl:4 2xl:5' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
+    <form-search
+      inline
+      :grid-props="{ cols: '1 s:2 m:3 l:3 xl:4 2xl:5' }"
+      :show-reset-button="false"
+      :show-advanced-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
+    />
     <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="(row: any) => row.bankId" :action-column="actionColumn">
       <template #tableTitle>
         <n-button type="success" @click="uploadFileModelRef.init()">

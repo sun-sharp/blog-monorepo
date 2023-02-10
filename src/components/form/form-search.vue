@@ -157,7 +157,7 @@
       const formModel = reactive<Recordable>({});
       const schemaRef = ref<Nullable<FormSchema[]>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
-      const gridCollapsed = ref(true);
+      const gridCollapsed = ref(props.showAdvancedButton);
       const isUpdateDefault = ref(false);
 
       const getSubmitBtnOptions = computed(() => {

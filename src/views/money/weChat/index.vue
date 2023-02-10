@@ -1,6 +1,13 @@
 <template>
   <n-card :bordered="false" class="pro-card">
-    <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:4 xl:5 2xl:6' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
+    <form-search
+      inline
+      :grid-props="{ cols: '1 s:2 m:3 l:4 xl:5 2xl:6' }"
+      :show-reset-button="false"
+      :show-advanced-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
+    />
     <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="(row: any) => row.id" :action-column="actionColumn">
       <template #tableTitle>
         <n-space>
