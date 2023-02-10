@@ -227,6 +227,27 @@ export class AliPayService {
   }
 
   /**
+   * @description: 获取余额或余额宝，交易时间最新一条的数据
+   * @param {string} userId
+   * @param {number} billMethod
+   * @param {number} billType
+   * @return {Promise<Array<AliPay>>}
+   */
+  public findLastOneBalance(userId: string, billMethod: number, billType: number): Promise<Array<AliPay>> {
+    return (
+      Promise.resolve({ userId })
+        .then(async ({ userId }) => {
+          const findData: any = { userId, $or: [{ billMethod }, { billType }] };
+          return await this.aliPayModel.find(findData).sort({ tradeTime: -1 }).limit(1);
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
    * @description: 修改支付宝账单
    * @param {UpdateAliPayDto} body
    * @return {Promise<IResponse>}
@@ -303,7 +324,7 @@ export class AliPayService {
       Promise.resolve({ userId })
         .then(async ({ userId }) => {
           const find = await this.aliPayModel.find({ userId }).sort({ tradeTime: 1 });
-          // 获取支付宝余额(账单方式-支付宝余额，账单类型-支付宝余额充值)
+          // 获取支付宝余额(账单方式-支付宝余额宝，账单类型-支付宝余额宝充值)
           const filterArr = find.filter((f) => f.billMethod === 112 || f.billType === 603);
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];

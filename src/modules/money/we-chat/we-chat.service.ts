@@ -249,15 +249,15 @@ export class WeChatService {
   }
 
   /**
-   * @description: 获取交易时间最新一条的数据
+   * @description: 获取微信零钱，交易时间最新一条的数据
    * @param {string} userId
    * @return {Promise<Array<WeChat>>}
    */
-  public findLastOne(userId: string): Promise<Array<WeChat>> {
+  public findLastOneBalance(userId: string): Promise<Array<WeChat>> {
     return (
       Promise.resolve({ userId })
         .then(async ({ userId }) => {
-          const findData: any = { userId };
+          const findData: any = { userId, $or: [{ billMethod: 101 }, { billType: 601 }] };
           return await this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(1);
         })
         // 返回错误

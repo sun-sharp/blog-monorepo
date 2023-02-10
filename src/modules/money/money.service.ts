@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sumArrayToMoney, uniqueArray } from 'src/common/array';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { IResponse } from 'src/interfaces/response.interface';
+import { AliPayService } from './ali-pay/ali-pay.service';
 import { BankService } from './bank/bank.service';
 import { StatisticsBankFlowDto } from './dto/statistics-bank-flow.dto';
 import { WeChatService } from './we-chat/we-chat.service';
@@ -20,7 +21,7 @@ interface IBankFlow {
 @Injectable()
 export class MoneyService {
   response: IResponse;
-  constructor(private readonly bankService: BankService, private readonly weChatService: WeChatService) {}
+  constructor(private readonly bankService: BankService, private readonly weChatService: WeChatService, private readonly aliPayService: AliPayService) {}
 
   index() {
     return '金钱内容';
@@ -139,7 +140,7 @@ export class MoneyService {
       Promise.resolve()
         .then(async () => {
           // 微信零钱
-          const weChat = await this.weChatService.findLastOne(userId);
+          const weChat = await this.weChatService.findLastOneBalance(userId);
           // 查询银行账单
           const bankModelAll = await this.bankService.findModelAll(userId);
           // 工商银行
@@ -173,10 +174,16 @@ export class MoneyService {
             }
             return bankBalance;
           };
+          // 支付宝余额
+          const aliPayBalance = await this.aliPayService.findLastOneBalance(userId, 111, 602);
+          // 支付宝余额宝
+          const aliPayBalanceBaby = await this.aliPayService.findLastOneBalance(userId, 112, 603);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
-              weChatChange: weChat.length > 0 ? weChat[0].balance : 0,
+              weChatBalance: weChat.length > 0 ? weChat[0].balance : 0,
+              aliPayBalance: aliPayBalance.length > 0 ? aliPayBalance[0].balance : 0,
+              aliPayBalanceBaby: aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0].balanceBaby : 0,
               businessBank: bankBalanceFun(businessArr),
               agricultureBank: bankBalanceFun(agricultureArr),
               buildBank: bankBalanceFun(buildArr),
