@@ -229,15 +229,22 @@ export class AliPayService {
   /**
    * @description: 获取余额或余额宝，交易时间最新一条的数据
    * @param {string} userId
-   * @param {number} billMethod
-   * @param {number} billType
+   * @param {'balance' | 'balanceBaby'} balanceType
    * @return {Promise<Array<AliPay>>}
    */
-  public findLastOneBalance(userId: string, billMethod: number, billType: number): Promise<Array<AliPay>> {
+  public findLastOneBalance(userId: string, balanceType: 'balance' | 'balanceBaby'): Promise<Array<AliPay>> {
     return (
       Promise.resolve({ userId })
         .then(async ({ userId }) => {
-          const findData: any = { userId, $or: [{ billMethod }, { billType }] };
+          const findData: any = { userId };
+          // 余额
+          if (balanceType === 'balance') {
+            findData.$or = [{ billMethod: 111 }, { billType: 602 }];
+          }
+          // 余额宝
+          else if (balanceType === 'balanceBaby') {
+            findData.$or = [{ billMethod: 112 }, { billType: 603 }];
+          }
           return await this.aliPayModel.find(findData).sort({ tradeTime: -1 }).limit(1);
         })
         // 返回错误

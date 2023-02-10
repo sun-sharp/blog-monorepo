@@ -175,9 +175,9 @@ export class MoneyService {
             return bankBalance;
           };
           // 支付宝余额
-          const aliPayBalance = await this.aliPayService.findLastOneBalance(userId, 111, 602);
+          const aliPayBalance = await this.aliPayService.findLastOneBalance(userId, 'balance');
           // 支付宝余额宝
-          const aliPayBalanceBaby = await this.aliPayService.findLastOneBalance(userId, 112, 603);
+          const aliPayBalanceBaby = await this.aliPayService.findLastOneBalance(userId, 'balanceBaby');
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {

@@ -54,7 +54,7 @@ export class AliPayController {
     return this.aliPayService.updateBalance(req.user._id);
   }
 
-  @Put('update_balance_body')
+  @Put('update_balance_baby')
   @ApiOperation({ summary: '处理支付宝余额宝' })
   updateBalanceBaby(@Request() req: any) {
     return this.aliPayService.updateBalanceBaby(req.user._id);
