@@ -25,3 +25,15 @@ export const statisticsMoneyBalance = (params?: any) => {
     params,
   });
 };
+
+/**
+ * @description: 统计某时间范围内的方式支出的金额
+ * @param {any} params
+ */
+export const statisticsFlowOutMoney = (params?: any) => {
+  return AxiosMoney.request({
+    url: `${basic}/statistics_flow_out_money`,
+    method: 'GET',
+    params,
+  });
+};

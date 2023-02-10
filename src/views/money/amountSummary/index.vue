@@ -4,6 +4,7 @@
     <n-space>
       <n-button type="info" @click="getBankFlow">银行流动</n-button>
       <n-button type="info" @click="getMoneyBalance">余额</n-button>
+      <n-button type="info" @click="getFlowOutMoney">支出的金额</n-button>
     </n-space>
   </n-card>
 </template>
@@ -33,6 +34,21 @@
   const getMoneyBalance = () => {
     moneyApi
       .statisticsMoneyBalance()
+      .then((info) => {
+        console.log(info);
+      })
+      .finally(() => {});
+  };
+
+  // 统计某时间范围内的方式支出的金额
+  const getFlowOutMoney = () => {
+    const params: any = {};
+    if (datePickerRange.value && datePickerRange.value.length > 0) {
+      params.startTime = datePickerRange.value[0] + ' 00:00:00';
+      params.endTime = datePickerRange.value[1] + ' 23:59:59';
+    }
+    moneyApi
+      .statisticsFlowOutMoney(params)
       .then((info) => {
         console.log(info);
       })
