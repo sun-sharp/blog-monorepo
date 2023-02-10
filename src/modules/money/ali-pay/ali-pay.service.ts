@@ -187,6 +187,7 @@ export class AliPayService {
                   billType,
                   billMethod,
                   balance,
+                  balanceBaby,
                 }) => ({
                   aliPayId: _id,
                   userId,
@@ -206,6 +207,7 @@ export class AliPayService {
                   billType,
                   billMethod,
                   balance,
+                  balanceBaby,
                 }),
               ),
               size,
@@ -245,6 +247,88 @@ export class AliPayService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 处理支付宝余额
+   * @param {string} userId
+   * @return {Promise<IResponse>}
+   */
+  public updateBalance(userId: string): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId })
+        .then(async ({ userId }) => {
+          const find = await this.aliPayModel.find({ userId }).sort({ tradeTime: 1 });
+          // 获取支付宝余额(账单方式-支付宝余额，账单类型-支付宝余额充值)
+          const filterArr = find.filter((f) => f.billMethod === 111 || f.billType === 602);
+          for (let fI = 0; fI < filterArr.length; fI++) {
+            const fe = filterArr[fI];
+            if (fI !== 0) {
+              const preId = filterArr[fI - 1]._id;
+              const findOne = await this.aliPayModel.findOne({ _id: preId });
+              let balance = findOne.balance || 0;
+              if (fe.inflowOrOutflow === 1 || fe.billType === 602) {
+                balance = balance + fe.moneyAmount;
+              } else if (fe.inflowOrOutflow === 2) {
+                balance = balance - fe.moneyAmount;
+              }
+              await this.aliPayModel.updateOne({ _id: fe._id }, { balance: Number(balance.toFixed(2)) });
+            }
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '处理成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '处理失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 处理支付宝余额宝
+   * @param {string} userId
+   * @return {Promise<IResponse>}
+   */
+  public updateBalanceBaby(userId: string): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId })
+        .then(async ({ userId }) => {
+          const find = await this.aliPayModel.find({ userId }).sort({ tradeTime: 1 });
+          // 获取支付宝余额(账单方式-支付宝余额，账单类型-支付宝余额充值)
+          const filterArr = find.filter((f) => f.billMethod === 112 || f.billType === 603);
+          for (let fI = 0; fI < filterArr.length; fI++) {
+            const fe = filterArr[fI];
+            if (fI !== 0) {
+              const preId = filterArr[fI - 1]._id;
+              const findOne = await this.aliPayModel.findOne({ _id: preId });
+              let balanceBaby = findOne.balanceBaby || 0;
+              if (fe.inflowOrOutflow === 1 || fe.billType === 603) {
+                balanceBaby = balanceBaby + fe.moneyAmount;
+              } else if (fe.inflowOrOutflow === 2) {
+                balanceBaby = balanceBaby - fe.moneyAmount;
+              }
+              await this.aliPayModel.updateOne({ _id: fe._id }, { balanceBaby: Number(balanceBaby.toFixed(2)) });
+            }
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '处理成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '处理失败！',
           });
         })
     );

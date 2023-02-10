@@ -47,4 +47,16 @@ export class AliPayController {
   update(@Body() body: UpdateAliPayDto) {
     return this.aliPayService.update(body);
   }
+
+  @Put('update_balance')
+  @ApiOperation({ summary: '处理支付宝余额' })
+  updateBalance(@Request() req: any) {
+    return this.aliPayService.updateBalance(req.user._id);
+  }
+
+  @Put('update_balance_body')
+  @ApiOperation({ summary: '处理支付宝余额宝' })
+  updateBalanceBaby(@Request() req: any) {
+    return this.aliPayService.updateBalanceBaby(req.user._id);
+  }
 }

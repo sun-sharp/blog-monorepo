@@ -61,6 +61,9 @@ export class AliPay extends Document {
 
   @Prop()
   balance: number; // 余额
+
+  @Prop()
+  balanceBaby: number; // 余额宝
 }
 
 export const AliPaySchema = SchemaFactory.createForClass(AliPay);

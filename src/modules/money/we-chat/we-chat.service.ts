@@ -311,7 +311,7 @@ export class WeChatService {
               const preId = filterArr[fI - 1]._id;
               const findOne = await this.weChatModel.findOne({ _id: preId });
               let balance = findOne.balance || 0;
-              if (fe.inflowOrOutflow === 1) {
+              if (fe.inflowOrOutflow === 1 || fe.billType === 601) {
                 balance = balance + fe.moneyAmount;
               } else if (fe.inflowOrOutflow === 2) {
                 balance = balance - fe.moneyAmount;
