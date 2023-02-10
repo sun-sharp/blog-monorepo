@@ -19,7 +19,6 @@
       <n-form-item label="收/支">
         {{ modelForm.incomeOrPay }}
       </n-form-item>
-      <n-form-item label="金额(元)">￥{{ modelForm.moneyAmount }}</n-form-item>
       <n-form-item label="支付方式">
         {{ modelForm.paymentMethod }}
       </n-form-item>
@@ -29,6 +28,8 @@
       <n-form-item label="备注">
         {{ modelForm.remarks }}
       </n-form-item>
+      <n-form-item label="金额(元)">￥{{ modelForm.moneyAmount }}</n-form-item>
+      <n-form-item v-if="modelForm.balance" label="余额(元)">￥{{ modelForm.balance }}</n-form-item>
       <n-form-item label="流入/流出" path="inflowOrOutflow">
         <n-radio-group v-model:value="modelForm.inflowOrOutflow" name="radiogroup">
           <n-space>
@@ -74,6 +75,7 @@
     goods: '',
     incomeOrPay: '',
     moneyAmount: '',
+    balance: '',
     paymentMethod: '',
     currentStatus: '',
     remarks: '',

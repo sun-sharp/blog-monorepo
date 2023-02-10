@@ -81,7 +81,7 @@ export const useConfigure = ({ updateModelRef }) => {
       key: 'balance',
       align: 'center',
       render(row: any) {
-        return '￥' + (row.balance || 0);
+        return row.balance ? `￥${row.balance}` : '';
       },
     },
     {
