@@ -19,13 +19,15 @@
       <n-form-item label="收/支">
         {{ modelForm.incomeOrPay }}
       </n-form-item>
-      <n-form-item label="金额(元)">￥{{ modelForm.moneyAmount }}</n-form-item>
       <n-form-item label="收/付款方式">
         {{ modelForm.paymentMethod }}
       </n-form-item>
       <n-form-item label="对方账号">
         {{ modelForm.oppositeAccount }}
       </n-form-item>
+      <n-form-item label="金额(元)">￥{{ modelForm.moneyAmount }}</n-form-item>
+      <n-form-item v-if="modelForm.balance" label="余额(元)">￥{{ modelForm.balance }}</n-form-item>
+      <n-form-item v-if="modelForm.balanceBaby" label="余额宝(元)">￥{{ modelForm.balanceBaby }}</n-form-item>
       <n-form-item label="流入/流出" path="inflowOrOutflow">
         <n-radio-group v-model:value="modelForm.inflowOrOutflow" name="radiogroup">
           <n-space>
@@ -41,11 +43,11 @@
       <n-form-item label="使用地点" path="place">
         <n-input v-model:value="modelForm.place" type="textarea" :rows="2" placeholder="请输入使用地点" />
       </n-form-item>
-      <n-form-item label="账单类型" path="billType">
-        <n-select v-model:value="modelForm.billType" filterable :options="billTypeOption" placeholder="请选择账单类型" />
-      </n-form-item>
       <n-form-item label="账单方式" path="billMethod">
         <n-select v-model:value="modelForm.billMethod" filterable :options="billMethodOption" placeholder="请选择账单类型" />
+      </n-form-item>
+      <n-form-item label="账单类型" path="billType">
+        <n-select v-model:value="modelForm.billType" filterable :options="billTypeOption" placeholder="请选择账单类型" />
       </n-form-item>
     </n-form>
 
@@ -71,13 +73,15 @@
     productDescription: '',
     incomeOrPay: '',
     moneyAmount: '',
+    balance: '',
+    balanceBaby: '',
     paymentMethod: '',
     oppositeAccount: '',
     explain: '',
     place: '',
     inflowOrOutflow: null,
-    billType: null,
     billMethod: null,
+    billType: null,
   };
 
   export default defineComponent({
@@ -97,17 +101,17 @@
           trigger: 'change',
           message: `请选择流入/流出`,
         },
-        billType: {
-          type: 'number',
-          required: true,
-          trigger: 'change',
-          message: `请选择账单类型`,
-        },
         billMethod: {
           type: 'number',
           required: true,
           trigger: 'change',
           message: `请选择账单方式`,
+        },
+        billType: {
+          type: 'number',
+          required: true,
+          trigger: 'change',
+          message: `请选择账单类型`,
         },
       });
 
@@ -144,8 +148,8 @@
                 inflowOrOutflow: modelForm.inflowOrOutflow,
                 explain: modelForm.explain,
                 place: modelForm.place,
-                billType: modelForm.billType,
                 billMethod: modelForm.billMethod,
+                billType: modelForm.billType,
               })
               .then(() => {
                 showModal.value = false;

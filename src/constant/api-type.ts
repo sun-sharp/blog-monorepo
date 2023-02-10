@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-02-09 17:03:35
+ * @LastEditTime: 2023-02-10 15:47:51
  * @Description: 接口类型
  */
 
@@ -103,7 +103,7 @@ export const billTypeOption = [
   },
   {
     value: 6,
-    label: '贷款',
+    label: '游戏',
   },
   {
     value: 7,
@@ -128,6 +128,18 @@ export const billTypeOption = [
   {
     value: 12,
     label: '饭卡',
+  },
+  {
+    value: 13,
+    label: '借出',
+  },
+  {
+    value: 14,
+    label: '返钱',
+  },
+  {
+    value: 20,
+    label: '话费',
   },
   {
     value: 102,
@@ -158,8 +170,12 @@ export const billTypeOption = [
     label: '消费-理发',
   },
   {
-    value: 111,
-    label: '借出',
+    value: 109,
+    label: '消费-电影',
+  },
+  {
+    value: 110,
+    label: '消费-眼镜',
   },
   {
     value: 131,
@@ -203,34 +219,54 @@ export const billTypeOption = [
   },
   {
     value: 201,
-    label: '提现',
+    label: '提现-中国农业银行',
   },
   {
     value: 202,
-    label: '话费',
+    label: '提现-中国工商银行',
   },
   {
-    value: 211,
+    value: 203,
+    label: '提现-中国建设银行',
+  },
+  {
+    value: 251,
+    label: '借入-个人',
+  },
+  {
+    value: 252,
+    label: '归还-个人',
+  },
+  {
+    value: 253,
+    label: '归还-花呗',
+  },
+  {
+    value: 254,
+    label: '借入-借呗',
+  },
+  {
+    value: 255,
+    label: '归还-借呗',
+  },
+  {
+    value: 301,
     label: '医院-挂号',
   },
   {
-    value: 212,
+    value: 302,
     label: '医院-买药',
   },
   {
-    value: 241,
+    value: 351,
     label: '学习-网课',
   },
   {
     value: 501,
-    label: '退还',
-  },
-  {
-    value: 502,
     label: '基本工资',
   },
   {
-    value: 503,
+    value: 502,
     label: '奖金',
   },
   {
@@ -284,7 +320,7 @@ export const billMethodOption = [
   },
   {
     value: 112,
-    label: '支付宝余额包',
+    label: '支付宝余额宝',
   },
   {
     value: 113,

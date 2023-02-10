@@ -81,7 +81,15 @@ export const useConfigure = ({ updateModelRef }) => {
       key: 'balance',
       align: 'center',
       render(row: any) {
-        return '￥' + (row.balance || 0);
+        return row.balance ? `￥${row.balance}` : '';
+      },
+    },
+    {
+      title: '余额宝(元)',
+      key: 'balanceBaby',
+      align: 'center',
+      render(row: any) {
+        return row.balanceBaby ? `￥${row.balanceBaby}` : '';
       },
     },
     {

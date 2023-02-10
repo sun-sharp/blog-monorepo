@@ -47,3 +47,13 @@ export const updateBalance = () => {
     method: 'PUT',
   });
 };
+
+/**
+ * @description: 处理支付宝账单余额
+ */
+export const updateBalanceBody = () => {
+  return AxiosMoney.request({
+    url: `${basic}/update_balance_body`,
+    method: 'PUT',
+  });
+};
