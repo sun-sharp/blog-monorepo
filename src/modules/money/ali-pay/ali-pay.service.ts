@@ -152,7 +152,7 @@ export class AliPayService {
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson, inflowOrOutflow, billType } = body;
+          const { size, current, tradeOtherPerson, inflowOrOutflow, billType, billMethod } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: any = {
             userId,
@@ -160,6 +160,7 @@ export class AliPayService {
           };
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (billType) findData.billType = billType;
+          if (billMethod) findData.billMethod = billMethod;
           const total = await this.aliPayModel.find(findData).count();
           const list = await this.aliPayModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
           return (this.response = {
@@ -232,8 +233,8 @@ export class AliPayService {
     return (
       Promise.resolve({ body })
         .then(async ({ body }) => {
-          const { aliPayId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType } = body;
-          await this.aliPayModel.updateOne({ _id: aliPayId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType });
+          const { aliPayId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod } = body;
+          await this.aliPayModel.updateOne({ _id: aliPayId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '修改成功！',

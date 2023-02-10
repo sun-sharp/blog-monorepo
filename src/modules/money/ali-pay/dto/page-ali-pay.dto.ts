@@ -20,4 +20,10 @@ export class PageAliPayDto extends PaginateDto {
     required: false,
   })
   billType: number;
+
+  @ApiProperty({
+    description: '账单方式',
+    required: false,
+  })
+  billMethod: number;
 }

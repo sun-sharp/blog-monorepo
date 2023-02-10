@@ -35,4 +35,10 @@ export class UpdateAliPayDto {
   })
   @IsNotEmpty({ message: '账单类型不能为空！' })
   readonly billType: number;
+
+  @ApiProperty({
+    description: '账单方式',
+  })
+  @IsNotEmpty({ message: '账单方式不能为空！' })
+  readonly billMethod: number;
 }
