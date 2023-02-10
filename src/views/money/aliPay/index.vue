@@ -13,7 +13,7 @@
             导入
           </n-button>
           <n-button :loading="btnBalanceLoading" type="info" @click="handleBalance">处理余额</n-button>
-          <n-button :loading="btnBalanceBodyLoading" type="info" @click="handleBalanceBody">处理余额宝</n-button>
+          <n-button :loading="btnBalanceBabyLoading" type="info" @click="handleBalanceBaby">处理余额宝</n-button>
         </n-space>
       </template>
     </basic-table>
@@ -74,16 +74,16 @@
   };
 
   // 处理余额宝
-  const btnBalanceBodyLoading = ref(false);
-  const handleBalanceBody = () => {
-    btnBalanceBodyLoading.value = true;
+  const btnBalanceBabyLoading = ref(false);
+  const handleBalanceBaby = () => {
+    btnBalanceBabyLoading.value = true;
     aliPayApi
-      .updateBalanceBody()
+      .updateBalanceBaby()
       .then(() => {
         reloadTable();
       })
       .finally(() => {
-        btnBalanceBodyLoading.value = false;
+        btnBalanceBabyLoading.value = false;
       });
   };
 </script>

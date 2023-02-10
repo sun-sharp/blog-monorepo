@@ -49,11 +49,11 @@ export const updateBalance = () => {
 };
 
 /**
- * @description: 处理支付宝账单余额
+ * @description: 处理支付宝账单余额宝
  */
-export const updateBalanceBody = () => {
+export const updateBalanceBaby = () => {
   return AxiosMoney.request({
-    url: `${basic}/update_balance_body`,
+    url: `${basic}/update_balance_baby`,
     method: 'PUT',
   });
 };
