@@ -307,7 +307,7 @@ export class WeChatService {
           const filterArr = find.filter((f) => f.billMethod === 101 || f.billType === 601);
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];
-            if (fI !== 0 && fe.balance === 0) {
+            if (fI !== 0) {
               const preId = filterArr[fI - 1]._id;
               const findOne = await this.weChatModel.findOne({ _id: preId });
               let balance = findOne.balance || 0;

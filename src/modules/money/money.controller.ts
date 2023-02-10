@@ -32,4 +32,12 @@ export class MoneyController {
   statisticsMoneyBalance(@Request() req: any) {
     return this.moneyService.statisticsMoneyBalance(req.user._id);
   }
+
+  @Get('statistics_flow_out_money')
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: '统计某时间范围内的方式支出的金额' })
+  statisticsFlowOutMoney(@Request() req: any) {
+    return this.moneyService.statisticsFlowOutMoney(req.user._id);
+  }
 }

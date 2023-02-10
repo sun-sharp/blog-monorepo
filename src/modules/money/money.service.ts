@@ -202,4 +202,36 @@ export class MoneyService {
         })
     );
   }
+
+  /**
+   * @description: 统计某时间范围内的方式支出的金额
+   * @param {string} userId
+   * @param {StatisticsBankFlowDto} query
+   * @return {Promise<IResponse>}
+   */
+  public statisticsFlowOutMoney(userId: string, query?: StatisticsBankFlowDto): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId, query })
+        .then(async ({ userId, query }) => {
+          // 查询某时间范围内的银行账单
+          const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
+          // 现金支出的金额
+          const cashMoneyArr = bankModelAll.filter((f) => f.bankBillType === 3 && f.inflowOrOutflow === 2).map((m) => m.moneyAmount);
+          console.log(cashMoneyArr);
+
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {},
+            message: '获取成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '获取失败！',
+          });
+        })
+    );
+  }
 }
