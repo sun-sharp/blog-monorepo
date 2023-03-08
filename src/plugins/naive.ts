@@ -67,6 +67,7 @@ import {
   NBackTop,
   NSkeleton,
   NTreeSelect,
+  NEmpty,
 } from 'naive-ui';
 
 const naive = create({
@@ -137,6 +138,7 @@ const naive = create({
     NBackTop,
     NSkeleton,
     NTreeSelect,
+    NEmpty,
   ],
 });
 

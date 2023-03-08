@@ -12,6 +12,7 @@
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && yarn"
   },
   "dependencies": {
+    "@antv/g2plot": "^2.4.26",
     "@vicons/antd": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
     "await-to-js": "^3.0.0",
