@@ -94,11 +94,12 @@
   };
 
   // 统计某时间范围内的方式支出的金额
-  /* const getFlowOutMoney = () => {
+  const flowOutMoneyDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
+  const getFlowOutMoney = () => {
     const params: any = {};
-    if (datePickerRange.value && datePickerRange.value.length > 0) {
-      params.startTime = datePickerRange.value[0] + ' 00:00:00';
-      params.endTime = datePickerRange.value[1] + ' 23:59:59';
+    if (flowOutMoneyDateRange.value && flowOutMoneyDateRange.value.length > 0) {
+      params.startTime = flowOutMoneyDateRange.value[0] + ' 00:00:00';
+      params.endTime = flowOutMoneyDateRange.value[1] + ' 23:59:59';
     }
     moneyApi
       .statisticsFlowOutMoney(params)
@@ -106,11 +107,12 @@
         console.log(info);
       })
       .finally(() => {});
-  }; */
+  };
 
   const init = () => {
     getMoneyBalance();
     getBankFlow();
+    getFlowOutMoney();
   };
 
   onMounted(init);
@@ -160,7 +162,16 @@
       </div>
       <div class="summary-card">
         <div class="summary-card__head">
-          <span>支出的金额</span>
+          <span>各方式所支出的金额</span>
+          <n-date-picker
+            v-model:formatted-value="flowOutMoneyDateRange"
+            style="width: 280px"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            clearable
+            @update:value="getFlowOutMoney()"
+          />
         </div>
         <div class="summary-card__chart">1524</div>
       </div>
