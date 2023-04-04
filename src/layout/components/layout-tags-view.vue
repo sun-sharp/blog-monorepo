@@ -2,12 +2,9 @@
   <div
     class="layout-tabs-view"
     :class="{
-      'layout-tabs-view-fix': multiTabsSetting.fixed,
-      'layout-tabs-view-fixed-header': isMultiHeaderFixed,
       'layout-tabs-view-default-background': getIsDarkTheme === false,
       'layout-tabs-view-dark-background': getIsDarkTheme === true,
     }"
-    :style="getChangeStyle"
   >
     <div class="layout-tabs-view-main">
       <div ref="navWrap" class="tabs-card" :class="{ 'tabs-card-scrollable': scrollable }">
@@ -83,13 +80,8 @@
       RightOutlined,
       Draggable,
     },
-    props: {
-      collapsed: {
-        type: Boolean,
-      },
-    },
-    setup(props) {
-      const { getIsDarkTheme, getAppTheme, getNavMode, getHeaderSetting, getMenuSetting, getMultiTabsSetting } = useSetting();
+    setup() {
+      const { getIsDarkTheme, getAppTheme, getHeaderSetting, getMultiTabsSetting } = useSetting();
 
       const message = useMessage();
       const route = useRoute();
@@ -115,27 +107,6 @@
         const { fullPath, hash, meta, name, params, path, query } = route;
         return { fullPath, hash, meta, name, params, path, query };
       };
-
-      const isMixMenuNoneSub = computed(() => {
-        const mixMenu = unref(getMenuSetting).mixMenu;
-        const currentRoute = useRoute();
-        const navMode = unref(getNavMode);
-        if (unref(navMode) != 'horizontal-mix') return true;
-        return !(unref(navMode) === 'horizontal-mix' && mixMenu && currentRoute.meta.isRoot);
-      });
-
-      //动态组装样式 菜单缩进
-      const getChangeStyle = computed(() => {
-        const { collapsed } = props;
-        const navMode = unref(getNavMode);
-        const { minMenuWidth, menuWidth }: any = unref(getMenuSetting);
-        const { fixed }: any = unref(getMultiTabsSetting);
-        let lenNum = navMode === 'horizontal' || !isMixMenuNoneSub.value ? '0px' : collapsed ? `${minMenuWidth}px` : `${menuWidth}px`;
-        return {
-          left: lenNum,
-          width: `calc(100% - ${!fixed ? '0px' : lenNum})`,
-        };
-      });
 
       //tags 右侧下拉菜单
       const TabsMenuOptions = computed(() => {
@@ -413,7 +384,6 @@
         closeOther,
         closeAll,
         reloadPage,
-        getChangeStyle,
         TabsMenuOptions,
         closeHandleSelect,
         scrollNext,
@@ -430,8 +400,9 @@
 <style lang="scss">
   .layout-tabs-view {
     width: 100%;
-    padding: 6px 0;
+    height: $tabs-view-height;
     display: flex;
+    align-items: center;
     transition: all 0.2s ease-in-out;
 
     &-main {
@@ -556,7 +527,7 @@
   }
 
   .layout-tabs-view-default-background {
-    background: #f5f7f9;
+    background: #efeeee;
   }
 
   .layout-tabs-view-dark-background {
