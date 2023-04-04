@@ -107,8 +107,9 @@ export function getViewportOffset(element: Element): ViewportOffsetResult {
   const left = offsetLeft - scrollLeft;
   const top = offsetTop - scrollTop;
 
-  const clientWidth = window.document.documentElement.clientWidth;
-  const clientHeight = window.document.documentElement.clientHeight;
+  const appLayoutEl = window.document.getElementById('appLayout') || window.document.documentElement;
+  const clientWidth = appLayoutEl.clientWidth;
+  const clientHeight = appLayoutEl.clientHeight;
   return {
     left: left,
     top: top,

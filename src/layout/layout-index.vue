@@ -10,6 +10,27 @@
 
   const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getShowFooter } = useSetting();
 
+  const layoutClassName = computed(() => {
+    const arr = ['layout-no-sider'];
+    if (!unref(getIsDarkTheme)) {
+      arr.push('layout-default-background');
+    }
+    const fixFoot = unref(fixedFoot);
+    const fixHead = unref(fixedHeader);
+    const fixMulti = unref(fixedMulti);
+    if (fixFoot) {
+      arr.push('layout-fixed--foot');
+    }
+    if (fixHead && !fixMulti) {
+      arr.push('layout-fixed--head');
+    } else if (fixHead && fixMulti) {
+      arr.push('layout-fixed--head-tabs');
+    } else if (!fixHead && fixMulti) {
+      arr.push('layout-fixed--tabs');
+    }
+    return arr;
+  });
+
   // 菜单是否折叠
   const collapsed = ref<boolean>(false);
 
@@ -21,11 +42,6 @@
       return false;
     }
     return true;
-  });
-
-  // 菜单位置
-  const getMenuLocation = computed(() => {
-    return 'left';
   });
 
   // 菜单主题
@@ -42,19 +58,13 @@
   // 头部固定
   const fixedHeader = computed(() => {
     const { fixed } = unref(getHeaderSetting);
-    return fixed ? 'static' : 'static';
-  });
-
-  // 标签栏和内容固定
-  const fixedCont = computed(() => {
-    const { fixed } = unref(getHeaderSetting);
-    return fixed ? 'static' : 'static';
+    return fixed;
   });
 
   // 标签栏固定
   const fixedMulti = computed(() => {
-    const { fixed } = unref(getHeaderSetting);
-    return fixed ? 'static' : 'static';
+    const { fixed } = unref(getMultiTabsSetting);
+    return fixed;
   });
 
   // 显示标签栏
@@ -62,15 +72,9 @@
     return unref(getMultiTabsSetting).show;
   });
 
-  // 内容固定
-  const fixedMain = computed(() => {
-    const { fixed } = unref(getHeaderSetting);
-    return fixed ? 'static' : 'static';
-  });
-
   // 底部固定
   const fixedFoot = computed(() => {
-    return 'absolute';
+    return true;
   });
 
   // 展示底部
@@ -80,7 +84,7 @@
 </script>
 
 <template>
-  <n-layout class="layout" :class="{ 'layout-default-background': !getIsDarkTheme }" has-sider>
+  <n-layout id="appLayout" class="layout" has-sider>
     <n-layout-sider
       v-if="menuIsShow"
       class="layout-sider"
@@ -94,23 +98,25 @@
       @expand="collapsed = false"
     >
       <layout-logo :collapsed="collapsed" />
-      <layout-menu v-model:collapsed="collapsed" v-model:location="getMenuLocation" />
+      <layout-menu v-model:collapsed="collapsed" />
     </n-layout-sider>
-    <n-layout :inverted="inverted" class="layout-no-sider">
-      <n-layout-header :inverted="getHeaderInverted" :position="fixedHeader">
-        <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
-      </n-layout-header>
-      <n-layout :inverted="inverted" :position="fixedCont" class="layout-content" :class="{ 'lc-foot': fixedFoot === 'absolute' }">
-        <n-layout-header :inverted="getHeaderInverted" :position="fixedMulti">
-          <layout-tabs-view v-if="isMultiTabs" />
+    <n-layout :inverted="inverted" :class="layoutClassName">
+      <n-layout :inverted="inverted" class="layout-no-foot">
+        <n-layout-header :inverted="getHeaderInverted" class="lnf-header" :class="{ fixed: fixedHeader }">
+          <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
         </n-layout-header>
-        <n-layout-content class="layout-content-main" :position="fixedMain">
-          <div class="main-view">
-            <layout-main />
-          </div>
-        </n-layout-content>
+        <n-layout :inverted="inverted" class="layout-content">
+          <n-layout-header :inverted="getHeaderInverted" class="lc-tabs" :class="{ fixed: fixedMulti, 'head-no-fixed': !fixedHeader }">
+            <layout-tabs-view v-if="isMultiTabs" />
+          </n-layout-header>
+          <n-layout-content class="layout-content-main">
+            <div class="main-view">
+              <layout-main />
+            </div>
+          </n-layout-content>
+        </n-layout>
       </n-layout>
-      <n-layout-footer v-if="showFooter" :position="fixedFoot" class="layout-footer">
+      <n-layout-footer v-if="showFooter" id="appLayoutFoot" class="lns-footer" :class="{ fixed: fixedFoot }">
         <layout-footer />
       </n-layout-footer>
       <n-back-top :right="70" :bottom="70" />
@@ -126,31 +132,75 @@
       background-color: #f5f7f9;
     }
 
-    &-no-sider {
-      background-color: transparent;
-    }
-
     &-sider {
       min-height: 100vh;
       box-shadow: 2px 0 8px 0 rgb(29 35 41 / 5%);
       transition: all 0.2s ease-in-out;
     }
 
-    &-content {
+    &-no-sider {
       background-color: transparent;
 
-      &.lc-foot {
-        padding-bottom: $footer-height;
-      }
-
-      &-main {
-        background-color: transparent;
-        // height: calc(100% - $tabs-view-height);
+      &.layout-fixed {
+        &--foot {
+          height: calc(100vh - $footer-height);
+        }
+        &--head {
+          padding-top: $header-height;
+        }
+        &--head-tabs {
+          padding-top: $header-height + $tabs-view-height;
+        }
+        &--tabs {
+          padding-top: $tabs-view-height;
+        }
       }
     }
 
-    &-footer {
-      z-index: 3000;
+    &-no-foot {
+      background-color: transparent;
+    }
+
+    &-content {
+      background-color: transparent;
+
+      &-main {
+        background-color: transparent;
+      }
+    }
+
+    .lns-footer {
+      &.fixed {
+        z-index: 3000;
+        bottom: 0;
+        position: fixed;
+        width: -webkit-fill-available;
+        width: -moz-available;
+      }
+    }
+
+    .lnf-header {
+      &.fixed {
+        z-index: 3000;
+        top: 0;
+        position: fixed;
+        width: -webkit-fill-available;
+        width: -moz-available;
+      }
+    }
+
+    .lc-tabs {
+      &.fixed {
+        z-index: 3000;
+        top: $header-height;
+        position: fixed;
+        width: -webkit-fill-available;
+        width: -moz-available;
+      }
+      &.head-no-fixed {
+        top: 0;
+        position: fixed;
+      }
     }
 
     .main-view {

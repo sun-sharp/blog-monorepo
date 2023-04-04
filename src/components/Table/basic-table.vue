@@ -256,6 +256,7 @@
         const headerH = 64;
         let paginationH = 2;
         let marginH = 24;
+        let borderH = 1;
         if (!isBoolean(pagination)) {
           paginationEl = tableEl.querySelector('.n-data-table__pagination') as HTMLElement;
           if (paginationEl) {
@@ -265,7 +266,7 @@
             paginationH += 28;
           }
         }
-        let height = bottomIncludeBody - (headerH + paginationH + marginH + (props.resizeHeightOffset || 0));
+        let height = bottomIncludeBody - (headerH + paginationH + marginH + borderH + (props.resizeHeightOffset || 0));
         const maxHeight = props.maxHeight;
         height = maxHeight && maxHeight < height ? maxHeight : height;
         deviceHeight.value = height;
