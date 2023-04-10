@@ -39,6 +39,12 @@ export interface CMultiTabsSetting {
   show: boolean;
 }
 
+// 底部
+export interface CFooterSetting {
+  fixed: boolean;
+  show: boolean;
+}
+
 // 用户信息
 export interface CUserConfigInfo {
   // 导航模式
@@ -47,8 +53,8 @@ export interface CUserConfigInfo {
   navTheme: string;
   // 顶部设置
   headerSetting: CHeaderSetting;
-  // 页脚
-  showFooter: boolean;
+  // 底部设置
+  footerSetting: CFooterSetting;
   // 菜单设置
   menuSetting: CMenuSetting;
   // 多标签

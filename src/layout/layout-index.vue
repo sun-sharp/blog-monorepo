@@ -8,7 +8,7 @@
   import LayoutMain from '@/layout/components/layout-main.vue';
   import LayoutFooter from './components/layout-footer.vue';
 
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getShowFooter } = useSetting();
+  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getFooterSetting } = useSetting();
 
   const layoutClassName = computed(() => {
     const arr = ['layout-no-sider'];
@@ -74,12 +74,13 @@
 
   // 底部固定
   const fixedFoot = computed(() => {
-    return true;
+    const { fixed } = unref(getFooterSetting);
+    return fixed;
   });
 
   // 展示底部
-  const showFooter = computed(() => {
-    return unref(getShowFooter);
+  const isFooter = computed(() => {
+    return unref(getFooterSetting).show;
   });
 </script>
 
@@ -116,7 +117,7 @@
           </n-layout-content>
         </n-layout>
       </n-layout>
-      <n-layout-footer v-if="showFooter" id="appLayoutFoot" class="lns-footer" :class="{ fixed: fixedFoot }">
+      <n-layout-footer v-if="isFooter" id="appLayoutFoot" class="lns-footer" :class="{ fixed: fixedFoot }">
         <layout-footer />
       </n-layout-footer>
       <n-back-top :right="70" :bottom="70" />

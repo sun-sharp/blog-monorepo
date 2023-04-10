@@ -85,6 +85,13 @@
           </div>
         </div>
 
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">固定底部</div>
+          <div class="drawer-setting-item-action">
+            <n-switch v-model:value="footerSetting.fixed" :loading="submitLoading" @update:value="switchChange" />
+          </div>
+        </div>
+
         <n-divider title-placement="center">界面显示</n-divider>
 
         <div class="drawer-setting-item">
@@ -118,7 +125,7 @@
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示页脚</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="showFooter" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="footerSetting.show" :loading="submitLoading" @update:value="switchChange" />
           </div>
         </div>
 
@@ -191,7 +198,7 @@
         getAppTheme,
         getIsPageAnimate,
         getPageAnimateType,
-        getShowFooter,
+        getFooterSetting,
       } = useSetting();
 
       // 复制computed的内容
@@ -209,7 +216,7 @@
         navMode: unref(getNavMode),
         isPageAnimate: unref(getIsPageAnimate),
         pageAnimateType: unref(getPageAnimateType),
-        showFooter: unref(getShowFooter),
+        footerSetting: unref(getFooterSetting),
       });
 
       // 展开

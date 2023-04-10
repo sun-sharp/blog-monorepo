@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
-import { CCrumbsSetting, CHeaderSetting, CMenuSetting, CMultiTabsSetting } from '/#/config';
+import { CCrumbsSetting, CFooterSetting, CHeaderSetting, CMenuSetting, CMultiTabsSetting } from '/#/config';
 
 export const useSetting = () => {
   const userStore = useUserStore();
@@ -25,7 +25,7 @@ export const useSetting = () => {
 
   const getAppTheme = computed<string>(() => userStore.getConfigInfo.appTheme);
 
-  const getShowFooter = computed<boolean>(() => userStore.getConfigInfo.showFooter);
+  const getFooterSetting = computed<CFooterSetting>(() => userStore.getConfigInfo.footerSetting);
 
   return {
     getNavMode,
@@ -34,7 +34,7 @@ export const useSetting = () => {
     getMultiTabsSetting,
     getMenuSetting,
     getCrumbsSetting,
-    getShowFooter,
+    getFooterSetting,
     getIsPageAnimate,
     getPageAnimateType,
     getIsDarkTheme,

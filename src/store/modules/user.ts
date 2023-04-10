@@ -67,8 +67,13 @@ const defaultConfigInfo: CUserConfigInfo = {
   navTheme: 'dark',
   // 路由动画类型
   pageAnimateType: 'zoom-fade',
-  // 页脚
-  showFooter: true,
+  // 底部
+  footerSetting: {
+    // 是否显示
+    show: true,
+    //固定底部
+    fixed: true,
+  },
 };
 
 export const useUserStore = defineStore({
