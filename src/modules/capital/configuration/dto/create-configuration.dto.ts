@@ -104,6 +104,26 @@ class CrumbsSettingDto {
 }
 
 /**
+ * @description 底部字段
+ * @class FooterSettingDto
+ */
+class FooterSettingDto {
+  @ApiProperty({
+    description: '是否显示底部',
+    example: true,
+  })
+  @IsBoolean({ message: '是否显示底部必须是枚举值' })
+  show: boolean;
+
+  @ApiProperty({
+    description: '固定底部',
+    example: true,
+  })
+  @IsBoolean({ message: '固定底部必须是枚举值' })
+  fixed: boolean;
+}
+
+/**
  * @description: 创建主题
  * @export
  * @class CreateConfigurationDto
@@ -145,11 +165,11 @@ export class CreateConfigurationDto {
   headerSetting: HeaderSettingDto;
 
   @ApiProperty({
-    description: '页脚',
-    example: true,
+    description: '底部',
   })
-  @IsBoolean({ message: '页脚必须是枚举值' })
-  showFooter: boolean;
+  @ValidateNested()
+  @Type(() => FooterSettingDto)
+  footerSetting: FooterSettingDto;
 
   @ApiProperty({
     description: '多标签',

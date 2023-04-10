@@ -74,6 +74,21 @@ export class CrumbsSetting {
 }
 
 /**
+ * @description 底部字段
+ * @export
+ * @class FooterSetting
+ */
+export class FooterSetting {
+  // 是否显示
+  @Prop()
+  show: boolean;
+
+  //固定底部
+  @Prop()
+  fixed: boolean;
+}
+
+/**
  * @description 设置数据字段
  * @export
  * @class Configuration
@@ -102,7 +117,7 @@ export class Configuration extends Document {
   headerSetting: HeaderSetting; // 顶部
 
   @Prop()
-  showFooter: boolean; // 页脚
+  footerSetting: FooterSetting; // 底部
 
   @Prop()
   multiTabsSetting: MultiTabsSetting; // 多标签

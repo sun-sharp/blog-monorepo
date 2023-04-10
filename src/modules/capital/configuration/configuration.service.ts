@@ -101,7 +101,7 @@ export class ConfigurationService {
               navMode: config.navMode,
               navTheme: config.navTheme,
               headerSetting: config.headerSetting,
-              showFooter: config.showFooter,
+              footerSetting: config.footerSetting,
               multiTabsSetting: config.multiTabsSetting,
               menuSetting: config.menuSetting,
               crumbsSetting: config.crumbsSetting,
