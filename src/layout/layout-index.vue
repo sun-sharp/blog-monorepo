@@ -171,7 +171,7 @@
 
     .lns-footer {
       &.fixed {
-        z-index: 3000;
+        z-index: 1500;
         bottom: 0;
         position: fixed;
         width: -webkit-fill-available;
@@ -181,7 +181,7 @@
 
     .lnf-header {
       &.fixed {
-        z-index: 3000;
+        z-index: 1500;
         top: 0;
         position: fixed;
         width: -webkit-fill-available;
@@ -191,7 +191,7 @@
 
     .lc-tabs {
       &.fixed {
-        z-index: 3000;
+        z-index: 1500;
         top: $header-height;
         position: fixed;
         width: -webkit-fill-available;
