@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-02-10 15:47:51
+ * @LastEditTime: 2023-04-10 18:06:36
  * @Description: 接口类型
  */
 
@@ -382,7 +382,7 @@ export const bankBillTypeOption = [
     label: '支付宝',
   },
   {
-    value: 2,
+    value: 11,
     label: '微信',
   },
   {
