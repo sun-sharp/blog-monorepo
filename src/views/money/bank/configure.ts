@@ -1,6 +1,6 @@
 import {
-  bankBillTypeMap,
-  bankBillTypeOption,
+  billTypeMap,
+  billTypeOption,
   bankTypeMap,
   bankTypeOption,
   incomeOrPayMap,
@@ -52,7 +52,7 @@ export const useConfigure = ({ reloadTable, updateModelRef }) => {
       componentProps: {
         filterable: true,
         placeholder: '请选择银行账单类型',
-        options: bankBillTypeOption,
+        options: billTypeOption,
       },
     },
   ];
@@ -109,7 +109,7 @@ export const useConfigure = ({ reloadTable, updateModelRef }) => {
       key: 'bankBillType',
       align: 'center',
       render(row: any) {
-        return bankBillTypeMap[row.bankBillType] || '';
+        return billTypeMap[row.bankBillType] || '';
       },
     },
     {
@@ -287,7 +287,7 @@ export const uploadColumns = () => {
           value: row.bankBillType,
           filterable: true,
           placeholder: '请选择',
-          options: bankBillTypeOption,
+          options: billTypeOption,
           'on-update:value': (value: string) => (row.bankBillType = value),
         });
       },

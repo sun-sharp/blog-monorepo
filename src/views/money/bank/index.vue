@@ -59,7 +59,7 @@
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     searchParams.value = values;
-    reloadTable();
+    actionRef.value.updatePage(1);
   };
 </script>
 <style lang="scss" scoped></style>

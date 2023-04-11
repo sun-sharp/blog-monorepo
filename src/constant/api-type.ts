@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-04-11 09:24:36
+ * @LastEditTime: 2023-04-11 10:01:43
  * @Description: 接口类型
  */
 
@@ -282,6 +282,26 @@ export const billTypeOption = [
     label: '支付宝余额宝充值',
   },
   {
+    value: 604,
+    label: '微信中转使用',
+  },
+  {
+    value: 605,
+    label: '支付宝中转使用',
+  },
+  {
+    value: 701,
+    label: '现金中转',
+  },
+  {
+    value: 702,
+    label: '现金花费',
+  },
+  {
+    value: 703,
+    label: '现金部分中转',
+  },
+  {
     value: 1001,
     label: '无效账单',
   },
@@ -374,36 +394,3 @@ export const voucherTypeOption = [
   },
 ];
 export const voucherTypeMap = arrEnumToObj(voucherTypeOption);
-
-// 账单“银行账单类型”枚举值
-export const bankBillTypeOption = [
-  {
-    value: 11,
-    label: '支付宝',
-  },
-  {
-    value: 21,
-    label: '微信',
-  },
-  {
-    value: 31,
-    label: '现金中转',
-  },
-  {
-    value: 32,
-    label: '现金花费',
-  },
-  {
-    value: 33,
-    label: '现金部分中转',
-  },
-  {
-    value: 41,
-    label: '工资',
-  },
-  {
-    value: 101,
-    label: '其它',
-  },
-];
-export const bankBillTypeMap = arrEnumToObj(bankBillTypeOption);

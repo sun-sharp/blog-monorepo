@@ -51,7 +51,7 @@
         <n-input v-model:value="modelForm.place" type="textarea" :rows="2" placeholder="请输入使用地点" />
       </n-form-item>
       <n-form-item label="银行账单类型" path="bankBillType">
-        <n-select v-model:value="modelForm.bankBillType" filterable :options="bankBillTypeOption" placeholder="请选择银行账单类型" />
+        <n-select v-model:value="modelForm.bankBillType" filterable :options="billTypeOption" placeholder="请选择银行账单类型" />
       </n-form-item>
     </n-form>
 
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-  import { bankBillTypeOption, bankTypeMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
+  import { billTypeOption, bankTypeMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { bankApi } from '@/api';
 
@@ -169,7 +169,7 @@
         bankTypeMap,
         voucherTypeMap,
         inflowOrOutflowOption,
-        bankBillTypeOption,
+        billTypeOption,
         init,
         confirmForm,
       };
