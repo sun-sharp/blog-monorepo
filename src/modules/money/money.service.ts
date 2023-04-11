@@ -216,7 +216,7 @@ export class MoneyService {
           // 查询某时间范围内的银行账单
           const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
           // 现金支出的金额
-          const cashMoneyArr = bankModelAll.filter((f) => f.bankBillType === 3 && f.inflowOrOutflow === 2).map((m) => m.moneyAmount);
+          const cashMoneyArr = bankModelAll.filter((f) => [32, 33].includes(f.bankBillType) && f.inflowOrOutflow === 2).map((m) => m.moneyAmount);
           console.log(cashMoneyArr);
 
           return (this.response = {
