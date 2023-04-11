@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-04-11 10:01:43
+ * @LastEditTime: 2023-04-11 16:43:48
  * @Description: 接口类型
  */
 
@@ -250,6 +250,10 @@ export const billTypeOption = [
     label: '归还-借呗',
   },
   {
+    value: 256,
+    label: '归还-京东白条',
+  },
+  {
     value: 301,
     label: '医院-挂号',
   },
@@ -270,8 +274,16 @@ export const billTypeOption = [
     label: '奖金',
   },
   {
+    value: 503,
+    label: '房租退还',
+  },
+  {
+    value: 504,
+    label: '公积金',
+  },
+  {
     value: 601,
-    label: '零钱充值',
+    label: '微信零钱充值',
   },
   {
     value: 602,
@@ -283,11 +295,19 @@ export const billTypeOption = [
   },
   {
     value: 604,
-    label: '微信中转使用',
+    label: '银行微信使用',
   },
   {
     value: 605,
-    label: '支付宝中转使用',
+    label: '银行支付宝使用',
+  },
+  {
+    value: 611,
+    label: '京东购买',
+  },
+  {
+    value: 621,
+    label: '淘宝购买',
   },
   {
     value: 701,
@@ -300,6 +320,10 @@ export const billTypeOption = [
   {
     value: 703,
     label: '现金部分中转',
+  },
+  {
+    value: 801,
+    label: '其它消费',
   },
   {
     value: 1001,

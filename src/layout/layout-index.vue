@@ -16,9 +16,10 @@
       arr.push('layout-default-background');
     }
     const fixFoot = unref(fixedFoot);
+    const isFoot = unref(isFooter);
     const fixHead = unref(fixedHeader);
     const fixMulti = unref(fixedMulti);
-    if (fixFoot) {
+    if (fixFoot && isFoot) {
       arr.push('layout-fixed--foot');
     }
     if (fixHead && !fixMulti) {

@@ -56,7 +56,7 @@ export const useConfigure = ({ reloadTable, addUpdateModelRef }) => {
     },
     {
       title: '角色',
-      key: 'roleName',
+      key: 'roleCode',
       align: 'center',
     },
   ];
