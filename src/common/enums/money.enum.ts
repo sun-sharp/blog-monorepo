@@ -13,7 +13,14 @@ export enum invalidEnum {
   bankBillType = 1001, // 账单类型-无效账单
 }
 
-//
+// 工资
 export enum capitalEnum {
   bankBillType = 501, // 账单类型-基本工资
+}
+
+// 现金
+export enum cashEnum {
+  bankBillTypeForTransit = 701, // 账单类型-现金中转
+  bankBillTypeForSpend = 702, // 账单类型-现金花费
+  bankBillTypeForPartTransit = 703, // 账单类型-现金部分中转
 }

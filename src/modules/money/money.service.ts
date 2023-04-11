@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { sumArrayToMoney, uniqueArray } from 'src/common/array';
+import { groupArray, sumArrayToMoney, uniqueArray } from 'src/common/array';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { IResponse } from 'src/interfaces/response.interface';
 import { AliPayService } from './ali-pay/ali-pay.service';
 import { BankService } from './bank/bank.service';
 import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
 import { WeChatService } from './we-chat/we-chat.service';
+import { cashEnum } from 'src/common/enums/money.enum';
 
 interface IBankFlow {
   voucherNum?: number;
@@ -216,12 +217,42 @@ export class MoneyService {
           // 查询某时间范围内的银行账单
           const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
           // 现金支出的金额
-          const cashMoneyArr = bankModelAll.filter((f) => [32, 33].includes(f.bankBillType) && f.inflowOrOutflow === 2).map((m) => m.moneyAmount);
-          console.log(cashMoneyArr);
+          const transitMoneyArr = bankModelAll
+            .filter((f) => [cashEnum.bankBillTypeForPartTransit, cashEnum.bankBillTypeForTransit].includes(f.bankBillType))
+            .map((m) => {
+              if (m.inflowOrOutflow === 1) {
+                return 0 - m.moneyAmount;
+              } else if (m.inflowOrOutflow === 2) {
+                return m.moneyAmount;
+              } else {
+                return 0;
+              }
+            });
+          // 现金花费方式的
+          const spendMoneyArr = bankModelAll
+            .filter((f) => [cashEnum.bankBillTypeForSpend].includes(f.bankBillType))
+            .map((m) => {
+              if (m.inflowOrOutflow === 1) {
+                return 0 - m.moneyAmount;
+              } else if (m.inflowOrOutflow === 2) {
+                return m.moneyAmount;
+              } else {
+                return 0;
+              }
+            });
+          const transitMoney = sumArrayToMoney(transitMoneyArr);
+          const cashMoney = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
+          console.log(cashMoney, 'cashMoney');
+          // 查询某时间范围内的银行账单
+          const weCharModelAll = await this.weChatService.findModelAll(userId, query.startTime, query.endTime);
+          const weCharGroup = groupArray(weCharModelAll, 'children', ['billType']);
+          console.log(weCharGroup);
 
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {},
+            result: {
+              cashMoney,
+            },
             message: '获取成功！',
           });
         })

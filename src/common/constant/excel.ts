@@ -101,8 +101,9 @@ export const bankExcelCellMap = {
         }
       }, // 对方户名
       13: (tar: any, val: any) => {
-        tar['tradeOtherPersonAccount'] = val;
-        if (val === '215500690') {
+        const newVal = filterStr(val);
+        tar['tradeOtherPersonAccount'] = newVal;
+        if (newVal === '215500690') {
           tar['bankBillType'] = aliPayEnum.bankBillType;
         } else if (!tar['bankBillType']) {
           tar['bankBillType'] = invalidEnum.bankBillType;
@@ -202,8 +203,9 @@ export const bankExcelCellMap = {
         }
       }, // 附言
       10: (tar: any, val: any) => {
-        tar['tradeOtherPersonAccount'] = val;
-        if (['243300133'].includes(val)) {
+        const newVal = filterStr(val);
+        tar['tradeOtherPersonAccount'] = newVal;
+        if (['243300133'].includes(newVal)) {
           tar['bankBillType'] = weCharEnum.bankBillType;
         } else if (!tar['bankBillType']) {
           tar['bankBillType'] = invalidEnum.bankBillType;
