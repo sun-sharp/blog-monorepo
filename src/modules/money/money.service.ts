@@ -242,16 +242,33 @@ export class MoneyService {
             });
           const transitMoney = sumArrayToMoney(transitMoneyArr);
           const cashMoney = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
-          console.log(cashMoney, 'cashMoney');
-          // 查询某时间范围内的银行账单
+          // 查询某时间范围内的微信账单
           const weChatModelAll = await this.weChatService.findModelAll(userId, query.startTime, query.endTime);
           const weChatGroup = groupArray(weChatModelAll, 'children', ['billType']);
-          console.log(weChatGroup);
+          const weChatOutflowArr = weChatGroup
+            .map((gr: { billType: any; children: any[] }) => {
+              const sumMoneyArr = gr.children.map((m: { inflowOrOutflow: number; moneyAmount: number }) => {
+                if (m.inflowOrOutflow === 1) {
+                  return 0 - m.moneyAmount;
+                } else if (m.inflowOrOutflow === 2) {
+                  return m.moneyAmount;
+                } else {
+                  return 0;
+                }
+              });
+              const sumMoney = sumArrayToMoney(sumMoneyArr);
+              return {
+                billType: gr.billType,
+                outflowMoney: sumMoney > 0 ? sumMoney : 0,
+              };
+            })
+            .filter((f: { outflowMoney: number }) => f.outflowMoney !== 0);
 
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
               cashMoney,
+              weChatOutflowArr,
             },
             message: '获取成功！',
           });

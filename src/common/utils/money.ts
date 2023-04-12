@@ -6,7 +6,7 @@ export const weChatExcelTargetHandler = (target: any) => {
   const tradeType = oldTarget.tradeType;
   const currentStatus = oldTarget.currentStatus;
   const paymentMethod = oldTarget.paymentMethod;
-  if (['微信红包'].includes(tradeType)) {
+  if (['微信红包', '企业微信红包'].includes(tradeType)) {
     target.billType = billTypeEnum.redPacket;
   }
   // 微信零钱
