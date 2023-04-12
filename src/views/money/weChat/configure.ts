@@ -237,10 +237,6 @@ export const uploadColumns = () => {
       align: 'center',
       width: 180,
       render(row: any) {
-        // 微信零钱
-        if (row.currentStatus === '已存入零钱' || row.paymentMethod === '零钱' || row.tradeType === '零钱充值') {
-          row.billMethod = 101;
-        }
         return h(NSelect, {
           value: row.billMethod,
           filterable: true,
@@ -255,10 +251,6 @@ export const uploadColumns = () => {
       align: 'center',
       width: 180,
       render(row: any) {
-        // 红包
-        if (row.tradeType === '微信红包') {
-          row.billType = 2;
-        }
         return h(NSelect, {
           value: row.billType,
           filterable: true,

@@ -244,18 +244,6 @@ export const uploadColumns = () => {
       align: 'center',
       width: 180,
       render(row: any) {
-        const { paymentMethod = '', tradeType = '' } = row;
-        if (tradeType !== '账户存取' && paymentMethod === '余额') {
-          row.billMethod = 111;
-        } else if (['余额宝'].includes(paymentMethod)) {
-          row.billMethod = 112;
-        } else if (['花呗'].includes(paymentMethod)) {
-          row.billMethod = 113;
-        } else if (paymentMethod.includes('中国农业银行')) {
-          row.billMethod = 2;
-        } else if (paymentMethod.includes('中国工商银行')) {
-          row.billMethod = 1;
-        }
         return h(NSelect, {
           value: row.billMethod,
           filterable: true,
@@ -270,16 +258,6 @@ export const uploadColumns = () => {
       align: 'center',
       width: 180,
       render(row: any) {
-        // 交通-地铁
-        if (
-          row.transactionClassification === '交通出行' &&
-          row.tradeOtherPerson === '成都金控数据服务有限公司' &&
-          ['天府通扫码乘车', '天府通APP乘车'].includes(row.productDescription)
-        ) {
-          row.billType = 136;
-        } else if (['余额宝-笔笔攒-单笔攒入'].includes(row.productDescription)) {
-          row.billType = 603;
-        }
         return h(NSelect, {
           value: row.billType,
           filterable: true,

@@ -58,7 +58,7 @@
   };
 
   // 获取银行数据的流动汇总
-  const lastMonthFormatRange = (formatStr) => {
+  const lastMonthFormatRange = (formatStr: string): [string, string] => {
     const nowTime = new Date();
     const year = nowTime.getFullYear();
     const month = nowTime.getMonth();
@@ -74,7 +74,8 @@
     attractInvestment: '招商银行',
   };
   const bankFlowData = ref<any[]>([]);
-  const getBankFlow = () => {
+  const getBankFlow = (formattedValue: [string, string]) => {
+    bankFlowDateRange.value = formattedValue;
     const params: any = {};
     if (bankFlowDateRange.value && bankFlowDateRange.value.length > 0) {
       params.startTime = bankFlowDateRange.value[0] + ' 00:00:00';
@@ -95,7 +96,8 @@
 
   // 统计某时间范围内的方式支出的金额
   const flowOutMoneyDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
-  const getFlowOutMoney = () => {
+  const getFlowOutMoney = (formattedValue: [string, string]) => {
+    flowOutMoneyDateRange.value = formattedValue;
     const params: any = {};
     if (flowOutMoneyDateRange.value && flowOutMoneyDateRange.value.length > 0) {
       params.startTime = flowOutMoneyDateRange.value[0] + ' 00:00:00';
@@ -111,8 +113,8 @@
 
   const init = () => {
     getMoneyBalance();
-    getBankFlow();
-    getFlowOutMoney();
+    getBankFlow(lastMonthFormatRange('yyyy-MM-dd'));
+    getFlowOutMoney(lastMonthFormatRange('yyyy-MM-dd'));
   };
 
   onMounted(init);
@@ -133,13 +135,13 @@
         <div class="summary-card__head">
           <span>银行流动</span>
           <n-date-picker
-            v-model:formatted-value="bankFlowDateRange"
+            :formatted-value="bankFlowDateRange"
             style="width: 280px"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             type="daterange"
             clearable
-            @update:value="getBankFlow()"
+            @update:formatted-value="getBankFlow($event)"
           />
         </div>
         <div class="summary-card__list">
@@ -164,13 +166,13 @@
         <div class="summary-card__head">
           <span>各方式所支出的金额</span>
           <n-date-picker
-            v-model:formatted-value="flowOutMoneyDateRange"
+            :formatted-value="flowOutMoneyDateRange"
             style="width: 280px"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             type="daterange"
             clearable
-            @update:value="getFlowOutMoney()"
+            @update:formatted-value="getFlowOutMoney($event)"
           />
         </div>
         <div class="summary-card__chart">1524</div>
