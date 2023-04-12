@@ -6,7 +6,7 @@ import { AliPayService } from './ali-pay/ali-pay.service';
 import { BankService } from './bank/bank.service';
 import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
 import { WeChatService } from './we-chat/we-chat.service';
-import { cashEnum } from 'src/common/enums/money.enum';
+import { billTypeEnum } from 'src/common/enums/money.enum';
 
 interface IBankFlow {
   voucherNum?: number;
@@ -218,7 +218,7 @@ export class MoneyService {
           const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
           // 现金支出的金额
           const transitMoneyArr = bankModelAll
-            .filter((f) => [cashEnum.bankBillTypeForPartTransit, cashEnum.bankBillTypeForTransit].includes(f.bankBillType))
+            .filter((f) => [billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType))
             .map((m) => {
               if (m.inflowOrOutflow === 1) {
                 return 0 - m.moneyAmount;
@@ -230,7 +230,7 @@ export class MoneyService {
             });
           // 现金花费方式的
           const spendMoneyArr = bankModelAll
-            .filter((f) => [cashEnum.bankBillTypeForSpend].includes(f.bankBillType))
+            .filter((f) => [billTypeEnum.cashSpend].includes(f.bankBillType))
             .map((m) => {
               if (m.inflowOrOutflow === 1) {
                 return 0 - m.moneyAmount;
@@ -244,9 +244,9 @@ export class MoneyService {
           const cashMoney = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
           console.log(cashMoney, 'cashMoney');
           // 查询某时间范围内的银行账单
-          const weCharModelAll = await this.weChatService.findModelAll(userId, query.startTime, query.endTime);
-          const weCharGroup = groupArray(weCharModelAll, 'children', ['billType']);
-          console.log(weCharGroup);
+          const weChatModelAll = await this.weChatService.findModelAll(userId, query.startTime, query.endTime);
+          const weChatGroup = groupArray(weChatModelAll, 'children', ['billType']);
+          console.log(weChatGroup);
 
           return (this.response = {
             code: ApiCode.SUCCESS,

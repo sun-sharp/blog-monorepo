@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { weCharExcelCellHandle } from 'src/common/constant/excel';
+import { weChatExcelCellHandle } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
@@ -10,7 +10,7 @@ import { WeChat } from 'src/schemas/money/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
-import { weCharExcelTargetHandler } from 'src/common/utils/money';
+import { weChatExcelTargetHandler } from 'src/common/utils/money';
 
 @Injectable()
 export class WeChatService {
@@ -32,8 +32,8 @@ export class WeChatService {
           const list = await excelCsvHandleBuffer({
             buffer: buffer,
             startNum: 18,
-            cellHandler: weCharExcelCellHandle,
-            targetHandler: weCharExcelTargetHandler,
+            cellHandler: weChatExcelCellHandle,
+            targetHandler: weChatExcelTargetHandler,
           });
           if (!list)
             throw {

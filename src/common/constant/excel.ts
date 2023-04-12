@@ -2,7 +2,7 @@ import { nowDateFun } from '../date';
 import { filterStr } from '../string';
 
 // 微信账单key值重命名
-export const weCharExcelCellHandle = {
+export const weChatExcelCellHandle = {
   1: (tar: any, val: any) => {
     tar['tradeTime'] = nowDateFun(val);
   }, // 交易时间
