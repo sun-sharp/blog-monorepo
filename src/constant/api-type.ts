@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-04-11 16:43:48
+ * @LastEditTime: 2023-04-12 17:21:15
  * @Description: 接口类型
  */
 
@@ -207,11 +207,15 @@ export const billTypeOption = [
   },
   {
     value: 141,
-    label: '吃-自做',
+    label: '吃-果蔬肉',
   },
   {
     value: 142,
-    label: '吃-熟食',
+    label: '吃-餐馆',
+  },
+  {
+    value: 143,
+    label: '吃-小吃',
   },
   {
     value: 151,
