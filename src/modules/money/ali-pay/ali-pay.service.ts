@@ -10,6 +10,7 @@ import { AliPay } from 'src/schemas/money/ali-pay.schema';
 import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
+import { aliPayExcelTargetHandler } from 'src/common/utils/money';
 
 @Injectable()
 export class AliPayService {
@@ -33,6 +34,7 @@ export class AliPayService {
             startNum: 3,
             endNum: 21,
             cellHandler: aliPayExcelCellHandle,
+            targetHandler: aliPayExcelTargetHandler,
           });
           if (!list)
             throw {

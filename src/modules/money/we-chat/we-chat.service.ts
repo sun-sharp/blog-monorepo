@@ -10,6 +10,7 @@ import { WeChat } from 'src/schemas/money/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
+import { weCharExcelTargetHandler } from 'src/common/utils/money';
 
 @Injectable()
 export class WeChatService {
@@ -32,6 +33,7 @@ export class WeChatService {
             buffer: buffer,
             startNum: 18,
             cellHandler: weCharExcelCellHandle,
+            targetHandler: weCharExcelTargetHandler,
           });
           if (!list)
             throw {

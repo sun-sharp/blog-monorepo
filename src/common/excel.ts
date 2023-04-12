@@ -7,6 +7,7 @@ interface excelCsvHandleBufferObj {
   startNum: number;
   endNum?: number;
   cellHandler: object;
+  targetHandler: (tar: any) => void;
   otherObj?: object;
 }
 
@@ -16,6 +17,7 @@ interface excelXlsxHandleBufferObj {
   startNum: number;
   endNum?: number;
   cellHandler: object;
+  targetHandler: (tar: any) => void;
   otherObj?: object;
 }
 
@@ -25,7 +27,7 @@ interface excelXlsxHandleBufferObj {
  * @return {Promise<any[]>}
  */
 export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promise<any[]> => {
-  const { buffer, startNum, endNum = 0, cellHandler = {}, otherObj = {} } = obj;
+  const { buffer, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
   const result = [];
   const workbook = new ExcelJS.Workbook();
   // 将buffer 转化为stream流
@@ -47,6 +49,7 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
         }
         cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
       });
+      targetHandler(target);
       result.push(target);
     }
   });
@@ -54,7 +57,7 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
 };
 
 export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Promise<any[]> => {
-  const { buffer, sheetName, startNum, endNum = 0, cellHandler = {}, otherObj = {} } = obj;
+  const { buffer, sheetName, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
   const result = [];
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(buffer); // 加载buffer文件
@@ -74,6 +77,7 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
         }
         cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
       });
+      targetHandler(target);
       result.push(target);
     }
   });

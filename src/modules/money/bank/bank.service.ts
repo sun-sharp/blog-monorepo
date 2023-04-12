@@ -11,6 +11,7 @@ import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
+import { bankExcelTargetHandler } from 'src/common/utils/money';
 
 @Injectable()
 export class BankService {
@@ -36,6 +37,7 @@ export class BankService {
               buffer: buffer,
               startNum: 2,
               cellHandler: excelCellHandle,
+              targetHandler: bankExcelTargetHandler,
               otherObj: { bankType: Number(itKey) },
             });
             if (!excelArr)

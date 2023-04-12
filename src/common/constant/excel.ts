@@ -1,5 +1,4 @@
 import { nowDateFun } from '../date';
-import { aliPayEnum, capitalEnum, invalidEnum, weCharEnum } from '../enums/money.enum';
 import { filterStr } from '../string';
 
 // 微信账单key值重命名
@@ -92,22 +91,10 @@ export const bankExcelCellMap = {
         tar['balance'] = val;
       }, // 余额
       12: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPerson'] = newVal;
-        if (newVal === '支付宝（中国）网络技术有限公司') {
-          tar['bankBillType'] = aliPayEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
+        tar['tradeOtherPerson'] = filterStr(val);
       }, // 对方户名
       13: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPersonAccount'] = newVal;
-        if (newVal === '215500690') {
-          tar['bankBillType'] = aliPayEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
+        tar['tradeOtherPersonAccount'] = filterStr(val);
       }, // 对方账号
       14: (tar: any, val: any) => {
         tar['tradeType'] = val;
@@ -126,15 +113,6 @@ export const bankExcelCellMap = {
       }, // 交易时间
       3: (tar: any, val: any) => {
         tar['explain'] = val;
-        if (['⽀付宝'].includes(val)) {
-          tar['bankBillType'] = aliPayEnum.bankBillType;
-        } else if (['财付通'].includes(val)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (['⼯资', '劳务'].includes(val)) {
-          tar['bankBillType'] = capitalEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
       }, // 摘要
       4: (tar: any, val: any) => {
         if (typeof val !== 'number') {
@@ -150,15 +128,7 @@ export const bankExcelCellMap = {
         tar['balance'] = val;
       }, // 余额
       6: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPerson'] = newVal;
-        if (['⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690'].includes(newVal)) {
-          tar['bankBillType'] = aliPayEnum.bankBillType;
-        } else if (['243300133'].includes(newVal)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
+        tar['tradeOtherPerson'] = filterStr(val);
       }, // 对⼿信息
       7: (tar: any, val: any) => {
         tar['tradeType'] = val;
@@ -196,29 +166,12 @@ export const bankExcelCellMap = {
       }, // 交易地点
       9: (tar: any, val: any) => {
         tar['tradeType'] = val;
-        if (['微信零钱提现'].includes(val)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
       }, // 附言
       10: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPersonAccount'] = newVal;
-        if (['243300133'].includes(newVal)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
+        tar['tradeOtherPersonAccount'] = filterStr(val);
       }, // 对方账号
       11: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPerson'] = newVal;
-        if (['财付通支付科技有限公司'].includes(newVal)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
+        tar['tradeOtherPerson'] = filterStr(val);
       }, // 户名
     },
   },
@@ -254,25 +207,10 @@ export const bankExcelCellMap = {
         tar['tradeType'] = val;
       }, // 交易渠道
       10: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPerson'] = newVal;
-        if (['⽀付宝（中国）⽹络技术有限公司', '蚂蚁基金'].includes(newVal)) {
-          tar['bankBillType'] = aliPayEnum.bankBillType;
-        } else if (['微信转账', '微信零钱充值账户'].includes(newVal)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
+        tar['tradeOtherPerson'] = filterStr(val);
       }, // 对方户名/账号
       11: (tar: any, val: any) => {
         tar['tradeOtherPersonRemarks'] = val;
-        if (['支付宝'].includes(val)) {
-          tar['bankBillType'] = aliPayEnum.bankBillType;
-        } else if (['财付通'].includes(val)) {
-          tar['bankBillType'] = weCharEnum.bankBillType;
-        } else if (!tar['bankBillType']) {
-          tar['bankBillType'] = invalidEnum.bankBillType;
-        }
       }, // 对方行名
     },
   },
@@ -303,8 +241,7 @@ export const bankExcelCellMap = {
         tar['tradeType'] = val;
       }, // 交易说明
       6: (tar: any, val: any) => {
-        const newVal = filterStr(val);
-        tar['tradeOtherPerson'] = newVal;
+        tar['tradeOtherPerson'] = filterStr(val);
       }, // 交易对方
     },
   },
