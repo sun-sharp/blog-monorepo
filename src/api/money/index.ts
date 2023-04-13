@@ -27,12 +27,12 @@ export const statisticsMoneyBalance = (params?: any) => {
 };
 
 /**
- * @description: 统计某时间范围内的方式支出的金额
+ * @description: 统计某时间范围内的方式流入/流出的金额
  * @param {any} params
  */
-export const statisticsFlowOutMoney = (params?: any) => {
+export const statisticsInflowOrOutflowMoney = (params?: any) => {
   return AxiosMoney.request({
-    url: `${basic}/statistics_flow_out_money`,
+    url: `${basic}/statistics_inflow_or_outflow_money`,
     method: 'GET',
     params,
   });

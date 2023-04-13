@@ -95,27 +95,40 @@
       .finally(() => {});
   };
 
-  // 统计某时间范围内的方式支出的金额
-  const flowOutMoneyDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
-  const flowOutMoneyData = ref<any>([]);
-  const flowOutMoneyCustomCfg = {
+  // 统计某时间范围内的方式流入/流出的金额
+  const inflowOrOutflowMoneyDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
+  const outflowMoneyData = ref<any>([]);
+  const outflowMoneyCustomCfg = {
     meta: {
       money: {
         alias: '金额',
       },
     },
   };
-  const getFlowOutMoney = (formattedValue: [string, string]) => {
-    flowOutMoneyDateRange.value = formattedValue;
+  const outflowMoneySumTotal = ref(0);
+  const inflowMoneyData = ref<any>([]);
+  const inflowMoneyCustomCfg = {
+    meta: {
+      money: {
+        alias: '金额',
+      },
+    },
+  };
+  const inflowMoneySumTotal = ref(0);
+  const getInflowOrOutflowMoney = (formattedValue: [string, string]) => {
+    inflowOrOutflowMoneyDateRange.value = formattedValue;
     const params: any = {};
-    if (flowOutMoneyDateRange.value && flowOutMoneyDateRange.value.length > 0) {
-      params.startTime = flowOutMoneyDateRange.value[0] + ' 00:00:00';
-      params.endTime = flowOutMoneyDateRange.value[1] + ' 23:59:59';
+    if (inflowOrOutflowMoneyDateRange.value && inflowOrOutflowMoneyDateRange.value.length > 0) {
+      params.startTime = inflowOrOutflowMoneyDateRange.value[0] + ' 00:00:00';
+      params.endTime = inflowOrOutflowMoneyDateRange.value[1] + ' 23:59:59';
     }
     moneyApi
-      .statisticsFlowOutMoney(params)
-      .then((arr) => {
-        flowOutMoneyData.value = arr;
+      .statisticsInflowOrOutflowMoney(params)
+      .then((info) => {
+        outflowMoneyData.value = info.outflowChart;
+        outflowMoneySumTotal.value = info.outflowSumTotal;
+        inflowMoneyData.value = info.inflowChart;
+        inflowMoneySumTotal.value = info.inflowSumTotal;
       })
       .finally(() => {});
   };
@@ -123,7 +136,7 @@
   const init = () => {
     getMoneyBalance();
     getBankFlow(lastMonthFormatRange('yyyy-MM-dd'));
-    getFlowOutMoney(lastMonthFormatRange('yyyy-MM-dd'));
+    getInflowOrOutflowMoney(lastMonthFormatRange('yyyy-MM-dd'));
   };
 
   onMounted(init);
@@ -157,43 +170,55 @@
         <div class="summary-card__list">
           <ul v-if="bankFlowData.length > 0" class="list-ul">
             <li v-for="(item, index) in bankFlowData" :key="index" class="list-item">
-              <h4>名称：{{ item.name }}</h4>
-              <p>
-                <span class="mr-5">开始余额：{{ item.startBalance }}</span>
-                <span>结束余额：{{ item.endBalance }}</span>
-              </p>
-              <p>
-                <span class="mr-5">流入金额：{{ item.inflowMoneyAmount }}</span>
-                <span>流出金额：{{ item.outflowMoneyAmount }}</span>
-              </p>
-              <p>{{ item.voucherNum }}份凭证</p>
+              <h4>名&emsp;&emsp;称：{{ item.name }}</h4>
+              <p>开始余额：{{ item.startBalance }}</p>
+              <p>结束余额：{{ item.endBalance }}</p>
+              <p>流入金额：{{ item.inflowMoneyAmount }}</p>
+              <p>流出金额：{{ item.outflowMoneyAmount }}</p>
+              <p>凭&emsp;&emsp;证：{{ item.voucherNum }}份</p>
             </li>
           </ul>
           <n-empty v-else class="w-full h-full justify-center" description="无数据"></n-empty>
         </div>
       </div>
-      <div class="summary-card" style="width: 100%">
+      <div class="summary-card full-card" style="height: 800px">
         <div class="summary-card__head">
-          <span>各方式所支出的金额</span>
+          <span>
+            各方式所流入/流出的金额
+            <span class="sub-title">流出总金额：{{ outflowMoneySumTotal || 0 }}</span>
+            <span class="sub-title">流入总金额：{{ inflowMoneySumTotal || 0 }}</span>
+          </span>
           <n-date-picker
-            :formatted-value="flowOutMoneyDateRange"
+            :formatted-value="inflowOrOutflowMoneyDateRange"
             style="width: 280px"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             type="daterange"
             clearable
-            @update:formatted-value="getFlowOutMoney($event)"
+            @update:formatted-value="getInflowOrOutflowMoney($event)"
           />
         </div>
         <div class="summary-card__chart">
-          <single-column-chart
-            v-if="flowOutMoneyData.length > 0"
-            :chart-data="flowOutMoneyData"
-            :custom-cfg="flowOutMoneyCustomCfg"
-            x-field="name"
-            y-field="money"
-          ></single-column-chart>
-          <n-empty v-else class="w-full h-full justify-center" description="无数据"></n-empty>
+          <div class="chart-separate">
+            <single-column-chart
+              v-if="outflowMoneyData.length > 0"
+              :chart-data="outflowMoneyData"
+              :custom-cfg="outflowMoneyCustomCfg"
+              x-field="name"
+              y-field="money"
+            ></single-column-chart>
+            <n-empty v-else class="w-full h-full justify-center" description="无流出数据"></n-empty>
+          </div>
+          <div class="chart-separate mt-10">
+            <single-column-chart
+              v-if="inflowMoneyData.length > 0"
+              :chart-data="inflowMoneyData"
+              :custom-cfg="inflowMoneyCustomCfg"
+              x-field="name"
+              y-field="money"
+            ></single-column-chart>
+            <n-empty v-else class="w-full h-full justify-center" description="无流入数据"></n-empty>
+          </div>
         </div>
       </div>
     </div>
@@ -213,6 +238,10 @@
       display: flex;
       flex-direction: column;
 
+      &.full-card {
+        width: 100%;
+      }
+
       &__head {
         display: flex;
         align-items: center;
@@ -222,6 +251,12 @@
         font-weight: 600;
         padding: 10px 16px;
         border-bottom: 1px solid #e9e9e9;
+
+        .sub-title {
+          font-size: 14px;
+          font-weight: 400;
+          margin-left: 10px;
+        }
       }
 
       &__chart {
@@ -229,6 +264,10 @@
         flex: 1;
         height: 0;
         overflow: hidden;
+
+        .chart-separate {
+          height: calc(50% - 5px);
+        }
       }
 
       &__list {
@@ -243,10 +282,17 @@
           flex-wrap: wrap;
         }
         .list-item {
-          width: calc(50% - 5px);
+          width: calc(100% / 3 - 5px);
           padding: 5px;
           border: 1px solid #e4e4e4;
           margin-top: 5px;
+
+          h4 {
+            color: #000;
+          }
+          p {
+            color: #878787;
+          }
         }
       }
 
