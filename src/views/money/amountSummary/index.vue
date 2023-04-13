@@ -3,6 +3,7 @@
   import { onMounted, ref } from 'vue';
   import { format } from 'date-fns';
   import InnerPieChart from '@/components/charts/inner-pie-chart.vue';
+  import SingleColumnChart from '@/components/charts/single-column-chart.vue';
 
   // 统计各个的方式的余额
   const defaultMoneyBalanceMap = {
@@ -96,6 +97,14 @@
 
   // 统计某时间范围内的方式支出的金额
   const flowOutMoneyDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
+  const flowOutMoneyData = ref<any>([]);
+  const flowOutMoneyCustomCfg = {
+    meta: {
+      money: {
+        alias: '金额',
+      },
+    },
+  };
   const getFlowOutMoney = (formattedValue: [string, string]) => {
     flowOutMoneyDateRange.value = formattedValue;
     const params: any = {};
@@ -105,8 +114,8 @@
     }
     moneyApi
       .statisticsFlowOutMoney(params)
-      .then((info) => {
-        console.log(info);
+      .then((arr) => {
+        flowOutMoneyData.value = arr;
       })
       .finally(() => {});
   };
@@ -128,7 +137,8 @@
           <span>各个方式的余额</span>
         </div>
         <div class="summary-card__chart">
-          <inner-pie-chart :chart-data="moneyBalanceData" :custom-cfg="moneyBalanceCustomCfg" />
+          <inner-pie-chart v-if="moneyBalanceData.length > 0" :chart-data="moneyBalanceData" :custom-cfg="moneyBalanceCustomCfg" />
+          <n-empty v-else class="w-full h-full justify-center" description="无数据"></n-empty>
         </div>
       </div>
       <div class="summary-card">
@@ -162,7 +172,7 @@
           <n-empty v-else class="w-full h-full justify-center" description="无数据"></n-empty>
         </div>
       </div>
-      <div class="summary-card">
+      <div class="summary-card" style="width: 100%">
         <div class="summary-card__head">
           <span>各方式所支出的金额</span>
           <n-date-picker
@@ -175,15 +185,18 @@
             @update:formatted-value="getFlowOutMoney($event)"
           />
         </div>
-        <div class="summary-card__chart">1524</div>
+        <div class="summary-card__chart">
+          <single-column-chart
+            v-if="flowOutMoneyData.length > 0"
+            :chart-data="flowOutMoneyData"
+            :custom-cfg="flowOutMoneyCustomCfg"
+            x-field="name"
+            y-field="money"
+          ></single-column-chart>
+          <n-empty v-else class="w-full h-full justify-center" description="无数据"></n-empty>
+        </div>
       </div>
     </div>
-    <!-- <n-date-picker v-model:formatted-value="datePickerRange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" type="daterange" clearable />
-    <n-space>
-      <n-button type="info" @click="getBankFlow">银行流动</n-button>
-      <n-button type="info" @click="getMoneyBalance">余额</n-button>
-      <n-button type="info" @click="getFlowOutMoney">支出的金额</n-button>
-    </n-space> -->
   </n-card>
 </template>
 
