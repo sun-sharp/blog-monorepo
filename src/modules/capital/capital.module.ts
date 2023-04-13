@@ -9,6 +9,7 @@ import { RoleModule } from './role/role.module';
 import { MenuModule } from './menu/menu.module';
 import { capitalMongooseModuleForRoot } from 'src/common/constant/mongoose';
 import { ConfigurationModule } from './configuration/configuration.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ConfigurationModule } from './configuration/configuration.module';
         ],
       },
     ]),
+    CategoryModule,
   ],
   controllers: [CapitalController],
   providers: [CapitalService],
