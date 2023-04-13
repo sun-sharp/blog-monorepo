@@ -39,6 +39,7 @@
             autoRotate: false,
           },
         },
+        maxColumnWidth: 40,
         slider: {
           start: 0,
           end: 1,
