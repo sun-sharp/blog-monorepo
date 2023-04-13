@@ -18,7 +18,7 @@ export class Category extends Document {
   value: number; // 分类标识
 
   @Prop()
-  name: string; // 分类名称
+  label: string; // 分类名称
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

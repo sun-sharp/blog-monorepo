@@ -33,11 +33,11 @@ export class MoneyController {
     return this.moneyService.statisticsMoneyBalance(req.user._id);
   }
 
-  @Get('statistics_flow_out_money')
+  @Get('statistics_inflow_or_outflow_money')
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: '统计某时间范围内的方式支出的金额' })
-  statisticsFlowOutMoney(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
-    return this.moneyService.statisticsFlowOutMoney(req.user._id, query);
+  @ApiOperation({ summary: '统计某时间范围内的方式流入/流出的金额' })
+  statisticsInflowOrOutflowMoney(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
+    return this.moneyService.statisticsInflowOrOutflowMoney(req.user._id, query);
   }
 }

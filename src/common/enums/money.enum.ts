@@ -9,7 +9,12 @@ export enum billTypeEnum {
   cashPartTransit = 703, // 现金部分中转
   redPacket = 2, // 微信红包
   trafficSubway = 136, // 交通-地铁
+  weChatChangeRecharge = 601, // 微信零钱充值
+  aliPayBalanceRecharge = 602, // 支付宝余额充值
   aliPayBalanceBabyRecharge = 603, // 支付宝余额宝充值
+  withdrawBusiness = 201, // 提现-中国工商银行
+  withdrawAgriculture = 202, // 提现-中国农业银行
+  withdrawBuild = 203, // 提现-中国建设银行
 }
 
 // 账单方式

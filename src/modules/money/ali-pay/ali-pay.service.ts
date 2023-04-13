@@ -363,4 +363,26 @@ export class AliPayService {
         })
     );
   }
+
+  /**
+   * @description: 根据交易时间范围查询全部支付宝账单
+   * @param {string} userId
+   * @param {string} startTime
+   * @param {string} endTime
+   * @return {Promise<Array<AliPay>>}
+   */
+  public findModelAll(userId: string, startTime: string, endTime: string): Promise<Array<AliPay>> {
+    return (
+      Promise.resolve({ userId, startTime, endTime })
+        .then(async ({ userId, startTime, endTime }) => {
+          const findData: any = { userId };
+          if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
+          return await this.aliPayModel.find(findData).sort({ tradeTime: 1 });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
 }

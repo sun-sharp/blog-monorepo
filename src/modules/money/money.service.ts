@@ -7,6 +7,8 @@ import { BankService } from './bank/bank.service';
 import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
 import { WeChatService } from './we-chat/we-chat.service';
 import { billTypeEnum } from 'src/common/enums/money.enum';
+import { CategoryService } from '../capital/category/category.service';
+import { categoryTypeEnum } from 'src/common/enums/category.enum';
 
 interface IBankFlow {
   voucherNum?: number;
@@ -22,7 +24,12 @@ interface IBankFlow {
 @Injectable()
 export class MoneyService {
   response: IResponse;
-  constructor(private readonly bankService: BankService, private readonly weChatService: WeChatService, private readonly aliPayService: AliPayService) {}
+  constructor(
+    private readonly bankService: BankService,
+    private readonly weChatService: WeChatService,
+    private readonly aliPayService: AliPayService,
+    private readonly categoryService: CategoryService,
+  ) {}
 
   index() {
     return '金钱内容';
@@ -205,18 +212,20 @@ export class MoneyService {
   }
 
   /**
-   * @description: 统计某时间范围内的方式支出的金额
+   * @description: 统计某时间范围内的方式流入/流出的金额
    * @param {string} userId
    * @param {StatisticsStartEndTimeDto} query
    * @return {Promise<IResponse>}
    */
-  public statisticsFlowOutMoney(userId: string, query?: StatisticsStartEndTimeDto): Promise<IResponse> {
+  public statisticsInflowOrOutflowMoney(userId: string, query?: StatisticsStartEndTimeDto): Promise<IResponse> {
     return (
       Promise.resolve({ userId, query })
         .then(async ({ userId, query }) => {
+          // 获取账单的类型分类
+          const billTypeOptions = await this.categoryService.findByType(categoryTypeEnum.moneyBillType);
           // 查询某时间范围内的银行账单
           const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
-          // 现金支出的金额
+          // 现金流入/流出的金额
           const transitMoneyArr = bankModelAll
             .filter((f) => [billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType))
             .map((m) => {
@@ -240,35 +249,107 @@ export class MoneyService {
                 return 0;
               }
             });
+          // 银行现金流出的
           const transitMoney = sumArrayToMoney(transitMoneyArr);
-          const cashMoney = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
-          // 查询某时间范围内的微信账单
+          const bankCashOutflow = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
+          // 银行现金流入的
+          const bankCashInflow = transitMoney < 0 ? 0 - transitMoney : 0;
+          //* 银行除现金外，其它方式 */
+          const bankOtherMoneyArr = bankModelAll.filter(
+            (f) => ![billTypeEnum.cashSpend, billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType),
+          );
+          //* 查询某时间范围内的微信账单 */
           const weChatModelAll = await this.weChatService.findModelAll(userId, query.startTime, query.endTime);
-          const weChatGroup = groupArray(weChatModelAll, 'children', ['billType']);
-          const weChatOutflowArr = weChatGroup
-            .map((gr: { billType: any; children: any[] }) => {
-              const sumMoneyArr = gr.children.map((m: { inflowOrOutflow: number; moneyAmount: number }) => {
-                if (m.inflowOrOutflow === 1) {
-                  return 0 - m.moneyAmount;
-                } else if (m.inflowOrOutflow === 2) {
-                  return m.moneyAmount;
-                } else {
-                  return 0;
-                }
-              });
-              const sumMoney = sumArrayToMoney(sumMoneyArr);
-              return {
-                billType: gr.billType,
-                outflowMoney: sumMoney > 0 ? sumMoney : 0,
-              };
-            })
-            .filter((f: { outflowMoney: number }) => f.outflowMoney !== 0);
-
+          //* 查询某时间范围内的支付宝账单 */
+          const aliPayModelAll = await this.aliPayService.findModelAll(userId, query.startTime, query.endTime);
+          const aliPayAndWeChatArr = groupArray(
+            weChatModelAll
+              .map((m) => ({
+                billType: m.billType,
+                inflowOrOutflow: m.inflowOrOutflow,
+                moneyAmount: m.moneyAmount,
+              }))
+              .concat(
+                aliPayModelAll.map((m) => ({
+                  billType: m.billType,
+                  inflowOrOutflow: m.inflowOrOutflow,
+                  moneyAmount: m.moneyAmount,
+                })),
+              )
+              .concat(
+                bankOtherMoneyArr.map((m) => ({
+                  billType: m.bankBillType,
+                  inflowOrOutflow: m.inflowOrOutflow,
+                  moneyAmount: m.moneyAmount,
+                })),
+              ),
+            'children',
+            ['billType'],
+          );
+          const aliPayAndWeChatInflowOrOutflowArr = aliPayAndWeChatArr.map((gr: { billType: any; children: any[] }) => {
+            const sumMoneyArr = gr.children.map((m: { inflowOrOutflow: number; moneyAmount: number }) => {
+              if (m.inflowOrOutflow === 1) {
+                return 0 - m.moneyAmount;
+              } else if (m.inflowOrOutflow === 2) {
+                return m.moneyAmount;
+              } else {
+                return 0;
+              }
+            });
+            const sumMoney = sumArrayToMoney(sumMoneyArr);
+            const billTypeFind = billTypeOptions.find((f) => f.value === gr.billType);
+            const billTypeName = billTypeFind ? billTypeFind.label : String(gr.billType);
+            return {
+              name: billTypeName,
+              billType: gr.billType,
+              outflowMoney: sumMoney > 0 ? sumMoney : 0,
+              inflowMoney: sumMoney < 0 ? 0 - sumMoney : 0,
+            };
+          });
+          const aliPayAndWeChatOutflowArr = aliPayAndWeChatInflowOrOutflowArr
+            .map((m: { name: string; outflowMoney: number }) => ({
+              name: m.name,
+              money: m.outflowMoney,
+            }))
+            .filter((f: { money: number }) => f.money !== 0);
+          const bankCashName = '银行现金';
+          // 汇总流出的数据
+          const outflowChart = (bankCashOutflow > 0 ? [{ name: bankCashName, money: bankCashOutflow }] : []).concat(aliPayAndWeChatOutflowArr);
+          const outflowSumTotal = sumArrayToMoney(
+            aliPayAndWeChatInflowOrOutflowArr
+              .filter(
+                (f: { billType: number }) =>
+                  ![
+                    billTypeEnum.aliPayBalanceBabyRecharge,
+                    billTypeEnum.withdrawBusiness,
+                    billTypeEnum.withdrawAgriculture,
+                    billTypeEnum.withdrawBuild,
+                  ].includes(f.billType),
+              )
+              .map((m: { outflowMoney: number }) => m.outflowMoney)
+              .concat([bankCashOutflow]),
+          );
+          // 汇总流入的数据
+          const aliPayAndWeChatInflowArr = aliPayAndWeChatInflowOrOutflowArr
+            .map((m: { name: string; inflowMoney: number }) => ({
+              name: m.name,
+              money: m.inflowMoney,
+            }))
+            .filter((f: { money: number }) => f.money !== 0);
+          const inflowChart = (bankCashInflow > 0 ? [{ name: bankCashName, money: bankCashInflow }] : []).concat(aliPayAndWeChatInflowArr);
+          const inflowSumTotal = sumArrayToMoney(
+            aliPayAndWeChatInflowOrOutflowArr
+              .filter((f: { billType: number }) => ![billTypeEnum.weChatChangeRecharge, billTypeEnum.aliPayBalanceRecharge].includes(f.billType))
+              .map((m: { inflowMoney: number }) => m.inflowMoney)
+              .concat([bankCashInflow]),
+          );
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
-              cashMoney,
-              weChatOutflowArr,
+              outflowSumTotal,
+              outflowChart,
+              inflowSumTotal,
+              inflowChart,
             },
             message: '获取成功！',
           });
