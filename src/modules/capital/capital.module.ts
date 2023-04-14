@@ -20,6 +20,7 @@ import { CategoryModule } from './category/category.module';
     RoleModule,
     MenuModule,
     ConfigurationModule,
+    CategoryModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -40,10 +41,13 @@ import { CategoryModule } from './category/category.module';
             path: '/',
             module: ConfigurationModule,
           },
+          {
+            path: '/',
+            module: CategoryModule,
+          },
         ],
       },
     ]),
-    CategoryModule,
   ],
   controllers: [CapitalController],
   providers: [CapitalService],
