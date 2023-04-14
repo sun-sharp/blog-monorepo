@@ -95,3 +95,9 @@ export interface CLoginFormState {
   password: string;
 }
 
+// 下拉选择器的参数
+export interface COption {
+  value: string | number;
+  label: string;
+}
+
