@@ -28,7 +28,7 @@
   </n-card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { weChatApi } from '@/api';
   import FormSearch from '@/components/form/form-search.vue';
   import BasicTable from '@/components/Table/basic-table.vue';
@@ -36,12 +36,16 @@
   import { UploadOutlined } from '@/utils';
   import UploadFileModel from './upload-file-model.vue';
   import UpdateModel from './update-model.vue';
+  import { getBillTypeData, useApiType } from '@/hooks';
 
   // 导入弹窗
   const uploadFileModelRef = ref();
 
   // 编辑弹窗
   const updateModelRef = ref();
+
+  // 账单类型
+  const { getBillTypeOption, getBillTypeMap } = useApiType();
 
   /**
    * 表格
@@ -57,7 +61,7 @@
     actionRef.value.reload();
   };
   // 配置
-  const { searchSchemas, actionColumn, columns } = useConfigure({ updateModelRef });
+  const { searchSchemas, actionColumn, columns } = useConfigure({ updateModelRef, getBillTypeOption, getBillTypeMap });
 
   // 数据查询
   const searchSubmit = (values: Recordable) => {
@@ -78,5 +82,9 @@
         btnBalanceLoading.value = false;
       });
   };
+
+  onMounted(() => {
+    getBillTypeData();
+  });
 </script>
 <style lang="scss" scoped></style>

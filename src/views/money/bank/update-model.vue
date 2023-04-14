@@ -7,9 +7,6 @@
       <n-form-item label="交易类型">
         {{ modelForm.tradeType }}
       </n-form-item>
-      <n-form-item label="银行类型">
-        {{ bankTypeMap[modelForm.bankType] || '' }}
-      </n-form-item>
       <n-form-item label="凭证类型">
         {{ voucherTypeMap[modelForm.voucherType] || '' }}
       </n-form-item>
@@ -65,9 +62,10 @@
 </template>
 
 <script lang="ts">
-  import { billTypeOption, bankTypeMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
+  import { inflowOrOutflowOption, voucherTypeMap } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { bankApi } from '@/api';
+  import { useApiType } from '@/hooks';
 
   const modelFields = {
     tradeTime: '',
@@ -115,6 +113,9 @@
 
       // 角色列表
       const roleOption = ref([]);
+
+      // 获取账单类型
+      const { getBillTypeOption } = useApiType();
 
       // 初始化
       const init = (row: any) => {
@@ -166,10 +167,9 @@
         modelRules,
         formBtnLoading,
         roleOption,
-        bankTypeMap,
         voucherTypeMap,
         inflowOrOutflowOption,
-        billTypeOption,
+        billTypeOption: getBillTypeOption,
         init,
         confirmForm,
       };

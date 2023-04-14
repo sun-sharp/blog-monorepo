@@ -1,11 +1,11 @@
-import { billMethodMap, billMethodOption, billTypeMap, billTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
+import { billMethodMap, billMethodOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
-import { h, reactive } from 'vue';
+import { h, reactive, unref, computed } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
 
-export const useConfigure = ({ updateModelRef }) => {
+export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap }) => {
   // 查询配置
-  const searchSchemas = [
+  const searchSchemas = computed(() => [
     {
       field: 'tradeOtherPerson',
       component: 'NInput',
@@ -40,13 +40,13 @@ export const useConfigure = ({ updateModelRef }) => {
       componentProps: {
         filterable: true,
         placeholder: '请选择账单类型',
-        options: billTypeOption,
+        options: unref(getBillTypeOption),
       },
     },
-  ];
+  ]);
 
   // 表格字段配置
-  const columns = [
+  const columns = computed(() => [
     {
       title: '交易时间',
       key: 'tradeTime',
@@ -105,10 +105,10 @@ export const useConfigure = ({ updateModelRef }) => {
       key: 'billType',
       align: 'center',
       render(row: any) {
-        return billTypeMap[row.billType] || '';
+        return unref(getBillTypeMap)[row.billType] || '';
       },
     },
-  ];
+  ]);
 
   const actionColumn = reactive({
     width: 150,
@@ -140,7 +140,7 @@ export const useConfigure = ({ updateModelRef }) => {
 };
 
 // 导入表格字段配置
-export const uploadColumns = () => {
+export const uploadColumns = ({ getBillTypeOption }) => {
   return [
     {
       title: '序号',
@@ -255,7 +255,7 @@ export const uploadColumns = () => {
           value: row.billType,
           filterable: true,
           placeholder: '请选择',
-          options: billTypeOption,
+          options: unref(getBillTypeOption),
           'on-update:value': (value: string) => (row.billType = value),
         });
       },

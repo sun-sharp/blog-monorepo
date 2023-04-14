@@ -63,9 +63,10 @@
 </template>
 
 <script lang="ts">
-  import { billTypeOption, billMethodOption, inflowOrOutflowOption } from '@/constant';
+  import { billMethodOption, inflowOrOutflowOption } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { weChatApi } from '@/api';
+  import { useApiType } from '@/hooks';
 
   const modelFields = {
     tradeTime: '',
@@ -120,6 +121,9 @@
       // 角色列表
       const roleOption = ref([]);
 
+      // 获取账单类型
+      const { getBillTypeOption } = useApiType();
+
       // 初始化
       const init = (row: any) => {
         showModal.value = true;
@@ -171,7 +175,7 @@
         formBtnLoading,
         roleOption,
         inflowOrOutflowOption,
-        billTypeOption,
+        billTypeOption: getBillTypeOption,
         billMethodOption,
         init,
         confirmForm,
