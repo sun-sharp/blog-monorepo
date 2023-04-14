@@ -4,6 +4,7 @@ export * as menuApi from './capital/menu';
 export * as userApi from './capital/user';
 export * as roleApi from './capital/role';
 export * as configurationApi from './capital/configuration';
+export * as categoryApi from './capital/category';
 
 // file
 export * as imageApi from './file/image';

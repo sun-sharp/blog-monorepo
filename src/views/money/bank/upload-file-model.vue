@@ -27,6 +27,7 @@
   import TableAll from '@/components/Table/table-all.vue';
   import FormUploadExcel from '@/components/form/form-upload-excel.vue';
   import { uploadColumns } from './configure';
+  import { useApiType } from '@/hooks';
 
   export default defineComponent({
     name: 'UploadFileModel',
@@ -38,7 +39,10 @@
       const btnDisabled = computed(() => {
         return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length !== 0;
       });
-      const columns = uploadColumns();
+
+      // 获取账单类型
+      const { getBillTypeOption } = useApiType();
+      const columns = uploadColumns({ getBillTypeOption });
       const uploadFileList = ref([]);
 
       // 重新刷新

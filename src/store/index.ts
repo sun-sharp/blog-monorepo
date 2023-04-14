@@ -4,8 +4,9 @@ import { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-s
 import { useUserStore, useUserStoreWidthOut } from './modules/user';
 import { useRouteStore, useRouteStoreWidthOut } from './modules/route';
 import { useTabsViewStore } from './modules/tabs-view';
+import { useApiTypeStore } from './modules/api-type';
 
-export { useLockScreenStore, useUserStore, useRouteStore, useTabsViewStore };
+export { useApiTypeStore, useLockScreenStore, useUserStore, useRouteStore, useTabsViewStore };
 
 export { useLockScreenStoreWidthOut, useUserStoreWidthOut, useRouteStoreWidthOut };
 

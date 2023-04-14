@@ -4,14 +4,7 @@
  * @Description: 接口类型
  */
 
-// 将枚举值的数组形式转化成对象形式
-const arrEnumToObj = (arr: Array<any>, value = 'value', label = 'label') => {
-  const obj = {};
-  arr.forEach((item) => {
-    obj[item[value]] = item[label];
-  });
-  return obj;
-};
+import { arrEnumToObj } from '@/utils';
 
 // 菜单类型枚举值
 export const menuTypeOption = [

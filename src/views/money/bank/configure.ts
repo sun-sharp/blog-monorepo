@@ -1,21 +1,13 @@
-import {
-  billTypeMap,
-  billTypeOption,
-  bankTypeMap,
-  bankTypeOption,
-  incomeOrPayMap,
-  inflowOrOutflowMap,
-  inflowOrOutflowOption,
-  voucherTypeMap,
-} from '@/constant';
+import { bankTypeMap, bankTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
 import { bankApi } from '@/api';
+import { computed } from 'vue';
+import { unref } from 'vue';
 
-export const useConfigure = ({ reloadTable, updateModelRef }) => {
-  // 查询配置
-  const searchSchemas = [
+export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, getBillTypeMap }) => {
+  const searchSchemas = computed(() => [
     {
       field: 'tradeOtherPerson',
       component: 'NInput',
@@ -52,13 +44,13 @@ export const useConfigure = ({ reloadTable, updateModelRef }) => {
       componentProps: {
         filterable: true,
         placeholder: '请选择银行账单类型',
-        options: billTypeOption,
+        options: unref(getBillTypeOption),
       },
     },
-  ];
+  ]);
 
   // 表格字段配置
-  const columns = [
+  const columns = computed(() => [
     {
       title: '交易时间',
       key: 'tradeTime',
@@ -109,7 +101,7 @@ export const useConfigure = ({ reloadTable, updateModelRef }) => {
       key: 'bankBillType',
       align: 'center',
       render(row: any) {
-        return billTypeMap[row.bankBillType] || '';
+        return unref(getBillTypeMap)[row.bankBillType] || '';
       },
     },
     {
@@ -120,7 +112,7 @@ export const useConfigure = ({ reloadTable, updateModelRef }) => {
         return inflowOrOutflowMap[row.inflowOrOutflow] || '';
       },
     },
-  ];
+  ]);
 
   // 删除表格数据
   const handleDelete = (bankId: string) => {
@@ -166,8 +158,8 @@ export const useConfigure = ({ reloadTable, updateModelRef }) => {
 };
 
 // 导入表格字段配置
-export const uploadColumns = () => {
-  return [
+export const uploadColumns = ({ getBillTypeOption }) => {
+  return computed(() => [
     {
       title: '序号',
       align: 'center',
@@ -287,10 +279,10 @@ export const uploadColumns = () => {
           value: row.bankBillType,
           filterable: true,
           placeholder: '请选择',
-          options: billTypeOption,
+          options: unref(getBillTypeOption),
           'on-update:value': (value: string) => (row.bankBillType = value),
         });
       },
     },
-  ];
+  ]);
 };

@@ -6,3 +6,4 @@ export * from './useECharts';
 export * from './event';
 export * from './table';
 export * from './useTimeout';
+export * from './useApiType';

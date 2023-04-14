@@ -25,7 +25,7 @@
   </n-card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { bankApi } from '@/api';
   import FormSearch from '@/components/form/form-search.vue';
   import BasicTable from '@/components/Table/basic-table.vue';
@@ -33,12 +33,16 @@
   import { UploadOutlined } from '@/utils';
   import UploadFileModel from './upload-file-model.vue';
   import UpdateModel from './update-model.vue';
+  import { useApiType, getBillTypeData } from '@/hooks';
 
   // 导入弹窗
   const uploadFileModelRef = ref();
 
   // 编辑弹窗
   const updateModelRef = ref();
+
+  // 获取账单类型
+  const { getBillTypeOption, getBillTypeMap } = useApiType();
 
   /**
    * 表格
@@ -54,12 +58,21 @@
     actionRef.value.reload();
   };
   // 配置
-  const { searchSchemas, actionColumn, columns } = useConfigure({ reloadTable, updateModelRef });
+  const { searchSchemas, actionColumn, columns } = useConfigure({
+    reloadTable,
+    updateModelRef,
+    getBillTypeOption,
+    getBillTypeMap,
+  });
 
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     searchParams.value = values;
     actionRef.value.updatePage(1);
   };
+
+  onMounted(() => {
+    getBillTypeData();
+  });
 </script>
 <style lang="scss" scoped></style>

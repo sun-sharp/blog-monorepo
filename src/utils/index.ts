@@ -10,3 +10,4 @@ export * from './files';
 export * from './props';
 export * from './domUtils';
 export * from './table';
+export * from './array';
