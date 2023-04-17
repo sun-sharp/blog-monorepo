@@ -90,20 +90,20 @@ export const useApiTypeStore = defineStore({
         value: m.value,
       }));
     },
-    // 获取账单方式
+    // 获取图片来源
     async getImageSource() {
       // 已经加载的数据，取消重复加载
       if (this.imageSourceOption.length > 0) {
         return;
       }
-      const [err, resp] = await at(categoryApi.certainTypeAll(categoryTypeEnum.moneyBillMethod));
+      const [err, resp] = await at(categoryApi.certainTypeAll(categoryTypeEnum.capitalImageSource));
       if (err || !resp) {
         this.imageSourceOption = [];
         return;
       }
-      this.imageSourceOption = resp.map((m: { label: string; value: number }) => ({
+      this.imageSourceOption = resp.map((m: { label: string; valueStr: string }) => ({
         label: m.label,
-        value: m.value,
+        value: m.valueStr,
       }));
     },
   },

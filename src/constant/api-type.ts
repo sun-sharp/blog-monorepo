@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-04-17 09:48:12
+ * @LastEditTime: 2023-04-17 10:15:38
  * @Description: 接口类型
  */
 
@@ -43,15 +43,6 @@ export const roleTypeOption = [
   },
 ];
 export const roleTypeObj = arrEnumToObj(roleTypeOption);
-
-// 图片来源枚举值
-export const sourceOption = [
-  {
-    value: 'user_avatar',
-    label: '用户头像',
-  },
-];
-export const sourceObj = arrEnumToObj(sourceOption);
 
 // 账单“收入/支出”枚举值
 export const incomeOrPayMap = {
