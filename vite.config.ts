@@ -85,7 +85,7 @@ export default defineConfig(({ command, mode }) => {
   const useMock = !!VITE_USE_MOCK;
   console.log(useMock, 'useMock');
   // 输出文件夹
-  const OUTPUT_DIR = 'dist-manage';
+  const OUTPUT_DIR = 'manage';
   const ASSETS_DIR = 'static';
 
   return {
