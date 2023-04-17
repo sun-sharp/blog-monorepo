@@ -25,6 +25,7 @@
     </basic-table>
     <upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
     <update-model ref="updateModelRef" @refurbish="reloadTable" />
+    <balance-time-select ref="balanceTimeRef" @balanceChange="balanceChange" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -37,6 +38,7 @@
   import UploadFileModel from './upload-file-model.vue';
   import UpdateModel from './update-model.vue';
   import { getBillMethodData, getBillTypeData, useApiType } from '@/hooks';
+  import BalanceTimeSelect from '../components/balance-time-select.vue';
 
   // 导入弹窗
   const uploadFileModelRef = ref();
@@ -53,7 +55,7 @@
   const actionRef = ref();
   // 获取接口数据
   const searchParams = ref({});
-  const loadDataTable = async (tableParams) => {
+  const loadDataTable = async (tableParams: any) => {
     return await weChatApi.getPage({ ...searchParams.value, ...tableParams });
   };
   // 刷新数据
@@ -69,12 +71,22 @@
     actionRef.value.updatePage(1);
   };
 
+  // 处理余额弹窗
+  const balanceTimeRef = ref();
+  const handleBalance = () => {
+    balanceTimeRef.value.init();
+  };
   // 处理余额
   const btnBalanceLoading = ref(false);
-  const handleBalance = () => {
+  const balanceChange = (dateRange: any) => {
+    const params: any = {};
+    if (dateRange && dateRange.length > 0) {
+      params.startTime = dateRange[0] + ' 00:00:00';
+      params.endTime = dateRange[1] + ' 23:59:59';
+    }
     btnBalanceLoading.value = true;
     weChatApi
-      .updateBalance()
+      .updateBalance(params)
       .then(() => {
         reloadTable();
       })

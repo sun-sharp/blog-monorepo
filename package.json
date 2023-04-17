@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-manage",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "scripts": {
     "dev": "vite --mode dev",
     "dev:prod": "vite --mode prod-local",

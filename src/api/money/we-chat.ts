@@ -40,10 +40,12 @@ export const update = (data: any) => {
 
 /**
  * @description: 处理微信账单余额
+ * @param {any} params
  */
-export const updateBalance = () => {
+export const updateBalance = (params: any) => {
   return AxiosMoney.request({
     url: `${basic}/update_balance`,
     method: 'PUT',
+    params,
   });
 };

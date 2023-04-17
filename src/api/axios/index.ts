@@ -5,7 +5,7 @@ const appEnvConfig = getAppEnvConfig();
 const urlPrefix = appEnvConfig.urlPrefix || '';
 
 export const AxiosCapital = new CustomAxios({
-  timeout: 10 * 1000,
+  timeout: 60 * 1000,
   // 接口前缀
   prefixUrl: urlPrefix,
   withCredentials: false,
@@ -29,7 +29,7 @@ export const AxiosCapital = new CustomAxios({
 });
 
 export const AxiosBlog = new CustomAxios({
-  timeout: 10 * 1000,
+  timeout: 60 * 1000,
   // 接口前缀
   prefixUrl: urlPrefix,
   withCredentials: false,
@@ -53,7 +53,7 @@ export const AxiosBlog = new CustomAxios({
 });
 
 export const AxiosFile = new CustomAxios({
-  timeout: 10 * 1000,
+  timeout: 60 * 1000,
   // 接口前缀
   prefixUrl: urlPrefix,
   withCredentials: false,
@@ -77,7 +77,7 @@ export const AxiosFile = new CustomAxios({
 });
 
 export const AxiosMoney = new CustomAxios({
-  timeout: 10 * 1000,
+  timeout: 60 * 1000,
   // 接口前缀
   prefixUrl: urlPrefix,
   withCredentials: false,

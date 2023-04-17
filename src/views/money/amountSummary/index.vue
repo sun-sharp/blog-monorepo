@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { moneyApi } from '@/api';
   import { onMounted, ref } from 'vue';
-  import { format } from 'date-fns';
   import InnerPieChart from '@/components/charts/inner-pie-chart.vue';
   import SingleColumnChart from '@/components/charts/single-column-chart.vue';
+  import { lastMonthFormatRange } from '@/utils';
 
   // 统计各个的方式的余额
   const defaultMoneyBalanceMap = {
@@ -59,13 +59,6 @@
   };
 
   // 获取银行数据的流动汇总
-  const lastMonthFormatRange = (formatStr: string): [string, string] => {
-    const nowTime = new Date();
-    const year = nowTime.getFullYear();
-    const month = nowTime.getMonth();
-    const day = new Date(year, month, 0).getDate();
-    return [format(nowTime.getTime() - day * 24 * 60 * 60 * 1000, formatStr), format(nowTime, formatStr)];
-  };
   const bankFlowDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
   const defaultBankFlowMap = {
     business: '工商银行',
