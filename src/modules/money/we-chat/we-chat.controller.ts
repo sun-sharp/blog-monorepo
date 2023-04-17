@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpCode, Request, UseInterceptors, UploadedFile, Put, Query } from '@nestjs/common';
 import { WeChatService } from './we-chat.service';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -8,6 +8,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadWeChatDto } from './dto/upload-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 
 @Controller('we-chat')
 @ApiTags('微信')
@@ -57,7 +58,7 @@ export class WeChatController {
 
   @Put('update_balance')
   @ApiOperation({ summary: '处理微信余额' })
-  updateBalance(@Request() req: any) {
-    return this.weChatService.updateBalance(req.user._id);
+  updateBalance(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
+    return this.weChatService.updateBalance(req.user._id, query);
   }
 }

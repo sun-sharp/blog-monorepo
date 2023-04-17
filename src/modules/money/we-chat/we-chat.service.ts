@@ -11,6 +11,7 @@ import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto'
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 import { weChatExcelTargetHandler } from 'src/common/utils/money';
+import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 
 @Injectable()
 export class WeChatService {
@@ -298,13 +299,14 @@ export class WeChatService {
   /**
    * @description: 处理微信余额
    * @param {string} userId
+   * @param {StatisticsStartEndTimeDto} query
    * @return {Promise<IResponse>}
    */
-  public updateBalance(userId: string): Promise<IResponse> {
+  public updateBalance(userId: string, query: StatisticsStartEndTimeDto): Promise<IResponse> {
     return (
-      Promise.resolve({ userId })
-        .then(async ({ userId }) => {
-          const find = await this.weChatModel.find({ userId }).sort({ tradeTime: 1 });
+      Promise.resolve({ userId, query })
+        .then(async ({ userId, query }) => {
+          const find = await this.findModelAll(userId, query.startTime, query.endTime);
           // 获取零钱的零钱(账单方式-微信零钱，账单类型-零钱充值)
           const filterArr = find.filter((f) => f.billMethod === 101 || f.billType === 601);
           for (let fI = 0; fI < filterArr.length; fI++) {
