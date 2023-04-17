@@ -225,7 +225,8 @@ export class MoneyService {
           const billTypeOptions = await this.categoryService.findByType(categoryTypeEnum.moneyBillType);
           // 查询某时间范围内的银行账单
           const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
-          // 现金流入/流出的金额
+          //* 现金流入/流出的金额 */
+          const bankCashName = '银行现金';
           const transitMoneyArr = bankModelAll
             .filter((f) => [billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType))
             .map((m) => {
@@ -306,43 +307,38 @@ export class MoneyService {
               inflowMoney: sumMoney < 0 ? 0 - sumMoney : 0,
             };
           });
-          const aliPayAndWeChatOutflowArr = aliPayAndWeChatInflowOrOutflowArr
+          // 汇总流出的数据
+          const outflowFilter = aliPayAndWeChatInflowOrOutflowArr.filter(
+            (f: { billType: number }) =>
+              ![
+                billTypeEnum.aliPayBalanceBabyRecharge,
+                billTypeEnum.withdrawBusiness,
+                billTypeEnum.withdrawAgriculture,
+                billTypeEnum.withdrawBuild,
+                billTypeEnum.bankAliPayUse,
+                billTypeEnum.bankWeChatUse,
+              ].includes(f.billType),
+          );
+          const outflowMoneyArr = outflowFilter
             .map((m: { name: string; outflowMoney: number }) => ({
               name: m.name,
               money: m.outflowMoney,
             }))
             .filter((f: { money: number }) => f.money !== 0);
-          const bankCashName = '银行现金';
-          // 汇总流出的数据
-          const outflowChart = (bankCashOutflow > 0 ? [{ name: bankCashName, money: bankCashOutflow }] : []).concat(aliPayAndWeChatOutflowArr);
-          const outflowSumTotal = sumArrayToMoney(
-            aliPayAndWeChatInflowOrOutflowArr
-              .filter(
-                (f: { billType: number }) =>
-                  ![
-                    billTypeEnum.aliPayBalanceBabyRecharge,
-                    billTypeEnum.withdrawBusiness,
-                    billTypeEnum.withdrawAgriculture,
-                    billTypeEnum.withdrawBuild,
-                  ].includes(f.billType),
-              )
-              .map((m: { outflowMoney: number }) => m.outflowMoney)
-              .concat([bankCashOutflow]),
-          );
+          const outflowChart = (bankCashOutflow > 0 ? [{ name: bankCashName, money: bankCashOutflow }] : []).concat(outflowMoneyArr);
+          const outflowSumTotal = sumArrayToMoney(outflowFilter.map((m: { outflowMoney: number }) => m.outflowMoney).concat([bankCashOutflow]));
           // 汇总流入的数据
-          const aliPayAndWeChatInflowArr = aliPayAndWeChatInflowOrOutflowArr
+          const inflowFilterArr = aliPayAndWeChatInflowOrOutflowArr.filter(
+            (f: { billType: number }) => ![billTypeEnum.weChatChangeRecharge, billTypeEnum.aliPayBalanceRecharge].includes(f.billType),
+          );
+          const inflowMoneyArr = inflowFilterArr
             .map((m: { name: string; inflowMoney: number }) => ({
               name: m.name,
               money: m.inflowMoney,
             }))
             .filter((f: { money: number }) => f.money !== 0);
-          const inflowChart = (bankCashInflow > 0 ? [{ name: bankCashName, money: bankCashInflow }] : []).concat(aliPayAndWeChatInflowArr);
-          const inflowSumTotal = sumArrayToMoney(
-            aliPayAndWeChatInflowOrOutflowArr
-              .filter((f: { billType: number }) => ![billTypeEnum.weChatChangeRecharge, billTypeEnum.aliPayBalanceRecharge].includes(f.billType))
-              .map((m: { inflowMoney: number }) => m.inflowMoney)
-              .concat([bankCashInflow]),
-          );
+          const inflowChart = (bankCashInflow > 0 ? [{ name: bankCashName, money: bankCashInflow }] : []).concat(inflowMoneyArr);
+          const inflowSumTotal = sumArrayToMoney(inflowFilterArr.map((m: { inflowMoney: number }) => m.inflowMoney).concat([bankCashInflow]));
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {

@@ -15,6 +15,8 @@ export enum billTypeEnum {
   withdrawBusiness = 201, // 提现-中国工商银行
   withdrawAgriculture = 202, // 提现-中国农业银行
   withdrawBuild = 203, // 提现-中国建设银行
+  bankAliPayUse = 604, // 银行支付宝使用
+  bankWeChatUse = 605, // 银行微信使用
 }
 
 // 账单方式
