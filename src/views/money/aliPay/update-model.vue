@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-  import { billMethodOption, inflowOrOutflowOption } from '@/constant';
+  import { inflowOrOutflowOption } from '@/constant';
   import { defineComponent, nextTick, reactive, ref } from 'vue';
   import { aliPayApi } from '@/api';
   import { useApiType } from '@/hooks';
@@ -120,7 +120,7 @@
       const roleOption = ref([]);
 
       // 获取账单类型
-      const { getBillTypeOption } = useApiType();
+      const { getBillTypeOption, getBillMethodOption } = useApiType();
 
       // 初始化
       const init = (row: any) => {
@@ -174,7 +174,7 @@
         roleOption,
         inflowOrOutflowOption,
         billTypeOption: getBillTypeOption,
-        billMethodOption,
+        billMethodOption: getBillMethodOption,
         init,
         confirmForm,
       };

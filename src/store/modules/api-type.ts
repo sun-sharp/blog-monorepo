@@ -15,6 +15,7 @@ enum categoryTypeEnum {
 export type IApiTypeState = {
   billTypeOption: COption[]; // 账单类型
   bankTypeOption: COption[]; // 金额银行类型
+  billMethodOption: COption[]; // 金额账单方式
 };
 
 export const useApiTypeStore = defineStore({
@@ -22,6 +23,7 @@ export const useApiTypeStore = defineStore({
   state: (): IApiTypeState => ({
     billTypeOption: [], // 账单类型
     bankTypeOption: [], // 金额银行类型
+    billMethodOption: [], // 金额账单方式
   }),
   getters: {
     getBillTypeOption(): COption[] {
@@ -29,6 +31,9 @@ export const useApiTypeStore = defineStore({
     },
     getBankTypeOption(): COption[] {
       return this.bankTypeOption;
+    },
+    getBillMethodOption(): COption[] {
+      return this.billMethodOption;
     },
   },
   actions: {
@@ -60,6 +65,22 @@ export const useApiTypeStore = defineStore({
         return;
       }
       this.bankTypeOption = resp.map((m: { label: string; value: number }) => ({
+        label: m.label,
+        value: m.value,
+      }));
+    },
+    // 获取账单方式
+    async getBillMethod() {
+      // 已经加载的数据，取消重复加载
+      if (this.billMethodOption.length > 0) {
+        return;
+      }
+      const [err, resp] = await at(categoryApi.certainTypeAll(categoryTypeEnum.moneyBillMethod));
+      if (err || !resp) {
+        this.billMethodOption = [];
+        return;
+      }
+      this.billMethodOption = resp.map((m: { label: string; value: number }) => ({
         label: m.label,
         value: m.value,
       }));

@@ -12,10 +12,13 @@ export const useApiType = () => {
 
   const getBankTypeOption = computed<COption[]>(() => apiTypeStore.getBankTypeOption);
 
+  const getBillMethodOption = computed<COption[]>(() => apiTypeStore.getBillMethodOption);
+
   return {
     getBillTypeOption,
     getBillTypeMap,
     getBankTypeOption,
+    getBillMethodOption,
   };
 };
 
@@ -29,4 +32,10 @@ export const getBillTypeData = () => {
 export const getBankTypeData = () => {
   const apiTypeStore = useApiTypeStore();
   apiTypeStore.getBankType();
+};
+
+// 获取账单方式数据
+export const getBillMethodData = () => {
+  const apiTypeStore = useApiTypeStore();
+  apiTypeStore.getBillMethod();
 };

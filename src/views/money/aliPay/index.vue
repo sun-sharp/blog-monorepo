@@ -37,7 +37,7 @@
   import { UploadOutlined } from '@/utils';
   import UploadFileModel from './upload-file-model.vue';
   import UpdateModel from './update-model.vue';
-  import { getBillTypeData, useApiType } from '@/hooks';
+  import { getBillMethodData, getBillTypeData, useApiType } from '@/hooks';
 
   // 导入弹窗
   const uploadFileModelRef = ref();
@@ -46,7 +46,7 @@
   const updateModelRef = ref();
 
   // 账单类型
-  const { getBillTypeOption, getBillTypeMap } = useApiType();
+  const { getBillTypeOption, getBillTypeMap, getBillMethodOption } = useApiType();
 
   /**
    * 表格
@@ -62,7 +62,7 @@
     actionRef.value.reload();
   };
   // 配置
-  const { searchSchemas, actionColumn, columns } = useConfigure({ updateModelRef, getBillTypeOption, getBillTypeMap });
+  const { searchSchemas, actionColumn, columns } = useConfigure({ updateModelRef, getBillTypeOption, getBillTypeMap, getBillMethodOption });
 
   // 数据查询
   const searchSubmit = (values: Recordable) => {
@@ -100,6 +100,7 @@
 
   onMounted(() => {
     getBillTypeData();
+    getBillMethodData();
   });
 </script>
 <style lang="scss" scoped></style>

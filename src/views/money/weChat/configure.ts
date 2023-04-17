@@ -1,9 +1,10 @@
-import { billMethodMap, billMethodOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
+import { incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive, unref, computed } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
+import { COption } from '/#/config';
 
-export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap }) => {
+export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap, getBillMethodOption }) => {
   // 查询配置
   const searchSchemas = computed(() => [
     {
@@ -30,7 +31,7 @@ export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap
       componentProps: {
         filterable: true,
         placeholder: '请选择账单类型',
-        options: billMethodOption,
+        options: unref(getBillMethodOption),
       },
     },
     {
@@ -97,7 +98,8 @@ export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap
       key: 'billMethod',
       align: 'center',
       render(row: any) {
-        return billMethodMap[row.billMethod] || '';
+        const find = unref(getBillMethodOption).find((f: COption) => f.value === row.billMethod);
+        return find ? find.label : '';
       },
     },
     {
@@ -140,7 +142,7 @@ export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap
 };
 
 // 导入表格字段配置
-export const uploadColumns = ({ getBillTypeOption }) => {
+export const uploadColumns = ({ getBillTypeOption, getBillMethodOption }) => {
   return [
     {
       title: '序号',
@@ -241,7 +243,7 @@ export const uploadColumns = ({ getBillTypeOption }) => {
           value: row.billMethod,
           filterable: true,
           placeholder: '请选择',
-          options: billMethodOption,
+          options: unref(getBillMethodOption),
           'on-update:value': (value: string) => (row.billMethod = value),
         });
       },

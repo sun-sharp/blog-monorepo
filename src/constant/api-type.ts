@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-04-17 09:33:43
+ * @LastEditTime: 2023-04-17 09:48:12
  * @Description: 接口类型
  */
 
@@ -71,51 +71,6 @@ export const inflowOrOutflowOption = [
   },
 ];
 export const inflowOrOutflowMap = arrEnumToObj(inflowOrOutflowOption);
-
-// 账单“账单方式”枚举值
-export const billMethodOption = [
-  {
-    value: 1,
-    label: '中国工商银行',
-  },
-  {
-    value: 2,
-    label: '中国农业银行',
-  },
-  {
-    value: 3,
-    label: '中国建设银行',
-  },
-  {
-    value: 4,
-    label: '民生银行',
-  },
-  {
-    value: 5,
-    label: '招商银行',
-  },
-  {
-    value: 101,
-    label: '微信零钱',
-  },
-  {
-    value: 111,
-    label: '支付宝余额',
-  },
-  {
-    value: 112,
-    label: '支付宝余额宝',
-  },
-  {
-    value: 113,
-    label: '花呗',
-  },
-  {
-    value: 1001,
-    label: '其它',
-  },
-];
-export const billMethodMap = arrEnumToObj(billMethodOption);
 
 // 账单“凭证类型”枚举值
 export const voucherTypeOption = [

@@ -40,8 +40,8 @@
         return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.billType).length !== 0;
       });
       // 获取账单类型
-      const { getBillTypeOption } = useApiType();
-      const columns = uploadColumns({ getBillTypeOption });
+      const { getBillTypeOption, getBillMethodOption } = useApiType();
+      const columns = uploadColumns({ getBillTypeOption, getBillMethodOption });
       const uploadFileList = ref([]);
 
       // 重新刷新
