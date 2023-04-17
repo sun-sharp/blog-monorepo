@@ -27,6 +27,7 @@ export class CategoryService {
             result: result.map((m) => ({
               categoryId: m._id,
               type: m.type,
+              valueStr: m.valueStr,
               value: m.value,
               label: m.label,
             })),

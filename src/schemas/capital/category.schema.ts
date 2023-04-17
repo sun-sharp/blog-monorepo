@@ -18,6 +18,9 @@ export class Category extends Document {
   value: number; // 分类标识
 
   @Prop()
+  valueStr: string; // 分类字符串类型的标识
+
+  @Prop()
   label: string; // 分类名称
 }
 
