@@ -1,13 +1,13 @@
-import { h, reactive } from 'vue';
+import { h, reactive, unref, computed } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
 import { imageApi } from '@/api';
 import { NImage } from 'naive-ui';
 import { getImgUrl } from '@/utils';
-import { sourceObj, sourceOption } from '@/constant';
+import { COption } from '/#/config';
 
-export const imageConfigure = ({ reloadTable }) => {
+export const imageConfigure = ({ reloadTable, getImageSourceOption }) => {
   // 查询配置
-  const searchSchemas = [
+  const searchSchemas = computed(() => [
     {
       field: 'name',
       component: 'NInput',
@@ -24,13 +24,13 @@ export const imageConfigure = ({ reloadTable }) => {
         defaultValue: '',
         clearable: false,
         placeholder: '请选择图片名称',
-        options: [{ value: '', label: '全部' }].concat(sourceOption),
+        options: [{ value: '', label: '全部' }].concat(unref(getImageSourceOption)),
       },
     },
-  ];
+  ]);
 
   // 表格字段配置
-  const columns = [
+  const columns = computed(() => [
     {
       title: '图片名称',
       key: 'name',
@@ -63,7 +63,8 @@ export const imageConfigure = ({ reloadTable }) => {
       key: 'source',
       align: 'center',
       render(row: Recordable) {
-        return sourceObj[row.source] || `*${row.source}`;
+        const find = unref(getImageSourceOption).find((f: COption) => f.value === row.source);
+        return find ? find.label : `*${row.source || ''}`;
       },
     },
     {
@@ -71,7 +72,7 @@ export const imageConfigure = ({ reloadTable }) => {
       key: 'uploadTime',
       align: 'center',
     },
-  ];
+  ]);
 
   /**
    * 表格按钮操作配置

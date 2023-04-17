@@ -9,13 +9,14 @@ enum categoryTypeEnum {
   moneyBillType = 'money_bill_type', // 金额账单类型
   moneyBankType = 'money_bank_type', // 金额银行类型
   moneyBillMethod = 'money_bill_method', // 金额账单方式
-  capitalMenuType = 'capital_menu_type', // 金额账单类型
+  capitalImageSource = 'capital_image_source', // 图片来源
 }
 
 export type IApiTypeState = {
   billTypeOption: COption[]; // 账单类型
   bankTypeOption: COption[]; // 金额银行类型
   billMethodOption: COption[]; // 金额账单方式
+  imageSourceOption: COption[]; // 图片来源
 };
 
 export const useApiTypeStore = defineStore({
@@ -24,6 +25,7 @@ export const useApiTypeStore = defineStore({
     billTypeOption: [], // 账单类型
     bankTypeOption: [], // 金额银行类型
     billMethodOption: [], // 金额账单方式
+    imageSourceOption: [], // 图片来源
   }),
   getters: {
     getBillTypeOption(): COption[] {
@@ -34,6 +36,9 @@ export const useApiTypeStore = defineStore({
     },
     getBillMethodOption(): COption[] {
       return this.billMethodOption;
+    },
+    getImageSourceOption(): COption[] {
+      return this.imageSourceOption;
     },
   },
   actions: {
@@ -81,6 +86,22 @@ export const useApiTypeStore = defineStore({
         return;
       }
       this.billMethodOption = resp.map((m: { label: string; value: number }) => ({
+        label: m.label,
+        value: m.value,
+      }));
+    },
+    // 获取账单方式
+    async getImageSource() {
+      // 已经加载的数据，取消重复加载
+      if (this.imageSourceOption.length > 0) {
+        return;
+      }
+      const [err, resp] = await at(categoryApi.certainTypeAll(categoryTypeEnum.moneyBillMethod));
+      if (err || !resp) {
+        this.imageSourceOption = [];
+        return;
+      }
+      this.imageSourceOption = resp.map((m: { label: string; value: number }) => ({
         label: m.label,
         value: m.value,
       }));

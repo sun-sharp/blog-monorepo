@@ -26,19 +26,22 @@
   </n-card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { imageApi } from '@/api';
   import BasicTable from '@/components/Table/basic-table.vue';
   import { imageConfigure } from '@/views/file/configure/image';
   import FormSearch from '@/components/form/form-search.vue';
   import ImageOnlyPublicModel from '@/views/file/components/image-only-public-model.vue';
   import ImageNotUseModel from '@/views/file/components/image-not-use-model.vue';
+  import { getImageSourceData, useApiType } from '@/hooks';
 
   // 处理只有图片文件的数据
   const imageOnlyPublicModelRef = ref();
 
   // 查询未使用的图片
   const imageNotUseModelRef = ref();
+
+  const { getImageSourceOption } = useApiType();
 
   /**
    * 表格
@@ -54,7 +57,7 @@
     actionRef.value.reload();
   };
   // 配置
-  const { searchSchemas, columns, actionColumn } = imageConfigure({ reloadTable });
+  const { searchSchemas, columns, actionColumn } = imageConfigure({ reloadTable, getImageSourceOption });
 
   // 数据查询
   const searchSubmit = (values: Recordable) => {
@@ -65,5 +68,9 @@
   // const onlyPublicImage = async () => {
   //   await imageApi.getOnlyPublic();
   // };
+
+  onMounted(() => {
+    getImageSourceData();
+  });
 </script>
 <style lang="scss" scoped></style>

@@ -12,11 +12,12 @@
 
 <script lang="ts">
   import { imageApi } from '@/api';
-  import { defineComponent, h, ref } from 'vue';
+  import { defineComponent, h, ref, unref, computed } from 'vue';
   import TableAll from '@/components/Table/table-all.vue';
   import { NImage } from 'naive-ui';
   import { getImgUrl } from '@/utils';
-  import { sourceObj } from '@/constant';
+  import { useApiType } from '@/hooks';
+  import { COption } from '/#/config';
 
   export default defineComponent({
     name: 'ImageNotUseModel',
@@ -30,7 +31,10 @@
       const getTableData = async () => {
         tableData.value = await imageApi.getOntUse();
       };
-      const columns = [
+
+      const { getImageSourceOption } = useApiType();
+
+      const columns = computed(() => [
         {
           title: '图片名称',
           key: 'name',
@@ -63,7 +67,8 @@
           key: 'source',
           align: 'center',
           render(row: Recordable) {
-            return sourceObj[row.source] || `*${row.source}`;
+            const find = unref(getImageSourceOption).find((f: COption) => f.value === row.source);
+            return find ? find.label : `*${row.source || ''}`;
           },
         },
         {
@@ -71,7 +76,7 @@
           key: 'uploadTime',
           align: 'center',
         },
-      ];
+      ]);
       // 初始化
       const init = async () => {
         showModal.value = true;

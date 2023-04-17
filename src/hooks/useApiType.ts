@@ -14,11 +14,14 @@ export const useApiType = () => {
 
   const getBillMethodOption = computed<COption[]>(() => apiTypeStore.getBillMethodOption);
 
+  const getImageSourceOption = computed<COption[]>(() => apiTypeStore.getImageSourceOption);
+
   return {
     getBillTypeOption,
     getBillTypeMap,
     getBankTypeOption,
     getBillMethodOption,
+    getImageSourceOption,
   };
 };
 
@@ -38,4 +41,10 @@ export const getBankTypeData = () => {
 export const getBillMethodData = () => {
   const apiTypeStore = useApiTypeStore();
   apiTypeStore.getBillMethod();
+};
+
+// 获取图片来源数据
+export const getImageSourceData = () => {
+  const apiTypeStore = useApiTypeStore();
+  apiTypeStore.getImageSource();
 };
