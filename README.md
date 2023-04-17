@@ -66,6 +66,8 @@ $ yarn compodoc
 $ git init
 $ git remote add origin git@github.com:sun-sharp/nest-blog-api.git
 $ git pull origin main
+# or
+$ git pull origin main
 
 # 安装插件
 $ yarn
