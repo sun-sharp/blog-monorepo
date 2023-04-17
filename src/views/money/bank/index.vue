@@ -33,7 +33,7 @@
   import { UploadOutlined } from '@/utils';
   import UploadFileModel from './upload-file-model.vue';
   import UpdateModel from './update-model.vue';
-  import { useApiType, getBillTypeData } from '@/hooks';
+  import { useApiType, getBillTypeData, getBankTypeData } from '@/hooks';
 
   // 导入弹窗
   const uploadFileModelRef = ref();
@@ -42,7 +42,7 @@
   const updateModelRef = ref();
 
   // 获取账单类型
-  const { getBillTypeOption, getBillTypeMap } = useApiType();
+  const { getBillTypeOption, getBillTypeMap, getBankTypeOption } = useApiType();
 
   /**
    * 表格
@@ -63,6 +63,7 @@
     updateModelRef,
     getBillTypeOption,
     getBillTypeMap,
+    getBankTypeOption,
   });
 
   // 数据查询
@@ -73,6 +74,7 @@
 
   onMounted(() => {
     getBillTypeData();
+    getBankTypeData();
   });
 </script>
 <style lang="scss" scoped></style>

@@ -41,8 +41,8 @@
       });
 
       // 获取账单类型
-      const { getBillTypeOption } = useApiType();
-      const columns = uploadColumns({ getBillTypeOption });
+      const { getBillTypeOption, getBankTypeOption } = useApiType();
+      const columns = uploadColumns({ getBillTypeOption, getBankTypeOption });
       const uploadFileList = ref([]);
 
       // 重新刷新

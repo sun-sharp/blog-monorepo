@@ -1,12 +1,13 @@
-import { bankTypeMap, bankTypeOption, incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
+import { incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
 import { bankApi } from '@/api';
 import { computed } from 'vue';
 import { unref } from 'vue';
+import { COption } from '/#/config';
 
-export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, getBillTypeMap }) => {
+export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, getBillTypeMap, getBankTypeOption }) => {
   const searchSchemas = computed(() => [
     {
       field: 'tradeOtherPerson',
@@ -33,7 +34,7 @@ export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, g
       componentProps: {
         filterable: true,
         placeholder: '请选择银行类型',
-        options: bankTypeOption,
+        options: unref(getBankTypeOption),
       },
     },
     {
@@ -67,7 +68,8 @@ export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, g
       key: 'bankType',
       align: 'center',
       render(row: any) {
-        return bankTypeMap[row.bankType] || '';
+        const find = unref(getBankTypeOption).find((f: COption) => f.value === row.bankType);
+        return find ? find.label : '';
       },
     },
     {
@@ -158,7 +160,7 @@ export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, g
 };
 
 // 导入表格字段配置
-export const uploadColumns = ({ getBillTypeOption }) => {
+export const uploadColumns = ({ getBillTypeOption, getBankTypeOption }) => {
   return computed(() => [
     {
       title: '序号',
@@ -183,7 +185,8 @@ export const uploadColumns = ({ getBillTypeOption }) => {
       title: '银行类型',
       align: 'center',
       render(row: any) {
-        return bankTypeMap[row.bankType] || '';
+        const find = unref(getBankTypeOption).find((f: COption) => f.value === row.bankType);
+        return find ? find.label : '';
       },
     },
     {

@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-04-14 17:03:11
+ * @LastEditTime: 2023-04-17 09:33:43
  * @Description: 接口类型
  */
 
@@ -116,31 +116,6 @@ export const billMethodOption = [
   },
 ];
 export const billMethodMap = arrEnumToObj(billMethodOption);
-
-// 账单“银行类型”枚举值
-export const bankTypeOption = [
-  {
-    value: 1,
-    label: '中国工商银行',
-  },
-  {
-    value: 2,
-    label: '中国农业银行',
-  },
-  {
-    value: 3,
-    label: '中国建设银行',
-  },
-  {
-    value: 4,
-    label: '民生银行',
-  },
-  {
-    value: 5,
-    label: '招商银行',
-  },
-];
-export const bankTypeMap = arrEnumToObj(bankTypeOption);
 
 // 账单“凭证类型”枚举值
 export const voucherTypeOption = [
