@@ -1,5 +1,5 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" title="导入支付宝账单">
+  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" :title="modalTitle">
     <table-all :data="tableData" :columns="columns" max-height="50vh" @reload="reload">
       <template #tableTitle>
         <form-upload-excel
@@ -36,6 +36,7 @@
     setup(_props, { emit }) {
       const showModal = ref(false);
       const tableData = ref<any[]>([]);
+      const excelUploadTotal = ref(0);
       const btnDisabled = computed(() => {
         return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.billType).length !== 0;
       });
@@ -48,6 +49,7 @@
       const reload = () => {
         tableData.value = [];
         uploadFileList.value = [];
+        excelUploadTotal.value = 0;
       };
 
       // 初始化
@@ -75,12 +77,19 @@
 
       // 账单上传成功
       const excelUploadChange = (data: any[]) => {
-        tableData.value = tableData.value.concat(data);
+        excelUploadTotal.value = tableData.value.concat(data).length;
+        tableData.value = tableData.value.concat(data).slice(0, 100);
       };
+
+      const modalTitle = computed(() => {
+        return '导入支付宝账单' + `(${tableData.value.length}/${excelUploadTotal.value})`;
+      });
       return {
+        modalTitle,
         showModal,
         btnDisabled,
         tableData,
+        excelUploadTotal,
         columns,
         uploadAction: getUploadAliPayAction(),
         uploadFileList,
