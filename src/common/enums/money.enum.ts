@@ -1,22 +1,30 @@
 // 账单类型
 export enum billTypeEnum {
-  weChatTransit = 604, // 微信中转
-  aliPayTransit = 605, // 支付宝中转
-  invalid = 1001, // 无效账单
-  basicCapital = 501, // 基本工资
-  cashTransit = 701, // 现金中转
-  cashSpend = 702, // 现金花费
-  cashPartTransit = 703, // 现金部分中转
   redPacket = 2, // 微信红包
+  manageMoneyMatters = 5, // 理财
+  phoneBill = 20, // 话费
+  consumptionSupermarket = 103, // 消费-超市
+  trafficBicycle = 132, // 交通-单车
+  trafficTaxi = 134, // 交通-打车
   trafficSubway = 136, // 交通-地铁
-  weChatChangeRecharge = 601, // 微信零钱充值
-  aliPayBalanceRecharge = 602, // 支付宝余额充值
-  aliPayBalanceBabyRecharge = 603, // 支付宝余额宝充值
+  trafficTransit = 138, // 交通-公交
+  eatingRestaurant = 142, // 吃-餐馆
   withdrawBusiness = 201, // 提现-中国工商银行
   withdrawAgriculture = 202, // 提现-中国农业银行
   withdrawBuild = 203, // 提现-中国建设银行
+  returnHuaBei = 253, // 归还-花呗
+  returnBorrow = 255, // 归还-借呗
+  basicCapital = 501, // 基本工资
+  weChatChangeRecharge = 601, // 微信零钱充值
+  aliPayBalanceRecharge = 602, // 支付宝余额充值
+  aliPayBalanceBabyRecharge = 603, // 支付宝余额宝充值
   bankAliPayUse = 604, // 银行支付宝使用
   bankWeChatUse = 605, // 银行微信使用
+  mtOrder = 631, // 美团订单
+  cashTransit = 701, // 现金中转
+  cashSpend = 702, // 现金花费
+  cashPartTransit = 703, // 现金部分中转
+  invalid = 1001, // 无效账单
 }
 
 // 账单方式
@@ -30,4 +38,6 @@ export enum billMethodEnum {
   aliPayBalance = 111, // 支付宝余额
   aliPayBalanceBaby = 112, // 支付宝余额宝
   aliPayHuaBei = 113, // 花呗
+  aliPayTradeClosure = 901, // 支付宝交易关闭
+  other = 1001,
 }
