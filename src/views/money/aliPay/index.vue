@@ -27,7 +27,7 @@
     <upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
     <update-model ref="updateModelRef" @refurbish="reloadTable" />
     <balance-time-select ref="balanceTimeRef" @balanceChange="balanceChange" />
-    <balance-time-select ref="balanceBabyTimeRef" @balanceChange="balanceBodyChange" />
+    <balance-time-select ref="balanceBodyTimeRef" @balanceChange="balanceBodyChange" />
   </n-card>
 </template>
 <script lang="ts" setup>
