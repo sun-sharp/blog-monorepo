@@ -1,4 +1,4 @@
-import { Controller, UseGuards, UseInterceptors, HttpCode, UploadedFile, Request, Post, Body, Put } from '@nestjs/common';
+import { Controller, UseGuards, UseInterceptors, HttpCode, UploadedFile, Request, Post, Body, Put, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -8,6 +8,7 @@ import { CreateAliPayBatchDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
 import { UploadAliPayDto } from './dto/upload-we-chat.dto';
+import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 
 @Controller('ali-pay')
 @ApiTags('支付宝')
@@ -50,13 +51,13 @@ export class AliPayController {
 
   @Put('update_balance')
   @ApiOperation({ summary: '处理支付宝余额' })
-  updateBalance(@Request() req: any) {
-    return this.aliPayService.updateBalance(req.user._id);
+  updateBalance(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
+    return this.aliPayService.updateBalance(req.user._id, query);
   }
 
   @Put('update_balance_baby')
   @ApiOperation({ summary: '处理支付宝余额宝' })
-  updateBalanceBaby(@Request() req: any) {
-    return this.aliPayService.updateBalanceBaby(req.user._id);
+  updateBalanceBaby(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
+    return this.aliPayService.updateBalanceBaby(req.user._id, query);
   }
 }

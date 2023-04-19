@@ -11,6 +11,7 @@ import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto'
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
 import { aliPayExcelTargetHandler } from 'src/common/utils/money';
+import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 
 @Injectable()
 export class AliPayService {
@@ -285,13 +286,14 @@ export class AliPayService {
   /**
    * @description: 处理支付宝余额
    * @param {string} userId
+   * @param {StatisticsStartEndTimeDto} query
    * @return {Promise<IResponse>}
    */
-  public updateBalance(userId: string): Promise<IResponse> {
+  public updateBalance(userId: string, query: StatisticsStartEndTimeDto): Promise<IResponse> {
     return (
-      Promise.resolve({ userId })
-        .then(async ({ userId }) => {
-          const find = await this.aliPayModel.find({ userId }).sort({ tradeTime: 1 });
+      Promise.resolve({ userId, query })
+        .then(async ({ userId, query }) => {
+          const find = await this.findModelAll(userId, query.startTime, query.endTime);
           // 获取支付宝余额(账单方式-支付宝余额，账单类型-支付宝余额充值)
           const filterArr = find.filter((f) => f.billMethod === 111 || f.billType === 602);
           for (let fI = 0; fI < filterArr.length; fI++) {
@@ -326,13 +328,14 @@ export class AliPayService {
   /**
    * @description: 处理支付宝余额宝
    * @param {string} userId
+   * @param {StatisticsStartEndTimeDto} query
    * @return {Promise<IResponse>}
    */
-  public updateBalanceBaby(userId: string): Promise<IResponse> {
+  public updateBalanceBaby(userId: string, query: StatisticsStartEndTimeDto): Promise<IResponse> {
     return (
-      Promise.resolve({ userId })
-        .then(async ({ userId }) => {
-          const find = await this.aliPayModel.find({ userId }).sort({ tradeTime: 1 });
+      Promise.resolve({ userId, query })
+        .then(async ({ userId, query }) => {
+          const find = await this.findModelAll(userId, query.startTime, query.endTime);
           // 获取支付宝余额(账单方式-支付宝余额宝，账单类型-支付宝余额宝充值)
           const filterArr = find.filter((f) => f.billMethod === 112 || f.billType === 603);
           for (let fI = 0; fI < filterArr.length; fI++) {
