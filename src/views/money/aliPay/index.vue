@@ -26,6 +26,8 @@
     </basic-table>
     <upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
     <update-model ref="updateModelRef" @refurbish="reloadTable" />
+    <balance-time-select ref="balanceTimeRef" @balanceChange="balanceChange" />
+    <balance-time-select ref="balanceBabyTimeRef" @balanceChange="balanceBodyChange" />
   </n-card>
 </template>
 <script lang="ts" setup>
@@ -38,6 +40,7 @@
   import UploadFileModel from './upload-file-model.vue';
   import UpdateModel from './update-model.vue';
   import { getBillMethodData, getBillTypeData, useApiType } from '@/hooks';
+  import BalanceTimeSelect from '../components/balance-time-select.vue';
 
   // 导入弹窗
   const uploadFileModelRef = ref();
@@ -70,9 +73,19 @@
     actionRef.value.updatePage(1);
   };
 
+  // 处理余额弹窗
+  const balanceTimeRef = ref();
+  const handleBalance = () => {
+    balanceTimeRef.value.init();
+  };
   // 处理余额
   const btnBalanceLoading = ref(false);
-  const handleBalance = () => {
+  const balanceChange = (dateRange: any) => {
+    const params: any = {};
+    if (dateRange && dateRange.length > 0) {
+      params.startTime = dateRange[0] + ' 00:00:00';
+      params.endTime = dateRange[1] + ' 23:59:59';
+    }
     btnBalanceLoading.value = true;
     aliPayApi
       .updateBalance()
@@ -84,9 +97,19 @@
       });
   };
 
+  // 处理余额宝弹窗
+  const balanceBodyTimeRef = ref();
+  const handleBalanceBaby = () => {
+    balanceBodyTimeRef.value.init();
+  };
   // 处理余额宝
   const btnBalanceBabyLoading = ref(false);
-  const handleBalanceBaby = () => {
+  const balanceBodyChange = (dateRange: any) => {
+    const params: any = {};
+    if (dateRange && dateRange.length > 0) {
+      params.startTime = dateRange[0] + ' 00:00:00';
+      params.endTime = dateRange[1] + ' 23:59:59';
+    }
     btnBalanceBabyLoading.value = true;
     aliPayApi
       .updateBalanceBaby()
