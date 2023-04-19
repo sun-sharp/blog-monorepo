@@ -40,7 +40,7 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billMethod = billMethodEnum.aliPayBalance;
   } else if (['余额宝'].includes(paymentMethod) || ['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
     target.billMethod = billMethodEnum.aliPayBalanceBaby;
-  } else if (['花呗'].includes(paymentMethod)) {
+  } else if (['花呗', '花呗&红包'].includes(paymentMethod)) {
     target.billMethod = billMethodEnum.aliPayHuaBei;
   } else if (['单车骑行卡抵扣'].includes(paymentMethod)) {
     target.billMethod = billMethodEnum.other;
@@ -60,6 +60,8 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.aliPayBalanceBabyRecharge;
   } else if (tradeType === '餐饮美食') {
     target.billType = billTypeEnum.eatingRestaurant;
+  } else if (paymentMethod === '余额' && ['充值-普通充值', '余额宝-转出到余额'].includes(productDescription)) {
+    target.billType = billTypeEnum.aliPayBalanceRecharge;
   } else if (tradeType === '投资理财') {
     target.billType = billTypeEnum.manageMoneyMatters;
   } else if (productDescription.indexOf('手机充值') !== -1) {
@@ -74,8 +76,6 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.consumptionSupermarket;
   } else if (['成都空港公共交通有限公司'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficTransit;
-  } else if (paymentMethod === '余额' && ['充值-普通充值'].includes(productDescription)) {
-    target.billType = billTypeEnum.aliPayBalanceRecharge;
   } else if (productDescription === '借呗还款') {
     target.billType = billTypeEnum.returnBorrow;
   } else if (productDescription.indexOf('主动还款-花呗') !== -1) {
