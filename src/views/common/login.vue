@@ -81,7 +81,7 @@
   import { reactive, ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useUserStore } from '@/store';
-  import { useMessage } from 'naive-ui';
+  import { MessageReactive, useMessage } from 'naive-ui';
   import logo from '@/assets/images/common/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { ResultEnum } from '@/constant';
@@ -125,17 +125,18 @@
     formRef.value.validate(async (errors) => {
       if (!errors) {
         const { username, password } = formInline;
-        message.loading('登录中...');
+        let messageReactive: MessageReactive | null = message.loading('登录中...');
         loading.value = true;
-
         const params: CLoginFormState = {
           username,
           password,
         };
-
         const { code } = await userStore.login(params);
         loading.value = false;
-
+        if (messageReactive) {
+          messageReactive.destroy();
+          messageReactive = null;
+        }
         if (code == ResultEnum.SUCCESS) {
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           message.success('登录成功！');
