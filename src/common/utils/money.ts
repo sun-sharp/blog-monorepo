@@ -86,13 +86,14 @@ export const aliPayExcelTargetHandler = (target: any) => {
   } else if (productDescription.indexOf('主动还款-花呗') !== -1) {
     target.billType = billTypeEnum.returnHuaBei;
   }
-  if (
-    ['充值-普通充值', '余额宝-单次转入'].includes(productDescription) ||
-    ['花呗'].includes(tradeOtherPerson) ||
+  if (['充值-普通充值', '余额宝-单次转入'].includes(productDescription) || ['花呗'].includes(tradeOtherPerson)) {
+    target['incomeOrPay'] = '收入';
+  } else if (
+    ['借呗还款', '提现-快速提现'].includes(productDescription) ||
+    ['借呗'].includes(tradeOtherPerson) ||
+    productDescription.indexOf('主动还款-花呗') !== -1 ||
     productDescription.indexOf('手机充值') !== -1
   ) {
-    target['incomeOrPay'] = '收入';
-  } else if (['借呗还款', '提现-快速提现'].includes(productDescription) || ['借呗'].includes(tradeOtherPerson)) {
     target['incomeOrPay'] = '支出';
   }
 };
