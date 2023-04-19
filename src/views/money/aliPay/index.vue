@@ -88,7 +88,7 @@
     }
     btnBalanceLoading.value = true;
     aliPayApi
-      .updateBalance()
+      .updateBalance(params)
       .then(() => {
         reloadTable();
       })
@@ -112,7 +112,7 @@
     }
     btnBalanceBabyLoading.value = true;
     aliPayApi
-      .updateBalanceBaby()
+      .updateBalanceBaby(params)
       .then(() => {
         reloadTable();
       })

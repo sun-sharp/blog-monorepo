@@ -40,20 +40,24 @@ export const update = (data: any) => {
 
 /**
  * @description: 处理支付宝账单余额
+ * @param {any} params
  */
-export const updateBalance = () => {
+export const updateBalance = (params: any) => {
   return AxiosMoney.request({
     url: `${basic}/update_balance`,
     method: 'PUT',
+    params,
   });
 };
 
 /**
  * @description: 处理支付宝账单余额宝
+ * @param {any} params
  */
-export const updateBalanceBaby = () => {
+export const updateBalanceBaby = (params: any) => {
   return AxiosMoney.request({
     url: `${basic}/update_balance_baby`,
     method: 'PUT',
+    params,
   });
 };
