@@ -1,5 +1,4 @@
 import { nowDateFun } from '../date';
-import { billMethodEnum } from '../enums/money.enum';
 import { filterStr } from '../string';
 
 // 微信账单key值重命名
@@ -56,9 +55,7 @@ export const aliPayExcelCellHandle = {
     tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
   }, // 金额
   7: (tar: any, val: any) => {
-    if (val === '交易关闭') {
-      tar['billMethod'] = billMethodEnum.aliPayTradeClosure;
-    }
+    tar['tradeStatus'] = val || '';
   }, // 交易分类
   8: (tar: any, val: any) => {
     tar['tradeType'] = val || '';

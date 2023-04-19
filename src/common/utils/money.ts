@@ -36,7 +36,10 @@ export const aliPayExcelTargetHandler = (target: any) => {
   const transactionClassification = oldTarget.transactionClassification;
   const tradeOtherPerson = oldTarget.tradeOtherPerson;
   const productDescription = oldTarget.productDescription;
-  if (paymentMethod === '余额') {
+  const tradeStatus = oldTarget.tradeStatus;
+  if (tradeStatus === '交易关闭') {
+    target.billMethod = billMethodEnum.aliPayTradeClosure;
+  } else if (paymentMethod === '余额') {
     target.billMethod = billMethodEnum.aliPayBalance;
   } else if (['余额宝'].includes(paymentMethod) || ['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
     target.billMethod = billMethodEnum.aliPayBalanceBaby;
@@ -50,7 +53,9 @@ export const aliPayExcelTargetHandler = (target: any) => {
   // } else if (paymentMethod.includes('中国工商银行')) {
   //   target.billMethod = billMethodEnum.business;
   // }
-  if (
+  if (tradeStatus === '交易关闭') {
+    target.billType = billTypeEnum.invalid;
+  } else if (
     transactionClassification === '交通出行' &&
     tradeOtherPerson === '成都金控数据服务有限公司' &&
     ['天府通扫码乘车', '天府通APP乘车'].includes(productDescription)
@@ -80,11 +85,9 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.returnBorrow;
   } else if (productDescription.indexOf('主动还款-花呗') !== -1) {
     target.billType = billTypeEnum.returnHuaBei;
-  } else if (oldTarget.billMethod === billMethodEnum.aliPayTradeClosure) {
-    target.billType = billTypeEnum.invalid;
   }
   if (
-    ['充值-普通充值', '余额宝-单次转入', '借呗还款'].includes(productDescription) ||
+    ['充值-普通充值', '余额宝-单次转入'].includes(productDescription) ||
     ['花呗'].includes(tradeOtherPerson) ||
     productDescription.indexOf('手机充值') !== -1
   ) {
