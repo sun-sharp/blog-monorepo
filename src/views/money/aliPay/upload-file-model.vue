@@ -1,6 +1,6 @@
 <template>
   <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" :title="modalTitle">
-    <table-all :data="tableData" :columns="columns" max-height="50vh" @reload="reload">
+    <table-all :data="tableData" :columns="columns" :row-class-name="rowClassName" max-height="50vh" @reload="reload">
       <template #tableTitle>
         <form-upload-excel
           v-model:file-list="uploadFileList"
@@ -58,6 +58,11 @@
         reload();
       };
 
+      // 表格样式
+      const rowClassName = (row: any) => {
+        return ![1, 2].includes(row.inflowOrOutflow) || !row.billMethod || !row.billType ? 'bg-red-td' : '';
+      };
+
       // 保存列表数据
       const btnLoading = ref(false);
       const confirmForm = () => {
@@ -89,6 +94,7 @@
         showModal,
         btnDisabled,
         tableData,
+        rowClassName,
         excelUploadTotal,
         columns,
         uploadAction: getUploadAliPayAction(),

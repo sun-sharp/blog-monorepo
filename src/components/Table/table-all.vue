@@ -33,6 +33,7 @@
           actionColumn: props.actionColumn,
           maxHeight: props.maxHeight,
           scrollX: props.scrollX,
+          rowClassName: props.rowClassName,
         };
       });
 
