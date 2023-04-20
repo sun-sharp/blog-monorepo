@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { ErrorComponent, HomeComponent, Layout, RedirectComponent, SettingAccountComponent } from './router-component';
+import { ErrorComponent, HomeComponent, Layout, RedirectComponent, SettingAccountComponent, SettingPasswordComponent } from './router-component';
 import { RouteRecordRaw } from 'vue-router';
 import { PageEnum } from '@/constant';
 
@@ -28,7 +28,6 @@ export const ErrorPageRoute: AppRouteRecordRaw = {
   component: Layout,
   meta: {
     title: PageEnum.ERROR_PAGE_TITLE,
-    hideBreadcrumb: true,
   },
   children: [
     {
@@ -37,7 +36,6 @@ export const ErrorPageRoute: AppRouteRecordRaw = {
       component: ErrorComponent,
       meta: {
         title: PageEnum.ERROR_PAGE_TITLE,
-        hideBreadcrumb: true,
       },
     },
   ],
@@ -50,7 +48,6 @@ export const RedirectRoute: AppRouteRecordRaw = {
   component: Layout,
   meta: {
     title: PageEnum.REDIRECT_PAGE_TITLE,
-    hideBreadcrumb: true,
   },
   children: [
     {
@@ -59,7 +56,6 @@ export const RedirectRoute: AppRouteRecordRaw = {
       component: RedirectComponent,
       meta: {
         title: PageEnum.REDIRECT_PAGE_TITLE,
-        hideBreadcrumb: true,
       },
     },
   ],
@@ -80,9 +76,16 @@ export const SettingRoute: AppRouteRecordRaw = {
       name: PageEnum.SETTING_ACCOUNT_NAME,
       meta: {
         title: PageEnum.SETTING_ACCOUNT_TITLE,
-        // hideBreadcrumb: true,
       },
       component: SettingAccountComponent,
+    },
+    {
+      path: PageEnum.SETTING_PASSWORD_PATH,
+      name: PageEnum.SETTING_PASSWORD_NAME,
+      meta: {
+        title: PageEnum.SETTING_PASSWORD_TITLE,
+      },
+      component: SettingPasswordComponent,
     },
   ],
 };

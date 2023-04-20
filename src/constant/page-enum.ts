@@ -26,4 +26,8 @@ export enum PageEnum {
   SETTING_ACCOUNT_PATH = '/setting/account',
   SETTING_ACCOUNT_NAME = 'SettingAccount',
   SETTING_ACCOUNT_TITLE = '个人设置',
+  // 设置-密码更新
+  SETTING_PASSWORD_PATH = '/setting/password',
+  SETTING_PASSWORD_NAME = 'SettingPassword',
+  SETTING_PASSWORD_TITLE = '密码设置',
 }
