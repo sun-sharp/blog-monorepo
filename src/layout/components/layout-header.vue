@@ -271,10 +271,6 @@
         {
           icon: 'SearchOutlined',
           tips: '搜索',
-        },
-        {
-          icon: 'GithubOutlined',
-          tips: 'github',
           eventObject: {
             click: () => window.open('https://github.com/sun-sharp/blog-manage-web'),
           },

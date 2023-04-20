@@ -36,7 +36,6 @@
   import type { CSSProperties, PropType } from 'vue';
   import { defineComponent, ref, unref, nextTick, computed, watchEffect, toRaw } from 'vue';
   import { FormOutlined, CloseOutlined, CheckOutlined, propTypes, isString, isBoolean, isFunction, isNumber, isArray, createPlaceholderMessage } from '@/utils';
-  import { ClickOutside } from '@/directives';
   import { set, omit } from 'lodash-es';
   import { EventEnum } from '@/components/Table/componentMap';
   import { milliseconds } from 'date-fns';
@@ -48,9 +47,6 @@
   export default defineComponent({
     name: 'EditableCell',
     components: { FormOutlined, CloseOutlined, CheckOutlined, CellComponent },
-    directives: {
-      ClickOutside,
-    },
     props: {
       value: {
         type: [String, Number, Boolean, Object] as PropType<string | number | boolean | Recordable>,

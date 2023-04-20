@@ -4,11 +4,7 @@ import { setupRouter } from './router';
 import { setupStore } from './store';
 import MakeitCaptcha from 'makeit-captcha';
 import 'makeit-captcha/dist/captcha.min.css';
-import {
-  setupNaive,
-  setupMdEditor,
-  // setupDirectives,
-} from '@/plugins';
+import { setupNaive, setupMdEditor, setupDirectives } from '@/plugins';
 
 const app = createApp(App);
 
@@ -19,7 +15,7 @@ app.use(MakeitCaptcha);
 setupNaive(app);
 
 // 注册全局自定义指令
-// setupDirectives(app);
+setupDirectives(app);
 
 // 挂载状态管理
 setupStore(app);
