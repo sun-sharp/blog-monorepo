@@ -11,6 +11,7 @@ import { UpdateRoleCodeUserDto } from './dto/update-role-code-user.dto';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 
 @Controller('user')
 @ApiTags('用户')
@@ -49,6 +50,12 @@ export class UserController {
   @ApiOperation({ summary: '修改用户基本信息' })
   updateUserInfo(@Request() req: any, @Body() body: UpdateUserInfoDto) {
     return this.userService.updateUserInfo(req.user._id, body);
+  }
+
+  @Put('update_user_password')
+  @ApiOperation({ summary: '更新用户密码' })
+  updateUserPassword(@Request() req: any, @Body() body: UpdateUserPasswordDto) {
+    return this.userService.updateUserPassword(req.user, body);
   }
 
   @Delete(':userId')

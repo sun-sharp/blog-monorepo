@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import { hashPassword } from 'src/common/bcrypt';
+import { comparePassword, hashPassword } from 'src/common/bcrypt';
 import { IResponse } from 'src/interfaces/response.interface';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PageUserDto } from './dto/page-user.dto';
@@ -12,6 +12,7 @@ import { nowDateFun } from 'src/common/date';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { JwtService } from '@nestjs/jwt';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 
 @Injectable()
 export class UserService {
@@ -274,6 +275,48 @@ export class UserService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 更新用户密码
+   * @param {User} user
+   * @param {UpdateUserPasswordDto} updateUserPasswordDto
+   * @return {*}
+   */
+  public updateUserPassword(user: User, updateUserPasswordDto: UpdateUserPasswordDto): Promise<IResponse> {
+    return (
+      Promise.resolve({ user, body: updateUserPasswordDto })
+        // 判断密码是否正确
+        .then(async ({ user, body }) => {
+          const verify = await comparePassword(body.password, user.password);
+          if (!verify) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '密码错误',
+            });
+          }
+          return {
+            userId: user._id,
+            updatePassword: body.updatePassword,
+          };
+        })
+        // 修改用户基本信息
+        .then(async ({ userId, updatePassword }) => {
+          const password = await hashPassword(updatePassword);
+          await this.userModel.updateOne({ _id: userId }, { password });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '修改密码成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '修改密码失败！',
           });
         })
     );
