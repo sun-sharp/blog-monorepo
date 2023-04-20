@@ -116,6 +116,7 @@
   import LayoutHeaderSetting from '@/layout/components/layout-header-setting.vue';
   import LayoutMenu from '@/layout/components/layout-menu.vue';
   import defaultAvatar from '@/assets/images/common/default-avatar.png';
+  import { useSearch } from '@/hooks';
 
   export default defineComponent({
     name: 'LayoutHeader',
@@ -272,7 +273,7 @@
           icon: 'SearchOutlined',
           tips: '搜索',
           eventObject: {
-            click: () => window.open('https://github.com/sun-sharp/blog-manage-web'),
+            click: () => (useSearch.value = !useSearch.value),
           },
         },
         {

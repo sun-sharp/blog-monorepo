@@ -2,13 +2,15 @@ import { useThrottleFn } from '@vueuse/core';
 import type { ObjectDirective } from 'vue';
 
 /**
- * @param {string} arg 键码
+ * @param {string} key 键值
  * @param {Function} funVal 执行的函数
  */
 interface obj {
-  arg: string;
+  arg: String;
+  ctrl: boolean;
+  alt: boolean;
+  shift: boolean;
   funVal: Function;
-  id: string | number;
 }
 
 interface keys {
@@ -31,47 +33,81 @@ export const pressKey: ObjectDirective = {
     const inputNode = ifType(el) ? el : el.children.length && ifType(el.children[0]) ? el.children[0] : undefined;
 
     if (!bind.arg) {
-      console.error('请绑定需要触发的键，例如v-press-key:s');
+      console.error('请绑定需要触发的键，例如v-press-key:s，v-press-key:s.alt');
       return;
     }
 
-    if (Object.keys(keys).filter((item) => item == bind.arg).length) {
-      console.error('绑定的按键 ' + bind.arg + ' 与已有的重名');
-      return;
-    }
-
+    // 获取键盘组合键盘值
+    const modifiersArr = Object.keys(bind.modifiers).filter((f) => bind.modifiers[f]);
     // 获取id
-    const id = Object.keys(bind.modifiers).length ? Object.keys(bind.modifiers)[0] : '';
+    const modifiersIds = modifiersArr.filter((f) => !['ctrl', 'alt', 'shift'].includes(f));
+    const id = modifiersIds.length ? modifiersIds[0] : '';
+
+    // 获取按键值
+    let keypad = bind.arg;
+    if (modifiersArr.includes('ctrl')) {
+      keypad = keypad + '.ctrl';
+    }
+    if (modifiersArr.includes('alt')) {
+      keypad = keypad + '.alt';
+    }
+    if (modifiersArr.includes('shift')) {
+      keypad = keypad + '.shift';
+    }
+
+    if (Object.keys(keys).filter((item) => item == keypad).length) {
+      console.error('绑定的按键 ' + keypad + ' 与已有的重名');
+      return;
+    }
 
     // 获取对象键值
-    const k = inputNode == undefined ? bind.arg : bind.arg + '-' + inputNode.tagName + (id ? '-' + id : '');
+    const k = inputNode !== undefined ? keypad + '-' + inputNode.tagName + (id ? '-' + id : '') : keypad;
     // 储存数据
     keys[k] = {
       arg: bind.arg,
+      ctrl: false,
+      alt: false,
+      shift: false,
       funVal: bind.value,
-      id,
     };
-
-    // 绑定在input上时
-    if (inputNode !== undefined) {
-      inputNode.onkeydown = function keydown(event: KeyboardEvent) {
-        // 获取匹配项
-        const match = Object.keys(keys).filter((item) => {
-          const key = item.split('-')[0];
-          return event.key.toUpperCase() == key || event.key.toLowerCase() == key || event.key == key;
-        });
-
-        useThrottleFn(match.length && keys[match[0].split('-')[0] + '-' + inputNode.tagName + (id ? '-' + id : '')].funVal(), wait);
-      };
-
-      return;
+    if (modifiersArr.includes('ctrl')) {
+      keys[k].ctrl = true;
+    }
+    if (modifiersArr.includes('alt')) {
+      keys[k].alt = true;
+    }
+    if (modifiersArr.includes('shift')) {
+      keys[k].shift = true;
     }
 
-    window.onkeydown = function keydown(event: KeyboardEvent) {
-      // 获取匹配项
-      const match = Object.keys(keys).filter((item) => event.key.toUpperCase() == item || event.key.toLowerCase() == item || event.key == item);
+    // // 绑定在input上时
+    // if (inputNode !== undefined) {
+    //   inputNode.onkeydown = function keydown(event: KeyboardEvent) {
+    //     // 获取匹配项
+    //     const match = Object.keys(keys).filter((item) => {
+    //       const key = item.split('-')[0];
+    //       return event.key.toUpperCase() == key || event.key.toLowerCase() == key || event.key == key;
+    //     });
 
-      useThrottleFn(match.length && keys[match[0]].funVal(), wait);
+    //     useThrottleFn(match.length && keys[match[0].split('-')[0] + '-' + inputNode.tagName + (id ? '-' + id : '')].funVal(), wait);
+    //   };
+
+    //   return;
+    // }
+
+    window.onkeydown = function keydown(event: KeyboardEvent) {
+      console.log(event, 'event');
+
+      const { key: e_key, altKey, ctrlKey, shiftKey } = event;
+      // 获取匹配项
+      const matchFind = Object.values(keys).find((f_item) => {
+        const { arg: i_arg, alt: i_alt, ctrl: i_ctrl, shift: i_shift } = f_item;
+        return (
+          (e_key.toUpperCase() === i_arg || e_key.toLowerCase() === i_arg || e_key === i_arg) && altKey === i_alt && ctrlKey === i_ctrl && shiftKey === i_shift
+        );
+      });
+
+      matchFind && useThrottleFn(matchFind.funVal(), wait);
     };
   },
 };

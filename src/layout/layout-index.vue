@@ -7,6 +7,8 @@
   import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
   import LayoutMain from '@/layout/components/layout-main.vue';
   import LayoutFooter from './components/layout-footer.vue';
+  import { useSearch } from '@/hooks';
+  import LayoutSearch from './components/layout-search.vue';
 
   const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getFooterSetting } = useSetting();
 
@@ -112,9 +114,15 @@
             <layout-tabs-view v-if="isMultiTabs" />
           </n-layout-header>
           <n-layout-content class="layout-content-main">
-            <div class="main-view">
-              <layout-main />
-            </div>
+            <transition name="searchView">
+              <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
+            </transition>
+
+            <transition name="searchView">
+              <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)" class="main-view">
+                <layout-main />
+              </div>
+            </transition>
           </n-layout-content>
         </n-layout>
       </n-layout>
