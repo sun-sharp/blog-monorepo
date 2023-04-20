@@ -276,7 +276,7 @@
           icon: 'GithubOutlined',
           tips: 'github',
           eventObject: {
-            click: () => window.open('https://github.com/jekip/naive-ui-admin'),
+            click: () => window.open('https://github.com/sun-sharp/blog-manage-web'),
           },
         },
         {
@@ -365,8 +365,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: $header-height;
-        line-height: $header-height;
         overflow: hidden;
         white-space: nowrap;
         padding-left: 10px;
@@ -403,7 +401,6 @@
       .avatar {
         display: flex;
         align-items: center;
-        height: $header-height;
       }
 
       > * {
@@ -412,9 +409,6 @@
     }
 
     &-trigger {
-      display: inline-block;
-      width: $header-height;
-      height: $header-height;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
@@ -422,8 +416,6 @@
       .n-icon {
         display: flex;
         align-items: center;
-        height: $header-height;
-        line-height: $header-height;
       }
 
       &:hover {
