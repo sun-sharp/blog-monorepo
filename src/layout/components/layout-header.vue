@@ -293,8 +293,12 @@
           key: 1,
         },
         {
-          label: '退出登录',
+          label: '密码设置',
           key: 2,
+        },
+        {
+          label: '退出登录',
+          key: 9,
         },
       ];
 
@@ -302,9 +306,12 @@
       const avatarSelect = (key: any) => {
         switch (key) {
           case 1:
-            router.push({ name: 'Setting' });
+            router.push({ name: 'SettingAccount' });
             break;
           case 2:
+            router.push({ name: 'SettingPassword' });
+            break;
+          case 9:
             doLogout();
             break;
         }

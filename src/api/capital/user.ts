@@ -16,7 +16,7 @@ export function getUserInfo() {
  * @description 用户列表
  * @param data
  */
-export function getPage(data) {
+export function getPage(data: any) {
   return AxiosCapital.request({
     url: `${basic}/find_page`,
     method: 'POST',
@@ -28,7 +28,7 @@ export function getPage(data) {
  * @description 新增用户
  * @param data
  */
-export const save = (data?) => {
+export const save = (data?: any) => {
   return AxiosCapital.request({
     url: `${basic}/save`,
     method: 'POST',
@@ -43,7 +43,7 @@ export const save = (data?) => {
  * @description 修改用户
  * @param data
  */
-export const updateRoleCode = (data?) => {
+export const updateRoleCode = (data?: { userId: string; roleCode: any }) => {
   return AxiosCapital.request({
     url: `${basic}/update_role_code`,
     method: 'PUT',
@@ -58,7 +58,7 @@ export const updateRoleCode = (data?) => {
  * @description 修改用户基本信息
  * @param data
  */
-export const updateUserInfo = (data?) => {
+export const updateUserInfo = (data?: any) => {
   return AxiosCapital.request({
     url: `${basic}/update_user_info`,
     method: 'PUT',
@@ -73,7 +73,7 @@ export const updateUserInfo = (data?) => {
  * @description 删除用户
  * @param userId
  */
-export const remove = (userId?) => {
+export const remove = (userId?: any) => {
   return AxiosCapital.request({
     url: `${basic}/${userId}`,
     method: 'DELETE',
@@ -84,28 +84,16 @@ export const remove = (userId?) => {
 };
 
 /**
- * @description: 用户修改密码
+ * @description 更新用户密码
+ * @param data
  */
-// export function changePassword(params, uid) {
-//   return http.request(
-//     {
-//       url: `/user/u${uid}/changepw`,
-//       method: 'POST',
-//       params,
-//     },
-//     {
-//       isTransformResponse: false,
-//     }
-//   );
-// }
-
-// /**
-//  * @description: 用户登出
-//  */
-// export function logout(params) {
-//   return http.request({
-//     url: '/login/logout',
-//     method: 'POST',
-//     params,
-//   });
-// }
+export const updateUserPassword = (data: any) => {
+  return AxiosCapital.request({
+    url: `${basic}/update_user_password`,
+    method: 'PUT',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
