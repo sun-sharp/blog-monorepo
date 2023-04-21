@@ -3,6 +3,10 @@
   import { useRouteStore } from '@/store';
   import { getAppEnvConfig, SearchOutlined } from '@/utils';
   import { ref, computed } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useSearch } from '@/hooks';
+
+  const router = useRouter();
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.shortName;
@@ -24,6 +28,17 @@
       return item.component.indexOf(searchValue.value) !== -1 || item.title.indexOf(searchValue.value) !== -1;
     });
   });
+
+  // 点击跳转页面
+  const toNestRouter = (item: { name: any }) => {
+    router
+      .push({
+        name: item.name,
+      })
+      .then(() => {
+        useSearch.value = false;
+      });
+  };
 </script>
 
 <template>
@@ -46,7 +61,7 @@
     </div>
     <n-card :bordered="false" class="layout-search__main" content-style="height: 0;padding: 5px">
       <n-scrollbar v-if="filterMenu.length > 0" trigger="none">
-        <div v-for="(item, index) in filterMenu" :key="index" class="main-item">
+        <div v-for="(item, index) in filterMenu" :key="index" class="main-item" @click="toNestRouter(item)">
           <component :is="item.icon" :key="item.menuId" class="main-item--icon" />
           <div class="main-item--cont">
             <div class="name">{{ item.title }}</div>
@@ -116,6 +131,7 @@
         transition: all 0.2s;
         border-left: 4px solid transparent;
         padding: 10px;
+        cursor: pointer;
 
         &:hover {
           background: $backColor;
