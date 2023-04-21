@@ -34,7 +34,7 @@ export class Menu extends Document {
   component: string; // 组件内容或地址
 
   @Prop()
-  menuType: number; // 内嵌iframe地址
+  menuType: number; // 菜单类型
 
   @Prop()
   hidden: boolean; // 菜单是否隐藏
