@@ -164,6 +164,7 @@ export class CustomAxios {
       isTransformResponse, // 不进行任何处理，直接返回 res.data
       isReturnNativeResponse, // 返回原生响应头
     } = this.responseOptions;
+
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;

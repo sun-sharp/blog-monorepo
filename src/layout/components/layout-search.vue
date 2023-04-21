@@ -1,24 +1,29 @@
 <script lang="ts" setup>
   import { useSetting } from '@/hooks';
+  import { useRouteStore } from '@/store';
   import { getAppEnvConfig, SearchOutlined } from '@/utils';
+  import { ref, computed } from 'vue';
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.shortName;
 
   const { getAppTheme } = useSetting();
 
-  const get_app_theme = getAppTheme;
+  const searchValue = ref('');
+
+  const routeStore = useRouteStore();
+  const searchMenus = computed(() => routeStore.getSearchMenus);
 
   // 筛选菜单 在页面上循环
-  // const funMenu = () => {
-  //   if (searchValue.value === '') {
-  //     return menus;
-  //   }
+  const filterMenu = computed(() => {
+    if (searchValue.value === '') {
+      return searchMenus.value;
+    }
 
-  //   return menus.filter((item: Arr) => {
-  //     return item.path.indexOf(searchValue.value) != -1 || (item.meta && item.meta.locale && t(item.meta.locale as string).indexOf(searchValue.value) != -1);
-  //   });
-  // };
+    return searchMenus.value.filter((item) => {
+      return item.component.indexOf(searchValue.value) !== -1 || item.title.indexOf(searchValue.value) !== -1;
+    });
+  });
 </script>
 
 <template>
@@ -26,7 +31,7 @@
     <div class="layout-search__wrap">
       <img class="logo" src="~@/assets/images/common/logo.png" alt="" />
       <h2 class="title">{{ title }}</h2>
-      <n-input placeholder="搜索页面（路径或者名称）">
+      <n-input v-model:value="searchValue" placeholder="搜索页面（路径或者名称）">
         <template #suffix>
           <n-icon :component="SearchOutlined" />
         </template>
@@ -39,16 +44,28 @@
         关闭
       </div>
     </div>
-    <n-card :bordered="false">
-      <n-scrollbar trigger="none">asdsa</n-scrollbar>
+    <n-card :bordered="false" class="layout-search__main" content-style="height: 0;padding: 5px">
+      <n-scrollbar v-if="filterMenu.length > 0" trigger="none">
+        <div v-for="(item, index) in filterMenu" :key="index" class="main-item">
+          <component :is="item.icon" :key="item.menuId" class="main-item--icon" />
+          <div class="main-item--cont">
+            <div class="name">{{ item.title }}</div>
+            <div class="path">{{ item.component }}</div>
+          </div>
+        </div>
+      </n-scrollbar>
+      <n-empty v-else class="w-full h-full justify-center" description="抱歉，没有找到相关页面！！"></n-empty>
     </n-card>
   </div>
 </template>
 
 <style lang="scss">
+  $backColor: #f5f7fa;
+  $themeColor: v-bind(getAppTheme);
   .layout-search {
     width: 100%;
-    background: #eff1f4;
+    height: 100%;
+    background: $backColor;
     box-sizing: border-box;
     padding: 20px;
 
@@ -81,10 +98,48 @@
           padding: 0px 5px;
           height: 18px;
           line-height: 18px;
-          background: v-bind(get_app_theme);
+          background: $themeColor;
           border-radius: 2px;
           color: #fff;
           margin: 0 3px;
+        }
+      }
+    }
+
+    &__main {
+      height: calc(100% - 170px);
+
+      .main-item {
+        display: flex;
+        align-items: center;
+        color: #444;
+        transition: all 0.2s;
+        border-left: 4px solid transparent;
+        padding: 10px;
+
+        &:hover {
+          background: $backColor;
+          color: $themeColor;
+          border-color: $themeColor;
+        }
+
+        &--icon {
+          font-size: 22px;
+        }
+
+        &--cont {
+          padding-left: 10px;
+
+          .name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+          }
+          .path {
+            width: 100%;
+            font-size: 12px;
+            color: #999;
+          }
         }
       }
     }

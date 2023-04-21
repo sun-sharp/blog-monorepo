@@ -13,8 +13,8 @@ LayoutMap.set('iframe', IframeComponent);
  * @return {*}
  *  */
 export const pathFormat = (item: AppRouteRecordRaw): string => {
-  const { component, name, meta } = item;
-  let path = component;
+  const { component, name = '', meta } = item;
+  let path: string = component;
   if (!component && meta?.iframeSrc) {
     path = '';
   } else if (component === 'layout') {
@@ -99,7 +99,7 @@ export const asyncImportRoute = (routes: AppRouteRecordRaw[] | undefined): any[]
  * @param routerMap
  * @returns {*}
  */
-export const routerOneScreen = (routerMap): any => {
+export const routerOneScreen = (routerMap: any[]): any => {
   const oneRouteList: any[] = [];
   const routeList: any[] = [];
   routerMap.forEach((item) => {

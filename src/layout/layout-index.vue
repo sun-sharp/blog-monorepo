@@ -168,13 +168,16 @@
     }
 
     &-no-foot {
+      height: 100%;
       background-color: transparent;
     }
 
     &-content {
+      height: 100%;
       background-color: transparent;
 
       &-main {
+        height: 100%;
         background-color: transparent;
       }
     }

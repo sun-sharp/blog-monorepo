@@ -1,10 +1,9 @@
 import type { AppRouteRecordRaw } from '/#/router';
 import { ErrorComponent, HomeComponent, Layout, RedirectComponent, SettingAccountComponent, SettingPasswordComponent } from './router-component';
-import { RouteRecordRaw } from 'vue-router';
 import { PageEnum } from '@/constant';
 
 // 首页
-export const HomeRoute: RouteRecordRaw = {
+export const HomeRoute: AppRouteRecordRaw = {
   path: PageEnum.HOME_PATH,
   name: PageEnum.HOME_NAME,
   component: HomeComponent,
@@ -14,7 +13,7 @@ export const HomeRoute: RouteRecordRaw = {
 };
 
 // 一级菜单
-export const PageRoute: RouteRecordRaw = {
+export const PageRoute: AppRouteRecordRaw = {
   path: '/',
   redirect: PageEnum.HOME_PATH,
   component: Layout,

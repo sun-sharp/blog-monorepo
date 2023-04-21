@@ -67,8 +67,6 @@ export const pressKey: ObjectDirective = {
     }
 
     window.onkeydown = function keydown(event: KeyboardEvent) {
-      console.log(event, 'event');
-
       const { key: e_key, altKey, ctrlKey, shiftKey } = event;
       // 获取匹配项
       const matchFind = Object.values(keys).find((f_item) => {

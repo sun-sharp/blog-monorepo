@@ -1,18 +1,15 @@
-import type { RouteRecordRaw, RouteMeta } from 'vue-router';
+import type { RouteRecordRaw, RouteMeta, RouteRecordRedirectOption } from 'vue-router';
 import { defineComponent } from 'vue';
 import { RouteLocationNormalized } from 'vue-router';
 
 export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Promise<typeof import('*.vue')>) | (() => Promise<T>);
 
-export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
+export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'children'> {
   path: string;
-  name: string;
-  meta: RouteMeta;
-  component: Component | string;
-  components?: Component;
+  name?: string;
+  meta?: RouteMeta;
+  component?: Component | string;
   children?: AppRouteRecordRaw[];
-  props?: Recordable;
-  fullPath?: string;
 }
 
 export interface Meta {
@@ -34,24 +31,20 @@ export interface Meta {
   hidden?: boolean;
 }
 
-export interface Menu {
-  title: string;
-  label: string;
-  key: string;
-  meta: RouteMeta;
-  name: string;
-  component?: Component | string;
-  components?: Component;
-  children?: AppRouteRecordRaw[];
-  props?: Recordable;
-  fullPath?: string;
-  icon?: any;
-  path: string;
-  redirect?: string;
-  sort?: number;
-}
-
 export type RouteItem = Partial<RouteLocationNormalized> & {
   fullPath: string;
   name: string;
 };
+
+export interface MenuType {
+  component: string;
+  hidden: Boolean;
+  icon: string;
+  iframeSrc?: string;
+  menuId: string;
+  menuType: number;
+  name: string;
+  parentId: string;
+  sort: number;
+  title: string;
+}

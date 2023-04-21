@@ -131,13 +131,13 @@
           username,
           password,
         };
-        const { code } = await userStore.login(params);
+        const { code, message: msg } = await userStore.login(params);
         loading.value = false;
         if (messageReactive) {
           messageReactive.destroy();
           messageReactive = null;
         }
-        if (code == ResultEnum.SUCCESS) {
+        if (code === ResultEnum.SUCCESS) {
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           message.success('登录成功！');
           router.replace(toPath).then(() => {
@@ -145,6 +145,8 @@
               router.replace('/');
             }
           });
+        } else {
+          message.error(msg || '登陆失败！');
         }
       } else {
         message.error('请填写完整信息，并且进行验证码校验');
