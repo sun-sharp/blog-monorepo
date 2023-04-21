@@ -1,7 +1,7 @@
 // 头部点击过渡
 .searchView-enter-active,
 .searchView-leave-active {
-  transition: all 1s;
+  transition: all 0.2s;
 }
 .searchView-enter-from {
   transform: scale(1.1);
