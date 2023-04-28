@@ -43,7 +43,7 @@ export class MenuService {
 
   /**
    * @description: 查询全部系统菜单
-   * @param {*}
+   * @param {menuFindAllDto} query
    * @return {Promise<IResponse>}
    */
   public findAll(query?: menuFindAllDto): Promise<IResponse> {
@@ -59,13 +59,15 @@ export class MenuService {
               menuId: m._id,
               name: m.name,
               title: m.title,
-              sort: m.sort,
-              icon: m.icon,
               parentId: m.parentId,
-              iframeSrc: m.iframeSrc,
-              component: m.component,
               menuType: m.menuType,
               hidden: m.hidden,
+              component: m.component,
+              sort: m.sort,
+              icon: m.icon,
+              iframeSrc: m.iframeSrc,
+              externalLink: m.externalLink,
+              noKeepAlive: m.noKeepAlive,
             })),
             message: '查询成功！',
           });
