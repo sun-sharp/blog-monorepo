@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "configurations": [
     {
-      "name": "Launch Nest",
+      "name": "run dev",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -16,6 +16,25 @@
       "runtimeArgs": [
         "run",
         "start:dev_watch_debug"
+      ],
+      "console": "integratedTerminal",
+      "protocol": "auto",
+      "restart": true,
+      "port": 3000,
+      "autoAttachChildProcesses": true
+    },
+    {
+      "name": "run prod",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "windows": {
+        "runtimeExecutable": "npm.cmd"
+      },
+      "runtimeArgs": [
+        "run",
+        "start:prod_watch_debug"
       ],
       "console": "integratedTerminal",
       "protocol": "auto",
