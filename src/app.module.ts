@@ -6,7 +6,7 @@ import { CapitalModule } from './modules/capital/capital.module';
 import { FileModule } from './modules/file/file.module';
 import { MoneyModule } from './modules/money/money.module';
 import { BlogModule } from './modules/blog/blog.module';
-import customConfig from './config';
+import { getEnvConfig } from './common/env-config';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import customConfig from './config';
     FileModule,
     ConfigModule.forRoot({
       isGlobal: true, // 作用于全局
-      load: [customConfig], // 加载自定义配置项
+      load: [() => getEnvConfig()], // 加载自定义配置项
     }),
     MoneyModule,
     BlogModule,

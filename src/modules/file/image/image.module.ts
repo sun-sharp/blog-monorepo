@@ -6,11 +6,11 @@ import { diskStorage } from 'multer';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Image, ImageSchema } from 'src/schemas/file/image.schema';
 import { UserModule } from 'src/modules/capital/user/user.module';
-import customConfig from 'src/config';
+import { getEnvConfig } from 'src/common/env-config';
 
 const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], 'file');
 
-const config = customConfig();
+const envConfig = getEnvConfig();
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ const config = customConfig();
     MulterModule.register({
       storage: diskStorage({
         // 配置文件上传后的文件夹路径
-        destination: `${config.file.lib}/public/files/image`,
+        destination: `${envConfig.fileLib}/public/files/image`,
         filename: (req, file, cb) => {
           const image = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
           const mimeType = file.mimetype.split('/')[1];

@@ -1,17 +1,13 @@
 import { MongooseModule } from '@nestjs/mongoose';
+import { getEnvConfig } from '../env-config';
 
-// 账号
-const account = 'yrr';
-// 密码
-const password = 'AlyYrrAdmin123';
-// 服务器ip地址
-const serverIp = '120.79.162.189';
-// 数据库端口
-const databasePort = '5606';
+const envConfig = getEnvConfig();
+
+const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery } = envConfig;
+// 账号登录
+const mongodbAccountAndPassword = mongodbAccount && mongodbPassword ? `${mongodbAccount}:${mongodbPassword}@` : '';
 // mongodb路径的基础配置
-const mongodbBaseUrl = `mongodb://${account}:${password}@${serverIp}:${databasePort}`;
-// mongodb的参数信息
-const mongodbQuery = '?authSource=admin';
+const mongodbBaseUrl = `mongodb://${mongodbAccountAndPassword}${serverIp}:${databasePort}`;
 
 // capital的mongoose配置
 export const capitalMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/capital${mongodbQuery}`, {

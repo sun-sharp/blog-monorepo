@@ -8,10 +8,10 @@ import { Role } from 'src/schemas/capital/role.schema';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PageRoleDto } from './dto/page-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import customConfig from 'src/config';
 import { readFileDataHandle } from 'src/common/fs-handle';
 import { logger } from 'src/common/journal';
 import { groupArray } from 'src/common/array';
+import { getEnvConfig } from 'src/common/env-config';
 
 @Injectable()
 export class RoleService {
@@ -209,8 +209,8 @@ export class RoleService {
       Promise.resolve()
         // 查询
         .then(async () => {
-          const config = customConfig();
-          const jsonPath = `${config.file.lib}/public/json/swagger-api.json`;
+          const envConfig = getEnvConfig();
+          const jsonPath = `${envConfig.fileLib}/public/json/swagger-api.json`;
           const jsonData = await readFileDataHandle(jsonPath);
           return JSON.parse(jsonData.toString()); //将二进制的数据转换为字符串， 将字符串转换为json对象
         })

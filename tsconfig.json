@@ -19,9 +19,8 @@
     "noFallthroughCasesInSwitch": false
   },
   "paths": {
-    "@/*": [
-      "src/*"
-    ],
+    "@/*": "src/*",
+    "/#/*": "types/*",
   },
   "exclude": [
     "node_modules",
