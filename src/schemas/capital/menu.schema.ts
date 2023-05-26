@@ -19,25 +19,31 @@ export class Menu extends Document {
   title: string; // 菜单的名称
 
   @Prop()
+  parentId: string; // 上级菜单的id
+
+  @Prop()
+  menuType: number; // 菜单类型
+
+  @Prop()
+  hidden: boolean; // 菜单是否隐藏
+
+  @Prop()
+  component: string; // 组件内容或地址
+
+  @Prop()
   sort: number; // 菜单的排序
 
   @Prop()
   icon: string; // 菜单的图标
 
   @Prop()
-  parentId: string; // 上级菜单的id
-
-  @Prop()
   iframeSrc: string; // 内嵌iframe地址
 
   @Prop()
-  component: string; // 组件内容或地址
+  externalLink: string; // 外链跳转地址
 
   @Prop()
-  menuType: number; // 内嵌iframe地址
-
-  @Prop()
-  hidden: boolean; // 菜单是否隐藏
+  noKeepAlive: boolean; // 是否不缓存
 }
 
 export const MenuSchema = SchemaFactory.createForClass(Menu);
