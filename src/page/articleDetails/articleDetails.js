@@ -35,7 +35,7 @@ class articleDetails extends Component {
   getArticleDetails = ()=> {
     const self = this;
     const params = {
-      id: this.state.articleId
+      articleId: this.state.articleId
     };
     axios.get(API.ARTICLE_DETAILS, { params })
       .then(({ data }) =>{
@@ -57,21 +57,21 @@ class articleDetails extends Component {
           <p className="article-cont--title">{ articleData.title }</p>
           <div className="article-cont--author">
             <i className="icon-touxiang author01" />
-            <span>{ articleData.author }</span>
+            <span>{ articleData.authorNickname }</span>
             <i className="icon-rili author02" />
             <span>{ articleData.createTime }</span>
           </div>
           <div className="article-cont--about">
             <strong>简介</strong>
-            { articleData.outline }
+            { articleData.brief }
           </div>
           <div className="article-markdown">
             <ReactMarkdown
-              source={articleData.htmlContent}
+              source={articleData.markdownContent}
               escapeHtml={false}
             />
           </div>
-          {/*<div dangerouslySetInnerHTML={{__html: articleData.htmlContent }} />*/}
+          {/* <div dangerouslySetInnerHTML={{__html: articleData.htmlContent }} /> */}
         </Content>
         <Sider width={330} className="article-side">
           <Affix offsetTop={5}>
