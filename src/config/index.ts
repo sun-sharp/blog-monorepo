@@ -9,15 +9,10 @@ const configs = {
   prod: prodConfig,
 };
 
-console.log(process.env.RUNNING_ENV, 'process.env.RUNNING_ENV');
-console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
-
 const { RUNNING_ENV } = process.env;
-let env = 'dev';
+let env = 'prod';
 if (RUNNING_ENV === 'dev') {
   env = 'dev';
-} else if (RUNNING_ENV === 'prod') {
-  env = 'prod';
 }
 
 export const useCustomConfig = () => configs[env];
