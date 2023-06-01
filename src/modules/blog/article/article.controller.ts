@@ -1,4 +1,4 @@
-import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -42,5 +42,12 @@ export class ArticleController {
   @UseGuards(JwtAuthGuard)
   remove(@Param('articleId') articleId: string) {
     return this.articleService.remove(articleId);
+  }
+
+  @Get('details')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '获取文章详情' })
+  findDetails(@Query('articleId') articleId: string) {
+    return this.articleService.findDetails(articleId);
   }
 }

@@ -171,4 +171,31 @@ export class ArticleService {
         })
     );
   }
+
+  public findDetails(articleId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(articleId)
+        .then(async (articleId) => {
+          const result = await this.articleModel.findOne({ _id: articleId });
+          if (!result) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '查询文章详情失败',
+            });
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
 }
