@@ -6,6 +6,9 @@ const configs = {
   prod: prodConfig,
 };
 
+console.log(process.env.RUNNING_ENV, 'process.env.RUNNING_ENV');
+console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
+
 const { RUNNING_ENV } = process.env;
 let env = 'dev';
 if (RUNNING_ENV === 'dev') {

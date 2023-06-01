@@ -14,7 +14,7 @@
     "start:prod_watch_debug": "rimraf dist && cross-env RUNNING_ENV=prod nest start --watch --debug",
     "rim:dist": "rimraf dist",
     "start:dist": "cross-env RUNNING_ENV=prod node dist/main",
-    "build": "rimraf dist && cross-env RUNNING_ENV=prod nest build",
+    "build": "rimraf dist && cross-env RUNNING_ENV=prod && cross-env NODE_ENV=prod nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark",
