@@ -1,7 +1,7 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
-import { getEnvConfig } from './env-config';
+import { useCustomConfig } from 'src/config';
 
-const config = getEnvConfig();
+const config = useCustomConfig();
 const basicPublicFilesImage = `${config.fileFsPath}public/files/image`;
 
 /**

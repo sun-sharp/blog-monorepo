@@ -9,9 +9,9 @@ import { join } from 'path';
 import * as express from 'express';
 import { logger } from './common/journal';
 import { writeFileSync } from 'fs';
-import { getEnvConfig } from './common/env-config';
+import { useCustomConfig } from './config';
 
-const envConfig = getEnvConfig();
+const customConfig = useCustomConfig();
 
 const { version } = pkg;
 
@@ -19,7 +19,7 @@ const title = 'NestJs博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
 const swaggerJsonUrl = `public/json/${swaggerUrl}.json`;
-const port = envConfig.port;
+const port = customConfig.port;
 const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUrl}`;
 
 (async () => {

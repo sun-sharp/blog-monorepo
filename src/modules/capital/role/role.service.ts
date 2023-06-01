@@ -11,7 +11,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { readFileDataHandle } from 'src/common/fs-handle';
 import { logger } from 'src/common/journal';
 import { groupArray } from 'src/common/array';
-import { getEnvConfig } from 'src/common/env-config';
+import { useCustomConfig } from 'src/config';
 
 @Injectable()
 export class RoleService {
@@ -209,8 +209,8 @@ export class RoleService {
       Promise.resolve()
         // 查询
         .then(async () => {
-          const envConfig = getEnvConfig();
-          const jsonPath = `${envConfig.fileLib}/public/json/swagger-api.json`;
+          const customConfig = useCustomConfig();
+          const jsonPath = `${customConfig.fileLib}/public/json/swagger-api.json`;
           const jsonData = await readFileDataHandle(jsonPath);
           return JSON.parse(jsonData.toString()); //将二进制的数据转换为字符串， 将字符串转换为json对象
         })

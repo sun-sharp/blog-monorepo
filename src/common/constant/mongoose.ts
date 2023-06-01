@@ -1,9 +1,9 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { getEnvConfig } from '../env-config';
+import { useCustomConfig } from 'src/config';
 
-const envConfig = getEnvConfig();
+const customConfig = useCustomConfig();
 
-const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery } = envConfig;
+const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery } = customConfig;
 // 账号登录
 const mongodbAccountAndPassword = mongodbAccount && mongodbPassword ? `${mongodbAccount}:${mongodbPassword}@` : '';
 // mongodb路径的基础配置
