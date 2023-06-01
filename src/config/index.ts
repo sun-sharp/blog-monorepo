@@ -1,5 +1,8 @@
 import devConfig from './dev';
 import prodConfig from './prod';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const configs = {
   dev: devConfig,
