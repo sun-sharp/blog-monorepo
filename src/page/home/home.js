@@ -12,6 +12,8 @@ import {
   Select,
 } from 'antd';
 import {isMobileOrPc} from "../../utils/utils";
+import headSculptureImage from '../../assets/head_sculpture.jpg';
+
 
 
 const { Content, Sider } = Layout;
@@ -211,7 +213,7 @@ class Home extends Component {
             {/*简介*/}
             <div className="slider-about">
               <div className="slider-about--avatar">
-                <Avatar size={100} src="https://6672-frist-ixdkl-1300617104.tcb.qcloud.la/blog/www/logo.jpg" />
+                <Avatar size={100} src={headSculptureImage} />
               </div>
               <p className="slider-about--name">Mr.Yang</p>
               <p className="slider-about--position">Web前端工程师</p>

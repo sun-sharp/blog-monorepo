@@ -7,6 +7,8 @@ import {
   Tooltip,
 } from 'antd';
 import { isMobileOrPc } from '../../utils/utils';
+import logoImage from '../../assets/logo.png';
+
 
 const { Header } = Layout;
 
@@ -61,7 +63,7 @@ class AppHeader extends Component {
           {/*<Col xs={24} sm={24} md={10} lg={10} xl={10}>*/}
             <Tooltip title="点击可进入过渡页面" overlayClassName="nav-tool">
               <Link to="/middle" className="nav-logo">
-                <img className="nav-logo--img" src="https://6672-frist-ixdkl-1300617104.tcb.qcloud.la/blog/www/logo.jpg" alt="Yang Ruirui logo" />
+                <img className="nav-logo--img" src={logoImage} alt="Yang Ruirui logo" />
                 <span className="nav-logo--name">Mr.Yang</span>
               </Link>
             </Tooltip>
