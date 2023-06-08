@@ -90,12 +90,12 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: [
         {
-          find: /\/#\//,
-          replacement: pathResolve('types') + '/',
-        },
-        {
           find: '@',
           replacement: pathResolve('src') + '/',
+        },
+        {
+          find: /\/#\//,
+          replacement: pathResolve('types') + '/',
         },
       ],
       dedupe: ['vue'],
@@ -116,6 +116,13 @@ export default defineConfig(({ command, mode }) => {
     // 定义全局常量替换方式。
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "./src/styles/variable.scss";', // 添加公共样式
+        },
+      },
     },
     server: {
       host: true,

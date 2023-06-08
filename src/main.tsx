@@ -1,10 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
+import { store } from '@/store';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from './router/index.tsx';
+import SharpProvider from '@/components/sharp/SharpProvider';
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const container = document.getElementById('root');
+const root = createRoot(container as HTMLDivElement);
+root.render(
+  <StrictMode>
+    <SharpProvider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </Provider>
+    </SharpProvider>
+  </StrictMode>
 );
