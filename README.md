@@ -1,68 +1,71 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# blog-official-website
 
-## Available Scripts
+## 介绍
 
-In the project directory, you can run:
+是基于[React](https://github.com/facebook/react) + [TypeScript](https://www.typescriptlang.org/) + [Vite](https://github.com/vitejs/vite) 的模板
 
-### `yarn start`
+## 安装使用
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- 获取项目代码
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```bash
+git clone https://github.com/sun-sharp/blog-official-website.git
+```
 
-### `yarn test`
+- 安装依赖
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+cd blog-official-website
+yarn
+```
 
-### `yarn build`
+### scripts
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# 运行本地接口项目
+yarn dev
+# 运行线上接口项目
+yarn dev:prod
+# 运行并监听本地接口
+yarn dev:debug
+# 构建项目
+yarn build
+# 直接预览本地打包文件目录
+yarn preview
+# 执行 eslint 校验，并修复部分问题
+yarn lint
+# 执行 stylelint 格式化
+yarn lint:stylelint
+# 重新安装依赖 该命令会先删除 node_modules、yarn.lock、package.lock.json，后再进行依赖重新安装（安装速度会明显变慢）
+yarn reinstall
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## 更新日志
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+[CHANGELOG](./CHANGELOG.md)
 
-### `yarn eject`
+## 浏览器支持
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+本地开发推荐使用`Chrome 80+` 浏览器
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+支持现代浏览器, 不支持 IE
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 安装插件说明
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### dependencies
 
-## Learn More
+```bash
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# 是一个非常好用的JS时间处理库
+date-fns
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
 
-### Code Splitting
+### devDependencies
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+```bash
 
-### Analyzing the Bundle Size
+# 代码检查 并在eslint中加入prettier配置
+eslint
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```
