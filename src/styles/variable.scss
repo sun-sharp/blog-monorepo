@@ -1,2 +1,4 @@
-$-theme-color: var(--app-theme-color, #166bcf);
-$-layout-header: var(--app-layout-header, 68px);
+$-theme-color: var(--root-theme-color, #166bcf);
+$-layout-header: var(--root-layout-header, 64px);
+$-layout-footer: var(--root-layout-footer, 40px);
+$-show-cont-width: var(--root-show-cont-width, 1200px);
