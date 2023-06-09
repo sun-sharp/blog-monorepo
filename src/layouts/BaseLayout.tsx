@@ -7,6 +7,7 @@ const LayoutStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   height: '100vh',
+  background: 'transparent',
 };
 
 const LayoutIndex: React.FC = () => {

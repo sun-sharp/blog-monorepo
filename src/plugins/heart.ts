@@ -1,14 +1,7 @@
 /*
- * @LastEditTime: 2023-06-09 14:50:58
+ * @LastEditTime: 2023-06-09 15:31:02
  * @Description: 鼠标点击心形动画
  */
-
-interface browserWindow extends Window {
-  webkitRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
-  mozRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
-  oRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
-  msRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
-}
 
 // 启动
 const heartAnimation = (window: browserWindow & typeof globalThis, document: Document) => {

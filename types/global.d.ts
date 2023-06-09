@@ -32,4 +32,11 @@ declare global {
     // 跨越代理
     VITE_PROXY: [string, string][];
   }
+
+  interface browserWindow extends Window {
+    webkitRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
+    mozRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
+    oRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
+    msRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
+  }
 }

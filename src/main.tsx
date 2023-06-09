@@ -7,8 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { Router } from './router/index.tsx';
 import SharpProvider from '@/components/sharp/SharpProvider';
 import { setupHeartAnimation } from './plugins/heart.ts';
+import { setupParticleBack } from './plugins/particle-back.ts';
 
 setupHeartAnimation();
+setupParticleBack();
 
 const container = document.getElementById('root');
 const root = createRoot(container as HTMLDivElement);
