@@ -2,8 +2,8 @@ import { Layout, Space } from 'antd';
 import LayoutHeader from './header/LayoutHeader';
 import LayoutFooter from './footer/LayoutFooter';
 import LayoutMain from './main/LayoutMain';
-import { setupHeartAnimation } from '@/plugins/heart.ts';
-import { setupParticleBack } from '@/plugins/particle-back.ts';
+import { clearParticleBack, initParticleBack } from '@/plugins/canvas/particle-back';
+import { useEffect } from 'react';
 
 const LayoutStyle: React.CSSProperties = {
   display: 'flex',
@@ -13,8 +13,16 @@ const LayoutStyle: React.CSSProperties = {
 };
 
 const LayoutIndex: React.FC = () => {
-  setupHeartAnimation();
-  setupParticleBack();
+  useEffect(() => {
+    // 这里的代码块 等价于 componentDidMount
+    // do something...
+    initParticleBack();
+    // return的写法 等价于 componentWillUnmount
+    return () => {
+      // do something...
+      clearParticleBack();
+    };
+  });
 
   return (
     <>

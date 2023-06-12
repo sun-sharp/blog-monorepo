@@ -8,5 +8,6 @@ module.exports = {
     'react-refresh/only-export-components': 'warn',
     'prettier/prettier': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-this-alias': 'off',
   },
 };
