@@ -1,13 +1,13 @@
 /*
- * @LastEditTime: 2023-06-13 02:39:50
+ * @LastEditTime: 2023-06-13 03:37:38
  * @Description: 动态粒子背景
  * Math.random() 大于0 小于1的随机数
  */
 
-const lineColor = 'rgba(187, 227, 255, 0.8)';
-const currentCircleColor = 'rgba(187, 227, 255, 0.8)';
+const lineColor = 'rgb(45 233 255 / 50%)';
+const currentCircleColor = 'rgb(45 233 255 / 50%)';
 // 粒子圆数量
-const circleNum = 100;
+const circleNum = 80;
 // 粒子圆的半径大小最大值
 const circleRatioR = 4;
 
