@@ -17,7 +17,7 @@ const Middle: React.FC = () => {
   return (
     <>
       <div className="middle">
-        <canvas id="sakura" />
+        <canvas id="fallenLeaves" />
         <div className="content">
           <div className="middle-header">
             <Link className="link" to={`/`}>
@@ -60,7 +60,7 @@ const Middle: React.FC = () => {
               {/*  className="link"*/}
               {/*  href={`https://segmentfault.com/u/biaochenxuying`}*/}
               {/*>*/}
-              {/*  segmentfault*/}
+              {/*  segmentFault*/}
               {/*</a>*/}
               {/*<a*/}
               {/*  target="_blank"*/}

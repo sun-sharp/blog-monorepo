@@ -1,3 +1,8 @@
+/*
+ * @LastEditTime: 2023-06-13 03:13:49
+ * @Description: 背景落叶
+ */
+
 class BlossomParticle {
   velocity;
   rotation;
@@ -5,7 +10,7 @@ class BlossomParticle {
   euler;
   size;
   alpha;
-  zkey;
+  zKey;
   constructor() {
     this.velocity = new Array(3);
     this.rotation = new Array(3);
@@ -13,33 +18,33 @@ class BlossomParticle {
     this.euler = new Array(3);
     this.size = 1.0;
     this.alpha = 1.0;
-    this.zkey = 0.0;
+    this.zKey = 0.0;
   }
 
-  setVelocity(vx: any, vy: any, vz: any) {
+  setVelocity(vx: number, vy: number, vz: number) {
     this.velocity[0] = vx;
     this.velocity[1] = vy;
     this.velocity[2] = vz;
   }
 
-  setRotation(rx: any, ry: any, rz: any) {
+  setRotation(rx: number, ry: number, rz: number) {
     this.rotation[0] = rx;
     this.rotation[1] = ry;
     this.rotation[2] = rz;
   }
-  setPosition(nx: any, ny: any, nz: any) {
+  setPosition(nx: number, ny: number, nz: number) {
     this.position[0] = nx;
     this.position[1] = ny;
     this.position[2] = nz;
   }
 
-  setEulerAngles(rx: any, ry: any, rz: any) {
+  setEulerAngles(rx: number, ry: number, rz: number) {
     this.euler[0] = rx;
     this.euler[1] = ry;
     this.euler[2] = rz;
   }
 
-  setSize(s: any) {
+  setSize(s: number) {
     this.size = s;
   }
 
@@ -55,9 +60,9 @@ class BlossomParticle {
 }
 
 export const fallenLeavesAnimation = () => {
-  const sakura_point_vsh = `
+  const fallen_leaves_point_vsh = `
   uniform mat4 uProjection;
-  uniform mat4 uModelview;
+  uniform mat4 uModelView;
   uniform vec3 uResolution;
   uniform vec3 uOffset;
   uniform vec3 uDOF;  //x:focus distance, y:focus radius, z:max radius
@@ -67,12 +72,12 @@ export const fallenLeavesAnimation = () => {
   attribute vec3 aEuler;
   attribute vec2 aMisc; //x:size, y:fade
 
-  varying vec3 pposition;
-  varying float psize;
-  varying float palpha;
-  varying float pdist;
+  varying vec3 p_position;
+  varying float p_size;
+  varying float p_alpha;
+  varying float p_dist;
 
-  //varying mat3 rotMat;
+  //varying mat3 rot_Mat;
   varying vec3 normX;
   varying vec3 normY;
   varying vec3 normZ;
@@ -80,76 +85,76 @@ export const fallenLeavesAnimation = () => {
 
   varying float diffuse;
   varying float specular;
-  varying float rstop;
-  varying float distancefade;
+  varying float r_stop;
+  varying float distance_fade;
 
   void main(void) {
       // Projection is based on vertical angle
-      vec4 pos = uModelview * vec4(aPosition + uOffset, 1.0);
+      vec4 pos = uModelView * vec4(aPosition + uOffset, 1.0);
       gl_Position = uProjection * pos;
       gl_PointSize = aMisc.x * uProjection[1][1] / -pos.z * uResolution.y * 0.5;
 
-      pposition = pos.xyz;
-      psize = aMisc.x;
-      pdist = length(pos.xyz);
-      palpha = smoothstep(0.0, 1.0, (pdist - 0.1) / uFade.z);
+      p_position = pos.xyz;
+      p_size = aMisc.x;
+      p_dist = length(pos.xyz);
+      p_alpha = smoothstep(0.0, 1.0, (p_dist - 0.1) / uFade.z);
 
-      vec3 elrsn = sin(aEuler);
-      vec3 elrcs = cos(aEuler);
-      mat3 rotx = mat3(
+      vec3 el_rsn = sin(aEuler);
+      vec3 el_rcs = cos(aEuler);
+      mat3 rot_x = mat3(
           1.0, 0.0, 0.0,
-          0.0, elrcs.x, elrsn.x,
-          0.0, -elrsn.x, elrcs.x
+          0.0, el_rcs.x, el_rsn.x,
+          0.0, -el_rsn.x, el_rcs.x
       );
-      mat3 roty = mat3(
-          elrcs.y, 0.0, -elrsn.y,
+      mat3 rot_y = mat3(
+          el_rcs.y, 0.0, -el_rsn.y,
           0.0, 1.0, 0.0,
-          elrsn.y, 0.0, elrcs.y
+          el_rsn.y, 0.0, el_rcs.y
       );
-      mat3 rotz = mat3(
-          elrcs.z, elrsn.z, 0.0,
-          -elrsn.z, elrcs.z, 0.0,
+      mat3 rot_z = mat3(
+          el_rcs.z, el_rsn.z, 0.0,
+          -el_rsn.z, el_rcs.z, 0.0,
           0.0, 0.0, 1.0
       );
-      mat3 rotmat = rotx * roty * rotz;
-      normal = rotmat[2];
+      mat3 rot_mat = rot_x * rot_y * rot_z;
+      normal = rot_mat[2];
 
-      mat3 trrotm = mat3(
-          rotmat[0][0], rotmat[1][0], rotmat[2][0],
-          rotmat[0][1], rotmat[1][1], rotmat[2][1],
-          rotmat[0][2], rotmat[1][2], rotmat[2][2]
+      mat3 trr_otm = mat3(
+          rot_mat[0][0], rot_mat[1][0], rot_mat[2][0],
+          rot_mat[0][1], rot_mat[1][1], rot_mat[2][1],
+          rot_mat[0][2], rot_mat[1][2], rot_mat[2][2]
       );
-      normX = trrotm[0];
-      normY = trrotm[1];
-      normZ = trrotm[2];
+      normX = trr_otm[0];
+      normY = trr_otm[1];
+      normZ = trr_otm[2];
 
       const vec3 lit = vec3(0.6917144638660746, 0.6917144638660746, -0.20751433915982237);
 
-      float tmpdfs = dot(lit, normal);
-      if(tmpdfs < 0.0) {
+      float tmp_dfs = dot(lit, normal);
+      if(tmp_dfs < 0.0) {
           normal = -normal;
-          tmpdfs = dot(lit, normal);
+          tmp_dfs = dot(lit, normal);
       }
-      diffuse = 0.4 + tmpdfs;
+      diffuse = 0.4 + tmp_dfs;
 
-      vec3 eyev = normalize(-pos.xyz);
-      if(dot(eyev, normal) > 0.0) {
-          vec3 hv = normalize(eyev + lit);
+      vec3 ey_ev = normalize(-pos.xyz);
+      if(dot(ey_ev, normal) > 0.0) {
+          vec3 hv = normalize(ey_ev + lit);
           specular = pow(max(dot(hv, normal), 0.0), 20.0);
       }
       else {
           specular = 0.0;
       }
 
-      rstop = clamp((abs(pdist - uDOF.x) - uDOF.y) / uDOF.z, 0.0, 1.0);
-      rstop = pow(rstop, 0.5);
+      r_stop = clamp((abs(p_dist - uDOF.x) - uDOF.y) / uDOF.z, 0.0, 1.0);
+      r_stop = pow(r_stop, 0.5);
       //-0.69315 = ln(0.5)
-      distancefade = min(1.0, exp((uFade.x - pdist) * 0.69315 / uFade.y));
+      distance_fade = min(1.0, exp((uFade.x - p_dist) * 0.69315 / uFade.y));
   }`;
-  const sakura_point_fsh = `
+  const fallen_leaves_point_fsh = `
   #ifdef GL_ES
-  //precision mediump float;
-  precision highp float;
+  //precision medium_p float;
+  precision high_p float;
   #endif
 
   uniform vec3 uDOF;  //x:focus distance, y:focus radius, z:max radius
@@ -157,12 +162,12 @@ export const fallenLeavesAnimation = () => {
 
   const vec3 fadeCol = vec3(0.08, 0.03, 0.06);
 
-  varying vec3 pposition;
-  varying float psize;
-  varying float palpha;
-  varying float pdist;
+  varying vec3 p_position;
+  varying float p_size;
+  varying float p_alpha;
+  varying float p_dist;
 
-  //varying mat3 rotMat;
+  //varying mat3 rot_Mat;
   varying vec3 normX;
   varying vec3 normY;
   varying vec3 normZ;
@@ -170,8 +175,8 @@ export const fallenLeavesAnimation = () => {
 
   varying float diffuse;
   varying float specular;
-  varying float rstop;
-  varying float distancefade;
+  varying float r_stop;
+  varying float distance_fade;
 
   float ellipse(vec2 p, vec2 o, vec2 r) {
       vec2 lp = (p - o) / r;
@@ -189,20 +194,20 @@ export const fallenLeavesAnimation = () => {
       vec2 coord = vec2(dot(normX, tp), dot(normY, tp));
 
       //angle = 15 degree
-      const float flwrsn = 0.258819045102521;
-      const float flwrcs = 0.965925826289068;
-      mat2 flwrm = mat2(flwrcs, -flwrsn, flwrsn, flwrcs);
-      vec2 flwrp = vec2(abs(coord.x), coord.y) * flwrm;
+      const float flw_rsn = 0.258819045102521;
+      const float flw_rcs = 0.965925826289068;
+      mat2 flw_rm = mat2(flw_rcs, -flw_rsn, flw_rsn, flw_rcs);
+      vec2 flw_rp = vec2(abs(coord.x), coord.y) * flw_rm;
 
       float r;
-      if(flwrp.x < 0.0) {
-          r = ellipse(flwrp, vec2(0.065, 0.024) * 0.5, vec2(0.36, 0.96) * 0.5);
+      if(flw_rp.x < 0.0) {
+          r = ellipse(flw_rp, vec2(0.065, 0.024) * 0.5, vec2(0.36, 0.96) * 0.5);
       }
       else {
-          r = ellipse(flwrp, vec2(0.065, 0.024) * 0.5, vec2(0.58, 0.96) * 0.5);
+          r = ellipse(flw_rp, vec2(0.065, 0.024) * 0.5, vec2(0.58, 0.96) * 0.5);
       }
 
-      if(r > rstop) discard;
+      if(r > r_stop) discard;
 
       vec3 col = mix(vec3(1.0, 0.8, 0.75), vec3(1.0, 0.9, 0.87), r);
       float grady = mix(0.0, 1.0, pow(coord.y * 0.5 + 0.5, 0.35));
@@ -210,14 +215,14 @@ export const fallenLeavesAnimation = () => {
       col *= mix(0.8, 1.0, pow(abs(coord.x), 0.3));
       col = col * diffuse + specular;
 
-      col = mix(fadeCol, col, distancefade);
+      col = mix(fadeCol, col, distance_fade);
 
-      float alpha = (rstop > 0.001)? (0.5 - r / (rstop * 2.0)) : 1.0;
-      alpha = smoothstep(0.0, 1.0, alpha) * palpha;
+      float alpha = (r_stop > 0.001)? (0.5 - r / (r_stop * 2.0)) : 1.0;
+      alpha = smoothstep(0.0, 1.0, alpha) * p_alpha;
 
       gl_FragColor = vec4(col * 0.5, alpha);
   }`;
-  const fx_common_vsh = `
+  const fxCommonVsh = `
   uniform vec3 uResolution;
   attribute vec2 aPosition;
 
@@ -229,10 +234,10 @@ export const fallenLeavesAnimation = () => {
       texCoord = aPosition.xy * 0.5 + vec2(0.5, 0.5);
       screenCoord = aPosition.xy * vec2(uResolution.z, 1.0);
   }`;
-  const bg_fsh = `
+  const bgFsh = `
   #ifdef GL_ES
-  //precision mediump float;
-  precision highp float;
+  //precision medium_p float;
+  precision high_p float;
   #endif
 
   uniform vec2 uTimes;
@@ -243,15 +248,15 @@ export const fallenLeavesAnimation = () => {
   void main(void) {
       vec3 col;
       float c;
-      vec2 tmpv = texCoord * vec2(0.8, 1.0) - vec2(0.95, 1.0);
-      c = exp(-pow(length(tmpv) * 1.8, 2.0));
+      vec2 tmp_v = texCoord * vec2(0.8, 1.0) - vec2(0.95, 1.0);
+      c = exp(-pow(length(tmp_v) * 1.8, 2.0));
       col = mix(vec3(0.02, 0.0, 0.03), vec3(0.96, 0.98, 1.0) * 1.5, c);
       gl_FragColor = vec4(col * 0.5, 1.0);
   }`;
-  const fx_brightbuf_fsh = `
+  const fx_bright_buf_fsh = `
   #ifdef GL_ES
-  //precision mediump float;
-  precision highp float;
+  //precision medium_p float;
+  precision high_p float;
   #endif
   uniform sampler2D uSrc;
   uniform vec2 uDelta;
@@ -263,10 +268,10 @@ export const fallenLeavesAnimation = () => {
       vec4 col = texture2D(uSrc, texCoord);
       gl_FragColor = vec4(col.rgb * 2.0 - vec3(0.5), 1.0);
   }`;
-  const fx_dirblur_r4_fsh = `
+  const fx_dir_blur_r4_fsh = `
   #ifdef GL_ES
-  //precision mediump float;
-  precision highp float;
+  //precision medium_p float;
+  precision high_p float;
   #endif
   uniform sampler2D uSrc;
   uniform vec2 uDelta;
@@ -295,8 +300,8 @@ export const fallenLeavesAnimation = () => {
   }`;
   const pp_final_fsh = `
   #ifdef GL_ES
-  //precision mediump float;
-  precision highp float;
+  //precision medium_p float;
+  precision high_p float;
   #endif
   uniform sampler2D uSrc;
   uniform sampler2D uBloom;
@@ -304,10 +309,10 @@ export const fallenLeavesAnimation = () => {
   varying vec2 texCoord;
   varying vec2 screenCoord;
   void main(void) {
-      vec4 srccol = texture2D(uSrc, texCoord) * 2.0;
-      vec4 bloomcol = texture2D(uBloom, texCoord);
+      vec4 src_col = texture2D(uSrc, texCoord) * 2.0;
+      vec4 bloom_col = texture2D(uBloom, texCoord);
       vec4 col;
-      col = srccol + bloomcol * (vec4(1.0) + srccol);
+      col = src_col + bloom_col * (vec4(1.0) + src_col);
       col *= smoothstep(1.0, 0.0, pow(length((texCoord - vec2(0.5)) * 2.0), 1.2) * 0.5);
       col = pow(col, vec4(0.45454545454545)); //(1.0 / 2.2)
 
@@ -351,8 +356,8 @@ export const fallenLeavesAnimation = () => {
   Matrix44.createIdentity = function () {
     return new Float32Array([1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]);
   };
-  Matrix44.loadProjection = function (m: number[], aspect: number, vdeg: number, near: number, far: number) {
-    const h = near * Math.tan(((vdeg * Math.PI) / 180.0) * 0.5) * 2.0;
+  Matrix44.loadProjection = function (m: number[], aspect: number, v_deg: number, near: number, far: number) {
+    const h = near * Math.tan(((v_deg * Math.PI) / 180.0) * 0.5) * 2.0;
     const w = h * aspect;
 
     m[0] = (2.0 * near) / w;
@@ -375,34 +380,34 @@ export const fallenLeavesAnimation = () => {
     m[14] = (-2.0 * far * near) / (far - near);
     m[15] = 0.0;
   };
-  Matrix44.loadLookAt = function (m: number[], vpos: { x: number; y: number; z: number }, vlook: { x: number; y: number; z: number }, vup: any) {
-    const frontv = Vector3.create(vpos.x - vlook.x, vpos.y - vlook.y, vpos.z - vlook.z);
-    Vector3.normalize(frontv);
-    const sidev = Vector3.create(1.0, 0.0, 0.0);
-    Vector3.cross(sidev, vup, frontv);
-    Vector3.normalize(sidev);
-    const topv = Vector3.create(1.0, 0.0, 0.0);
-    Vector3.cross(topv, frontv, sidev);
-    Vector3.normalize(topv);
+  Matrix44.loadLookAt = function (m: number[], v_pos: { x: number; y: number; z: number }, v_look: { x: number; y: number; z: number }, vup: any) {
+    const front_v = Vector3.create(v_pos.x - v_look.x, v_pos.y - v_look.y, v_pos.z - v_look.z);
+    Vector3.normalize(front_v);
+    const side_v = Vector3.create(1.0, 0.0, 0.0);
+    Vector3.cross(side_v, vup, front_v);
+    Vector3.normalize(side_v);
+    const top_v = Vector3.create(1.0, 0.0, 0.0);
+    Vector3.cross(top_v, front_v, side_v);
+    Vector3.normalize(top_v);
 
-    m[0] = sidev.x;
-    m[1] = topv.x;
-    m[2] = frontv.x;
+    m[0] = side_v.x;
+    m[1] = top_v.x;
+    m[2] = front_v.x;
     m[3] = 0.0;
 
-    m[4] = sidev.y;
-    m[5] = topv.y;
-    m[6] = frontv.y;
+    m[4] = side_v.y;
+    m[5] = top_v.y;
+    m[6] = front_v.y;
     m[7] = 0.0;
 
-    m[8] = sidev.z;
-    m[9] = topv.z;
-    m[10] = frontv.z;
+    m[8] = side_v.z;
+    m[9] = top_v.z;
+    m[10] = front_v.z;
     m[11] = 0.0;
 
-    m[12] = -(vpos.x * m[0] + vpos.y * m[4] + vpos.z * m[8]);
-    m[13] = -(vpos.x * m[1] + vpos.y * m[5] + vpos.z * m[9]);
-    m[14] = -(vpos.x * m[2] + vpos.y * m[6] + vpos.z * m[10]);
+    m[12] = -(v_pos.x * m[0] + v_pos.y * m[4] + v_pos.z * m[8]);
+    m[13] = -(v_pos.x * m[1] + v_pos.y * m[5] + v_pos.z * m[9]);
+    m[14] = -(v_pos.x * m[2] + v_pos.y * m[6] + v_pos.z * m[10]);
     m[15] = 1.0;
   };
 
@@ -415,91 +420,7 @@ export const fallenLeavesAnimation = () => {
   };
 
   //
-  let gl: {
-    deleteFramebuffer: (arg0: any) => void;
-    deleteRenderbuffer: (arg0: any) => void;
-    deleteTexture: (arg0: any) => void;
-    createFramebuffer: () => any;
-    createRenderbuffer: () => any;
-    createTexture: () => any;
-    bindTexture: (arg0: any, arg1: null) => void;
-    TEXTURE_2D: any;
-    texImage2D: (arg0: any, arg1: number, arg2: any, arg3: any, arg4: any, arg5: number, arg6: any, arg7: any, arg8: null) => void;
-    RGBA: any;
-    UNSIGNED_BYTE: any;
-    texParameteri: (arg0: any, arg1: any, arg2: any) => void;
-    TEXTURE_WRAP_S: any;
-    CLAMP_TO_EDGE: any;
-    TEXTURE_WRAP_T: any;
-    TEXTURE_MAG_FILTER: any;
-    LINEAR: any;
-    TEXTURE_MIN_FILTER: any;
-    bindFramebuffer: (arg0: any, arg1: null) => void;
-    FRAMEBUFFER: any;
-    framebufferTexture2D: (arg0: any, arg1: any, arg2: any, arg3: any, arg4: number) => void;
-    COLOR_ATTACHMENT0: any;
-    bindRenderbuffer: (arg0: any, arg1: null) => void;
-    RENDERBUFFER: any;
-    renderbufferStorage: (arg0: any, arg1: any, arg2: any, arg3: any) => void;
-    DEPTH_COMPONENT16: any;
-    framebufferRenderbuffer: (arg0: any, arg1: any, arg2: any, arg3: any) => void;
-    DEPTH_ATTACHMENT: any;
-    createShader: (arg0: any) => any;
-    shaderSource: (arg0: any, arg1: any) => void;
-    compileShader: (arg0: any) => void;
-    getShaderParameter: (arg0: any, arg1: any) => any;
-    COMPILE_STATUS: any;
-    getShaderInfoLog: (arg0: any) => any;
-    deleteShader: (arg0: any) => void;
-    VERTEX_SHADER: any;
-    FRAGMENT_SHADER: any;
-    createProgram: () => any;
-    attachShader: (arg0: any, arg1: any) => void;
-    linkProgram: (arg0: any) => void;
-    getProgramParameter: (arg0: any, arg1: any) => any;
-    LINK_STATUS: any;
-    getProgramInfoLog: (arg0: any) => any;
-    getUniformLocation: (arg0: any, arg1: any) => any;
-    getAttribLocation: (arg0: any, arg1: any) => any;
-    useProgram: (arg0: null) => void;
-    enableVertexAttribArray: (arg0: any) => void;
-    disableVertexAttribArray: (arg0: any) => void;
-    getParameter: (arg0: any) => any;
-    ALIASED_POINT_SIZE_RANGE: any;
-    createBuffer: () => any;
-    bindBuffer: (arg0: any, arg1: null) => void;
-    ARRAY_BUFFER: any;
-    bufferData: (arg0: any, arg1: any, arg2: any) => void;
-    DYNAMIC_DRAW: any;
-    enable: (arg0: any) => void;
-    BLEND: any;
-    blendFunc: (arg0: any, arg1: any) => void;
-    SRC_ALPHA: any;
-    ONE_MINUS_SRC_ALPHA: any;
-    uniformMatrix4fv: (arg0: any, arg1: boolean, arg2: any) => void;
-    uniform3fv: (arg0: any, arg1: Float32Array) => void;
-    vertexAttribPointer: (arg0: any, arg1: number, arg2: any, arg3: boolean, arg4: number, arg5: number) => void;
-    FLOAT: any;
-    drawArrays: (arg0: any, arg1: number, arg2: number) => void;
-    POINT: any;
-    DEPTH_TEST: any;
-    disable: (arg0: any) => void;
-    STATIC_DRAW: any;
-    uniform2fv: (arg0: any, arg1: any) => void;
-    uniform1i: (arg0: any, arg1: number) => void;
-    activeTexture: (arg0: any) => void;
-    TEXTURE0: any;
-    TRIANGLE_STRIP: any;
-    uniform2f: (arg0: any, arg1: number, arg2: number) => void;
-    viewport: (arg0: number, arg1: number, arg2: number, arg3: number) => void;
-    clearColor: (arg0: number, arg1: number, arg2: number, arg3: number) => void;
-    clear: (arg0: number) => void;
-    COLOR_BUFFER_BIT: number;
-    DEPTH_BUFFER_BIT: number;
-    uniform4f: (arg0: any, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-    TEXTURE1: any;
-    canvas: { width: any; height: any };
-  };
+  let gl: WebGLRenderingContext;
   const renderSpec: any = {
     width: 0,
     height: 0,
@@ -563,30 +484,30 @@ export const fallenLeavesAnimation = () => {
     return ret;
   }
 
-  function compileShader(shtype: any, shsrc: any) {
-    const retsh = gl.createShader(shtype);
+  function compileShader(sh_type: any, sh_src: any) {
+    const ret_sh = gl.createShader(sh_type) as any;
 
-    gl.shaderSource(retsh, shsrc);
-    gl.compileShader(retsh);
+    gl.shaderSource(ret_sh, sh_src);
+    gl.compileShader(ret_sh);
 
-    if (!gl.getShaderParameter(retsh, gl.COMPILE_STATUS)) {
-      const errlog = gl.getShaderInfoLog(retsh);
-      gl.deleteShader(retsh);
-      console.error(errlog);
+    if (!gl.getShaderParameter(ret_sh, gl.COMPILE_STATUS)) {
+      const err_log = gl.getShaderInfoLog(ret_sh);
+      gl.deleteShader(ret_sh);
+      console.error(err_log);
       return null;
     }
-    return retsh;
+    return ret_sh;
   }
 
-  function createShader(vtxsrc: string, frgsrc: string, uniformlist: string | any[], attrlist: string | any[]) {
-    const vsh = compileShader(gl.VERTEX_SHADER, vtxsrc);
-    const fsh = compileShader(gl.FRAGMENT_SHADER, frgsrc);
+  function createShader(vtx_src: string, frgSrc: string, uniform_list: string | any[], attr_list: string | any[]) {
+    const vsh = compileShader(gl.VERTEX_SHADER, vtx_src);
+    const fsh = compileShader(gl.FRAGMENT_SHADER, frgSrc);
 
     if (vsh == null || fsh == null) {
       return null;
     }
 
-    const prog = gl.createProgram();
+    const prog = gl.createProgram() as any;
     gl.attachShader(prog, vsh);
     gl.attachShader(prog, fsh);
 
@@ -595,22 +516,22 @@ export const fallenLeavesAnimation = () => {
 
     gl.linkProgram(prog);
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      const errlog = gl.getProgramInfoLog(prog);
-      console.error(errlog);
+      const err_log = gl.getProgramInfoLog(prog);
+      console.error(err_log);
       return null;
     }
 
-    if (uniformlist) {
+    if (uniform_list) {
       prog.uniforms = {};
-      for (let i = 0; i < uniformlist.length; i++) {
-        prog.uniforms[uniformlist[i]] = gl.getUniformLocation(prog, uniformlist[i]);
+      for (let i = 0; i < uniform_list.length; i++) {
+        prog.uniforms[uniform_list[i]] = gl.getUniformLocation(prog, uniform_list[i]);
       }
     }
 
-    if (attrlist) {
+    if (attr_list) {
       prog.attributes = {};
-      for (let i = 0; i < attrlist.length; i++) {
-        const attr = attrlist[i];
+      for (let i = 0; i < attr_list.length; i++) {
+        const attr = attr_list[i];
         prog.attributes[attr] = gl.getAttribLocation(prog, attr);
       }
     }
@@ -625,7 +546,7 @@ export const fallenLeavesAnimation = () => {
     }
   }
 
-  function unhomeShader(prog: any) {
+  function unHomeShader(prog: any) {
     for (const attr in prog.attributes) {
       gl.disableVertexAttribArray(prog.attributes[attr]);
     }
@@ -635,12 +556,12 @@ export const fallenLeavesAnimation = () => {
   /////
   const projection = {
     angle: 60,
-    nearfar: new Float32Array([0.1, 100.0]),
+    near_far: new Float32Array([0.1, 100.0]),
     matrix: Matrix44.createIdentity(),
   };
   const camera = {
     position: Vector3.create(0, 0, 100),
-    lookat: Vector3.create(0, 0, 0),
+    look_at: Vector3.create(0, 0, 0),
     up: Vector3.create(0, 1, 0),
     dof: Vector3.create(10.0, 4.0, 8.0),
     matrix: Matrix44.createIdentity(),
@@ -655,13 +576,13 @@ export const fallenLeavesAnimation = () => {
     const prm = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
     renderSpec.pointSize = { min: prm[0], max: prm[1] };
 
-    const vtxsrc = sakura_point_vsh;
-    const frgsrc = sakura_point_fsh;
+    const vtx_src = fallen_leaves_point_vsh;
+    const frgSrc = fallen_leaves_point_fsh;
 
     pointFlower.program = createShader(
-      vtxsrc,
-      frgsrc,
-      ['uProjection', 'uModelview', 'uResolution', 'uOffset', 'uDOF', 'uFade'],
+      vtx_src,
+      frgSrc,
+      ['uProjection', 'uModelView', 'uResolution', 'uOffset', 'uDOF', 'uFade'],
       ['aPosition', 'aEuler', 'aMisc']
     );
 
@@ -669,7 +590,6 @@ export const fallenLeavesAnimation = () => {
     pointFlower.offset = new Float32Array([0.0, 0.0, 0.0]);
     pointFlower.fader = Vector3.create(0.0, 10.0, 0.0);
 
-    // paramerters: velocity[3], rotate[3]
     pointFlower.numFlowers = 1600;
     pointFlower.particles = new Array(pointFlower.numFlowers);
     // vertex attributes {position[3], euler_xyz[3], size[1]}
@@ -683,7 +603,7 @@ export const fallenLeavesAnimation = () => {
     gl.bufferData(gl.ARRAY_BUFFER, pointFlower.dataArray, gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    unhomeShader(pointFlower.program);
+    unHomeShader(pointFlower.program);
 
     for (let i = 0; i < pointFlower.numFlowers; i++) {
       pointFlower.particles[i] = new BlossomParticle();
@@ -701,33 +621,33 @@ export const fallenLeavesAnimation = () => {
 
     //particles
     const PI2 = Math.PI * 2.0;
-    const tmpv3 = Vector3.create(0, 0, 0);
-    let tmpv = 0;
-    const symmetryrand = function () {
+    const tmpV3 = Vector3.create(0, 0, 0);
+    let tmp_v = 0;
+    const symmetryRand = function () {
       return Math.random() * 2.0 - 1.0;
     };
     for (let i = 0; i < pointFlower.numFlowers; i++) {
-      const tmpprtcl = pointFlower.particles[i];
+      const tmpPrTcl = pointFlower.particles[i];
 
       //velocity
-      tmpv3.x = symmetryrand() * 0.3 + 0.8;
-      tmpv3.y = symmetryrand() * 0.2 - 1.0;
-      tmpv3.z = symmetryrand() * 0.3 + 0.5;
-      Vector3.normalize(tmpv3);
-      tmpv = 2.0 + Math.random() * 1.0;
-      tmpprtcl.setVelocity(tmpv3.x * tmpv, tmpv3.y * tmpv, tmpv3.z * tmpv);
+      tmpV3.x = symmetryRand() * 0.3 + 0.8;
+      tmpV3.y = symmetryRand() * 0.2 - 1.0;
+      tmpV3.z = symmetryRand() * 0.3 + 0.5;
+      Vector3.normalize(tmpV3);
+      tmp_v = 2.0 + Math.random() * 1.0;
+      tmpPrTcl.setVelocity(tmpV3.x * tmp_v, tmpV3.y * tmp_v, tmpV3.z * tmp_v);
 
       //rotation
-      tmpprtcl.setRotation(symmetryrand() * PI2 * 0.5, symmetryrand() * PI2 * 0.5, symmetryrand() * PI2 * 0.5);
+      tmpPrTcl.setRotation(symmetryRand() * PI2 * 0.5, symmetryRand() * PI2 * 0.5, symmetryRand() * PI2 * 0.5);
 
       //position
-      tmpprtcl.setPosition(symmetryrand() * pointFlower.area.x, symmetryrand() * pointFlower.area.y, symmetryrand() * pointFlower.area.z);
+      tmpPrTcl.setPosition(symmetryRand() * pointFlower.area.x, symmetryRand() * pointFlower.area.y, symmetryRand() * pointFlower.area.z);
 
       //euler
-      tmpprtcl.setEulerAngles(Math.random() * Math.PI * 2.0, Math.random() * Math.PI * 2.0, Math.random() * Math.PI * 2.0);
+      tmpPrTcl.setEulerAngles(Math.random() * Math.PI * 2.0, Math.random() * Math.PI * 2.0, Math.random() * Math.PI * 2.0);
 
       //size
-      tmpprtcl.setSize(0.9 + Math.random() * 0.1);
+      tmpPrTcl.setSize(0.9 + Math.random() * 0.1);
     }
   }
 
@@ -753,42 +673,42 @@ export const fallenLeavesAnimation = () => {
     };
 
     for (let i = 0; i < pointFlower.numFlowers; i++) {
-      const prtcl = pointFlower.particles[i];
-      prtcl.update(timeInfo.delta, timeInfo.elapsed);
-      repeatPos(prtcl, 0, pointFlower.area.x);
-      repeatPos(prtcl, 1, pointFlower.area.y);
-      repeatPos(prtcl, 2, pointFlower.area.z);
-      repeatEuler(prtcl, 0);
-      repeatEuler(prtcl, 1);
-      repeatEuler(prtcl, 2);
+      const prTcl = pointFlower.particles[i];
+      prTcl.update(timeInfo.delta, timeInfo.elapsed);
+      repeatPos(prTcl, 0, pointFlower.area.x);
+      repeatPos(prTcl, 1, pointFlower.area.y);
+      repeatPos(prTcl, 2, pointFlower.area.z);
+      repeatEuler(prTcl, 0);
+      repeatEuler(prTcl, 1);
+      repeatEuler(prTcl, 2);
 
-      prtcl.alpha = 1.0; //(pointFlower.area.z - prtcl.position[2]) * 0.5;
+      prTcl.alpha = 1.0; //(pointFlower.area.z - prTcl.position[2]) * 0.5;
 
-      prtcl.zkey = camera.matrix[2] * prtcl.position[0] + camera.matrix[6] * prtcl.position[1] + camera.matrix[10] * prtcl.position[2] + camera.matrix[14];
+      prTcl.zKey = camera.matrix[2] * prTcl.position[0] + camera.matrix[6] * prTcl.position[1] + camera.matrix[10] * prTcl.position[2] + camera.matrix[14];
     }
 
     // sort
-    pointFlower.particles.sort(function (p0: { zkey: number }, p1: { zkey: number }) {
-      return p0.zkey - p1.zkey;
+    pointFlower.particles.sort(function (p0: { zKey: number }, p1: { zKey: number }) {
+      return p0.zKey - p1.zKey;
     });
 
     // update data
-    let ipos = pointFlower.positionArrayOffset;
-    let ieuler = pointFlower.eulerArrayOffset;
-    let imisc = pointFlower.miscArrayOffset;
+    let ipOs = pointFlower.positionArrayOffset;
+    let ieuLer = pointFlower.eulerArrayOffset;
+    let imIsc = pointFlower.miscArrayOffset;
     for (let i = 0; i < pointFlower.numFlowers; i++) {
-      const prtcl = pointFlower.particles[i];
-      pointFlower.dataArray[ipos] = prtcl.position[0];
-      pointFlower.dataArray[ipos + 1] = prtcl.position[1];
-      pointFlower.dataArray[ipos + 2] = prtcl.position[2];
-      ipos += 3;
-      pointFlower.dataArray[ieuler] = prtcl.euler[0];
-      pointFlower.dataArray[ieuler + 1] = prtcl.euler[1];
-      pointFlower.dataArray[ieuler + 2] = prtcl.euler[2];
-      ieuler += 3;
-      pointFlower.dataArray[imisc] = prtcl.size;
-      pointFlower.dataArray[imisc + 1] = prtcl.alpha;
-      imisc += 2;
+      const prTcl = pointFlower.particles[i];
+      pointFlower.dataArray[ipOs] = prTcl.position[0];
+      pointFlower.dataArray[ipOs + 1] = prTcl.position[1];
+      pointFlower.dataArray[ipOs + 2] = prTcl.position[2];
+      ipOs += 3;
+      pointFlower.dataArray[ieuLer] = prTcl.euler[0];
+      pointFlower.dataArray[ieuLer + 1] = prTcl.euler[1];
+      pointFlower.dataArray[ieuLer + 2] = prTcl.euler[2];
+      ieuLer += 3;
+      pointFlower.dataArray[imIsc] = prTcl.size;
+      pointFlower.dataArray[imIsc + 1] = prTcl.alpha;
+      imIsc += 2;
     }
 
     //draw
@@ -800,7 +720,7 @@ export const fallenLeavesAnimation = () => {
     homeShader(prog);
 
     gl.uniformMatrix4fv(prog.uniforms.uProjection, false, projection.matrix);
-    gl.uniformMatrix4fv(prog.uniforms.uModelview, false, camera.matrix);
+    gl.uniformMatrix4fv(prog.uniforms.uModelView, false, camera.matrix);
     gl.uniform3fv(prog.uniforms.uResolution, renderSpec.array);
     gl.uniform3fv(prog.uniforms.uDOF, Vector3.arrayForm(camera.dof));
     gl.uniform3fv(prog.uniforms.uFade, Vector3.arrayForm(pointFlower.fader));
@@ -814,30 +734,30 @@ export const fallenLeavesAnimation = () => {
 
     // doubler
     for (let i = 1; i < 2; i++) {
-      const zpos = i * -2.0;
+      const zpOs = i * -2.0;
       pointFlower.offset[0] = pointFlower.area.x * -1.0;
       pointFlower.offset[1] = pointFlower.area.y * -1.0;
-      pointFlower.offset[2] = pointFlower.area.z * zpos;
+      pointFlower.offset[2] = pointFlower.area.z * zpOs;
       gl.uniform3fv(prog.uniforms.uOffset, pointFlower.offset);
-      gl.drawArrays(gl.POINT, 0, pointFlower.numFlowers);
+      gl.drawArrays(gl.POINTS, 0, pointFlower.numFlowers);
 
       pointFlower.offset[0] = pointFlower.area.x * -1.0;
       pointFlower.offset[1] = pointFlower.area.y * 1.0;
-      pointFlower.offset[2] = pointFlower.area.z * zpos;
+      pointFlower.offset[2] = pointFlower.area.z * zpOs;
       gl.uniform3fv(prog.uniforms.uOffset, pointFlower.offset);
-      gl.drawArrays(gl.POINT, 0, pointFlower.numFlowers);
+      gl.drawArrays(gl.POINTS, 0, pointFlower.numFlowers);
 
       pointFlower.offset[0] = pointFlower.area.x * 1.0;
       pointFlower.offset[1] = pointFlower.area.y * -1.0;
-      pointFlower.offset[2] = pointFlower.area.z * zpos;
+      pointFlower.offset[2] = pointFlower.area.z * zpOs;
       gl.uniform3fv(prog.uniforms.uOffset, pointFlower.offset);
-      gl.drawArrays(gl.POINT, 0, pointFlower.numFlowers);
+      gl.drawArrays(gl.POINTS, 0, pointFlower.numFlowers);
 
       pointFlower.offset[0] = pointFlower.area.x * 1.0;
       pointFlower.offset[1] = pointFlower.area.y * 1.0;
-      pointFlower.offset[2] = pointFlower.area.z * zpos;
+      pointFlower.offset[2] = pointFlower.area.z * zpOs;
       gl.uniform3fv(prog.uniforms.uOffset, pointFlower.offset);
-      gl.drawArrays(gl.POINT, 0, pointFlower.numFlowers);
+      gl.drawArrays(gl.POINTS, 0, pointFlower.numFlowers);
     }
 
     //main
@@ -845,10 +765,10 @@ export const fallenLeavesAnimation = () => {
     pointFlower.offset[1] = 0.0;
     pointFlower.offset[2] = 0.0;
     gl.uniform3fv(prog.uniforms.uOffset, pointFlower.offset);
-    gl.drawArrays(gl.POINT, 0, pointFlower.numFlowers);
+    gl.drawArrays(gl.POINTS, 0, pointFlower.numFlowers);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
-    unhomeShader(prog);
+    unHomeShader(prog);
 
     gl.enable(gl.DEPTH_TEST);
     gl.disable(gl.BLEND);
@@ -856,18 +776,18 @@ export const fallenLeavesAnimation = () => {
 
   // effects
   //common util
-  function createEffectProgram(vtxsrc: string, frgsrc: string, exunifs: ConcatArray<string> | null, exattrs: ConcatArray<string> | null) {
+  function createEffectProgram(vtx_src: string, frgSrc: string, exUnIfs: ConcatArray<string> | null, exAttrs: ConcatArray<string> | null) {
     const ret: any = {};
-    let unifs = ['uResolution', 'uSrc', 'uDelta'];
-    if (exunifs) {
-      unifs = unifs.concat(exunifs);
+    let unIfs = ['uResolution', 'uSrc', 'uDelta'];
+    if (exUnIfs) {
+      unIfs = unIfs.concat(exUnIfs);
     }
     let attrs = ['aPosition'];
-    if (exattrs) {
-      attrs = attrs.concat(exattrs);
+    if (exAttrs) {
+      attrs = attrs.concat(exAttrs);
     }
 
-    ret.program = createShader(vtxsrc, frgsrc, unifs, attrs);
+    ret.program = createShader(vtx_src, frgSrc, unIfs, attrs);
     homeShader(ret.program);
 
     ret.dataArray = new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0]);
@@ -876,62 +796,55 @@ export const fallenLeavesAnimation = () => {
     gl.bufferData(gl.ARRAY_BUFFER, ret.dataArray, gl.STATIC_DRAW);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
-    unhomeShader(ret.program);
+    unHomeShader(ret.program);
 
     return ret;
   }
 
-  // basic usage
-  // homeEffect(prog, srctex({'texture':texid, 'dtxArray':(f32)[dtx, dty]})); //basic initialize
-  // gl.uniform**(...); //additional uniforms
-  // drawEffect()
-  // unhomeEffect(prog)
-  // TEXTURE0 makes src
-  function homeEffect(fxobj: { program: any }, srctex: { dtxArray: any; texture: any } | null) {
-    const prog = fxobj.program;
+  function homeEffect(fxObj: { program: any }, srcTex: { dtxArray: any; texture: any } | null) {
+    const prog = fxObj.program;
     homeShader(prog);
     gl.uniform3fv(prog.uniforms.uResolution, renderSpec.array);
 
-    if (srctex != null) {
-      gl.uniform2fv(prog.uniforms.uDelta, srctex.dtxArray);
+    if (srcTex != null) {
+      gl.uniform2fv(prog.uniforms.uDelta, srcTex.dtxArray);
       gl.uniform1i(prog.uniforms.uSrc, 0);
 
       gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, srctex.texture);
+      gl.bindTexture(gl.TEXTURE_2D, srcTex.texture);
     }
   }
-  function drawEffect(fxobj: { buffer: any; program: { attributes: { aPosition: any } } }) {
-    gl.bindBuffer(gl.ARRAY_BUFFER, fxobj.buffer);
-    gl.vertexAttribPointer(fxobj.program.attributes.aPosition, 2, gl.FLOAT, false, 0, 0);
+  function drawEffect(fxObj: { buffer: any; program: { attributes: { aPosition: any } } }) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, fxObj.buffer);
+    gl.vertexAttribPointer(fxObj.program.attributes.aPosition, 2, gl.FLOAT, false, 0, 0);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
-  function unhomeEffect(fxobj: { program: any }) {
-    unhomeShader(fxobj.program);
+  function unHomeEffect(fxObj: { program: any }) {
+    unHomeShader(fxObj.program);
   }
 
   const effectLib: any = {};
   function createEffectLib() {
-    let frgsrc;
+    let frgSrc;
     //common
-    const cmnvtxsrc = fx_common_vsh;
+    const cmnVtxSrc = fxCommonVsh;
 
     //background
-    frgsrc = bg_fsh;
-    effectLib.sceneBg = createEffectProgram(cmnvtxsrc, frgsrc, ['uTimes'], null);
+    frgSrc = bgFsh;
+    effectLib.sceneBg = createEffectProgram(cmnVtxSrc, frgSrc, ['uTimes'], null);
 
-    // make brightpixels buffer
-    frgsrc = fx_brightbuf_fsh;
-    effectLib.mkBrightBuf = createEffectProgram(cmnvtxsrc, frgsrc, null, null);
+    frgSrc = fx_bright_buf_fsh;
+    effectLib.mkBrightBuf = createEffectProgram(cmnVtxSrc, frgSrc, null, null);
 
     // direction blur
-    frgsrc = fx_dirblur_r4_fsh;
-    effectLib.dirBlur = createEffectProgram(cmnvtxsrc, frgsrc, ['uBlurDir'], null);
+    frgSrc = fx_dir_blur_r4_fsh;
+    effectLib.dirBlur = createEffectProgram(cmnVtxSrc, frgSrc, ['uBlurDir'], null);
 
     //final composite
-    const vtxsrc = pp_final_vsh;
-    frgsrc = pp_final_fsh;
-    // console.log('frgsrc :',frgsrc )
-    effectLib.finalComp = createEffectProgram(vtxsrc, frgsrc, ['uBloom'], null);
+    const vtx_src = pp_final_vsh;
+    frgSrc = pp_final_fsh;
+    // console.log('frgSrc :',frgSrc )
+    effectLib.finalComp = createEffectProgram(vtx_src, frgSrc, ['uBloom'], null);
   }
 
   // background
@@ -947,7 +860,7 @@ export const fallenLeavesAnimation = () => {
     homeEffect(effectLib.sceneBg, null);
     gl.uniform2f(effectLib.sceneBg.program.uniforms.uTimes, timeInfo.elapsed, timeInfo.delta);
     drawEffect(effectLib.sceneBg);
-    unhomeEffect(effectLib.sceneBg);
+    unHomeEffect(effectLib.sceneBg);
 
     gl.enable(gl.DEPTH_TEST);
   }
@@ -964,10 +877,10 @@ export const fallenLeavesAnimation = () => {
   function renderPostProcess() {
     gl.enable(gl.TEXTURE_2D);
     gl.disable(gl.DEPTH_TEST);
-    const bindRT = function (rt: { frameBuffer: any; width: any; height: any }, isclear: boolean) {
+    const bindRT = function (rt: { frameBuffer: any; width: any; height: any }, isClear: boolean) {
       gl.bindFramebuffer(gl.FRAMEBUFFER, rt.frameBuffer);
       gl.viewport(0, 0, rt.width, rt.height);
-      if (isclear) {
+      if (isClear) {
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       }
@@ -977,7 +890,7 @@ export const fallenLeavesAnimation = () => {
     bindRT(renderSpec.wHalfRT0, true);
     homeEffect(effectLib.mkBrightBuf, renderSpec.mainRT);
     drawEffect(effectLib.mkBrightBuf);
-    unhomeEffect(effectLib.mkBrightBuf);
+    unHomeEffect(effectLib.mkBrightBuf);
 
     // make bloom
     for (let i = 0; i < 2; i++) {
@@ -987,13 +900,13 @@ export const fallenLeavesAnimation = () => {
       homeEffect(effectLib.dirBlur, renderSpec.wHalfRT0);
       gl.uniform4f(effectLib.dirBlur.program.uniforms.uBlurDir, p, 0.0, s, 0.0);
       drawEffect(effectLib.dirBlur);
-      unhomeEffect(effectLib.dirBlur);
+      unHomeEffect(effectLib.dirBlur);
 
       bindRT(renderSpec.wHalfRT0, true);
       homeEffect(effectLib.dirBlur, renderSpec.wHalfRT1);
       gl.uniform4f(effectLib.dirBlur.program.uniforms.uBlurDir, 0.0, p, 0.0, s);
       drawEffect(effectLib.dirBlur);
-      unhomeEffect(effectLib.dirBlur);
+      unHomeEffect(effectLib.dirBlur);
     }
 
     //display
@@ -1006,7 +919,7 @@ export const fallenLeavesAnimation = () => {
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, renderSpec.wHalfRT0.texture);
     drawEffect(effectLib.finalComp);
-    unhomeEffect(effectLib.finalComp);
+    unHomeEffect(effectLib.finalComp);
 
     gl.enable(gl.DEPTH_TEST);
   }
@@ -1027,14 +940,14 @@ export const fallenLeavesAnimation = () => {
     initPostProcess();
 
     //camera.position.z = 17.320508;
-    camera.position.z = pointFlower.area.z + projection.nearfar[0];
+    camera.position.z = pointFlower.area.z + projection.near_far[0];
     projection.angle = ((Math.atan2(pointFlower.area.y, camera.position.z + pointFlower.area.z) * 180.0) / Math.PI) * 2.0;
-    Matrix44.loadProjection(projection.matrix, renderSpec.aspect, projection.angle, projection.nearfar[0], projection.nearfar[1]);
+    Matrix44.loadProjection(projection.matrix, renderSpec.aspect, projection.angle, projection.near_far[0], projection.near_far[1]);
   }
 
   function renderScene() {
     //draw
-    Matrix44.loadLookAt(camera.matrix, camera.position, camera.lookat, camera.up);
+    Matrix44.loadLookAt(camera.matrix, camera.position, camera.look_at, camera.up);
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -1051,29 +964,29 @@ export const fallenLeavesAnimation = () => {
 
   /////
   function onResize() {
-    makeCanvasFullScreen(document.getElementById('sakura') as HTMLCanvasElement);
-    setViewports();
+    makeCanvasFullScreen(document.getElementById('fallenLeaves') as HTMLCanvasElement);
+    setViewPorts();
     if (sceneStandBy) {
       initScene();
     }
   }
 
-  function setViewports() {
+  function setViewPorts() {
     renderSpec.setSize(gl.canvas.width, gl.canvas.height);
 
     gl.clearColor(0.2, 0.2, 0.5, 1.0);
     gl.viewport(0, 0, renderSpec.width, renderSpec.height);
 
-    const rtfunc = function (rtname: string, rtw: number, rth: number) {
-      const rt = renderSpec[rtname];
+    const rtFunc = function (rtName: string, rtw: number, rth: number) {
+      const rt = renderSpec[rtName];
       if (rt) deleteRenderTarget(rt);
-      renderSpec[rtname] = createRenderTarget(rtw, rth);
+      renderSpec[rtName] = createRenderTarget(rtw, rth);
     };
-    rtfunc('mainRT', renderSpec.width, renderSpec.height);
-    rtfunc('wFullRT0', renderSpec.width, renderSpec.height);
-    rtfunc('wFullRT1', renderSpec.width, renderSpec.height);
-    rtfunc('wHalfRT0', renderSpec.halfWidth, renderSpec.halfHeight);
-    rtfunc('wHalfRT1', renderSpec.halfWidth, renderSpec.halfHeight);
+    rtFunc('mainRT', renderSpec.width, renderSpec.height);
+    rtFunc('wFullRT0', renderSpec.width, renderSpec.height);
+    rtFunc('wFullRT1', renderSpec.width, renderSpec.height);
+    rtFunc('wHalfRT0', renderSpec.halfWidth, renderSpec.halfHeight);
+    rtFunc('wHalfRT1', renderSpec.halfWidth, renderSpec.halfHeight);
   }
 
   function render() {
@@ -1094,10 +1007,10 @@ export const fallenLeavesAnimation = () => {
   // }
 
   function animate() {
-    const curdate = new Date().getTime();
-    timeInfo.elapsed = (curdate - timeInfo.start) / 1000.0;
-    timeInfo.delta = (curdate - timeInfo.prev) / 1000.0;
-    timeInfo.prev = curdate;
+    const curDate = new Date().getTime();
+    timeInfo.elapsed = (curDate - timeInfo.start) / 1000.0;
+    timeInfo.delta = (curDate - timeInfo.prev) / 1000.0;
+    timeInfo.prev = curDate;
 
     if (animating) requestAnimationFrame(animate);
     render();
@@ -1106,46 +1019,25 @@ export const fallenLeavesAnimation = () => {
   function makeCanvasFullScreen(canvas: HTMLCanvasElement) {
     const b = document.body;
     const d = document.documentElement;
-    const fullw = Math.max(b.clientWidth, b.scrollWidth, d.scrollWidth, d.clientWidth);
-    const fullh = Math.max(b.clientHeight, b.scrollHeight, d.scrollHeight, d.clientHeight);
-    canvas.width = fullw;
-    canvas.height = fullh;
+    const fullW = Math.max(b.clientWidth, b.scrollWidth, d.scrollWidth, d.clientWidth);
+    const fullH = Math.max(b.clientHeight, b.scrollHeight, d.scrollHeight, d.clientHeight);
+    canvas.width = fullW;
+    canvas.height = fullH;
   }
 
-  // window.addEventListener('load', function(e) {
-  //   var canvas = document.getElementById('sakura');
-  //   try {
-  //     makeCanvasFullScreen(canvas);
-  //     gl = canvas.getContext('experimental-webgl');
-  //   } catch (e) {
-  //     alert('WebGL not supported.' + e);
-  //     console.error(e);
-  //     return;
-  //   }
-
-  //   window.addEventListener('resize', onResize);
-
-  //   setViewports();
-  //   createScene();
-  //   initScene();
-
-  //   timeInfo.start = new Date();
-  //   timeInfo.prev = timeInfo.start;
-  //   animate();
-  // });
-  const canvas = document.getElementById('sakura') as HTMLCanvasElement;
+  const canvas = document.getElementById('fallenLeaves') as HTMLCanvasElement;
   try {
     makeCanvasFullScreen(canvas);
-    gl = canvas.getContext('experimental-webgl') as any;
+    gl = canvas.getContext('webgl') as WebGLRenderingContext;
   } catch (e) {
-    alert('WebGL not supported.' + e);
+    console.error('WebGL 设置出错.' + e);
     console.error(e);
     return;
   }
 
   window.addEventListener('resize', onResize);
 
-  setViewports();
+  setViewPorts();
   createScene();
   initScene();
 
