@@ -2,6 +2,8 @@ import { Layout, Space } from 'antd';
 import LayoutHeader from './header/LayoutHeader';
 import LayoutFooter from './footer/LayoutFooter';
 import LayoutMain from './main/LayoutMain';
+import { setupHeartAnimation } from '@/plugins/heart.ts';
+import { setupParticleBack } from '@/plugins/particle-back.ts';
 
 const LayoutStyle: React.CSSProperties = {
   display: 'flex',
@@ -11,6 +13,9 @@ const LayoutStyle: React.CSSProperties = {
 };
 
 const LayoutIndex: React.FC = () => {
+  setupHeartAnimation();
+  setupParticleBack();
+
   return (
     <>
       <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>

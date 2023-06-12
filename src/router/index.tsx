@@ -5,6 +5,7 @@ import ErrorLayout from '@/layouts/ErrorLayout';
 import NotAuthorized from '@/views/error/403';
 import NotFound from '@/views/error/404';
 import ServiceError from '@/views/error/500';
+import Middle from '@/views/Middle';
 
 const routers: RouteObject[] = [
   {
@@ -16,6 +17,10 @@ const routers: RouteObject[] = [
         element: <Home />,
       },
     ],
+  },
+  {
+    path: '/middle',
+    element: <Middle />,
   },
   {
     element: <ErrorLayout />,

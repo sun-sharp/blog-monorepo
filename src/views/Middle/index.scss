@@ -1,0 +1,45 @@
+.middle {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  .content {
+    position: fixed;
+    inset: 0;
+    padding-top: 12%;
+    font-size: 20px;
+    text-align: center;
+
+   .middle-logo {
+      width: 220px;
+      border-radius: 50%;
+    }
+
+    .middle-header {
+      .link {
+        display: block;
+      }
+    }
+
+     .middle-body {
+      padding-top: 20px;
+
+      .list {
+        .link {
+          display: inline-block;
+          min-width: 80px;
+          padding: 20px;
+          color: #fff;
+        }
+
+        .link:hover {
+          color: rgb(0 243 255);
+        }
+      }
+    }
+
+    /* .introduce{
+      color: #960026;
+    } */
+  }
+}
