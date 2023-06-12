@@ -1,5 +1,5 @@
 /*
- * @LastEditTime: 2023-06-13 03:13:49
+ * @LastEditTime: 2023-06-13 03:15:29
  * @Description: 背景落叶
  */
 
@@ -60,7 +60,7 @@ class BlossomParticle {
 }
 
 export const fallenLeavesAnimation = () => {
-  const fallen_leaves_point_vsh = `
+  const fallenLeavesPointVsh = `
   uniform mat4 uProjection;
   uniform mat4 uModelView;
   uniform vec3 uResolution;
@@ -154,7 +154,7 @@ export const fallenLeavesAnimation = () => {
   const fallen_leaves_point_fsh = `
   #ifdef GL_ES
   //precision medium_p float;
-  precision high_p float;
+  precision highp float;
   #endif
 
   uniform vec3 uDOF;  //x:focus distance, y:focus radius, z:max radius
@@ -237,7 +237,7 @@ export const fallenLeavesAnimation = () => {
   const bgFsh = `
   #ifdef GL_ES
   //precision medium_p float;
-  precision high_p float;
+  precision highp float;
   #endif
 
   uniform vec2 uTimes;
@@ -256,7 +256,7 @@ export const fallenLeavesAnimation = () => {
   const fx_bright_buf_fsh = `
   #ifdef GL_ES
   //precision medium_p float;
-  precision high_p float;
+  precision highp float;
   #endif
   uniform sampler2D uSrc;
   uniform vec2 uDelta;
@@ -271,7 +271,7 @@ export const fallenLeavesAnimation = () => {
   const fx_dir_blur_r4_fsh = `
   #ifdef GL_ES
   //precision medium_p float;
-  precision high_p float;
+  precision highp float;
   #endif
   uniform sampler2D uSrc;
   uniform vec2 uDelta;
@@ -301,7 +301,7 @@ export const fallenLeavesAnimation = () => {
   const pp_final_fsh = `
   #ifdef GL_ES
   //precision medium_p float;
-  precision high_p float;
+  precision highp float;
   #endif
   uniform sampler2D uSrc;
   uniform sampler2D uBloom;
@@ -576,7 +576,7 @@ export const fallenLeavesAnimation = () => {
     const prm = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
     renderSpec.pointSize = { min: prm[0], max: prm[1] };
 
-    const vtx_src = fallen_leaves_point_vsh;
+    const vtx_src = fallenLeavesPointVsh;
     const frgSrc = fallen_leaves_point_fsh;
 
     pointFlower.program = createShader(
