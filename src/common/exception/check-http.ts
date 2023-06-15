@@ -48,7 +48,7 @@ export const checkMessage = (status: number, msg: string): string => {
       break;
     // 404请求不存在
     case 404:
-      message = msg || '网络请求错误,未找到该资源!';
+      message = '网络请求错误,未找到该资源!';
       break;
     case 405:
       message = msg || '网络请求错误,请求方法未允许!';

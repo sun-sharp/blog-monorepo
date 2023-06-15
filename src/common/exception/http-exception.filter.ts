@@ -19,6 +19,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (typeof excRes === 'string') {
       excResMessage = excRes;
     }
+    console.log(excResMessage, 'excResMessage');
+
     const message = checkMessage(status, excResMessage);
     const code = checkCode(status);
     // @todo 记录日志
