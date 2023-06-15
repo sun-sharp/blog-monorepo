@@ -8,6 +8,8 @@
 
     /* 文件处理 */
     "baseUrl": ".",
+    "types": ["vite/client"],
+    "typeRoots": ["./node_modules/@types/", "./types"],
     "paths": {
       "@/*": ["src/*"],
       "/#/*": ["types/*"]
