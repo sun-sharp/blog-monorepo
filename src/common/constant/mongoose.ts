@@ -21,11 +21,6 @@ export const moneyMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseU
   connectionName: 'money',
 });
 
-// file的mongoose配置
-export const fileMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/file${mongodbQuery}`, {
-  connectionName: 'file',
-});
-
 // blog的mongoose配置
 export const blogMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/blog${mongodbQuery}`, {
   connectionName: 'blog',

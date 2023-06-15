@@ -8,7 +8,7 @@ import { logger } from 'src/common/journal';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
 import { UserService } from 'src/modules/capital/user/user.service';
-import { Image } from 'src/schemas/file/image.schema';
+import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
 

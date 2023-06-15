@@ -10,6 +10,7 @@ import { MenuModule } from './menu/menu.module';
 import { capitalMongooseModuleForRoot } from 'src/common/constant/mongoose';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { CategoryModule } from './category/category.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CategoryModule } from './category/category.module';
     MenuModule,
     ConfigurationModule,
     CategoryModule,
+    ImageModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -44,6 +46,10 @@ import { CategoryModule } from './category/category.module';
           {
             path: '/',
             module: CategoryModule,
+          },
+          {
+            path: '/',
+            module: ImageModule,
           },
         ],
       },

@@ -4,11 +4,11 @@ import { ImageController } from './image.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Image, ImageSchema } from 'src/schemas/file/image.schema';
+import { Image, ImageSchema } from 'src/schemas/capital/image.schema';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { useCustomConfig } from 'src/config';
 
-const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], 'file');
+const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], 'capital');
 
 const customConfig = useCustomConfig();
 
