@@ -11,6 +11,7 @@ import { ArticleCategoryService } from '../article-category/article-category.ser
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 
 interface FindPageData {
   title: object; // 0 表示成功
@@ -195,6 +196,35 @@ export class ArticleService {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
           });
+        })
+    );
+  }
+
+  /**
+   * @description 查找文章图片的使用情况
+   * @param {string} image
+   * @return {Promise<User>}
+   */
+  public findOneByImage(image: string): Promise<User> {
+    return (
+      Promise.resolve(image)
+        // 图片头像是否合理
+        .then(async (image) => {
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(image);
+          if (hasHttpOrHttps)
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '图片保存的不合理，请处理之后再上传！',
+            });
+          return image;
+        })
+        // 判断username 是否为合法字符
+        .then(async (image) => {
+          return await this.articleModel.findOne({ markdownContent: { $regex: image } });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }

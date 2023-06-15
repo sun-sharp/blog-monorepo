@@ -11,13 +11,19 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
+import { ImageFindPageParams } from 'types/capital/image';
+import { ArticleService } from 'src/modules/blog/article/article.service';
 
 const basicPublic = 'public/files/image';
 
 @Injectable()
 export class ImageService {
   response: IResponse;
-  constructor(@InjectModel('Image') private readonly imageModel: Model<Image>, private readonly userService: UserService) {}
+  constructor(
+    @InjectModel('Image') private readonly imageModel: Model<Image>,
+    private readonly userService: UserService,
+    private readonly articleService: ArticleService,
+  ) {}
 
   /**
    * @description: 单图片上传
@@ -166,8 +172,14 @@ export class ImageService {
             const f = imageData[i];
             const [lib] = f.source.split('_');
             let useStatus = false;
+            // 是否用户
             if (lib === 'user') {
               const userFindOne = await this.userService.findOneByAvatar(f.url);
+              useStatus = !userFindOne;
+            }
+            // 是否文章
+            if (lib === 'article') {
+              const userFindOne = await this.articleService.findOneByImage(f.url);
               useStatus = !userFindOne;
             }
             if (useStatus) result.push(f);
@@ -247,9 +259,10 @@ export class ImageService {
       Promise.resolve(pageImageDto)
         // 查询
         .then(async (body) => {
-          const { size, current, name } = body;
+          const { size, current, name, source } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { name: { $regex: name } };
+          const findData: ImageFindPageParams = { name: { $regex: name } };
+          if (source) findData.source = source;
           const total = await this.imageModel.find(findData).count();
           const list = await this.imageModel.find(findData).limit(limit).skip(skip).sort({ uploadTime: -1 });
           return (this.response = {

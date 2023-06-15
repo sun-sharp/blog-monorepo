@@ -8,10 +8,11 @@ export class PageImageDto extends PaginateDto {
     default: '',
   })
   readonly name: string = '';
-  // @ApiProperty({
-  //   description: '角色标识',
-  //   required: false,
-  //   default: '',
-  // })
-  // readonly roleCode: string = '';
+
+  @ApiProperty({
+    description: '图片的来源',
+    required: false,
+    default: '',
+  })
+  readonly source: string = '';
 }
