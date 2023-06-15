@@ -5,7 +5,6 @@ import { WeChatModule } from './we-chat/we-chat.module';
 import { RouterModule } from '@nestjs/core';
 import { AliPayModule } from './ali-pay/ali-pay.module';
 import { BankModule } from './bank/bank.module';
-import { moneyMongooseModuleForRoot } from 'src/common/constant/mongoose';
 import { JwtModuleRegister } from 'src/jwt/jwt.constants';
 import { RoleModule } from '../capital/role/role.module';
 import { UserModule } from '../capital/user/user.module';
@@ -13,7 +12,6 @@ import { CategoryModule } from '../capital/category/category.module';
 
 @Module({
   imports: [
-    moneyMongooseModuleForRoot,
     WeChatModule,
     AliPayModule,
     BankModule,

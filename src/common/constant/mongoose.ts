@@ -16,11 +16,6 @@ export const capitalMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBas
   connectionName: 'capital',
 });
 
-// money的mongoose配置
-export const moneyMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/money${mongodbQuery}`, {
-  connectionName: 'money',
-});
-
 // blog的mongoose配置
 export const blogMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/blog${mongodbQuery}`, {
   connectionName: 'blog',

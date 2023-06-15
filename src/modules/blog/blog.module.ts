@@ -5,12 +5,14 @@ import { RouterModule } from '@nestjs/core';
 import { ArticleModule } from './article/article.module';
 import { ArticleCategoryModule } from './article-category/article-category.module';
 import { blogMongooseModuleForRoot } from 'src/common/constant/mongoose';
+import { MoneyModule } from '../money/money.module';
 
 @Module({
   imports: [
     blogMongooseModuleForRoot,
     ArticleModule,
     ArticleCategoryModule,
+    MoneyModule,
     RouterModule.register([
       {
         path: 'blog',
@@ -22,6 +24,10 @@ import { blogMongooseModuleForRoot } from 'src/common/constant/mongoose';
           {
             path: '/',
             module: ArticleCategoryModule,
+          },
+          {
+            path: '/',
+            module: MoneyModule,
           },
         ],
       },
