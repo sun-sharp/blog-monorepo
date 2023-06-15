@@ -2,7 +2,13 @@
   <md-editor-v3 v-model="text" v-bind="getMdEditorBind" @onChange="onChange" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
 </template>
 <script lang="ts" setup>
+  import { componentUpload } from '@/constant';
+  import { useUserStoreWidthOut } from '@/store';
+  import { getImgUrl, getUploadImageAction } from '@/utils';
+  import axios, { AxiosRequestConfig } from 'axios';
+  import { useMessage } from 'naive-ui';
   import { computed, ref, watchEffect } from 'vue';
+
   const props = defineProps({
     toolbars: {
       type: Array,
@@ -56,8 +62,16 @@
       type: String,
       default: '',
     },
+    imageSource: {
+      type: String,
+      required: true,
+    },
   });
+
   const emit = defineEmits(['onSave', 'update:htmlText', 'update:markdownText']);
+
+  const nMessage = useMessage();
+
   const text = ref('');
 
   const getMdEditorBind = computed(() => {
@@ -87,17 +101,55 @@
   };
 
   // 上传图片
+  const uploadImageAction = getUploadImageAction();
+  const userStore = useUserStoreWidthOut();
+  const completeToken = userStore.getCompleteToken;
+  const uploadHeaders = computed(() => {
+    return {
+      source: props.imageSource,
+      timestamp: new Date().getTime(),
+      Authorization: completeToken,
+    };
+  });
   const onUploadImg = async (files: any[], callback: (arg: any[]) => void) => {
     const res = await Promise.all(
-      files.map((file: any) => {
+      files.map((file: File) => {
         return new Promise((resolve, reject) => {
-          console.log(file);
-          console.log(resolve, reject);
+          const formData = new FormData();
+          formData.append('image', file);
+          axios
+            .request({
+              url: uploadImageAction as string,
+              method: 'POST',
+              data: formData,
+              withCredentials: false,
+              headers: uploadHeaders.value,
+            } as AxiosRequestConfig)
+            .then((res: any) => {
+              const infoField = componentUpload.apiSetting.infoField;
+              const imgField = componentUpload.apiSetting.imgField;
+              const aData = res.data || {};
+              const { code, message = '上传失败' } = aData;
+              const result = aData[infoField];
+              if (code === 0 && typeof result === 'object') {
+                const url = result[imgField];
+                nMessage.success(message);
+                resolve(getImgUrl(url));
+              } else {
+                nMessage.error(message);
+                reject('');
+              }
+            })
+            .catch((error) => {
+              nMessage.error(error.message);
+              reject('');
+            });
         });
       })
     );
 
     // callback(res.map((item) => item.data.url));
+    console.log(res);
     callback(res);
   };
 

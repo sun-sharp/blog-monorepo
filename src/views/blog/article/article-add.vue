@@ -122,7 +122,12 @@
       <n-select v-model:value="addFromModel.categoryVal" placeholder="请选择文章分类" filterable :options="categoryOptions" />
     </n-form-item>
     <n-form-item path="markdownContent" label="文章内容">
-      <md-editor-input v-model:markdown-text="addFromModel.markdownContent" v-model:html-text="addFromModel.htmlContent" @on-save="onSubmitOrEdit" />
+      <md-editor-input
+        v-model:markdown-text="addFromModel.markdownContent"
+        v-model:html-text="addFromModel.htmlContent"
+        image-source="article_content"
+        @on-save="onSubmitOrEdit"
+      />
     </n-form-item>
   </n-form>
 </template>

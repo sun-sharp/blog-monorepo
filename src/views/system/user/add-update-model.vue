@@ -50,6 +50,7 @@
   import FormUploadImage from '@/components/form/form-upload-image.vue';
   import { getImgUrl } from '@/utils';
   import { FormItemRule } from 'naive-ui';
+  import { UserItemForm } from '/#/views/user';
 
   const modelFields = {
     nickname: null,
@@ -69,7 +70,7 @@
 
       const formBtnLoading = ref(false);
       const modelFromRef = ref();
-      const modelForm = reactive<any>(Object.assign({}, modelFields));
+      const modelForm = reactive<UserItemForm>(Object.assign({}, modelFields));
       // 验证用户名
       const validateUsername = (_rule: FormItemRule, value: string) => {
         if (!value) return new Error('请输入用户名');
@@ -151,9 +152,10 @@
       };
       // 重置
       const resetFields = () => {
-        Object.keys(modelFields).forEach((key) => {
-          modelForm[key] = modelFields[key];
-        });
+        Object.assign(modelForm, modelFields);
+        // Object.keys(modelFields).forEach((key) => {
+        //   modelForm[key] = modelFields[key];
+        // });
         nextTick(() => {
           modelFromRef.value.restoreValidation();
         });
@@ -163,7 +165,7 @@
       const confirmForm = (e: { preventDefault: () => void }) => {
         e.preventDefault();
         formBtnLoading.value = true;
-        modelFromRef.value.validate((errors) => {
+        modelFromRef.value.validate((errors: FormItemRule) => {
           if (!errors) {
             const request = modelId.value
               ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode })
