@@ -8,7 +8,7 @@ const glob: Readonly<GlobalEnvConfig> = {
   mongodbPassword: '',
   mongodbQuery: '',
   fileFsPath: '',
-  fileLib: '',
+  fileLib: '.',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;
