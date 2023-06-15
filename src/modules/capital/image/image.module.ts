@@ -33,7 +33,7 @@ const customConfig = useCustomConfig();
             return cb(new BadRequestException('图片格式错误！'), '');
           }
           // 在此处自定义保存后的文件名称
-          const filename = `${new Date().getTime()}.${file.originalname.split('.')[1]}`;
+          const filename = `${customConfig.imageRefixName || ''}${new Date().getTime()}.${file.originalname.split('.')[1]}`;
           return cb(null, filename);
         },
       }),

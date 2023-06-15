@@ -9,6 +9,7 @@ const glob: Readonly<GlobalEnvConfig> = {
   mongodbQuery: '?authSource=admin',
   fileFsPath: '',
   fileLib: '',
+  imageRefixName: 'sharp_network_',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;

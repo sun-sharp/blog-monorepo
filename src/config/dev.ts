@@ -9,6 +9,7 @@ const glob: Readonly<GlobalEnvConfig> = {
   mongodbQuery: '',
   fileFsPath: '',
   fileLib: '.',
+  imageRefixName: 'sharp_local_',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;

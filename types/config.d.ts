@@ -16,24 +16,6 @@ export interface GlobalEnvConfig {
   fileFsPath: string;
   // 文件根目录
   fileLib: string;
-}
-
-// env 配置
-export interface ProcessEnv {
-  // 服务器ip地址
-  SERVER_IP?: string;
-  // 运行端口
-  PORT?: string;
-  // 数据库端口
-  DATABASE_PORT?: string;
-  // mongodb的账号
-  MONGODB_ACCOUNT?: string;
-  // mongodb的密码
-  MONGODB_PASSWORD?: string;
-  // mongodb的参数信息
-  MONGODB_QUERY?: string;
-  // 文件导出根目录
-  FILE_FS_PATH?: string;
-  // 文件根目录
-  FILE_LIB?: string;
+  // 图片前缀
+  imageRefixName: string;
 }
