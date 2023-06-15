@@ -5,7 +5,7 @@ import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
-import { Bank, BankSchema } from 'src/schemas/blog/bank.schema';
+import { Bank, BankSchema } from 'src/schemas/blog/money/bank.schema';
 
 const BANK_MONGO_MODULE = MongooseModule.forFeature([{ name: Bank.name, schema: BankSchema }], 'blog');
 

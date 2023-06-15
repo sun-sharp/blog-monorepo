@@ -5,7 +5,7 @@ import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
-import { WeChat, WeChatSchema } from 'src/schemas/blog/we-chat.schema';
+import { WeChat, WeChatSchema } from 'src/schemas/blog/money/we-chat.schema';
 
 const WE_CHAT_MONGO_MODULE = MongooseModule.forFeature([{ name: WeChat.name, schema: WeChatSchema }], 'blog');
 

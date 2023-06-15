@@ -6,7 +6,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelXlsxHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
-import { Bank } from 'src/schemas/blog/bank.schema';
+import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
