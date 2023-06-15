@@ -1,15 +1,14 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
 import { useCustomConfig } from 'src/config';
 
-const config = useCustomConfig();
-const basicPublicFilesImage = `${config.fileFsPath}public/files/image`;
+const customConfig = useCustomConfig();
 
 /**
- * @description: 获取文件夹目录里的文件
+ * @description: 获取静态目录里的图片
  * @param {PathLike} pathName
  * @return {*}
  */
-export const readdirHandle = (pathName: PathLike): any => {
+export const readdirOfImageHandle = (pathName: PathLike): any => {
   return new Promise((resolve, reject) => {
     readdir(pathName, (err, files) => {
       if (err) {
@@ -20,7 +19,7 @@ export const readdirHandle = (pathName: PathLike): any => {
         name: fileName.split('.')[0] || '',
         imageType: fileName.split('.')[1] || '',
         fileName: fileName,
-        url: `${basicPublicFilesImage}/${fileName}`,
+        url: `${customConfig.fileAccessPath}/image/${fileName}`,
       }));
       resolve(result);
     });
@@ -46,13 +45,14 @@ export const unlinkHandle = (pathName: PathLike): any => {
 
 /**
  * @description: 批量删除文件夹目录里的文件
+ * @param {string} dir // 读取目录
  * @param {string[]} list
  */
-export const unlinkListHandle = async (list: string[]) => {
+export const unlinkListHandle = async (dir: string, list: string[]) => {
   const promiseArr = list.map(
     (fileName) =>
       new Promise((resolve, reject) => {
-        unlink(`${basicPublicFilesImage}/${fileName}`, (err) => {
+        unlink(`${dir}/${fileName}`, (err) => {
           if (err) {
             reject({ err, fileName });
             return;
@@ -110,14 +110,14 @@ export const readFileDataHandle = (pathName: PathLike): any => {
 
 /**
  * @description: 批量读取文件夹目录里的文件
+ * @param {string} dir // 读取目录
  * @param {string[]} list
- * @return {*}
  */
-export const readFileListHandle = (list: string[]): any => {
+export const readFileListHandle = (dir: string, list: string[]): any => {
   const promiseArr = list.map(
     (fileName) =>
       new Promise((resolve, reject) => {
-        readFile(`${basicPublicFilesImage}/${fileName}`, (err) => {
+        readFile(`${dir}/${fileName}`, (err) => {
           if (err) {
             reject({ ...err, message: '文件夹里不存在文件' + fileName });
             return;

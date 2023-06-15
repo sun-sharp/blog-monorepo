@@ -18,7 +18,7 @@ const { version } = pkg;
 const title = 'NestJs博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
-const swaggerJsonUrl = `public/json/${swaggerUrl}.json`;
+const swaggerJsonUrl = `public/${swaggerUrl}.json`;
 const port = customConfig.port;
 const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUrl}`;
 
@@ -35,14 +35,14 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUr
         .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
-      writeFileSync(`./${swaggerJsonUrl}`, JSON.stringify(document));
+      writeFileSync(swaggerJsonUrl, JSON.stringify(document));
       SwaggerModule.setup(swaggerUrl, app, document);
       return app;
     })
     // 配置 public 文件夹为静态目录，以达到可直接访问下面文件的目的
     .then((app) => {
-      const rootDir = join(__dirname, '..');
-      app.use('/public', express.static(join(rootDir, 'public')));
+      const rootDir = join(__dirname, `../${customConfig.staticDirPosition}`);
+      app.use(`/${customConfig.fileAccessPath}`, express.static(join(rootDir, customConfig.staticDirName)));
       return app;
     })
     // 设置全局前缀

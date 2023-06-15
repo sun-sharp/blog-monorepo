@@ -12,10 +12,12 @@ export interface GlobalEnvConfig {
   mongodbPassword: string;
   // mongodb的参数信息
   mongodbQuery: string;
-  // 文件导出根目录
-  fileFsPath: string;
-  // 文件根目录
-  fileLib: string;
+  // 文件读取目录
+  fileAccessPath: string;
+  // 静态根目录位置
+  staticDirPosition: string;
+  // 静态根目录名称
+  staticDirName: string;
   // 图片前缀
   imageRefixName: string;
 }

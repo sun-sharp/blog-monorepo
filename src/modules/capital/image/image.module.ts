@@ -21,7 +21,7 @@ const customConfig = useCustomConfig();
     MulterModule.register({
       storage: diskStorage({
         // 配置文件上传后的文件夹路径
-        destination: `${customConfig.fileLib}/public/files/image`,
+        destination: `${customConfig.staticDirPosition}${customConfig.staticDirName}/image`,
         filename: (req, file, cb) => {
           const image = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
           const mimeType = file.mimetype.split('/')[1];

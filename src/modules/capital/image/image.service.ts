@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { existsSyncHandle, readdirHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
+import { existsSyncHandle, readdirOfImageHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
 import { logger } from 'src/common/journal';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { IResponse } from 'src/interfaces/response.interface';
@@ -13,8 +13,11 @@ import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
 import { ImageFindPageParams } from 'types/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
+import { useCustomConfig } from 'src/config';
 
-const basicPublic = 'public/files/image';
+const customConfig = useCustomConfig();
+const imageReadDir = `${customConfig.fileAccessPath}/image`;
+const imageFsDir = `${customConfig.staticDirPosition}${customConfig.staticDirName}/image/`;
 
 @Injectable()
 export class ImageService {
@@ -51,7 +54,7 @@ export class ImageService {
             name,
             imageType,
             fileName: filename,
-            url: `${basicPublic}/${filename}`,
+            url: `${imageReadDir}/${filename}`,
             uploadTime: nowDateFun(),
             source: source,
           };
@@ -96,7 +99,7 @@ export class ImageService {
     return (
       Promise.resolve()
         .then(async () => {
-          const result = await readdirHandle(basicPublic);
+          const result = await readdirOfImageHandle(imageFsDir);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,
@@ -123,7 +126,7 @@ export class ImageService {
       Promise.resolve()
         // 查询图片目录的全部文件
         .then(async () => {
-          return await readdirHandle(basicPublic);
+          return await readdirOfImageHandle(imageFsDir);
         })
         // 查询全部的图片数据
         .then(async (imagePublic) => {
@@ -308,7 +311,7 @@ export class ImageService {
       Promise.resolve(fileName)
         // 读取文件
         .then(async (fileName) => {
-          const publicName = `${basicPublic}/${fileName}`;
+          const publicName = `${imageFsDir}/${fileName}`;
           await readFileHandle(publicName);
           return publicName;
         })
@@ -340,12 +343,12 @@ export class ImageService {
       Promise.resolve(removePublicAllImageDto)
         // 读取文件
         .then(async ({ fileNameArr }) => {
-          await readFileListHandle(fileNameArr);
+          await readFileListHandle(`${customConfig.staticDirPosition}${customConfig.staticDirName}/image`, fileNameArr);
           return fileNameArr;
         })
         // 删除文件
         .then(async (fileNameArr) => {
-          const result = await unlinkListHandle(fileNameArr);
+          const result = await unlinkListHandle(`${customConfig.staticDirPosition}${customConfig.staticDirName}/image`, fileNameArr);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,

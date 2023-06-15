@@ -7,8 +7,9 @@ const glob: Readonly<GlobalEnvConfig> = {
   mongodbAccount: 'yrr',
   mongodbPassword: 'AlyYrrAdmin123',
   mongodbQuery: '?authSource=admin',
-  fileFsPath: '',
-  fileLib: '.',
+  fileAccessPath: 'api_file',
+  staticDirPosition: '../',
+  staticDirName: 'api_static_dir',
   imageRefixName: 'sharp_network_',
 };
 
