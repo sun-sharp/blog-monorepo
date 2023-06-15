@@ -1,29 +1,35 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"useDefineForClassFields": true,
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"strict": true,
-		"jsx": "preserve",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"esModuleInterop": true,
-		"lib": ["ESNext", "DOM"],
-		"skipLibCheck": true,
-		"noEmit": true,
-		"forceConsistentCasingInFileNames": true,
-		"allowSyntheticDefaultImports": true,
+		"target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+  
+		/* Bundler 模块 */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+
+		 /* 检测 */
+    "strict": true,
 		"strictFunctionTypes": false,
-		"baseUrl": ".",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
 		"allowJs": true,
 		"sourceMap": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 		"experimentalDecorators": true,
-		"types": ["vite/client"],
+
+		/* 文件处理 */
+		"baseUrl": ".",
 		"typeRoots": ["./node_modules/@types/", "./types"],
-		"noImplicitAny": false,
 		"paths": {
 			"@/*": ["src/*"],
 			"/#/*": ["types/*"]
