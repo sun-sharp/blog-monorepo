@@ -4,7 +4,6 @@ export interface GlobConfig {
   title: string;
   capitalApiUrl: string;
   blogApiUrl: string;
-  fileApiUrl: string;
   moneyApiUrl: string;
   shortName: string;
   urlPrefix?: string;

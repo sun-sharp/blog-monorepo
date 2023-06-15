@@ -10,8 +10,8 @@ export const getImgUrl = (url: string): string => {
 
 // 上传图片接口路径
 export const getUploadImageAction = (): string => {
-  const { fileApiUrl } = appEnvConfig;
-  return `${fileApiUrl}/image/upload`;
+  const { capitalApiUrl } = appEnvConfig;
+  return `${capitalApiUrl}/image/upload`;
 };
 
 // 上传微信账单接口路径

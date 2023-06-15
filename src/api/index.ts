@@ -7,7 +7,7 @@ export * as configurationApi from './capital/configuration';
 export * as categoryApi from './capital/category';
 
 // file
-export * as imageApi from './file/image';
+export * as imageApi from './capital/image';
 
 // blog
 export * as homeApi from './blog/home';
