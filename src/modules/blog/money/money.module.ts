@@ -6,9 +6,9 @@ import { RouterModule } from '@nestjs/core';
 import { AliPayModule } from './ali-pay/ali-pay.module';
 import { BankModule } from './bank/bank.module';
 import { JwtModuleRegister } from 'src/jwt/jwt.constants';
-import { RoleModule } from '../capital/role/role.module';
-import { UserModule } from '../capital/user/user.module';
-import { CategoryModule } from '../capital/category/category.module';
+import { CategoryModule } from 'src/modules/capital/category/category.module';
+import { UserModule } from 'src/modules/capital/user/user.module';
+import { RoleModule } from 'src/modules/capital/role/role.module';
 
 @Module({
   imports: [

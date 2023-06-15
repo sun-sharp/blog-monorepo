@@ -5,7 +5,7 @@ import { RouterModule } from '@nestjs/core';
 import { ArticleModule } from './article/article.module';
 import { ArticleCategoryModule } from './article-category/article-category.module';
 import { blogMongooseModuleForRoot } from 'src/common/constant/mongoose';
-import { MoneyModule } from '../money/money.module';
+import { MoneyModule } from './money/money.module';
 
 @Module({
   imports: [

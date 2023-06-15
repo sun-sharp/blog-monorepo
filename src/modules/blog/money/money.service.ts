@@ -7,8 +7,8 @@ import { BankService } from './bank/bank.service';
 import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
 import { WeChatService } from './we-chat/we-chat.service';
 import { billTypeEnum } from 'src/common/enums/money.enum';
-import { CategoryService } from '../capital/category/category.service';
 import { categoryTypeEnum } from 'src/common/enums/category.enum';
+import { CategoryService } from 'src/modules/capital/category/category.service';
 
 interface IBankFlow {
   voucherNum?: number;
