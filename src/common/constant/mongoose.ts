@@ -1,5 +1,6 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { useCustomConfig } from 'src/config';
+import { logger } from '../journal';
 
 const customConfig = useCustomConfig();
 
@@ -8,7 +9,7 @@ const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery } 
 const mongodbAccountAndPassword = mongodbAccount && mongodbPassword ? `${mongodbAccount}:${mongodbPassword}@` : '';
 // mongodb路径的基础配置
 const mongodbBaseUrl = `mongodb://${mongodbAccountAndPassword}${serverIp}:${databasePort}`;
-console.log(mongodbBaseUrl, mongodbQuery, 'mongodbBaseUrl');
+logger.log(mongodbBaseUrl, mongodbQuery, 'mongodb配置信息');
 
 // capital的mongoose配置
 export const capitalMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/capital${mongodbQuery}`, {
