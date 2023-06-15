@@ -239,7 +239,7 @@ export class CustomAxios {
     const err: string = error.toString();
     if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
       messageFun('error', '接口请求超时,请刷新页面重试!');
-      return msg;
+      throw msg;
     }
     if (err && err.includes('Network Error')) {
       Modal.info({
@@ -248,16 +248,16 @@ export class CustomAxios {
         positiveText: '确定',
         onPositiveClick: () => {},
       });
-      return msg;
+      throw msg;
     }
     // 请求是否被取消
     const isCancel = axios.isCancel(error);
     if (!isCancel) {
-      checkStatus(error.response && error.response.status, msg, messageFun);
+      checkStatus(response && response.status, msg, messageFun);
     } else {
-      console.warn(error, '请求被取消！');
+      console.warn(response, '请求被取消！');
     }
-    return error;
+    throw response && response.data ? response.data : response;
   }
 
   /**

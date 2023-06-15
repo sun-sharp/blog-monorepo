@@ -16,18 +16,18 @@ export const getUploadImageAction = (): string => {
 
 // 上传微信账单接口路径
 export const getUploadWeCharAction = (): string => {
-  const { moneyApiUrl } = appEnvConfig;
-  return `${moneyApiUrl}/we-chat/upload`;
+  const { blogApiUrl } = appEnvConfig;
+  return `${blogApiUrl}/money/we-chat/upload`;
 };
 
 // 上传支付宝账单接口路径
 export const getUploadAliPayAction = (): string => {
-  const { moneyApiUrl } = appEnvConfig;
-  return `${moneyApiUrl}/ali-pay/upload`;
+  const { blogApiUrl } = appEnvConfig;
+  return `${blogApiUrl}/money/ali-pay/upload`;
 };
 
 // 上传银行账单接口路径
 export const getUploadBankAction = (): string => {
-  const { moneyApiUrl } = appEnvConfig;
-  return `${moneyApiUrl}/bank/upload`;
+  const { blogApiUrl } = appEnvConfig;
+  return `${blogApiUrl}/money/bank/upload`;
 };

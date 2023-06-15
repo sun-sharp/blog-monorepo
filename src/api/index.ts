@@ -5,8 +5,6 @@ export * as userApi from './capital/user';
 export * as roleApi from './capital/role';
 export * as configurationApi from './capital/configuration';
 export * as categoryApi from './capital/category';
-
-// file
 export * as imageApi from './capital/image';
 
 // blog
@@ -15,7 +13,7 @@ export * as articleCategoryAPi from './blog/article-category';
 export * as articleAPi from './blog/article';
 
 // money
-export * as moneyApi from './money/index';
-export * as weChatApi from './money/we-chat';
-export * as aliPayApi from './money/ali-pay';
-export * as bankApi from './money/bank';
+export * as moneyApi from './blog/money/index';
+export * as weChatApi from './blog/money/we-chat';
+export * as aliPayApi from './blog/money/ali-pay';
+export * as bankApi from './blog/money/bank';

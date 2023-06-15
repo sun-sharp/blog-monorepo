@@ -4,6 +4,7 @@
   import InnerPieChart from '@/components/charts/inner-pie-chart.vue';
   import SingleColumnChart from '@/components/charts/single-column-chart.vue';
   import { lastMonthFormatRange } from '@/utils';
+  import { MoneyBalanceType, MoneyBankType } from '/#/views/money';
 
   // 统计各个的方式的余额
   const defaultMoneyBalanceMap = {
@@ -50,7 +51,7 @@
     moneyApi
       .statisticsMoneyBalance()
       .then((info) => {
-        moneyBalanceData.value = Object.keys(info).map((key) => ({
+        moneyBalanceData.value = Object.keys(info).map((key: MoneyBalanceType) => ({
           name: defaultMoneyBalanceMap[key],
           value: info[key],
         }));
@@ -79,7 +80,7 @@
       .getStatisticsBankFlow(params)
       .then((info) => {
         bankFlowData.value = Object.keys(defaultBankFlowMap)
-          .map((key) => ({
+          .map((key: MoneyBankType) => ({
             ...(info[key] || {}),
             name: defaultBankFlowMap[key],
           }))
