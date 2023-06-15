@@ -87,8 +87,17 @@ $ pm2 list
 # 添加进程/应用 nest
 $ pm2 start --name nest dist/main.js
 
+```
+
+``` bash
 # 或者
-# 重新在服务器更新分支main并打包部署应用 nest
+# 先拉取全部远程分支和tag
+$ git fetch origin
+
+# 切换到最新tag上
+$ git checkout aba-xxx
+
+# 打包部署应用 nest
 $ yarn update_main_pm2
 
 ```
