@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 const LayoutStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  height: '100vh',
+  minHeight: '100vh',
   background: 'transparent',
 };
 

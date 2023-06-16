@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-06-08 11:02:43
+ * @LastEditTime: 2023-06-16 16:07:36
  * @Description: stylelint验证代码
  *
  * stylelint ---- 主依赖
@@ -39,5 +39,12 @@ module.exports = {
   rules: {
     'no-empty-source': null, // 允许空文件
     'no-descending-specificity': true, // 禁止低优先级的选择器出现在高优先级的选择器之后
+    // 'font-family-name-quotes': null, // 允许在字体系列中缺少通用系列关键字
+    'font-family-no-missing-generic-family-keyword': [
+      true,
+      {
+        ignoreFontFamilies: ['iconfont'],
+      },
+    ],
   },
 };
