@@ -10,6 +10,9 @@
 
 ```bash
 git clone https://github.com/sun-sharp/blog-official-website.git
+
+# 提交检出均不转换
+git config --global core.autocrlf false
 ```
 
 - 安装依赖

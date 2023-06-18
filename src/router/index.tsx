@@ -6,6 +6,7 @@ import NotAuthorized from '@/views/error/403';
 import NotFound from '@/views/error/404';
 import ServiceError from '@/views/error/500';
 import Middle from '@/views/Middle';
+import Classify from '@/views/Classify';
 
 const routers: RouteObject[] = [
   {
@@ -15,6 +16,10 @@ const routers: RouteObject[] = [
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/classify',
+        element: <Classify />,
       },
     ],
   },

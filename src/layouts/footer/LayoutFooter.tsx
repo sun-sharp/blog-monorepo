@@ -41,7 +41,9 @@ const LayoutFooter: React.FC = () => {
           ©2020 – {nowYear}
           <LoveIcon className="layout-footer--love" />
           <span> {VITE_APP_SHORT_NAME} | </span>
-          <a href="https://beian.miit.gov.cn">黔ICP备2021008571号</a>
+          <a className="layout-footer--to" href="https://beian.miit.gov.cn">
+            黔ICP备2021008571号
+          </a>
         </div>
         <div className="w-full mt-6">本站已安全运行 {runDate}</div>
         {/* <div className="w-full mt-6">24811 人 | asdhakjshjk</div> */}
