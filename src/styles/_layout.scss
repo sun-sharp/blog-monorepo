@@ -1,4 +1,5 @@
 .base-layout {
+  position: relative;
   display: block;
   height: 100vh;
   min-height: 100vh;
@@ -6,7 +7,7 @@
   background: transparent;
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: $-scrollbar-width;
     height: 1px;
   }
 
@@ -33,66 +34,85 @@
 }
 
 .layout-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
+  width: 100vw;
   height: $-layout-header;
-  padding: 0 calc(50% - $-header-max-width / 2);
   line-height: normal;
-  background: transparent;
-  box-shadow: 0 1px 3px hsl(0deg 0% 7% / 10%);
+  background: $-layout-header-background;
 
-  .header-left {
+  &-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
     display: flex;
     align-items: center;
-  }
+    justify-content: space-between;
+    width: calc(100% - $-scrollbar-width);
+    height: $-layout-header;
+    padding: 0 calc(50% - $-header-max-width / 2);
+    background: $-layout-header-background;
+    box-shadow: 0 1px 3px hsl(0deg 0% 7% / 10%);
+    transform: translate(0, 0);
+    transition: transform 0.3s ease-in-out;
 
-  .head-logo {
-    display: flex;
-    align-items: center;
-    width: fit-content;
-
-    &--img {
-      width: 50px;
-      height: 50px;
-      margin-right: 10px;
-      border-radius: 50%;
+    &.hide {
+      transform: translate(0, calc(-1 * $-layout-header));
     }
 
-    &--name {
-      color: #000;
-      font-size: 24px;
+    .header-left {
+      display: flex;
+      align-items: center;
     }
-  }
 
-  .head-menu {
-    display: flex;
-    margin-left: 40px;
+    .head-logo {
+      display: flex;
+      align-items: center;
+      width: fit-content;
 
-    &--item {
-      height: 64px;
-      padding: 10px 20px;
-      font-size: 16px;
-      list-style: none;
+      &--img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        border-radius: 50%;
+      }
 
-      .item-to {
-        display: flex;
-        align-items: center;
-        height: 44px;
-        color: #333;
-        border-bottom: 2px solid transparent;
+      &--name {
+        color: #000;
+        font-size: 24px;
+      }
+    }
 
-        &.active {
-          color: $-theme-color;
-          border-color: $-theme-color;
+    .head-menu {
+      display: flex;
+      margin-left: 40px;
+
+      &--item {
+        height: 64px;
+        padding: 10px 20px;
+        font-size: 16px;
+        list-style: none;
+
+        .item-to {
+          display: flex;
+          align-items: center;
+          height: 44px;
+          color: #333;
+          border-bottom: 2px solid transparent;
+
+          &.active {
+            color: $-theme-color;
+            border-color: $-theme-color;
+          }
         }
       }
     }
-  }
 
-  .header-right {
-    display: flex;
-    align-items: center;
+    .header-right {
+      display: flex;
+      align-items: center;
+      padding-right: 40px;
+    }
   }
 }
 
