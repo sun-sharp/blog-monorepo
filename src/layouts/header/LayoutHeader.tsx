@@ -12,10 +12,10 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
       title: '首页',
       path: '/',
     },
-    {
-      title: '分页',
-      path: '/classify',
-    },
+    // {
+    //   title: '分页',
+    //   path: '/classify',
+    // },
   ];
 
   const location = useLocation();
