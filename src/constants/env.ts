@@ -21,4 +21,5 @@ const getEnvConfig = (): ViteEnv => {
   return ENV as ViteEnv;
 };
 
-export const { VITE_PUBLIC_PATH, VITE_APP_TITLE, VITE_APP_SHORT_NAME, VITE_API_URL_PREFIX, VITE_IMG_URL } = getEnvConfig();
+export const { VITE_PUBLIC_PATH, VITE_APP_TITLE, VITE_APP_SHORT_NAME, VITE_API_URL_PREFIX, VITE_IMG_URL, VITE_CAPITAL_API_URL, VITE_BLOG_API_URL } =
+  getEnvConfig();

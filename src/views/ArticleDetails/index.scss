@@ -1,0 +1,84 @@
+.article-detail {
+  position: relative;
+  display: flex;
+
+  /* 文章内容 */
+  &-cont {
+    flex: 1;
+    width: 0;
+    background-color: transparent;
+
+    &--title {
+      margin: 20px 0;
+      color: #333;
+      font-size: 24px;
+    }
+
+    &--author {
+      color: #999;
+
+      .author01 {
+        margin-right: 5px;
+        font-size: 18px;
+      }
+
+      .author02 {
+        margin-right: 5px;
+        margin-left: 15px;
+        font-size: 12px;
+      }
+    }
+
+    &--about {
+      margin: 20px auto 15px;
+      padding: 10px;
+      color: #888;
+      line-height: 23px;
+      background: none repeat 0 0 #f6f6f652;
+      border: 1px solid #f3f3f3;
+
+      strong {
+        padding-right: 8px;
+        color: #38485a;
+        font-weight: 400 !important;
+        font-size: 13px;
+      }
+    }
+  }
+
+  /* 文章右边内容 */
+  &-slider {
+    width: 18%;
+    height: auto;
+    padding-left: 10px;
+    background-color: transparent;
+
+    &__author {
+      width: 100%;
+      box-shadow: 0 0 4px $-card-box-shadow;
+    }
+  }
+
+  // 文章目录
+  &-catalog {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    margin-top: 30px;
+    padding: 10px 20px 20px;
+    box-shadow: 0 0 4px $-card-box-shadow;
+
+    &--title {
+      margin-bottom: 20px;
+      padding: 10px 0;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+
+  &__markdown {
+    .markdown-theme {
+      --md-bk-color: transparent;
+    }
+  }
+}

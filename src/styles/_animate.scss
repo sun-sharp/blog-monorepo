@@ -1,24 +1,35 @@
-  /* 放大动画 */
-  @keyframes icon-zoom {
-    0%,
-    100% {
-      transform: scale(1);
-    }
-
-    10%,
-    30% {
-      transform: scale(0.8);
-    }
-
-    20%,
-    40%,
-    60%,
-    80% {
-      transform: scale(1.2);
-    }
-
-    50%,
-    70% {
-      transform: scale(1.2);
-    }
+/* 阴影颜色变化 */
+@keyframes shadow-change {
+  0% {
+    box-shadow: 0 0 5px #fff, 0 0 10px #e6f4ff, 0 0 15px #c8e6ff, 0 0 8px #a8d8ff, 0 0 10px #77c2ff, 0 0 12px #1696ff;
   }
+
+  100% {
+    box-shadow: 0 0 5px #fff, 0 0 10px #f8f1ff, 0 0 15px #e6ccff, 0 0 8px #e3c4ff, 0 0 10px #bd76ff, 0 0 12px #982aff;
+  }
+}
+
+/* 放大动画 */
+@keyframes icon-zoom {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  10%,
+  30% {
+    transform: scale(0.8);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: scale(1.2);
+  }
+
+  50%,
+  70% {
+    transform: scale(1.2);
+  }
+}

@@ -1,46 +1,38 @@
-import { useState } from 'react';
-import reactLogo from '@/assets/react.svg';
+// import { useState } from 'react';
+import AuthorIntro from '@/components/common/AuthorIntro';
 import './index.scss';
-import { Button } from 'antd';
+import { useEffect, useState } from 'react';
+import { articleAPi } from '@/api';
+import ArticleItem from '@/components/common/ArticleItem';
 
 const Home: React.FC = () => {
-  const [count, setCount] = useState(0);
+  const [articleData, setArticleData] = useState([]);
 
-  // return (
-  //   <>
-  // <div>首页</div>
-  //     <h1>
-  //       <a href="https://react.dev" target="_blank">
-  //         <img src={reactLogo} className="logo react" alt="React logo" />
-  //       </a>
-  //     </h1>
-  //     <div className="card">
-  //       <Button type="primary" onClick={() => setCount((count) => count + 1)}>
-  //         count is {count}
-  //       </Button>
-  //       <p>
-  //         Edit <code>src/App.tsx</code> and save to test HMR
-  //       </p>
-  //     </div>
-  //     <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-  //   </>
-  // );
+  // 查询文章
+  const loadArticle = () => {
+    articleAPi
+      .getFindPage({
+        size: 10,
+        current: 1,
+      })
+      .then((res) => {
+        setArticleData(res.list);
+      });
+  };
+
+  useEffect(() => {
+    loadArticle();
+  }, []);
   return (
     <div className="home">
-      <h1>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </h1>
-      <div className="card">
-        <Button type="primary" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="home-main">
+        <ArticleItem data={articleData} />
       </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <div className="home-slider">
+        <div className="home-slider__cont">
+          <AuthorIntro backgroundColor="rgba(255, 255, 255, 0.4)" />
+        </div>
+      </div>
     </div>
   );
 };

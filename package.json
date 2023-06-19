@@ -16,7 +16,9 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "antd": "^5.6.1",
+    "axios": "^1.4.0",
     "date-fns": "^2.30.0",
+    "md-editor-rt": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.7",

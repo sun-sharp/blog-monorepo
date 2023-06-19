@@ -12,10 +12,6 @@ declare global {
     VITE_CAPITAL_API_URL: string;
     // blog接口地址
     VITE_BLOG_API_URL: string;
-    // file上传地址
-    VITE_FILE_API_URL: string;
-    // money接口地址
-    VITE_MONEY_API_URL: string;
     // 接口前缀
     VITE_API_URL_PREFIX?: string;
     // Project abbreviation
@@ -38,5 +34,9 @@ declare global {
     mozRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
     oRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
     msRequestAnimationFrame?: (callback: FrameRequestCallback) => number;
+  }
+
+  interface SharpWindow extends Window {
+    $message?: MessageInstance;
   }
 }

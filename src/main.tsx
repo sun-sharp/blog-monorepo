@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles/index.scss';
 import { store } from '@/store';
@@ -13,13 +12,11 @@ setupHeartAnimation();
 const container = document.getElementById('root');
 const root = createRoot(container as HTMLDivElement);
 root.render(
-  <StrictMode>
-    <SharpProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
-      </Provider>
-    </SharpProvider>
-  </StrictMode>
+  <SharpProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </Provider>
+  </SharpProvider>
 );

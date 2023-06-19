@@ -1,18 +1,17 @@
-import { Layout } from 'antd';
+import { FloatButton, Layout } from 'antd';
 import LayoutHeader from './header/LayoutHeader';
 import LayoutFooter from './footer/LayoutFooter';
 import LayoutMain from './main/LayoutMain';
 import { clearParticleBack, initParticleBack } from '@/plugins/canvas/particle-back';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useState } from 'react';
+import BackTopIcon from '@/components/icon/BackTopIcon';
 
 const LayoutIndex: React.FC = () => {
   const [headerHide, setHeaderHide] = useState(false);
 
-  const layoutId = useId();
-
   const scrollChange = () => {
     // 向下滚动时
-    const scrollTop = document.getElementById(layoutId)?.scrollTop;
+    const scrollTop = document.documentElement.scrollTop;
     if (scrollTop && scrollTop > 300) {
       setHeaderHide(true);
     } else {
@@ -43,10 +42,13 @@ const LayoutIndex: React.FC = () => {
   }, []);
 
   return (
-    <Layout id={layoutId} className="base-layout">
+    <Layout className="base-layout">
       <LayoutHeader hide={headerHide} />
       <LayoutMain />
       <LayoutFooter />
+      <FloatButton.Group style={{ right: 100 }}>
+        <FloatButton.BackTop icon={<BackTopIcon style={{ fontSize: '20px' }} />} />
+      </FloatButton.Group>
     </Layout>
   );
 };
