@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: ['main']
-    # tags:
-    # - 'bmw-*'
+    tags:
+    - 'bmw-*'
 
 jobs:
   build:
-    name: ubuntu-latest
+    name: build-manage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout # 获取源码，使用actions/checkout@v2
@@ -33,5 +32,5 @@ jobs:
           SOURCE: "manage/" # 源目录
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }} # 服务器地址
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }} # ssh连接端口号
-          REMOTE_USER: "root" # 连接用户名
-          TARGET: "/www/wwwroot/text/" # 目标部署目录
+          REMOTE_USER: ${{ secrets.REMOTE_USER }} # 连接用户名
+          TARGET: ${{ secrets.REMOTE_TARGET }} # 目标部署目录
