@@ -23,9 +23,9 @@ jobs:
           # npm run build
           # pm2 restart ./dist/src/main.js --name realworld-server
           script: |
-            cd /www/wwwroot/nestApi
+            cd /www/wwwroot/nestApi/
             git fetch origin
             git tag -l -n
             git checkout ${{ github.ref_name }}
-            yarn update_main_pm2
+            npm run update_main_pm2
             ls -al
