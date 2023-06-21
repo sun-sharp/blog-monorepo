@@ -4,29 +4,39 @@ import './index.scss';
 import { useEffect, useState } from 'react';
 import { articleAPi } from '@/api';
 import ArticleItem from '@/components/common/ArticleItem';
+import { Pagination, PaginationProps } from 'antd';
 
 const Home: React.FC = () => {
   const [articleData, setArticleData] = useState([]);
+  const [pageCurrent, setPageCurrent] = useState(1);
+  const [pageTotal, setPageTotal] = useState(0);
 
   // 查询文章
-  const loadArticle = () => {
+  const loadArticle = (current: number) => {
     articleAPi
       .getFindPage({
         size: 10,
-        current: 1,
+        current,
       })
       .then((res) => {
         setArticleData(res.list);
+        setPageTotal(res.total);
       });
   };
 
+  // 分页
+  const onPageChange: PaginationProps['onChange'] = (page) => {
+    setPageCurrent(page);
+  };
+
   useEffect(() => {
-    loadArticle();
-  }, []);
+    loadArticle(pageCurrent);
+  }, [pageCurrent]);
   return (
     <div className="home">
       <div className="home-main">
         <ArticleItem data={articleData} />
+        {pageCurrent > 1 ? <Pagination className="home-main__page" showQuickJumper current={pageCurrent} total={pageTotal} onChange={onPageChange} /> : ''}
       </div>
       <div className="home-slider">
         <div className="home-slider__cont">
