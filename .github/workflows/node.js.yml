@@ -6,22 +6,23 @@ name: Node.js CI
 on:
   push:
     tags:
-    - 'aba-*'
+      - 'aba-*'
 
 jobs:
   build:
     name: build-nest
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands to develop
+      - name: Connect to the server and deploy using SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_KEY }}
-          script: |
-            cd /home/apps-server/realworld-server
+          script:
+            cd /www/wwwroot/nestApi
+            ls -al
             # npm install
             # npm run build
             # pm2 restart ./dist/src/main.js --name realworld-server
-
