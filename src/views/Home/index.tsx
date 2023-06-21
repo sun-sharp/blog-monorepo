@@ -1,7 +1,7 @@
 // import { useState } from 'react';
 import AuthorIntro from '@/components/common/AuthorIntro';
 import './index.scss';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { articleAPi } from '@/api';
 import ArticleItem from '@/components/common/ArticleItem';
 import { Pagination, PaginationProps } from 'antd';
@@ -12,17 +12,17 @@ const Home: React.FC = () => {
   const [pageTotal, setPageTotal] = useState(0);
 
   // 查询文章
-  const loadArticle = (current: number) => {
+  const loadArticle = useCallback(() => {
     articleAPi
       .getFindPage({
         size: 10,
-        current,
+        current: pageCurrent,
       })
       .then((res) => {
         setArticleData(res.list);
         setPageTotal(res.total);
       });
-  };
+  }, [pageCurrent]);
 
   // 分页
   const onPageChange: PaginationProps['onChange'] = (page) => {
@@ -30,8 +30,8 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    loadArticle(pageCurrent);
-  }, [pageCurrent]);
+    loadArticle();
+  }, [loadArticle]);
   return (
     <div className="home">
       <div className="home-main">
