@@ -20,7 +20,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_KEY }}
-          # npm install
           # npm run build
           # pm2 restart ./dist/src/main.js --name realworld-server
           script: |
