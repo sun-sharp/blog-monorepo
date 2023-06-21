@@ -27,5 +27,5 @@ jobs:
             git fetch origin
             git tag -l -n
             git checkout ${{ github.ref_name }}
-            npm run update_main_pm2
+            yarn && pm2 stop nest && pm2 delete nest && yarn build && pm2 list && pm2 start --name nest dist/main.js
             ls -al
