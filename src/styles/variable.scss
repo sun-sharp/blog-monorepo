@@ -21,3 +21,9 @@ $-scrollbar-width: var(--root-scrollbar-width, 6px);
 
 /* 卡片阴影颜色 */
 $-card-box-shadow: var(--root-card-box-shadow, rgb(177 177 177 / 63.7%));
+
+/* 右侧最小宽度 */
+$-right-min-width: var(--root-right-min-width, 200px);
+
+/* 右侧宽度 */
+$-right-width: var(--root-right-width, 18%);

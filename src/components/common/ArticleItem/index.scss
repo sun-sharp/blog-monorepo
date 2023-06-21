@@ -2,14 +2,19 @@
   /* 文章列表 */
   .article-item {
     margin-bottom: 20px;
-    padding: 20px;
+    padding: 15px 10px;
     list-style: none;
     background: transparent;
     box-shadow: 0 0 4px $-card-box-shadow;
+    cursor: default;
+    transition: all .5s linear;
+
+    &:hover {
+      box-shadow: 0 10px 30px $-card-box-shadow;
+      transform: translate3d(0, -2px, 0);
+    }
 
     .item-cont {
-      display: flex;
-
       &--img {
         display: block;
         width: 30%;
@@ -22,9 +27,10 @@
       }
 
       &--title {
-        margin: 10px 0;
+        color: $-theme-color;
         font-weight: bold;
         font-size: 24px;
+        cursor: pointer;
       }
 
       &--info {
@@ -32,42 +38,32 @@
         font-size: 16px;
         line-height: 24px;
       }
+
+      &--btn {
+        display: flex;
+        justify-content: flex-end;
+
+        .more {
+          color: $-theme-color;
+          cursor: pointer;
+        }
+      }
     }
 
     .item-author {
       clear: both;
       width: 100%;
-      margin: 20px 0 0;
+      margin: 5px 0;
       color: #838383;
       font-size: 14px;
 
-      span {
-        margin-right: 10px;
-
-        a {
-          color: #096;
-        }
-      }
-
       .lm {
+        margin-right: 10px;
         color: #096;
-
-        i {
-          margin-right: 5px;
-          color: #ff7c7c;
-        }
       }
 
-      .time {
-        i {
-          margin-right: 5px;
-          color: #00cad4;
-        }
-      }
-
-      .more {
-        float: right;
-      }
+      // .time {
+      // }
     }
   }
 }

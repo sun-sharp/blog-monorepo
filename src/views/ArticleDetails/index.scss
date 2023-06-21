@@ -48,7 +48,8 @@
 
   /* 文章右边内容 */
   &-slider {
-    width: 18%;
+    width: $-right-width;
+    min-width: $-right-min-width;
     height: auto;
     padding-left: 10px;
     background-color: transparent;
