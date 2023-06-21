@@ -3,11 +3,11 @@ import { PaginateDto } from 'src/common/paginate/paginate.dto';
 
 export class PageArticleDto extends PaginateDto {
   @ApiProperty({
-    description: '文章标题',
+    description: '关键字',
     required: false,
     default: '',
   })
-  readonly title: string = '';
+  readonly keywords: string = '';
 
   @ApiProperty({
     description: '文章分类',

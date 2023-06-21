@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
@@ -12,11 +12,6 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
-
-interface FindPageData {
-  title: object; // 0 表示成功
-  categoryVal?: number;
-}
 
 @Injectable()
 export class ArticleService {
@@ -33,9 +28,9 @@ export class ArticleService {
       Promise.resolve(body)
         // 分页查询
         .then(async (body) => {
-          const { size, current, title, categoryVal } = body;
+          const { size, current, keywords, categoryVal } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData: FindPageData = { title: { $regex: title } };
+          const findData: FilterQuery<Article> = { $or: [{ title: { $regex: keywords } }, { brief: { $regex: keywords } }] };
           if (categoryVal) {
             findData.categoryVal = categoryVal;
           }
