@@ -27,4 +27,5 @@ jobs:
             cd /www/wwwroot/nestApi
             ls -al
             git fetch origin
-            git checkout aba-*
+            git checkout ${{ github.ref_name }}
+            git tag -l -n
