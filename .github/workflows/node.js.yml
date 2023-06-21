@@ -26,3 +26,5 @@ jobs:
           script: |
             cd /www/wwwroot/nestApi
             ls -al
+            git fetch origin
+            git checkout aba-*
