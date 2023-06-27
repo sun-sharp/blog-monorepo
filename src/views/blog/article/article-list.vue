@@ -58,11 +58,11 @@
   // 数据查询
   const searchSubmit = (values: Recordable) => {
     searchParams.value = values;
-    reloadTable();
+    actionRef.value.updatePage(1);
   };
 
   defineExpose({
-    searchSubmit,
+    reloadTable,
   });
 </script>
 
@@ -76,7 +76,15 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
+    <basic-table
+      ref="actionRef"
+      pagination
+      :columns="columns"
+      :request="loadDataTable"
+      :row-key="(row) => row.id"
+      :action-column="actionColumn"
+      :scroll-x="1090"
+    >
       <template #tableTitle>
         <n-button type="primary" @click="emit('addChange')">
           <template #icon>

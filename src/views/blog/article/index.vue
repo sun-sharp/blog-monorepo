@@ -20,7 +20,7 @@
 
   // 添加完成
   const addFinished = () => {
-    articleListRef.value.searchSubmit();
+    articleListRef.value.reloadTable();
   };
 
   // 新增传参

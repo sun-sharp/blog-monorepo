@@ -128,12 +128,18 @@
   flex: 1 1 0%;
 }
 
-.n-back-top {
-  z-index: 4000;
-}
-
 .bg-red-td {
   td {
     background-color: #ffeaea !important;
   }
+}
+
+/* Naive UI样式问题 */
+
+.n-back-top {
+  z-index: 4000;
+}
+
+.n-tooltip {
+  max-width: 30vw;
 }
