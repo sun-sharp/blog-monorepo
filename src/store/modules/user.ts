@@ -15,6 +15,7 @@ const defaultUserInfo: CUserInfo = {
   loginDate: '',
   nickname: '',
   roleCode: '',
+  roleName: '',
   userId: '',
   username: '',
 };

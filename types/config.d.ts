@@ -76,6 +76,7 @@ export interface CUserInfo {
   loginDate: string;
   nickname: string;
   roleCode: string;
+  roleName: string;
   userId: string;
   username: string;
 }
