@@ -1,4 +1,4 @@
-# vue3-ts-manage
+# blog-manage-web
 
 ## 介绍
 
@@ -9,13 +9,13 @@
 - 获取项目代码
 
 ```bash
-git clone https://github.com/sun-sharp/vue3-ts-manage.git
+git clone https://github.com/sun-sharp/blog-manage-web.git
 ```
 
 - 安装依赖
 
 ```bash
-cd vue3-ts-manage
+cd blog-manage-web
 yarn install
 ```
 

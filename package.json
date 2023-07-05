@@ -1,6 +1,6 @@
 {
-  "name": "vue3-ts-manage",
-  "version": "2.0.0",
+  "name": "blog-manage-web",
+  "version": "2.0.2",
   "scripts": {
     "dev": "vite --mode dev",
     "dev:prod": "vite --mode prod-local",
@@ -68,7 +68,7 @@
   "keywords": [
     "vue",
     "naive-ui",
-    "vue3-ts-manage",
+    "blog-manage-web",
     "vue3",
     "ts",
     "tsx",
