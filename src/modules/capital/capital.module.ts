@@ -11,6 +11,7 @@ import { capitalMongooseModuleForRoot } from 'src/common/constant/mongoose';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { CategoryModule } from './category/category.module';
 import { ImageModule } from './image/image.module';
+import { WaitForDoModule } from './wait-for-do/wait-for-do.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ImageModule } from './image/image.module';
     ConfigurationModule,
     CategoryModule,
     ImageModule,
+    WaitForDoModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -50,6 +52,10 @@ import { ImageModule } from './image/image.module';
           {
             path: '/',
             module: ImageModule,
+          },
+          {
+            path: '/',
+            module: WaitForDoModule,
           },
         ],
       },
