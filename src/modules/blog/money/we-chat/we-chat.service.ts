@@ -165,7 +165,7 @@ export class WeChatService {
           if (billType) findData.billType = billType;
           if (billMethod) findData.billMethod = billMethod;
           const total = await this.weChatModel.find(findData).count();
-          const list = await this.weChatModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
+          const list = await this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {

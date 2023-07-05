@@ -137,7 +137,7 @@ export class BankService {
           if (bankBillType) findData.bankBillType = bankBillType;
           if (bankType) findData.bankType = bankType;
           const total = await this.bankModel.find(findData).count();
-          const list = await this.bankModel.find(findData).sort({ tradeTime: 1 }).limit(limit).skip(skip);
+          const list = await this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: {
