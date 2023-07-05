@@ -7,18 +7,23 @@ export const weChatExcelTargetHandler = (target: any) => {
   const currentStatus = oldTarget.currentStatus;
   const paymentMethod = oldTarget.paymentMethod;
   const tradeOtherPerson = oldTarget.tradeOtherPerson;
+  const goods = oldTarget.goods;
   if (['微信红包', '企业微信红包'].includes(tradeType)) {
     target.billType = billTypeEnum.redPacket;
   } else if (['美团平台商户'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.mtOrder;
   } else if (['手机充值'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.phoneBill;
-  } else if (tradeOtherPerson.indexOf('超市') !== -1 || ['成都红旗连锁股份有限公司'].includes(tradeOtherPerson)) {
+  } else if (tradeOtherPerson.indexOf('超市') !== -1 || tradeOtherPerson.indexOf('便利店') !== -1 || ['成都红旗连锁股份有限公司'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.consumptionSupermarket;
   } else if (tradeType === '零钱充值') {
     target.billType = billTypeEnum.weChatChangeRecharge;
   } else if (['广州骑安'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficBicycle;
+  } else if (['兄弟江油肥肠', '大米先生'].includes(tradeOtherPerson)) {
+    target.billType = billTypeEnum.eatingRestaurant;
+  } else if (tradeOtherPerson === '高德' && goods === '高德打车') {
+    target.billType = billTypeEnum.trafficTaxi;
   }
   if (currentStatus === '已存入零钱' || paymentMethod === '零钱' || tradeType === '零钱充值') {
     target.billMethod = billMethodEnum.weChatChange;
