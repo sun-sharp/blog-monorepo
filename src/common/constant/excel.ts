@@ -35,34 +35,43 @@ export const weChatExcelCellHandle = {
 
 // 支付宝账单key值重命名
 export const aliPayExcelCellHandle = {
+  // 交易时间
   1: (tar: any, val: any) => {
-    tar['incomeOrPay'] = val || '';
-  }, // 收/支
+    tar['tradeTime'] = nowDateFun(val);
+  },
+  // 交易分类
   2: (tar: any, val: any) => {
-    tar['tradeOtherPerson'] = filterStr(val);
-  }, // 交易对方
+    tar['tradeType'] = val || '';
+  },
+  // 交易对方
   3: (tar: any, val: any) => {
-    tar['oppositeAccount'] = val || '';
-  }, // 对方账号
+    tar['tradeOtherPerson'] = filterStr(val);
+  },
+  // 对方账号
   4: (tar: any, val: any) => {
-    tar['productDescription'] = val || '';
-  }, // 商品说明
+    tar['oppositeAccount'] = val || '';
+  },
+  // 商品说明
   5: (tar: any, val: any) => {
-    tar['paymentMethod'] = val || '';
-  }, // 收/付款方式
+    tar['productDescription'] = val || '';
+  },
+  // 收/支
   6: (tar: any, val: any) => {
+    tar['incomeOrPay'] = val || '';
+  },
+  // 金额
+  7: (tar: any, val: any) => {
     const money = val;
     tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
-  }, // 金额
-  7: (tar: any, val: any) => {
-    tar['tradeStatus'] = val || '';
-  }, // 交易分类
+  },
+  // 收/付款方式
   8: (tar: any, val: any) => {
-    tar['tradeType'] = val || '';
-  }, // 交易分类
-  11: (tar: any, val: any) => {
-    tar['tradeTime'] = nowDateFun(val);
-  }, // 交易时间
+    tar['paymentMethod'] = val || '';
+  },
+  // 交易状态
+  9: (tar: any, val: any) => {
+    tar['tradeStatus'] = val || '';
+  },
 };
 
 // 银行账单所属类型

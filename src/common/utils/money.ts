@@ -52,12 +52,10 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billMethod = billMethodEnum.aliPayHuaBei;
   } else if (['单车骑行卡抵扣'].includes(paymentMethod)) {
     target.billMethod = billMethodEnum.other;
+  } else if (['中国工商银行储蓄卡(3413)'].includes(paymentMethod)) {
+    target.billMethod = billMethodEnum.business;
   }
-  // else if (paymentMethod.includes('中国农业银行')) {
-  //   target.billMethod = billMethodEnum.agriculture;
-  // } else if (paymentMethod.includes('中国工商银行')) {
-  //   target.billMethod = billMethodEnum.business;
-  // }
+
   if (tradeStatus === '交易关闭') {
     target.billType = billTypeEnum.invalid;
   } else if (
