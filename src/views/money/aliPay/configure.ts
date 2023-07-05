@@ -82,7 +82,7 @@ export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap
       key: 'balance',
       align: 'center',
       render(row: any) {
-        return row.balance ? `￥${row.balance}` : '';
+        return typeof row.balance === 'number' ? `￥${row.balance}` : '';
       },
     },
     {
@@ -90,7 +90,7 @@ export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap
       key: 'balanceBaby',
       align: 'center',
       render(row: any) {
-        return row.balanceBaby ? `￥${row.balanceBaby}` : '';
+        return typeof row.balanceBaby === 'number' ? `￥${row.balanceBaby}` : '';
       },
     },
     {
