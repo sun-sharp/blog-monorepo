@@ -66,10 +66,13 @@
 
       .add-calendar {
         cursor: pointer;
+        color: #c2c2c2;
+        display: flex;
+        align-items: center;
       }
       .add-time {
         margin-left: 10px;
-        color: rgba(194, 194, 194, 1);
+        font-size: 14px;
       }
     }
   }

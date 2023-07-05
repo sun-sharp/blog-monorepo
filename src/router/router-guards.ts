@@ -2,7 +2,6 @@ import { ACCESS_TOKEN, PageEnum } from '@/constant';
 import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
 import { getAppEnvConfig, storage } from '@/utils';
 import { Router, RouteRecordRaw } from 'vue-router';
-import { ErrorPageRoute } from './base';
 
 const LOGIN_PATH = PageEnum.LOGIN_PATH;
 
@@ -65,18 +64,11 @@ export function createRouterGuards(router: Router) {
       router.addRoute(item as unknown as RouteRecordRaw);
     });
 
-    //添加404
-    const isErrorPage = router.getRoutes().findIndex((item) => item.name === ErrorPageRoute.name);
-    if (isErrorPage === -1) {
-      router.addRoute(ErrorPageRoute as unknown as RouteRecordRaw);
-    }
-
     const redirectPath = (from.query.redirect || to.path) as string;
     const redirect = decodeURIComponent(redirectPath);
-    const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect };
+    const nextData = to.path === redirect ? { path: to.path, replace: true } : { path: redirect };
     routeStore.setDynamicAddedRoute(true);
     next(nextData);
-    Loading && Loading.finish();
   });
 
   router.afterEach((to) => {
