@@ -5,6 +5,8 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
 import { IResponse } from 'src/interfaces/response.interface';
 import { Category } from 'src/schemas/capital/category.schema';
+import { PageCategoryDto } from './dto/page-category.dto';
+import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 
 @Injectable()
 export class CategoryService {
@@ -12,7 +14,7 @@ export class CategoryService {
   constructor(@InjectModel('Category') private readonly categoryModel: Model<Category>) {}
 
   /**
-   * @description: 某种类型的所以配置
+   * @description: 某种类型的所有配置
    * @param {string} type
    * @return {Promise<IResponse>}
    */
@@ -48,7 +50,7 @@ export class CategoryService {
   /**
    * @description: 获取某个类型的全部分类列表
    * @param {string} type
-   * @return {Promise<IResponse>}
+   * @return {Promise<Category[]>}
    */
   public findByType(type: string): Promise<Category[]> {
     return (
@@ -60,6 +62,50 @@ export class CategoryService {
         // 返回错误
         .catch((err) => {
           return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 条件并分页获取分类列表
+   * @param {*}
+   * @return {*}
+   */
+  public findPage(pageCategoryDto: PageCategoryDto): Promise<IResponse> {
+    return (
+      Promise.resolve(pageCategoryDto)
+        // 查询
+        .then(async (body) => {
+          const { size, current } = body;
+          const { limit, skip } = PaginateHandle(size, current);
+          const findData = {};
+          const total = await this.categoryModel.find(findData).count();
+          const list = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result: {
+              current,
+              list: (list || []).map((m) => {
+                return {
+                  categoryId: m._id,
+                  type: m.type,
+                  valueStr: m.valueStr,
+                  value: m.value,
+                  label: m.label,
+                };
+              }),
+              size,
+              total,
+            },
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
         })
     );
   }
