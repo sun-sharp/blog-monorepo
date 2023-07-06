@@ -5,9 +5,10 @@ import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { CategoryCertainTypeDto } from './dto/category-certain-type.dto';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageCategoryDto } from './dto/page-category.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Controller('category')
-@ApiTags('分类')
+@ApiTags('全局类型')
 @ApiBearerAuth('jwt')
 @UseGuards(JwtAuthGuard)
 export class CategoryController {
@@ -21,8 +22,15 @@ export class CategoryController {
 
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '条件并分页获取分类列表' })
+  @ApiOperation({ summary: '条件并分页获取全局类型列表' })
   findPage(@Body() pageCategoryDto: PageCategoryDto) {
     return this.categoryService.findPage(pageCategoryDto);
+  }
+
+  @Post('save')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '创建全局类型' })
+  create(@Body() body: CreateCategoryDto) {
+    return this.categoryService.create(body);
   }
 }

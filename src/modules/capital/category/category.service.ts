@@ -7,11 +7,69 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { Category } from 'src/schemas/capital/category.schema';
 import { PageCategoryDto } from './dto/page-category.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 export class CategoryService {
   response: IResponse;
   constructor(@InjectModel('Category') private readonly categoryModel: Model<Category>) {}
+
+  /**
+   * @description: 新增文章分类
+   * @param {CreateCategoryDto} createCategoryDto
+   * @return {Promise<IResponse>}
+   */
+  public create(createCategoryDto: CreateCategoryDto): Promise<IResponse> {
+    return (
+      Promise.resolve(createCategoryDto)
+        // 处理全局类型标识重复问题
+        .then(async (body) => {
+          const { type, value, valueStr, label } = body;
+          if (!value && !valueStr) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '请输入全局类型标识',
+            });
+          }
+          const findTypeData = await this.categoryModel.find({ type });
+          if (value) {
+            const findValue = findTypeData.find((f) => f.value === value);
+            if (findValue) {
+              throw (this.response = {
+                code: ApiCode.ERROR,
+                message: '全局类型标识重复',
+              });
+            }
+            return { type, value, label };
+          } else if (valueStr) {
+            const findValueStr = findTypeData.find((f) => f.valueStr === valueStr);
+            if (findValueStr) {
+              throw (this.response = {
+                code: ApiCode.ERROR,
+                message: '全局类型标识（字符串类型）重复',
+              });
+            }
+            return { type, valueStr, label };
+          }
+        })
+        // 添加
+        .then(async (body) => {
+          await this.categoryModel.create(body);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '添加成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.log(`返回错误`, err);
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '添加失败！',
+          });
+        })
+    );
+  }
 
   /**
    * @description: 某种类型的所有配置
@@ -48,7 +106,7 @@ export class CategoryService {
   }
 
   /**
-   * @description: 获取某个类型的全部分类列表
+   * @description: 获取某个类型的全部全局类型列表
    * @param {string} type
    * @return {Promise<Category[]>}
    */
@@ -67,9 +125,9 @@ export class CategoryService {
   }
 
   /**
-   * @description: 条件并分页获取分类列表
-   * @param {*}
-   * @return {*}
+   * @description: 条件并分页获取全局类型列表
+   * @param {PageCategoryDto} pageCategoryDto
+   * @return {Promise<IResponse>}
    */
   public findPage(pageCategoryDto: PageCategoryDto): Promise<IResponse> {
     return (

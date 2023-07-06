@@ -2,7 +2,7 @@ import { SchemaFactory, Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 /**
- * @description 分类数据字段
+ * @description 全局类型数据字段
  * @export
  * @class category
  * @extends {Document}
@@ -11,17 +11,21 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class Category extends Document {
+  // 全局类型分类
   @Prop()
-  type: string; // 分类类型
+  type: string;
 
+  // 全局类型标识
   @Prop()
-  value: number; // 分类标识
+  value: number;
 
+  // 全局类型字符串类型的标识
   @Prop()
-  valueStr: string; // 分类字符串类型的标识
+  valueStr: string;
 
+  // 全局类型名称
   @Prop()
-  label: string; // 分类名称
+  label: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
