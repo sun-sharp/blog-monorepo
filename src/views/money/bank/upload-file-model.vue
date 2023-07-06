@@ -1,6 +1,6 @@
 <template>
-  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" title="导入微信账单">
-    <table-all :data="tableData" :columns="columns" max-height="50vh" @reload="reload">
+  <n-modal v-model:show="showModal" class="w-1300" :show-icon="false" :mask-closable="false" preset="dialog" :title="modalTitle">
+    <table-all :data="tableData" :columns="columns" :row-class-name="rowClassName" max-height="50vh" @reload="reload">
       <template #tableTitle>
         <form-upload-excel
           v-model:file-list="uploadFileList"
@@ -36,6 +36,7 @@
     setup(_props, { emit }) {
       const showModal = ref(false);
       const tableData = ref<any[]>([]);
+      const excelUploadTotal = ref(0);
       const btnDisabled = computed(() => {
         return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length !== 0;
       });
@@ -49,12 +50,18 @@
       const reload = () => {
         tableData.value = [];
         uploadFileList.value = [];
+        excelUploadTotal.value = 0;
       };
 
       // 初始化
       const init = async () => {
         showModal.value = true;
         reload();
+      };
+
+      // 表格样式
+      const rowClassName = (row: any) => {
+        return ![1, 2].includes(row.inflowOrOutflow) || !row.billMethod || !row.billType ? 'bg-red-td' : '';
       };
 
       // 保存列表数据
@@ -76,12 +83,20 @@
 
       // 账单上传成功
       const excelUploadChange = (data: any[]) => {
-        tableData.value = tableData.value.concat(data);
+        excelUploadTotal.value = tableData.value.concat(data).length;
+        tableData.value = tableData.value.concat(data).slice(0, 100);
       };
+
+      const modalTitle = computed(() => {
+        return '导入银行账单' + `(${tableData.value.length}/${excelUploadTotal.value})`;
+      });
       return {
+        modalTitle,
         showModal,
         btnDisabled,
         tableData,
+        rowClassName,
+        excelUploadTotal,
         columns,
         uploadAction: getUploadBankAction(),
         uploadFileList,
