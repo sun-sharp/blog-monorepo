@@ -5,11 +5,12 @@ export const useCategoryConfigure = () => {
   // 查询配置
   const searchSchemas = computed(() => [
     {
-      field: 'name',
+      field: 'type',
       component: 'NInput',
-      label: '交易对方',
+      label: '全局类型分类',
+      labelWidth: 110,
       componentProps: {
-        placeholder: '请输入昵称',
+        placeholder: '请输入全局类型分类',
       },
     },
   ]);
@@ -17,23 +18,23 @@ export const useCategoryConfigure = () => {
   // 表格字段配置
   const columns = computed(() => [
     {
-      title: '分类类型',
+      title: '全局类型分类',
       key: 'type',
       align: 'center',
       width: 170,
     },
     {
-      title: '分类标识',
+      title: '全局类型标识',
       key: 'value',
       align: 'center',
     },
     {
-      title: '分类标识(字符串类型)',
+      title: '全局类型标识（字符串类型）',
       key: 'valueStr',
       align: 'center',
     },
     {
-      title: '分类名称',
+      title: '全局类型名称',
       key: 'label',
       align: 'center',
     },
