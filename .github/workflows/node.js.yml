@@ -22,6 +22,7 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           # npm run build
           # pm2 restart ./dist/src/main.js --name realworld-server
+          script_stop: true
           script: |
             cd /www/wwwroot/nestApi/
             git fetch origin
