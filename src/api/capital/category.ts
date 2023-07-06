@@ -1,4 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
+import { FindPageData } from '/#/api/category';
 
 const basic = '/category';
 
@@ -15,3 +16,15 @@ export function certainTypeAll(type: string) {
     },
   });
 }
+
+/**
+ * @description: 支付宝账单列表
+ * @param {FindPageData} data
+ */
+export const getPage = (data: FindPageData) => {
+  return AxiosCapital.request({
+    url: `${basic}/find_page`,
+    method: 'POST',
+    data,
+  });
+};

@@ -6,12 +6,8 @@
   // import { format } from 'date-fns';
 
   // 分类选择
-  const classifyValue = ref('');
+  const classifyValue = ref(null);
   const classifyOptions = ref([
-    {
-      label: '全部',
-      value: '',
-    },
     {
       label: '类型1',
       value: '1',
@@ -69,49 +65,52 @@
     <div class="wait-for-do-list__search">
       <n-select v-model:value="classifyValue" :options="classifyOptions" />
     </div>
-    <div class="wait-for-do-list__add">
-      <n-input placeholder="添加待办事件，按回车保存">
-        <template #prefix>
-          <n-icon :component="PlusOutlined" color="#2d8cf0" />
-        </template>
-        <template #suffix>
-          <n-popover v-model:show="showCalendarPop" placement="bottom" trigger="manual" @clickoutside="calendarPopOutside">
-            <template #trigger>
-              <div class="add-calendar" @click="showCalendarPop = !showCalendarPop">
-                <n-icon :component="CalendarOutline" />
-                <span v-if="deadline" class="add-time">{{ deadline }}</span>
+    <template v-if="classifyValue">
+      <div class="wait-for-do-list__add">
+        <n-input placeholder="添加待办事件，按回车保存">
+          <template #prefix>
+            <n-icon :component="PlusOutlined" color="#2d8cf0" />
+          </template>
+          <template #suffix>
+            <n-popover v-model:show="showCalendarPop" placement="bottom" trigger="manual" @clickoutside="calendarPopOutside">
+              <template #trigger>
+                <div class="add-calendar" @click="showCalendarPop = !showCalendarPop">
+                  <n-icon :component="CalendarOutline" />
+                  <span v-if="deadline" class="add-time">{{ deadline }}</span>
+                </div>
+              </template>
+              <div>
+                <n-date-picker
+                  v-model:formatted-value="deadline"
+                  :format="formatText"
+                  :value-format="formatText"
+                  panel
+                  :actions="['clear', 'now', 'confirm']"
+                  type="datetime"
+                  @confirm="setDeadline()"
+                />
               </div>
-            </template>
-            <div>
-              <n-date-picker
-                v-model:formatted-value="deadline"
-                :format="formatText"
-                :value-format="formatText"
-                panel
-                :actions="['clear', 'now', 'confirm']"
-                type="datetime"
-                @confirm="setDeadline()"
-              />
+            </n-popover>
+          </template>
+        </n-input>
+      </div>
+      <n-tabs v-model:value="waitTabsName" justify-content="space-evenly" type="line">
+        <n-tab-pane :name="1" tab="进行中"></n-tab-pane>
+        <n-tab-pane :name="2" tab="已完成"></n-tab-pane>
+      </n-tabs>
+      <Draggable v-model="waitDragList" animation="300" item-key="waitForDoId" @end="draggableEnd">
+        <template #item="{ element }">
+          <div class="wait-list--item">
+            <n-checkbox :checked="element.state === 2" size="small" @update:checked="itemUpdateCheck($event, element)" />
+            <div class="item-info">
+              <div class="item-text">{{ element.title }}</div>
+              <div class="item-remark">{{ element.remark }}</div>
             </div>
-          </n-popover>
-        </template>
-      </n-input>
-    </div>
-    <n-tabs v-model:value="waitTabsName" justify-content="space-evenly" type="line">
-      <n-tab-pane :name="1" tab="进行中"></n-tab-pane>
-      <n-tab-pane :name="2" tab="已完成"></n-tab-pane>
-    </n-tabs>
-    <Draggable v-model="waitDragList" animation="300" item-key="waitForDoId" @end="draggableEnd">
-      <template #item="{ element }">
-        <div class="wait-list--item">
-          <n-checkbox :checked="element.state === 2" size="small" @update:checked="itemUpdateCheck($event, element)" />
-          <div class="item-info">
-            <div class="item-text">{{ element.title }}</div>
-            <div class="item-remark">{{ element.remark }}</div>
           </div>
-        </div>
-      </template>
-    </Draggable>
+        </template>
+      </Draggable>
+    </template>
+    <n-empty v-else class="pv-20" description="请先选择分类类型"></n-empty>
   </div>
 </template>
 
