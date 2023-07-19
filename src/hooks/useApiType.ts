@@ -16,12 +16,15 @@ export const useApiType = () => {
 
   const getImageSourceOption = computed<COption[]>(() => apiTypeStore.getImageSourceOption);
 
+  const getWaitForDoClassifyOption = computed<COption[]>(() => apiTypeStore.getWaitForDoClassifyOption);
+
   return {
     getBillTypeOption,
     getBillTypeMap,
     getBankTypeOption,
     getBillMethodOption,
     getImageSourceOption,
+    getWaitForDoClassifyOption,
   };
 };
 
@@ -47,4 +50,10 @@ export const getBillMethodData = () => {
 export const getImageSourceData = () => {
   const apiTypeStore = useApiTypeStore();
   apiTypeStore.getImageSource();
+};
+
+// 获取待办分类数据
+export const getWaitForDoClassifyData = () => {
+  const apiTypeStore = useApiTypeStore();
+  apiTypeStore.getWaitForDoClassify();
 };

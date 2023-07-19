@@ -29,6 +29,7 @@
   .user-info {
     max-width: 300px;
     min-width: 250px;
+    max-height: 220px;
     padding: 20px;
     background-color: $card-background-color;
     border-radius: $card-border-radius;

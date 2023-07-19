@@ -163,7 +163,7 @@
           fontSize: '22px',
         },
       }));
-      const iconRenderLabel = (option) => h(option.label) || 'jjj';
+      const iconRenderLabel = (option) => h(option.label) || '';
 
       // 初始化
       const init = (row) => {
