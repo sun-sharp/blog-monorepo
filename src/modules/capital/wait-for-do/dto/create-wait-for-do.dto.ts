@@ -14,7 +14,7 @@ export class CreateWaitForDoDto {
     example: '分类1',
   })
   @IsNotEmpty({ message: '分类不能为空' })
-  classify: string;
+  classify: number;
 
   @ApiProperty({
     description: '截止时间',
@@ -23,21 +23,9 @@ export class CreateWaitForDoDto {
   deadline: string;
 
   @ApiProperty({
-    description: '备注',
-    example: '备注1',
-  })
-  remark: string;
-
-  @ApiProperty({
     description: '状态',
     example: 1,
   })
   @IsNotEmpty({ message: '状态不能为空' })
   state: number;
-
-  @ApiProperty({
-    description: '是否删除',
-    example: false,
-  })
-  isRemove: boolean;
 }

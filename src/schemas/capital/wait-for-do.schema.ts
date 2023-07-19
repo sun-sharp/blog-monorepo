@@ -11,26 +11,37 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class WaitForDo extends Document {
+  // 标题
   @Prop()
-  title: string; // 标题
+  title: string;
 
+  // 分类
   @Prop()
-  classify: string; // 分类
+  classify: number;
 
+  // 截止时间
   @Prop()
-  deadline: string; // 截止时间
+  deadline: string;
 
+  // 备注
   @Prop()
-  remark: string; // 备注
+  remark: string;
 
+  // 状态
   @Prop()
-  state: number; // 状态
+  state: number;
 
+  // 排序
   @Prop()
-  sort: number; // 排序
+  sort: number;
 
+  // 是否删除
   @Prop()
-  isRemove: boolean; // 是否删除
+  isRemove: boolean;
+
+  // 用户id
+  @Prop()
+  userId: string;
 }
 
 export const WaitForDoSchema = SchemaFactory.createForClass(WaitForDo);

@@ -28,3 +28,12 @@ export const getTimeStamp = (defaultTime?: string): number => {
   const time = defaultTime ? new Date(defaultTime) : new Date();
   return time.getTime();
 };
+
+/**
+ * @description: 判断是否为日期格式
+ * @param {string} time
+ * @return {boolean}
+ */
+export const isDateFormat = (time: string): boolean => {
+  return !isNaN(Date.parse(time));
+};
