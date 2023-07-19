@@ -1,14 +1,25 @@
 <script lang="ts" setup>
   import { getWaitForDoClassifyData, useApiType } from '@/hooks';
-  import { PlusOutlined, CalendarOutline, CloseOutlined } from '@/utils';
+  import { PlusOutlined, CalendarOutline, DeleteOutlined } from '@/utils';
   import { watch, ref, onMounted } from 'vue';
   import { waitForDoApi } from '@/api';
   import Draggable from 'vuedraggable';
   import { WaitForDoItem } from '/#/views/wait-for-do';
 
   // 分类选择
-  const classifyValue = ref(null);
+  const classifyValue = ref<number | null>(null);
   const { getWaitForDoClassifyOption } = useApiType();
+  watch(
+    getWaitForDoClassifyOption,
+    (option) => {
+      if (option.length > 0) {
+        classifyValue.value = option[0].value;
+      }
+    },
+    {
+      immediate: true,
+    }
+  );
 
   // 截止时间
   const formatText = 'yyyy-MM-dd HH:00:00';
@@ -59,6 +70,12 @@
     });
   };
 
+  // 删除
+  const delWait = () => {
+    console.log('删除');
+  };
+
+  // 监听查询条件变化
   watch(
     [classifyValue, waitTabsName],
     ([classify, state]) => {
@@ -130,7 +147,7 @@
                 </div>
               </div>
               <div class="item-right">
-                <n-icon :component="CloseOutlined" />
+                <n-icon class="item-right--del" :component="DeleteOutlined" @click="delWait" />
               </div>
             </div>
           </template>
@@ -177,6 +194,12 @@
       display: flex;
       justify-content: space-between;
 
+      &:hover {
+        .item-right--del {
+          display: inline-block;
+        }
+      }
+
       .item-left {
         display: flex;
       }
@@ -184,6 +207,11 @@
       .item-right {
         display: flex;
         align-items: center;
+
+        &--del {
+          cursor: pointer;
+          display: none;
+        }
       }
 
       .item-info {

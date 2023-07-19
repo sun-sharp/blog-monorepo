@@ -2,7 +2,7 @@ import { incomeOrPayMap, inflowOrOutflowMap, inflowOrOutflowOption } from '@/con
 import { NRadio, NSelect, NSpace } from 'naive-ui';
 import { h, reactive, unref, computed } from 'vue';
 import TableAction from '@/components/Table/table-action.vue';
-import { COption } from '/#/config';
+import { CNumOption } from '/#/config';
 
 export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap, getBillMethodOption }) => {
   // 查询配置
@@ -106,7 +106,7 @@ export const useConfigure = ({ updateModelRef, getBillTypeOption, getBillTypeMap
       key: 'billMethod',
       align: 'center',
       render(row: any) {
-        const find = unref(getBillMethodOption).find((f: COption) => f.value === row.billMethod);
+        const find = unref(getBillMethodOption).find((f: CNumOption) => f.value === row.billMethod);
         return find ? find.label : '';
       },
     },

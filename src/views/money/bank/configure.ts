@@ -5,7 +5,7 @@ import TableAction from '@/components/Table/table-action.vue';
 import { bankApi } from '@/api';
 import { computed } from 'vue';
 import { unref } from 'vue';
-import { COption } from '/#/config';
+import { CNumOption } from '/#/config';
 
 export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, getBillTypeMap, getBankTypeOption }) => {
   const searchSchemas = computed(() => [
@@ -68,7 +68,7 @@ export const useConfigure = ({ reloadTable, updateModelRef, getBillTypeOption, g
       key: 'bankType',
       align: 'center',
       render(row: any) {
-        const find = unref(getBankTypeOption).find((f: COption) => f.value === row.bankType);
+        const find = unref(getBankTypeOption).find((f: CNumOption) => f.value === row.bankType);
         return find ? find.label : '';
       },
     },
@@ -185,7 +185,7 @@ export const uploadColumns = ({ getBillTypeOption, getBankTypeOption }) => {
       title: '银行类型',
       align: 'center',
       render(row: any) {
-        const find = unref(getBankTypeOption).find((f: COption) => f.value === row.bankType);
+        const find = unref(getBankTypeOption).find((f: CNumOption) => f.value === row.bankType);
         return find ? find.label : '';
       },
     },

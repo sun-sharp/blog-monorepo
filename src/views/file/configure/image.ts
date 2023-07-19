@@ -3,7 +3,7 @@ import TableAction from '@/components/Table/table-action.vue';
 import { imageApi } from '@/api';
 import { NImage } from 'naive-ui';
 import { getImgUrl } from '@/utils';
-import { COption } from '/#/config';
+import { CStrOption } from '/#/config';
 
 export const imageConfigure = ({ reloadTable, getImageSourceOption }) => {
   // 查询配置
@@ -63,7 +63,7 @@ export const imageConfigure = ({ reloadTable, getImageSourceOption }) => {
       key: 'source',
       align: 'center',
       render(row: Recordable) {
-        const find = unref(getImageSourceOption).find((f: COption) => f.value === row.source);
+        const find = unref(getImageSourceOption).find((f: CStrOption) => f.value === row.source);
         return find ? find.label : `*${row.source || ''}`;
       },
     },

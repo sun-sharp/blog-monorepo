@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import at from 'await-to-js';
 import { categoryApi } from '@/api';
-import { COption } from '/#/config';
+import { CNumOption, CStrOption } from '/#/config';
 
 // 分类类型
 enum categoryTypeEnum {
@@ -14,11 +14,11 @@ enum categoryTypeEnum {
 }
 
 export type IApiTypeState = {
-  billTypeOption: COption[]; // 账单类型
-  bankTypeOption: COption[]; // 金额银行类型
-  billMethodOption: COption[]; // 金额账单方式
-  imageSourceOption: COption[]; // 图片来源
-  waitForDoClassifyOption: COption[]; // 待办分类
+  billTypeOption: CNumOption[]; // 账单类型
+  bankTypeOption: CNumOption[]; // 金额银行类型
+  billMethodOption: CNumOption[]; // 金额账单方式
+  imageSourceOption: CStrOption[]; // 图片来源
+  waitForDoClassifyOption: CNumOption[]; // 待办分类
 };
 
 export const useApiTypeStore = defineStore({
@@ -31,19 +31,19 @@ export const useApiTypeStore = defineStore({
     waitForDoClassifyOption: [], // 待办分类
   }),
   getters: {
-    getBillTypeOption(): COption[] {
+    getBillTypeOption(): CNumOption[] {
       return this.billTypeOption;
     },
-    getBankTypeOption(): COption[] {
+    getBankTypeOption(): CNumOption[] {
       return this.bankTypeOption;
     },
-    getBillMethodOption(): COption[] {
+    getBillMethodOption(): CNumOption[] {
       return this.billMethodOption;
     },
-    getImageSourceOption(): COption[] {
+    getImageSourceOption(): CStrOption[] {
       return this.imageSourceOption;
     },
-    getWaitForDoClassifyOption(): COption[] {
+    getWaitForDoClassifyOption(): CNumOption[] {
       return this.waitForDoClassifyOption;
     },
   },

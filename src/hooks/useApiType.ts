@@ -1,22 +1,22 @@
 import { computed } from 'vue';
 import { useApiTypeStore } from '@/store';
 import { arrEnumToObj } from '@/utils';
-import { COption } from '/#/config';
+import { CNumOption, CStrOption } from '/#/config';
 
 export const useApiType = () => {
   const apiTypeStore = useApiTypeStore();
 
-  const getBillTypeOption = computed<COption[]>(() => apiTypeStore.getBillTypeOption);
+  const getBillTypeOption = computed<CNumOption[]>(() => apiTypeStore.getBillTypeOption);
 
   const getBillTypeMap = computed(() => arrEnumToObj(getBillTypeOption.value));
 
-  const getBankTypeOption = computed<COption[]>(() => apiTypeStore.getBankTypeOption);
+  const getBankTypeOption = computed<CNumOption[]>(() => apiTypeStore.getBankTypeOption);
 
-  const getBillMethodOption = computed<COption[]>(() => apiTypeStore.getBillMethodOption);
+  const getBillMethodOption = computed<CNumOption[]>(() => apiTypeStore.getBillMethodOption);
 
-  const getImageSourceOption = computed<COption[]>(() => apiTypeStore.getImageSourceOption);
+  const getImageSourceOption = computed<CStrOption[]>(() => apiTypeStore.getImageSourceOption);
 
-  const getWaitForDoClassifyOption = computed<COption[]>(() => apiTypeStore.getWaitForDoClassifyOption);
+  const getWaitForDoClassifyOption = computed<CNumOption[]>(() => apiTypeStore.getWaitForDoClassifyOption);
 
   return {
     getBillTypeOption,

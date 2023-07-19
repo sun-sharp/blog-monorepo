@@ -17,7 +17,7 @@
   import { NImage } from 'naive-ui';
   import { getImgUrl } from '@/utils';
   import { useApiType } from '@/hooks';
-  import { COption } from '/#/config';
+  import { CStrOption } from '/#/config';
 
   export default defineComponent({
     name: 'ImageNotUseModel',
@@ -67,7 +67,7 @@
           key: 'source',
           align: 'center',
           render(row: Recordable) {
-            const find = unref(getImageSourceOption).find((f: COption) => f.value === row.source);
+            const find = unref(getImageSourceOption).find((f: CStrOption) => f.value === row.source);
             return find ? find.label : `*${row.source || ''}`;
           },
         },
