@@ -18,9 +18,8 @@ const { version } = pkg;
 const title = 'NestJs博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
-const swaggerJsonUrl = `public/${swaggerUrl}.json`;
 const port = customConfig.port;
-const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUrl}`;
+const desc = `我的测试博客API \n\n swagger的JSON文件：/${customConfig.fileAccessPath}/json/${swaggerUrl}.json`;
 
 (async () => {
   // create app
@@ -35,7 +34,7 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${swaggerJsonUr
         .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
-      writeFileSync(swaggerJsonUrl, JSON.stringify(document));
+      writeFileSync(`${customConfig.staticDirPosition}${customConfig.staticDirName}/json/${swaggerUrl}.json`, JSON.stringify(document));
       SwaggerModule.setup(swaggerUrl, app, document);
       return app;
     })
