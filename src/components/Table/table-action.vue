@@ -26,12 +26,12 @@
 
 <script lang="ts">
   import { defineComponent, PropType, computed, toRaw } from 'vue';
-  import { DeleteOutlined, DownOutlined, isBoolean, isFunction } from '@/utils';
+  import { DownOutlined, isBoolean, isFunction } from '@/utils';
   import { ActionItem } from '/#/components/table';
 
   export default defineComponent({
     name: 'TableAction',
-    components: { DeleteOutlined, DownOutlined },
+    components: { DownOutlined },
     props: {
       actions: {
         type: Array as PropType<ActionItem[]>,

@@ -9,4 +9,5 @@ export {
   LogoGithub,
   LogoFacebook,
   CalendarOutline, // 日历
+  TrashOutline, // 垃圾桶
 } from '@vicons/ionicons5';

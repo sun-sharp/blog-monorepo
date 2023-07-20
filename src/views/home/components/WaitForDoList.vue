@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { getWaitForDoClassifyData, useApiType } from '@/hooks';
-  import { PlusOutlined, CalendarOutline, DeleteOutlined } from '@/utils';
+  import { PlusOutlined, CalendarOutline, TrashOutline } from '@/utils';
   import { watch, ref, onMounted } from 'vue';
   import { waitForDoApi } from '@/api';
   import Draggable from 'vuedraggable';
@@ -147,7 +147,7 @@
                 </div>
               </div>
               <div class="item-right">
-                <n-icon class="item-right--del" :component="DeleteOutlined" @click="delWait" />
+                <n-icon class="item-right--del" :component="TrashOutline" @click="delWait" />
               </div>
             </div>
           </template>

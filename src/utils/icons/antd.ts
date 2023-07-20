@@ -17,7 +17,6 @@ export {
   FormOutlined,
   CloseOutlined,
   CheckOutlined,
-  DeleteOutlined,
   SettingOutlined,
   DragOutlined,
   VerticalRightOutlined,
