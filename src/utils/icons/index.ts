@@ -35,3 +35,21 @@ export const constantHtmlIcon = (() => {
   });
   return routerObj;
 })();
+
+// Antd图标映射表-vue html图标
+export const constantAntdHtmlIcon = (() => {
+  const routerObj = {};
+  Object.keys(Antd).forEach((key) => {
+    routerObj[key] = hIcon(Antd[key]);
+  });
+  return routerObj;
+})();
+
+// Ionicons5图标映射表-vue html图标
+export const constantIonicons5HtmlIcon = (() => {
+  const routerObj = {};
+  Object.keys(Ionicons5).forEach((key) => {
+    routerObj[key] = hIcon(Ionicons5[key]);
+  });
+  return routerObj;
+})();

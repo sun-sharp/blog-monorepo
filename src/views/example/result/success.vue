@@ -1,5 +1,5 @@
 <template>
-  <n-card :bordered="false" class="pro-card">
+  <n-card :bordered="false">
     <div class="result-box">
       <n-result status="success" title="操作成功" description="提交结果页用于反馈一系列操作任务的处理结果，如果仅是简单操作，灰色区域可以显示一些补充的信息。">
         <div class="result-box-extra">

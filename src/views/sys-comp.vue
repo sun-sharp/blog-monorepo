@@ -1,10 +1,17 @@
 <script lang="ts" setup>
-  import { constantHtmlIcon } from '@/utils';
+  import { constantAntdHtmlIcon, constantIonicons5HtmlIcon } from '@/utils';
   import { ref } from 'vue';
 
-  const iconOptions = ref<any[]>(
-    Object.keys(constantHtmlIcon).map((key) => ({
-      label: constantHtmlIcon[key],
+  const iconAntdOptions = ref<any[]>(
+    Object.keys(constantAntdHtmlIcon).map((key) => ({
+      label: constantAntdHtmlIcon[key],
+      value: key,
+    }))
+  );
+
+  const iconIonicons5Options = ref<any[]>(
+    Object.keys(constantIonicons5HtmlIcon).map((key) => ({
+      label: constantIonicons5HtmlIcon[key],
       value: key,
     }))
   );
@@ -12,10 +19,17 @@
 
 <template>
   <div class="sys-comp">
-    <n-card :bordered="false" title="组件图标" class="mt-4 pro-card" size="small" :segmented="{ content: 'hard' }">
-      <n-descriptions bordered label-placement="left" class="py-2">
-        <n-descriptions-item v-for="item in iconOptions" :key="item.value" :label="item.value">
-          <component :is="item.label" />
+    <n-card :bordered="false" title="组件Antd图标" size="small" :segmented="{ content: 'hard' }">
+      <n-descriptions bordered label-placement="left" content-style="text-align: center">
+        <n-descriptions-item v-for="item in iconAntdOptions" :key="item.value" :label="item.value">
+          <component :is="item.label" size="22" />
+        </n-descriptions-item>
+      </n-descriptions>
+    </n-card>
+    <n-card :bordered="false" title="组件Ionicons5图标" class="mt-4" size="small" :segmented="{ content: 'hard' }">
+      <n-descriptions bordered label-placement="left" content-style="text-align: center">
+        <n-descriptions-item v-for="item in iconIonicons5Options" :key="item.value" :label="item.value">
+          <component :is="item.label" size="22" />
         </n-descriptions-item>
       </n-descriptions>
     </n-card>

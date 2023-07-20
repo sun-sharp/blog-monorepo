@@ -1,5 +1,5 @@
 <template>
-  <n-card :bordered="false" class="pro-card">
+  <n-card :bordered="false">
     <article-list v-show="showType === 'list'" ref="articleListRef" :category-options="categoryOptions" @edit-change="editChange" @add-change="addChange" />
     <article-add v-if="showType === 'add'" :row="rowParams" :category-options="categoryOptions" @changeShowType="changeShowType" @finished="addFinished" />
   </n-card>

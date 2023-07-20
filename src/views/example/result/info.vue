@@ -1,5 +1,5 @@
 <template>
-  <n-card :bordered="false" class="pro-card">
+  <n-card :bordered="false">
     <div class="result-box">
       <n-result status="info" title="提示" description="本次提交，将在24小时候内自动转入对方账户，如操作失误，请及时撤回">
         <div class="result-box-extra">
