@@ -1,14 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
+import { IdWaitForDoDto } from './id-wait-for-do.dto';
 
-export class UpdateWaitForDoStateDto {
-  @ApiProperty({
-    description: '待办id',
-  })
-  @IsString({ message: '待办id必须是字符串' })
-  @IsNotEmpty({ message: '待办id不能为空' })
-  readonly waitForDoId: string;
-
+export class UpdateWaitForDoStateDto extends IdWaitForDoDto {
   @ApiProperty({
     description: '状态',
   })

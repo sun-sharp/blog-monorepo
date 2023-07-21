@@ -8,6 +8,8 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
 import { isDateFormat } from 'src/common/date';
 import { UpdateWaitForDoStateDto } from './dto/update-wait-for-do-state.dto';
+import { UpdateWaitForDoSortDto } from './dto/update-wait-for-do-sort.dto';
+import { UpdateWaitForDoDto } from './dto/update-wait-for-do.dto';
 
 @Injectable()
 export class WaitForDoService {
@@ -34,7 +36,7 @@ export class WaitForDoService {
           return {
             ...body,
             userId,
-            deadline: deadline ? new Date(deadline) : '',
+            deadline: deadline ? new Date(deadline) : undefined,
           };
         })
         // 处理排序问题
@@ -132,7 +134,7 @@ export class WaitForDoService {
   }
 
   /**
-   * @description: 修改配置信息
+   * @description: 修改待办的状态
    * @param {string} userId
    * @param {UpdateWaitForDoStateDto} updateWaitForDoStateDto
    * @return {Promise<IResponse>}
@@ -142,7 +144,8 @@ export class WaitForDoService {
       Promise.resolve({ userId, body: updateWaitForDoStateDto })
         // 修改
         .then(async ({ userId, body }) => {
-          await this.waitForDoModel.updateOne({ userId }, body);
+          const { waitForDoId, state } = body;
+          await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { state });
           return (this.response = {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
@@ -153,6 +156,122 @@ export class WaitForDoService {
           return (this.response = {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 批量修改待办的排序
+   * @param {string} userId
+   * @param {UpdateWaitForDoSortDto[]} updateWaitForDoSortDtoArr
+   * @return {Promise<IResponse>}
+   */
+  public updateSort(userId: string, updateWaitForDoSortDtoArr: UpdateWaitForDoSortDto[]): Promise<IResponse> {
+    return (
+      Promise.resolve({ userId, body: updateWaitForDoSortDtoArr })
+        // 修改
+        .then(async ({ userId, body }) => {
+          for (let i = 0; i < body.length; i++) {
+            const dto = body[i];
+            const { waitForDoId, sort } = dto;
+            await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { sort });
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 修改待办的名称，备注，截止时间
+   * @param {UpdateWaitForDoDto} updateWaitForDoDto
+   * @return {Promise<IResponse>}
+   */
+  public update(updateWaitForDoDto: UpdateWaitForDoDto): Promise<IResponse> {
+    return (
+      Promise.resolve({ body: updateWaitForDoDto })
+        // 修改
+        .then(async ({ body }) => {
+          const { waitForDoId, ...other } = body;
+          await this.waitForDoModel.updateOne({ _id: waitForDoId }, other);
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '修改失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 查询待办详情
+   * @param {string} waitForDoId
+   * @return {Promise<IResponse>}
+   */
+  public findDetails(waitForDoId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(waitForDoId)
+        .then(async (waitForDoId) => {
+          const result = await this.waitForDoModel.findOne({ _id: waitForDoId });
+          if (!result) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '查询待办详情失败',
+            });
+          }
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '查询失败！',
+          });
+        })
+    );
+  }
+
+  /**
+   * @description: 删除待办
+   * @param {string} waitForDoId
+   * @return {Promise<IResponse>}
+   */
+  public remove(waitForDoId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(waitForDoId)
+        // 删除
+        .then(async (waitForDoId) => {
+          await this.waitForDoModel.deleteOne({ _id: waitForDoId });
+          return (this.response = {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          });
+        })
+        // 返回错误
+        .catch((err) => {
+          return (this.response = {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
           });
         })
     );
