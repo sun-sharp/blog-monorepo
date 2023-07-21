@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { WaitForDo } from 'src/schemas/capital/wait-for-do.schema';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
-import { isDateFormat } from 'src/common/date';
+import { isDateFormat, nowDateFun } from 'src/common/date';
 import { UpdateWaitForDoStateDto } from './dto/update-wait-for-do-state.dto';
 import { UpdateWaitForDoSortDto } from './dto/update-wait-for-do-sort.dto';
 import { UpdateWaitForDoDto } from './dto/update-wait-for-do.dto';
@@ -36,7 +36,7 @@ export class WaitForDoService {
           return {
             ...body,
             userId,
-            deadline: deadline ? new Date(deadline) : undefined,
+            deadline: deadline ? new Date(deadline) : null,
           };
         })
         // 处理排序问题
@@ -93,7 +93,7 @@ export class WaitForDoService {
               waitForDoId: m._id,
               title: m.title,
               classify: m.classify,
-              deadline: m.deadline,
+              deadline: m.deadline ? nowDateFun(m.deadline) : undefined,
               remark: m.remark,
               state: m.state,
               sort: m.sort,
@@ -199,9 +199,20 @@ export class WaitForDoService {
    */
   public update(updateWaitForDoDto: UpdateWaitForDoDto): Promise<IResponse> {
     return (
-      Promise.resolve({ body: updateWaitForDoDto })
+      Promise.resolve(updateWaitForDoDto)
+        // 处理时间
+        .then(async (body) => {
+          const { deadline } = body;
+          if (deadline && !isDateFormat(deadline)) {
+            throw (this.response = {
+              code: ApiCode.ERROR,
+              message: '截止时间格式不对',
+            });
+          }
+          return { ...body, deadline: deadline ? new Date(deadline) : null };
+        })
         // 修改
-        .then(async ({ body }) => {
+        .then(async (body) => {
           const { waitForDoId, ...other } = body;
           await this.waitForDoModel.updateOne({ _id: waitForDoId }, other);
           return (this.response = {
@@ -228,16 +239,23 @@ export class WaitForDoService {
     return (
       Promise.resolve(waitForDoId)
         .then(async (waitForDoId) => {
-          const result = await this.waitForDoModel.findOne({ _id: waitForDoId });
+          const result = await this.waitForDoModel.findOne({ _id: waitForDoId }).lean();
           if (!result) {
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '查询待办详情失败',
             });
           }
+          let deadline = undefined;
+          if (result.deadline) {
+            deadline = nowDateFun(result.deadline);
+          }
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result,
+            result: {
+              ...result,
+              deadline,
+            },
             message: '查询成功！',
           });
         })

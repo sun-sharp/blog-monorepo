@@ -21,7 +21,7 @@ export class WaitForDo extends Document {
 
   // 截止时间
   @Prop()
-  deadline: string;
+  deadline: Date;
 
   // 备注
   @Prop()

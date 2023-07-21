@@ -1,9 +1,9 @@
 /**
  * @description: 时间，日期转化
- * @param {string} defaultTime
+ * @param {string | Date} defaultTime
  * @return {string}
  */
-export const nowDateFun = (defaultTime?: string): string => {
+export const nowDateFun = (defaultTime?: string | Date): string => {
   const newDate = defaultTime ? new Date(defaultTime) : new Date();
   const year = `${newDate.getFullYear()}`;
   let month = `${newDate.getMonth() + 1}`;
