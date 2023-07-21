@@ -1,13 +1,17 @@
 <script lang="ts" setup>
   import { useUserStore } from '@/store';
-  import { getImgUrl } from '@/utils';
-  import { ref } from 'vue';
+  import { getImgUrl, judgeRangeToFormatTime } from '@/utils';
+  import { computed, ref } from 'vue';
   import defaultAvatar from '@/assets/images/common/default-avatar.png';
 
   const userStore = useUserStore();
   const { username, avatar, roleName, loginDate } = userStore.info;
 
   const userAvatar = ref(getImgUrl(avatar) || '');
+
+  const showLoginDate = computed(() => {
+    return loginDate ? judgeRangeToFormatTime(loginDate, 'yyyy年MM月DD日 HH小时mm分ss秒') : '';
+  });
 </script>
 
 <template>
@@ -20,7 +24,7 @@
       </div>
     </div>
     <div class="user-info__foot">
-      <p>上次登录时间： {{ loginDate }}</p>
+      <p>上次登录时间： {{ showLoginDate }}</p>
     </div>
   </div>
 </template>
