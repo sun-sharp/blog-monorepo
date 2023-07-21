@@ -42,6 +42,15 @@ export function isDate(val: unknown): val is Date {
 }
 
 /**
+ * @description: 判断是否为日期格式
+ * @param {string} time
+ * @return {boolean}
+ */
+export const isDateFormat = (time: string): boolean => {
+  return !isNaN(Date.parse(time));
+};
+
+/**
  * @description:  是否为数值
  */
 export function isNumber(val: unknown): val is number {

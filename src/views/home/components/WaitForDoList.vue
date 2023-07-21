@@ -1,10 +1,14 @@
 <script lang="ts" setup>
   import { getWaitForDoClassifyData, useApiType } from '@/hooks';
-  import { PlusOutlined, CalendarOutline, TrashOutline } from '@/utils';
+  import { PlusOutlined, CalendarOutline, isDateFormat } from '@/utils';
   import { watch, ref, onMounted } from 'vue';
   import { waitForDoApi } from '@/api';
   import Draggable from 'vuedraggable';
   import { WaitForDoItem } from '/#/views/wait-for-do';
+  import WaitForDoSetting from './WaitForDoSetting.vue';
+  import { format } from 'date-fns';
+
+  const waitForDoSettingRef = ref();
 
   // 分类选择
   const classifyValue = ref<number | null>(null);
@@ -23,9 +27,22 @@
 
   // 截止时间
   const formatText = 'yyyy-MM-dd HH:00:00';
-  const deadline = ref(null);
+  // 禁止选中今天以前的时间
+  const deadlineDateDisabled = (ts: number) => ts < new Date().getTime() - 24 * 60 * 60 * 1000;
+  const deadlineTimeDisabled = (ts: number) => {
+    return {
+      isHourDisabled: (hour: number) => {
+        return format(new Date(ts), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') && hour <= new Date().getHours();
+      },
+      isMinuteDisabled: (minute: number) => (minute === 0 ? false : true),
+      isSecondDisabled: (second: number) => (second === 0 ? false : true),
+    };
+  };
+  const deadlinePicker = ref(null);
+  const waitDeadline = ref();
   const setDeadline = () => {
     showCalendarPop.value = false;
+    waitDeadline.value = deadlinePicker.value || undefined;
   };
 
   // 待办事项-日期下拉
@@ -34,11 +51,15 @@
     showCalendarPop.value = false;
   };
 
+  // 判断时间是否超出今天
+  const expireJudge = (str: string): boolean => {
+    return isDateFormat(str) && new Date(str).getTime() < Date.now();
+  };
+
   // 状态展示
   const defaultWaitState = 1;
   const waitTabsName = ref(defaultWaitState);
   const waitDragList = ref([]);
-
   const addTitleValue = ref('');
 
   // 获取待办数据
@@ -48,12 +69,37 @@
     });
   };
 
-  const draggableEnd = () => {
-    console.log(waitDragList.value);
+  // 刷新数据
+  const refreshLoadData = () => {
+    const classify: number = classifyValue.value || 1;
+    loadWaitData(classify, waitTabsName.value);
   };
 
+  // 点击列表
+  const itemClick = (item: WaitForDoItem) => {
+    waitForDoSettingRef.value.init(item);
+  };
+
+  // 拖拽修改排序
+  const draggableEnd = () => {
+    const paramsArr = waitDragList.value.map((m: WaitForDoItem, i) => ({
+      waitForDoId: m.waitForDoId,
+      sort: i + 1,
+    }));
+    waitForDoApi.updateSort(paramsArr).then(() => {
+      refreshLoadData();
+    });
+  };
+
+  // 点击多选框修改状态
   const itemUpdateCheck = (check: boolean, item: WaitForDoItem) => {
-    console.log(check, item);
+    const updateParams = {
+      waitForDoId: item.waitForDoId,
+      state: check ? 2 : 1,
+    };
+    waitForDoApi.updateState(updateParams).then(() => {
+      loadWaitData(item.classify, item.state);
+    });
   };
 
   // 保存
@@ -62,17 +108,13 @@
     const postData = {
       title: addTitleValue.value,
       classify: addClassify,
-      deadline: '',
+      deadline: waitDeadline.value,
       state: defaultWaitState,
     };
     waitForDoApi.save(postData).then(() => {
+      addTitleValue.value = '';
       loadWaitData(addClassify, defaultWaitState);
     });
-  };
-
-  // 删除
-  const delWait = () => {
-    console.log('删除');
   };
 
   // 监听查询条件变化
@@ -113,14 +155,16 @@
               <template #trigger>
                 <div class="add-calendar" @click="showCalendarPop = !showCalendarPop">
                   <n-icon :component="CalendarOutline" />
-                  <span v-if="deadline" class="add-time">{{ deadline }}</span>
+                  <span v-if="waitDeadline" class="add-time">{{ waitDeadline }}</span>
                 </div>
               </template>
               <div>
                 <n-date-picker
-                  v-model:formatted-value="deadline"
+                  v-model:formatted-value="deadlinePicker"
                   :format="formatText"
                   :value-format="formatText"
+                  :is-date-disabled="deadlineDateDisabled"
+                  :is-time-disabled="deadlineTimeDisabled"
                   panel
                   :actions="['clear', 'now', 'confirm']"
                   type="datetime"
@@ -138,16 +182,22 @@
       <template v-if="waitDragList.length > 0">
         <Draggable v-model="waitDragList" animation="300" item-key="waitForDoId" @end="draggableEnd">
           <template #item="{ element }">
-            <div class="wait-list--item">
+            <div class="wait-list--item" @click="itemClick(element)">
               <div class="item-left">
-                <n-checkbox :checked="element.state === 2" size="small" @update:checked="itemUpdateCheck($event, element)" />
-                <div class="item-info">
+                <n-checkbox
+                  :style="{ '--n-color-checked': '#ccc', '--n-border-checked': '1px solid #ccc', '--n-border-focus': '1px solid #ccc' }"
+                  :checked="element.state === 2"
+                  size="small"
+                  @update:checked="itemUpdateCheck($event, element)"
+                  @click.stop
+                />
+                <div :class="['item-info', { finish: element.state === 2 }]">
                   <div class="item-text">{{ element.title }}</div>
                   <div class="item-remark">{{ element.remark }}</div>
                 </div>
               </div>
               <div class="item-right">
-                <n-icon class="item-right--del" :component="TrashOutline" @click="delWait" />
+                <div :class="['item-deadline', { expire: expireJudge(element.deadline) }]">{{ element.deadline }}</div>
               </div>
             </div>
           </template>
@@ -156,6 +206,8 @@
       <n-empty v-else description="暂无数据"></n-empty>
     </template>
     <n-empty v-else class="pv-20" description="请先选择分类类型"></n-empty>
+    <!-- 项目配置 -->
+    <wait-for-do-setting ref="waitForDoSettingRef" @refresh="refreshLoadData" />
   </div>
 </template>
 
@@ -194,28 +246,27 @@
       display: flex;
       justify-content: space-between;
 
-      &:hover {
-        .item-right--del {
-          display: inline-block;
-        }
-      }
-
       .item-left {
         display: flex;
       }
 
       .item-right {
         display: flex;
-        align-items: center;
-
-        &--del {
-          cursor: pointer;
-          display: none;
-        }
       }
 
+      .item-deadline {
+        &.expire {
+          color: $text-warning-color;
+        }
+      }
       .item-info {
         margin-left: 10px;
+
+        &.finish {
+          .item-text {
+            color: #999;
+          }
+        }
       }
 
       .item-text {

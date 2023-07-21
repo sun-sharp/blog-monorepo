@@ -2,7 +2,7 @@
  * @description: 待办参数
  */
 export interface WaitForDoItem {
-  categoryId: string;
+  waitForDoId: string;
   title: string;
   classify: number;
   deadline: string;
