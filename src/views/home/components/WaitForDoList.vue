@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { getWaitForDoClassifyData, useApiType } from '@/hooks';
-  import { PlusOutlined, CalendarOutline, isDateFormat } from '@/utils';
+  import { PlusOutlined, CalendarOutline, isDateFormat, judgeRangeToFormatFutureTime } from '@/utils';
   import { watch, ref, onMounted } from 'vue';
   import { waitForDoApi } from '@/api';
   import Draggable from 'vuedraggable';
@@ -54,6 +54,11 @@
   // 判断时间是否超出今天
   const expireJudge = (str: string): boolean => {
     return isDateFormat(str) && new Date(str).getTime() < Date.now();
+  };
+
+  // 处理截止时间展示
+  const formatDeadline = (str: string) => {
+    return str ? judgeRangeToFormatFutureTime(str, 'yyyy年MM月DD日 HH小时mm分ss秒') : '';
   };
 
   // 状态展示
@@ -196,7 +201,7 @@
                 </div>
               </div>
               <div class="item-right">
-                <div :class="['item-deadline', { expire: expireJudge(element.deadline) }]">{{ element.deadline }}</div>
+                <div :class="['item-deadline', { expire: expireJudge(element.deadline) }]">{{ formatDeadline(element.deadline) }}</div>
               </div>
             </div>
           </template>
@@ -254,6 +259,8 @@
       }
 
       .item-deadline {
+        color: #999;
+
         &.expire {
           color: $text-warning-color;
         }

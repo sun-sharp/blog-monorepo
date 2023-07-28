@@ -52,7 +52,7 @@ export const certainDateSpendDays = (defaultDate: Date): number => {
 };
 
 /**
- * 对时间进行判断并格式化分钟
+ * 对以前时间进行判断并格式化分钟
  * @param {number} time
  * @param {string} formatStr
  * @returns {string}
@@ -75,6 +75,40 @@ export const judgeRangeToFormatTime = (time: string, formatStr: string): string 
     return '昨天';
   } else if (diff < 3600 * 24 * 3) {
     return '前天';
+  } else if (diff < 3600 * 24 * spendDays) {
+    return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
+  }
+  if (formatStr) {
+    return format(d, formatStr);
+  } else {
+    return d.getFullYear() + '年' + d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
+  }
+};
+
+/**
+ * 对未来时间进行判断并格式化分钟
+ * @param {number} time
+ * @param {string} formatStr
+ * @returns {string}
+ */
+export const judgeRangeToFormatFutureTime = (time: string, formatStr: string): string => {
+  const d = new Date(time);
+  const now = Date.now();
+  const spendDays = certainDateSpendDays(new Date());
+  const diff = (d.getTime() - now) / 1000;
+  if (diff < 0) {
+    // 负数
+    return judgeRangeToFormatTime(time, formatStr);
+  } else if (diff < 3600) {
+    // 1 小时内
+    return `剩${Math.ceil(diff / 60)}分钟`;
+  } else if (diff < 3600 * 24) {
+    // 1 天内
+    return `剩${Math.ceil(diff / 3600)}小时`;
+  } else if (diff < 3600 * 24 * 2) {
+    return '明天';
+  } else if (diff < 3600 * 24 * 3) {
+    return '后天';
   } else if (diff < 3600 * 24 * spendDays) {
     return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
   }
