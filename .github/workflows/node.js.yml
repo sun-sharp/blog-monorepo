@@ -13,11 +13,6 @@ jobs:
     name: build-home
     runs-on: ubuntu-latest
 
-    # 设置变量
-    strategy:
-      matrix:
-        node: 18
-
     steps:
       
       # 获取源码，使用actions/checkout@v3
@@ -28,7 +23,7 @@ jobs:
       - name: Install & Build 
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 18
           cache: 'yarn'
       - run: yarn
       - run: yarn build
