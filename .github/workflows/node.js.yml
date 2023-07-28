@@ -30,8 +30,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
-        run: yarn
-        run: yarn build
+      - run: yarn
+      - run: yarn build
 
       # 部署到云服务器，使用easingthemes/ssh-deploy@v2.1.1，通过ssh的方式连接
       - name: Deploy to Server
