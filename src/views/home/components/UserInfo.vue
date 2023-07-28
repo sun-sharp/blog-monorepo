@@ -10,7 +10,7 @@
   const userAvatar = ref(getImgUrl(avatar) || '');
 
   const showLoginDate = computed(() => {
-    return loginDate ? judgeRangeToFormatTime(loginDate, 'yyyy年MM月DD日 HH小时mm分ss秒') : '';
+    return loginDate ? judgeRangeToFormatTime(loginDate) : '';
   });
 </script>
 

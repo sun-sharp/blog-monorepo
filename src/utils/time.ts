@@ -57,7 +57,7 @@ export const certainDateSpendDays = (defaultDate: Date): number => {
  * @param {string} formatStr
  * @returns {string}
  */
-export const judgeRangeToFormatTime = (time: string, formatStr: string): string => {
+export const judgeRangeToFormatTime = (time: string, formatStr?: string): string => {
   const d = new Date(time);
   const now = Date.now();
   const spendDays = certainDateSpendDays(new Date());
@@ -76,12 +76,12 @@ export const judgeRangeToFormatTime = (time: string, formatStr: string): string 
   } else if (diff < 3600 * 24 * 3) {
     return '前天';
   } else if (diff < 3600 * 24 * spendDays) {
-    return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
+    return format(d, 'MM月dd日 HH:mm');
   }
   if (formatStr) {
     return format(d, formatStr);
   } else {
-    return d.getFullYear() + '年' + d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
+    return format(d, 'yyyy年MM月dd日 HH:mm');
   }
 };
 
@@ -91,7 +91,7 @@ export const judgeRangeToFormatTime = (time: string, formatStr: string): string 
  * @param {string} formatStr
  * @returns {string}
  */
-export const judgeRangeToFormatFutureTime = (time: string, formatStr: string): string => {
+export const judgeRangeToFormatFutureTime = (time: string, formatStr?: string): string => {
   const d = new Date(time);
   const now = Date.now();
   const spendDays = certainDateSpendDays(new Date());
@@ -110,11 +110,11 @@ export const judgeRangeToFormatFutureTime = (time: string, formatStr: string): s
   } else if (diff < 3600 * 24 * 3) {
     return '后天';
   } else if (diff < 3600 * 24 * spendDays) {
-    return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
+    return format(d, 'MM月dd日 HH:mm');
   }
   if (formatStr) {
     return format(d, formatStr);
   } else {
-    return d.getFullYear() + '年' + d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒';
+    return format(d, 'yyyy年MM月dd日 HH:mm');
   }
 };

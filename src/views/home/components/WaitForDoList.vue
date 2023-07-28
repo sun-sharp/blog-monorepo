@@ -58,7 +58,7 @@
 
   // 处理截止时间展示
   const formatDeadline = (str: string) => {
-    return str ? judgeRangeToFormatFutureTime(str, 'yyyy年MM月DD日 HH小时mm分ss秒') : '';
+    return str ? judgeRangeToFormatFutureTime(str) : '';
   };
 
   // 状态展示
@@ -184,7 +184,7 @@
         <n-tab-pane :name="2" tab="已完成"></n-tab-pane>
       </n-tabs>
       <template v-if="waitDragList.length > 0">
-        <Draggable v-model="waitDragList" animation="300" item-key="waitForDoId" @end="draggableEnd">
+        <Draggable v-model="waitDragList" class="wait-drag" animation="300" item-key="waitForDoId" @end="draggableEnd">
           <template #item="{ element }">
             <div class="wait-list--item" @click="itemClick(element)">
               <div class="item-left">
@@ -241,6 +241,11 @@
         margin-left: 10px;
         font-size: 14px;
       }
+    }
+
+    .wait-drag {
+      max-height: 240px;
+      overflow-y: auto;
     }
 
     .wait-list--item {
