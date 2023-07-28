@@ -1,0 +1,49 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    tags:
+      - 'bmw-*'
+
+jobs:
+  build:
+    name: build-manage
+    runs-on: ubuntu-latest
+
+    # 设置变量
+    strategy:
+      matrix:
+        node-version: 18.16.0
+
+    steps:
+      # 获取源码，使用actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 安装依赖打包静态资源
+      - name: Install & Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+        run: |
+          yarn
+          yarn build
+
+      # 部署到云服务器，使用easingthemes/ssh-deploy@v2.1.1，通过ssh的方式连接
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v2.1.1
+        env:
+          # 报错 Load key “/home/runner/.ssh/deploy_key”: invalid format
+          # 说明ssh的key格式不匹配，可以参考上面配置 secret重新生成key，也可以将现有的转换成PEM格式：
+          # ssh-keygen -p -f ~/.ssh/id_rsa -m pem
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }} # 私钥全选复制至SSH_PRIVATE_KEY配置，到服务器的/root/.ssh/authorized_keys中拷贝
+          ARGS: ${{ secrets.ARGS }} # 对于任何初始/必需的rsync标志，默认-avzr --delete，如果目录下有其他不可删除文件或文件夹可以用--exclude忽略，如--exclude /uploads/
+          SOURCE: 'home/' # 源目录
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }} # 服务器地址
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT }} # ssh连接端口号
+          REMOTE_USER: ${{ secrets.REMOTE_USER }} # 连接用户名
+          TARGET: ${{ secrets.REMOTE_TARGET }} # 目标部署目录
