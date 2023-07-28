@@ -124,7 +124,7 @@ export class WaitForDoService {
       Promise.resolve({ classify, state })
         // 查询
         .then(async ({ classify, state }) => {
-          return await this.waitForDoModel.find({ classify, state, isRemove: false }).sort({ sort: 1 });
+          return await this.waitForDoModel.find({ classify, state, isRemove: false }).sort({ sort: -1 });
         })
         // 返回错误
         .catch((err) => {
@@ -172,10 +172,10 @@ export class WaitForDoService {
       Promise.resolve({ userId, body: updateWaitForDoSortDtoArr })
         // 修改
         .then(async ({ userId, body }) => {
-          for (let i = 0; i < body.length; i++) {
-            const dto = body[i];
-            const { waitForDoId, sort } = dto;
-            await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { sort });
+          for (let i = body.length; i > 0; i--) {
+            const dto = body[body.length - i];
+            const { waitForDoId } = dto;
+            await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { sort: i });
           }
           return (this.response = {
             code: ApiCode.SUCCESS,
