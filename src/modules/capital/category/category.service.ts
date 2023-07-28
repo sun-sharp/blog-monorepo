@@ -134,9 +134,9 @@ export class CategoryService {
       Promise.resolve(pageCategoryDto)
         // 查询
         .then(async (body) => {
-          const { size, current } = body;
+          const { size, current, type } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = {};
+          const findData = { type: { $regex: type } };
           const total = await this.categoryModel.find(findData).count();
           const list = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
           return (this.response = {
