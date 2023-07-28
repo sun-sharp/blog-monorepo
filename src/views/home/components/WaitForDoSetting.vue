@@ -191,6 +191,7 @@
             }"
             type="textarea"
             :autosize="{
+              minRows: 1,
               maxRows: 5,
             }"
             placeholder="添加备注"

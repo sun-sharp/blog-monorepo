@@ -82,9 +82,8 @@
 
   // 拖拽修改排序
   const draggableEnd = () => {
-    const paramsArr = waitDragList.value.map((m: WaitForDoItem, i) => ({
+    const paramsArr = waitDragList.value.map((m: WaitForDoItem) => ({
       waitForDoId: m.waitForDoId,
-      sort: i + 1,
     }));
     waitForDoApi.updateSort(paramsArr).then(() => {
       refreshLoadData();

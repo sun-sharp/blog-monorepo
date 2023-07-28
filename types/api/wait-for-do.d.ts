@@ -32,9 +32,6 @@ export interface ApiWaitForDoUpdateStateData {
 export interface ApiWaitForDoUpdateSortData {
   // 待办id
   waitForDoId: string;
-
-  // 排序
-  sort: number;
 }
 
 /**
