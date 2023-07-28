@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: 18.16.0
           cache: 'yarn'
+        run: yarn
+        run: yarn build
         # run: |
         #   yarn
         #   yarn build
