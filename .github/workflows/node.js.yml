@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: 18.16.0
           cache: 'yarn'
-        run: |
-          yarn
-          yarn build
+        # run: |
+        #   yarn
+        #   yarn build
 
       - name: Deploy to Server # 部署到云服务器，使用easingthemes/ssh-deploy@v2.1.1，通过ssh的方式连接
         uses: easingthemes/ssh-deploy@v2.1.1
