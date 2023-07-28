@@ -19,8 +19,10 @@ jobs:
         node-version: 18.16.0
 
     steps:
-      - name: Checkout # 获取源码，使用actions/checkout@v2
-        uses: actions/checkout@v2
+      
+      # 获取源码，使用actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       # 安装依赖打包静态资源
       - name: Install & Build 
@@ -31,7 +33,8 @@ jobs:
         run: yarn
         run: yarn build
 
-      - name: Deploy to Server # 部署到云服务器，使用easingthemes/ssh-deploy@v2.1.1，通过ssh的方式连接
+      # 部署到云服务器，使用easingthemes/ssh-deploy@v2.1.1，通过ssh的方式连接
+      - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
         env:
           # 报错 Load key “/home/runner/.ssh/deploy_key”: invalid format
