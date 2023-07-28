@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: build-manage
+    name: build-home
     runs-on: ubuntu-latest
 
     # 设置变量
