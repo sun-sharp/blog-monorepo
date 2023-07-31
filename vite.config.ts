@@ -83,7 +83,7 @@ export default defineConfig(({ command, mode }) => {
   // const useMock = !!VITE_USE_MOCK;
   // console.log(useMock, 'useMock');
   // 输出文件夹
-  const OUTPUT_DIR = 'dist';
+  const OUTPUT_DIR = 'home';
   const ASSETS_DIR = 'static';
   return {
     base: VITE_PUBLIC_PATH,
