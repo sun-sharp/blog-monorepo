@@ -15,3 +15,4 @@ dist-manage
 /bin
 Dockerfile
 /types
+index.html
