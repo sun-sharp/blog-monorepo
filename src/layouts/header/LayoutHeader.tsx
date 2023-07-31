@@ -1,4 +1,7 @@
-import { Input, Tooltip } from 'antd';
+import {
+  // Input,
+  Tooltip,
+} from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { Link, useLocation } from 'react-router-dom';
 import logoImage from '@/assets/logo.png';
@@ -26,10 +29,10 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
     setActivePath(item.path);
   };
 
-  const { Search } = Input;
-  const onSearch = (val: string) => {
-    console.log(val);
-  };
+  // const { Search } = Input;
+  // const onSearch = (val: string) => {
+  //   console.log(val);
+  // };
 
   return (
     <Header className="layout-header">
@@ -59,7 +62,7 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
             ))}
           </ul>
         </div>
-        <div className="header-right">{activePath === '/' ? <Search placeholder="请输入关键字" size="middle" onSearch={onSearch} /> : ''}</div>
+        {/* <div className="header-right">{activePath === '/' ? <Search placeholder="请输入关键字" size="middle" onSearch={onSearch} /> : ''}</div> */}
       </div>
     </Header>
   );

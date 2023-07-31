@@ -28,17 +28,24 @@ jobs:
       - run: yarn
       - run: yarn build
 
-      # 部署到云服务器，使用easingthemes/ssh-deploy@v2.1.1，通过ssh的方式连接
+      # 部署到云服务器，使用easingthemes/ssh-deploy@v4，通过ssh的方式连接
       - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v2.1.1
+        uses: easingthemes/ssh-deploy@v4
         env:
           # 报错 Load key “/home/runner/.ssh/deploy_key”: invalid format
           # 说明ssh的key格式不匹配，可以参考上面配置 secret重新生成key，也可以将现有的转换成PEM格式：
           # ssh-keygen -p -f ~/.ssh/id_rsa -m pem
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }} # 私钥全选复制至SSH_PRIVATE_KEY配置，公钥拷贝到服务器在/root/.ssh/authorized_keys中
-          ARGS: ${{ secrets.ARGS }} # 对于任何初始/必需的rsync标志，默认-avzr --delete，如果目录下有其他不可删除文件或文件夹可以用--exclude忽略，如--exclude /uploads/
-          SOURCE: "home/" # 源目录
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }} # 服务器地址
-          REMOTE_PORT: ${{ secrets.REMOTE_PORT }} # ssh连接端口号
-          REMOTE_USER: ${{ secrets.REMOTE_USER }} # 连接用户名
-          TARGET: ${{ secrets.REMOTE_TARGET }} # 目标部署目录
+          # id_rsa中的私钥全选复制至SSH_PRIVATE_KEY配置，公钥拷贝到服务器在/root/.ssh/authorized_keys中
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          # 填写-rlgoDzvc -i --delete，如果目录下有其他不可删除文件或文件夹可以用--exclude忽略，如--exclude /uploads/
+          ARGS: ${{ secrets.ARGS }}
+          # 打包好的源目录
+          SOURCE: "home/"
+          # 服务器地址
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          # ssh连接端口号
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+          # 连接用户名
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          # 目标部署目录，最后添加 /home/
+          TARGET: ${{ secrets.REMOTE_TARGET }}
