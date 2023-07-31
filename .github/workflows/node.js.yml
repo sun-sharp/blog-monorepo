@@ -39,12 +39,12 @@ jobs:
           # 填写-rlgoDzvc -i --delete，如果目录下有其他不可删除文件或文件夹可以用--exclude忽略，如--exclude /uploads/
           ARGS: ${{ secrets.ARGS }}
           # 打包好的源目录
-          SOURCE: 'home/'
+          SOURCE: 'manage/'
           # 服务器地址
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           # ssh连接端口号
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           # 连接用户名
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          # 目标部署目录，最后添加 /home/
+          # 目标部署目录，最后添加 /manage/
           TARGET: ${{ secrets.REMOTE_TARGET }}
