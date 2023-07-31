@@ -6,7 +6,7 @@ import { Header } from 'antd/es/layout/layout';
 import { Link, useLocation } from 'react-router-dom';
 import logoImage from '@/assets/logo.png';
 import { IHeadMenuArr, IHeaderProp } from '/#/layouts/header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 
 const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
@@ -29,10 +29,10 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
     setActivePath(item.path);
   };
 
-  // const { Search } = Input;
-  // const onSearch = (val: string) => {
-  //   console.log(val);
-  // };
+  // 监听路由变化
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location.pathname]);
 
   return (
     <Header className="layout-header">
