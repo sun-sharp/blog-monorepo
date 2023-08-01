@@ -11,7 +11,7 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
-import { ImageFindPageParams } from 'types/capital/image';
+import { ImageFindPageParams, UploadedImage } from 'types/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
 
@@ -30,10 +30,10 @@ export class ImageService {
 
   /**
    * @description: 单图片上传
-   * @param {any} image
-   * @return {*}
+   * @param {UploadedImage} image
+   * @return {Promise<IResponse>}
    */
-  uploadImage(image: any, source: string | string[]): Promise<IResponse> {
+  uploadImage(image: UploadedImage, source: string | string[]): Promise<IResponse> {
     return (
       Promise.resolve({ image, source })
         // 上传参数是否有问题
@@ -92,8 +92,7 @@ export class ImageService {
 
   /**
    * @description: 获取图片目录的全部文件
-   * @param {*}
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   getPublic(): Promise<IResponse> {
     return (
@@ -118,8 +117,7 @@ export class ImageService {
 
   /**
    * @description: 查询只有图片文件没有数据的文件
-   * @param {*}
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   getOnlyPublic(): Promise<IResponse> {
     return (
@@ -157,8 +155,7 @@ export class ImageService {
 
   /**
    * @description: 查询未使用的图片
-   * @param {*}
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   getOntUse(): Promise<IResponse> {
     return (
@@ -217,8 +214,7 @@ export class ImageService {
 
   /**
    * @description: 获取图片全部列表数据
-   * @param {*}
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   findAll(): Promise<IResponse> {
     return (
@@ -254,8 +250,8 @@ export class ImageService {
 
   /**
    * @description: 条件并分页获取图片数据列表
-   * @param {*}
-   * @return {*}
+   * @param {PageImageDto} pageImageDto
+   * @return {Promise<IResponse>}
    */
   public findPage(pageImageDto: PageImageDto): Promise<IResponse> {
     return (
@@ -304,7 +300,7 @@ export class ImageService {
   /**
    * @description: 删除图片目录下的图片
    * @param {string} fileName
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public removePublic(fileName: string): Promise<IResponse> {
     return (
@@ -336,7 +332,7 @@ export class ImageService {
   /**
    * @description: 批量删除图片目录下的图片
    * @param {RemovePublicAllImageDto} removePublicAllImageDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public removePublicAll(removePublicAllImageDto: RemovePublicAllImageDto): Promise<IResponse> {
     return (
@@ -368,7 +364,7 @@ export class ImageService {
   /**
    * @description: 删除图片下的数据
    * @param {string} imageId
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public removeData(imageId: string): Promise<IResponse> {
     return (
@@ -393,7 +389,7 @@ export class ImageService {
   /**
    * @description: 批量删除图片下的数据
    * @param {RemoveDataAllImageDto} removeDataAllImageDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public removeDataAll(removeDataAllImageDto: RemoveDataAllImageDto): Promise<IResponse> {
     return (
@@ -418,7 +414,7 @@ export class ImageService {
   /**
    * @description: 删除 图片目录下的图片 和 图片下的数据
    * @param {string} imageId
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public removePublicAndData(imageId: string): Promise<IResponse> {
     return (
@@ -459,7 +455,7 @@ export class ImageService {
   /**
    * @description: 批量删除 图片目录下的图片 和 图片下的数据
    * @param {RemovePublicAndDataAllImageDto} removePublicAndDataAllImageDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public removePublicAndDataAll(removePublicAndDataAllImageDto: RemovePublicAndDataAllImageDto): Promise<IResponse> {
     return (

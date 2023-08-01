@@ -90,7 +90,7 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
  * @param {any} findArr
  * @param {string} timeKey
  * @param {string[]} keyArr
- * @return {*}
+ * @return {any[]}
  */
 export const twoArrForTimeSameFilter = (arrFilter: any[], findArr: any[], timeKey: string, keyArr: string[] = []): any[] => {
   return arrFilter.filter((fil) => {

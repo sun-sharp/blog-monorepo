@@ -134,7 +134,7 @@ export const readFileListHandle = (dir: string, list: string[]): Promise<unknown
 /**
  * @description: 判断文件夹目录里的文件是否存在
  * @param {PathLike} pathName
- * @return {*}
+ * @return {boolean}
  */
 export const existsSyncHandle = (pathName: PathLike): boolean => {
   return existsSync(pathName);
@@ -143,7 +143,7 @@ export const existsSyncHandle = (pathName: PathLike): boolean => {
 /**
  * @description: 判断文件夹目录里的文件是否存在
  * @param {PathLike} list
- * @return {*}
+ * @return {any[]}
  */
 export const existsSyncListHandle = (list: any[]): any[] => {
   return list.map((m) => {

@@ -19,7 +19,7 @@ export class WaitForDoService {
   /**
    * @description: 新增文章分类
    * @param {CreateWaitForDoDto} createWaitForDoDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public save(userId: string, createWaitForDoDto: CreateWaitForDoDto): Promise<IResponse> {
     return (

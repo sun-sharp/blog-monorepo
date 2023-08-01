@@ -19,3 +19,11 @@ export interface ReadImageItem {
   fileName: string;
   url: string;
 }
+
+/**
+ * @description: 上传之后的图片字段
+ */
+export interface UploadedImage {
+  filename: string;
+  size: number;
+}

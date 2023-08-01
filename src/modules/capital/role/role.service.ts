@@ -12,6 +12,7 @@ import { readFileDataHandle } from 'src/common/fs-handle';
 import { logger } from 'src/common/journal';
 import { groupArray } from 'src/common/array';
 import { useCustomConfig } from 'src/config';
+import { ApiSwaggerJson } from 'types/capital/role';
 
 @Injectable()
 export class RoleService {
@@ -63,7 +64,7 @@ export class RoleService {
 
   /**
    * @description 获取全部权限列表
-   * @return {*}  {Promise<IResponse>}
+   * @return {Promise<IResponse>}
    * @memberof RoleService
    */
   public findAll(): Promise<IResponse> {
@@ -125,7 +126,7 @@ export class RoleService {
 
   /**
    * @description 新增权限
-   * @return {*}  {Promise<IResponse>}
+   * @return {Promise<IResponse>}
    * @memberof RoleService
    */
   public save(createRoleDto: CreateRoleDto): Promise<IResponse> {
@@ -180,7 +181,7 @@ export class RoleService {
   /**
    * @description: 根据roleCode查找权限详情
    * @param {string} roleCode
-   * @return {*}  {Promise<IResponse>}
+   * @return {Promise<Role>}
    */
   public findOneByRoleCode(roleCode: string): Promise<Role> {
     return (
@@ -196,15 +197,10 @@ export class RoleService {
   }
 
   /**
-   * @description
-   * @return {*}  {Promise<any>}
-   * @memberof RoleService
-   */
-  /**
    * @description: 获取全部swagger-api.json数据
-   * @return {*}
+   * @return {Promise<ApiSwaggerJson>}
    */
-  public findSwaggerApi(): Promise<any> {
+  public findSwaggerApi(): Promise<ApiSwaggerJson> {
     return (
       Promise.resolve()
         // 查询
@@ -223,7 +219,7 @@ export class RoleService {
 
   /**
    * @description 获取全部接口列表的一维数据
-   * @return {*}  {Promise<IResponse>}
+   * @return {Promise<IResponse>}
    * @memberof RoleService
    */
   public findApiAllOneDimensional(): Promise<Array<any>> {
@@ -275,8 +271,7 @@ export class RoleService {
 
   /**
    * @description 获取需要jwt验证的接口一维列表
-   * @return {*}  {Promise<IResponse>}
-   * @memberof RoleService
+   * @return {Promise<Array<any>>}
    */
   public findApiJwtAll(): Promise<Array<any>> {
     return (
@@ -297,7 +292,7 @@ export class RoleService {
   /**
    * @description: jwt权限接口认证
    * @param {string} roleCode
-   * @return {*}
+   * @return {Promise<boolean>}
    */
   public validateRoleByRoleCode(roleCode: string, url: string, method: string): Promise<boolean> {
     return (
@@ -328,8 +323,7 @@ export class RoleService {
 
   /**
    * @description 获取全部接口列表并关联
-   * @return {*}  {Promise<IResponse>}
-   * @memberof RoleService
+   * @return {Promise<IResponse>}
    */
   public findApiAll(): Promise<IResponse> {
     return (

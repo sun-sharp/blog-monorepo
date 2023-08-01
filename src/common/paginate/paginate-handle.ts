@@ -9,7 +9,7 @@ interface PaginateType {
  * @description: 对分页进行处理
  * @param {*} size
  * @param {*} current
- * @return {*}
+ * @return {PaginateType}
  */
 export const PaginateHandle = (size: number = paginateDefault.SIZE, current: number = paginateDefault.CURRENT): PaginateType => {
   const skip = (current - 1) * size;

@@ -141,7 +141,7 @@ export class MoneyService {
   /**
    * @description: 统计各个的方式的余额
    * @param {string} userId
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public statisticsMoneyBalance(userId: string): Promise<IResponse> {
     return (

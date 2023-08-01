@@ -5,7 +5,7 @@ import { logger } from '../journal';
  * @description 状态码的变化
  * @date 26/11/2021
  * @param {(number)} status
- * @return {*}  {number}
+ * @return {number}
  */
 export const checkCode = (status: number): number => {
   let code = null;
@@ -26,7 +26,7 @@ export const checkCode = (status: number): number => {
  * @date 26/11/2021
  * @param {(number)} status
  * @param {(string)} msg
- * @return {*}  {string}
+ * @return {string}
  */
 export const checkMessage = (status: number, msg: string): string => {
   let message = '';
@@ -86,9 +86,8 @@ export const checkMessage = (status: number, msg: string): string => {
  * @param {string} method
  * @param {string} url
  * @param {string} msg
- * @return {*}
  */
-export const checkHttpLog = (status: number, method: string, url: string, msg: string): any => {
+export const checkHttpLog = (status: number, method: string, url: string, msg: string) => {
   switch (status) {
     case ApiHttpStatus.SUCCESS:
       logger.log(`success: ${method} ${url} ${msg}`);

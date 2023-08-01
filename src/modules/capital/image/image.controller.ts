@@ -7,6 +7,7 @@ import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
 import { Request } from 'express';
+import { UploadedImage } from 'types/capital/image';
 
 @Controller('image')
 @ApiTags('图片')
@@ -21,7 +22,7 @@ export class ImageController {
   @UseInterceptors(FileInterceptor('image'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  uploadImage(@UploadedFile() image, @Req() req: Request) {
+  uploadImage(@UploadedFile() image: UploadedImage, @Req() req: Request) {
     return this.imageService.uploadImage(image, req.headers.source);
   }
 

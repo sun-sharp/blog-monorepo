@@ -72,7 +72,7 @@ export class ArticleService {
    * @description: 新增文章
    * @param {User} user
    * @param {CreateArticleDto} createArticleDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public save(user: User, createArticleDto: CreateArticleDto): Promise<IResponse> {
     return (
@@ -146,7 +146,7 @@ export class ArticleService {
 
   /**
    * @description: 删除文章
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public remove(articleId: string): Promise<IResponse> {
     return (

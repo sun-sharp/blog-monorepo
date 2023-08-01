@@ -250,7 +250,7 @@ export class BankService {
   /**
    * @description: 批量删除银行账单的数据
    * @param {batchRemoveDto} body
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public batchRemove(body: batchRemoveDto): Promise<IResponse> {
     return (
@@ -275,7 +275,7 @@ export class BankService {
   /**
    * @description: 删除银行账单的数据
    * @param {string} bankId
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public remove(bankId: string): Promise<IResponse> {
     return (

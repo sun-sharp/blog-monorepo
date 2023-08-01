@@ -230,7 +230,7 @@ export class UserService {
    * @description: 修改用户权限
    * @param {string} userId
    * @param {string} roleCode
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public updateUserRole(userId: string, roleCode: string): Promise<IResponse> {
     return (
@@ -256,7 +256,7 @@ export class UserService {
    * @description: 修改用户基本信息
    * @param {string} userId
    * @param {UpdateUserInfoDto} updateUserInfoDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public updateUserInfo(userId: string, updateUserInfoDto: UpdateUserInfoDto): Promise<IResponse> {
     return (
@@ -294,7 +294,7 @@ export class UserService {
    * @description: 更新用户密码
    * @param {User} user
    * @param {UpdateUserPasswordDto} updateUserPasswordDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public updateUserPassword(user: User, updateUserPasswordDto: UpdateUserPasswordDto): Promise<IResponse> {
     return (
@@ -335,7 +335,7 @@ export class UserService {
   /**
    * @description: 删除用户
    * @param {string} userId
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public remove(userId: string): Promise<IResponse> {
     return (
@@ -360,7 +360,7 @@ export class UserService {
   /**
    * @description: 修改登录时间
    * @param {string} userId
-   * @return {*}
+   * @return {Promise<User>}
    */
   public updateLoginDate(userId: string): Promise<User> {
     return (
@@ -379,7 +379,7 @@ export class UserService {
   /**
    * @description: 校验 token
    * @param {string} token
-   * @return {*}
+   * @return {Promise<string>}
    */
   verifyToken(token: string): Promise<string> {
     return (
@@ -399,7 +399,7 @@ export class UserService {
   /**
    * @description: 根据用户ID校验用户
    * @param {string} userId
-   * @return {*}
+   * @return {Promise<User | false>}
    */
   async validateUserByUserId(userId: string): Promise<User | false> {
     return (

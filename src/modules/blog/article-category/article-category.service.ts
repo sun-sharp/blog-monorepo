@@ -16,7 +16,7 @@ export class ArticleCategoryService {
   /**
    * @description: 新增文章分类
    * @param {CreateArticleCategoryDto} createArticleCategoryDto
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public save(createArticleCategoryDto: CreateArticleCategoryDto): Promise<IResponse> {
     return (
@@ -68,7 +68,7 @@ export class ArticleCategoryService {
   /**
    * @description: 根据文章分类标识value查找文章分类详情
    * @param {number} value
-   * @return {*}  {Promise<IResponse>}
+   * @return {Promise<IResponse>}
    */
   public findOneByValue(value: number): Promise<ArticleCategory> {
     return (
@@ -86,7 +86,7 @@ export class ArticleCategoryService {
 
   /**
    * @description: 获取全部文章分类列表
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public findAll(): Promise<IResponse> {
     return (
@@ -117,7 +117,7 @@ export class ArticleCategoryService {
 
   /**
    * @description: 删除文章分类
-   * @return {*}
+   * @return {Promise<IResponse>}
    */
   public remove(articleCategoryId: string): Promise<IResponse> {
     return (

@@ -3,7 +3,7 @@
  * @param {any[]} jsonArr // 需要处理的数组
  * @param {string} keyInfo // 二级字段
  * @param {any[]} conditions // 多个条件
- * @return {*}
+ * @return {any}
  */
 export const groupArray = (jsonArr: any[], keyInfo: string, conditions: any[]): any => {
   const newJson = []; // 合并好的数据都放在这个数组里
