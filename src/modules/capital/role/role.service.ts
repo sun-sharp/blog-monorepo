@@ -210,7 +210,7 @@ export class RoleService {
         // 查询
         .then(async () => {
           const customConfig = useCustomConfig();
-          const jsonPath = `${customConfig.staticDirPosition}/${customConfig.fileAccessPath}/json/swagger-api.json`;
+          const jsonPath = `${customConfig.staticDirPosition}/${customConfig.staticDirName}/json/swagger-api.json`;
           const jsonData = await readFileDataHandle(jsonPath);
           return JSON.parse(jsonData.toString()); //将二进制的数据转换为字符串， 将字符串转换为json对象
         })
