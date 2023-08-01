@@ -2,15 +2,15 @@ import type { Component } from 'vue';
 import { NInput, NSelect, NCheckbox, NInputNumber, NSwitch, NDatePicker, NTimePicker } from 'naive-ui';
 import { ComponentType } from '/#/components/table';
 
-export enum EventEnum {
-  NInput = 'on-input',
-  NInputNumber = 'on-input',
-  NSelect = 'on-update:value',
-  NSwitch = 'on-update:value',
-  NCheckbox = 'on-update:value',
-  NDatePicker = 'on-update:value',
-  NTimePicker = 'on-update:value',
-}
+export const EventEnum = {
+  NInput: 'on-input',
+  NInputNumber: 'on-input',
+  NSelect: 'on-update:value',
+  NSwitch: 'on-update:value',
+  NCheckbox: 'on-update:value',
+  NDatePicker: 'on-update:value',
+  NTimePicker: 'on-update:value',
+};
 
 const componentMap = new Map<ComponentType, Component>();
 

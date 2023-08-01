@@ -41,5 +41,6 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     'vue/v-on-event-hyphenation': 'off',
     'vue/multi-word-component-names': 'off',
+    'vue/no-setup-props-destructure': 'off',
   },
 };

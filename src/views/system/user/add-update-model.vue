@@ -170,11 +170,11 @@
             const request = modelId.value
               ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode })
               : capitalApi.signUp({
-                  nickname: modelForm.nickname,
+                  nickname: modelForm.nickname || '',
                   avatar: modelForm.avatar.length > 0 ? modelForm.avatar[0].key : '',
-                  username: modelForm.username,
-                  roleCode: modelForm.roleCode,
-                  password: modelForm.verifyPassword,
+                  username: modelForm.username || '',
+                  roleCode: modelForm.roleCode || '',
+                  password: modelForm.verifyPassword || '',
                 });
             request.then(() => {
               showModal.value = false;

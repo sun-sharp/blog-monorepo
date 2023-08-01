@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { ReaderOutline, TrashOutline, CalendarOutline, RightOutlined } from '@/utils';
   import { reactive, ref } from 'vue';
-  import { WaitForDoItem } from '/#/views/wait-for-do';
   import { waitForDoApi } from '@/api';
   import { useDebounceFn } from '@vueuse/core';
   import { format } from 'date-fns';
+  import { ApiWaitForDoItem } from '/#/api/wait-for-do';
 
   defineProps({
     title: {
@@ -21,7 +21,7 @@
   const isDrawer = ref(false);
   const placement = ref('right');
   const waitForDoId = ref<string | undefined>('');
-  const waitDet = reactive<Partial<WaitForDoItem>>({});
+  const waitDet = reactive<Partial<ApiWaitForDoItem>>({});
 
   // 待办事项-日期下拉
   const showCalendarPop = ref(false);
@@ -50,7 +50,7 @@
   };
 
   // 初始化
-  const init = (item?: WaitForDoItem) => {
+  const init = (item?: ApiWaitForDoItem) => {
     isDrawer.value = true;
     waitForDoId.value = item?.waitForDoId;
     loadDetail();
@@ -59,7 +59,7 @@
   // 获取待办详情
   const loadDetail = () => {
     if (waitForDoId.value) {
-      waitForDoApi.detail(waitForDoId.value).then((data: WaitForDoItem) => {
+      waitForDoApi.detail(waitForDoId.value).then((data: ApiWaitForDoItem) => {
         waitDet.title = data.title;
         waitDet.remark = data.remark;
         waitDet.state = data.state;
@@ -205,18 +205,19 @@
 
 <style lang="scss">
   .wait-for-do-setting {
-    .n-drawer-header__main {
-      width: 100%;
-    }
     &__head {
-      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      width: 100%;
 
       .head-del {
         cursor: pointer;
       }
+    }
+
+    .n-drawer-header__main {
+      width: 100%;
     }
 
     &__cont {

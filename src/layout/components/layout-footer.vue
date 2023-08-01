@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import { defineComponent } from 'vue';
   import { getAppEnvConfig } from '@/utils/env';
 
@@ -29,18 +29,18 @@
 
 <style lang="scss" scoped>
   .layout-footer {
-    width: 100%;
+    z-index: 11;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: $footer-height;
+    padding: 0;
+    color: #a5a4a4;
     font-size: 14px;
     background: #333;
-    color: #a5a4a4;
-    padding: 0;
     box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
     transition: all 0.2s ease-in-out;
-    z-index: 11;
 
     a {
       color: #a5a4a4;

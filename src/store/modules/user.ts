@@ -5,12 +5,14 @@ import { store } from '@/store';
 import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, ResultEnum, USER_CONFIG } from '@/constant';
 import { capitalApi, configurationApi, userApi } from '@/api';
 import { getAppEnvConfig } from '@/utils/env';
-import { CLoginFormState, CUserState, CUserInfo, CUserConfigInfo } from '/#/config';
+import { CUserState, CUserConfigInfo } from '/#/config';
+import { ApiCapitalLoginData } from '/#/api/capital';
+import { ApiUserInfo } from '/#/api/user';
 
 const appEnvConfig = getAppEnvConfig();
 
 // 默认用户信息
-const defaultUserInfo: CUserInfo = {
+const defaultUserInfo: ApiUserInfo = {
   avatar: '',
   loginDate: '',
   nickname: '',
@@ -92,7 +94,7 @@ export const useUserStore = defineStore({
       const { tokenHead } = appEnvConfig;
       return tokenHead ? tokenHead + this.token : this.token;
     },
-    getUserInfo(): CUserInfo {
+    getUserInfo(): ApiUserInfo {
       return this.info;
     },
     getConfigInfo(): CUserConfigInfo {
@@ -105,7 +107,7 @@ export const useUserStore = defineStore({
       this.token = token;
     },
     // 设置用户信息
-    setUserInfo(info: CUserInfo) {
+    setUserInfo(info: ApiUserInfo) {
       this.info = info;
     },
     // 设置配置信息
@@ -113,11 +115,11 @@ export const useUserStore = defineStore({
       this.configInfo = configInfo;
     },
     // 登录
-    async login(loginForm: CLoginFormState) {
+    async login(loginForm: ApiCapitalLoginData) {
       const [err, resp] = await at(capitalApi.login(loginForm));
       if (err) return err;
       const { result, code } = resp;
-      if (code === ResultEnum.SUCCESS) {
+      if (code === ResultEnum.SUCCESS && result) {
         storage.set(ACCESS_TOKEN, result.token);
         storage.set(IS_LOCK_SCREEN, false);
         this.setToken(result.token);

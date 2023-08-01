@@ -129,7 +129,7 @@
         }
 
         const options: any = editComponentProps?.options ?? (unref(optionsRef) || []);
-        const option = options.find((item) => `${item.value}` === `${value}`);
+        const option = options.find((item: { value: number | string }) => `${item.value}` === `${value}`);
 
         return option?.label ?? value;
       });
@@ -356,23 +356,23 @@
   .editable-cell {
     &-content {
       position: relative;
-      overflow-wrap: break-word;
-      word-break: break-word;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      word-break: break-word;
+      overflow-wrap: break-word;
 
       &-comp {
         flex: 1;
       }
 
       .edit-icon {
-        font-size: 14px;
-        //position: absolute;
-        //top: 4px;
-        //right: 0;
+        // position: absolute;
+        // top: 4px;
+        // right: 0;
         display: none;
         width: 20px;
+        font-size: 14px;
         cursor: pointer;
       }
 

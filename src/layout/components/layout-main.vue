@@ -11,7 +11,7 @@
   </router-view>
 </template>
 
-<script>
+<script lang="ts">
   import { defineComponent, computed, unref } from 'vue';
   import { useRouteStore } from '@/store';
   import { useSetting } from '@/hooks';

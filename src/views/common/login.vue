@@ -86,7 +86,6 @@
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { ResultEnum } from '@/constant';
   import LayoutFooter from '@/layout/components/layout-footer.vue';
-  import { CLoginFormState } from '/#/config';
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.title;
@@ -127,7 +126,7 @@
         const { username, password } = formInline;
         let messageReactive: MessageReactive | null = message.loading('登录中...');
         loading.value = true;
-        const params: CLoginFormState = {
+        const params = {
           username,
           password,
         };
@@ -162,20 +161,20 @@
 
 <style lang="scss" scoped>
   .view-account {
-    height: 100vh;
-    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
+    overflow: auto;
 
     &-container {
-      width: 384px;
-      flex: 1;
-      height: 0;
       display: flex;
+      flex: 1;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      width: 384px;
+      height: 0;
     }
 
     &-top {
@@ -183,8 +182,8 @@
       text-align: center;
 
       &-desc {
-        font-size: 14px;
         color: #808695;
+        font-size: 14px;
       }
 
       &-logo {
@@ -209,7 +208,7 @@
     }
   }
 
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     .view-account {
       background-image: url('@/assets/images/login/login.svg');
       background-repeat: no-repeat;
@@ -218,7 +217,7 @@
     }
 
     .page-account-container {
-      padding: 32px 0 24px 0;
+      padding: 32px 0 24px;
     }
   }
 </style>

@@ -89,7 +89,7 @@
   const route = useRoute();
 
   const { battery, batteryStatus, calcDischargingTime, calcChargingTime } = useBattery();
-  const userInfo: object = userStore.getUserInfo || {};
+  const userInfo = userStore.getUserInfo;
   const username = userInfo['username'] || '';
   const state = reactive({
     showLogin: false,
@@ -169,33 +169,19 @@
       }
     }
 
-    @keyframes moveToTop {
-      90% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0.1;
-        transform: translate(-50%, -180px);
-      }
-    }
-
-    @keyframes hueRotate {
+    @keyframes hue-rotate {
       100% {
         filter: contrast(15) hue-rotate(360deg);
       }
     }
 
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    background: #000;
-    color: white;
-    overflow: hidden;
+    inset: 0;
     z-index: 9999;
+    display: flex;
+    overflow: hidden;
+    color: white;
+    background: #000;
 
     &__recharge {
       position: absolute;
@@ -210,8 +196,8 @@
         top: 20%;
         z-index: 10;
         width: 300px;
-        font-size: 32px;
         color: #fff;
+        font-size: 32px;
         text-align: center;
       }
 
@@ -221,14 +207,14 @@
         overflow: hidden;
         background-color: #000;
         filter: contrast(15) hue-rotate(0);
-        animation: hueRotate 10s infinite linear;
+        animation: hue-rotate 10s infinite linear;
 
         .circle {
           position: relative;
+          box-sizing: border-box;
           width: 300px;
           height: 300px;
           filter: blur(8px);
-          box-sizing: border-box;
 
           &::after {
             position: absolute;
@@ -238,9 +224,9 @@
             height: 200px;
             background-color: #00ff6f;
             border-radius: 42% 38% 62% 49% / 45%;
-            content: '';
             transform: translate(-50%, -50%) rotate(0);
             animation: rotate 10s infinite linear;
+            content: '';
           }
 
           &::before {
@@ -252,8 +238,8 @@
             height: 176px;
             background-color: #000;
             border-radius: 50%;
-            content: '';
             transform: translate(-50%, -50%);
+            content: '';
           }
         }
 
@@ -265,8 +251,8 @@
           height: 40px;
           background-color: #00ff6f;
           border-radius: 100px 100px 0 0;
-          filter: blur(5px);
           transform: translate(-50%, 0);
+          filter: blur(5px);
 
           li {
             position: absolute;
@@ -283,7 +269,7 @@
     }
 
     &.onLockLogin {
-      background-color: rgba(25, 28, 34, 0.88);
+      background-color: rgb(25 28 34 / 88%);
       backdrop-filter: blur(7px);
     }
 
@@ -291,11 +277,11 @@
       position: absolute;
       top: 45%;
       left: 50%;
-      transform: translate(-50%, -50%);
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
 
       > * {
         margin-bottom: 14px;
@@ -310,9 +296,9 @@
       position: absolute;
       top: 20px;
       left: 50%;
-      transform: translateX(-50%);
-      font-size: 34px;
       z-index: 100;
+      font-size: 34px;
+      transform: translateX(-50%);
 
       .tips {
         color: white;
@@ -345,7 +331,7 @@
       position: absolute;
       bottom: 60px;
       left: 60px;
-      font-family: helvetica;
+      font-family: helvetica, sans-serif;
 
       .time {
         font-size: 70px;
@@ -358,8 +344,8 @@
 
     .computer-status {
       position: absolute;
-      bottom: 60px;
       right: 60px;
+      bottom: 60px;
       font-size: 24px;
 
       > * {
@@ -370,15 +356,15 @@
         position: relative;
 
         &.offline::before {
-          content: '';
           position: absolute;
-          left: 50%;
           top: 50%;
+          left: 50%;
+          z-index: 10;
           width: 2px;
           height: 28px;
-          transform: translate(-50%, -50%) rotate(45deg);
           background-color: red;
-          z-index: 10;
+          transform: translate(-50%, -50%) rotate(45deg);
+          content: '';
         }
       }
     }

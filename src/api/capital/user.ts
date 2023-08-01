@@ -1,16 +1,18 @@
 import { AxiosCapital } from '@/api/axios';
+import { ApiUserInfo } from '/#/api/user';
 
 const basic = '/user';
 
 /**
  * @description: 获取用户信息
+ * @returns ApiUserInfo
  */
-export function getUserInfo() {
+export const getUserInfo = (): Promise<ApiUserInfo> => {
   return AxiosCapital.request({
     url: `${basic}/admin_info`,
     method: 'get',
   });
-}
+};
 
 /**
  * @description 用户列表

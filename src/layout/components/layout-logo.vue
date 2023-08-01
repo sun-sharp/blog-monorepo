@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import { defineComponent } from 'vue';
   import { getAppEnvConfig } from '@/utils/env';
 
@@ -32,8 +32,8 @@
     align-items: center;
     justify-content: center;
     height: $header-height;
-    line-height: $header-height;
     overflow: hidden;
+    line-height: $header-height;
     white-space: nowrap;
 
     img {
@@ -42,8 +42,8 @@
     }
 
     .title {
-      margin-bottom: 0;
       margin-top: 0;
+      margin-bottom: 0;
       margin-left: 5px;
     }
   }
