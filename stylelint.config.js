@@ -1,60 +1,43 @@
+/*
+ * @Author: YangRuiRui
+ * @LastEditTime: 2023-08-01 10:48:26
+ * @Description: stylelint验证代码
+ *
+ * stylelint ---- 主依赖
+ * stylelint-config-rational-order ---- 针对css属性排序的共享规则配置，避免长串css属性顺序规则书写。与stylelint-order配合使用
+ * stylelint-config-standard-scss ---- 针对scss的标准可共享配置。与stylelint-scss配合使用
+ * stylelint-config-standard-vue ---- 为 Stylelint 推荐的标准可共享 Vue 配置。
+ * stylelint-no-unsupported-browser-features ---- 禁止您所针对的浏览器不支持的 CSS。
+ *
+ *
+ warning "stylelint-config-standard-scss > stylelint-config-recommended-scss > postcss-scss@4.0.6" has unmet peer dependency "postcss@^8.4.19".
+ warning " > stylelint-config-standard-vue@1.0.0" has unmet peer dependency "postcss-html@^1.0.0".
+ warning "stylelint-config-standard-vue > stylelint-config-html@1.1.0" has unmet peer dependency "postcss-html@^1.0.0".
+ warning "stylelint-config-standard-vue > stylelint-config-recommended-vue@1.4.0" has unmet peer dependency "postcss-html@^1.0.0"
+ * 
+ * 自定义语法
+ * postcss ---- 用于postcss-html和postcss-scss的支持
+ * postcss-scss ---- 解析<style lang=“scss”>下的scss样式
+ * postcss-html ---- 解析<style>类 vue、html 文件标签中的样式
+ */
+
 module.exports = {
   root: true,
-  plugins: ['stylelint-order', 'stylelint-scss'],
-  extends: ['stylelint-config-standard', 'stylelint-config-prettier'],
-  rules: {
-    'selector-pseudo-class-no-unknown': [
-      true,
-      {
-        ignorePseudoClasses: ['global'],
-      },
-    ], // 禁止使用未知的伪类选择器
-    'selector-pseudo-element-no-unknown': [
-      true,
-      {
-        ignorePseudoElements: ['v-deep'],
-      },
-    ], // 禁止使用未知的伪元素
-    'at-rule-no-unknown': [
-      true,
-      {
-        ignoreAtRules: ['for', 'extend', 'apply', 'variants', 'responsive', 'screen', 'function', 'if', 'each', 'include', 'mixin'],
-      },
-    ], // 禁止使用未知的 at 规则
-    'no-empty-source': null, // 禁止空源
-    'named-grid-areas-no-invalid': null,
-    'unicode-bom': 'never',
-    'no-descending-specificity': null, // 禁止低优先级的选择器出现在高优先级的选择器之后。
-    'font-family-no-missing-generic-family-keyword': null,
-    'declaration-colon-space-after': 'always-single-line', // 在冒号之后要求有一个空格或禁止有空白
-    'declaration-colon-space-before': 'never', // 在冒号之前要求有一个空格或禁止有空白
-    'at-rule-empty-line-before': [
-      'always',
-      {
-        ignore: ['after-comment'],
-        except: ['first-nested'],
-      },
-    ],
-    'unit-no-unknown': [true, { ignoreUnits: ['rpx'] }],
-    'order/order': [
-      [
-        'dollar-variables',
-        'custom-properties',
-        'at-rules',
-        'declarations',
-        {
-          type: 'at-rule',
-          name: 'supports',
-        },
-        {
-          type: 'at-rule',
-          name: 'media',
-        },
-        'rules',
-      ],
-      { severity: 'warning' },
-    ],
-  },
+  extends: [
+    'stylelint-config-rational-order',
+    'stylelint-config-standard-scss', //
+    'stylelint-config-standard-vue/scss',
+  ],
+  plugins: ['stylelint-no-unsupported-browser-features'],
   customSyntax: 'postcss-html',
-  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
+  overrides: [
+    {
+      files: ['**/*.{scss,css,sass}'], // css 相关文件由 postcss-scss 处理
+      customSyntax: 'postcss-scss',
+    },
+  ],
+  rules: {
+    'no-empty-source': null, // 允许空文件
+    'no-descending-specificity': true, // 禁止低优先级的选择器出现在高优先级的选择器之后
+  },
 };

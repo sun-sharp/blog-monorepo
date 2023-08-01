@@ -1,19 +1,10 @@
 {
   "compilerOptions": {
     "composite": true,
+    "skipLibCheck": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-
-    /* 文件处理 */
-    "baseUrl": ".",
-    "types": ["vite/client"],
-    "typeRoots": ["./node_modules/@types/", "./types"],
-    "paths": {
-      "@/*": ["src/*"],
-      "/#/*": ["types/*"]
-    }
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["vite.config.ts", "types/**/*.d.ts", "types/**/*.ts", "package.json"]
+  "include": ["vite.config.ts", "types/global.d.ts", "package.json"]
 }

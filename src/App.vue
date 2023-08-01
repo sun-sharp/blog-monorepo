@@ -21,7 +21,7 @@
   const lockTime = computed(() => useLockScreen.lockTime);
 
   // 设置锁屏
-  let timer: number | undefined;
+  let timer: IntervalHandle;
   const timekeeping = () => {
     clearInterval(timer);
     if (route.name == 'login' || isLock.value) return;
@@ -50,5 +50,5 @@
 </script>
 
 <style lang="scss">
-  @import 'styles/index.scss';
+  @import 'styles/index';
 </style>

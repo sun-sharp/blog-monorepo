@@ -1,8 +1,8 @@
-/**
- *  @module .prettierrc
- * @author: yangruirui
- * @description: prettier配置
+/*
+ * @LastEditTime: 2023-08-01 10:52:33
+ * @Description: prettier配置
  */
+
 module.exports = {
   printWidth: 160, // 单行输出（不折行）的（最大）长度
   tabWidth: 2, // 每个缩进级别的空格数

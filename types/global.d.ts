@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 import type {
-  // ComponentRenderProxy,
   VNode,
   VNodeChild,
   ComponentPublicInstance,
@@ -10,6 +9,8 @@ import type {
 } from 'vue';
 
 declare global {
+
+  // app 项目信息
   const __APP_INFO__: {
     pkg: {
       name: string;
@@ -19,46 +20,26 @@ declare global {
     };
     lastBuildTime: string;
   };
-  // declare interface Window {
-  //   // Global vue app instance
-  //   __APP__: App<Element>;
-  // }
 
   // vue
   type PropType<T> = VuePropType<T>;
   type VueNode = VNodeChild | JSX.Element;
 
-  export type Writable<T> = {
-    -readonly [P in keyof T]: T[P];
-  };
-
+  // 可能为null
   type Nullable<T> = T | null;
   // type NonNullable<T> = T extends null | undefined ? never : T;
   type Recordable<T = any> = Record<string, T>;
-  type ReadonlyRecordable<T = any> = {
-    readonly [key: string]: T;
-  };
-  type Indexable<T = any> = {
-    [key: string]: T;
-  };
-  type DeepPartial<T> = {
-    [P in keyof T]?: DeepPartial<T[P]>;
-  };
+
+  // 定时器初始化
   type TimeoutHandle = ReturnType<typeof setTimeout>;
   type IntervalHandle = ReturnType<typeof setInterval>;
 
+  // 点击事件
   interface ChangeEvent extends Event {
     target: HTMLInputElement;
   }
 
-  interface WheelEvent {
-    path?: EventTarget[];
-  }
-
-  interface ImportMetaEnv extends ViteEnv {
-    __: unknown;
-  }
-
+  // env参数配置
   interface ViteEnv {
     // 网站根目录
     VITE_PUBLIC_PATH: string;
@@ -85,20 +66,9 @@ declare global {
     VITE_DROP_CONSOLE: boolean;
     // 跨越代理
     VITE_PROXY: [string, string][];
-    //生产环境打包
-    VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
-    VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean;
   }
 
-  function parseInt(s: string | number, radix?: number): number;
-
-  function parseFloat(string: string | number): number;
-
   namespace JSX {
-    // tslint:disable no-empty-interface
-    // type Element = VNode;
-    // tslint:disable no-empty-interface
-    // type ElementClass = ComponentRenderProxy;
 
     interface ElementAttributesProperty {
       $props: {};
@@ -112,8 +82,4 @@ declare global {
       [elem: string]: any;
     }
   }
-}
-
-declare module 'vue' {
-  export type JSXComponent<Props = any> = { new (): ComponentPublicInstance<Props> } | FunctionalComponent<Props>;
 }
