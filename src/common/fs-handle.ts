@@ -1,14 +1,15 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
 import { useCustomConfig } from 'src/config';
+import { ReadImageItem } from 'types/capital/image';
 
 const customConfig = useCustomConfig();
 
 /**
  * @description: 获取静态目录里的图片
  * @param {PathLike} pathName
- * @return {*}
+ * @return {Promise<ReadImageItem[]>}
  */
-export const readdirOfImageHandle = (pathName: PathLike): any => {
+export const readdirOfImageHandle = (pathName: PathLike): Promise<ReadImageItem[]> => {
   return new Promise((resolve, reject) => {
     readdir(pathName, (err, files) => {
       if (err) {
@@ -29,9 +30,9 @@ export const readdirOfImageHandle = (pathName: PathLike): any => {
 /**
  * @description: 删除文件夹目录里的文件
  * @param {PathLike} pathName
- * @return {*}
+ * @return {Promise<boolean>}
  */
-export const unlinkHandle = (pathName: PathLike): any => {
+export const unlinkHandle = (pathName: PathLike): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     unlink(pathName, (err) => {
       if (err) {
@@ -47,8 +48,9 @@ export const unlinkHandle = (pathName: PathLike): any => {
  * @description: 批量删除文件夹目录里的文件
  * @param {string} dir // 读取目录
  * @param {string[]} list
+ * @return {Promise<Promise<{ message: string }>[]}
  */
-export const unlinkListHandle = async (dir: string, list: string[]) => {
+export const unlinkListHandle = async (dir: string, list: string[]): Promise<Promise<{ message: string }>[]> => {
   const promiseArr = list.map(
     (fileName) =>
       new Promise((resolve, reject) => {
@@ -68,7 +70,7 @@ export const unlinkListHandle = async (dir: string, list: string[]) => {
       item.message = `${m.fileName}删除成功！`;
     } else if (m.status === 'rejected') {
       item = { ...m.err };
-      item.message = `${m.fileName}删除成功！`;
+      item.message = `${m.fileName}删除失败！`;
     }
     return item;
   });
@@ -77,9 +79,9 @@ export const unlinkListHandle = async (dir: string, list: string[]) => {
 /**
  * @description: 读取文件夹目录里的文件，并判断是否存在
  * @param {PathLike} pathName
- * @return {*}
+ * @return {Promise<boolean>}
  */
-export const readFileHandle = (pathName: PathLike): any => {
+export const readFileHandle = (pathName: PathLike): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     readFile(pathName, (err) => {
       if (err) {
@@ -94,9 +96,9 @@ export const readFileHandle = (pathName: PathLike): any => {
 /**
  * @description: 读取某文件的数据
  * @param {PathLike} pathName
- * @return {*}
+ * @return {Promise<any>}
  */
-export const readFileDataHandle = (pathName: PathLike): any => {
+export const readFileDataHandle = (pathName: PathLike): Promise<any> => {
   return new Promise((resolve, reject) => {
     readFile(pathName, (err, data) => {
       if (err) {
@@ -113,7 +115,7 @@ export const readFileDataHandle = (pathName: PathLike): any => {
  * @param {string} dir // 读取目录
  * @param {string[]} list
  */
-export const readFileListHandle = (dir: string, list: string[]): any => {
+export const readFileListHandle = (dir: string, list: string[]): Promise<unknown[]> => {
   const promiseArr = list.map(
     (fileName) =>
       new Promise((resolve, reject) => {

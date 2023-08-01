@@ -14,6 +14,7 @@ import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { RoleService } from '../role/role.service';
+import { ApiUserInfo, ApiUserItem } from 'types/capital/user';
 
 @Injectable()
 export class UserService {
@@ -79,7 +80,6 @@ export class UserService {
             ...body,
             password,
           });
-          console.log(result._id);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: result._id,
@@ -154,7 +154,7 @@ export class UserService {
       Promise.resolve(userId)
         // 获取信息
         .then(async (userId) => {
-          const user = await this.userModel.findOne({ _id: userId });
+          const user = await this.userModel.findOne({ _id: userId }).lean();
           const routeFind = await this.roleService.findOneByRoleCode(user.roleCode);
           if (!routeFind) {
             throw (this.response = {
@@ -162,17 +162,18 @@ export class UserService {
               message: '查询角色失败',
             });
           }
+          const result: ApiUserInfo = {
+            userId: user._id,
+            roleCode: user.roleCode,
+            roleName: routeFind.name,
+            loginDate: user.loginDate,
+            username: user.username,
+            avatar: user.avatar,
+            nickname: user.nickname,
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              userId: user._id,
-              roleCode: user.roleCode,
-              roleName: routeFind.name,
-              loginDate: user.loginDate,
-              username: user.username,
-              avatar: user.avatar,
-              nickname: user.nickname,
-            },
+            result,
             message: '查询成功！',
           });
         })
@@ -200,22 +201,18 @@ export class UserService {
           const { limit, skip } = PaginateHandle(size, current);
           const findData = { nickname: { $regex: nickname }, username: { $regex: username } };
           const total = await this.userModel.find(findData).count();
-          const list = await this.userModel.find(findData).limit(limit).skip(skip);
+          const findArr = await this.userModel.find(findData).limit(limit).skip(skip);
+          const list: ApiUserItem[] = findArr.map((m) => ({
+            userId: m._id,
+            roleCode: m.roleCode,
+            loginDate: m.loginDate,
+            username: m.username,
+            avatar: m.avatar,
+            nickname: m.nickname,
+          }));
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: list.map((m) => ({
-                userId: m._id,
-                roleCode: m.roleCode,
-                loginDate: m.loginDate,
-                username: m.username,
-                avatar: m.avatar,
-                nickname: m.nickname,
-              })),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })
@@ -404,7 +401,7 @@ export class UserService {
    * @param {string} userId
    * @return {*}
    */
-  async validateUserByUserId(userId: string): Promise<User | boolean> {
+  async validateUserByUserId(userId: string): Promise<User | false> {
     return (
       Promise.resolve(userId)
         .then(async (userId) => {

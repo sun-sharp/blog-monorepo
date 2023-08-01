@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { IResponse } from 'src/interfaces/response.interface';
 import { comparePassword } from 'src/common/bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user/user.service';
@@ -11,10 +10,12 @@ import { logger } from 'src/common/journal';
 import { ConfigurationService } from './configuration/configuration.service';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { CreateConfigurationDto } from './configuration/dto/create-configuration.dto';
+import { IResponse } from 'types/common';
+import { ApiCapitalLoginResult } from 'types/capital';
+import { ApiMenuItem } from 'types/capital/menu';
 
 @Injectable()
 export class CapitalService {
-  response: IResponse;
   constructor(
     private readonly userService: UserService,
     private readonly roleService: RoleService,
@@ -36,22 +37,20 @@ export class CapitalService {
           const { username } = res;
           const user = await this.userService.findOneByName(username);
           if (!user) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '用户尚未注册',
-            });
+            };
           }
           if (await comparePassword(res.password, user.password)) {
             return {
               _id: user._id,
-              // nickname: user.nickname,
-              // username: user.username,
             };
           } else {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '密码错误',
-            });
+            };
           }
         })
         // 修改登录时间
@@ -60,26 +59,28 @@ export class CapitalService {
           logger.log(`修改登录时间`);
           return {
             _id: res._id,
-            // nickname: res.nickname,
-            // username: res.username,
           };
         })
         // 创造token
         .then((res) => {
           const token = this.jwtService.sign(res);
           logger.log(`创造token，请求成功！`, token);
-          return (this.response = {
+          const result: ApiCapitalLoginResult = {
+            token,
+          };
+          return {
             code: ApiCode.SUCCESS,
-            result: {
-              token,
-            },
+            result,
             message: '请求成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.error(`返回错误`, err);
-          return err;
+          return {
+            code: ApiCode.SUCCESS,
+            message: err.message || '请求失败！',
+          };
         })
     );
   }
@@ -96,10 +97,10 @@ export class CapitalService {
         .then(async (body) => {
           const { result: userId, code, message } = await this.userService.create(body);
           if (code !== ApiCode.SUCCESS) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: message || '创建用户失败',
-            });
+            };
           }
           // 默认配置信息
           const defaultConfigInfo: CreateConfigurationDto = {
@@ -159,23 +160,23 @@ export class CapitalService {
           };
           const { code: configCode, message: configMessage } = await this.configurationService.save(userId, defaultConfigInfo);
           if (configCode !== ApiCode.SUCCESS) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: configMessage || '创建配置信息失败',
-            });
+            };
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: userId,
             message: '注册成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '注册失败！',
-          });
+          };
         })
     );
   }
@@ -192,48 +193,49 @@ export class CapitalService {
         .then(async (roleCode) => {
           const routeFind = await this.roleService.findOneByRoleCode(roleCode);
           if (!routeFind) {
-            console.log(routeFind);
-
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询角色失败',
-            });
+            };
           }
           // 如果你是管理员账号，那就获取全部菜单
           if (routeFind.roleType === 1) {
-            const result = await this.menuService.findAll();
-            if (result.code === ApiCode.SUCCESS) {
-              return result;
+            const response = await this.menuService.findAll();
+            if (response.code === ApiCode.SUCCESS) {
+              return response;
             }
           }
           // 不是管理员账号，执行下面
           const routePermission = routeFind.menuPermission;
-          const result = await this.menuService.findByMenuPermission(routePermission);
-          if (result) {
-            return (this.response = {
+          const findArr = await this.menuService.findByMenuPermission(routePermission);
+          if (findArr.length > 0) {
+            const result: ApiMenuItem[] = findArr.map((m) => ({
+              menuId: m._id,
+              name: m.name,
+              title: m.title,
+              sort: m.sort,
+              icon: m.icon,
+              parentId: m.parentId,
+              iframeSrc: m.iframeSrc,
+              component: m.component,
+              menuType: m.menuType,
+              hidden: m.hidden,
+              externalLink: m.externalLink,
+              noKeepAlive: m.noKeepAlive,
+            }));
+            return {
               code: ApiCode.SUCCESS,
-              result: result.map((m) => ({
-                menuId: m._id,
-                name: m.name,
-                title: m.title,
-                sort: m.sort,
-                icon: m.icon,
-                parentId: m.parentId,
-                iframeSrc: m.iframeSrc,
-                component: m.component,
-                menuType: m.menuType,
-                hidden: m.hidden,
-              })),
+              result,
               message: '查询成功！',
-            });
+            };
           }
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -249,29 +251,29 @@ export class CapitalService {
         .then(async (userId) => {
           const { code: userCode, message: userMessage } = await this.userService.remove(userId);
           if (userCode !== ApiCode.SUCCESS) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: userMessage || '删除用户失败',
-            });
+            };
           }
           const { code: configCode, message: configMessage } = await this.configurationService.remove(userId);
           if (configCode !== ApiCode.SUCCESS) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: configMessage || '删除用户配置信息失败',
-            });
+            };
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

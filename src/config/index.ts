@@ -1,3 +1,4 @@
+import { GlobalEnvConfig } from 'types/config';
 import devConfig from './dev';
 import prodConfig from './prod';
 import * as dotenv from 'dotenv';
@@ -15,4 +16,4 @@ if (RUNNING_ENV === 'dev') {
   env = 'dev';
 }
 
-export const useCustomConfig = () => configs[env];
+export const useCustomConfig = (): GlobalEnvConfig => configs[env];

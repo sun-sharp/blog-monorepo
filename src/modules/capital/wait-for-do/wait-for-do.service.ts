@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWaitForDoDto } from './dto/create-wait-for-do.dto';
-import { IResponse } from 'src/interfaces/response.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { WaitForDo } from 'src/schemas/capital/wait-for-do.schema';
@@ -10,10 +9,11 @@ import { isDateFormat, nowDateFun } from 'src/common/date';
 import { UpdateWaitForDoStateDto } from './dto/update-wait-for-do-state.dto';
 import { UpdateWaitForDoSortDto } from './dto/update-wait-for-do-sort.dto';
 import { UpdateWaitForDoDto } from './dto/update-wait-for-do.dto';
+import { IResponse } from 'types/common';
+import { ApiWaitForDoItem } from 'types/capital/wait-for-do';
 
 @Injectable()
 export class WaitForDoService {
-  response: IResponse;
   constructor(@InjectModel('WaitForDo') private readonly waitForDoModel: Model<WaitForDo>) {}
 
   /**
@@ -28,10 +28,10 @@ export class WaitForDoService {
         .then(async ({ userId, body }) => {
           const { deadline } = body;
           if (deadline && !isDateFormat(deadline)) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '截止时间格式不对',
-            });
+            };
           }
           return {
             ...body,
@@ -49,28 +49,28 @@ export class WaitForDoService {
               isRemove: false,
             };
           } else {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '处理排序问题失败！',
-            });
+            };
           }
         })
         // 添加
         .then(async (body) => {
           const createBody = { ...body, isRemove: false };
           await this.waitForDoModel.create(createBody);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.log(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -86,29 +86,36 @@ export class WaitForDoService {
       Promise.resolve({ classify, state })
         // 查询
         .then(async ({ classify, state }) => {
-          const result = await this.findByClassify(classify, state);
-          return (this.response = {
-            code: ApiCode.SUCCESS,
-            result: result.map((m) => ({
+          const findArr = await this.findByClassify(classify, state);
+          const result = findArr.map((m) => {
+            const item: ApiWaitForDoItem = {
               waitForDoId: m._id,
               title: m.title,
               classify: m.classify,
-              deadline: m.deadline ? nowDateFun(m.deadline) : undefined,
               remark: m.remark,
               state: m.state,
               sort: m.sort,
               userId: m.userId,
-            })),
-            message: '查询成功！',
+              isRemove: m.isRemove,
+            };
+            if (m.deadline) {
+              item.deadline = nowDateFun(m.deadline);
+            }
+            return item;
           });
+          return {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.log(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -146,17 +153,17 @@ export class WaitForDoService {
         .then(async ({ userId, body }) => {
           const { waitForDoId, state } = body;
           await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { state });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -177,17 +184,17 @@ export class WaitForDoService {
             const { waitForDoId } = dto;
             await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { sort: i });
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -204,10 +211,10 @@ export class WaitForDoService {
         .then(async (body) => {
           const { deadline } = body;
           if (deadline && !isDateFormat(deadline)) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '截止时间格式不对',
-            });
+            };
           }
           return { ...body, deadline: deadline ? new Date(deadline) : null };
         })
@@ -215,17 +222,17 @@ export class WaitForDoService {
         .then(async (body) => {
           const { waitForDoId, ...other } = body;
           await this.waitForDoModel.updateOne({ _id: waitForDoId }, other);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -241,30 +248,30 @@ export class WaitForDoService {
         .then(async (waitForDoId) => {
           const result = await this.waitForDoModel.findOne({ _id: waitForDoId }).lean();
           if (!result) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询待办详情失败',
-            });
+            };
           }
           let deadline = undefined;
           if (result.deadline) {
             deadline = nowDateFun(result.deadline);
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: {
               ...result,
               deadline,
             },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -280,17 +287,17 @@ export class WaitForDoService {
         // 删除
         .then(async (waitForDoId) => {
           await this.waitForDoModel.deleteOne({ _id: waitForDoId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

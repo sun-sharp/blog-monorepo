@@ -1,5 +1,5 @@
 // 过滤掉\n，空格
-export const filterStr = (str: any) => {
+export const filterStr = (str: any): string => {
   if (typeof str !== 'string') {
     return '';
   }

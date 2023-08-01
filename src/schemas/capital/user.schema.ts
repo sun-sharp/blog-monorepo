@@ -11,23 +11,29 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class User extends Document {
+  // 昵称
   @Prop()
-  nickname: string; // 昵称
+  nickname: string;
 
+  // 用户头像
   @Prop()
-  avatar: string; // 用户头像
+  avatar: string;
 
+  // 账号名
   @Prop()
-  username: string; // 账号名
+  username: string;
 
+  // 密码
   @Prop()
-  password: string; // 密码
+  password: string;
 
+  // 上次登录时间
   @Prop()
-  loginDate: string; // 上次登录时间
+  loginDate: string;
 
+  // 角色类型
   @Prop()
-  roleCode: string; // 角色类型
+  roleCode: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

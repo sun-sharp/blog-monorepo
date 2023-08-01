@@ -19,7 +19,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
           if (!accessToken) throw '请先登录';
           const atUserId = await this.userService.verifyToken(accessToken);
           if (!atUserId) throw '当前登录已过期，请重新登录';
-          const user: any = await this.userService.validateUserByUserId(atUserId);
+          const user = await this.userService.validateUserByUserId(atUserId);
           if (!user) throw '用户不存在';
           if (user.roleCode !== 'manager') {
             let method = '';

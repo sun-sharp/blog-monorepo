@@ -1,3 +1,6 @@
+/**
+ * @description: 图片分页查询数据库查询传参
+ */
 export interface ImageFindPageParams {
   name:
     | {
@@ -5,4 +8,14 @@ export interface ImageFindPageParams {
       }
     | string;
   source?: string;
+}
+
+/**
+ * @description: 获取静态目录里的图片字段
+ */
+export interface ReadImageItem {
+  name: string;
+  imageType: string;
+  fileName: string;
+  url: string;
 }

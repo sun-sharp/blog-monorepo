@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.0
+- 代码 ts 格式化
+
 ## 2.0.7
 - 修改获取全部swagger-api.json数据
 
