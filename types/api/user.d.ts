@@ -25,9 +25,9 @@ export interface ApiUser {
 }
 
 /**
- * @description: 待办的数据字段
+ * @description: 用户信息
  */
 export interface ApiUserInfo extends Omit<ApiUser, 'password'>,ApiUserId {
   // 角色名称
-  roleName: string,
+  roleName: string;
 }
