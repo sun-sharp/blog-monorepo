@@ -2,10 +2,10 @@
  * @description: 多条件相同元素合并成一个新数组
  * @param {any[]} jsonArr // 需要处理的数组
  * @param {string} keyInfo // 二级字段
- * @param {any[]} conditions // 多个条件
+ * @param {string[]} conditions // 多个条件
  * @return {any}
  */
-export const groupArray = (jsonArr: any[], keyInfo: string, conditions: any[]): any => {
+export const groupArray = (jsonArr: any[], keyInfo: string, conditions: string[]): any[] => {
   const newJson = []; // 合并好的数据都放在这个数组里
   jsonArr.forEach((itemJson) => {
     let mark = -1;

@@ -12,7 +12,15 @@ import { readFileDataHandle } from 'src/common/fs-handle';
 import { logger } from 'src/common/journal';
 import { groupArray } from 'src/common/array';
 import { useCustomConfig } from 'src/config';
-import { ApiSwaggerJson } from 'types/capital/role';
+import {
+  ApiRoleItem,
+  ApiSwaggerJson,
+  ApiSwaggerJsonAllAssociateResult,
+  ApiSwaggerJsonMethod,
+  ApiSwaggerJsonMode,
+  ApiSwaggerJsonPathsUrlMethod,
+  ApiSwaggerJsonResult,
+} from 'types/capital/role';
 
 @Injectable()
 export class RoleService {
@@ -33,22 +41,18 @@ export class RoleService {
           const { limit, skip } = PaginateHandle(size, current);
           const findData = { name: { $regex: name }, roleCode: { $regex: roleCode } };
           const total = await this.roleModel.find(findData).count();
-          const list = await this.roleModel.find(findData).limit(limit).skip(skip);
+          const findArr = await this.roleModel.find(findData).limit(limit).skip(skip);
+          const list: ApiRoleItem[] = findArr.map((m) => ({
+            roleId: m._id,
+            name: m.name,
+            roleCode: m.roleCode,
+            roleType: m.roleType,
+            menuPermission: m.menuPermission,
+            apiPermission: m.apiPermission,
+          }));
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: list.map((m) => ({
-                roleId: m._id,
-                name: m.name,
-                roleCode: m.roleCode,
-                roleType: m.roleType,
-                menuPermission: m.menuPermission,
-                apiPermission: m.apiPermission,
-              })),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })
@@ -72,17 +76,18 @@ export class RoleService {
       Promise.resolve()
         // 查询
         .then(async () => {
-          const result = await this.roleModel.find().sort({ sort: 1 });
+          const findArr = await this.roleModel.find().sort({ sort: 1 });
+          const result: ApiRoleItem[] = findArr.map((m) => ({
+            roleId: m._id,
+            name: m.name,
+            roleCode: m.roleCode,
+            roleType: m.roleType,
+            menuPermission: m.menuPermission,
+            apiPermission: m.apiPermission,
+          }));
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: result.map((m) => ({
-              roleId: m._id,
-              name: m.name,
-              roleCode: m.roleCode,
-              roleType: m.roleType,
-              menuPermission: m.menuPermission,
-              apiPermission: m.apiPermission,
-            })),
+            result,
             message: '查询成功！',
           });
         })
@@ -219,22 +224,23 @@ export class RoleService {
 
   /**
    * @description 获取全部接口列表的一维数据
-   * @return {Promise<IResponse>}
+   * @return {Promise<ApiSwaggerJsonResult[]>}
    * @memberof RoleService
    */
-  public findApiAllOneDimensional(): Promise<Array<any>> {
+  public findApiAllOneDimensional(): Promise<ApiSwaggerJsonResult[]> {
     return (
       Promise.resolve()
         // 查询
         .then(async () => {
           const { paths: swaggerApiPaths = {} } = await this.findSwaggerApi();
-          const oneArr = [];
+          const oneArr: ApiSwaggerJsonResult[] = [];
           for (const url in swaggerApiPaths) {
             const methodObj = swaggerApiPaths[url];
             if (methodObj && Object.keys(methodObj).length > 0) {
-              for (const method in methodObj) {
-                const itemObj = methodObj[method];
-                const item: any = { url, method };
+              for (const me in methodObj) {
+                const method = me as ApiSwaggerJsonMethod;
+                const itemObj: ApiSwaggerJsonPathsUrlMethod = methodObj[method];
+                const item: ApiSwaggerJsonResult = { url, method };
                 if (itemObj.operationId) {
                   item.operationId = itemObj.operationId;
                   const operationIdSplit = itemObj.operationId.split('_');
@@ -245,8 +251,8 @@ export class RoleService {
                 if (itemObj.parameters && itemObj.parameters.length > 0)
                   itemParameters = itemParameters.concat(
                     itemObj.parameters
-                      .map((m: any) => m.in)
-                      .filter((f: string, index: number, arr: any) => {
+                      .map((m: { in: ApiSwaggerJsonMode }) => m.in)
+                      .filter((f: ApiSwaggerJsonMode, index: number, arr: ApiSwaggerJsonMode[]) => {
                         return arr.indexOf(f, 0) === index;
                       }),
                   );
@@ -258,7 +264,6 @@ export class RoleService {
               }
             }
           }
-
           return oneArr;
         })
         // 返回错误
@@ -276,7 +281,7 @@ export class RoleService {
   public findApiJwtAll(): Promise<Array<any>> {
     return (
       Promise.resolve()
-        // 查询
+        // 查询，并获取需要jwt验证的数据
         .then(async () => {
           const oneArr = await this.findApiAllOneDimensional();
           return oneArr.filter((f) => f.jwt);
@@ -331,7 +336,7 @@ export class RoleService {
         // 查询
         .then(async () => {
           const oneArr = await this.findApiAllOneDimensional();
-          const result = groupArray(oneArr, 'children', ['tagId', 'tagName']);
+          const result: ApiSwaggerJsonAllAssociateResult[] = groupArray(oneArr, 'children', ['tagId', 'tagName']);
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,

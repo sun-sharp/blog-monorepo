@@ -11,7 +11,7 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
-import { ImageFindPageParams, UploadedImage } from 'types/capital/image';
+import { ApiImage, ApiImageItem, ImageFindPageParams, UploadedImage } from 'types/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
 
@@ -57,26 +57,27 @@ export class ImageService {
             url: `${imageReadDir}/${filename}`,
             uploadTime: nowDateFun(),
             source: source,
-          };
+          } as ApiImage;
         })
         .then(async (body) => {
-          const result = await this.imageModel.create(body);
-          if (!result)
+          const saveItem = await this.imageModel.create(body);
+          if (!saveItem)
             throw {
               message: '图片类型出错！',
             };
+          const result: ApiImageItem = {
+            imageId: saveItem._id,
+            size: saveItem.size,
+            name: saveItem.name,
+            imageType: saveItem.imageType,
+            fileName: saveItem.fileName,
+            url: saveItem.url,
+            uploadTime: saveItem.uploadTime,
+            source: saveItem.source,
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              imageId: result._id,
-              size: result.size,
-              name: result.name,
-              imageType: result.imageType,
-              fileName: result.fileName,
-              url: result.url,
-              uploadTime: result.uploadTime,
-              source: result.source,
-            },
+            result,
             message: '上传成功！',
           });
         })
@@ -188,7 +189,7 @@ export class ImageService {
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
-              return {
+              const item: ApiImageItem = {
                 imageId: m._id,
                 size: m.size,
                 fileName: m.fileName,
@@ -198,6 +199,7 @@ export class ImageService {
                 uploadTime: m.uploadTime,
                 source: m.source,
               };
+              return item;
             }),
             message: '查询成功！',
           });
@@ -224,7 +226,7 @@ export class ImageService {
           return (this.response = {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
-              return {
+              const item: ApiImageItem = {
                 imageId: m._id,
                 size: m.size,
                 fileName: m.fileName,
@@ -234,6 +236,7 @@ export class ImageService {
                 uploadTime: m.uploadTime,
                 source: m.source,
               };
+              return item;
             }),
             message: '查询成功！',
           });
@@ -269,7 +272,7 @@ export class ImageService {
             result: {
               current,
               list: (list || []).map((m) => {
-                return {
+                const item: ApiImageItem = {
                   imageId: m._id,
                   size: m.size,
                   fileName: m.fileName,
@@ -280,6 +283,7 @@ export class ImageService {
                   source: m.source,
                   exists: existsSyncHandle(m.url),
                 };
+                return item;
               }),
               size,
               total,

@@ -11,20 +11,25 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class Role extends Document {
+  // 角色名
   @Prop()
-  name: string; // 角色名
+  name: string;
 
+  // 角色唯一标识
   @Prop()
-  roleCode: string; // 角色唯一标识
+  roleCode: string;
 
+  // 角色类型
   @Prop()
-  roleType: number; // 角色类型
+  roleType: number;
 
+  // 角色菜单权限
   @Prop()
-  menuPermission: Array<string>; // 角色菜单权限
+  menuPermission: Array<string>;
 
+  // 角色api权限
   @Prop()
-  apiPermission: Array<string>; // 角色api权限
+  apiPermission: Array<string>;
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);

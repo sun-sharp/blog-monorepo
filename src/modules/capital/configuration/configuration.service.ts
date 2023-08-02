@@ -7,6 +7,7 @@ import { IResponse } from 'src/interfaces/response.interface';
 import { Configuration } from 'src/schemas/capital/configuration.schema';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
+import { ApiConfiguration } from 'types/capital/configuration';
 
 @Injectable()
 export class ConfigurationService {
@@ -91,23 +92,24 @@ export class ConfigurationService {
       Promise.resolve(userId)
         // 获取信息
         .then(async (userId) => {
-          const config = await this.configurationModel.findOne({ userId });
+          const config = await this.configurationModel.findOne({ userId }).lean();
+          const result: ApiConfiguration = {
+            userId: config.userId,
+            isDarkTheme: config.isDarkTheme,
+            appTheme: config.appTheme,
+            navMode: config.navMode,
+            navTheme: config.navTheme,
+            headerSetting: config.headerSetting,
+            footerSetting: config.footerSetting,
+            multiTabsSetting: config.multiTabsSetting,
+            menuSetting: config.menuSetting,
+            crumbsSetting: config.crumbsSetting,
+            isPageAnimate: config.isPageAnimate,
+            pageAnimateType: config.pageAnimateType,
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              userId: config.userId,
-              isDarkTheme: config.isDarkTheme,
-              appTheme: config.appTheme,
-              navMode: config.navMode,
-              navTheme: config.navTheme,
-              headerSetting: config.headerSetting,
-              footerSetting: config.footerSetting,
-              multiTabsSetting: config.multiTabsSetting,
-              menuSetting: config.menuSetting,
-              crumbsSetting: config.crumbsSetting,
-              isPageAnimate: config.isPageAnimate,
-              pageAnimateType: config.pageAnimateType,
-            },
+            result,
             message: '查询成功！',
           });
         })

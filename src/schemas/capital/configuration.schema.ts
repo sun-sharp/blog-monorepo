@@ -98,41 +98,53 @@ export class FooterSetting {
   versionKey: false,
 })
 export class Configuration extends Document {
+  // 用户id
   @Prop()
-  userId: string; // 用户id
+  userId: string;
 
+  // 深色主题
   @Prop()
-  isDarkTheme: boolean; // 深色主题
+  isDarkTheme: boolean;
 
+  // 系统主题色
   @Prop()
-  appTheme: string; // 系统主题色
+  appTheme: string;
 
+  // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
   @Prop()
-  navMode: string; // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
+  navMode: string;
 
+  // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
   @Prop()
-  navTheme: string; // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
+  navTheme: string;
 
+  // 顶部
   @Prop()
-  headerSetting: HeaderSetting; // 顶部
+  headerSetting: HeaderSetting;
 
+  // 底部
   @Prop()
-  footerSetting: FooterSetting; // 底部
+  footerSetting: FooterSetting;
 
+  // 多标签
   @Prop()
-  multiTabsSetting: MultiTabsSetting; // 多标签
+  multiTabsSetting: MultiTabsSetting;
 
+  // 菜单
   @Prop()
-  menuSetting: MenuSetting; // 菜单
+  menuSetting: MenuSetting;
 
+  // 面包屑
   @Prop()
-  crumbsSetting: CrumbsSetting; // 面包屑
+  crumbsSetting: CrumbsSetting;
 
+  // 是否开启路由动画
   @Prop()
-  isPageAnimate: boolean; // 是否开启路由动画
+  isPageAnimate: boolean;
 
+  // 路由动画类型
   @Prop()
-  pageAnimateType: string; // 路由动画类型
+  pageAnimateType: string;
 }
 
 export const ConfigurationSchema = SchemaFactory.createForClass(Configuration);

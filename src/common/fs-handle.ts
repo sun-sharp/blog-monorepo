@@ -50,7 +50,7 @@ export const unlinkHandle = (pathName: PathLike): Promise<boolean> => {
  * @param {string[]} list
  * @return {Promise<Promise<{ message: string }>[]}
  */
-export const unlinkListHandle = async (dir: string, list: string[]): Promise<Promise<{ message: string }>[]> => {
+export const unlinkListHandle = async (dir: string, list: string[]): Promise<{ message: string }[]> => {
   const promiseArr = list.map(
     (fileName) =>
       new Promise((resolve, reject) => {

@@ -8,6 +8,7 @@ import { Category } from 'src/schemas/capital/category.schema';
 import { PageCategoryDto } from './dto/page-category.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { ApiCategoryItem } from 'types/capital/category';
 
 @Injectable()
 export class CategoryService {
@@ -81,16 +82,17 @@ export class CategoryService {
       Promise.resolve(type)
         // 查询
         .then(async (type) => {
-          const result = await this.findByType(type);
+          const findArr = await this.findByType(type);
+          const result: ApiCategoryItem[] = findArr.map((m) => ({
+            categoryId: m._id,
+            type: m.type,
+            valueStr: m.valueStr,
+            value: m.value,
+            label: m.label,
+          }));
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: result.map((m) => ({
-              categoryId: m._id,
-              type: m.type,
-              valueStr: m.valueStr,
-              value: m.value,
-              label: m.label,
-            })),
+            result,
             message: '查询成功！',
           });
         })
@@ -138,23 +140,19 @@ export class CategoryService {
           const { limit, skip } = PaginateHandle(size, current);
           const findData = { type: { $regex: type } };
           const total = await this.categoryModel.find(findData).count();
-          const list = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
+          const findArr = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
+          const list: ApiCategoryItem[] = (findArr || []).map((m) => {
+            return {
+              categoryId: m._id,
+              type: m.type,
+              valueStr: m.valueStr,
+              value: m.value,
+              label: m.label,
+            };
+          });
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: (list || []).map((m) => {
-                return {
-                  categoryId: m._id,
-                  type: m.type,
-                  valueStr: m.valueStr,
-                  value: m.value,
-                  label: m.label,
-                };
-              }),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })

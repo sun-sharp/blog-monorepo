@@ -7,10 +7,10 @@ import { Menu } from 'src/schemas/capital/menu.schema';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { menuFindAllDto } from './dto/menu-find-all-dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
+import { ApiMenuItem } from 'types/capital/menu';
 
 @Injectable()
 export class MenuService {
-  response: IResponse;
   constructor(@InjectModel('Menu') private readonly menuModel: Model<Menu>) {}
 
   /**
@@ -18,25 +18,25 @@ export class MenuService {
    * @param {CreateMenuDto} createMenuDto
    * @return {Promise<IResponse>}
    */
-  public save(body: CreateMenuDto): Promise<IResponse> {
+  public save(createMenuDto: CreateMenuDto): Promise<IResponse> {
     return (
-      Promise.resolve(body)
+      Promise.resolve(createMenuDto)
         // 添加
         .then(async (body) => {
           await this.menuModel.create({
             ...body,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -53,31 +53,32 @@ export class MenuService {
         .then(async (query) => {
           const findData = query ? { name: { $regex: query.name || '' } } : {};
           const menuList = await this.menuModel.find(findData).sort({ sort: 1 });
-          return (this.response = {
+          const result: ApiMenuItem[] = menuList.map((m) => ({
+            menuId: m._id,
+            name: m.name,
+            title: m.title,
+            parentId: m.parentId,
+            menuType: m.menuType,
+            hidden: m.hidden,
+            component: m.component,
+            sort: m.sort,
+            icon: m.icon,
+            iframeSrc: m.iframeSrc,
+            externalLink: m.externalLink,
+            noKeepAlive: m.noKeepAlive,
+          }));
+          return {
             code: ApiCode.SUCCESS,
-            result: menuList.map((m) => ({
-              menuId: m._id,
-              name: m.name,
-              title: m.title,
-              parentId: m.parentId,
-              menuType: m.menuType,
-              hidden: m.hidden,
-              component: m.component,
-              sort: m.sort,
-              icon: m.icon,
-              iframeSrc: m.iframeSrc,
-              externalLink: m.externalLink,
-              noKeepAlive: m.noKeepAlive,
-            })),
+            result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -134,17 +135,17 @@ export class MenuService {
         .then(async (body) => {
           const { menuId, ...other } = body;
           await this.menuModel.updateOne({ _id: menuId }, other);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -164,17 +165,17 @@ export class MenuService {
         // 删除
         .then(async (menuId) => {
           await this.menuModel.deleteOne({ _id: menuId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
