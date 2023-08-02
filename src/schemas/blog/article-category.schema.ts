@@ -11,11 +11,13 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class ArticleCategory extends Document {
+  // 文章分类标识
   @Prop()
-  value: number; // 文章分类标识
+  value: number;
 
+  // 文章分类名称
   @Prop()
-  name: string; // 文章分类名称
+  name: string;
 }
 
 export const ArticleCategorySchema = SchemaFactory.createForClass(ArticleCategory);

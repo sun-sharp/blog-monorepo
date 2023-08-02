@@ -6,6 +6,7 @@ import { logger } from 'src/common/journal';
 import { IResponse } from 'src/interfaces/response.interface';
 import { ArticleCategory } from 'src/schemas/blog/article-category.schema';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
+import { ApiArticleCategoryItem } from 'types/blog/article-category';
 // import { UpdateArticleCategoryDto } from './dto/update-article-category.dto';
 
 @Injectable()
@@ -93,14 +94,15 @@ export class ArticleCategoryService {
       Promise.resolve()
         // 查询
         .then(async () => {
-          const result = await this.articleCategoryModel.find().sort({ value: 1 });
+          const findArr = await this.articleCategoryModel.find().sort({ value: 1 });
+          const result: ApiArticleCategoryItem[] = findArr.map((m) => ({
+            articleCategoryId: m._id,
+            value: m.value,
+            name: m.name,
+          }));
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: result.map((m) => ({
-              articleCategoryId: m._id,
-              value: m.value,
-              name: m.name,
-            })),
+            result,
             message: '查询成功！',
           });
         })

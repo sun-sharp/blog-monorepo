@@ -11,32 +11,41 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class Article extends Document {
+  // 文章的标题
   @Prop()
-  title: string; // 文章的标题
+  title: string;
 
+  // 文章的简介
   @Prop()
-  brief: string; // 文章的简介
+  brief: string;
 
+  // 文章的html内容
   @Prop()
-  htmlContent: string; // 文章的html内容
+  htmlContent: string;
 
+  // 文章的markdown内容
   @Prop()
-  markdownContent: string; // 文章的markdown内容
+  markdownContent: string;
 
+  // 文章的作者
   @Prop()
-  authorId: string; // 文章的作者
+  authorId: string;
 
+  // 文章的作者昵称
   @Prop()
-  authorNickname: string; // 文章的作者昵称
+  authorNickname: string;
 
+  // 文章的类型标识
   @Prop()
-  categoryVal: number; // 文章的类型标识
+  categoryVal: number;
 
+  // 文章的名称
   @Prop()
-  categoryName: string; // 文章的名称
+  categoryName: string;
 
+  // 文章的创建时间
   @Prop()
-  createTime: string; // 文章的创建时间
+  createTime: string;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

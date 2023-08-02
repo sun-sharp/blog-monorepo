@@ -12,6 +12,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
+import { ApiArticleItem } from 'types/blog/article';
 
 @Injectable()
 export class ArticleService {
@@ -35,26 +36,22 @@ export class ArticleService {
             findData.categoryVal = categoryVal;
           }
           const total = await this.articleModel.find(findData).count();
-          const list = await this.articleModel.find(findData).limit(limit).skip(skip);
+          const findArr = await this.articleModel.find(findData).limit(limit).skip(skip);
+          const list: ApiArticleItem[] = findArr.map((m) => ({
+            articleId: m._id,
+            title: m.title,
+            brief: m.brief,
+            htmlContent: m.htmlContent,
+            markdownContent: m.markdownContent,
+            authorId: m.authorId,
+            authorNickname: m.authorNickname,
+            categoryVal: m.categoryVal,
+            categoryName: m.categoryName,
+            createTime: m.createTime,
+          }));
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: list.map((m) => ({
-                articleId: m._id,
-                title: m.title,
-                brief: m.brief,
-                htmlContent: m.htmlContent,
-                markdownContent: m.markdownContent,
-                authorId: m.authorId,
-                authorNickname: m.authorNickname,
-                categoryVal: m.categoryVal,
-                categoryName: m.categoryName,
-                createTime: m.createTime,
-              })),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })
@@ -172,13 +169,25 @@ export class ArticleService {
     return (
       Promise.resolve(articleId)
         .then(async (articleId) => {
-          const result = await this.articleModel.findOne({ _id: articleId });
-          if (!result) {
+          const find = await this.articleModel.findOne({ _id: articleId }).lean();
+          if (!find) {
             throw (this.response = {
               code: ApiCode.ERROR,
               message: '查询文章详情失败',
             });
           }
+          const result: ApiArticleItem = {
+            articleId: find._id,
+            title: find.title,
+            brief: find.brief,
+            htmlContent: find.htmlContent,
+            markdownContent: find.markdownContent,
+            authorId: find.authorId,
+            authorNickname: find.authorNickname,
+            categoryVal: find.categoryVal,
+            categoryName: find.categoryName,
+            createTime: find.createTime,
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
             result,
