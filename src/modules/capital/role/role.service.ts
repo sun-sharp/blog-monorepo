@@ -115,7 +115,6 @@ export class RoleService {
           await this.roleModel.updateOne({ _id: roleId }, other);
           return (this.response = {
             code: ApiCode.SUCCESS,
-            // result: true,
             message: '修改成功！',
           });
         })
