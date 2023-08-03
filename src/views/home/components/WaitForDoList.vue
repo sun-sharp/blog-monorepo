@@ -4,9 +4,9 @@
   import { watch, ref, onMounted } from 'vue';
   import { waitForDoApi } from '@/api';
   import Draggable from 'vuedraggable';
-  import { WaitForDoItem } from '/#/views/wait-for-do';
   import WaitForDoSetting from './WaitForDoSetting.vue';
   import { format } from 'date-fns';
+import { ApiWaitForDoItem } from '/#/api/wait-for-do';
 
   const waitForDoSettingRef = ref();
 
@@ -64,7 +64,7 @@
   // 状态展示
   const defaultWaitState = 1;
   const waitTabsName = ref(defaultWaitState);
-  const waitDragList = ref([]);
+  const waitDragList = ref<ApiWaitForDoItem[]>([]);
   const addTitleValue = ref('');
 
   // 获取待办数据
@@ -81,13 +81,13 @@
   };
 
   // 点击列表
-  const itemClick = (item: WaitForDoItem) => {
+  const itemClick = (item: ApiWaitForDoItem) => {
     waitForDoSettingRef.value.init(item);
   };
 
   // 拖拽修改排序
   const draggableEnd = () => {
-    const paramsArr = waitDragList.value.map((m: WaitForDoItem) => ({
+    const paramsArr = waitDragList.value.map((m: ApiWaitForDoItem) => ({
       waitForDoId: m.waitForDoId,
     }));
     waitForDoApi.updateSort(paramsArr).then(() => {
@@ -96,7 +96,7 @@
   };
 
   // 点击多选框修改状态
-  const itemUpdateCheck = (check: boolean, item: WaitForDoItem) => {
+  const itemUpdateCheck = (check: boolean, item: ApiWaitForDoItem) => {
     const updateParams = {
       waitForDoId: item.waitForDoId,
       state: check ? 2 : 1,
@@ -232,11 +232,12 @@
       margin-bottom: 10px;
 
       .add-calendar {
-        cursor: pointer;
-        color: #c2c2c2;
         display: flex;
         align-items: center;
+        color: #c2c2c2;
+        cursor: pointer;
       }
+
       .add-time {
         margin-left: 10px;
         font-size: 14px;
@@ -249,11 +250,11 @@
     }
 
     .wait-list--item {
-      cursor: default;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
       display: flex;
       justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      cursor: default;
 
       .item-left {
         display: flex;
@@ -270,6 +271,12 @@
           color: $text-warning-color;
         }
       }
+      
+      .item-text {
+        color: #333;
+        font-size: 14px;
+      }
+
       .item-info {
         margin-left: 10px;
 
@@ -280,16 +287,13 @@
         }
       }
 
-      .item-text {
-        font-size: 14px;
-        color: #333;
-      }
+      
 
       .item-remark {
-        font-size: 12px;
-        color: #999;
         max-width: 200px;
         overflow: hidden;
+        color: #999;
+        font-size: 12px;
         white-space: nowrap;
         text-overflow: ellipsis;
       }

@@ -31,8 +31,8 @@
 
 <style lang="scss">
   .user-info {
-    max-width: 300px;
     min-width: 250px;
+    max-width: 300px;
     max-height: 220px;
     padding: 20px;
     background-color: $card-background-color;
@@ -40,10 +40,10 @@
     box-shadow: $card-box-shadow;
 
     &__head {
-      border-bottom: 1px solid $border-divide-color;
       display: flex;
       align-items: center;
       padding-bottom: 20px;
+      border-bottom: 1px solid $border-divide-color;
 
       .head-avatar {
         margin-right: 30px;
@@ -51,13 +51,13 @@
 
       .head-info {
         h2 {
-          font-size: 30px;
           color: $font-color;
+          font-size: 30px;
         }
 
         p {
-          font-size: 16px;
           color: $font-color;
+          font-size: 16px;
         }
       }
     }
