@@ -4,7 +4,7 @@ import { setupRouter } from './router';
 import { setupStore } from './store';
 import MakeitCaptcha from 'makeit-captcha';
 import 'makeit-captcha/dist/captcha.min.css';
-import { setupNaive, setupMdEditor, setupDirectives } from '@/plugins';
+import { setupNaive, setupDirectives } from '@/plugins';
 
 const app = createApp(App);
 
@@ -22,8 +22,5 @@ setupStore(app);
 
 // 挂载路由
 setupRouter(app);
-
-// 挂载 markdown 编辑器
-setupMdEditor(app);
 
 app.mount('#app');

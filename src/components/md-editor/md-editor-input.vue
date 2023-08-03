@@ -1,6 +1,3 @@
-<template>
-  <md-editor-v3 v-model="text" v-bind="getMdEditorBind" @onChange="onChange" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
-</template>
 <script lang="ts" setup>
   import { componentUpload } from '@/constant';
   import { useUserStoreWidthOut } from '@/store';
@@ -8,10 +5,13 @@
   import axios, { AxiosRequestConfig } from 'axios';
   import { useMessage } from 'naive-ui';
   import { computed, ref, watchEffect } from 'vue';
+  import type { ToolbarNames } from 'md-editor-v3';
+  import { MdEditor } from 'md-editor-v3';
+  import 'md-editor-v3/lib/style.css';
 
   const props = defineProps({
     toolbars: {
-      type: Array,
+      type: Array<ToolbarNames>,
       default: () => [
         'bold', // 加粗
         'underline', // 加下划线
@@ -163,3 +163,8 @@
     emit('update:markdownText', v);
   };
 </script>
+
+<template>
+  <md-editor v-model="text" v-bind="getMdEditorBind" @onChange="onChange" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
+</template>
+
