@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiUserInfo } from '/#/api/user';
+import { ApiUserInfo, ApiUserItem, ApiUserPageData } from '/#/api/user';
 
 const basic = '/user';
 
@@ -18,13 +18,13 @@ export const getUserInfo = (): Promise<ApiUserInfo> => {
  * @description 用户列表
  * @param data
  */
-export function getPage(data: any) {
+export const getPage = (data: ApiUserPageData): Promise<ApiUserItem> => {
   return AxiosCapital.request({
     url: `${basic}/find_page`,
     method: 'POST',
     data,
   });
-}
+};
 
 /**
  * @description 新增用户

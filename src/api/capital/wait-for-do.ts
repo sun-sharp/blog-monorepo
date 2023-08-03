@@ -1,13 +1,14 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiWaitForDoSaveData, ApiWaitForDoUpdateData, ApiWaitForDoUpdateSortData, ApiWaitForDoUpdateStateData } from '/#/api/wait-for-do';
+import { ApiWaitForDoItem, ApiWaitForDoSaveData, ApiWaitForDoUpdateData, ApiWaitForDoUpdateSortData, ApiWaitForDoUpdateStateData } from '/#/api/wait-for-do';
 
 const basic = '/wait-for-do';
 
 /**
- * @description 新增待办
- * @param data
+ * @description: 新增待办
+ * @param {ApiWaitForDoSaveData} data
+ * @return {Promise<undefined>}
  */
-export const save = (data: ApiWaitForDoSaveData) => {
+export const save = (data: ApiWaitForDoSaveData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/save`,
     method: 'POST',
@@ -19,10 +20,12 @@ export const save = (data: ApiWaitForDoSaveData) => {
 };
 
 /**
- * @description 某种类型的所有待办
- * @param data
+ * @description: 某种类型的所有待办
+ * @param {number} classify
+ * @param {number} state
+ * @return {Promise<ApiWaitForDoItem[]>}
  */
-export const classifyAll = (classify: number, state: number) => {
+export const classifyAll = (classify: number, state: number): Promise<ApiWaitForDoItem[]> => {
   return AxiosCapital.request({
     url: `${basic}/classify_all`,
     method: 'GET',
@@ -34,10 +37,11 @@ export const classifyAll = (classify: number, state: number) => {
 };
 
 /**
- * @description 修改待办的状态
- * @param data
+ * @description: 修改待办的状态
+ * @param {ApiWaitForDoUpdateStateData} data
+ * @return {: Promise<undefined>}
  */
-export const updateState = (data: ApiWaitForDoUpdateStateData) => {
+export const updateState = (data: ApiWaitForDoUpdateStateData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/update_state`,
     method: 'PUT',
@@ -46,10 +50,11 @@ export const updateState = (data: ApiWaitForDoUpdateStateData) => {
 };
 
 /**
- * @description 批量修改待办的排序
- * @param data
+ * @description: 批量修改待办的排序
+ * @param {ApiWaitForDoUpdateSortData} data
+ * @return {Promise<undefined>}
  */
-export const updateSort = (data: ApiWaitForDoUpdateSortData[]) => {
+export const updateSort = (data: ApiWaitForDoUpdateSortData[]): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/update_sort`,
     method: 'PUT',
@@ -58,10 +63,11 @@ export const updateSort = (data: ApiWaitForDoUpdateSortData[]) => {
 };
 
 /**
- * @description 修改待办的名称，备注，截止时间
- * @param data
+ * @description: 修改待办的名称，备注，截止时间
+ * @param {ApiWaitForDoUpdateData} data
+ * @return {Promise<undefined>}
  */
-export const update = (data: ApiWaitForDoUpdateData) => {
+export const update = (data: ApiWaitForDoUpdateData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/update`,
     method: 'PUT',
@@ -70,10 +76,11 @@ export const update = (data: ApiWaitForDoUpdateData) => {
 };
 
 /**
- * @description 批量修改待办的排序
- * @param waitForDoId
+ * @description: 批量修改待办的排序
+ * @param {string} waitForDoId
+ * @return {Promise<ApiWaitForDoItem>}
  */
-export const detail = (waitForDoId: string) => {
+export const detail = (waitForDoId: string): Promise<ApiWaitForDoItem> => {
   return AxiosCapital.request({
     url: `${basic}/${waitForDoId}`,
     method: 'GET',
@@ -81,10 +88,11 @@ export const detail = (waitForDoId: string) => {
 };
 
 /**
- * @description 删除待办
- * @param waitForDoId
+ * @description: 删除待办
+ * @param {string} waitForDoId
+ * @return {Promise<undefined>}
  */
-export const remove = (waitForDoId: string) => {
+export const remove = (waitForDoId: string): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/${waitForDoId}`,
     method: 'DELETE',

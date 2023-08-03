@@ -1,3 +1,5 @@
+import { ApiPaginateParams } from './common';
+
 /**
  * @description: 用户的id
  */
@@ -30,4 +32,19 @@ export interface ApiUser {
 export interface ApiUserInfo extends Omit<ApiUser, 'password'>,ApiUserId {
   // 角色名称
   roleName: string;
+}
+
+/**
+ * @description: 用户的列表每项
+ */
+export interface ApiUserItem extends ApiUser,ApiUserId {}
+
+/**
+ * @description: 分页查询用户列表传参
+ */
+export interface ApiUserPageData extends ApiPaginateParams {
+  // 昵称
+  nickname: string;
+  // 用户名
+  username: string;
 }
