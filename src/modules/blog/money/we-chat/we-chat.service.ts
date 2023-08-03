@@ -5,7 +5,6 @@ import { weChatExcelCellHandle } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'src/interfaces/response.interface';
 import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
@@ -13,10 +12,10 @@ import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 import { weChatExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiWeChatItem, ApiWeChatUpload } from 'types/blog/money/we-chat';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class WeChatService {
-  response: IResponse;
   constructor(@InjectModel('WeChat') private readonly weChatModel: Model<WeChat>) {}
 
   /**
@@ -56,18 +55,18 @@ export class WeChatService {
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '导入成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '导入失败！',
-          });
+          };
         })
     );
   }
@@ -95,17 +94,17 @@ export class WeChatService {
             userId,
             balance: 0,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -130,17 +129,17 @@ export class WeChatService {
               message: '保存的数据交易时间全部和数据库的相同！',
             };
           await this.weChatModel.create(...filterArr.map((m) => ({ ...m, userId, balance: 0 })));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -210,18 +209,18 @@ export class WeChatService {
               balance,
             }),
           );
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -278,17 +277,17 @@ export class WeChatService {
         .then(async ({ body }) => {
           const { weChatId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod } = body;
           await this.weChatModel.updateOne({ _id: weChatId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -320,17 +319,17 @@ export class WeChatService {
               await this.weChatModel.updateOne({ _id: fe._id }, { balance: Number(balance.toFixed(2)) });
             }
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '处理成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '处理失败！',
-          });
+          };
         })
     );
   }

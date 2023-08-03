@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { IResponse } from 'src/interfaces/response.interface';
 import { Menu } from 'src/schemas/capital/menu.schema';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { menuFindAllDto } from './dto/menu-find-all-dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { ApiMenuItem } from 'types/capital/menu';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class MenuService {

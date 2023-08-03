@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { groupArray, sumArrayToMoney, uniqueArray } from 'src/common/array';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { IResponse } from 'src/interfaces/response.interface';
 import { AliPayService } from './ali-pay/ali-pay.service';
 import { BankService } from './bank/bank.service';
 import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
@@ -11,10 +10,10 @@ import { categoryTypeEnum } from 'src/common/enums/category.enum';
 import { CategoryService } from 'src/modules/capital/category/category.service';
 import { ApiAliPayAndWeChatChild, ApiBankFlow, ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from 'types/blog/money';
 import { ApiBank } from 'types/blog/money/bank';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class MoneyService {
-  response: IResponse;
   constructor(
     private readonly bankService: BankService,
     private readonly weChatService: WeChatService,
@@ -114,18 +113,18 @@ export class MoneyService {
             civil: bankFlowFun(civilArr),
             attractInvestment: bankFlowFun(attractInvestmentArr),
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '获取成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '获取失败！',
-          });
+          };
         })
     );
   }
@@ -188,18 +187,18 @@ export class MoneyService {
             civilBank: bankBalanceFun(civilArr),
             attractInvestmentBank: bankBalanceFun(attractInvestmentArr),
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '获取成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '获取失败！',
-          });
+          };
         })
     );
   }
@@ -339,18 +338,18 @@ export class MoneyService {
             inflowSumTotal,
             inflowChart,
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '获取成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '获取失败！',
-          });
+          };
         })
     );
   }

@@ -6,7 +6,6 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { existsSyncHandle, readdirOfImageHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
 import { logger } from 'src/common/journal';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'src/interfaces/response.interface';
 import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
@@ -14,6 +13,7 @@ import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllI
 import { ApiImage, ApiImageItem, ImageFindPageParams, UploadedImage } from 'types/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
+import { IResponse } from 'types/common';
 
 const customConfig = useCustomConfig();
 const imageReadDir = `${customConfig.fileAccessPath}/image`;
@@ -21,7 +21,6 @@ const imageFsDir = `${customConfig.staticDirPosition}${customConfig.staticDirNam
 
 @Injectable()
 export class ImageService {
-  response: IResponse;
   constructor(
     @InjectModel('Image') private readonly imageModel: Model<Image>,
     private readonly userService: UserService,
@@ -75,18 +74,18 @@ export class ImageService {
             uploadTime: saveItem.uploadTime,
             source: saveItem.source,
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '上传成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '上传失败！',
-          });
+          };
         })
     );
   }
@@ -100,18 +99,18 @@ export class ImageService {
       Promise.resolve()
         .then(async () => {
           const result = await readdirOfImageHandle(imageFsDir);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -138,18 +137,18 @@ export class ImageService {
             const findIndex = imageData.findIndex((d) => p.name === d.name);
             return findIndex === -1;
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -186,7 +185,7 @@ export class ImageService {
             if (useStatus) result.push(f);
           }
           logger.log(`获取只有图片文件没有数据的文件`, result);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
               const item: ApiImageItem = {
@@ -202,14 +201,14 @@ export class ImageService {
               return item;
             }),
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -223,7 +222,7 @@ export class ImageService {
       Promise.resolve()
         .then(async () => {
           const result = await this.imageModel.find();
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
               const item: ApiImageItem = {
@@ -239,14 +238,14 @@ export class ImageService {
               return item;
             }),
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -267,7 +266,7 @@ export class ImageService {
           if (source) findData.source = source;
           const total = await this.imageModel.find(findData).count();
           const list = await this.imageModel.find(findData).limit(limit).skip(skip).sort({ uploadTime: -1 });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: {
               current,
@@ -289,14 +288,14 @@ export class ImageService {
               total,
             },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -318,17 +317,17 @@ export class ImageService {
         // 删除文件
         .then(async (publicName) => {
           await unlinkHandle(publicName);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -349,18 +348,18 @@ export class ImageService {
         // 删除文件
         .then(async (fileNameArr) => {
           const result = await unlinkListHandle(`${customConfig.staticDirPosition}${customConfig.staticDirName}/image`, fileNameArr);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -375,17 +374,17 @@ export class ImageService {
       Promise.resolve(imageId)
         .then(async (imageId) => {
           await this.imageModel.deleteOne({ _id: imageId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -400,17 +399,17 @@ export class ImageService {
       Promise.resolve(removeDataAllImageDto)
         .then(async ({ imageIdArr }) => {
           await this.imageModel.deleteMany({ _id: { $in: imageIdArr } });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -448,10 +447,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -489,10 +488,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

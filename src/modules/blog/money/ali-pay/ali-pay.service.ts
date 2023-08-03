@@ -5,7 +5,6 @@ import { aliPayExcelCellHandle } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'src/interfaces/response.interface';
 import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
 import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
@@ -13,10 +12,10 @@ import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
 import { aliPayExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class AliPayService {
-  response: IResponse;
   constructor(@InjectModel('AliPay') private readonly aliPayModel: Model<AliPay>) {}
 
   /**
@@ -57,18 +56,18 @@ export class AliPayService {
           result.sort((a, b) => {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '导入成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '导入失败！',
-          });
+          };
         })
     );
   }
@@ -95,17 +94,17 @@ export class AliPayService {
             ...body,
             userId,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -130,17 +129,17 @@ export class AliPayService {
               message: '保存的数据交易时间全部和数据库的相同！',
             };
           await this.aliPayModel.create(...filterArr.map((m) => ({ ...m, userId })));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -210,18 +209,18 @@ export class AliPayService {
               balanceBaby,
             }),
           );
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -265,17 +264,17 @@ export class AliPayService {
         .then(async ({ body }) => {
           const { aliPayId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod } = body;
           await this.aliPayModel.updateOne({ _id: aliPayId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -307,17 +306,17 @@ export class AliPayService {
               await this.aliPayModel.updateOne({ _id: fe._id }, { balance: Number(balance.toFixed(2)) });
             }
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '处理成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '处理失败！',
-          });
+          };
         })
     );
   }
@@ -349,17 +348,17 @@ export class AliPayService {
               await this.aliPayModel.updateOne({ _id: fe._id }, { balanceBaby: Number(balanceBaby.toFixed(2)) });
             }
           }
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '处理成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '处理失败！',
-          });
+          };
         })
     );
   }

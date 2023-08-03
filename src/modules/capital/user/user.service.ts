@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { comparePassword, hashPassword } from 'src/common/bcrypt';
-import { IResponse } from 'src/interfaces/response.interface';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PageUserDto } from './dto/page-user.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
@@ -15,12 +14,12 @@ import { JwtService } from '@nestjs/jwt';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { RoleService } from '../role/role.service';
 import { ApiUserInfo, ApiUserItem } from 'types/capital/user';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class UserService {
   private USERNAME_LENGTH_MAX = 10;
   private USERNAME_LENGTH_MIN = 3;
-  response: IResponse;
   constructor(
     @InjectModel('User') private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
@@ -39,15 +38,15 @@ export class UserService {
         .then((body) => {
           const { username } = body;
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
-            });
+            };
           if (!/^[a-z][a-z_`~@*|()+-]{3,40}$/.test(username)) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '账号不符合规定',
-            });
+            };
           }
           return body;
         })
@@ -56,10 +55,10 @@ export class UserService {
           const { username } = body;
           const user = await this.userModel.findOne({ username });
           if (user)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '用户名已注册',
-            });
+            };
           return body;
         })
         // 判断头像是否合理
@@ -67,10 +66,10 @@ export class UserService {
           const { avatar } = body;
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
           if (hasHttpOrHttps)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '头像保存的不合理，请处理之后再上传！',
-            });
+            };
           return body;
         })
         // 注册用户
@@ -80,18 +79,18 @@ export class UserService {
             ...body,
             password,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: result._id,
             message: '用户创建成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '创建用户失败！',
-          });
+          };
         })
     );
   }
@@ -127,10 +126,10 @@ export class UserService {
         .then(async (avatar) => {
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
           if (hasHttpOrHttps)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '头像保存的不合理，请处理之后再上传！',
-            });
+            };
           return avatar;
         })
         // 判断username 是否为合法字符
@@ -157,10 +156,10 @@ export class UserService {
           const user = await this.userModel.findOne({ _id: userId }).lean();
           const routeFind = await this.roleService.findOneByRoleCode(user.roleCode);
           if (!routeFind) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询角色失败',
-            });
+            };
           }
           const result: ApiUserInfo = {
             userId: user._id,
@@ -171,18 +170,18 @@ export class UserService {
             avatar: user.avatar,
             nickname: user.nickname,
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -210,18 +209,18 @@ export class UserService {
             avatar: m.avatar,
             nickname: m.nickname,
           }));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -237,17 +236,17 @@ export class UserService {
       Promise.resolve({ userId, roleCode })
         .then(async ({ userId, roleCode }) => {
           await this.userModel.updateOne({ _id: userId }, { roleCode });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -266,26 +265,26 @@ export class UserService {
           const { avatar } = body;
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
           if (hasHttpOrHttps)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '头像保存的不合理，请处理之后再上传！',
-            });
+            };
           return { userId, body };
         })
         // 修改用户基本信息
         .then(async ({ userId, body }) => {
           await this.userModel.updateOne({ _id: userId }, body);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -303,10 +302,10 @@ export class UserService {
         .then(async ({ user, body }) => {
           const verify = await comparePassword(body.password, user.password);
           if (!verify) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '密码错误',
-            });
+            };
           }
           return {
             userId: user._id,
@@ -317,17 +316,17 @@ export class UserService {
         .then(async ({ userId, updatePassword }) => {
           const password = await hashPassword(updatePassword);
           await this.userModel.updateOne({ _id: userId }, { password });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改密码成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改密码失败！',
-          });
+          };
         })
     );
   }
@@ -342,17 +341,17 @@ export class UserService {
       Promise.resolve(userId)
         .then(async (userId) => {
           await this.userModel.deleteOne({ _id: userId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

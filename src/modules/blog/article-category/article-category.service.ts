@@ -3,15 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
-import { IResponse } from 'src/interfaces/response.interface';
 import { ArticleCategory } from 'src/schemas/blog/article-category.schema';
 import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
 import { ApiArticleCategoryItem } from 'types/blog/article-category';
-// import { UpdateArticleCategoryDto } from './dto/update-article-category.dto';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class ArticleCategoryService {
-  response: IResponse;
   constructor(@InjectModel('ArticleCategory') private readonly articleCategoryModel: Model<ArticleCategory>) {}
 
   /**
@@ -27,10 +25,10 @@ export class ArticleCategoryService {
           const { name } = body;
           const findOne = await this.articleCategoryModel.findOne({ name });
           if (findOne) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '分类已添加',
-            });
+            };
           }
           const findAll = await this.articleCategoryModel.find().sort({ value: 1 });
           if (findAll && findAll.length > 0) {
@@ -39,10 +37,10 @@ export class ArticleCategoryService {
               name,
             };
           } else {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询分类最新添加的失败',
-            });
+            };
           }
         })
         // 添加
@@ -50,18 +48,18 @@ export class ArticleCategoryService {
           await this.articleCategoryModel.create({
             ...body,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.log(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -100,19 +98,19 @@ export class ArticleCategoryService {
             value: m.value,
             name: m.name,
           }));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.log(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -126,17 +124,17 @@ export class ArticleCategoryService {
       Promise.resolve(articleCategoryId)
         .then(async (articleCategoryId) => {
           await this.articleCategoryModel.deleteOne({ _id: articleCategoryId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

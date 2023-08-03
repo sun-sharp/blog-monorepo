@@ -3,16 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
-import { IResponse } from 'src/interfaces/response.interface';
 import { Category } from 'src/schemas/capital/category.schema';
 import { PageCategoryDto } from './dto/page-category.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ApiCategoryItem } from 'types/capital/category';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class CategoryService {
-  response: IResponse;
   constructor(@InjectModel('Category') private readonly categoryModel: Model<Category>) {}
 
   /**
@@ -27,28 +26,28 @@ export class CategoryService {
         .then(async (body) => {
           const { type, value, valueStr, label } = body;
           if (!value && !valueStr) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '请输入全局类型标识',
-            });
+            };
           }
           const findTypeData = await this.categoryModel.find({ type });
           if (value) {
             const findValue = findTypeData.find((f) => f.value === value);
             if (findValue) {
-              throw (this.response = {
+              throw {
                 code: ApiCode.ERROR,
                 message: '全局类型标识重复',
-              });
+              };
             }
             return { type, value, label };
           } else if (valueStr) {
             const findValueStr = findTypeData.find((f) => f.valueStr === valueStr);
             if (findValueStr) {
-              throw (this.response = {
+              throw {
                 code: ApiCode.ERROR,
                 message: '全局类型标识（字符串类型）重复',
-              });
+              };
             }
             return { type, valueStr, label };
           }
@@ -56,18 +55,18 @@ export class CategoryService {
         // 添加
         .then(async (body) => {
           await this.categoryModel.create(body);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.log(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -90,19 +89,19 @@ export class CategoryService {
             value: m.value,
             label: m.label,
           }));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.log(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -150,18 +149,18 @@ export class CategoryService {
               label: m.label,
             };
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }

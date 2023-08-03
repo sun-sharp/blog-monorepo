@@ -5,7 +5,6 @@ import { bankExcelCellMap } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelXlsxHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'src/interfaces/response.interface';
 import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
@@ -13,10 +12,10 @@ import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 import { bankExcelTargetHandler } from 'src/common/utils/money';
 import { ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class BankService {
-  response: IResponse;
   constructor(@InjectModel('Bank') private readonly bankModel: Model<Bank>) {}
 
   /**
@@ -66,18 +65,18 @@ export class BankService {
               return b.bankType > a.bankType ? -1 : 1;
             }
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '导入成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '导入失败！',
-          });
+          };
         })
     );
   }
@@ -102,17 +101,17 @@ export class BankService {
               message: '新增的数据全部和数据库的相同！',
             };
           await this.bankModel.create(...filterArr.map((m) => ({ ...m, userId })));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -180,18 +179,18 @@ export class BankService {
               bankBillType,
             }),
           );
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -207,17 +206,17 @@ export class BankService {
         .then(async ({ body }) => {
           const { bankId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost } = body;
           await this.bankModel.updateOne({ _id: bankId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, bankBillType, otherCost });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -254,17 +253,17 @@ export class BankService {
       Promise.resolve(body)
         .then(async ({ bankIdArr }) => {
           await this.bankModel.deleteMany({ _id: { $in: bankIdArr } });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -279,17 +278,17 @@ export class BankService {
       Promise.resolve(bankId)
         .then(async (bankId) => {
           await this.bankModel.deleteOne({ _id: bankId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

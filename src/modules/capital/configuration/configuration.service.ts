@@ -3,15 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { IResponse } from 'src/interfaces/response.interface';
 import { Configuration } from 'src/schemas/capital/configuration.schema';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
 import { ApiConfiguration } from 'types/capital/configuration';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class ConfigurationService {
-  response: IResponse;
   constructor(@InjectModel('Configuration') private readonly configurationModel: Model<Configuration>) {}
 
   /**
@@ -27,10 +26,10 @@ export class ConfigurationService {
         .then(async ({ userId, body }) => {
           const configFind = await this.configurationModel.findOne({ userId });
           if (configFind)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '用户已添加配置',
-            });
+            };
           return { userId, body };
         })
         // 添加
@@ -40,17 +39,17 @@ export class ConfigurationService {
             createTime: nowDateFun(),
             userId,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -67,17 +66,17 @@ export class ConfigurationService {
         // 修改
         .then(async ({ userId, body }) => {
           await this.configurationModel.updateOne({ userId }, body);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -107,18 +106,18 @@ export class ConfigurationService {
             isPageAnimate: config.isPageAnimate,
             pageAnimateType: config.pageAnimateType,
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -133,17 +132,17 @@ export class ConfigurationService {
       Promise.resolve(userId)
         .then(async (userId) => {
           await this.configurationModel.deleteOne({ userId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }

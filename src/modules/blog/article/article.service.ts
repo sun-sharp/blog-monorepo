@@ -4,7 +4,6 @@ import { FilterQuery, Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'src/interfaces/response.interface';
 import { Article } from 'src/schemas/blog/article.schema';
 import { User } from 'src/schemas/capital/user.schema';
 import { ArticleCategoryService } from '../article-category/article-category.service';
@@ -13,10 +12,10 @@ import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { ApiArticleItem } from 'types/blog/article';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class ArticleService {
-  response: IResponse;
   constructor(@InjectModel('Article') private readonly articleModel: Model<Article>, private readonly articleCategoryService: ArticleCategoryService) {}
 
   /**
@@ -49,18 +48,18 @@ export class ArticleService {
             categoryName: m.categoryName,
             createTime: m.createTime,
           }));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -79,10 +78,10 @@ export class ArticleService {
           const { categoryVal } = body;
           const categoryFind = await this.articleCategoryService.findOneByValue(categoryVal);
           if (!categoryFind) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询文章分类失败',
-            });
+            };
           }
           await this.articleModel.create({
             ...body,
@@ -91,17 +90,17 @@ export class ArticleService {
             authorNickname: user.nickname,
             categoryName: categoryFind.name,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -119,24 +118,24 @@ export class ArticleService {
           const { articleId, categoryVal, ...other } = body;
           const categoryFind = await this.articleCategoryService.findOneByValue(categoryVal);
           if (!categoryFind) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询文章分类失败',
-            });
+            };
           }
           const updateData = { categoryVal, categoryName: categoryFind.name, ...other };
           await this.articleModel.updateOne({ _id: articleId }, updateData);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -150,17 +149,17 @@ export class ArticleService {
       Promise.resolve(articleId)
         .then(async (articleId) => {
           await this.articleModel.deleteOne({ _id: articleId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -171,10 +170,10 @@ export class ArticleService {
         .then(async (articleId) => {
           const find = await this.articleModel.findOne({ _id: articleId }).lean();
           if (!find) {
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '查询文章详情失败',
-            });
+            };
           }
           const result: ApiArticleItem = {
             articleId: find._id,
@@ -188,18 +187,18 @@ export class ArticleService {
             categoryName: find.categoryName,
             createTime: find.createTime,
           };
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -216,10 +215,10 @@ export class ArticleService {
         .then(async (image) => {
           const hasHttpOrHttps = imageIsHasHttpOrHttps(image);
           if (hasHttpOrHttps)
-            throw (this.response = {
+            throw {
               code: ApiCode.ERROR,
               message: '图片保存的不合理，请处理之后再上传！',
-            });
+            };
           return image;
         })
         // 判断username 是否为合法字符

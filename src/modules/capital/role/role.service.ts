@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'src/interfaces/response.interface';
 import { Role } from 'src/schemas/capital/role.schema';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PageRoleDto } from './dto/page-role.dto';
@@ -21,10 +20,10 @@ import {
   ApiSwaggerJsonPathsUrlMethod,
   ApiSwaggerJsonResult,
 } from 'types/capital/role';
+import { IResponse } from 'types/common';
 
 @Injectable()
 export class RoleService {
-  response: IResponse;
   constructor(@InjectModel('Role') private readonly roleModel: Model<Role>) {}
 
   /**
@@ -50,18 +49,18 @@ export class RoleService {
             menuPermission: m.menuPermission,
             apiPermission: m.apiPermission,
           }));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -85,18 +84,18 @@ export class RoleService {
             menuPermission: m.menuPermission,
             apiPermission: m.apiPermission,
           }));
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
@@ -113,17 +112,17 @@ export class RoleService {
         .then(async (body) => {
           const { roleId, ...other } = body;
           await this.roleModel.updateOne({ _id: roleId }, other);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '修改失败！',
-          });
+          };
         })
     );
   }
@@ -141,17 +140,17 @@ export class RoleService {
           await this.roleModel.create({
             ...body,
           });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
-          });
+          };
         })
     );
   }
@@ -167,17 +166,17 @@ export class RoleService {
         // 删除
         .then(async (roleId) => {
           await this.roleModel.deleteOne({ _id: roleId });
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
-          });
+          };
         })
     );
   }
@@ -336,19 +335,19 @@ export class RoleService {
         .then(async () => {
           const oneArr = await this.findApiAllOneDimensional();
           const result: ApiSwaggerJsonAllAssociateResult[] = groupArray(oneArr, 'children', ['tagId', 'tagName']);
-          return (this.response = {
+          return {
             code: ApiCode.SUCCESS,
             result,
             message: '查询成功！',
-          });
+          };
         })
         // 返回错误
         .catch((err) => {
           logger.error(`返回错误`, err);
-          return (this.response = {
+          return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
-          });
+          };
         })
     );
   }
