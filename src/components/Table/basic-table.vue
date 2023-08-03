@@ -68,13 +68,147 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { ref, defineComponent, reactive, unref, toRaw, computed, toRefs, onMounted, nextTick, PropType } from 'vue';
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { QuestionCircleOutlined, ColumnHeightOutlined, ReloadOutlined } from '@/utils/icons';
+  import ColumnSetting from './table-column-setting.vue';
+  import { BasicTableProps } from './hooks/useBasicTable';
+  import { useLoading } from './hooks/useLoading';
+  import { usePagination } from './hooks/usePagination';
+  import { useDataSource } from './hooks/useDataSource';
+
+  const props = defineProps(BasicTableProps);
+
+  const emit = defineEmits(['fetch-success', 'fetch-error', 'update:checked-row-keys', 'edit-end', 'edit-cancel', 'edit-row-end', 'edit-change']);
+
+  const deviceHeight = ref(150);
+  const tableElRef = ref();
+  const wrapRef = ref<Nullable<HTMLDivElement>>(null);
+  let paginationEl: HTMLElement | null;
+
+  const tableData = ref<Recordable[]>([]);
+
+  const { getLoading, setLoading } = useLoading(props);
+
+  const { getPaginationInfo, setPagination } = usePagination(props);
+
+  const { getDataSourceRef, getRowKey, reload } = useDataSource(props, emit, {
+    getPaginationInfo,
+    setPagination,
+    tableData,
+    setLoading,
+  });
+
+  const { getPageColumns, setColumns, getColumns, getCacheColumns, setCacheColumnsField } = useColumns(getProps);
+
+  const state = reactive({
+    tableSize: unref(getProps).size || 'medium',
+    isColumnSetting: false,
+  });
+
+  //页码切换
+  const updatePage = (current: number) => {
+    setPagination({ current });
+    reload();
+  };
+
+  //分页数量切换
+  const updatePageSize = (size: number) => {
+    setPagination({ current: 1, pageSize: size });
+    reload();
+  };
+
+  //密度切换
+  const densitySelect = (e: number) => {
+    state.tableSize = e;
+  };
+
+  //选中行
+  const updateCheckedRowKeys = (rowKeys) => {
+    emit('update:checked-row-keys', rowKeys);
+  };
+
+  //获取表格大小
+  const getTableSize = computed(() => state.tableSize);
+
+  //组装表格信息
+  const getBindValues = computed(() => {
+    const tableData = unref(getDataSourceRef);
+    const maxHeight = tableData.length ? `${unref(deviceHeight)}px` : 'auto';
+    return {
+      ...unref(getProps),
+      loading: unref(getLoading),
+      columns: toRaw(unref(getPageColumns)),
+      rowKey: unref(getRowKey),
+      data: tableData,
+      size: unref(getTableSize),
+      remote: true,
+      'max-height': maxHeight,
+    };
+  });
+
+  //获取分页信息
+  const pagination = computed(() => toRaw(unref(getPaginationInfo)));
+
+  const tableAction = {
+    reload,
+    setColumns,
+    setLoading,
+    getColumns,
+    getPageColumns,
+    getCacheColumns,
+    setCacheColumnsField,
+    emit,
+  };
+
+  const getCanResize = computed(() => {
+    const { canResize } = unref(getProps);
+    return canResize;
+  });
+
+  async function computeTableHeight() {
+    const table = unref(tableElRef);
+    if (!table) return;
+    if (!unref(getCanResize)) return;
+    const tableEl = table?.$el;
+    const headEl = tableEl.querySelector('.n-data-table-thead ');
+    const { bottomIncludeBody } = getViewportOffset(headEl);
+    const headerH = 64;
+    let paginationH = 2;
+    let marginH = 24;
+    let borderH = 1;
+    if (!isBoolean(pagination)) {
+      paginationEl = tableEl.querySelector('.n-data-table__pagination') as HTMLElement;
+      if (paginationEl) {
+        const offsetHeight = paginationEl.offsetHeight;
+        paginationH += offsetHeight || 0;
+      } else {
+        paginationH += 28;
+      }
+    }
+    let height = bottomIncludeBody - (headerH + paginationH + marginH + borderH + (props.resizeHeightOffset || 0));
+    const maxHeight = props.maxHeight;
+    height = maxHeight && maxHeight < height ? maxHeight : height;
+    deviceHeight.value = height;
+  }
+
+  useWindowSizeFn(computeTableHeight, 280);
+
+  onMounted(() => {
+    nextTick(() => {
+      computeTableHeight();
+    });
+  });
+
+  createTableContext({ ...tableAction, wrapRef, getBindValues });
+</script>
+
+<!-- <script lang="ts">
+  import { ref, defineComponent, reactive, unref, toRaw, computed, toRefs, onMounted, nextTick, PropType, ExtractPropTypes } from 'vue';
   import { ReloadOutlined, ColumnHeightOutlined, QuestionCircleOutlined, getViewportOffset, isBoolean, propTypes } from '@/utils';
   import ColumnSetting from './table-column-setting.vue';
   import { useColumns, useDataSource, useLoading, usePagination, useWindowSizeFn, createTableContext } from '@/hooks';
-  import { NDataTable } from 'naive-ui';
-  import { BasicColumn, BasicTableProps } from '/#/components/table';
+  import { BasicTableProps } from './props/basic-table';
 
   const densityOptions = [
     {
@@ -101,65 +235,17 @@
       ColumnSetting,
       QuestionCircleOutlined,
     },
-    props: {
-      ...NDataTable.props, // 这里继承原 UI 组件的 props
-      title: {
-        type: String,
-        default: null,
-      },
-      titleTooltip: {
-        type: String,
-        default: null,
-      },
-      size: {
-        type: String,
-        default: 'medium',
-      },
-      tableData: {
-        type: Array,
-        default: () => [],
-      },
-      columns: {
-        type: [Array] as PropType<BasicColumn[]>,
-        default: () => [],
-        required: true,
-      },
-      request: {
-        type: Function as PropType<(...arg: any[]) => Promise<any>>,
-        default: null,
-        required: true,
-      },
-      rowKey: {
-        type: [String, Function] as PropType<string | ((record) => string)>,
-        default: undefined,
-      },
-      //废弃
-      showPagination: {
-        type: [String, Boolean],
-        default: 'auto',
-      },
-      actionColumn: {
-        type: Object as PropType<BasicColumn>,
-        default: null,
-      },
-      canResize: propTypes.bool.def(true),
-      resizeHeightOffset: propTypes.number.def(0),
-    },
-    emits: ['fetch-success', 'fetch-error', 'update:checked-row-keys', 'edit-end', 'edit-cancel', 'edit-row-end', 'edit-change'],
-    setup(props, { emit }) {
+    props: BasicTableProps,
+    emits: ,
+    setup(props: ExtractPropTypes<typeof BasicTableProps>, { emit }) {
       const deviceHeight = ref(150);
-      const tableElRef = ref<any>(null);
+      const tableElRef = ref();
       const wrapRef = ref<Nullable<HTMLDivElement>>(null);
       let paginationEl: HTMLElement | null;
 
       const tableData = ref<Recordable[]>([]);
-      const innerPropsRef = ref<Partial<BasicTableProps>>();
 
-      const getProps = computed(() => {
-        return { ...props, ...unref(innerPropsRef) } as BasicTableProps;
-      });
-
-      const { getLoading, setLoading } = useLoading(getProps);
+      const { getLoading, setLoading } = useLoading(props);
 
       const { getPaginationInfo, setPagination } = usePagination(getProps);
 
@@ -177,26 +263,26 @@
       const { getPageColumns, setColumns, getColumns, getCacheColumns, setCacheColumnsField } = useColumns(getProps);
 
       const state = reactive({
-        tableSize: unref(getProps as any).size || 'medium',
+        tableSize: unref(getProps).size || 'medium',
         isColumnSetting: false,
       });
 
       //页码切换
-      function updatePage(page) {
+      const updatePage = (page: number) => {
         setPagination({ page: page });
         reload();
-      }
+      };
 
       //分页数量切换
-      function updatePageSize(size) {
+      const updatePageSize = (size: number) => {
         setPagination({ page: 1, pageSize: size });
         reload();
-      }
+      };
 
       //密度切换
-      function densitySelect(e) {
+      const densitySelect = (e: number) => {
         state.tableSize = e;
-      }
+      };
 
       //选中行
       const updateCheckedRowKeys = (rowKeys) => {
@@ -225,15 +311,10 @@
       //获取分页信息
       const pagination = computed(() => toRaw(unref(getPaginationInfo)));
 
-      function setProps(props: Partial<BasicTableProps>) {
-        innerPropsRef.value = { ...unref(innerPropsRef), ...props };
-      }
-
       const tableAction = {
         reload,
         setColumns,
         setLoading,
-        setProps,
         getColumns,
         getPageColumns,
         getCacheColumns,
@@ -250,7 +331,7 @@
         const table = unref(tableElRef);
         if (!table) return;
         if (!unref(getCanResize)) return;
-        const tableEl: any = table?.$el;
+        const tableEl = table?.$el;
         const headEl = tableEl.querySelector('.n-data-table-thead ');
         const { bottomIncludeBody } = getViewportOffset(headEl);
         const headerH = 64;
@@ -298,38 +379,39 @@
       };
     },
   });
-</script>
+</script> -->
+
 <style lang="scss" scoped>
   .table-toolbar {
     display: flex;
     justify-content: space-between;
-    padding: 0 0 16px 0;
+    padding: 0 0 16px;
 
     &-left {
       display: flex;
+      flex: 1;
       align-items: center;
       justify-content: flex-start;
-      flex: 1;
 
       &-title {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        font-size: 16px;
         font-weight: 600;
+        font-size: 16px;
       }
     }
 
     &-right {
       display: flex;
-      justify-content: flex-end;
       flex: 1;
+      justify-content: flex-end;
 
       &-icon {
         margin-left: 12px;
+        color: var(--text-color);
         font-size: 16px;
         cursor: pointer;
-        color: var(--text-color);
 
         :hover {
           color: #1890ff;

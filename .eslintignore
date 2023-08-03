@@ -14,5 +14,4 @@ dist-manage
 .local
 /bin
 Dockerfile
-/types
 index.html

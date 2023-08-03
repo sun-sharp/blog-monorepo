@@ -8,7 +8,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="(row) => row.id" :action-column="actionColumn" :scroll-x="1090">
+    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :action-column="actionColumn" :scroll-x="1090">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
           <template #icon>
@@ -31,6 +31,7 @@
   import BasicTable from '@/components/Table/basic-table.vue';
   import { useConfigure } from './configure';
   import AddUpdateModel from './add-update-model.vue';
+import { ApiUserItem } from '/#/api/user';
 
   const addUpdateModelRef = ref();
 
@@ -48,6 +49,7 @@
     actionRef.value.reload();
   };
   // 配置
+  const tableRowKey = (row: ApiUserItem): string => row.userId;
   const { searchSchemas, columns, actionColumn } = useConfigure({ reloadTable, addUpdateModelRef });
 
   // 数据查询

@@ -1,12 +1,15 @@
-import type { TableBaseColumn } from 'naive-ui/lib/data-table/src/interface';
-import { ButtonProps } from 'naive-ui';
-import { Fn } from '@vueuse/core';
-import { Ref } from 'vue';
+import type { ButtonProps, TableBaseColumn } from 'naive-ui';
+import type { Fn } from '@vueuse/core';
+import type { Ref } from 'vue';
+import type { PageFieldType, ListFieldType, SizeFieldType, PageCountFieldType, TotalFieldType } from '/#/constant/setting';
 
 export type ComponentType = 'NInput' | 'NInputNumber' | 'NSelect' | 'NCheckbox' | 'NSwitch' | 'NDatePicker' | 'NTimePicker';
 
+/**
+ * @description: 表格列表配置
+ */
 export interface BasicColumn extends TableBaseColumn {
-  //编辑表格
+  // 是否编辑表格
   edit?: boolean;
   editRow?: boolean;
   editable?: boolean;
@@ -41,15 +44,27 @@ export interface BasicTableProps {
   resizeHeightOffset: number;
 }
 
-// 分页
-export interface PaginationProps {
-  page?: number;
-  pageCount?: number;
-  pageSize?: number;
-  itemCount?: number;
-  pageSizes?: number[];
-  showSizePicker?: boolean;
-  showQuickJumper?: boolean;
+export type PaginationPropsType = PageCountFieldType | ListFieldType | SizeFieldType | PageFieldType | TotalFieldType;
+
+/**
+ * @description: 分页
+ */
+export type PaginationProps = {
+  [key in PaginationPropsType]?: number;
+} & { showSizePicker?: boolean; showQuickJumper?: boolean; pageSizes?: number[] };
+
+// 分页传参
+export interface PaginationParams {
+  current?: number;
+  size?: number;
+}
+
+// 分页传参
+export interface PaginationResult {
+  current: number;
+  list: any[];
+  size: number;
+  total: number;
 }
 
 // 表格操作

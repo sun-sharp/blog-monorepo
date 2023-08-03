@@ -1,8 +1,10 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-01-16 16:06:53
+ * @LastEditTime: 2023-08-03 17:50:07
  * @Description: 项目配置
  */
+
+import { ListFieldType, SizeFieldType } from '/#/constant/setting';
 
 // 系统内置主题色列表
 export const appThemeList: string[] = [
@@ -36,33 +38,27 @@ export const animateSetting = [
   { value: 'fade-scale', label: '缩放消退' },
 ];
 
-// 表格组件配置
-export const componentTable = {
-  apiSetting: {
-    // 当前页的字段名
-    pageField: 'current',
-    // 每页数量字段名
-    sizeField: 'size',
-    // 接口返回的数据字段名
-    listField: 'list',
-    // 接口返回总页数字段名
-    pageCountField: 'pageCount',
-    // 接口返回总条数字段名
-    totalField: 'total',
-  },
-  //默认分页数量
-  defaultPageSize: 10,
-  //可切换每页数量集合
-  pageSizes: [10, 20, 30, 40, 50, 100],
-};
+/**
+ * 表格组件配置
+ */
+// 默认分页数量
+export const DEFAULT_PAGESIZE = 10;
+// 当前页的字段名
+export const PAGE_FIELD = 'current';
+// 每页数量字段名
+export const SIZE_FIELD: SizeFieldType = 'size';
+// 接口返回的数据字段名
+export const LIST_FIELD: ListFieldType = 'list';
+// 接口返回总页数字段名
+export const PAGE_COUNT_FIELD = 'pageCount';
+// 接口返回总条数字段名
+export const TOTAL_FIELD = 'total';
+// 可切换每页数量集合
+export const PAGE_SIZES: number[] = [10, 20, 30, 40, 50, 100];
 
-// 表格组件配置的重命名
-const { apiSetting, defaultPageSize, pageSizes } = componentTable;
-export const DEFAULT_PAGESIZE = defaultPageSize;
-export const API_SETTING = apiSetting;
-export const PAGE_SIZES = pageSizes;
-
-// 图片上传配置
+/**
+ * 图片上传配置
+ */
 export const componentUpload = {
   //考虑接口规范不同
   apiSetting: {

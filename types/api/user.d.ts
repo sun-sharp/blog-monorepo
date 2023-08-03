@@ -70,6 +70,15 @@ export interface ApiUserUpdateUserInfoData {
 }
 
 /**
+ * @description: 用户图片
+ */
+export interface UserAvatarItem {
+  url: string;
+  key: string;
+  status: 'finished';
+}
+
+/**
  * @description: 修改用户信息表单
  */
 export interface UserUpdateUserInfoForm {
@@ -79,15 +88,6 @@ export interface UserUpdateUserInfoForm {
   username: string;
   // 用户头像
   avatar: UserAvatarItem[];
-}
-
-/**
- * @description: 用户图片
- */
-export interface UserAvatarItem {
-  url: string;
-  key: string;
-  status: 'finished';
 }
 
 /**
