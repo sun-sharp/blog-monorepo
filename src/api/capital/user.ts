@@ -1,11 +1,11 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiUserInfo, ApiUserItem, ApiUserPageData } from '/#/api/user';
+import { ApiUserInfo, ApiUserItem, ApiUserPageData, ApiUserUpdateRoleCodeData, ApiUserUpdateUserInfoData } from '/#/api/user';
 
 const basic = '/user';
 
 /**
  * @description: 获取用户信息
- * @returns ApiUserInfo
+ * @return {Promise<ApiUserInfo>}
  */
 export const getUserInfo = (): Promise<ApiUserInfo> => {
   return AxiosCapital.request({
@@ -15,8 +15,9 @@ export const getUserInfo = (): Promise<ApiUserInfo> => {
 };
 
 /**
- * @description 用户列表
- * @param data
+ * @description: 用户列表
+ * @param {ApiUserPageData} data
+ * @return {Promise<ApiUserItem>}
  */
 export const getPage = (data: ApiUserPageData): Promise<ApiUserItem> => {
   return AxiosCapital.request({
@@ -27,25 +28,11 @@ export const getPage = (data: ApiUserPageData): Promise<ApiUserItem> => {
 };
 
 /**
- * @description 新增用户
- * @param data
+ * @description: 修改用户角色
+ * @param {ApiUserUpdateRoleCodeData} data
+ * @return {Promise<undefined>}
  */
-export const save = (data?: any) => {
-  return AxiosCapital.request({
-    url: `${basic}/save`,
-    method: 'POST',
-    data,
-    responseOptions: {
-      isShowSuccessMessage: true,
-    },
-  });
-};
-
-/**
- * @description 修改用户
- * @param data
- */
-export const updateRoleCode = (data?: { userId: string; roleCode: any }) => {
+export const updateRoleCode = (data: ApiUserUpdateRoleCodeData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/update_role_code`,
     method: 'PUT',
@@ -57,10 +44,11 @@ export const updateRoleCode = (data?: { userId: string; roleCode: any }) => {
 };
 
 /**
- * @description 修改用户基本信息
- * @param data
+ * @description: 修改用户基本信息
+ * @param {ApiUserUpdateUserInfoData} data
+ * @return {Promise<undefined>}
  */
-export const updateUserInfo = (data?: any) => {
+export const updateUserInfo = (data: ApiUserUpdateUserInfoData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/update_user_info`,
     method: 'PUT',

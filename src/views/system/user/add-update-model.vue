@@ -50,7 +50,8 @@
   import FormUploadImage from '@/components/form/form-upload-image.vue';
   import { getImgUrl } from '@/utils';
   import { FormItemRule } from 'naive-ui';
-  import { UserItemForm } from '/#/views/user';
+import { UserItemForm } from '/#/api/user';
+import { CStrOption } from '/#/config';
 
   const modelFields = {
     nickname: null,
@@ -123,7 +124,7 @@
       });
 
       // 角色列表
-      const roleOption = ref([]);
+      const roleOption = ref<CStrOption[]>([]);
 
       // 初始化
       const init = (row: any) => {
@@ -168,7 +169,7 @@
         modelFromRef.value.validate((errors: FormItemRule) => {
           if (!errors) {
             const request = modelId.value
-              ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode })
+              ? userApi.updateRoleCode({ userId: modelId.value, roleCode: modelForm.roleCode || '' })
               : capitalApi.signUp({
                   nickname: modelForm.nickname || '',
                   avatar: modelForm.avatar.length > 0 ? modelForm.avatar[0].key : '',

@@ -20,14 +20,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { useMessage } from 'naive-ui';
+  import { FormItemRule, useMessage } from 'naive-ui';
   import { onMounted, reactive, ref } from 'vue';
   import FormUploadImage from '@/components/form/form-upload-image.vue';
   import { useUserStore } from '@/store';
   import { getImgUrl } from '@/utils';
   import { userApi } from '@/api';
+import { UserUpdateUserInfoForm } from '/#/api/user';
 
-  const modelFromRef: any = ref(null);
+  const modelFromRef = ref();
   const message = useMessage();
 
   // 表单权限
@@ -51,11 +52,11 @@
   };
 
   // 表单字段
-  const modelForm = reactive<any>(Object.assign({}, modelFields));
+  const modelForm = reactive<UserUpdateUserInfoForm>(Object.assign({}, modelFields));
 
   // 获取基本信息
   const userStore = useUserStore();
-  const userInfo: any = userStore.getUserInfo;
+  const userInfo = userStore.getUserInfo;
 
   const hasUploadImage = ref(false);
 
@@ -78,7 +79,7 @@
   // 表单提交
   const formLoading = ref(false);
   const formSubmit = () => {
-    modelFromRef.value.validate((errors) => {
+    modelFromRef.value.validate((errors: FormItemRule) => {
       if (!errors) {
         formLoading.value = true;
         const avatar = modelForm.avatar.length > 0 ? modelForm.avatar[0].key : '';

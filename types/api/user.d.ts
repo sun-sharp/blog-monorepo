@@ -48,3 +48,61 @@ export interface ApiUserPageData extends ApiPaginateParams {
   // 用户名
   username: string;
 }
+
+/**
+ * @description: 修改用户角色传参
+ */
+export interface ApiUserUpdateRoleCodeData extends ApiUserId {
+  // 角色类型
+  roleCode: string;
+}
+
+/**
+ * @description: 修改用户信息传参
+ */
+export interface ApiUserUpdateUserInfoData {
+  // 昵称
+  nickname: string;
+  // 用户名
+  username: string;
+  // 用户头像
+  avatar: string;
+}
+
+/**
+ * @description: 修改用户信息表单
+ */
+export interface UserUpdateUserInfoForm {
+  // 昵称
+  nickname: string;
+  // 用户名
+  username: string;
+  // 用户头像
+  avatar: UserAvatarItem[];
+}
+
+/**
+ * @description: 用户图片
+ */
+export interface UserAvatarItem {
+  url: string;
+  key: string;
+  status: 'finished';
+}
+
+/**
+ * @description: 用户表单
+ */
+export interface UserItemForm {
+  nickname: null | string;
+  avatar: UserAvatarItem[];
+  username: null | string;
+  roleCode: null | string;
+  password: null | string;
+  verifyPassword: null | string;
+}
+
+/**
+ * @description: 用户选择类型
+ */
+export type UserItemKey = 'nickname' | 'avatar' | 'username' | 'roleCode' | 'password' | 'verifyPassword';
