@@ -11,56 +11,73 @@ import { Document } from 'mongoose';
   versionKey: false,
 })
 export class Bank extends Document {
+  // 用户id
   @Prop()
-  userId: string; // 用户id
+  userId: string;
 
+  // 交易时间
   @Prop()
-  tradeTime: string; // 交易时间
+  tradeTime: string;
 
+  // 交易类型
   @Prop()
-  tradeType: string; // 交易类型
+  tradeType: string;
 
+  // 银行类型
   @Prop()
-  bankType: number; // 银行类型
+  bankType: number;
 
+  // 凭证类型
   @Prop()
-  voucherType: number; // 凭证类型
+  voucherType: number;
 
+  // 凭证号码
   @Prop()
-  voucherNo: string; // 凭证号码
+  voucherNo: string;
 
+  // 交易对方
   @Prop()
-  tradeOtherPerson: string; // 交易对方
+  tradeOtherPerson: string;
 
+  // 交易对方账号
   @Prop()
-  tradeOtherPersonAccount: string; // 交易对方账号
+  tradeOtherPersonAccount: string;
 
+  // 交易对方备注
   @Prop()
-  tradeOtherPersonRemarks: string; // 交易对方备注
+  tradeOtherPersonRemarks: string;
 
+  // 收/支
   @Prop()
-  incomeOrPay: string; // 收/支
+  incomeOrPay: string;
 
+  // 交易金额
   @Prop()
-  moneyAmount: number; // 交易金额
+  moneyAmount: number;
 
+  // 余额
   @Prop()
-  balance: number; // 余额
+  balance: number;
 
+  // 其它费用
   @Prop()
-  otherCost: number; // 其它费用
+  otherCost: number;
 
+  // 流入/流出
   @Prop()
-  inflowOrOutflow: number; // 流入/流出
+  inflowOrOutflow: number;
 
+  // 账单说明
   @Prop()
-  explain: string; // 账单说明
+  explain: string;
 
+  // 使用地点
   @Prop()
-  place: string; // 使用地点
+  place: string;
 
+  // 银行账单类型
   @Prop()
-  bankBillType: number; // 银行账单类型
+  bankBillType: number;
 }
 
 export const BankSchema = SchemaFactory.createForClass(Bank);

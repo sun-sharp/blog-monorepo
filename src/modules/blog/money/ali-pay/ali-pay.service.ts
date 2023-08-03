@@ -12,6 +12,7 @@ import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
 import { aliPayExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
+import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
 
 @Injectable()
 export class AliPayService {
@@ -29,8 +30,8 @@ export class AliPayService {
         // 导入数据处理
         .then(async ({ file }) => {
           const { buffer } = file; // file为前端上传的excel
-          // 微信的菜单处理
-          const list = await excelCsvHandleBuffer({
+          // 支付宝账单导入处理
+          const list: ApiAliPayUpload[] = await excelCsvHandleBuffer({
             buffer: buffer,
             startNum: 26,
             endNum: 0,
@@ -47,13 +48,13 @@ export class AliPayService {
             };
           // 过滤掉相同交易时间的数据
           const find = await this.aliPayModel.find();
-          const result = twoArrForTimeSameFilter(list, find, 'tradeTime');
+          const result: ApiAliPayUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime');
           if (result.length === 0)
             throw {
               message: '导入的数据交易时间全部和数据库的相同！',
             };
           // 对数据按照交易时间排序
-          result.sort(function (a, b) {
+          result.sort((a, b) => {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
           return (this.response = {
@@ -165,57 +166,53 @@ export class AliPayService {
           if (billType) findData.billType = billType;
           if (billMethod) findData.billMethod = billMethod;
           const total = await this.aliPayModel.find(findData).count();
-          const list = await this.aliPayModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
+          const findArr = await this.aliPayModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
+          const list: ApiAliPayItem[] = findArr.map(
+            ({
+              _id,
+              userId,
+              tradeTime,
+              tradeType,
+              tradeOtherPerson,
+              tradeOtherPersonRemarks,
+              productDescription,
+              incomeOrPay,
+              moneyAmount,
+              otherCost,
+              paymentMethod,
+              oppositeAccount,
+              inflowOrOutflow,
+              explain,
+              place,
+              billType,
+              billMethod,
+              balance,
+              balanceBaby,
+            }) => ({
+              aliPayId: _id,
+              userId,
+              tradeTime,
+              tradeType,
+              tradeOtherPerson,
+              tradeOtherPersonRemarks,
+              productDescription,
+              incomeOrPay,
+              moneyAmount,
+              otherCost,
+              paymentMethod,
+              oppositeAccount,
+              inflowOrOutflow,
+              explain,
+              place,
+              billType,
+              billMethod,
+              balance,
+              balanceBaby,
+            }),
+          );
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: list.map(
-                ({
-                  _id,
-                  userId,
-                  tradeTime,
-                  tradeType,
-                  tradeOtherPerson,
-                  tradeOtherPersonRemarks,
-                  productDescription,
-                  incomeOrPay,
-                  moneyAmount,
-                  otherCost,
-                  paymentMethod,
-                  oppositeAccount,
-                  inflowOrOutflow,
-                  explain,
-                  place,
-                  billType,
-                  billMethod,
-                  balance,
-                  balanceBaby,
-                }) => ({
-                  aliPayId: _id,
-                  userId,
-                  tradeTime,
-                  tradeType,
-                  tradeOtherPerson,
-                  tradeOtherPersonRemarks,
-                  productDescription,
-                  incomeOrPay,
-                  moneyAmount,
-                  otherCost,
-                  paymentMethod,
-                  oppositeAccount,
-                  inflowOrOutflow,
-                  explain,
-                  place,
-                  billType,
-                  billMethod,
-                  balance,
-                  balanceBaby,
-                }),
-              ),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })

@@ -9,17 +9,8 @@ import { WeChatService } from './we-chat/we-chat.service';
 import { billTypeEnum } from 'src/common/enums/money.enum';
 import { categoryTypeEnum } from 'src/common/enums/category.enum';
 import { CategoryService } from 'src/modules/capital/category/category.service';
-
-interface IBankFlow {
-  voucherNum?: number;
-  startBalance: number;
-  endBalance: number;
-  inflowMoneyAmount: number;
-  outflowMoneyAmount: number;
-  voucherNo?: string;
-  voucherType?: number;
-  children?: IBankFlow[];
-}
+import { ApiAliPayAndWeChatChild, ApiBankFlow, ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from 'types/blog/money';
+import { ApiBank } from 'types/blog/money/bank';
 
 @Injectable()
 export class MoneyService {
@@ -58,8 +49,8 @@ export class MoneyService {
           // 招商银行
           const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
           // 获取银行数据
-          const bankFlowFun = (flowArr: any[]) => {
-            const bankFlow: IBankFlow = {
+          const bankFlowFun = (flowArr: ApiBank[]) => {
+            const bankFlow: ApiBankFlow = {
               voucherNum: 0,
               startBalance: 0,
               endBalance: 0,
@@ -116,15 +107,16 @@ export class MoneyService {
             }
             return bankFlow;
           };
+          const result: ApiBankFlowResult = {
+            business: bankFlowFun(businessArr),
+            agriculture: bankFlowFun(agricultureArr),
+            build: bankFlowFun(buildArr),
+            civil: bankFlowFun(civilArr),
+            attractInvestment: bankFlowFun(attractInvestmentArr),
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              business: bankFlowFun(businessArr),
-              agriculture: bankFlowFun(agricultureArr),
-              build: bankFlowFun(buildArr),
-              civil: bankFlowFun(civilArr),
-              attractInvestment: bankFlowFun(attractInvestmentArr),
-            },
+            result,
             message: '获取成功！',
           });
         })
@@ -162,7 +154,7 @@ export class MoneyService {
           // 招商银行
           const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
           // 获取银行的余额
-          const bankBalanceFun = (balanceArr: any[]) => {
+          const bankBalanceFun = (balanceArr: ApiBank[]): number => {
             let bankBalance = 0;
             // 判断数据是否为空
             if (balanceArr.length > 0) {
@@ -186,18 +178,19 @@ export class MoneyService {
           const aliPayBalance = await this.aliPayService.findLastOneBalance(userId, 'balance');
           // 支付宝余额宝
           const aliPayBalanceBaby = await this.aliPayService.findLastOneBalance(userId, 'balanceBaby');
+          const result: ApiMoneyBalanceResult = {
+            weChatBalance: weChat.length > 0 ? weChat[0].balance : 0,
+            aliPayBalance: aliPayBalance.length > 0 ? aliPayBalance[0].balance : 0,
+            aliPayBalanceBaby: aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0].balanceBaby : 0,
+            businessBank: bankBalanceFun(businessArr),
+            agricultureBank: bankBalanceFun(agricultureArr),
+            buildBank: bankBalanceFun(buildArr),
+            civilBank: bankBalanceFun(civilArr),
+            attractInvestmentBank: bankBalanceFun(attractInvestmentArr),
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              weChatBalance: weChat.length > 0 ? weChat[0].balance : 0,
-              aliPayBalance: aliPayBalance.length > 0 ? aliPayBalance[0].balance : 0,
-              aliPayBalanceBaby: aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0].balanceBaby : 0,
-              businessBank: bankBalanceFun(businessArr),
-              agricultureBank: bankBalanceFun(agricultureArr),
-              buildBank: bankBalanceFun(buildArr),
-              civilBank: bankBalanceFun(civilArr),
-              attractInvestmentBank: bankBalanceFun(attractInvestmentArr),
-            },
+            result,
             message: '获取成功！',
           });
         })
@@ -287,8 +280,8 @@ export class MoneyService {
             'children',
             ['billType'],
           );
-          const aliPayAndWeChatInflowOrOutflowArr = aliPayAndWeChatArr.map((gr: { billType: any; children: any[] }) => {
-            const sumMoneyArr = gr.children.map((m: { inflowOrOutflow: number; moneyAmount: number }) => {
+          const aliPayAndWeChatInflowOrOutflowArr = aliPayAndWeChatArr.map((gr: { billType: number; children: ApiAliPayAndWeChatChild[] }) => {
+            const sumMoneyArr = gr.children.map((m) => {
               if (m.inflowOrOutflow === 1) {
                 return 0 - m.moneyAmount;
               } else if (m.inflowOrOutflow === 2) {
@@ -339,14 +332,16 @@ export class MoneyService {
             .filter((f: { money: number }) => f.money !== 0);
           const inflowChart = (bankCashInflow > 0 ? [{ name: bankCashName, money: bankCashInflow }] : []).concat(inflowMoneyArr);
           const inflowSumTotal = sumArrayToMoney(inflowFilterArr.map((m: { inflowMoney: number }) => m.inflowMoney).concat([bankCashInflow]));
+          // 结果
+          const result: ApiInflowOrOutflowMoneyResult = {
+            outflowSumTotal,
+            outflowChart,
+            inflowSumTotal,
+            inflowChart,
+          };
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              outflowSumTotal,
-              outflowChart,
-              inflowSumTotal,
-              inflowChart,
-            },
+            result,
             message: '获取成功！',
           });
         })

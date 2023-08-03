@@ -12,6 +12,7 @@ import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 import { bankExcelTargetHandler } from 'src/common/utils/money';
+import { ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
 
 @Injectable()
 export class BankService {
@@ -29,7 +30,7 @@ export class BankService {
         // 导入数据处理
         .then(async ({ file }) => {
           const { buffer } = file; // file为前端上传的excel
-          let list = [];
+          let list: ApiBankUpload[] = [];
           for (const itKey in bankExcelCellMap) {
             const { sheetName, excelCellHandle } = bankExcelCellMap[itKey];
             const excelArr = await excelXlsxHandleBuffer({
@@ -52,7 +53,7 @@ export class BankService {
             };
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
-          const result = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
+          const result: ApiBankUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
           if (result.length === 0)
             throw {
               message: '导入的数据全部和数据库的相同！',
@@ -137,55 +138,51 @@ export class BankService {
           if (bankBillType) findData.bankBillType = bankBillType;
           if (bankType) findData.bankType = bankType;
           const total = await this.bankModel.find(findData).count();
-          const list = await this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
+          const findArr = await this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
+          const list: ApiBankItem[] = findArr.map(
+            ({
+              _id,
+              userId,
+              tradeTime,
+              tradeType,
+              bankType,
+              voucherType,
+              voucherNo,
+              tradeOtherPerson,
+              tradeOtherPersonAccount,
+              tradeOtherPersonRemarks,
+              incomeOrPay,
+              moneyAmount,
+              balance,
+              otherCost,
+              inflowOrOutflow,
+              explain,
+              place,
+              bankBillType,
+            }) => ({
+              bankId: _id,
+              userId,
+              tradeTime,
+              tradeType,
+              bankType,
+              voucherType,
+              voucherNo,
+              tradeOtherPerson,
+              tradeOtherPersonAccount,
+              tradeOtherPersonRemarks,
+              incomeOrPay,
+              moneyAmount,
+              balance,
+              otherCost,
+              inflowOrOutflow,
+              explain,
+              place,
+              bankBillType,
+            }),
+          );
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: list.map(
-                ({
-                  _id,
-                  userId,
-                  tradeTime,
-                  tradeType,
-                  bankType,
-                  voucherType,
-                  voucherNo,
-                  tradeOtherPerson,
-                  tradeOtherPersonAccount,
-                  tradeOtherPersonRemarks,
-                  incomeOrPay,
-                  moneyAmount,
-                  balance,
-                  otherCost,
-                  inflowOrOutflow,
-                  explain,
-                  place,
-                  bankBillType,
-                }) => ({
-                  bankId: _id,
-                  userId,
-                  tradeTime,
-                  tradeType,
-                  bankType,
-                  voucherType,
-                  voucherNo,
-                  tradeOtherPerson,
-                  tradeOtherPersonAccount,
-                  tradeOtherPersonRemarks,
-                  incomeOrPay,
-                  moneyAmount,
-                  balance,
-                  otherCost,
-                  inflowOrOutflow,
-                  explain,
-                  place,
-                  bankBillType,
-                }),
-              ),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })

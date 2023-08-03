@@ -12,6 +12,7 @@ import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 import { weChatExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
+import { ApiWeChatItem, ApiWeChatUpload } from 'types/blog/money/we-chat';
 
 @Injectable()
 export class WeChatService {
@@ -30,7 +31,7 @@ export class WeChatService {
         .then(async ({ file }) => {
           const { buffer } = file; // file为前端上传的excel
           // 微信的菜单处理
-          const list = await excelCsvHandleBuffer({
+          const list: ApiWeChatUpload[] = await excelCsvHandleBuffer({
             buffer: buffer,
             startNum: 18,
             cellHandler: weChatExcelCellHandle,
@@ -46,7 +47,7 @@ export class WeChatService {
             };
           // 过滤掉相同交易时间的数据
           const find = await this.weChatModel.find();
-          const result = twoArrForTimeSameFilter(list, find, 'tradeTime');
+          const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime');
           if (result.length === 0)
             throw {
               message: '导入的数据交易时间全部和数据库的相同！',
@@ -165,57 +166,53 @@ export class WeChatService {
           if (billType) findData.billType = billType;
           if (billMethod) findData.billMethod = billMethod;
           const total = await this.weChatModel.find(findData).count();
-          const list = await this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
+          const findArr = await this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip);
+          const list: ApiWeChatItem[] = findArr.map(
+            ({
+              _id,
+              userId,
+              tradeTime,
+              tradeType,
+              tradeOtherPerson,
+              tradeOtherPersonRemarks,
+              goods,
+              incomeOrPay,
+              moneyAmount,
+              paymentMethod,
+              currentStatus,
+              remarks,
+              inflowOrOutflow,
+              explain,
+              place,
+              billType,
+              otherCost,
+              billMethod,
+              balance,
+            }) => ({
+              weChatId: _id,
+              userId,
+              tradeTime,
+              tradeType,
+              tradeOtherPerson,
+              tradeOtherPersonRemarks,
+              goods,
+              incomeOrPay,
+              moneyAmount,
+              paymentMethod,
+              currentStatus,
+              remarks,
+              inflowOrOutflow,
+              explain,
+              place,
+              billType,
+              otherCost,
+              billMethod,
+              balance,
+            }),
+          );
           return (this.response = {
             code: ApiCode.SUCCESS,
-            result: {
-              current,
-              list: list.map(
-                ({
-                  _id,
-                  userId,
-                  tradeTime,
-                  tradeType,
-                  tradeOtherPerson,
-                  tradeOtherPersonRemarks,
-                  goods,
-                  incomeOrPay,
-                  moneyAmount,
-                  paymentMethod,
-                  currentStatus,
-                  remarks,
-                  inflowOrOutflow,
-                  explain,
-                  place,
-                  billType,
-                  otherCost,
-                  billMethod,
-                  balance,
-                }) => ({
-                  weChatId: _id,
-                  userId,
-                  tradeTime,
-                  tradeType,
-                  tradeOtherPerson,
-                  tradeOtherPersonRemarks,
-                  goods,
-                  incomeOrPay,
-                  moneyAmount,
-                  paymentMethod,
-                  currentStatus,
-                  remarks,
-                  inflowOrOutflow,
-                  explain,
-                  place,
-                  billType,
-                  otherCost,
-                  billMethod,
-                  balance,
-                }),
-              ),
-              size,
-              total,
-            },
+            result: { current, list, size, total },
             message: '查询成功！',
           });
         })
