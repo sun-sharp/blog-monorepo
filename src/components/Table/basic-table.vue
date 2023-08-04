@@ -69,13 +69,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, nextTick, onMounted, ref, toRaw, unref } from 'vue';
   import { QuestionCircleOutlined, ColumnHeightOutlined, ReloadOutlined } from '@/utils/icons';
   import ColumnSetting from './table-column-setting.vue';
   import { BasicTableProps } from './hooks/useBasicTable';
   import { useLoading } from './hooks/useLoading';
   import { usePagination } from './hooks/usePagination';
   import { useDataSource } from './hooks/useDataSource';
+  import { isBoolean } from '@/utils';
 
   const props = defineProps(BasicTableProps);
 

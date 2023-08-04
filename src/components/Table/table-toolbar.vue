@@ -98,33 +98,33 @@
   .app-table-toolbar {
     display: flex;
     justify-content: space-between;
-    padding: 0 0 16px 0;
+    padding: 0 0 16px;
 
     &__left {
       display: flex;
+      flex: 1;
       align-items: center;
       justify-content: flex-start;
-      flex: 1;
 
       &-title {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        font-size: 16px;
         font-weight: 600;
+        font-size: 16px;
       }
     }
 
     &__right {
       display: flex;
-      justify-content: flex-end;
       flex: 1;
+      justify-content: flex-end;
 
       &-icon {
         margin-left: 12px;
+        color: var(--text-color);
         font-size: 16px;
         cursor: pointer;
-        color: var(--text-color);
 
         :hover {
           color: #1890ff;

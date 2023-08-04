@@ -1,10 +1,10 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-08-03 17:50:07
+ * @LastEditTime: 2023-08-04 17:16:54
  * @Description: 项目配置
  */
 
-import { ListFieldType, SizeFieldType } from '/#/constant/setting';
+import { ListFieldType, PageCountFieldType, PageFieldType, SizeFieldType, TotalFieldType } from '/#/components/table';
 
 // 系统内置主题色列表
 export const appThemeList: string[] = [
@@ -44,15 +44,15 @@ export const animateSetting = [
 // 默认分页数量
 export const DEFAULT_PAGESIZE = 10;
 // 当前页的字段名
-export const PAGE_FIELD = 'current';
+export const PAGE_FIELD: PageFieldType = 'current';
 // 每页数量字段名
 export const SIZE_FIELD: SizeFieldType = 'size';
 // 接口返回的数据字段名
 export const LIST_FIELD: ListFieldType = 'list';
 // 接口返回总页数字段名
-export const PAGE_COUNT_FIELD = 'pageCount';
+export const PAGE_COUNT_FIELD: PageCountFieldType = 'pageCount';
 // 接口返回总条数字段名
-export const TOTAL_FIELD = 'total';
+export const TOTAL_FIELD: TotalFieldType = 'total';
 // 可切换每页数量集合
 export const PAGE_SIZES: number[] = [10, 20, 30, 40, 50, 100];
 

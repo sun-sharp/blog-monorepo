@@ -8,7 +8,7 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
   const configRef = ref<PaginationProps>({});
   const show = ref(true);
 
-  const getPaginationInfo = computed((): PaginationProps | boolean => {
+  const getPaginationInfo = computed((): PaginationProps | false => {
     const { pagination } = unref(props);
     if (!unref(show) || (isBoolean(pagination) && !pagination)) {
       return false;
@@ -37,13 +37,18 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
     return unref(getPaginationInfo);
   };
 
-  const getShowPagination = (): boolean => {
-    return unref(show);
-  };
+  // const getShowPagination = (): boolean => {
+  //   return unref(show);
+  // };
 
-  const setShowPagination = async (flag: boolean) => {
-    show.value = flag;
-  };
+  // const setShowPagination = async (flag: boolean) => {
+  //   show.value = flag;
+  // };
 
-  return { getPagination, getPaginationInfo, setShowPagination, getShowPagination, setPagination };
+  return {
+    getPagination,
+    getPaginationInfo,
+    // setShowPagination, getShowPagination,
+    setPagination,
+  };
 }

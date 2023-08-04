@@ -69,7 +69,6 @@ export interface CUserConfigInfo {
   appTheme: string;
 }
 
-
 // 用户信息
 export interface CUserInfo {
   avatar: string;
@@ -105,4 +104,3 @@ export interface CStrOption {
   value: string;
   label: string;
 }
-
