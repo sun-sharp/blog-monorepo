@@ -8,7 +8,7 @@ const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
  * @param {boolean} restful
  * @returns {string | { _t?: number }}
  */
-export const joinTimestamp = (join: boolean, restful: boolean = false): string | { _t?: number } => {
+export const joinTimestamp = (join: boolean, restful = false): string | { _t?: number } => {
   if (!join) {
     return restful ? '' : {};
   }

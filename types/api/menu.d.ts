@@ -45,7 +45,7 @@ export interface ApiMenuFindAllParams {
 /**
  * @description: 新增菜单传参
  */
-export interface ApiMenuSaveData extends ApiMenu {}
+export type ApiMenuSaveData = ApiMenu;
 
 /**
  * @description: 修改菜单传参
