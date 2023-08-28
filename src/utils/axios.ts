@@ -2,10 +2,13 @@ import { isObject, isString } from '@/utils/is';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 
-export function joinTimestamp<T extends boolean>(join: boolean, restful: T): T extends true ? string : object;
-
-// 添加参数_t: 时间
-export function joinTimestamp(join: boolean, restful = false): string | object {
+/**
+ * @description: 添加参数_t: 时间
+ * @param {boolean} join
+ * @param {boolean} restful
+ * @returns {string | { _t?: number }}
+ */
+export const joinTimestamp = (join: boolean, restful: boolean = false): string | { _t?: number } => {
   if (!join) {
     return restful ? '' : {};
   }
@@ -14,12 +17,13 @@ export function joinTimestamp(join: boolean, restful = false): string | object {
     return `?_t=${now}`;
   }
   return { _t: now };
-}
+};
 
 /**
  * @description: 格式化请求参数时间
+ * @param {Recordable} params
  */
-export function formatRequestDate(params: Recordable) {
+export const formatRequestDate = (params: Recordable): void => {
   if (Object.prototype.toString.call(params) !== '[object Object]') {
     return;
   }
@@ -42,19 +46,15 @@ export function formatRequestDate(params: Recordable) {
       formatRequestDate(params[key]);
     }
   }
-}
+};
 
 /**
- * 将对象添加当作参数拼接到URL上面
- * @param baseUrl 需要拼接的url
- * @param obj 参数对象
- * @returns {string} 拼接后的对象
- * 例子:
- *  let obj = {a: '3', b: '4'}
- *  setObjToUrlParams('www.baidu.com', obj)
- *  ==>www.baidu.com?a=3&b=4
+ * @description: 将对象添加当作参数拼接到URL上面
+ * @param {string} baseUrl
+ * @param {{ [x: string]: string }} obj
+ * @return {string}
  */
-export function setObjToUrlParams(baseUrl: string, obj: object): string {
+export const setObjToUrlParams = (baseUrl: string, obj: { [x: string]: string }): string => {
   let parameters = '';
   let url = '';
   for (const key in obj) {
@@ -67,4 +67,4 @@ export function setObjToUrlParams(baseUrl: string, obj: object): string {
     url = baseUrl.replace(/\/?$/, '?') + parameters;
   }
   return url;
-}
+};

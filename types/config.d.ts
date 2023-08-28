@@ -84,7 +84,7 @@ export interface CUserInfo {
 export interface CUserState {
   token: string;
   info: CUserInfo;
-  configInfo: CUserConfigInfo;
+  // configInfo: CUserConfigInfo;
 }
 
 // 登录传参

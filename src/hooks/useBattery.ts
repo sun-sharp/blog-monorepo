@@ -9,7 +9,7 @@ interface Battery {
 }
 
 export const useBattery = () => {
-  const state = reactive({
+  const state = reactive<{ battery: Battery }>({
     battery: {
       charging: false,
       chargingTime: 0,
@@ -19,7 +19,7 @@ export const useBattery = () => {
   });
 
   // 更新电池使用状态
-  const updateBattery = (target) => {
+  const updateBattery = (target: Battery) => {
     for (const key in state.battery) {
       state.battery[key] = target[key];
     }
@@ -56,19 +56,19 @@ export const useBattery = () => {
     updateBattery(BatteryManager);
 
     // 电池充电状态更新时被调用
-    BatteryManager.onchargingchange = ({ target }) => {
+    BatteryManager.onChargingChange = ({ target }: { target: Battery }) => {
       updateBattery(target);
     };
     // 电池充电时间更新时被调用
-    BatteryManager.onchargingtimechange = ({ target }) => {
+    BatteryManager.onChargingTimeChange = ({ target }: { target: Battery }) => {
       updateBattery(target);
     };
     // 电池断开充电时间更新时被调用
-    BatteryManager.ondischargingtimechange = ({ target }) => {
+    BatteryManager.onDisChargingTimeChange = ({ target }: { target: Battery }) => {
       updateBattery(target);
     };
     // 电池电量更新时被调用
-    BatteryManager.onlevelchange = ({ target }) => {
+    BatteryManager.onLevelChange = ({ target }: { target: Battery }) => {
       updateBattery(target);
     };
 

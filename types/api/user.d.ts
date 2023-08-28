@@ -29,7 +29,7 @@ export interface ApiUser {
 /**
  * @description: 用户信息
  */
-export interface ApiUserInfo extends Omit<ApiUser, 'password'>,ApiUserId {
+export interface ApiUserInfo extends Omit<ApiUser, 'password'>, ApiUserId {
   // 角色名称
   roleName: string;
 }
@@ -37,7 +37,7 @@ export interface ApiUserInfo extends Omit<ApiUser, 'password'>,ApiUserId {
 /**
  * @description: 用户的列表每项
  */
-export interface ApiUserItem extends ApiUser,ApiUserId {}
+export interface ApiUserItem extends ApiUser, ApiUserId {}
 
 /**
  * @description: 分页查询用户列表传参

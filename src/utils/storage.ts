@@ -2,11 +2,13 @@
 const DEFAULT_CACHE_TIME = 60 * 60 * 24 * 7;
 
 /**
- * 创建本地缓存对象
- * @param {string=} prefixKey -
- * @param {Object} [storage=localStorage] - sessionStorage | localStorage
+ * @description: 创建本地缓存对象
+ * @param {object} options
  */
-export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) => {
+export const createStorage = (options: { prefixKey?: string; storage?: Storage } = {}) => {
+  // prefixKey string
+  // storage sessionStorage | localStorage
+  const { prefixKey = '', storage = localStorage } = options;
   /**
    * 本地缓存类
    * @class Storage
@@ -15,7 +17,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
     private storage = storage;
     private prefixKey?: string = prefixKey;
 
-    private getKey(key: string) {
+    private getKey(key: string): string {
       return `${this.prefixKey}${key}`.toUpperCase();
     }
 
@@ -25,7 +27,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
      * @param {*} value 缓存值
      * @param expire
      */
-    set(key: string, value: any, expire: number | null = DEFAULT_CACHE_TIME) {
+    set(key: string, value: any, expire: number | null = DEFAULT_CACHE_TIME): void {
       const stringData = JSON.stringify({
         value,
         expire: expire !== null ? new Date().getTime() + expire * 1000 : null,
@@ -38,7 +40,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
      * @param {string} key 缓存键
      * @param {*=} def 默认值
      */
-    get(key: string, def: any = null) {
+    get(key: string, def: any = null): any {
       const item = this.storage.getItem(this.getKey(key));
       if (item) {
         try {
@@ -60,7 +62,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
      * 从缓存删除某项
      * @param {string} key
      */
-    remove(key: string) {
+    remove(key: string): void {
       this.storage.removeItem(this.getKey(key));
     }
 

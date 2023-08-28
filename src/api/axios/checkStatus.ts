@@ -1,4 +1,4 @@
-import { PageEnum } from '@/constant';
+import { PAGE_ENUM } from '@/constant';
 import router from '@/router';
 import { storage } from '@/utils/storage';
 
@@ -12,7 +12,7 @@ export const checkStatus = (status: number, msg: string, messageFun: Function): 
     // 在登录成功后返回当前页面，这一步需要在登录页操作。
     case 401:
       messageFun('error', msg || '用户没有权限（令牌、用户名、密码错误）!');
-      const LoginName = PageEnum.LOGIN_NAME;
+      const LoginName = PAGE_ENUM.LOGIN_NAME;
       storage.clear();
       router.replace({
         name: LoginName,

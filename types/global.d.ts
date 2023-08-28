@@ -1,15 +1,8 @@
 /// <reference types="vite/client" />
 
-import type {
-  VNode,
-  VNodeChild,
-  ComponentPublicInstance,
-  FunctionalComponent,
-  PropType as VuePropType,
-} from 'vue';
+import type { VNodeChild, PropType as VuePropType } from 'vue';
 
 declare global {
-
   // app 项目信息
   const __APP_INFO__: {
     pkg: {
@@ -69,7 +62,6 @@ declare global {
   }
 
   namespace JSX {
-
     interface ElementAttributesProperty {
       $props: {};
     }

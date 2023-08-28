@@ -1,8 +1,8 @@
-import { useUserStoreWidthOut } from '@/store';
+import { useUserStoreWidthOut, useProviderStoreWidthOut } from '@/store';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
 import { formatRequestDate, getAppEnvConfig, isEmpty, isString, joinTimestamp } from '@/utils';
-import { ResultEnum } from '@/constant';
+import { RESULT_ENUM } from '@/constant';
 import { checkStatus } from './checkStatus';
 import { VNodeChild } from 'vue';
 
@@ -15,8 +15,7 @@ const urlPrefix = appEnvConfig.urlPrefix || '';
  * @param {string} msg
  */
 export const messageFun = (type: 'success' | 'error' | 'warning' | 'info' | 'loading', msg: string | (() => VNodeChild)) => {
-  // @ts-ignore
-  const { $message: Message } = window;
+  const { getMessage: Message } = useProviderStoreWidthOut();
   // 先关闭以前的消息
   Message.destroyAll();
   if (type === 'success') {
@@ -185,7 +184,7 @@ export class CustomAxios {
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, result, message } = data;
     // 请求成功
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = data && Reflect.has(data, 'code') && code === RESULT_ENUM.SUCCESS;
     // 是否显示提示信息
     if (isShowMessage) {
       if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
@@ -213,14 +212,14 @@ export class CustomAxios {
     }
 
     // 接口请求错误，统一提示错误信息
-    const hasError = data && Reflect.has(data, 'code') && code === ResultEnum.ERROR;
+    const hasError = data && Reflect.has(data, 'code') && code === RESULT_ENUM.ERROR;
     if (hasError) {
       messageFun('error', message || '操作失败,系统异常!');
       throw message;
     }
 
     // 登录超时
-    const hasTimeout = data && Reflect.has(data, 'code') && code === ResultEnum.TIMEOUT;
+    const hasTimeout = data && Reflect.has(data, 'code') && code === RESULT_ENUM.TIMEOUT;
     if (hasTimeout) {
       messageFun('error', message || '登录超时!');
       throw message;

@@ -50,9 +50,9 @@ export interface ApiMenuSaveData extends ApiMenu {}
 /**
  * @description: 修改菜单传参
  */
-export interface ApiMenuUpdateData extends ApiMenuSaveData,ApiMenuId {}
+export interface ApiMenuUpdateData extends ApiMenuSaveData, ApiMenuId {}
 
 /**
  * @description: 菜单的列表每项
  */
-export interface ApiMenuItem extends ApiMenu,ApiMenuId {}
+export interface ApiMenuItem extends ApiMenu, ApiMenuId {}

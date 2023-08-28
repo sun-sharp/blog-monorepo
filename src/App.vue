@@ -10,8 +10,8 @@
 
 <script lang="ts" setup>
   import { onMounted, onUnmounted, computed } from 'vue';
-  import AppLockScreen from '@/components/app/lock-screen/app-lock-screen.vue';
-  import AppProvider from '@/components/app/provider/app-provider.vue';
+  import AppLockScreen from '@/components/app/lock-screen/AppLockScreen.vue';
+  import AppProvider from '@/components/app/provider/AppProvider.vue';
   import { useRoute } from 'vue-router';
   import { useLockScreenStore } from '@/store';
 

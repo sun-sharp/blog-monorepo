@@ -73,7 +73,7 @@
         </n-form>
       </div>
     </div>
-    <layout-footer />
+    <!-- <layout-footer /> -->
   </div>
 </template>
 
@@ -81,11 +81,11 @@
   import { reactive, ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useUserStore } from '@/store';
-  import { MessageReactive, useMessage } from 'naive-ui';
+  import { FormItemRule, MessageReactive, useMessage } from 'naive-ui';
   import logo from '@/assets/images/common/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
-  import { ResultEnum } from '@/constant';
-  import LayoutFooter from '@/layout/components/layout-footer.vue';
+  import { RESULT_ENUM } from '@/constant';
+  // import LayoutFooter from '@/layout/components/layout-footer.vue';
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.title;
@@ -109,7 +109,7 @@
       type: 'boolean',
       trigger: 'change',
       message: '请点击按钮进行验证码校验',
-      validator: (_, value) => value === true,
+      validator: (_: any, value: boolean) => value === true,
     },
   };
 
@@ -119,9 +119,9 @@
   const route = useRoute();
 
   // 登录提交
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: Event) => {
     e.preventDefault();
-    formRef.value.validate(async (errors) => {
+    formRef.value.validate(async (errors: FormItemRule) => {
       if (!errors) {
         const { username, password } = formInline;
         let messageReactive: MessageReactive | null = message.loading('登录中...');
@@ -136,7 +136,7 @@
           messageReactive.destroy();
           messageReactive = null;
         }
-        if (code === ResultEnum.SUCCESS) {
+        if (code === RESULT_ENUM.SUCCESS) {
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           message.success('登录成功！');
           router.replace(toPath).then(() => {

@@ -2,12 +2,20 @@ import at from 'await-to-js';
 import { defineStore } from 'pinia';
 import { storage } from '@/utils';
 import { store } from '@/store';
-import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, ResultEnum, USER_CONFIG } from '@/constant';
-import { capitalApi, configurationApi, userApi } from '@/api';
+import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, RESULT_ENUM, USER_CONFIG } from '@/constant';
+import {
+  capitalApi,
+  // configurationApi,
+  userApi,
+} from '@/api';
 import { getAppEnvConfig } from '@/utils/env';
-import { CUserState, CUserConfigInfo } from '/#/config';
-import { ApiCapitalLoginData } from '/#/api/capital';
+import {
+  UserState,
+  // CUserConfigInfo
+} from '/#/store';
+import { ApiCapitalLoginData, ApiCapitalLoginResult } from '/#/api/capital';
 import { ApiUserInfo } from '/#/api/user';
+import { ApiResponse } from '/#/api/common';
 
 const appEnvConfig = getAppEnvConfig();
 
@@ -23,68 +31,68 @@ const defaultUserInfo: ApiUserInfo = {
 };
 
 // 默认配置信息
-const defaultConfigInfo: CUserConfigInfo = {
-  // 系统主题色
-  appTheme: '#2d8cf0',
-  // 面包屑
-  crumbsSetting: {
-    // 是否显示
-    show: true,
-    // 显示图标
-    showIcon: false,
-  },
-  // 顶部
-  headerSetting: {
-    // 固定顶部
-    fixed: true,
-    // 显示重载按钮
-    isReload: true,
-  },
-  // 深色主题
-  isDarkTheme: false,
-  // 是否开启路由动画
-  isPageAnimate: true,
-  // 菜单
-  menuSetting: {
-    // 默认展开
-    collapsed: false,
-    // 固定菜单
-    fixed: true,
-    // 菜单宽度
-    menuWidth: 200,
-    // 最小宽度
-    minMenuWidth: 64,
-    // 分割菜单
-    mixMenu: false,
-  },
-  // 多标签
-  multiTabsSetting: {
-    // 是否显示
-    show: true,
-    // 固定多标签
-    fixed: true,
-  },
-  // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
-  navMode: 'vertical',
-  // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
-  navTheme: 'dark',
-  // 路由动画类型
-  pageAnimateType: 'zoom-fade',
-  // 底部
-  footerSetting: {
-    // 是否显示
-    show: true,
-    //固定底部
-    fixed: true,
-  },
-};
+// const defaultConfigInfo: CUserConfigInfo = {
+//   // 系统主题色
+//   appTheme: '#2d8cf0',
+//   // 面包屑
+//   crumbsSetting: {
+//     // 是否显示
+//     show: true,
+//     // 显示图标
+//     showIcon: false,
+//   },
+//   // 顶部
+//   headerSetting: {
+//     // 固定顶部
+//     fixed: true,
+//     // 显示重载按钮
+//     isReload: true,
+//   },
+//   // 深色主题
+//   isDarkTheme: false,
+//   // 是否开启路由动画
+//   isPageAnimate: true,
+//   // 菜单
+//   menuSetting: {
+//     // 默认展开
+//     collapsed: false,
+//     // 固定菜单
+//     fixed: true,
+//     // 菜单宽度
+//     menuWidth: 200,
+//     // 最小宽度
+//     minMenuWidth: 64,
+//     // 分割菜单
+//     mixMenu: false,
+//   },
+//   // 多标签
+//   multiTabsSetting: {
+//     // 是否显示
+//     show: true,
+//     // 固定多标签
+//     fixed: true,
+//   },
+//   // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
+//   navMode: 'vertical',
+//   // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
+//   navTheme: 'dark',
+//   // 路由动画类型
+//   pageAnimateType: 'zoom-fade',
+//   // 底部
+//   footerSetting: {
+//     // 是否显示
+//     show: true,
+//     //固定底部
+//     fixed: true,
+//   },
+// };
 
 export const useUserStore = defineStore({
   id: 'app-user',
-  state: (): CUserState => ({
+  state: (): UserState => ({
     token: storage.get(ACCESS_TOKEN, ''),
     info: storage.get(CURRENT_USER, defaultUserInfo),
-    configInfo: storage.get(USER_CONFIG, defaultConfigInfo),
+    // configInfo: storage.get(USER_CONFIG, defaultConfigInfo),
   }),
   getters: {
     getToken(): string {
@@ -97,9 +105,9 @@ export const useUserStore = defineStore({
     getUserInfo(): ApiUserInfo {
       return this.info;
     },
-    getConfigInfo(): CUserConfigInfo {
-      return this.configInfo;
-    },
+    // getConfigInfo(): CUserConfigInfo {
+    //   return this.configInfo;
+    // },
   },
   actions: {
     // 设置token
@@ -111,15 +119,15 @@ export const useUserStore = defineStore({
       this.info = info;
     },
     // 设置配置信息
-    setConfigInfo(configInfo: CUserConfigInfo) {
-      this.configInfo = configInfo;
-    },
+    // setConfigInfo(configInfo: CUserConfigInfo) {
+    //   this.configInfo = configInfo;
+    // },
     // 登录
-    async login(loginForm: ApiCapitalLoginData) {
+    async login(loginForm: ApiCapitalLoginData): Promise<ApiResponse<ApiCapitalLoginResult>> {
       const [err, resp] = await at(capitalApi.login(loginForm));
-      if (err) return err;
+      if (err) return { code: RESULT_ENUM.ERROR, message: err.message };
       const { result, code } = resp;
-      if (code === ResultEnum.SUCCESS && result) {
+      if (code === RESULT_ENUM.SUCCESS && result) {
         storage.set(ACCESS_TOKEN, result.token);
         storage.set(IS_LOCK_SCREEN, false);
         this.setToken(result.token);
@@ -136,32 +144,32 @@ export const useUserStore = defineStore({
       return resp;
     },
     // 获取用户配置
-    async GetConfigInfo() {
-      const self = this;
-      const [err, resp] = await at(configurationApi.getConfigInfo());
-      if (err || !resp) return false;
-      storage.set(USER_CONFIG, resp);
-      self.setConfigInfo(resp);
-      return resp;
-    },
+    // async GetConfigInfo() {
+    //   const self = this;
+    //   const [err, resp] = await at(configurationApi.getConfigInfo());
+    //   if (err || !resp) return false;
+    //   storage.set(USER_CONFIG, resp);
+    //   self.setConfigInfo(resp);
+    //   return resp;
+    // },
     // 登出
     logout() {
       this.setToken('');
       storage.remove(ACCESS_TOKEN);
       this.setUserInfo(defaultUserInfo);
       storage.remove(CURRENT_USER);
-      this.setConfigInfo(defaultConfigInfo);
+      // this.setConfigInfo(defaultConfigInfo);
       storage.remove(USER_CONFIG);
       return Promise.resolve('');
     },
     // 接口修改配置
-    async updateApiConfigInfo(configInfo: CUserConfigInfo) {
-      const [err, resp] = await at(configurationApi.update(configInfo));
-      if (err) return false;
-      storage.set(USER_CONFIG, configInfo);
-      this.setConfigInfo(configInfo);
-      return resp;
-    },
+    // async updateApiConfigInfo(configInfo: CUserConfigInfo) {
+    //   const [err, resp] = await at(configurationApi.update(configInfo));
+    //   if (err) return false;
+    //   storage.set(USER_CONFIG, configInfo);
+    //   this.setConfigInfo(configInfo);
+    //   return resp;
+    // },
   },
 });
 

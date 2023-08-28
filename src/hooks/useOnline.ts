@@ -4,9 +4,9 @@ import { ref, onMounted, onUnmounted } from 'vue';
  * @description 用户网络是否可用
  * */
 export function useOnline() {
-  const online = ref(true);
+  const online = ref<boolean>(true);
 
-  const showStatus = (val) => {
+  const showStatus = (val: any): void => {
     online.value = typeof val == 'boolean' ? val : val.target.online;
   };
 

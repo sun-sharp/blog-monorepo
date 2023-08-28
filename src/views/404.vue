@@ -21,14 +21,14 @@
 <style lang="scss" scoped>
   .page-container {
     width: 100%;
-    border-radius: 4px;
-    padding: 50px 0;
     height: 100vh;
+    padding: 50px 0;
+    border-radius: 4px;
 
     .text-center {
       h1 {
-        color: #666;
         padding: 20px 0;
+        color: #666;
       }
     }
 
