@@ -1,26 +1,13 @@
 import type { App } from 'vue';
 import { createPinia } from 'pinia';
-import { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-screen';
-import { useUserStore, useUserStoreWidthOut } from './modules/user';
-import { useProviderStore, useProviderStoreWidthOut } from './modules/provider';
-// import { useRouteStore, useRouteStoreWidthOut } from './modules/route';
-// import { useTabsViewStore } from './modules/tabs-view';
-// import { useApiTypeStore } from './modules/api-type';
 
-export {
-  useProviderStore,
-  useLockScreenStore,
-  //  useApiTypeStore,
-  useUserStore,
-  // useRouteStore, useTabsViewStore
-};
-
-export {
-  useProviderStoreWidthOut,
-  useLockScreenStoreWidthOut,
-  useUserStoreWidthOut,
-  // useRouteStoreWidthOut
-};
+// 导出
+export { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-screen';
+export { useUserStore, useUserStoreWidthOut } from './modules/user';
+export { useProviderStore, useProviderStoreWidthOut } from './modules/provider';
+export { useRouteStore, useRouteStoreWidthOut } from './modules/route';
+// export { useTabsViewStore } from './modules/tabs-view';
+// export { useApiTypeStore } from './modules/api-type';
 
 const pinia = createPinia();
 

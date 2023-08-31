@@ -1,19 +1,8 @@
 import type { App } from 'vue';
-import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import { getAppEnvConfig } from '@/utils';
-// import { ErrorPageRoute, RedirectRoute, SettingRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
+import { LoginRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 // import { createRouterGuards } from './router-guards';
-import { LoginComponent } from './router-component';
-
-// 登录页
-export const LoginRoute: RouteRecordRaw = {
-  path: '/login',
-  name: 'Login',
-  component: LoginComponent,
-  meta: {
-    title: '登录',
-  },
-};
 
 //普通路由 无需验证权限
 export const constantRouter: any[] = [

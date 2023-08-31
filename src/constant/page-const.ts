@@ -2,6 +2,7 @@ export const PAGE_ENUM = {
   // 登录
   LOGIN_PATH: '/login',
   LOGIN_NAME: 'Login',
+  LOGIN_TITLE: '登录',
   // 首页
   HOME_PATH: '/home',
   HOME_NAME: 'Home',

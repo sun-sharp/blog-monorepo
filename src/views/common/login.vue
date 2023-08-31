@@ -73,7 +73,7 @@
         </n-form>
       </div>
     </div>
-    <!-- <layout-footer /> -->
+    <layout-footer />
   </div>
 </template>
 
@@ -85,7 +85,7 @@
   import logo from '@/assets/images/common/logo.png';
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
   import { RESULT_ENUM } from '@/constant';
-  // import LayoutFooter from '@/layout/components/layout-footer.vue';
+  import LayoutFooter from '@/layout/components/LayoutFooter.vue';
 
   const appEnvConfig = getAppEnvConfig();
   const title = appEnvConfig.title;

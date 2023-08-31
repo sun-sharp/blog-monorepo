@@ -1,43 +1,42 @@
 import { computed } from 'vue';
-// import { useUserStore } from '@/store';
-// import { CCrumbsSetting, CFooterSetting, CHeaderSetting, CMenuSetting, CMultiTabsSetting } from '/#/config';
+import { useUserStore } from '@/store';
+import { ApiConfCrumbsSetting, ApiConfFooterSetting, ApiConfHeaderSetting, ApiConfMenuSetting, ApiConfMultiTabsSetting } from '/#/api/configuration';
 
 export const useSetting = () => {
-  // const userStore = useUserStore();
+  const userStore = useUserStore();
 
-  // const getNavMode = computed<string>(() => userStore.getConfigInfo.navMode);
+  const getNavMode = computed<string>(() => userStore.getConfigInfo.navMode);
 
-  // const getNavTheme = computed<string>(() => userStore.getConfigInfo.navTheme);
+  const getNavTheme = computed<string>(() => userStore.getConfigInfo.navTheme);
 
-  // const getHeaderSetting = computed<CHeaderSetting>(() => userStore.getConfigInfo.headerSetting);
+  const getHeaderSetting = computed<ApiConfHeaderSetting>(() => userStore.getConfigInfo.headerSetting);
 
-  // const getMultiTabsSetting = computed<CMultiTabsSetting>(() => userStore.getConfigInfo.multiTabsSetting);
+  const getMultiTabsSetting = computed<ApiConfMultiTabsSetting>(() => userStore.getConfigInfo.multiTabsSetting);
 
-  // const getMenuSetting = computed<CMenuSetting>(() => userStore.getConfigInfo.menuSetting);
+  const getMenuSetting = computed<ApiConfMenuSetting>(() => userStore.getConfigInfo.menuSetting);
 
-  // const getCrumbsSetting = computed<CCrumbsSetting>(() => userStore.getConfigInfo.crumbsSetting);
+  const getCrumbsSetting = computed<ApiConfCrumbsSetting>(() => userStore.getConfigInfo.crumbsSetting);
 
-  // const getIsPageAnimate = computed<boolean>(() => userStore.getConfigInfo.isPageAnimate);
+  const getIsPageAnimate = computed<boolean>(() => userStore.getConfigInfo.isPageAnimate);
 
-  // const getPageAnimateType = computed<string>(() => userStore.getConfigInfo.pageAnimateType);
+  const getPageAnimateType = computed<string>(() => userStore.getConfigInfo.pageAnimateType);
 
-  // const getIsDarkTheme = computed<boolean>(() => userStore.getConfigInfo.isDarkTheme);
-  const getIsDarkTheme = computed<boolean>(() => false);
+  const getIsDarkTheme = computed<boolean>(() => userStore.getConfigInfo.isDarkTheme);
 
-  const getAppTheme = computed<string>(() => '#2d8cf0');
+  const getAppTheme = computed<string>(() => userStore.getConfigInfo.appTheme);
 
-  // const getFooterSetting = computed<CFooterSetting>(() => userStore.getConfigInfo.footerSetting);
+  const getFooterSetting = computed<ApiConfFooterSetting>(() => userStore.getConfigInfo.footerSetting);
 
   return {
-    // getNavMode,
-    // getNavTheme,
-    // getHeaderSetting,
-    // getMultiTabsSetting,
-    // getMenuSetting,
-    // getCrumbsSetting,
-    // getFooterSetting,
-    // getIsPageAnimate,
-    // getPageAnimateType,
+    getNavMode,
+    getNavTheme,
+    getHeaderSetting,
+    getMultiTabsSetting,
+    getMenuSetting,
+    getCrumbsSetting,
+    getFooterSetting,
+    getIsPageAnimate,
+    getPageAnimateType,
     getIsDarkTheme,
     getAppTheme,
   };

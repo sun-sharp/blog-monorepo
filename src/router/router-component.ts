@@ -1,5 +1,5 @@
 // // 根目录
-// export const Layout = () => import('@/layout/layout-index.vue');
+export const Layout = () => import('@/layout/LayoutIndex.vue');
 
 // // 全局
 // export const ParentLayout = () => import('@/layout/layout-parent.vue');
@@ -10,8 +10,8 @@
 // // iframe嵌入
 // export const IframeComponent = () => import('@/views/iframe.vue');
 
-// // 404页面
-// export const ErrorComponent = () => import('@/views/404.vue');
+// 404页面
+export const Error404Component = () => import('@/views/Error404.vue');
 
 // // 重定向页面
 // export const RedirectComponent = () => import('@/views/redirect.vue');
