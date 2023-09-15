@@ -1,20 +1,20 @@
 // 根目录
 export const Layout = () => import('@/layout/LayoutIndex.vue');
 
-// // 全局
-// export const ParentLayout = () => import('@/layout/layout-parent.vue');
+// 路由渲染
+export const LayoutRouterView = () => import('@/layout/LayoutRouterView.vue');
 
 // 首页
 export const HomeComponent = () => import('@/views/home/index.vue');
 
-// // iframe嵌入
-// export const IframeComponent = () => import('@/views/iframe.vue');
+// iframe嵌入
+export const IframeComponent = () => import('@/views/iframe.vue');
 
 // 404页面
 export const Error404Component = () => import('@/views/error-404.vue');
 
-// // 重定向页面
-// export const RedirectComponent = () => import('@/views/redirect.vue');
+// 重定向页面
+export const RedirectComponent = () => import('@/views/redirect.vue');
 
 // 登录页面
 export const LoginComponent = () => import('@/views/common/login.vue');

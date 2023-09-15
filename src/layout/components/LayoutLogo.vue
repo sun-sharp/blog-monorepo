@@ -17,8 +17,25 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .layout-logo {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $header-height;
+    overflow: hidden;
+    line-height: $header-height;
+    white-space: nowrap;
+
+    img {
+      width: auto;
+      height: 32px;
+    }
+
+    .title {
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: 5px;
+    }
   }
 </style>
