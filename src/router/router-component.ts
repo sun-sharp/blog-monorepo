@@ -5,7 +5,7 @@ export const Layout = () => import('@/layout/LayoutIndex.vue');
 // export const ParentLayout = () => import('@/layout/layout-parent.vue');
 
 // // 首页
-// export const HomeComponent = () => import('@/views/home/index.vue');
+export const HomeComponent = () => import('@/views/home/HomeIndex.vue');
 
 // // iframe嵌入
 // export const IframeComponent = () => import('@/views/iframe.vue');

@@ -1,6 +1,9 @@
 /// <reference types="vite/client" />
 
 import type { VNodeChild, PropType as VuePropType } from 'vue';
+import { LoadingBarApiInjection } from 'naive-ui/es/loading-bar/src/LoadingBarProvider';
+import { DialogApiInjection } from 'naive-ui/es/dialog/src/DialogProvider';
+import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
 declare global {
   // app 项目信息
@@ -73,5 +76,12 @@ declare global {
     interface IntrinsicAttributes {
       [elem: string]: any;
     }
+  }
+
+  // window 参数
+  interface WindowConfig extends Window {
+    $loading?: LoadingBarApiInjection;
+    $message?: MessageApiInjection;
+    $dialog?: DialogApiInjection;
   }
 }

@@ -1,4 +1,4 @@
-import { useUserStoreWidthOut, useProviderStoreWidthOut } from '@/store';
+import { useUserStoreWidthOut } from '@/store';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
 import { formatRequestDate, getAppEnvConfig, isEmpty, isString, joinTimestamp } from '@/utils';
@@ -9,13 +9,15 @@ import { VNodeChild } from 'vue';
 const appEnvConfig = getAppEnvConfig();
 const urlPrefix = appEnvConfig.urlPrefix || '';
 
+const win: WindowConfig = window;
+
 /**
  * @description: 消息弹窗
  * @param {'success' | 'error' | 'warning' | 'info' | 'loading'} type
  * @param {string} msg
  */
 export const messageFun = (type: 'success' | 'error' | 'warning' | 'info' | 'loading', msg: string | (() => VNodeChild)) => {
-  const { getMessage: Message } = useProviderStoreWidthOut();
+  const { $message: Message } = win;
   // 先关闭以前的消息
   Message.destroyAll();
   if (type === 'success') {

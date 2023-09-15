@@ -1,14 +1,17 @@
 <template>
   <n-config-provider :locale="zhCN" :theme="getTheme" :theme-overrides="getThemeOverrides" :date-locale="dateZhCN">
-    <app-provider-loading>
-      <app-provider-dialog>
+    <n-loading-bar-provider>
+      <app-provider-loading />
+      <n-dialog-provider>
+        <app-provider-dialog />
         <n-notification-provider>
-          <app-provider-message>
+          <n-message-provider>
+            <app-provider-message />
             <slot></slot>
-          </app-provider-message>
+          </n-message-provider>
         </n-notification-provider>
-      </app-provider-dialog>
-    </app-provider-loading>
+      </n-dialog-provider>
+    </n-loading-bar-provider>
   </n-config-provider>
 </template>
 
@@ -24,7 +27,7 @@
   const { getAppTheme, getIsDarkTheme } = useSetting();
 
   /**
-   * @type import('naive-ui').GlobalThemeOverrides 设置主题样式
+   * @description 设置主题样式
    */
   const getThemeOverrides = computed(() => {
     const appTheme = unref(getAppTheme);

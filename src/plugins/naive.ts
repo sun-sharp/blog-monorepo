@@ -144,6 +144,10 @@ const naive = create({
   ],
 });
 
-export function setupNaive(app: App<Element>) {
+/**
+ * naive ui 组件
+ * @param app
+ */
+export const setupNaive = (app: App<Element>) => {
   app.use(naive);
-}
+};

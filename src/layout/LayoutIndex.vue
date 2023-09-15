@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { computed, ref, unref } from 'vue';
   import { useSearch, useSetting } from '@/hooks';
-  // import LayoutLogo from '@/layout/components/layout-logo.vue';
+  import LayoutLogo from '@/layout/components/LayoutLogo.vue';
   // import LayoutMenu from '@/layout/components/layout-menu.vue';
   // import LayoutHeader from '@/layout/components/layout-header.vue';
   // import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
-  import LayoutMain from '@/layout/components/layout-main.vue';
-  import LayoutFooter from '@/layout/components/layout-footer.vue';
+  import LayoutMain from '@/layout/components/LayoutMain.vue';
+  import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   // import LayoutSearch from '@/layout/components/layout-search.vue';
 
   const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getFooterSetting } = useSetting();
@@ -100,7 +100,7 @@
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
-      <!-- <layout-logo :collapsed="collapsed" /> -->
+      <layout-logo :collapsed="collapsed" />
       <!-- <layout-menu v-model:collapsed="collapsed" /> -->
     </n-layout-sider>
     <n-layout :inverted="inverted" :class="layoutClassName">
@@ -189,7 +189,7 @@
         position: fixed;
         bottom: 0;
         z-index: 1500;
-        width: fill-available;
+        width: max-content;
         width: available;
       }
     }
@@ -199,7 +199,7 @@
         position: fixed;
         top: 0;
         z-index: 1500;
-        width: fill-available;
+        width: max-content;
         width: available;
       }
     }
@@ -209,7 +209,7 @@
         position: fixed;
         top: $header-height;
         z-index: 1500;
-        width: fill-available;
+        width: max-content;
         width: available;
       }
 

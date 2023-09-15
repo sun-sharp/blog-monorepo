@@ -6,7 +6,7 @@
     "dev:prod": "vite --mode prod-local",
     "dev:debug": "vite --mode dev --debug",
     "build": "vue-tsc --noEmit && vite build --mode prod",
-    "preview": "vite preview",
+    "preview": "vite preview --outDir manage --base /manage/",
     "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && yarn"

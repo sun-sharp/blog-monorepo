@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { Error404Component, Layout, LoginComponent } from './router-component';
+import { Error404Component, HomeComponent, Layout, LoginComponent } from './router-component';
 import { PAGE_ENUM } from '@/constant';
 
 // 登录页
@@ -13,22 +13,22 @@ export const LoginRoute: AppRouteRecordRaw = {
 };
 
 // 首页
-// export const HomeRoute: AppRouteRecordRaw = {
-//   path: PAGE_ENUM.HOME_PATH,
-//   name: PAGE_ENUM.HOME_NAME,
-//   component: HomeComponent,
-//   meta: {
-//     title: PAGE_ENUM.HOME_TITLE,
-//   },
-// };
+export const HomeRoute: AppRouteRecordRaw = {
+  path: PAGE_ENUM.HOME_PATH,
+  name: PAGE_ENUM.HOME_NAME,
+  component: HomeComponent,
+  meta: {
+    title: PAGE_ENUM.HOME_TITLE,
+  },
+};
 
 // 一级菜单
-// export const PageRoute: AppRouteRecordRaw = {
-//   path: '/',
-//   redirect: PAGE_ENUM.HOME_PATH,
-//   component: Layout,
-//   children: [HomeRoute],
-// };
+export const PageRoute: AppRouteRecordRaw = {
+  path: '/',
+  redirect: PAGE_ENUM.HOME_PATH,
+  component: Layout,
+  children: [HomeRoute],
+};
 
 // 404 on a page
 export const ErrorPageRoute: AppRouteRecordRaw = {

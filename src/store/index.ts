@@ -4,7 +4,6 @@ import { createPinia } from 'pinia';
 // 导出
 export { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-screen';
 export { useUserStore, useUserStoreWidthOut } from './modules/user';
-export { useProviderStore, useProviderStoreWidthOut } from './modules/provider';
 export { useRouteStore, useRouteStoreWidthOut } from './modules/route';
 // export { useTabsViewStore } from './modules/tabs-view';
 // export { useApiTypeStore } from './modules/api-type';

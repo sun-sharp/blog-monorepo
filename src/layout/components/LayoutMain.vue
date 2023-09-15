@@ -11,39 +11,29 @@
   </router-view>
 </template>
 
-<script lang="ts">
-  import { defineComponent, computed, unref } from 'vue';
+<script lang="ts" setup>
+  import { computed, unref } from 'vue';
   import { useRouteStore } from '@/store';
   import { useSetting } from '@/hooks';
 
-  export default defineComponent({
-    name: 'LayoutMain',
-    components: {},
-    props: {
-      notNeedKey: {
-        type: Boolean,
-        default: false,
-      },
-      animate: {
-        type: Boolean,
-        default: true,
-      },
+  defineProps({
+    notNeedKey: {
+      type: Boolean,
+      default: false,
     },
-    setup() {
-      const { getIsPageAnimate, getPageAnimateType } = useSetting();
-      const routeStore = useRouteStore();
-      // 需要缓存的路由组件
-      const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
-
-      const getTransitionName = computed(() => {
-        return unref(getIsPageAnimate) ? unref(getPageAnimateType) : '';
-      });
-
-      return {
-        keepAliveComponents,
-        getTransitionName,
-      };
+    animate: {
+      type: Boolean,
+      default: true,
     },
+  });
+
+  const { getIsPageAnimate, getPageAnimateType } = useSetting();
+  const routeStore = useRouteStore();
+  // 需要缓存的路由组件
+  const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
+
+  const getTransitionName = computed(() => {
+    return unref(getIsPageAnimate) ? unref(getPageAnimateType) : '';
   });
 </script>
 

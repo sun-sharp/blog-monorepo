@@ -1,4 +1,4 @@
-// import { toRaw } from 'vue';
+import { toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { RouteState } from '/#/store';
@@ -6,7 +6,7 @@ import { RouteState } from '/#/store';
 // import { capitalApi } from '@/api';
 // import at from 'await-to-js';
 // import { constantRouterIcon, routerOneScreen } from '@/utils';
-// import { HomeRoute, PageRoute } from '@/router/base';
+import { HomeRoute, PageRoute } from '@/router/base';
 // import { AppRouteRecordRaw, MenuType } from '/#/router';
 
 export const useRouteStore = defineStore({
@@ -18,7 +18,7 @@ export const useRouteStore = defineStore({
     // addRouters: [],
     keepAliveComponents: [],
     // 是否已动态添加路由
-    // isDynamicAddedRoute: false,
+    isDynamicAddedRoute: false,
   }),
   getters: {
     // getMenus(): AppRouteRecordRaw[] {
@@ -27,14 +27,14 @@ export const useRouteStore = defineStore({
     // getSearchMenus(): MenuType[] {
     //   return this.searchMenus;
     // },
-    // getIsDynamicAddedRoute(): boolean {
-    //   return this.isDynamicAddedRoute;
-    // },
+    getIsDynamicAddedRoute(): boolean {
+      return this.isDynamicAddedRoute;
+    },
   },
   actions: {
-    // setDynamicAddedRoute(added: boolean) {
-    //   this.isDynamicAddedRoute = added;
-    // },
+    setDynamicAddedRoute(added: boolean) {
+      this.isDynamicAddedRoute = added;
+    },
     // // 设置动态路由
     // setRouters(routers: AppRouteRecordRaw[]) {
     //   this.addRouters = routers;
@@ -53,20 +53,21 @@ export const useRouteStore = defineStore({
       this.keepAliveComponents = compNames;
     },
     // 动态获取权限
-    // async generateRoutes(userInfo?: any) {
-    //   PageRoute.children = [HomeRoute];
-    //   if (!userInfo) return toRaw([PageRoute]);
-    //   const { roleCode } = userInfo;
-    //   // 动态获取菜单
-    //   const [err, resp] = await at(capitalApi.adminMenus(roleCode));
-    //   if (err) return toRaw([PageRoute]);
-    //   this.setSearchMenus(resp);
-    //   const accessedRouters = await routerOneScreen(resp);
-    //   PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
-    //   this.setRouters([PageRoute, ...accessedRouters.routeList]);
-    //   this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
-    //   return toRaw([PageRoute, ...accessedRouters.routeList]);
-    // },
+    async generateRoutes() {
+      PageRoute.children = [HomeRoute];
+      // if (!userInfo) return toRaw([PageRoute]);
+      // const { roleCode } = userInfo;
+      // 动态获取菜单
+      // const [err, resp] = await at(capitalApi.adminMenus(roleCode));
+      // if (err) return toRaw([PageRoute]);
+      // this.setSearchMenus(resp);
+      // const accessedRouters = await routerOneScreen(resp);
+      // PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
+      // this.setRouters([PageRoute, ...accessedRouters.routeList]);
+      // this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
+      // return toRaw([PageRoute, ...accessedRouters.routeList]);
+      return toRaw([PageRoute]);
+    },
   },
 });
 
