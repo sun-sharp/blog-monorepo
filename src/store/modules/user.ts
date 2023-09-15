@@ -2,9 +2,8 @@ import at from 'await-to-js';
 import { defineStore } from 'pinia';
 import { storage } from '@/utils';
 import { store } from '@/store';
-import { ACCESS_TOKEN, CURRENT_USER, IS_LOCK_SCREEN, RESULT_ENUM, USER_CONFIG } from '@/constant';
+import { ACCESS_TOKEN, APP_ENV_CONFIG, CURRENT_USER, IS_LOCK_SCREEN, RESULT_ENUM, USER_CONFIG } from '@/constant';
 import { capitalApi, configurationApi, userApi } from '@/api';
-import { getAppEnvConfig } from '@/utils/env';
 import {
   UserState,
   // CUserConfigInfo
@@ -13,8 +12,6 @@ import { ApiCapitalLoginData, ApiCapitalLoginResult } from '/#/api/capital';
 import { ApiUserInfo } from '/#/api/user';
 import { ApiResponse } from '/#/api/common';
 import { ApiConfigInfo } from '/#/api/configuration';
-
-const appEnvConfig = getAppEnvConfig();
 
 // 默认用户信息
 const defaultUserInfo: ApiUserInfo = {
@@ -96,7 +93,7 @@ export const useUserStore = defineStore({
       return this.token;
     },
     getCompleteToken(): string {
-      const { tokenHead } = appEnvConfig;
+      const { tokenHead } = APP_ENV_CONFIG;
       return tokenHead ? tokenHead + this.token : this.token;
     },
     getUserInfo(): ApiUserInfo {

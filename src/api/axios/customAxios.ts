@@ -1,13 +1,12 @@
 import { useUserStoreWidthOut } from '@/store';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
-import { formatRequestDate, getAppEnvConfig, isEmpty, isString, joinTimestamp } from '@/utils';
-import { RESULT_ENUM } from '@/constant';
+import { formatRequestDate, isEmpty, isString, joinTimestamp } from '@/utils';
+import { APP_ENV_CONFIG, RESULT_ENUM } from '@/constant';
 import { checkStatus } from './checkStatus';
 import { VNodeChild } from 'vue';
 
-const appEnvConfig = getAppEnvConfig();
-const urlPrefix = appEnvConfig.urlPrefix || '';
+const urlPrefix = APP_ENV_CONFIG.urlPrefix || '';
 
 const win: WindowConfig = window;
 
@@ -19,17 +18,19 @@ const win: WindowConfig = window;
 export const messageFun = (type: 'success' | 'error' | 'warning' | 'info' | 'loading', msg: string | (() => VNodeChild)) => {
   const { $message: Message } = win;
   // 先关闭以前的消息
-  Message.destroyAll();
-  if (type === 'success') {
-    Message.success(msg);
-  } else if (type === 'error') {
-    Message.error(msg);
-  } else if (type === 'warning') {
-    Message.warning(msg);
-  } else if (type === 'info') {
-    Message.info(msg);
-  } else if (type === 'loading') {
-    Message.loading(msg);
+  if (Message) {
+    Message.destroyAll();
+    if (type === 'success') {
+      Message.success(msg);
+    } else if (type === 'error') {
+      Message.error(msg);
+    } else if (type === 'warning') {
+      Message.warning(msg);
+    } else if (type === 'info') {
+      Message.info(msg);
+    } else if (type === 'loading') {
+      Message.loading(msg);
+    }
   }
 };
 

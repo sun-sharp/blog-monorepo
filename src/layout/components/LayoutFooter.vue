@@ -7,10 +7,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { getAppEnvConfig } from '@/utils';
+  import { APP_ENV_CONFIG } from '@/constant';
 
-  const appEnvConfig = getAppEnvConfig();
-  const title = appEnvConfig.shortName;
+  const title = APP_ENV_CONFIG.shortName;
 </script>
 
 <style lang="scss" scoped>

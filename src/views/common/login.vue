@@ -83,13 +83,12 @@
   import { useUserStore } from '@/store';
   import { FormItemRule, MessageReactive, useMessage } from 'naive-ui';
   import logo from '@/assets/images/common/logo.png';
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook, getAppEnvConfig } from '@/utils';
-  import { RESULT_ENUM } from '@/constant';
+  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@/utils';
+  import { APP_ENV_CONFIG, RESULT_ENUM } from '@/constant';
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
 
-  const appEnvConfig = getAppEnvConfig();
-  const title = appEnvConfig.title;
-  const shortName = appEnvConfig.shortName;
+  const title = APP_ENV_CONFIG.title;
+  const shortName = APP_ENV_CONFIG.shortName;
   const formRef = ref();
   const message = useMessage();
   const loading = ref(false);

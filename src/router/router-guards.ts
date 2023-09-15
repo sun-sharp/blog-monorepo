@@ -1,6 +1,6 @@
-import { ACCESS_TOKEN, PAGE_ENUM } from '@/constant';
+import { ACCESS_TOKEN, APP_ENV_CONFIG, PAGE_ENUM } from '@/constant';
 import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
-import { getAppEnvConfig, storage } from '@/utils';
+import { storage } from '@/utils';
 import { RouteRecordRaw, Router } from 'vue-router';
 
 const LOGIN_PATH = PAGE_ENUM.LOGIN_PATH;
@@ -12,7 +12,6 @@ const whitePathList = [LOGIN_PATH]; // 白名单中的重定向
 export function createRouterGuards(router: Router) {
   const userStore = useUserStoreWidthOut();
   const routeStore = useRouteStoreWidthOut();
-  const appEnvConfig = getAppEnvConfig();
   router.beforeEach(async (to, from, next) => {
     const Loading = win['$loading'] || null;
     Loading && Loading.start();
@@ -71,7 +70,7 @@ export function createRouterGuards(router: Router) {
   });
 
   router.afterEach((to) => {
-    document.title = `${appEnvConfig.title}-${(to?.meta?.title as string) || document.title}`;
+    document.title = `${APP_ENV_CONFIG.title}-${(to?.meta?.title as string) || document.title}`;
     // 在这里设置需要缓存的组件名称
     const keepAliveComponents = routeStore.keepAliveComponents;
     const currentComName: any = to.matched.find((item) => item.name == to.name)?.name;

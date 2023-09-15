@@ -1,3 +1,4 @@
+// 环境变量
 import type { GlobConfig } from '/#/config';
 
 export const getAppEnvConfig = (): Readonly<GlobConfig> => {
@@ -27,3 +28,5 @@ export const getAppEnvConfig = (): Readonly<GlobConfig> => {
   };
   return glob as Readonly<GlobConfig>;
 };
+
+export const APP_ENV_CONFIG = getAppEnvConfig();

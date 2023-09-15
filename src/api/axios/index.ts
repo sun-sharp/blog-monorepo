@@ -1,8 +1,7 @@
-import { getAppEnvConfig } from '@/utils';
 import { CustomAxios } from './customAxios';
+import { APP_ENV_CONFIG } from '@/constant';
 
-const appEnvConfig = getAppEnvConfig();
-const urlPrefix = appEnvConfig.urlPrefix || '';
+const urlPrefix = APP_ENV_CONFIG.urlPrefix || '';
 
 export const AxiosCapital = new CustomAxios({
   timeout: 60 * 1000,
@@ -16,7 +15,7 @@ export const AxiosCapital = new CustomAxios({
     // 格式化提交参数时间
     formatDate: true,
     // 接口地址
-    apiUrl: appEnvConfig.capitalApiUrl as string,
+    apiUrl: APP_ENV_CONFIG.capitalApiUrl as string,
   },
   responseOptions: {
     // 需要对返回数据进行处理
@@ -40,7 +39,7 @@ export const AxiosBlog = new CustomAxios({
     // 格式化提交参数时间
     formatDate: true,
     // 接口地址
-    apiUrl: appEnvConfig.blogApiUrl as string,
+    apiUrl: APP_ENV_CONFIG.blogApiUrl as string,
   },
   responseOptions: {
     // 需要对返回数据进行处理

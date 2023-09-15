@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { getAppEnvConfig } from '@/utils/env';
+  import { APP_ENV_CONFIG } from '@/constant';
 
   defineProps({
     collapsed: {
@@ -7,8 +7,7 @@
     },
   });
 
-  const appEnvConfig = getAppEnvConfig();
-  const title = appEnvConfig.shortName;
+  const title = APP_ENV_CONFIG.shortName;
 </script>
 
 <template>

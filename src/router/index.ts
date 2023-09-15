@@ -1,8 +1,8 @@
 import type { App } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import { getAppEnvConfig } from '@/utils';
 import { LoginRoute } from '@/router/base'; // 重定向和报错路由404，,500，403
 import { createRouterGuards } from './router-guards';
+import { APP_ENV_CONFIG } from '@/constant';
 
 //普通路由 无需验证权限
 export const constantRouter: any[] = [
@@ -13,7 +13,7 @@ export const constantRouter: any[] = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(getAppEnvConfig().baseUrl),
+  history: createWebHistory(APP_ENV_CONFIG.baseUrl),
   routes: constantRouter,
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),
