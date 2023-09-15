@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN, APP_ENV_CONFIG, PAGE_ENUM } from '@/constant';
 import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
 import { storage } from '@/utils';
-import { RouteRecordRaw, Router } from 'vue-router';
+import { Router } from 'vue-router';
 
 const LOGIN_PATH = PAGE_ENUM.LOGIN_PATH;
 
@@ -52,13 +52,12 @@ export function createRouterGuards(router: Router) {
       // 获取用户配置信息
       await userStore.GetConfigInfo();
       // 获取动态路由
-      const routes = await routeStore.generateRoutes();
+      const routes = await routeStore.generateRoutes(userInfo);
       // 动态添加可访问路由表
       routes.forEach((item) => {
-        router.addRoute(item as unknown as RouteRecordRaw);
+        router.addRoute(item);
       });
       routeStore.setDynamicAddedRoute(true);
-
       // 跳转重定向地址
       const redirectPath = (from.query.redirect || to.path) as string;
       const redirect = decodeURIComponent(redirectPath);

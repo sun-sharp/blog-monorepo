@@ -129,10 +129,10 @@ export const useUserStore = defineStore({
       return resp;
     },
     // 获取用户信息
-    async GetInfo() {
+    async GetInfo(): Promise<ApiUserInfo | undefined> {
       const self = this;
       const [err, resp] = await at(userApi.getUserInfo());
-      if (err || !resp) return false;
+      if (err || !resp) return;
       storage.set(CURRENT_USER, resp);
       self.setUserInfo(resp);
       return resp;

@@ -1,3 +1,6 @@
+import { AppRouteRecordRaw } from '/#/router';
+import { ViewsMenu } from '/#/views/menu';
+
 // 用户全局配置
 export interface UserState {
   token: string;
@@ -13,8 +16,8 @@ export type LockScreenState = {
 
 // 路由配置
 export interface RouteState {
-  // menus: AppRouteRecordRaw[];
-  // searchMenus: MenuType[];
+  menus: AppRouteRecordRaw[];
+  searchMenus: ViewsMenu[];
   // routers: any[];
   // addRouters: any[];
   keepAliveComponents: string[];
