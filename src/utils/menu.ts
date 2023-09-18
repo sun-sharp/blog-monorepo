@@ -98,8 +98,8 @@ export const routerGenerator = (routerMap: MenuRouteItem[], _parentId = '0'): Ap
         currentRouter.redirect = `${itemChildren[0].path}`;
         // Recursion
         currentRouter.children = itemChildren;
-        resultArr.push(currentRouter);
       }
+      resultArr.push(currentRouter);
     }
   });
   return resultArr;

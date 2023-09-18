@@ -32,3 +32,21 @@ export enum PageEnum {
   SETTING_PASSWORD_NAME = 'SettingPassword',
   SETTING_PASSWORD_TITLE = '密码设置',
 }
+
+export enum SizeEnum {
+  XS = 'XS',
+  SM = 'SM',
+  MD = 'MD',
+  LG = 'LG',
+  XL = 'XL',
+  XXL = 'XXL',
+}
+
+export enum ScreenEnum {
+  XS = 480,
+  SM = 576,
+  MD = 768,
+  LG = 992,
+  XL = 1200,
+  XXL = 1600,
+}
