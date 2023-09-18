@@ -6,10 +6,11 @@ import { ApiUserInfo } from '/#/api/user';
 // import { constantRouter } from '@/router';
 import { capitalApi } from '@/api';
 import at from 'await-to-js';
-import { constantRouterIcon } from '@/utils';
+import { constantRouterIcon, routerScreen } from '@/utils';
 import { AppRouteRecordRaw } from '/#/router';
 import { ApiMenuItem } from '/#/api/menu';
 import { ViewsMenu } from '/#/views/menu';
+import { PageRoute } from '@/router/base';
 
 export const useRouteStore = defineStore({
   id: 'app-route',
@@ -17,7 +18,7 @@ export const useRouteStore = defineStore({
     menus: [],
     searchMenus: [],
     // routers: constantRouter,
-    // addRouters: [],
+    addRouters: [],
     keepAliveComponents: [],
     // 是否已动态添加路由
     isDynamicAddedRoute: false,
@@ -37,11 +38,11 @@ export const useRouteStore = defineStore({
     setDynamicAddedRoute(added: boolean) {
       this.isDynamicAddedRoute = added;
     },
-    // // 设置动态路由
-    // setRouters(routers: AppRouteRecordRaw[]) {
-    //   this.addRouters = routers;
-    //   this.routers = constantRouter.concat(routers);
-    // },
+    // 设置动态路由
+    setRouters(routers: AppRouteRecordRaw[]) {
+      this.addRouters = routers;
+      // this.routers = constantRouter.concat(routers);
+    },
     // setMenus(menus: AppRouteRecordRaw[]) {
     //   // 设置动态路由
     //   this.menus = menus;
@@ -63,12 +64,15 @@ export const useRouteStore = defineStore({
       if (err) return toRaw([]);
       // 设置菜单搜索
       this.setSearchMenus(resp);
-      // const accessedRouters = await routerOneScreen(resp);
-      // PageRoute.children = [HomeRoute, ...accessedRouters.oneRouteList];
-      // this.setRouters([PageRoute, ...accessedRouters.routeList]);
+      const accessedRouters = routerScreen(resp);
+      console.log(accessedRouters);
+
+      PageRoute.children = accessedRouters;
+      const routers = [PageRoute];
+      this.setRouters(routers);
       // this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
       // return toRaw([PageRoute, ...accessedRouters.routeList]);
-      return toRaw([]);
+      return toRaw(routers);
     },
   },
 });

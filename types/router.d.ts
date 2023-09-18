@@ -1,5 +1,6 @@
 import type { RouteRecordRaw, RouteMeta } from 'vue-router';
 import { RouteLocationNormalized } from 'vue-router';
+import { ApiMenu, ApiMenuId } from '/#/api/menu';
 
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'children'> {
   path: string;
@@ -32,3 +33,10 @@ export type RouteItem = Partial<RouteLocationNormalized> & {
   fullPath: string;
   name: string;
 };
+
+/**
+ * @description: 菜单的列表每项
+ */
+export interface MenuRouteItem extends ApiMenu, ApiMenuId {
+  path: string;
+}

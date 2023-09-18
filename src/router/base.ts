@@ -1,5 +1,13 @@
 import type { AppRouteRecordRaw } from '/#/router';
-import { Error404Component, HomeComponent, Layout, LoginComponent } from './router-component';
+import {
+  Error404Component,
+  HomeComponent,
+  Layout,
+  LoginComponent,
+  RedirectComponent,
+  SettingAccountComponent,
+  SettingPasswordComponent,
+} from './router-component';
 import { PAGE_ENUM } from '@/constant';
 
 // 登录页
@@ -23,11 +31,19 @@ export const HomeRoute: AppRouteRecordRaw = {
 };
 
 // 一级菜单
-export const PageRoute: AppRouteRecordRaw = {
+export const BeginRoute: AppRouteRecordRaw = {
   path: '/',
   redirect: PAGE_ENUM.HOME_PATH,
   component: Layout,
   children: [HomeRoute],
+};
+
+// 一级菜单
+export const PageRoute: AppRouteRecordRaw = {
+  path: '/page',
+  redirect: PAGE_ENUM.HOME_PATH,
+  component: Layout,
+  children: [],
 };
 
 // 404 on a page
@@ -51,50 +67,50 @@ export const ErrorPageRoute: AppRouteRecordRaw = {
 };
 
 // 重定向
-// export const RedirectRoute: AppRouteRecordRaw = {
-//   path: '/redirect',
-//   name: PAGE_ENUM.REDIRECT_PAGE_NAME,
-//   component: Layout,
-//   meta: {
-//     title: PAGE_ENUM.REDIRECT_PAGE_TITLE,
-//   },
-//   children: [
-//     {
-//       path: '/redirect/:path(.*)',
-//       name: PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME,
-//       component: RedirectComponent,
-//       meta: {
-//         title: PAGE_ENUM.REDIRECT_PAGE_TITLE,
-//       },
-//     },
-//   ],
-// };
+export const RedirectRoute: AppRouteRecordRaw = {
+  path: '/redirect',
+  name: PAGE_ENUM.REDIRECT_PAGE_NAME,
+  component: Layout,
+  meta: {
+    title: PAGE_ENUM.REDIRECT_PAGE_TITLE,
+  },
+  children: [
+    {
+      path: '/redirect/:path(.*)',
+      name: PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME,
+      component: RedirectComponent,
+      meta: {
+        title: PAGE_ENUM.REDIRECT_PAGE_TITLE,
+      },
+    },
+  ],
+};
 
 // 设置
-// export const SettingRoute: AppRouteRecordRaw = {
-//   path: PAGE_ENUM.SETTING_PATH,
-//   name: PAGE_ENUM.SETTING_NAME,
-//   component: Layout,
-//   meta: {
-//     title: PAGE_ENUM.SETTING_TITLE,
-//   },
-//   redirect: PAGE_ENUM.SETTING_ACCOUNT_PATH,
-//   children: [
-//     {
-//       path: PAGE_ENUM.SETTING_ACCOUNT_PATH,
-//       name: PAGE_ENUM.SETTING_ACCOUNT_NAME,
-//       meta: {
-//         title: PAGE_ENUM.SETTING_ACCOUNT_TITLE,
-//       },
-//       component: SettingAccountComponent,
-//     },
-//     {
-//       path: PAGE_ENUM.SETTING_PASSWORD_PATH,
-//       name: PAGE_ENUM.SETTING_PASSWORD_NAME,
-//       meta: {
-//         title: PAGE_ENUM.SETTING_PASSWORD_TITLE,
-//       },
-//       component: SettingPasswordComponent,
-//     },
-//   ],
-// };
+export const SettingRoute: AppRouteRecordRaw = {
+  path: PAGE_ENUM.SETTING_PATH,
+  name: PAGE_ENUM.SETTING_NAME,
+  component: Layout,
+  meta: {
+    title: PAGE_ENUM.SETTING_TITLE,
+  },
+  redirect: PAGE_ENUM.SETTING_ACCOUNT_PATH,
+  children: [
+    {
+      path: PAGE_ENUM.SETTING_ACCOUNT_PATH,
+      name: PAGE_ENUM.SETTING_ACCOUNT_NAME,
+      meta: {
+        title: PAGE_ENUM.SETTING_ACCOUNT_TITLE,
+      },
+      component: SettingAccountComponent,
+    },
+    {
+      path: PAGE_ENUM.SETTING_PASSWORD_PATH,
+      name: PAGE_ENUM.SETTING_PASSWORD_NAME,
+      meta: {
+        title: PAGE_ENUM.SETTING_PASSWORD_TITLE,
+      },
+      component: SettingPasswordComponent,
+    },
+  ],
+};

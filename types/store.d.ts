@@ -19,7 +19,7 @@ export interface RouteState {
   menus: AppRouteRecordRaw[];
   searchMenus: ViewsMenu[];
   // routers: any[];
-  // addRouters: any[];
+  addRouters: AppRouteRecordRaw[];
   keepAliveComponents: string[];
   isDynamicAddedRoute: boolean;
 }

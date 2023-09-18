@@ -20,7 +20,7 @@ export const RedirectComponent = () => import('@/views/redirect.vue');
 export const LoginComponent = () => import('@/views/common/login.vue');
 
 // 基本信息设置页面
-// export const SettingAccountComponent = () => import('@/views/common/setting-account.vue');
+export const SettingAccountComponent = () => import('@/views/common/setting-account.vue');
 
-// // 密码更新页面
-// export const SettingPasswordComponent = () => import('@/views/common/setting-password.vue');
+// 密码更新页面
+export const SettingPasswordComponent = () => import('@/views/common/setting-password.vue');
