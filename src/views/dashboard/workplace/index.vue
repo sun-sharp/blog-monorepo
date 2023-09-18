@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue';
   // import { homeApi } from '@/api';
   import VisitTab from './components/VisitTab.vue';
-  import TransitionCountTo from '@/components/transition/transition-count-to.vue';
+  import TransitionCountTo from '@/components/transition/TransitionCountTo.vue';
   import {
     CaretUpOutlined,
     CaretDownOutlined,

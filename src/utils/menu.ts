@@ -1,4 +1,4 @@
-import { IframeComponent, Layout, LayoutRouterView } from '@/router/router-component';
+import { IframeComponent, LayoutRouterView } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
@@ -56,8 +56,6 @@ export const formatRouteComponent = (component: string, iframeSrc: string) => {
   let newComponent: Component | string;
   if (component.indexOf('/') >= 0) {
     newComponent = dynamicImport(viewsModules, component as string);
-  } else if (component === 'layout') {
-    newComponent = Layout;
   } else if (iframeSrc) {
     newComponent = IframeComponent;
   } else {
