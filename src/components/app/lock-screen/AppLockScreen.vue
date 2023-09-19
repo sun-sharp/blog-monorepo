@@ -1,3 +1,72 @@
+<script lang="ts" setup>
+  import { reactive } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import { RESULT_ENUM } from '@/constant';
+  import { LockOutlined, LoadingOutlined, UserOutlined, ApiOutlined, ArrowRightOutlined, WifiOutlined } from '@/utils';
+  import { useBattery, useOnline, useTime } from '@/hooks';
+  import { useLockScreenStore, useUserStore } from '@/store';
+
+  const useLockScreen = useLockScreenStore();
+  const userStore = useUserStore();
+
+  // 获取时间
+  const { month, day, hour, minute, week } = useTime();
+  const { online } = useOnline();
+
+  const router = useRouter();
+  const route = useRoute();
+
+  const { battery, batteryStatus, calcDischargingTime, calcChargingTime } = useBattery();
+  const userInfo = userStore.getUserInfo;
+  const username = userInfo['username'] || '';
+  const state = reactive({
+    showLogin: false,
+    loginLoading: false, // 正在登录
+    isLoginError: false, //密码错误
+    errorMsg: '密码错误',
+    loginParams: {
+      username: username || '',
+      password: '',
+    },
+  });
+
+  // 解锁登录
+  const onLockLogin = (value: boolean) => (state.showLogin = value);
+
+  // 登录
+  const onLogin = async () => {
+    if (!state.loginParams.password.trim()) {
+      return;
+    }
+    const params = {
+      isLock: true,
+      ...state.loginParams,
+    };
+    state.loginLoading = true;
+    const { code, message } = await userStore.login(params);
+    if (code === RESULT_ENUM.SUCCESS) {
+      onLockLogin(false);
+      useLockScreen.setLock(false);
+    } else {
+      state.errorMsg = message;
+      state.isLoginError = true;
+    }
+    state.loginLoading = false;
+  };
+
+  //重新登录
+  const goLogin = () => {
+    onLockLogin(false);
+    useLockScreen.setLock(false);
+    router.replace({
+      path: '/login',
+      query: {
+        redirect: route.fullPath,
+      },
+    });
+  };
+</script>
+
 <template>
   <div :class="{ onLockLogin: state.showLogin }" class="lock-screen" @keyup="onLockLogin(true)" @mousedown.stop @contextmenu.prevent>
     <template v-if="!state.showLogin">
@@ -69,93 +138,6 @@
     </template>
   </div>
 </template>
-
-<script lang="ts" setup>
-  import { reactive } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import { RESULT_ENUM } from '@/constant';
-  import { LockOutlined, LoadingOutlined, UserOutlined, ApiOutlined, ArrowRightOutlined, WifiOutlined } from '@/utils';
-  import { useBattery, useOnline, useTime } from '@/hooks';
-  import { useLockScreenStore, useUserStore } from '@/store';
-
-  const useLockScreen = useLockScreenStore();
-  const userStore = useUserStore();
-
-  // 获取时间
-  const { month, day, hour, minute, week } = useTime();
-  const { online } = useOnline();
-
-  const router = useRouter();
-  const route = useRoute();
-
-  const { battery, batteryStatus, calcDischargingTime, calcChargingTime } = useBattery();
-  const userInfo = userStore.getUserInfo;
-  const username = userInfo['username'] || '';
-  const state = reactive({
-    showLogin: false,
-    loginLoading: false, // 正在登录
-    isLoginError: false, //密码错误
-    errorMsg: '密码错误',
-    loginParams: {
-      username: username || '',
-      password: '',
-    },
-  });
-
-  // 解锁登录
-  const onLockLogin = (value: boolean) => (state.showLogin = value);
-
-  // 登录
-  const onLogin = async () => {
-    if (!state.loginParams.password.trim()) {
-      return;
-    }
-    const params = {
-      isLock: true,
-      ...state.loginParams,
-    };
-    state.loginLoading = true;
-    const { code, message } = await userStore.login(params);
-    if (code === RESULT_ENUM.SUCCESS) {
-      onLockLogin(false);
-      useLockScreen.setLock(false);
-    } else {
-      state.errorMsg = message;
-      state.isLoginError = true;
-    }
-    state.loginLoading = false;
-  };
-
-  //重新登录
-  const goLogin = () => {
-    onLockLogin(false);
-    useLockScreen.setLock(false);
-    router.replace({
-      path: '/login',
-      query: {
-        redirect: route.fullPath,
-      },
-    });
-  };
-
-  // return {
-  //   ...toRefs(state),
-  //   online,
-  //   month,
-  //   day,
-  //   hour,
-  //   minute,
-  //   second,
-  //   week,
-  //   battery,
-  //   batteryStatus,
-  //   calcDischargingTime,
-  //   calcChargingTime,
-  //   onLockLogin,
-  //   onLogin,
-  //   goLogin,
-  // };
-</script>
 
 <style lang="scss" scoped>
   .lock-screen {

@@ -7,17 +7,17 @@
     unref,
     // toRefs, computed, unref, ref
   } from 'vue';
-  // import { useRouter, useRoute } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import {
     SettingOutlined,
-    //   SearchOutlined,
+    SearchOutlined,
     //   MenuFoldOutlined,
     //   MenuUnfoldOutlined,
-    //   FullscreenOutlined,
-    //   FullscreenExitOutlined,
+    FullscreenOutlined,
+    FullscreenExitOutlined,
     //   PoweroffOutlined,
     //   GithubOutlined,
-    //   LockOutlined,
+    LockOutlined,
     //   ReloadOutlined,
     //   LogoutOutlined,
     //   UserOutlined,
@@ -25,14 +25,13 @@
     //   getImgUrl,
     //   Person,
   } from '@/utils';
-  // import { NDialogProvider, useDialog, useMessage } from 'naive-ui';
-  import { useUserStore } from '@/store';
+  import { useDialog, useMessage } from 'naive-ui';
+  import { useLockScreenStore, useUserStore } from '@/store';
   import { getImgUrl } from '@/utils';
-  import { useSetting } from '@/hooks';
+  import { useSearch, useSetting } from '@/hooks';
   import LayoutHeaderSetting from '@/layout/components/LayoutHeaderSetting.vue';
   import LayoutMenu from '@/layout/components/LayoutMenu.vue';
-  // import defaultAvatar from '@/assets/images/common/default-avatar.png';
-  // import { useSearch } from '@/hooks';
+  import defaultAvatar from '@/assets/images/common/default-avatar.png';
 
   const props = defineProps({
     collapsed: {
@@ -68,19 +67,20 @@
   //   emits: ['update:collapsed'],
   //   setup(props) {
   const userStore = useUserStore();
-  // const useLockScreen = useLockScreenStore();
-  //     const message = useMessage();
-  //     const dialog = useDialog();
+  const useLockScreen = useLockScreenStore();
+  const message = useMessage();
+  const dialog = useDialog();
   const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useSetting();
 
   const { username, avatar } = userStore?.info || {};
 
   const headerSettingRef = ref();
 
+  const fullscreenBool = ref(false);
+
   const state = reactive({
     username: username || '',
     avatar: getImgUrl(avatar) || '',
-    fullscreenIcon: 'FullscreenOutlined',
     navMode: getNavMode,
     navTheme: getNavTheme,
     headerSetting: getHeaderSetting,
@@ -109,8 +109,8 @@
   //       return 'header';
   //     });
 
-  //     const router = useRouter();
-  //     const route = useRoute();
+  const router = useRouter();
+  const route = useRoute();
 
   //     const generator: any = (routerMap: any[]) => {
   //       return routerMap.map((item: { meta: { title: any }; name: any; path: string; children: string | any[] }) => {
@@ -144,93 +144,93 @@
   //       });
   //     };
 
-  //     // 退出登录
-  //     const doLogout = () => {
-  //       dialog.info({
-  //         title: '提示',
-  //         content: '您确定要退出登录吗',
-  //         positiveText: '确定',
-  //         negativeText: '取消',
-  //         onPositiveClick: () => {
-  //           userStore.logout().then(() => {
-  //             message.success('成功退出登录');
-  //             router
-  //               .replace({
-  //                 name: 'Login',
-  //                 query: {
-  //                   redirect: route.fullPath,
-  //                 },
-  //               })
-  //               .finally(() => location.reload());
-  //           });
-  //         },
-  //         onNegativeClick: () => {},
-  //       });
-  //     };
+  // 退出登录
+  const doLogout = () => {
+    dialog.info({
+      title: '提示',
+      content: '您确定要退出登录吗',
+      positiveText: '确定',
+      negativeText: '取消',
+      onPositiveClick: () => {
+        userStore.logout().then(() => {
+          message.success('成功退出登录');
+          router
+            .replace({
+              name: 'Login',
+              query: {
+                redirect: route.fullPath,
+              },
+            })
+            .finally(() => location.reload());
+        });
+      },
+      onNegativeClick: () => {},
+    });
+  };
 
-  //     // 切换全屏图标
-  //     const toggleFullscreenIcon = () => (state.fullscreenIcon = document.fullscreenElement !== null ? 'FullscreenExitOutlined' : 'FullScreenOutlined');
+  // 切换全屏图标
+  const toggleFullscreenIcon = () => (fullscreenBool.value = document.fullscreenElement !== null);
 
-  //     // 监听全屏切换事件
-  //     document.addEventListener('fullscreenChange', toggleFullscreenIcon);
+  // 监听全屏切换事件
+  document.addEventListener('fullscreenChange', toggleFullscreenIcon);
 
-  //     // 全屏切换
-  //     const toggleFullscreen = () => {
-  //       if (!document.fullscreenElement) {
-  //         document.documentElement.requestFullscreen();
-  //       } else {
-  //         if (document.exitFullscreen) {
-  //           document.exitFullscreen();
-  //         }
-  //       }
-  //     };
+  // 全屏切换
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
-  //     // 图标列表
-  //     const iconList = [
-  //       {
-  //         icon: 'SearchOutlined',
-  //         tips: '搜索',
-  //         eventObject: {
-  //           click: () => (useSearch.value = !useSearch.value),
-  //         },
-  //       },
-  //       {
-  //         icon: 'LockOutlined',
-  //         tips: '锁屏',
-  //         eventObject: {
-  //           click: () => useLockScreen.setLock(true),
-  //         },
-  //       },
-  //     ];
-  //     const avatarOptions = [
-  //       {
-  //         label: '个人设置',
-  //         key: 1,
-  //       },
-  //       {
-  //         label: '密码设置',
-  //         key: 2,
-  //       },
-  //       {
-  //         label: '退出登录',
-  //         key: 9,
-  //       },
-  //     ];
+  // 图标列表
+  const iconList = [
+    {
+      icon: SearchOutlined,
+      tips: '搜索',
+      eventObject: {
+        click: () => (useSearch.value = !useSearch.value),
+      },
+    },
+    {
+      icon: LockOutlined,
+      tips: '锁屏',
+      eventObject: {
+        click: () => useLockScreen.setLock(true),
+      },
+    },
+  ];
+  const avatarOptions = [
+    {
+      label: '个人设置',
+      key: 1,
+    },
+    {
+      label: '密码设置',
+      key: 2,
+    },
+    {
+      label: '退出登录',
+      key: 9,
+    },
+  ];
 
-  //     //头像下拉菜单
-  //     const avatarSelect = (key: any) => {
-  //       switch (key) {
-  //         case 1:
-  //           router.push({ name: 'SettingAccount' });
-  //           break;
-  //         case 2:
-  //           router.push({ name: 'SettingPassword' });
-  //           break;
-  //         case 9:
-  //           doLogout();
-  //           break;
-  //       }
-  //     };
+  //头像下拉菜单
+  const avatarSelect = (key: any) => {
+    switch (key) {
+      case 1:
+        router.push({ name: 'SettingAccount' });
+        break;
+      case 2:
+        router.push({ name: 'SettingPassword' });
+        break;
+      case 9:
+        doLogout();
+        break;
+    }
+  };
 
   const openSetting = () => {
     const { openDrawer } = headerSettingRef.value;
@@ -306,35 +306,33 @@
       </n-breadcrumb> -->
     </div>
     <div class="layout-header-right">
-      <!-- <div v-for="item in iconList" :key="item.tips" class="layout-header-trigger layout-header-trigger-min">
+      <div v-for="item in iconList" :key="item.tips" class="layout-header-trigger layout-header-trigger-min">
         <n-tooltip placement="bottom">
           <template #trigger>
-            <n-icon size="18">
-              <component :is="item.icon" v-on="item.eventObject || {}" />
+            <n-icon size="18" :component="item.icon" v-on="item.eventObject || {}">
+              <!-- <component :is="item.icon" v-on="item.eventObject || {}" /> -->
             </n-icon>
           </template>
           <span>{{ item.tips }}</span>
         </n-tooltip>
-      </div> -->
+      </div>
       <!-- 切换全屏 -->
-      <!--<div class="layout-header-trigger layout-header-trigger-min">
+      <div class="layout-header-trigger layout-header-trigger-min">
         <n-tooltip placement="bottom">
           <template #trigger>
-            <n-icon size="18">
-              <component :is="fullscreenIcon" @click="toggleFullscreen" />
-            </n-icon>
+            <n-icon size="18" :component="fullscreenBool ? FullscreenExitOutlined : FullscreenOutlined" @click="toggleFullscreen"></n-icon>
           </template>
           <span>全屏</span>
         </n-tooltip>
-      </div>-->
+      </div>
       <!-- 个人中心 -->
-      <!--<div class="layout-header-trigger layout-header-trigger-min">
+      <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
           <div class="avatar">
             <n-avatar round :src="avatar" :fallback-src="defaultAvatar" />
           </div>
         </n-dropdown>
-      </div>-->
+      </div>
       <!--设置-->
       <div class="layout-header-trigger layout-header-trigger-min" @click="openSetting">
         <n-tooltip placement="bottom-end">
@@ -396,7 +394,7 @@
       }
 
       &-menu {
-        color: var(--text-color);
+        color: $font-color;
       }
     }
 

@@ -5,7 +5,7 @@ import type { ObjectDirective } from 'vue';
  * @param {string} key 键值
  * @param {Function} funVal 执行的函数
  */
-interface obj {
+interface IObj {
   arg: String;
   ctrl: boolean;
   alt: boolean;
@@ -13,10 +13,10 @@ interface obj {
   funVal: Function;
 }
 
-interface keys {
-  [s: string]: obj;
+interface IKeys {
+  [s: string]: IObj;
 }
-const keys: keys = {};
+const keys: IKeys = {};
 
 // 等待时间
 const wait = 100;
@@ -78,5 +78,12 @@ export const pressKey: ObjectDirective = {
 
       matchFind && useThrottleFn(matchFind.funVal(), wait);
     };
+  },
+
+  unmounted() {
+    for (const key in keys) {
+      delete keys[key];
+    }
+    console.log(keys);
   },
 };

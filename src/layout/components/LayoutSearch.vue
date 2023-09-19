@@ -3,14 +3,12 @@
   import { SearchOutlined } from '@/utils';
   import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
-  import { useSearch, useSetting } from '@/hooks';
+  import { useSearch } from '@/hooks';
   import { APP_ENV_CONFIG } from '@/constant';
 
   const router = useRouter();
 
   const title = APP_ENV_CONFIG.shortName;
-
-  const { getAppTheme } = useSetting();
 
   const searchValue = ref('');
 
@@ -74,15 +72,12 @@
 </template>
 
 <style lang="scss" scoped>
-  $back-color: #f5f7fa;
-  $theme-color: v-bind(getAppTheme);
-
   .layout-search {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     padding: 20px;
-    background: $back-color;
+    background: $background-color;
 
     &__wrap {
       display: flex;
@@ -136,7 +131,7 @@
 
         &:hover {
           color: $theme-color;
-          background: $back-color;
+          background: $background-color;
           border-color: $theme-color;
         }
 

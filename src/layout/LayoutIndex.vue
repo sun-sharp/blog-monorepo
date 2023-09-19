@@ -129,6 +129,8 @@
             <layout-main />
           </div>
         </transition>
+
+        <n-back-top :right="70" :bottom="70" />
       </main>
 
       <footer v-if="isFooter" class="lnf-footer">
@@ -168,7 +170,6 @@
       <n-layout-footer v-if="isFooter">
         <layout-footer />
       </n-layout-footer>
-      <n-back-top :right="70" :bottom="70" />
     </n-layout> -->
   </n-layout>
 </template>
@@ -176,10 +177,6 @@
 <style lang="scss" scoped>
   .layout {
     height: 100vh;
-
-    // &.layout-default-background {
-    //   background-color: #f5f7f9;
-    // }
 
     &-sider {
       min-height: 100vh;

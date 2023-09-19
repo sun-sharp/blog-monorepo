@@ -1,22 +1,29 @@
+/* 主题 */
+$theme-color: var(--app-theme-color, #166bcf);
+
 /* layout */
-$header-height: 64px;
-$footer-height: 44px;
-$tabs-view-height: 44px;
+$header-height: var(--app-header-height, 64px);
+$footer-height: var(--app-footer-height, 44px);
+
+/* 标签页 */
+$tabs-view-height: var(--app-tabs-view-height, 44px);
+$tabs-back-color: var(--app-background-color, #f5f7fa);
 
 /* border */
-$border-divide-color: #ccc;
-$border-input-color: rgb(224 224 230);
+$border-divide-color: var(--app-border-divide-color, #ccc);
+$border-input-color: var(--app-border-input-color, #e0e0e6);
 
 /* 文字 */
-$font-color: #333;
+$font-color: var(--app-font-color, #333);
 
 /* 背景 */
-$background-color: #fff;
+$background-color: var(--app-background-color, #f5f7fa);
 
 /* 卡片 */
-$card-background-color: #fff;
-$card-box-shadow: 0 0 8px #ccc;
-$card-border-radius: 8px;
+$card-background-color: var(--app-card-background-color, #fff);
+$card-border-color: var(--app-card-border-color, #ccc);
+$card-border-radius: var(--app-card-border-radius, 8px);
+$card-box-shadow: 0 0 $card-border-radius $card-border-color;
 
 /* 警告 */
-$text-warning-color: #ff6767;
+$text-warning-color: var(--app-text-warning-color, #ff6767);
