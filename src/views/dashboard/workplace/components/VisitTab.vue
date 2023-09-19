@@ -5,19 +5,15 @@
 
 <template>
   <div class="mt-16">
-    <NRow :gutter="24">
-      <NCol :span="24">
-        <n-card content-style="padding: 0;" :bordered="false">
-          <n-tabs type="line" size="large" :tabs-padding="20" pane-style="padding: 20px;">
-            <n-tab-pane name="流量趋势">
-              <FluxTrend />
-            </n-tab-pane>
-            <n-tab-pane name="访问量">
-              <VisitAmount />
-            </n-tab-pane>
-          </n-tabs>
-        </n-card>
-      </NCol>
-    </NRow>
+    <n-card content-style="padding: 0;" :bordered="false">
+      <n-tabs type="line" size="large" :tabs-padding="20" pane-style="padding: 20px;">
+        <n-tab-pane name="流量趋势">
+          <FluxTrend />
+        </n-tab-pane>
+        <n-tab-pane name="访问量">
+          <VisitAmount />
+        </n-tab-pane>
+      </n-tabs>
+    </n-card>
   </div>
 </template>

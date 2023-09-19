@@ -5,7 +5,7 @@ import { createPinia } from 'pinia';
 export { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-screen';
 export { useUserStore, useUserStoreWidthOut } from './modules/user';
 export { useRouteStore, useRouteStoreWidthOut } from './modules/route';
-// export { useTabsViewStore } from './modules/tabs-view';
+export { useTabsViewStore } from './modules/tabs-view';
 // export { useApiTypeStore } from './modules/api-type';
 
 const pinia = createPinia();

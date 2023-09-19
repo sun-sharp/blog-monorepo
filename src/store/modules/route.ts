@@ -6,7 +6,7 @@ import { ApiUserInfo } from '/#/api/user';
 // import { constantRouter } from '@/router';
 import { capitalApi } from '@/api';
 import at from 'await-to-js';
-import { constantRouterIcon, routerScreen } from '@/utils';
+import { constantRouterIcon, routerScreen, sortRouteMenu } from '@/utils';
 import { AppRouteRecordRaw } from '/#/router';
 import { ApiMenuItem } from '/#/api/menu';
 import { ViewsMenu } from '/#/views/menu';
@@ -43,10 +43,10 @@ export const useRouteStore = defineStore({
       this.addRouters = routers;
       // this.routers = constantRouter.concat(routers);
     },
-    // setMenus(menus: AppRouteRecordRaw[]) {
-    //   // 设置动态路由
-    //   this.menus = menus;
-    // },
+    setMenus(menus: AppRouteRecordRaw[]) {
+      // 设置动态路由
+      this.menus = menus;
+    },
     // 设置查询列表的菜单
     setSearchMenus(searchMenus: ApiMenuItem[]) {
       this.searchMenus = searchMenus.filter((f) => f.component !== 'layout').map((m) => ({ ...m, icon: constantRouterIcon[m.icon] }));
@@ -65,13 +65,10 @@ export const useRouteStore = defineStore({
       // 设置菜单搜索
       this.setSearchMenus(resp);
       const accessedRouters = routerScreen(resp);
-      console.log(accessedRouters);
-
       PageRoute.children = accessedRouters;
       const routers = [PageRoute];
       this.setRouters(routers);
-      // this.setMenus(sortRoute([...accessedRouters.routeList, ...accessedRouters.oneRouteList]));
-      // return toRaw([PageRoute, ...accessedRouters.routeList]);
+      this.setMenus(sortRouteMenu(accessedRouters));
       return toRaw(routers);
     },
   },
@@ -81,17 +78,3 @@ export const useRouteStore = defineStore({
 export function useRouteStoreWidthOut() {
   return useRouteStore(store);
 }
-
-// 对菜单进行排序
-// const sortRoute = (list: any[]) => {
-//   const routeList = list;
-//   routeList.sort((a: any, b: any) => (a.meta?.sort || 0) - (b.meta?.sort || 0));
-//   routeList.forEach((i: any) => {
-//     const item = i;
-//     if (item.children && item.children.length > 0) {
-//       item.children = sortRoute(item.children);
-//     }
-//     return item;
-//   });
-//   return routeList;
-// };

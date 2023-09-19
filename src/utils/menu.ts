@@ -2,6 +2,8 @@ import { IframeComponent, LayoutRouterView } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
+import { PAGE_ENUM } from '@/constant';
+import { NaiveMenuOption } from '/#/plugins/naive';
 
 /**
  * 对路由的path进行处理
@@ -12,7 +14,7 @@ export const pathFormat = (item: ApiMenuItem): string => {
   const { component, name = '' } = item;
   let path: string;
   if (component.indexOf('/') !== -1) {
-    console.log(component, 'component');
+    // console.log(component, 'component');
     path = component.replace('/index', '');
     path = (path.match(/\/\\/g) || []).length === 0 ? path : path.replace(/(.*)[/]/, '$1-');
   } else {
@@ -123,4 +125,69 @@ export const routerScreen = (routerMap: ApiMenuItem[]): AppRouteRecordRaw[] => {
       // 判断连接，组件页面是否为空
       .filter((f) => f.path && f.component)
   );
+};
+
+/**
+ * 排除Router
+ * */
+export const filterRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
+  return routerMap.filter((item) => {
+    return (item.meta?.hidden || false) != true && !['/:path(.*)*', '/', PAGE_ENUM.REDIRECT_PATH, PAGE_ENUM.LOGIN_PATH].includes(item.path);
+  });
+};
+
+/**
+ * @description: 递归组装菜单格式
+ * @param {AppRouteRecordRaw[]} list
+ */
+export const generatorMenu = (list: AppRouteRecordRaw[]): NaiveMenuOption[] => {
+  return filterRouter(list).map((m) => {
+    const currentMenu: NaiveMenuOption = {
+      // 是否禁用菜单项
+      disabled: false,
+      // 菜单项的图标
+      icon: m.meta?.icon,
+      // 菜单项的标识符
+      key: m.name,
+      // 菜单项的内容
+      label: m.meta?.title,
+      // 是否显示菜单项
+      show: !m.meta?.hidden,
+    };
+    // 是否有子菜单，并递归处理
+    if (m.children && m.children.length > 0) {
+      currentMenu.children = generatorMenu(m.children);
+    } else if (m.meta?.menuType === 1) {
+      currentMenu.children = [];
+    }
+    return currentMenu;
+  });
+};
+
+/**
+ * @description: 混合菜单
+ * @param {AppRouteRecordRaw[]} list
+ */
+export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] => {
+  console.log(list, 'generatorMenuMix');
+  console.log(routerName, 'generatorMenuMix_routerName');
+
+  return [];
+};
+
+/**
+ * @description: 对菜单进行排序
+ * @param {AppRouteRecordRaw[]} list
+ */
+export const sortRouteMenu = (list: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
+  const routeList = list;
+  routeList.sort((a: AppRouteRecordRaw, b: AppRouteRecordRaw) => (a.meta?.sort || 0) - (b.meta?.sort || 0));
+  routeList.forEach((i: AppRouteRecordRaw) => {
+    const item = i;
+    if (item.children && item.children.length > 0) {
+      item.children = sortRouteMenu(item.children);
+    }
+    return item;
+  });
+  return routeList;
 };

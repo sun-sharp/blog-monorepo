@@ -4,13 +4,13 @@ import { ApiMenu, ApiMenuId } from '/#/api/menu';
 
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'children'> {
   path: string;
-  name?: string;
-  meta?: RouteMeta;
+  name: string;
+  meta?: meta;
   component?: Component | string;
   children?: AppRouteRecordRaw[];
 }
 
-export interface Meta {
+export interface Meta extends RouteMeta {
   // 名称
   title: string;
   // 是否忽略权限
@@ -27,6 +27,8 @@ export interface Meta {
   externalLink?: string;
   //隐藏
   hidden?: boolean;
+  // 排序
+  sort?: number;
 }
 
 export type RouteItem = Partial<RouteLocationNormalized> & {

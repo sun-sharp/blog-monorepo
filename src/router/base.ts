@@ -33,6 +33,7 @@ export const HomeRoute: AppRouteRecordRaw = {
 // 一级菜单
 export const BeginRoute: AppRouteRecordRaw = {
   path: '/',
+  name: 'Begin',
   redirect: PAGE_ENUM.HOME_PATH,
   component: Layout,
   children: [HomeRoute],
@@ -41,6 +42,7 @@ export const BeginRoute: AppRouteRecordRaw = {
 // 一级菜单
 export const PageRoute: AppRouteRecordRaw = {
   path: '/page',
+  name: 'Page',
   redirect: PAGE_ENUM.HOME_PATH,
   component: Layout,
   children: [],

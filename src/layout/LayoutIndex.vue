@@ -2,34 +2,42 @@
   import { computed, ref, unref } from 'vue';
   import { useSearch, useSetting } from '@/hooks';
   import LayoutLogo from '@/layout/components/LayoutLogo.vue';
-  // import LayoutMenu from '@/layout/components/layout-menu.vue';
-  // import LayoutHeader from '@/layout/components/layout-header.vue';
-  // import LayoutTabsView from '@/layout/components/layout-tags-view.vue';
+  import LayoutMenu from '@/layout/components/LayoutMenu.vue';
+  import LayoutHeader from '@/layout/components/LayoutHeader.vue';
+  import LayoutTabsView from '@/layout/components/LayoutTagsView.vue';
   import LayoutMain from '@/layout/components/LayoutMain.vue';
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
-  // import LayoutSearch from '@/layout/components/layout-search.vue';
+  import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting, getIsDarkTheme, getFooterSetting } = useSetting();
+  const {
+    getNavMode,
+    getNavTheme,
+    // getHeaderSetting,
+    getMenuSetting,
+    // getMultiTabsSetting,
+    // getIsDarkTheme,
+    // getFooterSetting,
+  } = useSetting();
 
   const layoutClassName = computed(() => {
     const arr = ['layout-no-sider'];
-    if (!unref(getIsDarkTheme)) {
-      arr.push('layout-default-background');
-    }
-    const fixFoot = unref(fixedFoot);
-    const isFoot = unref(isFooter);
-    const fixHead = unref(fixedHeader);
-    const fixMulti = unref(fixedMulti);
-    if (fixFoot && isFoot) {
-      arr.push('layout-fixed--foot');
-    }
-    if (fixHead && !fixMulti) {
-      arr.push('layout-fixed--head');
-    } else if (fixHead && fixMulti) {
-      arr.push('layout-fixed--head-tabs');
-    } else if (!fixHead && fixMulti) {
-      arr.push('layout-fixed--tabs');
-    }
+    // if (!unref(getIsDarkTheme)) {
+    //   arr.push('layout-default-background');
+    // }
+    // const fixFoot = unref(fixedFoot);
+    // const isFoot = unref(isFooter);
+    // const fixHead = unref(fixedHeader);
+    // const fixMulti = unref(fixedMulti);
+    // if (fixFoot && isFoot) {
+    //   arr.push('layout-fixed--foot');
+    // }
+    // if (fixHead && !fixMulti) {
+    //   arr.push('layout-fixed--head');
+    // } else if (fixHead && fixMulti) {
+    //   arr.push('layout-fixed--head-tabs');
+    // } else if (!fixHead && fixMulti) {
+    //   arr.push('layout-fixed--tabs');
+    // }
     return arr;
   });
 
@@ -52,37 +60,39 @@
   });
 
   // 标题主题
-  const getHeaderInverted = computed(() => {
-    const navTheme = unref(getNavTheme);
-    return ['light', 'header-dark'].includes(navTheme) ? unref(inverted) : !unref(inverted);
-  });
-
-  // 头部固定
-  const fixedHeader = computed(() => {
-    const { fixed } = unref(getHeaderSetting);
-    return fixed;
-  });
-
-  // 标签栏固定
-  const fixedMulti = computed(() => {
-    const { fixed } = unref(getMultiTabsSetting);
-    return fixed;
-  });
-
-  // 显示标签栏
-  // const isMultiTabs = computed(() => {
-  //   return unref(getMultiTabsSetting).show;
+  // const getHeaderInverted = computed(() => {
+  //   const navTheme = unref(getNavTheme);
+  //   return ['light', 'header-dark'].includes(navTheme) ? unref(inverted) : !unref(inverted);
   // });
 
-  // 底部固定
-  const fixedFoot = computed(() => {
-    const { fixed } = unref(getFooterSetting);
-    return fixed;
+  // 头部固定
+  // const fixedHeader = computed(() => {
+  //   const { fixed } = unref(getHeaderSetting);
+  //   return fixed;
+  // });
+
+  // 标签栏固定
+  // const fixedMulti = computed(() => {
+  //   const { fixed } = unref(getMultiTabsSetting);
+  //   return fixed;
+  // });
+
+  // 显示标签栏
+  const isMultiTabs = computed(() => {
+    // return unref(getMultiTabsSetting).show;
+    return true;
   });
+
+  // 底部固定
+  // const fixedFoot = computed(() => {
+  //   const { fixed } = unref(getFooterSetting);
+  //   return fixed;
+  // });
 
   // 展示底部
   const isFooter = computed(() => {
-    return unref(getFooterSetting).show;
+    // return unref(getFooterSetting).show;
+    return true;
   });
 </script>
 
@@ -101,35 +111,65 @@
       @expand="collapsed = false"
     >
       <layout-logo :collapsed="collapsed" />
-      <!-- <layout-menu v-model:collapsed="collapsed" /> -->
+      <layout-menu v-model:collapsed="collapsed" />
     </n-layout-sider>
-    <n-layout :inverted="inverted" :class="layoutClassName">
-      <n-layout :inverted="inverted" class="layout-no-foot">
-        <n-layout-header :inverted="getHeaderInverted" class="lnf-header" :class="{ fixed: fixedHeader }">
-          <!-- <layout-header v-model:collapsed="collapsed" :inverted="inverted" /> -->
-        </n-layout-header>
-        <n-layout :inverted="inverted" class="layout-content">
-          <n-layout-header :inverted="getHeaderInverted" class="lc-tabs" :class="{ fixed: fixedMulti, 'head-no-fixed': !fixedHeader }">
-            <!-- <layout-tabs-view v-if="isMultiTabs" /> -->
-          </n-layout-header>
-          <n-layout-content class="layout-content-main">
-            <!-- <transition name="searchView">
-              <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
-            </transition> -->
+    <section :class="layoutClassName">
+      <header class="lnf-header">
+        <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
+        <layout-tabs-view v-if="isMultiTabs" />
+      </header>
 
-            <transition name="searchView">
-              <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)" class="main-view">
-                <layout-main />
-              </div>
-            </transition>
-          </n-layout-content>
+      <main class="lnf-content">
+        <transition name="searchView">
+          <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
+        </transition>
+
+        <transition name="searchView">
+          <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)" class="main-view">
+            <layout-main />
+          </div>
+        </transition>
+      </main>
+
+      <footer v-if="isFooter" class="lnf-footer">
+        <layout-footer />
+      </footer>
+    </section>
+    <!-- <n-layout-content>
+      <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
+      <transition name="searchView">
+        <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)" class="main-view">
+          <layout-main />
+        </div>
+      </transition>
+    </n-layout-content> -->
+    <!-- <n-layout :inverted="inverted" :class="layoutClassName">
+      <n-layout :inverted="inverted">
+        <n-layout-header :inverted="getHeaderInverted">
+          <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
+        </n-layout-header>
+        <n-layout :inverted="inverted">
+          <n-layout-header :inverted="getHeaderInverted">
+            <layout-tabs-view v-if="isMultiTabs" />
+          </n-layout-header>
+        <n-layout-content>
+          <transition name="searchView">
+            <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
+          </transition>
+
+          <transition name="searchView">
+            <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)">
+              <layout-main />
+            </div>
+          </transition>
+        </n-layout-content>
         </n-layout>
       </n-layout>
-      <n-layout-footer v-if="isFooter" id="appLayoutFoot" class="lns-footer" :class="{ fixed: fixedFoot }">
+      <n-layout-footer v-if="isFooter">
         <layout-footer />
       </n-layout-footer>
       <n-back-top :right="70" :bottom="70" />
-    </n-layout>
+    </n-layout> -->
   </n-layout>
 </template>
 
@@ -137,9 +177,9 @@
   .layout {
     height: 100vh;
 
-    &.layout-default-background {
-      background-color: #f5f7f9;
-    }
+    // &.layout-default-background {
+    //   background-color: #f5f7f9;
+    // }
 
     &-sider {
       min-height: 100vh;
@@ -148,75 +188,28 @@
     }
 
     &-no-sider {
-      background-color: transparent;
-
-      &.layout-fixed {
-        &--foot {
-          height: calc(100vh - $footer-height);
-        }
-
-        &--head {
-          padding-top: $header-height;
-        }
-
-        &--head-tabs {
-          padding-top: $header-height + $tabs-view-height;
-        }
-
-        &--tabs {
-          padding-top: $tabs-view-height;
-        }
-      }
-    }
-
-    &-no-foot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
       height: 100%;
-      background-color: transparent;
-    }
-
-    &-content {
-      height: 100%;
-      background-color: transparent;
-
-      &-main {
-        height: 100%;
-        background-color: transparent;
-      }
-    }
-
-    .lns-footer {
-      &.fixed {
-        position: fixed;
-        bottom: 0;
-        z-index: 1500;
-        width: max-content;
-        width: available;
-      }
+      overflow: hidden;
     }
 
     .lnf-header {
-      &.fixed {
-        position: fixed;
-        top: 0;
-        z-index: 1500;
-        width: max-content;
-        width: available;
-      }
+      width: 100%;
     }
 
-    .lc-tabs {
-      &.fixed {
-        position: fixed;
-        top: $header-height;
-        z-index: 1500;
-        width: max-content;
-        width: available;
-      }
+    .lnf-content {
+      flex: 1;
+      width: 100%;
+      height: 0;
+      overflow-y: auto;
+      background-color: #fc0000;
+    }
 
-      &.head-no-fixed {
-        position: fixed;
-        top: 0;
-      }
+    .lnf-footer {
+      width: 100%;
     }
 
     .main-view {

@@ -1,4 +1,4 @@
-import { AppRouteRecordRaw } from '/#/router';
+import { AppRouteRecordRaw, RouteItem } from '/#/router';
 import { ViewsMenu } from '/#/views/menu';
 
 // 用户全局配置
@@ -23,3 +23,8 @@ export interface RouteState {
   keepAliveComponents: string[];
   isDynamicAddedRoute: boolean;
 }
+
+// 标签页配置
+export type TabsViewState = {
+  tabsList: RouteItem[]; // 标签页
+};
