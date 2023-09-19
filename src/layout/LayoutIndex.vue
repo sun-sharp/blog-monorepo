@@ -137,40 +137,6 @@
         <layout-footer />
       </footer>
     </section>
-    <!-- <n-layout-content>
-      <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
-      <transition name="searchView">
-        <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)" class="main-view">
-          <layout-main />
-        </div>
-      </transition>
-    </n-layout-content> -->
-    <!-- <n-layout :inverted="inverted" :class="layoutClassName">
-      <n-layout :inverted="inverted">
-        <n-layout-header :inverted="getHeaderInverted">
-          <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
-        </n-layout-header>
-        <n-layout :inverted="inverted">
-          <n-layout-header :inverted="getHeaderInverted">
-            <layout-tabs-view v-if="isMultiTabs" />
-          </n-layout-header>
-        <n-layout-content>
-          <transition name="searchView">
-            <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
-          </transition>
-
-          <transition name="searchView">
-            <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)">
-              <layout-main />
-            </div>
-          </transition>
-        </n-layout-content>
-        </n-layout>
-      </n-layout>
-      <n-layout-footer v-if="isFooter">
-        <layout-footer />
-      </n-layout-footer>
-    </n-layout> -->
   </n-layout>
 </template>
 
