@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { useTabsView } from '../hooks/useTabsView';
+  import { useTabsView } from '@/layout/hooks/useTabsView';
   import { LeftOutlined, CloseOutlined, RightOutlined, DownOutlined } from '@/utils';
   import Draggable from 'vuedraggable';
 

@@ -1,270 +1,38 @@
 <script lang="ts" setup>
-  import {
-    computed,
-    // defineComponent,
-    reactive,
-    ref,
-    unref,
-    // toRefs, computed, unref, ref
-  } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import {
-    SettingOutlined,
-    SearchOutlined,
-    //   MenuFoldOutlined,
-    //   MenuUnfoldOutlined,
-    FullscreenOutlined,
-    FullscreenExitOutlined,
-    //   PoweroffOutlined,
-    //   GithubOutlined,
-    LockOutlined,
-    //   ReloadOutlined,
-    //   LogoutOutlined,
-    //   UserOutlined,
-    //   CheckOutlined,
-    //   getImgUrl,
-    //   Person,
-  } from '@/utils';
-  import { useDialog, useMessage } from 'naive-ui';
-  import { useLockScreenStore, useUserStore } from '@/store';
-  import { getImgUrl } from '@/utils';
-  import { useSearch, useSetting } from '@/hooks';
   import LayoutHeaderSetting from '@/layout/components/LayoutHeaderSetting.vue';
   import LayoutMenu from '@/layout/components/LayoutMenu.vue';
   import defaultAvatar from '@/assets/images/common/default-avatar.png';
+  import { SettingOutlined, MenuFoldOutlined, MenuUnfoldOutlined, FullscreenOutlined, FullscreenExitOutlined, ReloadOutlined } from '@/utils';
+  import { LayoutHeaderProps, useLayoutHeader } from '@/layout/hooks/useLayoutHeader';
 
-  const props = defineProps({
-    collapsed: {
-      type: Boolean,
-    },
-    inverted: {
-      type: Boolean,
-    },
-  });
+  const props = defineProps(LayoutHeaderProps);
 
-  // export default defineComponent({
-  //   name: 'LayoutHeader',
-  //   components: {
-  //     SettingOutlined,
-  //     SearchOutlined,
-  //     MenuFoldOutlined,
-  //     MenuUnfoldOutlined,
-  //     FullscreenOutlined,
-  //     FullscreenExitOutlined,
-  //     PoweroffOutlined,
-  //     GithubOutlined,
-  //     LockOutlined,
-  //     ReloadOutlined,
-  //     LogoutOutlined,
-  //     UserOutlined,
-  //     CheckOutlined,
-  //     NDialogProvider,
-  //     LayoutHeaderSetting,
-  //     LayoutMenu,
-  //     Person,
-  //   },
-  //   props: ,
-  //   emits: ['update:collapsed'],
-  //   setup(props) {
-  const userStore = useUserStore();
-  const useLockScreen = useLockScreenStore();
-  const message = useMessage();
-  const dialog = useDialog();
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useSetting();
+  const emit = defineEmits(['update:collapsed']);
 
-  const { username, avatar } = userStore?.info || {};
-
-  const headerSettingRef = ref();
-
-  const fullscreenBool = ref(false);
-
-  const state = reactive({
-    username: username || '',
-    avatar: getImgUrl(avatar) || '',
-    navMode: getNavMode,
-    navTheme: getNavTheme,
-    headerSetting: getHeaderSetting,
-    crumbsSetting: getCrumbsSetting,
-  });
-
-  const getInverted = computed(() => {
-    const navTheme = unref(getNavTheme);
-    return ['light', 'header-dark'].includes(navTheme) ? props.inverted : !props.inverted;
-  });
-
-  const mixMenu = computed(() => {
-    return unref(getMenuSetting).mixMenu;
-  });
-
-  //     const getChangeStyle = computed(() => {
-  //       const { collapsed } = props;
-  //       const { minMenuWidth, menuWidth }: any = unref(getMenuSetting);
-  //       return {
-  //         left: collapsed ? `${minMenuWidth}px` : `${menuWidth}px`,
-  //         width: `calc(100% - ${collapsed ? `${minMenuWidth}px` : `${menuWidth}px`})`,
-  //       };
-  //     });
-
-  //     const getMenuLocation = computed(() => {
-  //       return 'header';
-  //     });
-
-  const router = useRouter();
-  const route = useRoute();
-
-  //     const generator: any = (routerMap: any[]) => {
-  //       return routerMap.map((item: { meta: { title: any }; name: any; path: string; children: string | any[] }) => {
-  //         const currentMenu = {
-  //           ...item,
-  //           label: item.meta.title,
-  //           key: item.name,
-  //           disabled: item.path === '/',
-  //         };
-  //         // 是否有子菜单，并递归处理
-  //         if (item.children && item.children.length > 0) {
-  //           // Recursion
-  //           currentMenu.children = generator(item.children, currentMenu);
-  //         }
-  //         return currentMenu;
-  //       });
-  //     };
-
-  //     const breadcrumbList = computed(() => {
-  //       return generator(route.matched);
-  //     });
-
-  //     const dropdownSelect = (key: any) => {
-  //       router.push({ name: key });
-  //     };
-
-  //     // 刷新页面
-  //     const reloadPage = () => {
-  //       router.push({
-  //         path: '/redirect' + unref(route).fullPath,
-  //       });
-  //     };
-
-  // 退出登录
-  const doLogout = () => {
-    dialog.info({
-      title: '提示',
-      content: '您确定要退出登录吗',
-      positiveText: '确定',
-      negativeText: '取消',
-      onPositiveClick: () => {
-        userStore.logout().then(() => {
-          message.success('成功退出登录');
-          router
-            .replace({
-              name: 'Login',
-              query: {
-                redirect: route.fullPath,
-              },
-            })
-            .finally(() => location.reload());
-        });
-      },
-      onNegativeClick: () => {},
-    });
-  };
-
-  // 切换全屏图标
-  const toggleFullscreenIcon = () => (fullscreenBool.value = document.fullscreenElement !== null);
-
-  // 监听全屏切换事件
-  document.addEventListener('fullscreenChange', toggleFullscreenIcon);
-
-  // 全屏切换
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-  };
-
-  // 图标列表
-  const iconList = [
-    {
-      icon: SearchOutlined,
-      tips: '搜索',
-      eventObject: {
-        click: () => (useSearch.value = !useSearch.value),
-      },
-    },
-    {
-      icon: LockOutlined,
-      tips: '锁屏',
-      eventObject: {
-        click: () => useLockScreen.setLock(true),
-      },
-    },
-  ];
-  const avatarOptions = [
-    {
-      label: '个人设置',
-      key: 1,
-    },
-    {
-      label: '密码设置',
-      key: 2,
-    },
-    {
-      label: '退出登录',
-      key: 9,
-    },
-  ];
-
-  //头像下拉菜单
-  const avatarSelect = (key: any) => {
-    switch (key) {
-      case 1:
-        router.push({ name: 'SettingAccount' });
-        break;
-      case 2:
-        router.push({ name: 'SettingPassword' });
-        break;
-      case 9:
-        doLogout();
-        break;
-    }
-  };
-
-  const openSetting = () => {
-    const { openDrawer } = headerSettingRef.value;
-    openDrawer();
-  };
-
-  //     return {
-  //       ...toRefs(state),
-  //       iconList,
-  //       toggleFullscreen,
-  //       doLogout,
-  //       route,
-  //       dropdownSelect,
-  //       avatarOptions,
-  //       getChangeStyle,
-  //       avatarSelect,
-  //       breadcrumbList,
-  //       reloadPage,
-  //       headerSettingRef,
-  //       openSetting,
-  //       getInverted,
-  //       getMenuLocation,
-  //       mixMenu,
-  //       defaultAvatar,
-  //     };
-  //   },
-  // });
+  const {
+    navMode,
+    mixMenu,
+    headerSetting,
+    crumbsSetting,
+    getInverted,
+    breadcrumbList,
+    iconList,
+    fullscreenBool,
+    avatar,
+    avatarOptions,
+    reloadPage,
+    dropdownSelect,
+    toggleFullscreen,
+    avatarSelect,
+    openSetting,
+  } = useLayoutHeader(props);
 </script>
 
 <template>
   <div class="layout-header">
     <!--顶部菜单-->
-    <div v-if="state.navMode === 'horizontal' || (state.navMode === 'horizontal-mix' && mixMenu)" class="layout-header-left">
-      <div v-if="state.navMode === 'horizontal'" class="logo">
+    <div v-if="navMode === 'horizontal' || (navMode === 'horizontal-mix' && mixMenu)" class="layout-header-left">
+      <div v-if="navMode === 'horizontal'" class="logo">
         <img src="~@/assets/images/common/logo.png" alt="" />
         <h2 v-show="!collapsed" class="title">NaiveUiAdmin</h2>
       </div>
@@ -273,45 +41,43 @@
     <!--左侧菜单-->
     <div v-else class="layout-header-left">
       <!-- 菜单收起 -->
-      <!-- <div class="ml-5 layout-header-trigger layout-header-trigger-min" @click="() => $emit('update:collapsed', !collapsed)">
+      <div class="ml-5 layout-header-trigger layout-header-trigger-min" @click="() => emit('update:collapsed', !collapsed)">
         <n-icon v-if="collapsed" size="18">
           <MenuUnfoldOutlined />
         </n-icon>
         <n-icon v-else size="18">
           <MenuFoldOutlined />
         </n-icon>
-      </div> -->
+      </div>
       <!-- 刷新 -->
-      <!-- <div v-if="headerSetting.isReload" class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
+      <div v-if="headerSetting.isReload" class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
         <n-icon size="18">
           <ReloadOutlined />
         </n-icon>
-      </div> -->
+      </div>
       <!-- 面包屑 -->
-      <!-- <n-breadcrumb v-if="crumbsSetting.show">
-        <template v-for="routeItem in breadcrumbList" :key="routeItem.name">
+      <n-breadcrumb v-if="crumbsSetting.show">
+        <template v-for="breadItem in breadcrumbList" :key="breadItem.key">
           <n-breadcrumb-item>
-            <n-dropdown v-if="routeItem.children.length" :options="routeItem.children" @select="dropdownSelect">
+            <n-dropdown v-if="breadItem.children && breadItem.children.length" :options="breadItem.children" @select="dropdownSelect">
               <span class="link-text">
-                <component :is="routeItem.meta.icon" v-if="crumbsSetting.showIcon && routeItem.meta.icon" />
-                {{ routeItem.meta.title }}
+                <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
+                {{ breadItem.label }}
               </span>
             </n-dropdown>
             <span v-else class="link-text">
-              <component :is="routeItem.meta.icon" v-if="crumbsSetting.showIcon && routeItem.meta.icon" />
-              {{ routeItem.meta.title }}
+              <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
+              {{ breadItem.label }}
             </span>
           </n-breadcrumb-item>
         </template>
-      </n-breadcrumb> -->
+      </n-breadcrumb>
     </div>
     <div class="layout-header-right">
       <div v-for="item in iconList" :key="item.tips" class="layout-header-trigger layout-header-trigger-min">
         <n-tooltip placement="bottom">
           <template #trigger>
-            <n-icon size="18" :component="item.icon" v-on="item.eventObject || {}">
-              <!-- <component :is="item.icon" v-on="item.eventObject || {}" /> -->
-            </n-icon>
+            <n-icon size="18" :component="item.icon" v-on="item.eventObject || {}"></n-icon>
           </template>
           <span>{{ item.tips }}</span>
         </n-tooltip>

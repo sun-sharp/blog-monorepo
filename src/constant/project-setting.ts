@@ -1,13 +1,13 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-09-18 17:50:50
+ * @LastEditTime: 2023-09-19 16:55:48
  * @Description: 项目配置
  */
 
 // import { ListFieldType, PageCountFieldType, PageFieldType, SizeFieldType, TotalFieldType } from '/#/components/table';
 
 // 系统内置主题色列表
-export const appThemeList: string[] = [
+export const APP_THEME_LIST: string[] = [
   '#2d8cf0',
   '#0960bd',
   '#0084f4',
@@ -29,7 +29,7 @@ export const appThemeList: string[] = [
 ];
 
 // 动画全部类型
-export const animateSetting = [
+export const ANIMATE_SETTING = [
   { value: 'zoom-fade', label: '渐变' },
   { value: 'zoom-out', label: '闪现' },
   { value: 'fade-slide', label: '滑动' },
