@@ -158,11 +158,11 @@ export const useUserStore = defineStore({
     },
     // 接口修改配置
     async updateApiConfigInfo(configInfo: ApiConfigInfo) {
-      const [err, resp] = await at(configurationApi.update(configInfo));
-      if (err) return false;
+      // const [err, resp] = await at(configurationApi.update(configInfo));
+      // if (err) return false;
       storage.set(USER_CONFIG, configInfo);
       this.setConfigInfo(configInfo);
-      return resp;
+      // return resp;
     },
   },
 });

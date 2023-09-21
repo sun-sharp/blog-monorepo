@@ -1,36 +1,42 @@
 <script lang="ts" setup>
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
-  import { ANIMATE_SETTING } from '@/constant';
+  import { appThemeList, navModeArr } from '@/constant';
   import { LayoutHeaderSettingProps, useLayoutHeaderSetting } from '@/layout/hooks/useLayoutHeaderSetting';
+  import { CSSProperties } from 'vue';
 
   const props = defineProps(LayoutHeaderSettingProps);
-
-  const animateSetting = ANIMATE_SETTING;
 
   const {
     isDrawer,
     placement,
     isDarkTheme,
-    submitLoading,
-    navModeArr,
-    navTheme,
-    navThemeArr,
     appTheme,
     navMode,
-    appThemeList,
-    menuSetting,
-    headerSetting,
-    multiTabsSetting,
-    crumbsSetting,
-    isPageAnimate,
-    pageAnimateType,
-    footerSetting,
-    togNavTheme,
-    togNavMode,
-    togTheme,
+    // navTheme,
+    // navThemeArr,
+    // menuSetting,
+    // headerSetting,
+    // multiTabsSetting,
+    // crumbsSetting,
+    // isPageAnimate,
+    // pageAnimateType,
+    // footerSetting,
+    // togNavTheme,
+    submitLoading,
     switchChange,
-    selectChange,
+    togTheme,
+    togNavMode,
+    // selectChange,
+    openDrawer,
   } = useLayoutHeaderSetting(props);
+
+  // 主题按钮样式
+  const themeRailStyle = () => {
+    const style: CSSProperties = { background: '#000e1c' };
+    return style;
+  };
+
+  defineExpose({ openDrawer });
 </script>
 
 <template>
@@ -38,18 +44,17 @@
     <n-drawer-content :title="title">
       <div class="drawer">
         <n-divider title-placement="center">主题</n-divider>
-
-        <div class="drawer-setting-item justify-center dark-switch">
+        <div class="drawer-setting-item justify-center pv-12">
           <n-tooltip placement="bottom">
             <template #trigger>
-              <n-switch v-model:value="isDarkTheme" :loading="submitLoading" class="dark-theme-switch" @update:value="switchChange">
+              <n-switch v-model:value="isDarkTheme" :loading="submitLoading" :rail-style="themeRailStyle" @update:value="switchChange">
                 <template #checked>
-                  <n-icon size="14" color="#ffd93b">
+                  <n-icon size="14" color="#ffce00">
                     <SunnySharp />
                   </n-icon>
                 </template>
                 <template #unchecked>
-                  <n-icon size="14" color="#ffd93b">
+                  <n-icon size="14" color="#ffce00">
                     <Moon />
                   </n-icon>
                 </template>
@@ -60,8 +65,7 @@
         </div>
 
         <n-divider title-placement="center">系统主题</n-divider>
-
-        <div class="drawer-setting-item align-items-top">
+        <div class="drawer-setting-item justify-between pv-2">
           <span v-for="(item, index) in appThemeList" :key="index" class="theme-item" :style="{ 'background-color': item }" @click="togTheme(item)">
             <n-icon v-if="item === appTheme" size="12">
               <CheckOutlined />
@@ -70,20 +74,19 @@
         </div>
 
         <n-divider title-placement="center">导航栏模式</n-divider>
-
-        <div class="drawer-setting-item align-items-top">
+        <div class="drawer-setting-item justify-between pv-2">
           <div v-for="(item, index) in navModeArr" :key="index" class="drawer-setting-item-style">
             <n-tooltip placement="top">
               <template #trigger>
-                <img :src="item.image" :alt="item.title" @click="togNavMode(item.name)" />
+                <img class="drawer-setting-item-image" :src="item.image" :alt="item.title" @click="togNavMode(item.name)" />
               </template>
               <span>{{ item.title }}</span>
             </n-tooltip>
-            <n-badge v-if="navMode === item.name" dot color="#19be6b" />
+            <n-badge class="drawer-setting-item-dot" dot :color="navMode === item.name ? '#19be6b' : '#fff'" />
           </div>
         </div>
 
-        <n-divider title-placement="center">导航栏风格</n-divider>
+        <!-- <n-divider title-placement="center">导航栏风格</n-divider>
 
         <div class="drawer-setting-item align-items-top">
           <div v-for="(item, index) in navThemeArr" :key="index" class="drawer-setting-item-style">
@@ -178,7 +181,7 @@
           <div class="drawer-setting-item-select">
             <n-select v-model:value="pageAnimateType" :loading="submitLoading" :options="animateSetting" @update:value="selectChange" />
           </div>
-        </div>
+        </div> -->
       </div>
     </n-drawer-content>
   </n-drawer>
@@ -194,7 +197,6 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      padding: 12px 0;
 
       &-style {
         position: relative;
@@ -217,6 +219,16 @@
         flex: 1;
       }
 
+      &-image {
+        width: 52px;
+        height: 45px;
+      }
+
+      &-dot {
+        display: flex;
+        justify-content: center;
+      }
+
       .theme-item {
         width: 20px;
         min-width: 20px;
@@ -236,12 +248,6 @@
     .align-items-top {
       align-items: flex-start;
       padding: 2px 0;
-    }
-
-    .dark-switch .n-switch {
-      ::v-deep(.n-switch__rail) {
-        background-color: #000e1c;
-      }
     }
   }
 

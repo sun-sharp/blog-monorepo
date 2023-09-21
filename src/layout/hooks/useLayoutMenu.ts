@@ -1,6 +1,6 @@
 import { PAGE_ENUM } from '@/constant';
 import { constantRouterIcon, generatorMenu, generatorMenuMix } from '@/utils';
-import { computed, onMounted, ref, unref, watch } from 'vue';
+import { ExtractPropTypes, computed, onMounted, ref, unref, watch } from 'vue';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { useSetting } from '@/hooks';
 import { useRoute, useRouter } from 'vue-router';
@@ -20,7 +20,7 @@ export const LayoutMenuProps = {
 };
 
 /* 处理LayoutMenu */
-export const useLayoutMenu = () => {
+export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, emit: (event: 'update:collapsed', ...args: any[]) => void) => {
   // 当前路由
   const currentRoute = useRoute();
   const router = useRouter();
@@ -29,13 +29,7 @@ export const useLayoutMenu = () => {
   const selectedKeys = ref<string>(currentRoute.name as string);
   // const headerMenuSelectKey = ref<string>('');
 
-  const {
-    //  getNavMode,
-    getNavTheme,
-    getMenuSetting,
-  } = useSetting();
-
-  // const navMode = getNavMode;
+  const { getNavMode, getNavTheme } = useSetting();
 
   // 获取当前打开的子菜单
   const matched = currentRoute.matched;
@@ -49,19 +43,19 @@ export const useLayoutMenu = () => {
   });
 
   // const getSelectedKeys = computed(() => {
-  //   return unref(navMode) === 'horizontal' ? unref(selectedKeys) : unref(headerMenuSelectKey);
+  //   return unref(getNavMode) === 'horizontal' ? unref(selectedKeys) : unref(headerMenuSelectKey);
   // });
 
-  // 监听分割菜单
-  // watch(
-  //   () => unref(getMenuSetting).mixMenu,
-  //   () => {
-  //     updateMenu();
-  //     if (props.collapsed) {
-  //       emit('update:collapsed', !props.collapsed);
-  //     }
-  //   }
-  // );
+  // 监听导航栏模式切换
+  watch(
+    () => unref(getNavMode),
+    () => {
+      updateMenu();
+      if (props.collapsed) {
+        emit('update:collapsed', !props.collapsed);
+      }
+    }
+  );
 
   // 跟随页面路由变化，切换菜单选中状态
   watch(
@@ -84,14 +78,16 @@ export const useLayoutMenu = () => {
         label: PAGE_ENUM.HOME_TITLE,
       },
     ];
-    if (!unref(getMenuSetting).mixMenu) {
-      menus.value = [...defaultMenu, ...generatorMenu(routeStore.getMenus)];
-    } else {
+    if (unref(getNavMode) === 'horizontal-mix') {
       // 混合菜单
       const firstRouteName: string = (currentRoute.matched[0].name as string) || '';
       menus.value = [...defaultMenu, ...generatorMenuMix(routeStore.getMenus, firstRouteName)];
+      console.log(menus.value);
+
       // const activeMenu: string = currentRoute?.matched[0].meta?.activeMenu as string;
       // headerMenuSelectKey.value = (activeMenu ? activeMenu : firstRouteName) || '';
+    } else {
+      menus.value = [...defaultMenu, ...generatorMenu(routeStore.getMenus)];
     }
   };
 

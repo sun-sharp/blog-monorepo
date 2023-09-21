@@ -4,10 +4,13 @@
   import defaultAvatar from '@/assets/images/common/default-avatar.png';
   import { SettingOutlined, MenuFoldOutlined, MenuUnfoldOutlined, FullscreenOutlined, FullscreenExitOutlined, ReloadOutlined } from '@/utils';
   import { LayoutHeaderProps, useLayoutHeader } from '@/layout/hooks/useLayoutHeader';
+  import { APP_ENV_CONFIG } from '@/constant';
 
   const props = defineProps(LayoutHeaderProps);
 
   const emit = defineEmits(['update:collapsed']);
+
+  const title = APP_ENV_CONFIG.shortName;
 
   const {
     navMode,
@@ -20,6 +23,7 @@
     fullscreenBool,
     avatar,
     avatarOptions,
+    headerSettingRef,
     reloadPage,
     dropdownSelect,
     toggleFullscreen,
@@ -34,9 +38,9 @@
     <div v-if="navMode === 'horizontal' || (navMode === 'horizontal-mix' && mixMenu)" class="layout-header-left">
       <div v-if="navMode === 'horizontal'" class="logo">
         <img src="~@/assets/images/common/logo.png" alt="" />
-        <h2 v-show="!collapsed" class="title">NaiveUiAdmin</h2>
+        <h2 v-show="!collapsed" class="title">{{ title }}</h2>
       </div>
-      <layout-menu :collapsed="collapsed" :inverted="getInverted" mode="horizontal" />
+      <layout-menu :inverted="getInverted" mode="horizontal" />
     </div>
     <!--左侧菜单-->
     <div v-else class="layout-header-left">

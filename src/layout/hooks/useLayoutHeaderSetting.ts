@@ -1,13 +1,7 @@
-import { APP_THEME_LIST } from '@/constant';
 import { useSetting } from '@/hooks';
 import { useUserStore } from '@/store';
 import { ComputedRef, ExtractPropTypes, reactive, ref, toRefs, unref } from 'vue';
 import { CUserConfigInfo } from '/#/config';
-import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
-import navHorizontalImage from '@/assets/images/setting/nav-horizontal.svg';
-import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
-import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
-import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
 
 // LayoutHeaderSetting传参
 export const LayoutHeaderSettingProps = {
@@ -28,7 +22,6 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     title: props.title,
     isDrawer: false,
     placement: 'right',
-    appThemeList: APP_THEME_LIST,
   });
 
   const userStore = useUserStore();
@@ -85,48 +78,12 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     });
   };
 
-  // 切换导航模式
-  const navModeArr = [
-    {
-      title: '左侧菜单模式',
-      name: 'vertical',
-      image: navThemeDarkImage,
-    },
-    {
-      title: '顶部菜单模式',
-      name: 'horizontal',
-      image: navHorizontalImage,
-    },
-    {
-      title: '顶部菜单混合模式',
-      name: 'horizontal-mix',
-      image: navHorizontalMixImage,
-    },
-  ];
   const togNavMode = (mode: string) => {
     configInfo.navMode = mode;
     configInfo.menuSetting.mixMenu = false;
     drawerSettingSubmit();
   };
 
-  // 设置导航风格
-  const navThemeArr = [
-    {
-      title: '暗色侧边栏',
-      name: 'dark',
-      image: navThemeDarkImage,
-    },
-    {
-      title: '白色侧边栏',
-      name: 'light',
-      image: navThemeLightImage,
-    },
-    {
-      title: '暗色顶栏',
-      name: 'header-dark',
-      image: headerThemeDarkImage,
-    },
-  ];
   const togNavTheme = (theme: string) => {
     let navTheme = theme;
     if (configInfo.navMode === 'horizontal' && ['light'].includes(theme)) {
@@ -153,8 +110,6 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     ...toRefs(state),
     ...toRefs(configInfo),
     submitLoading,
-    navModeArr,
-    navThemeArr,
     togNavTheme,
     togNavMode,
     togTheme,

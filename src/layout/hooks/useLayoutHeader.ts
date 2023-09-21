@@ -6,6 +6,7 @@ import { useLockScreenStore, useUserStore } from '@/store';
 import { getImgUrl } from '@/utils';
 import { useSearch, useSetting } from '@/hooks';
 import { HeaderBreadcrumbItem } from '/#/layout/header';
+import { PAGE_ENUM } from '@/constant';
 
 // LayoutHeader传参
 export const LayoutHeaderProps = {
@@ -53,20 +54,22 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
   const route = useRoute();
 
   const generator = (routerMap: RouteLocationMatched[] | RouteRecordRaw[]): HeaderBreadcrumbItem[] => {
-    return routerMap.map((item) => {
-      const currentMenu: HeaderBreadcrumbItem = {
-        icon: item?.meta?.icon,
-        label: item?.meta?.title,
-        key: item.name,
-        disabled: item.path === '/',
-      };
-      // 是否有子菜单，并递归处理
-      if (item.children && item.children.length > 0) {
-        // Recursion
-        currentMenu.children = generator(item.children);
-      }
-      return currentMenu;
-    });
+    return routerMap
+      .filter((f) => f.path !== PAGE_ENUM.PAGE_PATH)
+      .map((item) => {
+        const currentMenu: HeaderBreadcrumbItem = {
+          icon: item?.meta?.icon,
+          label: item?.meta?.title,
+          key: item.name,
+          disabled: item.path === '/',
+        };
+        // 是否有子菜单，并递归处理
+        if (item.children && item.children.length > 0) {
+          // Recursion
+          currentMenu.children = generator(item.children);
+        }
+        return currentMenu;
+      });
   };
 
   const breadcrumbList = computed(() => {
@@ -189,6 +192,7 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
     fullscreenBool,
     avatar,
     avatarOptions,
+    headerSettingRef,
     reloadPage,
     dropdownSelect,
     toggleFullscreen,

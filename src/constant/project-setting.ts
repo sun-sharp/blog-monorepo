@@ -1,13 +1,17 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-09-19 16:55:48
+ * @LastEditTime: 2023-09-21 10:24:58
  * @Description: 项目配置
  */
 
-// import { ListFieldType, PageCountFieldType, PageFieldType, SizeFieldType, TotalFieldType } from '/#/components/table';
+import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
+import navHorizontalImage from '@/assets/images/setting/nav-horizontal.svg';
+import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
+import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
+import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
 
 // 系统内置主题色列表
-export const APP_THEME_LIST: string[] = [
+export const appThemeList: string[] = [
   '#2d8cf0',
   '#0960bd',
   '#0084f4',
@@ -28,8 +32,46 @@ export const APP_THEME_LIST: string[] = [
   '#FC5404',
 ];
 
+// 切换导航栏模式
+export const navModeArr = [
+  {
+    title: '左侧菜单模式',
+    name: 'vertical',
+    image: navThemeDarkImage,
+  },
+  {
+    title: '顶部菜单模式',
+    name: 'horizontal',
+    image: navHorizontalImage,
+  },
+  {
+    title: '顶部菜单混合模式',
+    name: 'horizontal-mix',
+    image: navHorizontalMixImage,
+  },
+];
+
+// 设置导航风格
+export const navThemeArr = [
+  {
+    title: '暗色侧边栏',
+    name: 'dark',
+    image: navThemeDarkImage,
+  },
+  {
+    title: '白色侧边栏',
+    name: 'light',
+    image: navThemeLightImage,
+  },
+  {
+    title: '暗色顶栏',
+    name: 'header-dark',
+    image: headerThemeDarkImage,
+  },
+];
+
 // 动画全部类型
-export const ANIMATE_SETTING = [
+export const animateSetting = [
   { value: 'zoom-fade', label: '渐变' },
   { value: 'zoom-out', label: '闪现' },
   { value: 'fade-slide', label: '滑动' },

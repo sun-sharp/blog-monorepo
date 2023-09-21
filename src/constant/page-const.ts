@@ -8,6 +8,9 @@ export const PAGE_ENUM = {
   HOME_NAME: 'Home',
   HOME_TITLE: '首页',
   HOME_ICON: 'HomeOutlined',
+  // 一级页面
+  PAGE_PATH: '/page',
+  PAGE_NAME: 'Page',
   // 错误
   ERROR_PAGE_NAME: 'ErrorPage',
   ERROR_PAGE_TITLE: '错误404',

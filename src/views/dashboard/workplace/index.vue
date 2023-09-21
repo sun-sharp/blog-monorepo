@@ -18,7 +18,7 @@
 
   // const cardHeaderStyle = ref({ 'border-bottom': '1px solid #eee', 'font-size': '16px' });
 
-  const loading = ref(true);
+  const loading = ref(false);
   const visits = ref({}) as any;
   const saleroom = ref({}) as any;
   const orderLarge = ref({}) as any;
@@ -101,6 +101,7 @@
   ];
 
   const init = () => {
+    // loading.value = true;
     // homeApi
     //   .getConsoleInfo()
     //   .then((info) => {

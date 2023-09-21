@@ -4,6 +4,7 @@ import { ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
 import { PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
+import { cloneDeep } from 'lodash-es';
 
 /**
  * 对路由的path进行处理
@@ -171,6 +172,10 @@ export const generatorMenu = (list: AppRouteRecordRaw[]): NaiveMenuOption[] => {
 export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] => {
   console.log(list, 'generatorMenuMix');
   console.log(routerName, 'generatorMenuMix_routerName');
+  const cloneListMap = cloneDeep(list);
+  console.log(cloneListMap, 'sdfd');
+
+  // const newRouter = filterRouter(cloneRouterMap);
 
   return [];
 };

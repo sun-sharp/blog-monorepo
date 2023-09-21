@@ -168,7 +168,7 @@
       width: 100%;
       height: 0;
       overflow-y: auto;
-      background-color: #fc0000;
+      background-color: $background-color;
     }
 
     .lnf-footer {

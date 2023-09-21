@@ -1,9 +1,11 @@
 <script lang="ts" setup>
   import { LayoutMenuProps, useLayoutMenu } from '@/layout/hooks/useLayoutMenu';
 
-  defineProps(LayoutMenuProps);
+  const props = defineProps(LayoutMenuProps);
 
-  const { menus, inverted, openKeys, selectedKeys, menuExpanded, clickMenuItem } = useLayoutMenu();
+  const emit = defineEmits(['update:collapsed']);
+
+  const { menus, inverted, openKeys, selectedKeys, menuExpanded, clickMenuItem } = useLayoutMenu(props, emit);
 </script>
 
 <template>

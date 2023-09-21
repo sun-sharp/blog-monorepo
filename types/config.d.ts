@@ -10,55 +10,22 @@ export interface GlobConfig {
   tokenHead?: string;
 }
 
-// 顶部设置
-export interface CHeaderSetting {
-  fixed: boolean;
-  isReload: boolean;
-}
-
-// 菜单设置
-export interface CMenuSetting {
-  minMenuWidth: number;
-  menuWidth: number;
-  fixed: boolean;
-  mixMenu: boolean;
-  collapsed: boolean;
-}
-
-// 面包屑
-export interface CCrumbsSetting {
-  show: boolean;
-  showIcon: boolean;
-}
-
-// 多标签
-export interface CMultiTabsSetting {
-  fixed: boolean;
-  show: boolean;
-}
-
-// 底部
-export interface CFooterSetting {
-  fixed: boolean;
-  show: boolean;
-}
-
 // 用户信息
 export interface CUserConfigInfo {
   // 导航模式
-  navMode: string;
+  navMode: ApiConfNavMode;
   // 导航风格
   navTheme: string;
   // 顶部设置
-  headerSetting: CHeaderSetting;
+  headerSetting: ApiConfHeaderSetting;
   // 底部设置
-  footerSetting: CFooterSetting;
+  footerSetting: ApiConfFooterSetting;
   // 菜单设置
-  menuSetting: CMenuSetting;
+  menuSetting: ApiConfMenuSetting;
   // 多标签
-  multiTabsSetting: CMultiTabsSetting;
+  multiTabsSetting: ApiConfMultiTabsSetting;
   // 面包屑
-  crumbsSetting: CCrumbsSetting;
+  crumbsSetting: ApiConfCrumbsSetting;
   // 是否开启路由动画
   isPageAnimate: boolean;
   // 路由动画类型

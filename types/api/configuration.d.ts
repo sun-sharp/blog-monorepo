@@ -1,4 +1,12 @@
 /**
+ * @description: 导航模式
+ * vertical 左侧菜单模式
+ * horizontal 顶部菜单模式
+ * horizontal-mix 顶部菜单混合模式
+ */
+export type ApiConfNavMode = 'vertical' | 'horizontal' | 'horizontal-mix';
+
+/**
  * @description: 设置的id
  */
 export interface ApiImageId {
@@ -84,7 +92,7 @@ export interface ApiConfiguration {
   appTheme: string;
 
   // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
-  navMode: string;
+  navMode: ApiConfNavMode;
 
   // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
   navTheme: string;
