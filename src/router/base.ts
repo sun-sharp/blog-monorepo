@@ -9,6 +9,7 @@ import {
   SettingPasswordComponent,
 } from './router-component';
 import { PAGE_ENUM } from '@/constant';
+import { constantRouterIcon } from '@/utils';
 
 // 登录页
 export const LoginRoute: AppRouteRecordRaw = {
@@ -27,6 +28,7 @@ export const HomeRoute: AppRouteRecordRaw = {
   component: HomeComponent,
   meta: {
     title: PAGE_ENUM.HOME_TITLE,
+    icon: constantRouterIcon[PAGE_ENUM.HOME_ICON],
   },
 };
 

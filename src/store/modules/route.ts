@@ -10,7 +10,7 @@ import { constantRouterIcon, routerScreen, sortRouteMenu } from '@/utils';
 import { AppRouteRecordRaw } from '/#/router';
 import { ApiMenuItem } from '/#/api/menu';
 import { ViewsMenu } from '/#/views/menu';
-import { PageRoute } from '@/router/base';
+import { HomeRoute, PageRoute } from '@/router/base';
 
 export const useRouteStore = defineStore({
   id: 'app-route',
@@ -68,7 +68,7 @@ export const useRouteStore = defineStore({
       PageRoute.children = accessedRouters;
       const routers = [PageRoute];
       this.setRouters(routers);
-      this.setMenus(sortRouteMenu(accessedRouters));
+      this.setMenus([HomeRoute, ...sortRouteMenu(accessedRouters)]);
       return toRaw(routers);
     },
   },

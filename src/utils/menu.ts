@@ -166,18 +166,74 @@ export const generatorMenu = (list: AppRouteRecordRaw[]): NaiveMenuOption[] => {
 };
 
 /**
+ * 混合菜单获取对应的菜单
+ * */
+export function getChildrenMix(newArr: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] {
+  const firstRouter: NaiveMenuOption[] = [];
+  filterRouter(newArr).forEach((m) => {
+    const currentMenu: NaiveMenuOption = {
+      // 是否禁用菜单项
+      disabled: false,
+      // 菜单项的图标
+      icon: m.meta?.icon,
+      // 菜单项的标识符
+      key: m.name,
+      // 菜单项的内容
+      label: m.meta?.title,
+      // 是否显示菜单项
+      show: !m.meta?.hidden,
+    };
+    if (m.name !== routerName) {
+      if (m.children && m.children.length > 0) {
+        currentMenu.children = getChildrenMix(m.children, routerName);
+        if (currentMenu.children.length > 0) firstRouter.push(currentMenu);
+      } else {
+        firstRouter.push(currentMenu);
+      }
+    }
+  });
+  return firstRouter;
+}
+
+/**
+ * 混合菜单获取对应的整体菜单
+ * */
+export function getCurrentChildrenMix(newArr: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] {
+  const firstRouter: NaiveMenuOption[] = [];
+  filterRouter(newArr).forEach((m) => {
+    const currentMenu: NaiveMenuOption = {
+      // 是否禁用菜单项
+      disabled: false,
+      // 菜单项的图标
+      icon: m.meta?.icon,
+      // 菜单项的标识符
+      key: m.name,
+      // 菜单项的内容
+      label: m.meta?.title,
+      // 是否显示菜单项
+      show: !m.meta?.hidden,
+    };
+    if (m.name === routerName) {
+      firstRouter.push(currentMenu);
+      return true;
+    } else if (m.children && m.children.length > 0) {
+      currentMenu.children = getCurrentChildrenMix(m.children, routerName);
+      if (currentMenu.children.length > 0) firstRouter.push(currentMenu);
+    }
+  });
+  return firstRouter;
+}
+
+/**
  * @description: 混合菜单
  * @param {AppRouteRecordRaw[]} list
  */
-export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] => {
-  console.log(list, 'generatorMenuMix');
-  console.log(routerName, 'generatorMenuMix_routerName');
+export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string, mode: string): NaiveMenuOption[] => {
   const cloneListMap = cloneDeep(list);
-  console.log(cloneListMap, 'sdfd');
-
-  // const newRouter = filterRouter(cloneRouterMap);
-
-  return [];
+  if (mode === 'horizontal') {
+    return getChildrenMix(cloneListMap, routerName);
+  }
+  return getCurrentChildrenMix(cloneListMap, routerName);
 };
 
 /**

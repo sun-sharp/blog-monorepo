@@ -1,10 +1,10 @@
-import { PAGE_ENUM } from '@/constant';
-import { constantRouterIcon, generatorMenu, generatorMenuMix } from '@/utils';
+import { generatorMenu, generatorMenuMix } from '@/utils';
 import { ExtractPropTypes, computed, onMounted, ref, unref, watch } from 'vue';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { useSetting } from '@/hooks';
 import { useRoute, useRouter } from 'vue-router';
 import { useRouteStore } from '@/store';
+// import { PAGE_ENUM } from '@/constant';
 
 // LayoutMenu传参
 export const LayoutMenuProps = {
@@ -70,24 +70,12 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
   );
 
   const updateMenu = () => {
-    // 默认菜单
-    const defaultMenu: NaiveMenuOption[] = [
-      {
-        icon: constantRouterIcon[PAGE_ENUM.HOME_ICON],
-        key: PAGE_ENUM.HOME_NAME,
-        label: PAGE_ENUM.HOME_TITLE,
-      },
-    ];
     if (unref(getNavMode) === 'horizontal-mix') {
       // 混合菜单
-      const firstRouteName: string = (currentRoute.matched[0].name as string) || '';
-      menus.value = [...defaultMenu, ...generatorMenuMix(routeStore.getMenus, firstRouteName)];
-      console.log(menus.value);
-
-      // const activeMenu: string = currentRoute?.matched[0].meta?.activeMenu as string;
-      // headerMenuSelectKey.value = (activeMenu ? activeMenu : firstRouteName) || '';
+      const firstRouteName: string = (currentRoute.name as string) || '';
+      menus.value = generatorMenuMix(routeStore.getMenus, firstRouteName, props.mode);
     } else {
-      menus.value = [...defaultMenu, ...generatorMenu(routeStore.getMenus)];
+      menus.value = generatorMenu(routeStore.getMenus);
     }
   };
 
