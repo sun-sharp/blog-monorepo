@@ -35,14 +35,6 @@ export interface ApiMenu {
 }
 
 /**
- * @description: 获取菜单列表传参
- */
-export interface ApiMenuFindAllParams {
-  name?: string;
-  title?: string;
-}
-
-/**
  * @description: 新增菜单传参
  */
 export type ApiMenuSaveData = ApiMenu;

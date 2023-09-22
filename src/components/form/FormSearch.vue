@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@/utils';
   import { FormSearchEmits, FormSearchProps, useFormSearch } from './hooks/useFormSearch';
 
   const props = defineProps(FormSearchProps);

@@ -1,63 +1,15 @@
 <script lang="ts" setup>
-  import { nextTick, onMounted, ref } from 'vue';
-  import { menuApi } from '@/api';
   import { useMenuConfigure } from './hooks/useMenuConfigure';
-  import { levelMenu, ReloadOutlined, ColumnHeightOutlined, PlusOutlined } from '@/utils';
-  import { ApiLevelMenuItem, ApiMenuFindAllParams } from '/#/api/menu';
+  import { ReloadOutlined, ColumnHeightOutlined, PlusOutlined } from '@/utils';
+  import { ApiLevelMenuItem } from '/#/api/menu';
   import { densityOptions } from '@/components/table';
-  import { TableDensityOptionKey } from '/#/components/table';
   import FormSearch from '@/components/form/FormSearch.vue';
   import MenuAddUpdateModel from './components/MenuAddUpdateModel.vue';
 
-  const addUpdateModelRef = ref<Component>();
-
-  // 配置表格密度
-  const tableSize = ref<TableDensityOptionKey>('medium');
-
-  // 表格
-  const tableData = ref<ApiLevelMenuItem[]>([]);
+  // 表格key
   const rowKey = (row: ApiLevelMenuItem) => row.name;
-  const tableLoading = ref(false);
 
-  /**
-   * 表格
-   *  */
-  // 获取接口数据
-  let searchParams: ApiMenuFindAllParams = {};
-  const loadDataTable = () => {
-    tableLoading.value = true;
-    menuApi
-      .getMenuList(searchParams)
-      .then((res) => {
-        tableData.value = levelMenu(res);
-      })
-      .finally(() => {
-        tableLoading.value = false;
-      });
-  };
-
-  // 配置
-  const { searchSchemas, columns } = useMenuConfigure({ loadDataTable, addUpdateModelRef });
-
-  /**
-   * 查询
-   *  */
-  // 数据查询
-  const searchSubmit = (values: Recordable) => {
-    searchParams = values;
-    loadDataTable();
-  };
-
-  //密度切换
-  const densitySelect = (e: TableDensityOptionKey) => {
-    tableSize.value = e;
-  };
-
-  onMounted(() => {
-    nextTick(() => {
-      loadDataTable();
-    });
-  });
+  const { addUpdateModelRef, searchSchemas, tableSize, tableLoading, tableData, columns, densitySelect, searchSubmit, loadDataTable } = useMenuConfigure();
 </script>
 
 <template>

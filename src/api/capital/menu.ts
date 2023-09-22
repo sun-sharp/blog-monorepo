@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiMenuFindAllParams, ApiMenuItem, ApiMenuSaveData, ApiMenuUpdateData } from '/#/api/menu';
+import { ApiMenuItem, ApiMenuSaveData, ApiMenuUpdateData } from '/#/api/menu';
 
 const basic = '/menu';
 
@@ -7,11 +7,10 @@ const basic = '/menu';
  * @description 获取菜单列表
  * @param params
  */
-export const getMenuList = (params: ApiMenuFindAllParams): Promise<ApiMenuItem[]> => {
+export const getMenuList = (): Promise<ApiMenuItem[]> => {
   return AxiosCapital.request({
     url: `${basic}/find_term`,
     method: 'GET',
-    params,
   });
 };
 

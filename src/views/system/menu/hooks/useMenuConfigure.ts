@@ -1,13 +1,75 @@
-import { h } from 'vue';
-import { constantHtmlIcon } from '@/utils';
+import { h, nextTick, onMounted, ref } from 'vue';
+import { constantHtmlIcon, levelMenu } from '@/utils';
 import { NButton, NTag } from 'naive-ui';
 import { menuTypeObj } from '@/constant';
 import { menuApi } from '@/api';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormSchema } from '/#/components/form';
+import { TableDensityOptionKey } from '/#/components/table';
 
-export const useMenuConfigure = (options: { loadDataTable: () => void; addUpdateModelRef: any }) => {
-  const { loadDataTable, addUpdateModelRef } = options;
+/**
+ * @description: 根据参数过滤表单数据
+ */
+const filterMenuByParams = (arr: ApiLevelMenuItem[], params: { title: string }) => {
+  if (!params.title) return arr;
+  const newArr: ApiLevelMenuItem[] = [];
+  arr.forEach((m) => {
+    const item = { ...m };
+    if (m.title.indexOf(params.title) !== -1) {
+      newArr.push(m);
+      return true;
+    } else if (m.children && m.children.length > 0) {
+      item.children = filterMenuByParams(m.children, params);
+      if (item.children && item.children.length > 0) newArr.push(m);
+    }
+  });
+  return newArr;
+};
+
+/**
+ * 表格按钮操作配置
+ *  */
+const typeNameObj: {
+  [x: number]: string;
+} = {
+  1: 'info',
+  2: 'info',
+  5: 'success',
+  6: 'warning',
+  7: 'error',
+};
+
+export const useMenuConfigure = () => {
+  const addUpdateModelRef = ref<Component>();
+
+  // 配置表格密度
+  const tableSize = ref<TableDensityOptionKey>('medium');
+
+  // 表格
+  const tableData = ref<ApiLevelMenuItem[]>([]);
+  const tableTempData = ref<ApiLevelMenuItem[]>([]);
+
+  // 表格加载
+  const tableLoading = ref(false);
+
+  /**
+   * 表格
+   *  */
+  // 获取接口数据
+  const loadDataTable = () => {
+    tableLoading.value = true;
+    menuApi
+      .getMenuList()
+      .then((res) => {
+        const levelData = levelMenu(res);
+        tableTempData.value = levelData;
+        tableData.value = levelData;
+      })
+      .finally(() => {
+        tableLoading.value = false;
+      });
+  };
+
   // 查询配置
   const searchSchemas: FormSchema[] = [
     {
@@ -20,18 +82,6 @@ export const useMenuConfigure = (options: { loadDataTable: () => void; addUpdate
     },
   ];
 
-  /**
-   * 表格按钮操作配置
-   *  */
-  const typeNameObj: {
-    [x: number]: string;
-  } = {
-    1: 'info',
-    2: 'info',
-    5: 'success',
-    6: 'warning',
-    7: 'error',
-  };
   // 表格字段配置
   const columns = [
     {
@@ -139,15 +189,44 @@ export const useMenuConfigure = (options: { loadDataTable: () => void; addUpdate
       },
     },
   ];
+
   // 删除
-  const handleDelete = (row: Recordable) => {
+  const handleDelete = (row: ApiLevelMenuItem) => {
     menuApi.removeMenu(row.menuId).then(() => {
       loadDataTable();
     });
   };
 
+  /**
+   * 查询
+   *  */
+  // 数据查询
+  const searchSubmit = (values: { title: string }) => {
+    console.log(values);
+    tableData.value = filterMenuByParams(tableTempData.value, values);
+    // searchParams = values;
+  };
+
+  //密度切换
+  const densitySelect = (e: TableDensityOptionKey) => {
+    tableSize.value = e;
+  };
+
+  onMounted(() => {
+    nextTick(() => {
+      loadDataTable();
+    });
+  });
+
   return {
+    addUpdateModelRef,
     searchSchemas,
     columns,
+    tableLoading,
+    tableData,
+    tableSize,
+    densitySelect,
+    searchSubmit,
+    loadDataTable,
   };
 };

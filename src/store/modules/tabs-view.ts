@@ -46,8 +46,8 @@ export const useTabsViewStore = defineStore({
       this.tabsList.splice(index, 1);
     },
     closeAllTabs() {
-      // 关闭全部
-      this.tabsList = [];
+      // 关闭全部，并且不能关闭首页
+      this.tabsList = this.tabsList.filter((item) => item.fullPath === PAGE_ENUM.HOME_PATH);
     },
   },
 });
