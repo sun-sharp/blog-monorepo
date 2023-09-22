@@ -34,7 +34,7 @@ const pathResolve = (dir: string): string => {
  * @return {ViteEnv}
  */
 const wrapperEnv = (envConf: Recordable): ViteEnv => {
-  const ret: any = {};
+  const ret = {};
 
   for (const envName of Object.keys(envConf)) {
     let realName = envConf[envName].replace(/\\n/g, '\n');
@@ -51,7 +51,7 @@ const wrapperEnv = (envConf: Recordable): ViteEnv => {
     ret[envName] = realName;
     process.env[envName] = realName;
   }
-  return ret;
+  return ret as ViteEnv;
 };
 
 /**

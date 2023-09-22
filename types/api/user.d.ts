@@ -91,6 +91,16 @@ export interface UserUpdateUserInfoForm {
 }
 
 /**
+ * @description: 修改用户信息表单
+ */
+export interface UserUpdateUserPassword {
+  // 原密码
+  password: string;
+  // 新密码
+  updatePassword: string;
+}
+
+/**
  * @description: 用户表单
  */
 export interface UserItemForm {

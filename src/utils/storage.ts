@@ -25,9 +25,9 @@ export const createStorage = (options: { prefixKey?: string; storage?: Storage }
      * @description 设置缓存
      * @param {string} key 缓存键
      * @param {*} value 缓存值
-     * @param expire
+     * @param {number | null} expire DEFAULT_CACHE_TIME
      */
-    set(key: string, value: any, expire: number | null = DEFAULT_CACHE_TIME): void {
+    set(key: string, value: string, expire: number | null = DEFAULT_CACHE_TIME): void {
       const stringData = JSON.stringify({
         value,
         expire: expire !== null ? new Date().getTime() + expire * 1000 : null,

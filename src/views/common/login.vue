@@ -108,7 +108,7 @@
       type: 'boolean',
       trigger: 'change',
       message: '请点击按钮进行验证码校验',
-      validator: (_: any, value: boolean) => value === true,
+      validator: (_: unknown, value: boolean) => value === true,
     },
   };
 

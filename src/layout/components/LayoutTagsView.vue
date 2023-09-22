@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { useTabsView } from '@/layout/hooks/useTabsView';
+  import { useLayoutTagsView } from '@/layout/hooks/useLayoutTagsView';
   import { LeftOutlined, CloseOutlined, RightOutlined, DownOutlined } from '@/utils';
   import Draggable from 'vuedraggable';
 
@@ -22,7 +22,7 @@
     handleContextMenu,
     onClickOutside,
     getIsDarkTheme,
-  } = useTabsView();
+  } = useLayoutTagsView();
 </script>
 
 <template>

@@ -4,7 +4,6 @@ import { NaiveMenuOption } from '/#/plugins/naive';
 import { useSetting } from '@/hooks';
 import { useRoute, useRouter } from 'vue-router';
 import { useRouteStore } from '@/store';
-// import { PAGE_ENUM } from '@/constant';
 
 // LayoutMenu传参
 export const LayoutMenuProps = {
@@ -27,7 +26,6 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
   const routeStore = useRouteStore();
   const menus = ref<NaiveMenuOption[]>([]);
   const selectedKeys = ref<string>(currentRoute.name as string);
-  // const headerMenuSelectKey = ref<string>('');
 
   const { getNavMode, getNavTheme } = useSetting();
 
@@ -41,10 +39,6 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
   const inverted = computed(() => {
     return ['dark', 'header-dark'].includes(unref(getNavTheme));
   });
-
-  // const getSelectedKeys = computed(() => {
-  //   return unref(getNavMode) === 'horizontal' ? unref(selectedKeys) : unref(headerMenuSelectKey);
-  // });
 
   // 监听导航栏模式切换
   watch(
@@ -62,10 +56,10 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
     () => currentRoute.fullPath,
     () => {
       updateMenu();
-      // const matched = currentRoute.matched;
-      // openKeys.value = matched.map((item) => item.name);
-      // const activeMenu: string = (currentRoute.meta?.activeMenu as string) || '';
-      // selectedKeys.value = activeMenu ? (activeMenu as string) : (currentRoute.name as string);
+      const matched = currentRoute.matched;
+      openKeys.value = matched.map((item) => item.name);
+      const activeMenu: string = (currentRoute.meta?.activeMenu as string) || '';
+      selectedKeys.value = activeMenu ? (activeMenu as string) : (currentRoute.name as string);
     }
   );
 

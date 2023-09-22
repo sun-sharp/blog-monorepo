@@ -4,12 +4,12 @@
   import { userApi } from '@/api';
   import { useUserStore } from '@/store';
 
-  const modelFromRef: any = ref(null);
+  const modelFromRef = ref();
   // const message = useMessage();
 
   // 获取基本信息
   const userStore = useUserStore();
-  const userInfo: any = userStore.getUserInfo;
+  const userInfo = userStore.getUserInfo;
 
   // 表单权限
   // 判断正在输入的密码是否输入
@@ -55,7 +55,7 @@
   };
 
   // 表单字段
-  const modelForm = reactive<any>(Object.assign({}, modelFields));
+  const modelForm = reactive(Object.assign({}, modelFields));
 
   // 初始化
   const init = () => {

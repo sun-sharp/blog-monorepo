@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiUserInfo, ApiUserItem, ApiUserPageData, ApiUserUpdateRoleCodeData, ApiUserUpdateUserInfoData } from '/#/api/user';
+import { ApiUserInfo, ApiUserItem, ApiUserPageData, ApiUserUpdateRoleCodeData, ApiUserUpdateUserInfoData, UserUpdateUserPassword } from '/#/api/user';
 
 const basic = '/user';
 
@@ -63,7 +63,7 @@ export const updateUserInfo = (data: ApiUserUpdateUserInfoData): Promise<undefin
  * @description 删除用户
  * @param userId
  */
-export const remove = (userId?: any) => {
+export const remove = (userId?: string) => {
   return AxiosCapital.request({
     url: `${basic}/${userId}`,
     method: 'DELETE',
@@ -77,7 +77,7 @@ export const remove = (userId?: any) => {
  * @description 更新用户密码
  * @param data
  */
-export const updateUserPassword = (data: any) => {
+export const updateUserPassword = (data: UserUpdateUserPassword) => {
   return AxiosCapital.request({
     url: `${basic}/update_user_password`,
     method: 'PUT',

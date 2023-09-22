@@ -72,7 +72,7 @@ export function createRouterGuards(router: Router) {
     document.title = `${APP_ENV_CONFIG.title}-${(to?.meta?.title as string) || document.title}`;
     // 在这里设置需要缓存的组件名称
     const keepAliveComponents = routeStore.keepAliveComponents;
-    const currentComName: any = to.matched.find((item) => item.name == to.name)?.name;
+    const currentComName = to.matched.find((item) => item.name == to.name)?.name as string;
     if (currentComName && !keepAliveComponents.includes(currentComName) && to.meta?.keepAlive) {
       // 需要缓存的组件
       keepAliveComponents.push(currentComName);

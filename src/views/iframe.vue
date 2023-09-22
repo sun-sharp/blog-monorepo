@@ -26,7 +26,7 @@
     nextTick(() => {
       const iframe = unref(frameRef);
       if (!iframe) return;
-      const _frame = iframe as any;
+      const _frame: HTMLFrameElement & { attachEvent?: (e: string, fn: () => void) => void } = iframe;
       if (_frame.attachEvent) {
         _frame.attachEvent('onload', () => {
           hideLoading();

@@ -1,18 +1,11 @@
-import { VNode, h } from 'vue';
+import { h } from 'vue';
 import { NIcon } from 'naive-ui';
 import * as Antd from './antd';
 import * as Ionicons5 from './ionicons5';
+import { IconsType, RenderIconType } from '/#/utils/icon';
 
 export * from './antd';
 export * from './ionicons5';
-
-interface IconsType {
-  [x: string]: Component;
-}
-
-interface renderIconType {
-  [x: string]: VNode;
-}
 
 const iconsObj: IconsType = { ...Antd, ...Ionicons5 };
 
@@ -36,8 +29,8 @@ export const constantRouterIcon = ((): IconsType => {
 })();
 
 //前端路由图标映射表-vue html图标
-export const constantHtmlIcon = ((): renderIconType => {
-  const iconObj: renderIconType = {};
+export const constantHtmlIcon = ((): RenderIconType => {
+  const iconObj: RenderIconType = {};
   for (const key in iconsObj) {
     iconObj[key] = hIcon(iconsObj[key]);
   }
@@ -45,8 +38,8 @@ export const constantHtmlIcon = ((): renderIconType => {
 })();
 
 // Antd图标映射表-vue html图标
-export const constantAntdHtmlIcon = ((): renderIconType => {
-  const iconObj: renderIconType = {};
+export const constantAntdHtmlIcon = ((): RenderIconType => {
+  const iconObj: RenderIconType = {};
   const obj: IconsType = Antd;
   for (const key in obj) {
     iconObj[key] = hIcon(obj[key]);
@@ -55,8 +48,8 @@ export const constantAntdHtmlIcon = ((): renderIconType => {
 })();
 
 // Ionicons5图标映射表-vue html图标
-export const constantIonicons5HtmlIcon = ((): renderIconType => {
-  const iconObj: renderIconType = {};
+export const constantIonicons5HtmlIcon = ((): RenderIconType => {
+  const iconObj: RenderIconType = {};
   const obj: IconsType = Ionicons5;
   for (const key in obj) {
     iconObj[key] = hIcon(obj[key]);

@@ -9,6 +9,6 @@ export * from './files';
 // export * from './props';
 export * from './domUtils';
 // export * from './table';
-// export * from './array';
+export * from './array';
 export * from './time';
 // export * from './style';

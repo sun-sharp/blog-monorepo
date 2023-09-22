@@ -40,7 +40,7 @@
         <img src="~@/assets/images/common/logo.png" alt="" />
         <h2 v-show="!collapsed" class="title">{{ title }}</h2>
       </div>
-      <layout-menu :inverted="getInverted" mode="horizontal" />
+      <layout-menu :inverted="getInverted" mode="horizontal" :indent="100" />
     </div>
     <!--左侧菜单-->
     <div v-else class="layout-header-left">

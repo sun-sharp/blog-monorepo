@@ -37,8 +37,8 @@ export const formatRequestDate = (params: Recordable): void => {
       if (value) {
         try {
           params[key] = isString(value) ? value.trim() : value;
-        } catch (error: any) {
-          throw new Error(error);
+        } catch (error) {
+          throw new Error(error as string);
         }
       }
     }

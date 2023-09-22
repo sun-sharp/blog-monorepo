@@ -2,7 +2,7 @@ import { IframeComponent, LayoutRouterView } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
-import { PAGE_ENUM } from '@/constant';
+import { MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
 
@@ -27,7 +27,7 @@ export const pathFormat = (item: ApiMenuItem): string => {
 };
 
 /**
- * 动态导入vue页面
+ * @description: 动态导入vue页面
  * */
 export const dynamicImport = (viewsModules: Record<string, () => Promise<Recordable>>, component: string) => {
   const keys = Object.keys(viewsModules);
@@ -68,7 +68,7 @@ export const formatRouteComponent = (component: string, iframeSrc: string) => {
 };
 
 /**
- * 格式化 后端 结构信息并递归生成层级路由表
+ * @description: 格式化 后端 结构信息并递归生成层级路由表
  * @param routerMap
  * @param routerMap
  * @param _parentId
@@ -107,14 +107,36 @@ export const routerGenerator = (routerMap: MenuRouteItem[], _parentId = '0'): Ap
 };
 
 /**
- * 处理路由表
+ * @description: 处理路由表
  * @param routerMap
- * @returns {*}
+ */
+export const filterChildrenRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
+  const filterList: AppRouteRecordRaw[] = [];
+  routerMap.forEach((m) => {
+    const item = { ...m };
+    if (m.path && m.component) {
+      if (m.children && m.children.length > 0) {
+        item.children = filterChildrenRouter(m.children);
+      }
+      if (item.meta && item.meta.menuType === MAIN_DIRECTORY_VALUE && item.children && item.children.length > 0) {
+        filterList.push(item);
+      }
+      if (item.meta && item.meta.menuType === MENU_VALUE) {
+        filterList.push(item);
+      }
+    }
+  });
+  return filterList;
+};
+
+/**
+ * @description: 处理路由表
+ * @param routerMap
  */
 export const routerScreen = (routerMap: ApiMenuItem[]): AppRouteRecordRaw[] => {
-  return routerGenerator(
-    routerMap
-      .map((m) => {
+  return filterChildrenRouter(
+    routerGenerator(
+      routerMap.map((m) => {
         const path = pathFormat(m);
         const component = formatRouteComponent(m.component, m.iframeSrc);
         return {
@@ -123,13 +145,12 @@ export const routerScreen = (routerMap: ApiMenuItem[]): AppRouteRecordRaw[] => {
           component,
         };
       })
-      // 判断连接，组件页面是否为空
-      .filter((f) => f.path && f.component)
+    )
   );
 };
 
 /**
- * 排除Router
+ * @description: 排除Router
  * */
 export const filterRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
   return routerMap.filter((item) => {
@@ -166,7 +187,7 @@ export const generatorMenu = (list: AppRouteRecordRaw[]): NaiveMenuOption[] => {
 };
 
 /**
- * 混合菜单获取对应的菜单
+ * @description: 混合菜单获取对应的菜单
  * */
 export function getChildrenMix(newArr: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] {
   const firstRouter: NaiveMenuOption[] = [];
@@ -196,7 +217,7 @@ export function getChildrenMix(newArr: AppRouteRecordRaw[], routerName: string):
 }
 
 /**
- * 混合菜单获取对应的整体菜单
+ * @description: 混合菜单获取对应的整体菜单
  * */
 export function getCurrentChildrenMix(newArr: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] {
   const firstRouter: NaiveMenuOption[] = [];

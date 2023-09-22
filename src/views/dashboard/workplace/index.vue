@@ -19,10 +19,10 @@
   // const cardHeaderStyle = ref({ 'border-bottom': '1px solid #eee', 'font-size': '16px' });
 
   const loading = ref(false);
-  const visits = ref({}) as any;
-  const saleroom = ref({}) as any;
-  const orderLarge = ref({}) as any;
-  const volume = ref({}) as any;
+  const visits = ref({}) as { dayVisits?: number; rise?: number; decline?: number; amount?: number };
+  const saleroom = ref({}) as { weekSaleroom?: number; degree?: number; amount?: number; weekLarge?: number };
+  const orderLarge = ref({}) as { weekLarge?: number; rise?: number; amount?: number };
+  const volume = ref({}) as { amount?: number; weekLarge?: number; rise?: number; decline?: number };
 
   // 图标列表
   const iconList = [

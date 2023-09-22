@@ -9,7 +9,7 @@ import { RouteItem } from '/#/router';
 import { CloseOutlined, ColumnWidthOutlined, MinusOutlined, ReloadOutlined, renderIcon } from '@/utils';
 
 /* 处理tabsView */
-export const useTabsView = () => {
+export const useLayoutTagsView = () => {
   const { getIsDarkTheme, getAppTheme, getHeaderSetting, getMultiTabsSetting } = useSetting();
 
   const message = useMessage();
@@ -17,8 +17,8 @@ export const useTabsView = () => {
   const router = useRouter();
   const tabsViewStore = useTabsViewStore();
   const routeStore = useRouteStore();
-  const navScroll: any = ref(null);
-  const navWrap: any = ref(null);
+  const navScroll = ref();
+  const navWrap = ref();
   const isCurrent = ref(false);
 
   const state = reactive({
@@ -100,7 +100,7 @@ export const useTabsView = () => {
   };
 
   // 标签页列表
-  const tabsList: any = computed(() => tabsViewStore.tabsList);
+  const tabsList = computed<RouteItem[]>(() => tabsViewStore.tabsList);
 
   const whiteList: string[] = [PAGE_ENUM.LOGIN_NAME, PAGE_ENUM.REDIRECT_NAME, PAGE_ENUM.ERROR_PAGE_NAME];
 
@@ -286,7 +286,7 @@ export const useTabsView = () => {
   function closeTabItem(e: RouteItem) {
     const { fullPath } = e;
     const routeInfo = tabsList.value.find((item: RouteItem) => item.fullPath == fullPath);
-    removeTab(routeInfo);
+    if (routeInfo) removeTab(routeInfo);
   }
 
   onMounted(() => {

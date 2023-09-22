@@ -37,28 +37,28 @@ export interface CUserConfigInfo {
 }
 
 // 用户信息
-export interface CUserInfo {
-  avatar: string;
-  loginDate: string;
-  nickname: string;
-  roleCode: string;
-  roleName: string;
-  userId: string;
-  username: string;
-}
+// export interface CUserInfo {
+//   avatar: string;
+//   loginDate: string;
+//   nickname: string;
+//   roleCode: string;
+//   roleName: string;
+//   userId: string;
+//   username: string;
+// }
 
 // 用户全局配置
-export interface CUserState {
-  token: string;
-  info: CUserInfo;
-  // configInfo: CUserConfigInfo;
-}
+// export interface CUserState {
+//   token: string;
+//   info: CUserInfo;
+//   // configInfo: CUserConfigInfo;
+// }
 
 // 登录传参
-export interface CLoginFormState {
-  username: string;
-  password: string;
-}
+// export interface CLoginFormState {
+//   username: string;
+//   password: string;
+// }
 
 // 下拉选择器的参数
 export interface CNumOption {

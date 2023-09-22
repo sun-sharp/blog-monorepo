@@ -1,5 +1,5 @@
 import { useUserStoreWidthOut } from '@/store';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosHeaderValue, AxiosInstance, AxiosResponse, HeadersDefaults } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
 import { formatRequestDate, isEmpty, isString, joinTimestamp } from '@/utils';
 import { APP_ENV_CONFIG, RESULT_ENUM } from '@/constant';
@@ -85,7 +85,11 @@ export class CustomAxios {
   /**
    * @description: 设置通用header
    */
-  setHeader(headers: any): void {
+  setHeader(
+    headers: HeadersDefaults & {
+      [key: string]: AxiosHeaderValue;
+    }
+  ): void {
     if (!this.axiosInstance) {
       return;
     }

@@ -27,7 +27,7 @@
   });
 
   // 点击跳转页面
-  const toNestRouter = (item: { name: any }) => {
+  const toNestRouter = (item: { name: string }) => {
     router
       .push({
         name: item.name,
