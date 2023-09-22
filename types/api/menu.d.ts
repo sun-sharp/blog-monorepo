@@ -38,8 +38,8 @@ export interface ApiMenu {
  * @description: 获取菜单列表传参
  */
 export interface ApiMenuFindAllParams {
-  name: string;
-  title: string;
+  name?: string;
+  title?: string;
 }
 
 /**
@@ -56,3 +56,11 @@ export interface ApiMenuUpdateData extends ApiMenuSaveData, ApiMenuId {}
  * @description: 菜单的列表每项
  */
 export interface ApiMenuItem extends ApiMenu, ApiMenuId {}
+
+/**
+ * @description: 菜单的列表每项
+ */
+export interface ApiLevelMenuItem extends ApiMenuItem {
+  children?: ApiLevelMenuItem[];
+  parentName?: string;
+}

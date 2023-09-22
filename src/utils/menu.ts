@@ -1,10 +1,42 @@
 import { IframeComponent, LayoutRouterView } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
-import { ApiMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
 import { MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
+
+/**
+ * 将数组菜单组合成多层菜单
+ */
+export const levelMenu = (menuMap: ApiMenuItem[], parentId: string | number = '0') => {
+  const menuArr: ApiLevelMenuItem[] = [];
+  menuMap.forEach((i) => {
+    const item: ApiLevelMenuItem = i;
+    // 查找上级菜单
+    const menuFind = menuMap.find((f) => f.menuId === item.parentId);
+    if (item.parentId === parentId) {
+      // 是否有子菜单，并递归处理
+      const itemChildren = levelMenu(menuMap, item.menuId);
+      if (itemChildren && itemChildren.length > 0) {
+        // 添加子数据
+        item.children = itemChildren;
+      }
+      // 添加上级菜单的名称
+      if (menuFind) {
+        item.parentName = menuFind.title;
+      }
+      menuArr.push(item);
+    } else if (parentId === '0') {
+      // 判断这个菜单是否没有上级
+      if (!menuFind) {
+        item.parentName = '查询的数据没有上级菜单';
+        menuArr.push(item);
+      }
+    }
+  });
+  return menuArr;
+};
 
 /**
  * 对路由的path进行处理
