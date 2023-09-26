@@ -14,7 +14,6 @@
 
   const {
     navMode,
-    mixMenu,
     headerSetting,
     crumbsSetting,
     getInverted,
@@ -35,7 +34,7 @@
 <template>
   <div class="layout-header">
     <!--顶部菜单-->
-    <div v-if="navMode === 'horizontal' || (navMode === 'horizontal-mix' && mixMenu)" class="layout-header-left">
+    <div v-if="navMode === 'horizontal' || navMode === 'horizontal-mix'" class="layout-header-left">
       <div v-if="navMode === 'horizontal'" class="logo">
         <img src="~@/assets/images/common/logo.png" alt="" />
         <h2 v-show="!collapsed" class="title">{{ title }}</h2>

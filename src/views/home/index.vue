@@ -1,15 +1,12 @@
 <script lang="ts" setup>
   import UserInfo from './components/UserInfo.vue';
-  // import WaitForDoList from './components/WaitForDoList.vue';
-  // import { useRouter } from 'vue-router';
-
-  // console.log(useRouter().getRoutes());
+  import WaitForDoList from './components/WaitForDoList.vue';
 </script>
 
 <template>
   <div class="home">
     <user-info class="mr-20" />
-    <!-- <wait-for-do-list /> -->
+    <wait-for-do-list />
   </div>
 </template>
 

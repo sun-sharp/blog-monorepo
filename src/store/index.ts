@@ -6,7 +6,7 @@ export { useLockScreenStore, useLockScreenStoreWidthOut } from './modules/lock-s
 export { useUserStore, useUserStoreWidthOut } from './modules/user';
 export { useRouteStore, useRouteStoreWidthOut } from './modules/route';
 export { useTabsViewStore } from './modules/tabs-view';
-// export { useApiTypeStore } from './modules/api-type';
+export { useApiTypeStore } from './modules/api-type';
 
 const pinia = createPinia();
 
