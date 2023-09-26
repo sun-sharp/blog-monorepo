@@ -284,9 +284,9 @@ export function getCurrentChildrenMix(newArr: AppRouteRecordRaw[], routerName: s
 export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string, mode: string): NaiveMenuOption[] => {
   const cloneListMap = cloneDeep(list);
   if (mode === 'horizontal') {
-    return getChildrenMix(cloneListMap, routerName);
+    return getCurrentChildrenMix(cloneListMap, routerName);
   }
-  return getCurrentChildrenMix(cloneListMap, routerName);
+  return getChildrenMix(cloneListMap, routerName);
 };
 
 /**

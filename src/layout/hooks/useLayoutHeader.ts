@@ -190,7 +190,6 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
     breadcrumbList,
     iconList,
     fullscreenBool,
-    avatar,
     avatarOptions,
     headerSettingRef,
     reloadPage,

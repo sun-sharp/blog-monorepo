@@ -3,7 +3,7 @@ import { CSSProperties, ExtractPropTypes, computed, onMounted, reactive, ref, un
 import { ComponentType, FormActionType, FormSchema, SearchFormProps } from '/#/components/form';
 import { ButtonProps, GridItemProps, GridProps } from 'naive-ui';
 
-// 单管理 新建/修改 传参
+// 表单管理 新建/修改 传参
 export const FormSearchProps = {
   // 标签宽度  固定宽度
   labelWidth: {
@@ -77,11 +77,8 @@ export const FormSearchProps = {
   },
 };
 
-// 单管理 新建/修改 父组件方法
-export const FormSearchEmits = 'submit';
-
 // 表单查询
-export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, emit: (event: typeof FormSearchEmits, ...args: any[]) => void) => {
+export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, emit: (event: 'submit', ...args: any[]) => void) => {
   const formModel = reactive<Recordable>({});
   const schemaRef = ref<Nullable<FormSchema[]>>(null);
   const formElRef = ref<Nullable<FormActionType>>(null);

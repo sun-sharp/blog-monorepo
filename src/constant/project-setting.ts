@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-09-21 10:24:58
+ * @LastEditTime: 2023-09-25 09:44:59
  * @Description: 项目配置
  */
 
@@ -98,19 +98,16 @@ export const animateSetting = [
 // // 可切换每页数量集合
 // export const PAGE_SIZES: number[] = [10, 20, 30, 40, 50, 100];
 
-// /**
-//  * 图片上传配置
-//  */
-// export const componentUpload = {
-//   //考虑接口规范不同
-//   apiSetting: {
-//     // 集合字段名
-//     infoField: 'result',
-//     // 图片地址字段名
-//     imgField: 'url',
-//   },
-//   //最大上传图片大小
-//   maxSize: 2,
-//   //图片上传类型
-//   fileType: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/svg+xml'],
-// };
+/**
+ * 图片上传配置
+ */
+export const COMPONENT_UPLOAD = {
+  // 集合字段名
+  apiInfoField: 'result',
+  // 图片地址字段名
+  apiImgField: 'url',
+  //最大上传图片大小
+  maxSize: 2,
+  //图片上传类型
+  fileType: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/svg+xml'],
+};

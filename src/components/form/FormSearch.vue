@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@/utils';
-  import { FormSearchEmits, FormSearchProps, useFormSearch } from './hooks/useFormSearch';
+  import { FormSearchProps, useFormSearch } from './hooks/useFormSearch';
 
   const props = defineProps(FormSearchProps);
 
-  const emit = defineEmits([FormSearchEmits]);
+  const emit = defineEmits(['submit']);
 
   const { formElRef, formModel, getGrid, getFormBind, getSchema, getSubmitBtnOptions, handleSubmit, getComponentProps, unfoldToggle } = useFormSearch(
     props,
