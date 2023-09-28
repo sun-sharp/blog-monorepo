@@ -8,10 +8,13 @@ $header-text-color: var(--app-header-text-color, #333639);
 
 /* 底部 */
 $footer-height: var(--app-footer-height, 44px);
+$footer-back-color: var(--app-footer-back-color, #fff);
+$footer-text-color: var(--app-footer-text-color, #333639);
 
 /* 标签页 */
 $tabs-view-height: var(--app-tabs-view-height, 44px);
-$tabs-back-color: var(--app-background-color, #f5f7fa);
+$tabs-view-back-color: var(--app-tabs-view-back-color, #e8e8e8);
+$tabs-view-btn-back-color: var(--app-tabs-view-btn-back-color, #fff);
 
 /* 边框 */
 $border-divide-color: var(--app-border-divide-color, #ccc);

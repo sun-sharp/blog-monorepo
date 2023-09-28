@@ -12,37 +12,10 @@
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   // import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const {
-    // getIsDarkTheme,
-    getSiderIsDark,
-    getNavMode,
-    // getHeaderSetting,
-    getMenuSetting,
-    // getMultiTabsSetting,
-    // getIsDarkTheme,
-    // getFooterSetting,
-    getTopBarStyle,
-  } = useSetting();
+  const { getSiderIsDark, getNavMode, getMenuSetting, getTopBarStyle } = useSetting();
 
   const layoutClassName = computed(() => {
     const arr = ['layout-no-sider'];
-    // if (!unref(getIsDarkTheme)) {
-    //   arr.push('layout-default-background');
-    // }
-    // const fixFoot = unref(fixedFoot);
-    // const isFoot = unref(isFooter);
-    // const fixHead = unref(fixedHeader);
-    // const fixMulti = unref(fixedMulti);
-    // if (fixFoot && isFoot) {
-    //   arr.push('layout-fixed--foot');
-    // }
-    // if (fixHead && !fixMulti) {
-    //   arr.push('layout-fixed--head');
-    // } else if (fixHead && fixMulti) {
-    //   arr.push('layout-fixed--head-tabs');
-    // } else if (!fixHead && fixMulti) {
-    //   arr.push('layout-fixed--tabs');
-    // }
     return arr;
   });
 
@@ -61,7 +34,6 @@
 
   // 侧边栏主题
   const siderInverted = computed(() => {
-    // const isDarkTheme = unref(getIsDarkTheme);
     const siderIsDark = unref(getSiderIsDark);
     return siderIsDark;
   });
@@ -171,7 +143,6 @@
 
     &-sider {
       min-height: 100vh;
-      box-shadow: 2px 0 8px 0 rgb(29 35 41 / 5%);
       transition: all 0.2s ease-in-out;
     }
 

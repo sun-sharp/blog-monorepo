@@ -27,8 +27,10 @@ const defaultUserInfo: ApiUserInfo = {
 
 // 默认配置信息
 const defaultConfigInfo: ApiConfigInfo = {
+  // 系统主题
+  appTheme: 'light',
   // 系统主题色
-  appTheme: '#2d8cf0',
+  appThemeColor: '#2d8cf0',
   // 面包屑
   crumbsSetting: {
     // 是否显示
@@ -43,8 +45,6 @@ const defaultConfigInfo: ApiConfigInfo = {
     // 显示重载按钮
     isReload: true,
   },
-  // 深色主题
-  isDarkTheme: false,
   // 是否开启路由动画
   isPageAnimate: true,
   // 菜单

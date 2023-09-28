@@ -28,13 +28,13 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
 
   // 配置信息
   const {
-    getIsDarkTheme,
+    getAppTheme,
+    getAppThemeColor,
     getNavMode,
     getMenuSetting,
     getHeaderSetting,
     getMultiTabsSetting,
     getCrumbsSetting,
-    getAppTheme,
     getIsPageAnimate,
     getPageAnimateType,
     getFooterSetting,
@@ -47,13 +47,13 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     return Object.assign({}, unref(obj));
   };
   const configInfo: ApiConfigInfo = reactive({
-    isDarkTheme: unref(getIsDarkTheme),
+    appTheme: unref(getAppTheme),
+    appThemeColor: unref(getAppThemeColor),
+    navMode: unref(getNavMode),
     menuSetting: copyComputedObj(getMenuSetting),
     headerSetting: copyComputedObj(getHeaderSetting),
     multiTabsSetting: copyComputedObj(getMultiTabsSetting),
     crumbsSetting: copyComputedObj(getCrumbsSetting),
-    appTheme: unref(getAppTheme),
-    navMode: unref(getNavMode),
     isPageAnimate: unref(getIsPageAnimate),
     pageAnimateType: unref(getPageAnimateType),
     footerSetting: unref(getFooterSetting),
@@ -80,14 +80,22 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     });
   };
 
+  // 切换主题 val: ApiAppTheme
+  const togTheme = () => {
+    // if (val === 'light') {
+    //   configInfo.siderIsDark = false;
+    // }
+    drawerSettingSubmit();
+  };
+
   const togNavMode = (mode: string) => {
     configInfo.navMode = mode;
     drawerSettingSubmit();
   };
 
   // 切换主题色
-  const togTheme = (color: string) => {
-    configInfo.appTheme = color;
+  const togThemeColor = (color: string) => {
+    configInfo.appThemeColor = color;
     drawerSettingSubmit();
   };
 
@@ -104,8 +112,9 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     ...toRefs(state),
     ...toRefs(configInfo),
     submitLoading,
-    togNavMode,
     togTheme,
+    togThemeColor,
+    togNavMode,
     openDrawer,
     closeDrawer,
     drawerSettingSubmit,

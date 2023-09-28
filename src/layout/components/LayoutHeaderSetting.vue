@@ -1,16 +1,16 @@
 <script lang="ts" setup>
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
-  import { appThemeList, navModeArr, topBarStyleArr } from '@/constant';
+  import { appThemeList, appThemeColorList, navModeArr, topBarStyleArr } from '@/constant';
   import { LayoutHeaderSettingProps, useLayoutHeaderSetting } from '@/layout/hooks/useLayoutHeaderSetting';
-  import { CSSProperties } from 'vue';
+  // import { CSSProperties } from 'vue';
 
   const props = defineProps(LayoutHeaderSettingProps);
 
   const {
+    appTheme,
+    appThemeColor,
     isDrawer,
     placement,
-    isDarkTheme,
-    appTheme,
     navMode,
     siderIsDark,
     topBarStyle,
@@ -25,19 +25,18 @@
     // footerSetting,
     // togNavTheme,
     submitLoading,
-    switchChange,
     togTheme,
-    togNavMode,
+    togThemeColor,
     radioChange,
-    // selectChange,
+    switchChange,
     openDrawer,
   } = useLayoutHeaderSetting(props);
 
   // 主题按钮样式
-  const themeRailStyle = () => {
-    const style: CSSProperties = { background: '#000e1c' };
-    return style;
-  };
+  // const themeRailStyle = () => {
+  //   const style: CSSProperties = { background: '#000e1c' };
+  //   return style;
+  // };
 
   defineExpose({ openDrawer });
 </script>
@@ -48,37 +47,30 @@
       <div class="drawer">
         <n-divider title-placement="center">系统主题</n-divider>
         <div class="drawer-setting-item justify-center pv-12">
-          <n-tooltip placement="bottom">
-            <template #trigger>
-              <n-switch v-model:value="isDarkTheme" :loading="submitLoading" :rail-style="themeRailStyle" @update:value="switchChange">
-                <template #checked>
-                  <n-icon size="14" color="#ffce00">
-                    <SunnySharp />
-                  </n-icon>
-                </template>
-                <template #unchecked>
-                  <n-icon size="14" color="#ffce00">
-                    <Moon />
-                  </n-icon>
-                </template>
-              </n-switch>
-            </template>
-            <span>{{ isDarkTheme ? '深' : '浅' }}色主题</span>
-          </n-tooltip>
+          <n-radio-group v-model:value="appTheme" name="radiogroup" @update:value="togTheme">
+            <n-space>
+              <n-radio v-for="(item, index) in appThemeList" :key="index" :value="item.value">{{ item.label }}</n-radio>
+            </n-space>
+          </n-radio-group>
         </div>
 
         <n-divider title-placement="center">系统主题色</n-divider>
         <div class="drawer-setting-item justify-between pv-2">
-          <span v-for="(item, index) in appThemeList" :key="index" class="theme-item" :style="{ 'background-color': item }" @click="togTheme(item)">
-            <n-icon v-if="item === appTheme" size="12">
+          <span v-for="(item, index) in appThemeColorList" :key="index" class="theme-item" :style="{ 'background-color': item }" @click="togThemeColor(item)">
+            <n-icon v-if="item === appThemeColor" size="12">
               <CheckOutlined />
             </n-icon>
           </span>
         </div>
 
-        <n-divider title-placement="center">导航栏模式</n-divider>
-        <div class="drawer-setting-item justify-between pv-2">
-          <div v-for="(item, index) in navModeArr" :key="index" class="drawer-setting-item-style">
+        <n-divider title-placement="center">菜单模式</n-divider>
+        <div class="drawer-setting-item justify-center pv-2">
+          <n-radio-group v-model:value="navMode" name="radiogroup" @update:value="radioChange">
+            <n-space>
+              <n-radio v-for="(item, index) in navModeArr" :key="index" :value="item.name">{{ item.title }}</n-radio>
+            </n-space>
+          </n-radio-group>
+          <!-- <div v-for="(item, index) in navModeArr" :key="index" class="drawer-setting-item-style">
             <n-tooltip placement="top">
               <template #trigger>
                 <img class="drawer-setting-item-image" :src="item.image" :alt="item.title" @click="togNavMode(item.name)" />
@@ -86,7 +78,7 @@
               <span>{{ item.title }}</span>
             </n-tooltip>
             <n-badge class="drawer-setting-item-dot" dot :color="navMode === item.name ? '#19be6b' : '#fff'" />
-          </div>
+          </div> -->
         </div>
 
         <n-divider title-placement="center">导航栏风格</n-divider>
@@ -115,7 +107,7 @@
         <!-- <div class="drawer-setting-item-title">侧边栏样式</div>
         <div class="pv-10 pl-20"></div> -->
 
-        <div class="drawer-setting-item-title">顶栏栏样式</div>
+        <div class="drawer-setting-item-title">顶栏样式</div>
         <div class="pv-10 pl-20">
           <n-radio-group v-model:value="topBarStyle" name="radiogroup" @update:value="radioChange">
             <n-space>

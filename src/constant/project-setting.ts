@@ -1,53 +1,45 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-09-26 11:15:06
+ * @LastEditTime: 2023-09-28 17:07:47
  * @Description: 项目配置
  */
 
 import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
-import navHorizontalImage from '@/assets/images/setting/nav-horizontal.svg';
-import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
+// import navHorizontalImage from '@/assets/images/setting/nav-horizontal.svg';
+// import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
 import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
 import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
+import { ApiAppTheme } from '/#/api/configuration';
+import { CTypeOption } from '/#/config';
 
-// 系统内置主题色列表
-export const appThemeList: string[] = [
-  '#2d8cf0',
-  '#0960bd',
-  '#0084f4',
-  '#009688',
-  '#536dfe',
-  '#ff5c93',
-  '#ee4f12',
-  '#0096c7',
-  '#9c27b0',
-  '#ff9800',
-  '#FF3D68',
-  '#00C1D4',
-  '#71EFA3',
-  '#171010',
-  '#78DEC7',
-  '#1768AC',
-  '#FB9300',
-  '#FC5404',
+// 系统主题类型列表
+export const appThemeList: CTypeOption<ApiAppTheme>[] = [
+  {
+    label: '浅色',
+    value: 'light',
+  },
+  {
+    label: '深色',
+    value: 'dark',
+  },
 ];
 
-// 切换导航栏模式
+// 系统内置主题色列表
+export const appThemeColorList: string[] = ['#2d8cf0', '#009688', '#536dfe', '#ff5c93', '#ee4f12', '#0096c7', '#9c27b0', '#ff9800', '#FF3D68'];
+
+// 切换菜单模式
 export const navModeArr = [
   {
     title: '左侧菜单模式',
     name: 'vertical',
-    image: navThemeDarkImage,
   },
   {
     title: '顶部菜单模式',
     name: 'horizontal',
-    image: navHorizontalImage,
   },
   {
     title: '顶部菜单混合模式',
     name: 'horizontal-mix',
-    image: navHorizontalMixImage,
   },
 ];
 

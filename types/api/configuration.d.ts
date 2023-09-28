@@ -7,6 +7,13 @@
 export type ApiConfNavMode = 'vertical' | 'horizontal' | 'horizontal-mix';
 
 /**
+ * @description: 系统主题
+ * dark 深色
+ * light 浅色
+ */
+export type ApiAppTheme = 'light' | 'dark';
+
+/**
  * @description: 设置的id
  */
 export interface ApiImageId {
@@ -76,10 +83,10 @@ export interface ApiConfFooterSetting {
 export interface ApiConfiguration {
   // 用户id
   userId: string;
-  // 深色主题
-  isDarkTheme: boolean;
+  // 系统主题
+  appTheme: ApiAppTheme;
   // 系统主题色
-  appTheme: string;
+  appThemeColor: string;
   // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
   navMode: string;
   // 侧边栏深色主题

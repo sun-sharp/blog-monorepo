@@ -21,14 +21,13 @@
     width: 100%;
     height: $footer-height;
     padding: 0;
-    color: #a5a4a4;
+    color: $footer-text-color;
     font-size: 14px;
-    background: #333;
-    box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
+    background: $footer-back-color;
     transition: all 0.2s ease-in-out;
 
     a {
-      color: #a5a4a4;
+      color: $footer-text-color;
     }
   }
 </style>

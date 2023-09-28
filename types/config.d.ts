@@ -10,14 +10,20 @@ export interface GlobConfig {
   tokenHead?: string;
 }
 
-// 下拉选择器的参数
+// 选择数字的参数
 export interface CNumOption {
   value: number;
   label: string;
 }
 
-// 下拉选择器的参数
+// 选择字符串的参数
 export interface CStrOption {
   value: string;
+  label: string;
+}
+
+// 选择的参数
+export interface CTypeOption<T> {
+  value: T;
   label: string;
 }

@@ -21,18 +21,11 @@
     scrollPrev,
     handleContextMenu,
     onClickOutside,
-    getIsDarkTheme,
   } = useLayoutTagsView();
 </script>
 
 <template>
-  <div
-    class="layout-tabs-view"
-    :class="{
-      'layout-tabs-view-default-background': getIsDarkTheme === false,
-      'layout-tabs-view-dark-background': getIsDarkTheme === true,
-    }"
-  >
+  <div class="layout-tabs-view">
     <div class="layout-tabs-view-main">
       <div ref="navWrap" class="tabs-card" :class="{ 'tabs-card-scrollable': scrollable }">
         <span class="tabs-card-prev" :class="{ 'tabs-card-prev-hide': !scrollable }" @click="scrollPrev">
@@ -92,6 +85,8 @@
     align-items: center;
     width: 100%;
     height: $tabs-view-height;
+    padding: 0 5px;
+    background-color: $tabs-view-back-color;
     transition: all 0.2s ease-in-out;
 
     &-main {
@@ -99,8 +94,6 @@
       min-width: 100%;
       max-width: 100%;
       height: 32px;
-
-      // padding: 0 10px;
 
       .tabs-card {
         position: relative;
@@ -152,7 +145,7 @@
             margin-right: 6px;
             padding: 6px 16px 4px;
             color: $font-color;
-            background: $tabs-back-color;
+            background: $tabs-view-btn-back-color;
             border-radius: 3px;
             cursor: pointer;
 
@@ -165,25 +158,6 @@
             &:hover {
               color: #515a6e;
             }
-
-            // .n-icon {
-            //   position: relative;
-            //   width: 21px;
-            //   height: 22px;
-            //   margin-right: -6px;
-            //   color: #808695;
-            //   text-align: center;
-            //   vertical-align: middle;
-
-            //   &:hover {
-            //     color: #515a6e !important;
-            //   }
-
-            //   svg {
-            //     display: inline-block;
-            //     height: 21px;
-            //   }
-            // }
           }
 
           .active-item {
@@ -205,7 +179,7 @@
       padding: 0 15px;
       line-height: 32px;
       text-align: center;
-      background: $tabs-back-color;
+      background: $tabs-view-btn-back-color;
       border-radius: 2px;
       cursor: pointer;
 
@@ -217,24 +191,5 @@
         color: $font-color;
       }
     }
-  }
-
-  .layout-tabs-view-default-background {
-    background: #efeeee;
-  }
-
-  .layout-tabs-view-dark-background {
-    background: #101014;
-  }
-
-  .layout-tabs-view-fix {
-    position: fixed;
-    left: 200px;
-    z-index: 5;
-    padding: 6px 19px 6px 10px;
-  }
-
-  .layout-tabs-view-fixed-header {
-    top: 0;
   }
 </style>

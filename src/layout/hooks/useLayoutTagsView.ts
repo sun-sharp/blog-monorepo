@@ -10,7 +10,7 @@ import { CloseOutlined, ColumnWidthOutlined, MinusOutlined, ReloadOutlined, rend
 
 /* 处理tabsView */
 export const useLayoutTagsView = () => {
-  const { getIsDarkTheme, getAppTheme, getHeaderSetting, getMultiTabsSetting } = useSetting();
+  const { getHeaderSetting, getMultiTabsSetting } = useSetting();
 
   const message = useMessage();
   const route = useRoute();
@@ -318,7 +318,5 @@ export const useLayoutTagsView = () => {
     scrollPrev,
     handleContextMenu,
     onClickOutside,
-    getIsDarkTheme,
-    get_app_theme: getAppTheme,
   };
 };
