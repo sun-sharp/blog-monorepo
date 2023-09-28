@@ -1,8 +1,7 @@
 /**
  * @description: 将通过的百分比与十六进制颜色的R、G或B相加
- * @param {string} color The color to change
- * @param {number} amount The amount to change the color by
- * @returns {string} The processed part of the color
+ * @param {string} color 需更改的颜色
+ * @param {number} amount 需更改的颜色
  */
 const addLight = (color: string, amount: number): string => {
   const cc = parseInt(color, 16) + amount;
@@ -12,9 +11,9 @@ const addLight = (color: string, amount: number): string => {
 
 /**
  * @description: 根据通过的百分比点亮6字符十六进制颜色
- * @param {string} color The color to change
- * @param {number} amount The amount to change the color by
- * @returns {string} The processed color represented as HEX
+ * @param {string} color 需更改的颜色
+ * @param {number} amount 替换成接近的颜色数值
+ * @returns {string} 理后的颜色表示为HEX
  */
 export const lighten = (color: string, amount: number): string => {
   color = color.indexOf('#') >= 0 ? color.substring(1, color.length) : color;
