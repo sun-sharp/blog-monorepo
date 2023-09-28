@@ -13,7 +13,7 @@ export const useAppProvider = () => {
   const getThemeOverrides = computed(() => {
     const appTheme = unref(getAppTheme);
     const lightenStr = lighten(appTheme, 6);
-    console.log(unref(getIsDarkTheme), JSON.stringify(darkTheme));
+    console.log(unref(getIsDarkTheme), darkTheme, JSON.stringify(darkTheme.Alert.common));
 
     return {
       common: {
