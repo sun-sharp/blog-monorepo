@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN, APP_ENV_CONFIG, PAGE_ENUM } from '@/constant';
-import { useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
+import { useLockScreenStoreWidthOut, useRouteStoreWidthOut, useUserStoreWidthOut } from '@/store';
 import { storage } from '@/utils';
 import { RouteRecordRaw, Router } from 'vue-router';
 
@@ -12,6 +12,7 @@ const whitePathList = [LOGIN_PATH]; // 白名单中的重定向
 export function createRouterGuards(router: Router) {
   const userStore = useUserStoreWidthOut();
   const routeStore = useRouteStoreWidthOut();
+  const useLockScreen = useLockScreenStoreWidthOut();
   router.beforeEach(async (to, from, next) => {
     const Loading = win['$loading'] || null;
     Loading && Loading.start();
@@ -22,7 +23,10 @@ export function createRouterGuards(router: Router) {
     // 可以直接输入白名单
     if (whitePathList.includes(to.path)) {
       // 如果去登录页，那么删除token
-      if (to.path === LOGIN_PATH) userStore.setToken('');
+      if (to.path === LOGIN_PATH) {
+        userStore.logout();
+        useLockScreen.setLock(false);
+      }
       next();
       return;
     }

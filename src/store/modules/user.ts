@@ -3,11 +3,12 @@ import { defineStore } from 'pinia';
 import { storage } from '@/utils';
 import { store } from '@/store';
 import { ACCESS_TOKEN, APP_ENV_CONFIG, CURRENT_USER, IS_LOCK_SCREEN, RESULT_ENUM, USER_CONFIG } from '@/constant';
-import { capitalApi, configurationApi, userApi } from '@/api';
 import {
-  UserState,
-  // CUserConfigInfo
-} from '/#/store';
+  capitalApi,
+  // configurationApi,
+  userApi,
+} from '@/api';
+import { UserState } from '/#/store';
 import { ApiCapitalLoginData, ApiCapitalLoginResult } from '/#/api/capital';
 import { ApiUserInfo } from '/#/api/user';
 import { ApiResponse } from '/#/api/common';
@@ -68,8 +69,6 @@ const defaultConfigInfo: ApiConfigInfo = {
   },
   // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
   navMode: 'vertical',
-  // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
-  navTheme: 'dark',
   // 路由动画类型
   pageAnimateType: 'zoom-fade',
   // 底部
@@ -79,6 +78,10 @@ const defaultConfigInfo: ApiConfigInfo = {
     //固定底部
     fixed: true,
   },
+  // 侧边栏样式
+  siderIsDark: true,
+  // 顶栏样式
+  topBarStyle: 'light',
 };
 
 export const useUserStore = defineStore({
@@ -140,11 +143,12 @@ export const useUserStore = defineStore({
     // 获取用户配置
     async GetConfigInfo() {
       const self = this;
-      const [err, resp] = await at(configurationApi.getConfigInfo());
-      if (err || !resp) return false;
+      // const [err, resp] = await at(configurationApi.getConfigInfo());
+      // if (err || !resp) return;
+      const resp = defaultConfigInfo;
       storage.set(USER_CONFIG, resp);
       self.setConfigInfo(resp);
-      return resp;
+      return;
     },
     // 登出
     logout() {

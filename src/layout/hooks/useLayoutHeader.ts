@@ -24,7 +24,7 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
   const useLockScreen = useLockScreenStore();
   const message = useMessage();
   const dialog = useDialog();
-  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useSetting();
+  const { getNavMode, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useSetting();
 
   const { username, avatar } = userStore?.info || {};
 
@@ -36,15 +36,11 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
     username: username || '',
     avatar: getImgUrl(avatar) || '',
     navMode: getNavMode,
-    navTheme: getNavTheme,
     headerSetting: getHeaderSetting,
     crumbsSetting: getCrumbsSetting,
   });
 
-  const getInverted = computed(() => {
-    const navTheme = unref(getNavTheme);
-    return ['light', 'header-dark'].includes(navTheme) ? props.inverted : !props.inverted;
-  });
+  const getInverted = computed(() => props.inverted);
 
   const mixMenu = computed(() => {
     return unref(getMenuSetting).mixMenu;
@@ -55,7 +51,7 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
 
   const generator = (routerMap: RouteLocationMatched[] | RouteRecordRaw[]): HeaderBreadcrumbItem[] => {
     return routerMap
-      .filter((f) => f.path !== PAGE_ENUM.PAGE_PATH)
+      .filter((f) => f.path !== PAGE_ENUM.PAGE_PATH && f.path !== '/')
       .map((item) => {
         const currentMenu: HeaderBreadcrumbItem = {
           icon: item?.meta?.icon,

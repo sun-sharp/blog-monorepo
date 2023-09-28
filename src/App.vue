@@ -1,53 +1,19 @@
-<template>
-  <app-provider v-if="!isLock">
-    <router-view />
-  </app-provider>
-
-  <transition v-if="isLock && $route.name !== 'login'" name="slide-up">
-    <app-lock-screen />
-  </transition>
-</template>
-
 <script lang="ts" setup>
-  import { onMounted, onUnmounted, computed } from 'vue';
   import AppLockScreen from '@/components/app/lock-screen/AppLockScreen.vue';
   import AppProvider from '@/components/app/provider/AppProvider.vue';
-  import { useRoute } from 'vue-router';
-  import { useLockScreenStore } from '@/store';
+  import { useApp } from '@/hooks';
 
-  const route = useRoute();
-  const useLockScreen = useLockScreenStore();
-  const isLock = computed<boolean>(() => useLockScreen.isLock);
-  const lockTime = computed(() => useLockScreen.lockTime);
-
-  // 设置锁屏
-  let timer: IntervalHandle;
-  const timekeeping = () => {
-    clearInterval(timer);
-    if (route.name == 'login' || isLock.value) return;
-    // 设置不锁屏
-    useLockScreen.setLock(false);
-    // 重置锁屏时间
-    useLockScreen.setLockTime();
-    timer = setInterval(() => {
-      // 锁屏倒计时递减
-      useLockScreen.setLockTime(lockTime.value - 1);
-      if (lockTime.value <= 0) {
-        // 设置锁屏
-        useLockScreen.setLock(true);
-        return clearInterval(timer);
-      }
-    }, 1000);
-  };
-
-  onMounted(() => {
-    document.addEventListener('mousedown', timekeeping);
-  });
-
-  onUnmounted(() => {
-    document.removeEventListener('mousedown', timekeeping);
-  });
+  const { isLock } = useApp();
 </script>
+
+<template>
+  <app-provider>
+    <transition v-if="isLock" name="slide-up">
+      <app-lock-screen />
+    </transition>
+    <router-view v-else />
+  </app-provider>
+</template>
 
 <style lang="scss">
   @import 'styles/index';

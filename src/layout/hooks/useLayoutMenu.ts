@@ -16,6 +16,11 @@ export const LayoutMenuProps = {
     // 侧边栏菜单是否收起
     type: Boolean,
   },
+  inverted: {
+    // 菜单主题
+    type: Boolean,
+    default: true,
+  },
 };
 
 /* 处理LayoutMenu */
@@ -27,7 +32,7 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
   const menus = ref<NaiveMenuOption[]>([]);
   const selectedKeys = ref<string>(currentRoute.name as string);
 
-  const { getNavMode, getNavTheme } = useSetting();
+  const { getNavMode } = useSetting();
 
   // 获取当前打开的子菜单
   const matched = currentRoute.matched;
@@ -36,9 +41,7 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
 
   const openKeys = ref(getOpenKeys);
 
-  const inverted = computed(() => {
-    return ['dark', 'header-dark'].includes(unref(getNavTheme));
-  });
+  const getInverted = computed(() => props.inverted);
 
   // 监听导航栏模式切换
   watch(
@@ -108,9 +111,9 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
 
   return {
     menus,
-    inverted,
     selectedKeys,
     openKeys,
+    getInverted,
     menuExpanded,
     clickMenuItem,
   };

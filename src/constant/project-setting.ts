@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-09-25 09:44:59
+ * @LastEditTime: 2023-09-26 11:15:06
  * @Description: 项目配置
  */
 
@@ -111,3 +111,27 @@ export const COMPONENT_UPLOAD = {
   //图片上传类型
   fileType: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/svg+xml'],
 };
+
+// 设置导航风格
+export const sidebarStyleArr = [
+  {
+    title: '暗',
+    name: 'dark',
+  },
+  {
+    title: '白',
+    name: 'light',
+  },
+];
+
+// 设置导航风格
+export const topBarStyleArr = [
+  {
+    title: '暗',
+    name: 'dark',
+  },
+  {
+    title: '白',
+    name: 'light',
+  },
+];

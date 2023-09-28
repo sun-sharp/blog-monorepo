@@ -1,22 +1,27 @@
 <script lang="ts" setup>
   import { computed, ref, unref } from 'vue';
-  import { useSearch, useSetting } from '@/hooks';
+  import {
+    // useSearch,
+    useSetting,
+  } from '@/hooks';
   import LayoutLogo from '@/layout/components/LayoutLogo.vue';
   import LayoutMenu from '@/layout/components/LayoutMenu.vue';
   import LayoutHeader from '@/layout/components/LayoutHeader.vue';
   import LayoutTabsView from '@/layout/components/LayoutTagsView.vue';
-  import LayoutMain from '@/layout/components/LayoutMain.vue';
+  // import LayoutMain from '@/layout/components/LayoutMain.vue';
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
-  import LayoutSearch from '@/layout/components/LayoutSearch.vue';
+  // import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
   const {
+    // getIsDarkTheme,
+    getSiderIsDark,
     getNavMode,
-    getNavTheme,
     // getHeaderSetting,
     getMenuSetting,
     // getMultiTabsSetting,
     // getIsDarkTheme,
     // getFooterSetting,
+    getTopBarStyle,
   } = useSetting();
 
   const layoutClassName = computed(() => {
@@ -54,12 +59,28 @@
     return true;
   });
 
-  // 菜单主题
-  const inverted = computed(() => {
-    return ['dark', 'header-dark'].includes(unref(getNavTheme));
+  // 侧边栏主题
+  const siderInverted = computed(() => {
+    // const isDarkTheme = unref(getIsDarkTheme);
+    const siderIsDark = unref(getSiderIsDark);
+    return siderIsDark;
   });
 
+  // 顶部样式
+  // const headerStyle = computed(() => {
+  //   const topBarStyle = unref(getTopBarStyle) === 'dark';
+  //   const backColor = topBarStyle ? '#001428' : '#fff';
+  //   const textColor = topBarStyle ? '#fff' : '#333639';
+  //   return {
+  //     '--app-header-back-color': backColor,
+  //     '--app-header-text-color': textColor,
+  //   };
+  // });
+
   // 标题主题
+  const getHeaderInverted = computed(() => {
+    return unref(getTopBarStyle) === 'dark';
+  });
   // const getHeaderInverted = computed(() => {
   //   const navTheme = unref(getNavTheme);
   //   return ['light', 'header-dark'].includes(navTheme) ? unref(inverted) : !unref(inverted);
@@ -106,21 +127,25 @@
       :collapsed-width="64"
       :collapsed="collapsed"
       :native-scrollbar="false"
-      :inverted="inverted"
+      :inverted="siderInverted"
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
       <layout-logo :collapsed="collapsed" />
-      <layout-menu v-model:collapsed="collapsed" />
+      <layout-menu v-model:collapsed="collapsed" :inverted="siderInverted" />
     </n-layout-sider>
     <section :class="layoutClassName">
-      <header class="lnf-header">
-        <layout-header v-model:collapsed="collapsed" :inverted="inverted" />
+      <!-- <header class="lnf-header" :style="headerStyle" :inverted="getHeaderInverted">
+        <layout-header v-model:collapsed="collapsed" :inverted="getHeaderInverted" />
         <layout-tabs-view v-if="isMultiTabs" />
-      </header>
+      </header> -->
+      <n-layout-header class="lnf-header" :inverted="getHeaderInverted">
+        <layout-header v-model:collapsed="collapsed" :inverted="getHeaderInverted" />
+        <layout-tabs-view v-if="isMultiTabs" />
+      </n-layout-header>
 
       <main class="lnf-content">
-        <transition name="searchView">
+        <!-- <transition name="searchView">
           <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
         </transition>
 
@@ -130,7 +155,7 @@
           </div>
         </transition>
 
-        <n-back-top :right="70" :bottom="70" />
+        <n-back-top :right="70" :bottom="70" /> -->
       </main>
 
       <footer v-if="isFooter" class="lnf-footer">
@@ -161,6 +186,9 @@
 
     .lnf-header {
       width: 100%;
+
+      // color: $header-text-color;
+      // background-color: $header-back-color;
     }
 
     .lnf-content {

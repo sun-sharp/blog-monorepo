@@ -1,20 +1,11 @@
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
-import {
-  ApiConfCrumbsSetting,
-  ApiConfFooterSetting,
-  ApiConfHeaderSetting,
-  ApiConfMenuSetting,
-  ApiConfMultiTabsSetting,
-  ApiConfNavMode,
-} from '/#/api/configuration';
+import { ApiConfCrumbsSetting, ApiConfFooterSetting, ApiConfHeaderSetting, ApiConfMenuSetting, ApiConfMultiTabsSetting } from '/#/api/configuration';
 
 export const useSetting = () => {
   const userStore = useUserStore();
 
-  const getNavMode = computed<ApiConfNavMode>(() => userStore.getConfigInfo.navMode);
-
-  const getNavTheme = computed<string>(() => userStore.getConfigInfo.navTheme);
+  const getNavMode = computed<string>(() => userStore.getConfigInfo.navMode);
 
   const getHeaderSetting = computed<ApiConfHeaderSetting>(() => userStore.getConfigInfo.headerSetting);
 
@@ -34,9 +25,12 @@ export const useSetting = () => {
 
   const getFooterSetting = computed<ApiConfFooterSetting>(() => userStore.getConfigInfo.footerSetting);
 
+  const getSiderIsDark = computed<boolean>(() => userStore.getConfigInfo.siderIsDark);
+
+  const getTopBarStyle = computed<string>(() => userStore.getConfigInfo.topBarStyle);
+
   return {
     getNavMode,
-    getNavTheme,
     getHeaderSetting,
     getMultiTabsSetting,
     getMenuSetting,
@@ -46,5 +40,7 @@ export const useSetting = () => {
     getPageAnimateType,
     getIsDarkTheme,
     getAppTheme,
+    getSiderIsDark,
+    getTopBarStyle,
   };
 };

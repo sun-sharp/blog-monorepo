@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :style="getThemeStyle" :locale="zhCN" :theme="getTheme" :theme-overrides="getThemeOverrides" :date-locale="dateZhCN">
+  <n-config-provider :style="getThemeStyle" :locale="zhCN" :theme-overrides="getThemeOverrides" :date-locale="dateZhCN">
     <n-loading-bar-provider>
       <app-provider-loading />
       <n-dialog-provider>
@@ -32,6 +32,8 @@
   const getThemeOverrides = computed(() => {
     const appTheme = unref(getAppTheme);
     const lightenStr = lighten(appTheme, 6);
+    console.log(unref(getIsDarkTheme), darkTheme);
+
     return {
       common: {
         primaryColor: appTheme,
@@ -41,11 +43,27 @@
       LoadingBar: {
         colorLoading: appTheme,
       },
+      Switch: {
+        primaryColor: appTheme,
+      },
     };
   });
 
   // 获取主题样式
-  const getTheme = computed(() => (unref(getIsDarkTheme) ? darkTheme : undefined));
+  // const getTheme = computed(() => {
+  //   if (unref(getIsDarkTheme)) {
+  //     console.log(unref(getIsDarkTheme), {
+  //       ...darkTheme,
+  //       // ...unref(getThemeOverrides),
+  //     });
+
+  //     return {
+  //       ...unref(getThemeOverrides),
+  //       ...darkTheme,
+  //     };
+  //   }
+  //   return undefined;
+  // });
 
   // 设置主题style
   const getThemeStyle = computed(() => {

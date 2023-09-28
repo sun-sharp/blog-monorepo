@@ -5,13 +5,13 @@
 
   const emit = defineEmits(['update:collapsed']);
 
-  const { menus, inverted, openKeys, selectedKeys, menuExpanded, clickMenuItem } = useLayoutMenu(props, emit);
+  const { menus, getInverted, openKeys, selectedKeys, menuExpanded, clickMenuItem } = useLayoutMenu(props, emit);
 </script>
 
 <template>
   <n-menu
     :options="menus"
-    :inverted="inverted"
+    :inverted="getInverted"
     :mode="mode"
     :collapsed="collapsed"
     :collapsed-width="64"

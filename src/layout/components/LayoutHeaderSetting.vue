@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
-  import { appThemeList, navModeArr } from '@/constant';
+  import { appThemeList, navModeArr, topBarStyleArr } from '@/constant';
   import { LayoutHeaderSettingProps, useLayoutHeaderSetting } from '@/layout/hooks/useLayoutHeaderSetting';
   import { CSSProperties } from 'vue';
 
@@ -12,6 +12,8 @@
     isDarkTheme,
     appTheme,
     navMode,
+    siderIsDark,
+    topBarStyle,
     // navTheme,
     // navThemeArr,
     // menuSetting,
@@ -26,6 +28,7 @@
     switchChange,
     togTheme,
     togNavMode,
+    radioChange,
     // selectChange,
     openDrawer,
   } = useLayoutHeaderSetting(props);
@@ -43,7 +46,7 @@
   <n-drawer v-model:show="isDrawer" :width="width" :placement="placement">
     <n-drawer-content :title="title">
       <div class="drawer">
-        <n-divider title-placement="center">主题</n-divider>
+        <n-divider title-placement="center">系统主题</n-divider>
         <div class="drawer-setting-item justify-center pv-12">
           <n-tooltip placement="bottom">
             <template #trigger>
@@ -64,7 +67,7 @@
           </n-tooltip>
         </div>
 
-        <n-divider title-placement="center">系统主题</n-divider>
+        <n-divider title-placement="center">系统主题色</n-divider>
         <div class="drawer-setting-item justify-between pv-2">
           <span v-for="(item, index) in appThemeList" :key="index" class="theme-item" :style="{ 'background-color': item }" @click="togTheme(item)">
             <n-icon v-if="item === appTheme" size="12">
@@ -86,9 +89,41 @@
           </div>
         </div>
 
-        <!-- <n-divider title-placement="center">导航栏风格</n-divider>
+        <n-divider title-placement="center">导航栏风格</n-divider>
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">侧边栏主题</div>
+          <div class="drawer-setting-item-action">
+            <n-tooltip placement="bottom">
+              <template #trigger>
+                <n-switch v-model:value="siderIsDark" :loading="submitLoading" @update:value="switchChange">
+                  <template #checked>
+                    <n-icon size="14" color="#ffce00">
+                      <SunnySharp />
+                    </n-icon>
+                  </template>
+                  <template #unchecked>
+                    <n-icon size="14" color="#ffce00">
+                      <Moon />
+                    </n-icon>
+                  </template>
+                </n-switch>
+              </template>
+              <span>{{ siderIsDark ? '深' : '浅' }}色主题</span>
+            </n-tooltip>
+          </div>
+        </div>
+        <!-- <div class="drawer-setting-item-title">侧边栏样式</div>
+        <div class="pv-10 pl-20"></div> -->
 
-        <div class="drawer-setting-item align-items-top">
+        <div class="drawer-setting-item-title">顶栏栏样式</div>
+        <div class="pv-10 pl-20">
+          <n-radio-group v-model:value="topBarStyle" name="radiogroup" @update:value="radioChange">
+            <n-space>
+              <n-radio v-for="(item, index) in topBarStyleArr" :key="index" :value="item.name">{{ item.title }}</n-radio>
+            </n-space>
+          </n-radio-group>
+        </div>
+        <!-- <div class="drawer-setting-item align-items-top">
           <div v-for="(item, index) in navThemeArr" :key="index" class="drawer-setting-item-style">
             <n-tooltip placement="top">
               <template #trigger>
@@ -98,9 +133,9 @@
             </n-tooltip>
             <n-badge v-if="navTheme === item.name" dot color="#19be6b" />
           </div>
-        </div>
+        </div> -->
 
-        <n-divider title-placement="center">界面功能</n-divider>
+        <!--<n-divider title-placement="center">界面功能</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">分割菜单</div>

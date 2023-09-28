@@ -1,15 +1,19 @@
 /* 主题 */
 $theme-color: var(--app-theme-color, #166bcf);
 
-/* layout */
+/* 顶部 */
 $header-height: var(--app-header-height, 64px);
+$header-back-color: var(--app-header-back-color, #fff);
+$header-text-color: var(--app-header-text-color, #333639);
+
+/* 底部 */
 $footer-height: var(--app-footer-height, 44px);
 
 /* 标签页 */
 $tabs-view-height: var(--app-tabs-view-height, 44px);
 $tabs-back-color: var(--app-background-color, #f5f7fa);
 
-/* border */
+/* 边框 */
 $border-divide-color: var(--app-border-divide-color, #ccc);
 $border-input-color: var(--app-border-input-color, #e0e0e6);
 

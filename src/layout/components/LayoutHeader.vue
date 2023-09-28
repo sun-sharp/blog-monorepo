@@ -154,10 +154,6 @@
         }
       }
 
-      ::v-deep(.ant-breadcrumb span:last-child .link-text) {
-        color: #515a6e;
-      }
-
       .n-breadcrumb {
         display: inline-block;
       }
@@ -192,9 +188,9 @@
         align-items: center;
       }
 
-      &:hover {
-        background: hsl(0deg 0% 100% / 8%);
-      }
+      // &:hover {
+      //   background: hsl(0deg 0% 100% / 8%);
+      // }
 
       .anticon {
         color: #515a6e;
@@ -205,7 +201,6 @@
     &-trigger-min {
       width: auto;
       padding: 0 12px;
-      color: #000;
     }
   }
 

@@ -1,7 +1,7 @@
 import { useSetting } from '@/hooks';
 import { useUserStore } from '@/store';
 import { ComputedRef, ExtractPropTypes, reactive, ref, toRefs, unref } from 'vue';
-import { CUserConfigInfo } from '/#/config';
+import { ApiConfigInfo } from '/#/api/configuration';
 
 // LayoutHeaderSetting传参
 export const LayoutHeaderSettingProps = {
@@ -29,7 +29,6 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
   // 配置信息
   const {
     getIsDarkTheme,
-    getNavTheme,
     getNavMode,
     getMenuSetting,
     getHeaderSetting,
@@ -39,14 +38,15 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     getIsPageAnimate,
     getPageAnimateType,
     getFooterSetting,
+    getSiderIsDark,
+    getTopBarStyle,
   } = useSetting();
 
   // 复制computed的内容
   const copyComputedObj = (obj: ComputedRef) => {
     return Object.assign({}, unref(obj));
   };
-  const configInfo: CUserConfigInfo = reactive({
-    navTheme: unref(getNavTheme),
+  const configInfo: ApiConfigInfo = reactive({
     isDarkTheme: unref(getIsDarkTheme),
     menuSetting: copyComputedObj(getMenuSetting),
     headerSetting: copyComputedObj(getHeaderSetting),
@@ -57,6 +57,8 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     isPageAnimate: unref(getIsPageAnimate),
     pageAnimateType: unref(getPageAnimateType),
     footerSetting: unref(getFooterSetting),
+    siderIsDark: unref(getSiderIsDark),
+    topBarStyle: unref(getTopBarStyle),
   });
 
   // 展开
@@ -80,17 +82,6 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
 
   const togNavMode = (mode: string) => {
     configInfo.navMode = mode;
-    configInfo.menuSetting.mixMenu = false;
-    drawerSettingSubmit();
-  };
-
-  const togNavTheme = (theme: string) => {
-    let navTheme = theme;
-    if (configInfo.navMode === 'horizontal' && ['light'].includes(theme)) {
-      navTheme = 'dark';
-    }
-    if (configInfo.navTheme === navTheme) return;
-    configInfo.navTheme = navTheme;
     drawerSettingSubmit();
   };
 
@@ -99,6 +90,9 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     configInfo.appTheme = color;
     drawerSettingSubmit();
   };
+
+  // 单选组件
+  const radioChange = () => drawerSettingSubmit();
 
   // 开关组件变化
   const switchChange = () => drawerSettingSubmit();
@@ -110,12 +104,12 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     ...toRefs(state),
     ...toRefs(configInfo),
     submitLoading,
-    togNavTheme,
     togNavMode,
     togTheme,
     openDrawer,
     closeDrawer,
     drawerSettingSubmit,
+    radioChange,
     switchChange,
     selectChange,
   };

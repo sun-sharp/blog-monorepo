@@ -1,11 +1,8 @@
-import { AppRouteRecordRaw, RouteItem } from '/#/router';
-import { ViewsMenu } from '/#/views/menu';
-
 // 用户全局配置
 export interface UserState {
   token: string;
   info: ApiUserInfo;
-  configInfo: CUserConfigInfo;
+  configInfo: ApiConfigInfo;
 }
 
 // 锁屏配置
