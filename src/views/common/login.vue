@@ -30,7 +30,7 @@
           </n-form-item>
           <!-- <n-form-item path="isCaptcha">
             <div class="w-full">
-              <mi-captcha width="384" theme-color="#2d8cf0" :logo="logo" @success="onAuthCode" />
+              <mi-captcha width="384" :logo="logo" @success="onAuthCode" />
             </div>
           </n-form-item> -->
           <n-form-item class="default-color">
@@ -53,14 +53,14 @@
               </div>
               <div class="flex-initial mh-10">
                 <a href="javascript:">
-                  <n-icon size="24" color="#2d8cf0">
+                  <n-icon size="24">
                     <LogoGithub />
                   </n-icon>
                 </a>
               </div>
               <div class="flex-initial mh-10">
                 <a href="javascript:">
-                  <n-icon size="24" color="#2d8cf0">
+                  <n-icon size="24">
                     <LogoFacebook />
                   </n-icon>
                 </a>

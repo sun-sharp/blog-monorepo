@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { getWaitForDoClassifyData, useApiType } from '@/hooks';
+  import { getWaitForDoClassifyData, useApiType, useSetting } from '@/hooks';
   import { PlusOutlined, CalendarOutline, isDateFormat, judgeRangeToFormatFutureTime } from '@/utils';
   import { watch, ref, onMounted } from 'vue';
   import { waitForDoApi } from '@/api';
@@ -9,6 +9,8 @@
   import { ApiWaitForDoItem } from '/#/api/wait-for-do';
 
   const waitForDoSettingRef = ref();
+
+  const { getAppThemeColor } = useSetting();
 
   // 分类选择
   const classifyValue = ref<number | null>(null);
@@ -152,7 +154,7 @@
       <div class="wait-for-do-list__add ph-15">
         <n-input v-model:value="addTitleValue" placeholder="添加待办事件，按回车保存" clearable @keyup.enter="addWaitSave">
           <template #prefix>
-            <n-icon :component="PlusOutlined" color="#2d8cf0" />
+            <n-icon :component="PlusOutlined" :color="getAppThemeColor" />
           </template>
           <template #suffix>
             <n-popover v-model:show="showCalendarPop" placement="bottom" trigger="manual" @clickoutside="calendarPopOutside">

@@ -31,6 +31,10 @@ const defaultConfigInfo: ApiConfigInfo = {
   appTheme: 'light',
   // 系统主题色
   appThemeColor: '#2d8cf0',
+  // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
+  navMode: 'vertical',
+  // 侧边栏样式
+  siderIsDark: false,
   // 面包屑
   crumbsSetting: {
     // 是否显示
@@ -67,8 +71,7 @@ const defaultConfigInfo: ApiConfigInfo = {
     // 固定多标签
     fixed: true,
   },
-  // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
-  navMode: 'vertical',
+
   // 路由动画类型
   pageAnimateType: 'zoom-fade',
   // 底部
@@ -78,8 +81,7 @@ const defaultConfigInfo: ApiConfigInfo = {
     //固定底部
     fixed: true,
   },
-  // 侧边栏样式
-  siderIsDark: true,
+
   // 顶栏样式
   topBarStyle: 'light',
 };
