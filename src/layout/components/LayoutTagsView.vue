@@ -60,7 +60,7 @@
       <div class="tabs-close">
         <n-dropdown trigger="hover" placement="bottom-end" :options="TabsMenuOptions" @select="closeHandleSelect">
           <div class="tabs-close-btn">
-            <n-icon size="16" color="#515a6e">
+            <n-icon size="16">
               <DownOutlined />
             </n-icon>
           </div>
@@ -144,7 +144,7 @@
             height: 32px;
             margin-right: 6px;
             padding: 6px 16px 4px;
-            color: $font-color;
+            color: $tabs-view-btn-text-color;
             background: $tabs-view-btn-back-color;
             border-radius: 3px;
             cursor: pointer;
@@ -161,7 +161,8 @@
           }
 
           .active-item {
-            color: $theme-color;
+            color: $tabs-view-btn-active-text-color;
+            background: $tabs-view-btn-active-back-color;
           }
         }
       }
@@ -188,7 +189,7 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-        color: $font-color;
+        color: $tabs-view-btn-text-color;
       }
     }
   }

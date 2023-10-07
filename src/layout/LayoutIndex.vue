@@ -12,7 +12,7 @@
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   // import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const { getSiderIsDark, getNavMode, getMenuSetting } = useSetting();
+  const { getNavMode, getMenuSetting } = useSetting();
 
   const layoutClassName = computed(() => {
     const arr = ['layout-no-sider'];
@@ -33,10 +33,10 @@
   });
 
   // 侧边栏主题
-  const siderInverted = computed(() => {
-    const siderIsDark = unref(getSiderIsDark);
-    return siderIsDark;
-  });
+  // const siderInverted = computed(() => {
+  //   const siderIsDark = unref(getSiderIsDark);
+  //   return siderIsDark;
+  // });
 
   // 顶部样式
   // const headerStyle = computed(() => {
@@ -98,13 +98,9 @@
       @expand="collapsed = false"
     >
       <layout-logo :collapsed="collapsed" />
-      <layout-menu v-model:collapsed="collapsed" :inverted="siderInverted" />
+      <layout-menu v-model:collapsed="collapsed" :inverted="false" />
     </n-layout-sider>
     <section :class="layoutClassName">
-      <!-- <header class="lnf-header" :style="headerStyle" :inverted="getHeaderInverted">
-        <layout-header v-model:collapsed="collapsed" :inverted="getHeaderInverted" />
-        <layout-tabs-view v-if="isMultiTabs" />
-      </header> -->
       <n-layout-header class="lnf-header">
         <layout-header v-model:collapsed="collapsed" />
         <layout-tabs-view v-if="isMultiTabs" />
@@ -167,6 +163,8 @@
 
     .lnf-footer {
       width: 100%;
+      color: $footer-text-color;
+      background-color: $footer-back-color;
     }
 
     .main-view {

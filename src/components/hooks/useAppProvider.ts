@@ -43,6 +43,7 @@ export const useAppProvider = () => {
 
   // 设置主题style
   const getThemeStyle = computed(() => {
+    const appTheme = unref(getAppTheme);
     const appThemeColor = unref(getAppThemeColor);
     // 顶栏
     let appHeaderBackColor = defaultVariable.headerBackColor;
@@ -58,12 +59,48 @@ export const useAppProvider = () => {
       appSiderBackColor = darkVariable.headerBackColor;
       appSiderTextColor = darkVariable.headerTextColor;
     }
+    // 底部
+    let appFooterBackColor = defaultVariable.footerBackColor;
+    let appFooterTextColor = defaultVariable.footerTextColor;
+    if (appTheme === 'dark') {
+      appFooterBackColor = darkVariable.footerBackColor;
+      appFooterTextColor = darkVariable.footerTextColor;
+    }
+    // 标签栏
+    let appTabsViewBackColor = defaultVariable.tabsViewBackColor;
+    let appTabsViewBtnBackColor = defaultVariable.tabsViewBtnBackColor;
+    let appTabsViewBtnActiveTextColor = appThemeColor;
+    let appTabsViewBtnActiveBackColor = defaultVariable.tabsViewBtnBackColor;
+    let appTabsViewBtnTextColor = defaultVariable.tabsViewBtnTextColor;
+    if (appTheme === 'dark') {
+      appTabsViewBackColor = darkVariable.tabsViewBackColor;
+      appTabsViewBtnBackColor = darkVariable.tabsViewBtnBackColor;
+      appTabsViewBtnActiveBackColor = appThemeColor;
+      appTabsViewBtnActiveTextColor = darkVariable.tabsViewBtnActiveTextColor;
+      appTabsViewBtnTextColor = darkVariable.tabsViewBtnTextColor;
+    }
+    // 全局
+    let appBackgroundColor = defaultVariable.backgroundColor;
+    let appFontColor = defaultVariable.fontColor;
+    if (appTheme === 'dark') {
+      appBackgroundColor = darkVariable.backgroundColor;
+      appFontColor = darkVariable.fontColor;
+    }
     return {
       '--app-theme-color': appThemeColor,
       '--app-header-back-color': appHeaderBackColor,
       '--app-header-text-color': appHeaderTextColor,
       '--app-sider-back-color': appSiderBackColor,
       '--app-sider-text-color': appSiderTextColor,
+      '--app-footer-back-color': appFooterBackColor,
+      '--app-footer-text-color': appFooterTextColor,
+      '--app-tabs-view-back-color': appTabsViewBackColor,
+      '--app-tabs-view-btn-back-color': appTabsViewBtnBackColor,
+      '--app-tabs-view-btn-active-back-color': appTabsViewBtnActiveBackColor,
+      '--app-tabs-view-btn-active-text-color': appTabsViewBtnActiveTextColor,
+      '--app-tabs-view-btn-text-color': appTabsViewBtnTextColor,
+      '--app-background-color': appBackgroundColor,
+      '--app-font-color': appFontColor,
     };
   });
 

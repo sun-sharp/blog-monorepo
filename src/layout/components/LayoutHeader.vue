@@ -6,7 +6,7 @@
   import { LayoutHeaderProps, useLayoutHeader } from '@/layout/hooks/useLayoutHeader';
   import { APP_ENV_CONFIG } from '@/constant';
 
-  const props = defineProps(LayoutHeaderProps);
+  defineProps(LayoutHeaderProps);
 
   const emit = defineEmits(['update:collapsed']);
 
@@ -16,7 +16,6 @@
     navMode,
     headerSetting,
     crumbsSetting,
-    getInverted,
     breadcrumbList,
     iconList,
     fullscreenBool,
@@ -29,7 +28,7 @@
     toggleFullscreen,
     avatarSelect,
     openSetting,
-  } = useLayoutHeader(props);
+  } = useLayoutHeader();
 </script>
 
 <template>
@@ -41,7 +40,7 @@
           <img src="~@/assets/images/common/logo.png" alt="" />
           <h2 v-show="!collapsed" class="title">{{ title }}</h2>
         </div>
-        <layout-menu :inverted="getInverted" mode="horizontal" :indent="100" />
+        <layout-menu mode="horizontal" :indent="100" :inverted="false" />
       </div>
       <!--左侧菜单-->
       <div v-else class="layout-header-left">

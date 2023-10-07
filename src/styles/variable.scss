@@ -1,34 +1,37 @@
 /* 主题 */
-$theme-color: var(--app-theme-color, #2d8cf0);
+$theme-color: var(--app-theme-color);
 
 /* 侧边栏 */
-$sider-back-color: var(--app-sider-back-color, #fff);
-$sider-text-color: var(--app-sider-text-color, #333639);
+$sider-back-color: var(--app-sider-back-color);
+$sider-text-color: var(--app-sider-text-color);
 
 /* 顶部 */
 $header-height: var(--app-header-height, 64px);
-$header-back-color: var(--app-header-back-color, #fff);
-$header-text-color: var(--app-header-text-color, #333639);
+$header-back-color: var(--app-header-back-color);
+$header-text-color: var(--app-header-text-color);
 
 /* 底部 */
 $footer-height: var(--app-footer-height, 44px);
-$footer-back-color: var(--app-footer-back-color, #fff);
-$footer-text-color: var(--app-footer-text-color, #333639);
+$footer-back-color: var(--app-footer-back-color);
+$footer-text-color: var(--app-footer-text-color);
 
 /* 标签页 */
 $tabs-view-height: var(--app-tabs-view-height, 44px);
-$tabs-view-back-color: var(--app-tabs-view-back-color, #f0f0f0);
-$tabs-view-btn-back-color: var(--app-tabs-view-btn-back-color, #fff);
+$tabs-view-back-color: var(--app-tabs-view-back-color);
+$tabs-view-btn-back-color: var(--app-tabs-view-btn-back-color);
+$tabs-view-btn-text-color: var(--app-tabs-view-btn-text-color);
+$tabs-view-btn-active-back-color: var(--app-tabs-view-btn-active-back-color);
+$tabs-view-btn-active-text-color: var(--app-tabs-view-btn-active-text-color);
 
 /* 边框 */
 $border-divide-color: var(--app-border-divide-color, #ccc);
 $border-input-color: var(--app-border-input-color, #e0e0e6);
 
 /* 文字 */
-$font-color: var(--app-font-color, #333);
+$font-color: var(--app-font-color);
 
 /* 背景 */
-$background-color: var(--app-background-color, #f5f7fa);
+$background-color: var(--app-background-color);
 
 /* 卡片 */
 $card-background-color: var(--app-card-background-color, #fff);

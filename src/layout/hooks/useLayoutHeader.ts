@@ -1,4 +1,4 @@
-import { ExtractPropTypes, computed, reactive, ref, toRefs, unref } from 'vue';
+import { computed, reactive, ref, toRefs, unref } from 'vue';
 import { useRouter, useRoute, RouteLocationMatched, RouteRecordRaw } from 'vue-router';
 import { SearchOutlined, LockOutlined, lighten } from '@/utils';
 import { useDialog, useMessage } from 'naive-ui';
@@ -14,13 +14,10 @@ export const LayoutHeaderProps = {
   collapsed: {
     type: Boolean,
   },
-  inverted: {
-    type: Boolean,
-  },
 };
 
 /* 处理LayoutHeader */
-export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps>) => {
+export const useLayoutHeader = () => {
   const userStore = useUserStore();
   const useLockScreen = useLockScreenStore();
   const message = useMessage();
@@ -40,8 +37,6 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
     headerSetting: getHeaderSetting,
     crumbsSetting: getCrumbsSetting,
   });
-
-  const getInverted = computed(() => props.inverted);
 
   const mixMenu = computed(() => {
     return unref(getMenuSetting).mixMenu;
@@ -207,7 +202,6 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
   return {
     ...toRefs(state),
     mixMenu,
-    getInverted,
     breadcrumbList,
     iconList,
     fullscreenBool,

@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-07 14:33:37
+ * @LastEditTime: 2023-10-07 17:41:57
  * @Description: 项目配置
  */
 
@@ -16,10 +16,18 @@ import { ThemeCommonVars } from 'naive-ui';
 // 默认variable样式
 export const defaultVariable = {
   themeColor: '#2d8cf0',
-  headerBackColor: '#fff',
+  headerBackColor: '#ffffff',
   headerTextColor: '#333639',
-  siderBackColor: '#fff',
+  siderBackColor: '#ffffff',
   siderTextColor: '#333639',
+  footerBackColor: '#ffffff',
+  footerTextColor: '#333639',
+  tabsViewBackColor: '#f0f0f0',
+  tabsViewBtnBackColor: '#ffffff',
+  tabsViewBtnTextColor: '#333639',
+  tabsViewBtnActiveBackColor: '#ffffff',
+  backgroundColor: '#f5f7fa',
+  fontColor: '#333333',
 };
 // 默认naive组件主题
 export const defaultNaiveTheme: ThemeCommonVars = {
@@ -131,9 +139,17 @@ export const defaultNaiveTheme: ThemeCommonVars = {
 // 暗色variable样式
 export const darkVariable = {
   headerBackColor: '#001428',
-  headerTextColor: '#fff',
+  headerTextColor: '#ffffff',
   siderBackColor: '#001428',
-  siderTextColor: '#fff',
+  siderTextColor: '#ffffff',
+  footerBackColor: '#001428',
+  footerTextColor: '#ffffff',
+  tabsViewBackColor: '#333333',
+  tabsViewBtnBackColor: '#001428',
+  tabsViewBtnTextColor: '#ffffff',
+  tabsViewBtnActiveTextColor: '#ffffff',
+  backgroundColor: '#222222',
+  fontColor: '#fff',
 };
 // 暗色naive组件主题
 export const darkNaiveTheme: ThemeCommonVars = {
@@ -196,7 +212,7 @@ export const darkNaiveTheme: ThemeCommonVars = {
   infoColorSuppl: 'rgb(56, 137, 197)',
   inputColor: 'rgba(255, 255, 255, 0.1)',
   inputColorDisabled: 'rgba(255, 255, 255, 0.06)',
-  invertedColor: '#fff',
+  invertedColor: '#000',
   lineHeight: '1.6',
   modalColor: 'rgb(44, 44, 50)',
   name: 'common',
@@ -234,7 +250,7 @@ export const darkNaiveTheme: ThemeCommonVars = {
   textColor1: 'rgba(255, 255, 255, 0.9)',
   textColor2: 'rgba(255, 255, 255, 0.82)',
   textColor3: 'rgba(255, 255, 255, 0.52)',
-  textColorBase: '#fff',
+  textColorBase: '#000',
   textColorDisabled: 'rgba(255, 255, 255, 0.38)',
   warningColor: '#f2c97d',
   warningColorHover: '#f5d599',
