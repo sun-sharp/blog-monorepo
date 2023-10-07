@@ -1,6 +1,10 @@
 /* 主题 */
 $theme-color: var(--app-theme-color, #2d8cf0);
 
+/* 侧边栏 */
+$sider-back-color: var(--app-sider-back-color, #fff);
+$sider-text-color: var(--app-sider-text-color, #333639);
+
 /* 顶部 */
 $header-height: var(--app-header-height, 64px);
 $header-back-color: var(--app-header-back-color, #fff);
@@ -13,7 +17,7 @@ $footer-text-color: var(--app-footer-text-color, #333639);
 
 /* 标签页 */
 $tabs-view-height: var(--app-tabs-view-height, 44px);
-$tabs-view-back-color: var(--app-tabs-view-back-color, #dfdfdf);
+$tabs-view-back-color: var(--app-tabs-view-back-color, #f0f0f0);
 $tabs-view-btn-back-color: var(--app-tabs-view-btn-back-color, #fff);
 
 /* 边框 */

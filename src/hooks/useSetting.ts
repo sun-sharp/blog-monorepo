@@ -34,7 +34,7 @@ export const useSetting = () => {
 
   const getSiderIsDark = computed<boolean>(() => userStore.getConfigInfo.siderIsDark);
 
-  const getTopBarStyle = computed<string>(() => userStore.getConfigInfo.topBarStyle);
+  const getHeadIsDark = computed<boolean>(() => userStore.getConfigInfo.headIsDark);
 
   return {
     getAppTheme,
@@ -48,6 +48,6 @@ export const useSetting = () => {
     getIsPageAnimate,
     getPageAnimateType,
     getSiderIsDark,
-    getTopBarStyle,
+    getHeadIsDark,
   };
 };

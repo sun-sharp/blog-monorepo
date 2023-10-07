@@ -35,6 +35,8 @@ const defaultConfigInfo: ApiConfigInfo = {
   navMode: 'vertical',
   // 侧边栏样式
   siderIsDark: false,
+  // 顶栏样式
+  headIsDark: false,
   // 面包屑
   crumbsSetting: {
     // 是否显示
@@ -81,9 +83,6 @@ const defaultConfigInfo: ApiConfigInfo = {
     //固定底部
     fixed: true,
   },
-
-  // 顶栏样式
-  topBarStyle: 'light',
 };
 
 export const useUserStore = defineStore({

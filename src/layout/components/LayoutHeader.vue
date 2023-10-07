@@ -22,6 +22,7 @@
     fullscreenBool,
     avatar,
     avatarOptions,
+    headThemeOverrides,
     headerSettingRef,
     reloadPage,
     dropdownSelect,
@@ -32,89 +33,91 @@
 </script>
 
 <template>
-  <div class="layout-header">
-    <!--顶部菜单-->
-    <div v-if="navMode === 'horizontal' || navMode === 'horizontal-mix'" class="layout-header-left">
-      <div v-if="navMode === 'horizontal'" class="logo">
-        <img src="~@/assets/images/common/logo.png" alt="" />
-        <h2 v-show="!collapsed" class="title">{{ title }}</h2>
+  <n-config-provider :theme-overrides="headThemeOverrides">
+    <div class="layout-header">
+      <!--顶部菜单-->
+      <div v-if="navMode === 'horizontal' || navMode === 'horizontal-mix'" class="layout-header-left">
+        <div v-if="navMode === 'horizontal'" class="logo">
+          <img src="~@/assets/images/common/logo.png" alt="" />
+          <h2 v-show="!collapsed" class="title">{{ title }}</h2>
+        </div>
+        <layout-menu :inverted="getInverted" mode="horizontal" :indent="100" />
       </div>
-      <layout-menu :inverted="getInverted" mode="horizontal" :indent="100" />
-    </div>
-    <!--左侧菜单-->
-    <div v-else class="layout-header-left">
-      <!-- 菜单收起 -->
-      <div class="ml-5 layout-header-trigger layout-header-trigger-min" @click="() => emit('update:collapsed', !collapsed)">
-        <n-icon v-if="collapsed" size="18">
-          <MenuUnfoldOutlined />
-        </n-icon>
-        <n-icon v-else size="18">
-          <MenuFoldOutlined />
-        </n-icon>
-      </div>
-      <!-- 刷新 -->
-      <div v-if="headerSetting.isReload" class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
-        <n-icon size="18">
-          <ReloadOutlined />
-        </n-icon>
-      </div>
-      <!-- 面包屑 -->
-      <n-breadcrumb v-if="crumbsSetting.show">
-        <template v-for="breadItem in breadcrumbList" :key="breadItem.key">
-          <n-breadcrumb-item>
-            <n-dropdown v-if="breadItem.children && breadItem.children.length" :options="breadItem.children" @select="dropdownSelect">
-              <span class="link-text">
+      <!--左侧菜单-->
+      <div v-else class="layout-header-left">
+        <!-- 菜单收起 -->
+        <div class="ml-5 layout-header-trigger layout-header-trigger-min" @click="() => emit('update:collapsed', !collapsed)">
+          <n-icon v-if="collapsed" size="18">
+            <MenuUnfoldOutlined />
+          </n-icon>
+          <n-icon v-else size="18">
+            <MenuFoldOutlined />
+          </n-icon>
+        </div>
+        <!-- 刷新 -->
+        <div v-if="headerSetting.isReload" class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
+          <n-icon size="18">
+            <ReloadOutlined />
+          </n-icon>
+        </div>
+        <!-- 面包屑 -->
+        <n-breadcrumb v-if="crumbsSetting.show">
+          <template v-for="breadItem in breadcrumbList" :key="breadItem.key">
+            <n-breadcrumb-item>
+              <n-dropdown v-if="breadItem.children && breadItem.children.length" :options="breadItem.children" @select="dropdownSelect">
+                <span class="link-text">
+                  <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
+                  {{ breadItem.label }}
+                </span>
+              </n-dropdown>
+              <span v-else class="link-text">
                 <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
                 {{ breadItem.label }}
               </span>
-            </n-dropdown>
-            <span v-else class="link-text">
-              <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
-              {{ breadItem.label }}
-            </span>
-          </n-breadcrumb-item>
-        </template>
-      </n-breadcrumb>
-    </div>
-    <div class="layout-header-right">
-      <div v-for="item in iconList" :key="item.tips" class="layout-header-trigger layout-header-trigger-min">
-        <n-tooltip placement="bottom">
-          <template #trigger>
-            <n-icon size="18" :component="item.icon" v-on="item.eventObject || {}"></n-icon>
+            </n-breadcrumb-item>
           </template>
-          <span>{{ item.tips }}</span>
-        </n-tooltip>
+        </n-breadcrumb>
       </div>
-      <!-- 切换全屏 -->
-      <div class="layout-header-trigger layout-header-trigger-min">
-        <n-tooltip placement="bottom">
-          <template #trigger>
-            <n-icon size="18" :component="fullscreenBool ? FullscreenExitOutlined : FullscreenOutlined" @click="toggleFullscreen"></n-icon>
-          </template>
-          <span>全屏</span>
-        </n-tooltip>
-      </div>
-      <!-- 个人中心 -->
-      <div class="layout-header-trigger layout-header-trigger-min">
-        <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
-          <div class="avatar">
-            <n-avatar round :src="avatar" :fallback-src="defaultAvatar" />
-          </div>
-        </n-dropdown>
-      </div>
-      <!--设置-->
-      <div class="layout-header-trigger layout-header-trigger-min" @click="openSetting">
-        <n-tooltip placement="bottom-end">
-          <template #trigger>
-            <n-icon size="18">
-              <SettingOutlined />
-            </n-icon>
-          </template>
-          <span>项目配置</span>
-        </n-tooltip>
+      <div class="layout-header-right">
+        <div v-for="item in iconList" :key="item.tips" class="layout-header-trigger layout-header-trigger-min">
+          <n-tooltip placement="bottom">
+            <template #trigger>
+              <n-icon size="18" :component="item.icon" v-on="item.eventObject || {}"></n-icon>
+            </template>
+            <span>{{ item.tips }}</span>
+          </n-tooltip>
+        </div>
+        <!-- 切换全屏 -->
+        <div class="layout-header-trigger layout-header-trigger-min">
+          <n-tooltip placement="bottom">
+            <template #trigger>
+              <n-icon size="18" :component="fullscreenBool ? FullscreenExitOutlined : FullscreenOutlined" @click="toggleFullscreen"></n-icon>
+            </template>
+            <span>全屏</span>
+          </n-tooltip>
+        </div>
+        <!-- 个人中心 -->
+        <div class="layout-header-trigger layout-header-trigger-min">
+          <n-dropdown trigger="hover" :options="avatarOptions" @select="avatarSelect">
+            <div class="avatar">
+              <n-avatar round :src="avatar" :fallback-src="defaultAvatar" />
+            </div>
+          </n-dropdown>
+        </div>
+        <!--设置-->
+        <div class="layout-header-trigger layout-header-trigger-min" @click="openSetting">
+          <n-tooltip placement="bottom-end">
+            <template #trigger>
+              <n-icon size="18">
+                <SettingOutlined />
+              </n-icon>
+            </template>
+            <span>项目配置</span>
+          </n-tooltip>
+        </div>
       </div>
     </div>
-  </div>
+  </n-config-provider>
   <!--项目配置-->
   <LayoutHeaderSetting ref="headerSettingRef" />
 </template>

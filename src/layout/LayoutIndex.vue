@@ -12,7 +12,7 @@
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   // import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const { getSiderIsDark, getNavMode, getMenuSetting, getTopBarStyle } = useSetting();
+  const { getSiderIsDark, getNavMode, getMenuSetting } = useSetting();
 
   const layoutClassName = computed(() => {
     const arr = ['layout-no-sider'];
@@ -48,11 +48,6 @@
   //     '--app-header-text-color': textColor,
   //   };
   // });
-
-  // 标题主题
-  const getHeaderInverted = computed(() => {
-    return unref(getTopBarStyle) === 'dark';
-  });
   // const getHeaderInverted = computed(() => {
   //   const navTheme = unref(getNavTheme);
   //   return ['light', 'header-dark'].includes(navTheme) ? unref(inverted) : !unref(inverted);
@@ -99,7 +94,6 @@
       :collapsed-width="64"
       :collapsed="collapsed"
       :native-scrollbar="false"
-      :inverted="siderInverted"
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
@@ -111,8 +105,8 @@
         <layout-header v-model:collapsed="collapsed" :inverted="getHeaderInverted" />
         <layout-tabs-view v-if="isMultiTabs" />
       </header> -->
-      <n-layout-header class="lnf-header" :inverted="getHeaderInverted">
-        <layout-header v-model:collapsed="collapsed" :inverted="getHeaderInverted" />
+      <n-layout-header class="lnf-header">
+        <layout-header v-model:collapsed="collapsed" />
         <layout-tabs-view v-if="isMultiTabs" />
       </n-layout-header>
 
@@ -143,6 +137,8 @@
 
     &-sider {
       min-height: 100vh;
+      color: $sider-text-color;
+      background-color: $sider-back-color;
       transition: all 0.2s ease-in-out;
     }
 
@@ -157,9 +153,8 @@
 
     .lnf-header {
       width: 100%;
-
-      // color: $header-text-color;
-      // background-color: $header-back-color;
+      color: $header-text-color;
+      background-color: $header-back-color;
     }
 
     .lnf-content {

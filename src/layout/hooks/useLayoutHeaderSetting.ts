@@ -1,7 +1,7 @@
 import { useSetting } from '@/hooks';
 import { useUserStore } from '@/store';
 import { ComputedRef, ExtractPropTypes, reactive, ref, toRefs, unref } from 'vue';
-import { ApiConfigInfo } from '/#/api/configuration';
+import { ApiAppTheme, ApiConfigInfo } from '/#/api/configuration';
 
 // LayoutHeaderSetting传参
 export const LayoutHeaderSettingProps = {
@@ -39,7 +39,7 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     getPageAnimateType,
     getFooterSetting,
     getSiderIsDark,
-    getTopBarStyle,
+    getHeadIsDark,
   } = useSetting();
 
   // 复制computed的内容
@@ -58,7 +58,7 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     pageAnimateType: unref(getPageAnimateType),
     footerSetting: unref(getFooterSetting),
     siderIsDark: unref(getSiderIsDark),
-    topBarStyle: unref(getTopBarStyle),
+    headIsDark: unref(getHeadIsDark),
   });
 
   // 展开
@@ -81,10 +81,14 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
   };
 
   // 切换主题 val: ApiAppTheme
-  const togTheme = () => {
-    // if (val === 'light') {
-    //   configInfo.siderIsDark = false;
-    // }
+  const togTheme = (val: ApiAppTheme) => {
+    if (val === 'dark') {
+      configInfo.siderIsDark = true;
+      configInfo.headIsDark = true;
+    } else if (val === 'light') {
+      configInfo.siderIsDark = false;
+      configInfo.headIsDark = false;
+    }
     drawerSettingSubmit();
   };
 

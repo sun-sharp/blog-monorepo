@@ -1,12 +1,13 @@
 import { ExtractPropTypes, computed, reactive, ref, toRefs, unref } from 'vue';
 import { useRouter, useRoute, RouteLocationMatched, RouteRecordRaw } from 'vue-router';
-import { SearchOutlined, LockOutlined } from '@/utils';
+import { SearchOutlined, LockOutlined, lighten } from '@/utils';
 import { useDialog, useMessage } from 'naive-ui';
 import { useLockScreenStore, useUserStore } from '@/store';
 import { getImgUrl } from '@/utils';
 import { useSearch, useSetting } from '@/hooks';
 import { HeaderBreadcrumbItem } from '/#/layout/header';
-import { PAGE_ENUM } from '@/constant';
+import { PAGE_ENUM, darkNaiveTheme, defaultNaiveTheme } from '@/constant';
+import { formatNaiveTheme } from '@/components/hooks/useAppProvider';
 
 // LayoutHeader传参
 export const LayoutHeaderProps = {
@@ -24,7 +25,7 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
   const useLockScreen = useLockScreenStore();
   const message = useMessage();
   const dialog = useDialog();
-  const { getNavMode, getHeaderSetting, getMenuSetting, getCrumbsSetting } = useSetting();
+  const { getAppThemeColor, getNavMode, getHeaderSetting, getHeadIsDark, getMenuSetting, getCrumbsSetting } = useSetting();
 
   const { username, avatar } = userStore?.info || {};
 
@@ -48,6 +49,30 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
 
   const router = useRouter();
   const route = useRoute();
+
+  // 修改面包屑样式
+  const headThemeOverrides = computed(() => {
+    const isDark = unref(getHeadIsDark);
+    // 默认naive主题
+    let naiveCommon = defaultNaiveTheme;
+    if (isDark) {
+      naiveCommon = darkNaiveTheme;
+    }
+    // 改变naive主题
+    const primaryColor = unref(getAppThemeColor);
+    const primaryColorHover = lighten(primaryColor, 6);
+    const primaryColorPressed = lighten(primaryColor, -6);
+    const otherCommon = {
+      primaryColor,
+      primaryColorHover,
+      primaryColorPressed,
+      primaryColorSuppl: primaryColorHover,
+    };
+
+    return {
+      common: formatNaiveTheme(naiveCommon, otherCommon),
+    };
+  });
 
   const generator = (routerMap: RouteLocationMatched[] | RouteRecordRaw[]): HeaderBreadcrumbItem[] => {
     return routerMap
@@ -187,6 +212,7 @@ export const useLayoutHeader = (props: ExtractPropTypes<typeof LayoutHeaderProps
     iconList,
     fullscreenBool,
     avatarOptions,
+    headThemeOverrides,
     headerSettingRef,
     reloadPage,
     dropdownSelect,

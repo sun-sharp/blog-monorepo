@@ -91,6 +91,8 @@ export interface ApiConfiguration {
   navMode: string;
   // 侧边栏深色主题
   siderIsDark: boolean;
+  // 顶栏样式
+  headIsDark: boolean;
   // 顶部
   headerSetting: ApiConfHeaderSetting;
   // 底部
@@ -105,9 +107,6 @@ export interface ApiConfiguration {
   isPageAnimate: boolean;
   // 路由动画类型
   pageAnimateType: string;
-
-  // 顶栏样式
-  topBarStyle: string;
 }
 
 /**
