@@ -1,8 +1,8 @@
 import { menuTypeObj } from '@/constant';
 import { constantHtmlIcon } from '@/utils';
-import { ExtractPropTypes, VNode, h, nextTick, reactive, ref, unref, watch } from 'vue';
+import { ExtractPropTypes, VNode, nextTick, reactive, ref, unref, watch } from 'vue';
 import { ApiLevelMenuItem } from '/#/api/menu';
-import { FormItemRule, FormRules } from 'naive-ui';
+import { FormItemRule, FormRules, MenuOption } from 'naive-ui';
 import { menuApi } from '@/api';
 
 // 单管理 新建/修改 传参
@@ -111,7 +111,7 @@ export const useMenuAddUpdateModel = (
     }
   );
   // 图标
-  const iconOptions = ref<any[]>([]);
+  const iconOptions = ref<MenuOption[]>([]);
   iconOptions.value = Object.keys(constantHtmlIcon).map((key) => ({
     label: constantHtmlIcon[key],
     value: key,
@@ -123,7 +123,7 @@ export const useMenuAddUpdateModel = (
     },
   }));
 
-  const iconRenderLabel = (option: { label: VNode }) => h(option.label) || '';
+  const iconRenderLabel = (option: { label: VNode }) => option.label || '';
 
   // 初始化
   const init = (row: ApiLevelMenuItem) => {

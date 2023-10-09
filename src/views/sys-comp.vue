@@ -5,13 +5,15 @@
 
   // const columnNum = ref(3);
 
-  const iconAntdOptions = computed<UtilsIconOptions[]>(() =>
+  // Antd图标
+  const iconAntdOptions = computed(() =>
     Object.entries(constantAntdHtmlIcon).map(([key, icon]) => ({
       value: key,
       label: icon,
     }))
   );
 
+  // Ionicons5图标
   const iconIonicons5Options = ref<UtilsIconOptions[]>(
     Object.entries(constantIonicons5HtmlIcon).map(([key, icon]) => ({
       value: key,
@@ -39,8 +41,4 @@
   </div>
 </template>
 
-<style lang="scss">
-  .sys-comp {
-    display: block;
-  }
-</style>
+<style lang="scss"></style>

@@ -9,7 +9,7 @@
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const { getNavMode, getMenuSetting } = useSetting();
+  const { getNavMode, getHeadFixed, getTabsViewFixed, getFooterFixed, getMenuSetting } = useSetting();
 
   const layoutClassName = computed(() => {
     const arr = ['layout-no-sider'];
@@ -51,28 +51,25 @@
   // });
 
   // 头部固定
-  // const fixedHeader = computed(() => {
-  //   const { fixed } = unref(getHeaderSetting);
-  //   return fixed;
-  // });
+  const fixedHeader = computed(() => {
+    return unref(getHeadFixed);
+  });
 
   // 标签栏固定
-  // const fixedMulti = computed(() => {
-  //   const { fixed } = unref(getMultiTabsSetting);
-  //   return fixed;
-  // });
+  const fixedTabsView = computed(() => {
+    return unref(getTabsViewFixed);
+  });
 
   // 显示标签栏
-  const isMultiTabs = computed(() => {
+  const tabsViewShow = computed(() => {
     // return unref(getMultiTabsSetting).show;
     return true;
   });
 
   // 底部固定
-  // const fixedFoot = computed(() => {
-  //   const { fixed } = unref(getFooterSetting);
-  //   return fixed;
-  // });
+  const footerFixed = computed(() => {
+    return unref(getFooterFixed);
+  });
 
   // 展示底部
   const isFooter = computed(() => {
@@ -98,12 +95,16 @@
       <layout-menu v-model:collapsed="collapsed" :inverted="false" />
     </n-layout-sider>
     <section :class="layoutClassName">
-      <n-layout-header class="lnf-header">
-        <layout-header v-model:collapsed="collapsed" />
-        <layout-tabs-view v-if="isMultiTabs" />
-      </n-layout-header>
+      <header class="lnf-header">
+        <layout-header v-if="fixedHeader" v-model:collapsed="collapsed" />
+        <layout-tabs-view v-if="tabsViewShow && fixedTabsView" />
+      </header>
 
       <main class="lnf-content">
+        <layout-header v-if="!fixedHeader" v-model:collapsed="collapsed" />
+
+        <layout-tabs-view v-if="tabsViewShow && !fixedTabsView" />
+
         <transition name="searchView">
           <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
         </transition>
@@ -114,10 +115,12 @@
           </div>
         </transition>
 
+        <layout-footer v-if="!footerFixed" />
+
         <n-back-top :right="70" :bottom="70" />
       </main>
 
-      <footer v-if="isFooter" class="lnf-footer">
+      <footer v-if="isFooter && footerFixed" class="lnf-footer">
         <layout-footer />
       </footer>
     </section>

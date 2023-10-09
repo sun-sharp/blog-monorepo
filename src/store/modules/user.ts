@@ -37,6 +37,12 @@ const defaultConfigInfo: ApiConfigInfo = {
   siderIsDark: false,
   // 顶栏样式
   headIsDark: false,
+  // 固定顶栏
+  headFixed: true,
+  // 固定标签页
+  tabsViewFixed: true,
+  // 固定顶部
+  footerFixed: true,
   // 面包屑
   crumbsSetting: {
     // 是否显示

@@ -40,6 +40,9 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     getFooterSetting,
     getSiderIsDark,
     getHeadIsDark,
+    getHeadFixed,
+    getTabsViewFixed,
+    getFooterFixed,
   } = useSetting();
 
   // 复制computed的内容
@@ -59,6 +62,9 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     footerSetting: unref(getFooterSetting),
     siderIsDark: unref(getSiderIsDark),
     headIsDark: unref(getHeadIsDark),
+    headFixed: unref(getHeadFixed),
+    tabsViewFixed: unref(getTabsViewFixed),
+    footerFixed: unref(getFooterFixed),
   });
 
   // 展开

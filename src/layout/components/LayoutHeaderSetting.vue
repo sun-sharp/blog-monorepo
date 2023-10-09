@@ -14,6 +14,9 @@
     navMode,
     siderIsDark,
     headIsDark,
+    headFixed,
+    tabsViewFixed,
+    footerFixed,
     // navTheme,
     // navThemeArr,
     // menuSetting,
@@ -70,15 +73,6 @@
               <n-radio v-for="(item, index) in navModeArr" :key="index" :value="item.name">{{ item.title }}</n-radio>
             </n-space>
           </n-radio-group>
-          <!-- <div v-for="(item, index) in navModeArr" :key="index" class="drawer-setting-item-style">
-            <n-tooltip placement="top">
-              <template #trigger>
-                <img class="drawer-setting-item-image" :src="item.image" :alt="item.title" @click="togNavMode(item.name)" />
-              </template>
-              <span>{{ item.title }}</span>
-            </n-tooltip>
-            <n-badge class="drawer-setting-item-dot" dot :color="navMode === item.name ? '#19be6b' : '#fff'" />
-          </div> -->
         </div>
 
         <n-divider title-placement="center">导航栏风格</n-divider>
@@ -126,60 +120,31 @@
             </n-tooltip>
           </div>
         </div>
-        <!-- <div class="drawer-setting-item-title">侧边栏样式</div>
-        <div class="pv-10 pl-20"></div> -->
 
-        <!-- <div class="drawer-setting-item-title">顶栏样式</div> -->
-        <!-- <div class="pv-10 pl-20">
-          <n-radio-group v-model:value="topBarStyle" name="radiogroup" @update:value="radioChange">
-            <n-space>
-              <n-radio v-for="(item, index) in topBarStyleArr" :key="index" :value="item.name">{{ item.title }}</n-radio>
-            </n-space>
-          </n-radio-group>
-        </div> -->
-        <!-- <div class="drawer-setting-item align-items-top">
-          <div v-for="(item, index) in navThemeArr" :key="index" class="drawer-setting-item-style">
-            <n-tooltip placement="top">
-              <template #trigger>
-                <img :src="item.image" :alt="item.title" @click="togNavTheme(item.name)" />
-              </template>
-              <span>{{ item.title }}</span>
-            </n-tooltip>
-            <n-badge v-if="navTheme === item.name" dot color="#19be6b" />
-          </div>
-        </div> -->
+        <n-divider title-placement="center">界面功能</n-divider>
 
-        <!--<n-divider title-placement="center">界面功能</n-divider>
-
-        <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">分割菜单</div>
-          <div class="drawer-setting-item-action">
-            <n-switch v-model:value="menuSetting.mixMenu" :loading="submitLoading" :disabled="navMode !== 'horizontal-mix'" @update:value="switchChange" />
-          </div>
-        </div>
-
-        <div class="drawer-setting-item">
+        <div class="drawer-setting-item pv-5">
           <div class="drawer-setting-item-title">固定顶栏</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="headerSetting.fixed" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="headFixed" @update:value="switchChange" />
           </div>
         </div>
 
-        <div class="drawer-setting-item">
+        <div class="drawer-setting-item pv-5">
           <div class="drawer-setting-item-title">固定多页签</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="multiTabsSetting.fixed" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="tabsViewFixed" @update:value="switchChange" />
           </div>
         </div>
 
-        <div class="drawer-setting-item">
+        <div class="drawer-setting-item pv-5">
           <div class="drawer-setting-item-title">固定底部</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="footerSetting.fixed" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="footerFixed" @update:value="switchChange" />
           </div>
         </div>
 
-        <n-divider title-placement="center">界面显示</n-divider>
+        <!--<n-divider title-placement="center">界面显示</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>

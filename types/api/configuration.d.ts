@@ -93,6 +93,12 @@ export interface ApiConfiguration {
   siderIsDark: boolean;
   // 顶栏样式
   headIsDark: boolean;
+  // 固定顶栏
+  headFixed: boolean;
+  // 固定标签页
+  tabsViewFixed: boolean;
+  // 固定底部
+  footerFixed: boolean;
   // 顶部
   headerSetting: ApiConfHeaderSetting;
   // 底部

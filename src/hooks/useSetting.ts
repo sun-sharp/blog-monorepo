@@ -32,9 +32,20 @@ export const useSetting = () => {
 
   const getFooterSetting = computed<ApiConfFooterSetting>(() => userStore.getConfigInfo.footerSetting);
 
+  // 侧边栏主题是否暗色
   const getSiderIsDark = computed<boolean>(() => userStore.getConfigInfo.siderIsDark);
 
+  // 顶栏主题是否暗色
   const getHeadIsDark = computed<boolean>(() => userStore.getConfigInfo.headIsDark);
+
+  // 固定顶栏
+  const getHeadFixed = computed<boolean>(() => userStore.getConfigInfo.headFixed);
+
+  // 固定标签页
+  const getTabsViewFixed = computed<boolean>(() => userStore.getConfigInfo.tabsViewFixed);
+
+  // 固定底部
+  const getFooterFixed = computed<boolean>(() => userStore.getConfigInfo.footerFixed);
 
   return {
     getAppTheme,
@@ -49,5 +60,8 @@ export const useSetting = () => {
     getPageAnimateType,
     getSiderIsDark,
     getHeadIsDark,
+    getHeadFixed,
+    getTabsViewFixed,
+    getFooterFixed,
   };
 };
