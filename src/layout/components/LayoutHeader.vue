@@ -33,7 +33,7 @@
 
 <template>
   <n-config-provider :theme-overrides="headThemeOverrides">
-    <div class="layout-header">
+    <div class="layout-header" :class="className">
       <!--顶部菜单-->
       <div v-if="navMode === 'horizontal' || navMode === 'horizontal-mix'" class="layout-header-left">
         <div v-if="navMode === 'horizontal'" class="logo">

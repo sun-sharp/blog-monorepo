@@ -11,8 +11,68 @@
 
   const { getNavMode, getHeadFixed, getTabsViewFixed, getFooterFixed, getMenuSetting } = useSetting();
 
-  const layoutClassName = computed(() => {
+  // 除去右侧
+  const noSiderClassName = computed(() => {
     const arr = ['layout-no-sider'];
+    return arr;
+  });
+
+  // 顶部
+  const noSiderHeadClassName = computed(() => {
+    const arr = ['lnf-header'];
+    const headFixed = unref(getHeadFixed);
+    const tabsViewFixed = unref(getTabsViewFixed);
+    if (headFixed && tabsViewFixed) {
+      arr.push('head_tabs-view');
+    } else if (headFixed) {
+      arr.push('head');
+    } else if (tabsViewFixed) {
+      arr.push('tabs-view');
+    }
+    return arr;
+  });
+
+  // 顶部固定
+  const lnfContHeadClassName = computed(() => {
+    const arr = [];
+    const headFixed = unref(getHeadFixed);
+    if (headFixed) {
+      arr.push('head-fixed');
+    }
+    return arr;
+  });
+
+  // 标签页固定
+  const lnfContTabsViewClassName = computed(() => {
+    const arr = [];
+    const headFixed = unref(getHeadFixed);
+    const tabsViewFixed = unref(getTabsViewFixed);
+    if (tabsViewFixed) {
+      arr.push('tabs-view-fixed');
+    }
+    if (headFixed) {
+      arr.push('has-head');
+    }
+    return arr;
+  });
+
+  // 底部
+  const noSiderFootClassName = computed(() => {
+    const arr = ['lnf-footer'];
+    const footerFixed = unref(getFooterFixed);
+    if (footerFixed) {
+      arr.push('footer');
+    }
+    return arr;
+  });
+
+  // 底部固定
+  const lnfContFootClassName = computed(() => {
+    const arr = [];
+    const footerFixed = unref(getFooterFixed);
+    if (footerFixed) {
+      arr.push('foot-fixed');
+    }
     return arr;
   });
 
@@ -26,54 +86,6 @@
     if (!mixMenu && navMode === 'horizontal') {
       return false;
     }
-    return true;
-  });
-
-  // 侧边栏主题
-  // const siderInverted = computed(() => {
-  //   const siderIsDark = unref(getSiderIsDark);
-  //   return siderIsDark;
-  // });
-
-  // 顶部样式
-  // const headerStyle = computed(() => {
-  //   const topBarStyle = unref(getTopBarStyle) === 'dark';
-  //   const backColor = topBarStyle ? '#001428' : '#fff';
-  //   const textColor = topBarStyle ? '#fff' : '#333639';
-  //   return {
-  //     '--app-header-back-color': backColor,
-  //     '--app-header-text-color': textColor,
-  //   };
-  // });
-  // const getHeaderInverted = computed(() => {
-  //   const navTheme = unref(getNavTheme);
-  //   return ['light', 'header-dark'].includes(navTheme) ? unref(inverted) : !unref(inverted);
-  // });
-
-  // 头部固定
-  const fixedHeader = computed(() => {
-    return unref(getHeadFixed);
-  });
-
-  // 标签栏固定
-  const fixedTabsView = computed(() => {
-    return unref(getTabsViewFixed);
-  });
-
-  // 显示标签栏
-  const tabsViewShow = computed(() => {
-    // return unref(getMultiTabsSetting).show;
-    return true;
-  });
-
-  // 底部固定
-  const footerFixed = computed(() => {
-    return unref(getFooterFixed);
-  });
-
-  // 展示底部
-  const isFooter = computed(() => {
-    // return unref(getFooterSetting).show;
     return true;
   });
 </script>
@@ -94,16 +106,17 @@
       <layout-logo :collapsed="collapsed" />
       <layout-menu v-model:collapsed="collapsed" :inverted="false" />
     </n-layout-sider>
-    <section :class="layoutClassName">
-      <header class="lnf-header">
-        <layout-header v-if="fixedHeader" v-model:collapsed="collapsed" />
-        <layout-tabs-view v-if="tabsViewShow && fixedTabsView" />
-      </header>
+    <section :class="noSiderClassName">
+      <header :class="noSiderHeadClassName"></header>
 
-      <main class="lnf-content">
-        <layout-header v-if="!fixedHeader" v-model:collapsed="collapsed" />
+      <main class="lnf-cont">
+        <div :class="lnfContHeadClassName">
+          <layout-header v-model:collapsed="collapsed" />
+        </div>
 
-        <layout-tabs-view v-if="tabsViewShow && !fixedTabsView" />
+        <div :class="lnfContTabsViewClassName">
+          <layout-tabs-view />
+        </div>
 
         <transition name="searchView">
           <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
@@ -115,14 +128,14 @@
           </div>
         </transition>
 
-        <layout-footer v-if="!footerFixed" />
+        <div :class="lnfContFootClassName">
+          <layout-footer />
+        </div>
 
         <n-back-top :right="70" :bottom="70" />
       </main>
 
-      <footer v-if="isFooter && footerFixed" class="lnf-footer">
-        <layout-footer />
-      </footer>
+      <footer :class="noSiderFootClassName"></footer>
     </section>
   </n-layout>
 </template>
@@ -139,6 +152,7 @@
     }
 
     &-no-sider {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -149,20 +163,58 @@
 
     .lnf-header {
       width: 100%;
+
+      &.head {
+        height: $header-height;
+      }
+
+      &.tabs-view {
+        height: $tabs-view-height;
+      }
+
+      &.head_tabs-view {
+        height: calc($header-height + $tabs-view-height);
+      }
     }
 
-    .lnf-content {
+    .lnf-cont {
       flex: 1;
       width: 100%;
       height: 0;
       overflow-y: auto;
       background-color: $background-color;
+
+      .head-fixed {
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      .tabs-view-fixed {
+        position: absolute;
+        top: 0;
+        width: 100%;
+
+        &.has-head {
+          top: $header-height;
+        }
+      }
+
+      .foot-fixed {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+      }
     }
 
     .lnf-footer {
       width: 100%;
       color: $footer-text-color;
       background-color: $footer-back-color;
+
+      &.footer {
+        height: $footer-height;
+      }
     }
 
     .main-view {

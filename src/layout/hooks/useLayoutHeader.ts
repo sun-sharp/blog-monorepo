@@ -14,6 +14,10 @@ export const LayoutHeaderProps = {
   collapsed: {
     type: Boolean,
   },
+  className: {
+    type: String,
+    default: '',
+  },
 };
 
 /* 处理LayoutHeader */
