@@ -257,7 +257,7 @@
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid $border-divide-color;
       cursor: default;
 
       .item-left {
@@ -277,7 +277,7 @@
       }
 
       .item-text {
-        color: #333;
+        color: $font-color;
         font-size: 14px;
       }
 

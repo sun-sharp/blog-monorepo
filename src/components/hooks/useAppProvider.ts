@@ -44,63 +44,105 @@ export const useAppProvider = () => {
   // 设置主题style
   const getThemeStyle = computed(() => {
     const appTheme = unref(getAppTheme);
-    const appThemeColor = unref(getAppThemeColor);
+    const themeColor = unref(getAppThemeColor);
+
+    let {
+      // 顶栏
+      headerBackColor,
+      headerTextColor,
+      // 侧边栏
+      siderBackColor,
+      siderTextColor,
+      // 底部
+      footerBackColor,
+      footerTextColor,
+      // 标签栏
+      tabsViewBackColor,
+      tabsViewBtnBackColor,
+      tabsViewBtnTextColor,
+      // 全局
+      backgroundColor,
+      fontColor,
+      borderDivideColor,
+      // 滚动条
+      scrollbarThumbBackColor,
+      scrollbarThumbHoverBackColor,
+      scrollbarTrackPieceBackColor,
+      // 卡片
+      cardBackgroundColor,
+      cardBoxShadow,
+    } = defaultVariable;
+    const { cardBorderRadius, cardBorderColor, borderInputColor, textWarningColor, headerHeight, footerHeight, tabsViewHeight } = defaultVariable;
     // 顶栏
-    let appHeaderBackColor = defaultVariable.headerBackColor;
-    let appHeaderTextColor = defaultVariable.headerTextColor;
     if (unref(getHeadIsDark)) {
-      appHeaderBackColor = darkVariable.headerBackColor;
-      appHeaderTextColor = darkVariable.headerTextColor;
+      headerBackColor = darkVariable.headerBackColor;
+      headerTextColor = darkVariable.headerTextColor;
     }
     // 侧边栏
-    let appSiderBackColor = defaultVariable.headerBackColor;
-    let appSiderTextColor = defaultVariable.headerTextColor;
     if (unref(getSiderIsDark)) {
-      appSiderBackColor = darkVariable.headerBackColor;
-      appSiderTextColor = darkVariable.headerTextColor;
+      siderBackColor = darkVariable.siderBackColor;
+      siderTextColor = darkVariable.siderTextColor;
     }
     // 底部
-    let appFooterBackColor = defaultVariable.footerBackColor;
-    let appFooterTextColor = defaultVariable.footerTextColor;
     if (appTheme === 'dark') {
-      appFooterBackColor = darkVariable.footerBackColor;
-      appFooterTextColor = darkVariable.footerTextColor;
+      footerBackColor = darkVariable.footerBackColor;
+      footerTextColor = darkVariable.footerTextColor;
     }
     // 标签栏
-    let appTabsViewBackColor = defaultVariable.tabsViewBackColor;
-    let appTabsViewBtnBackColor = defaultVariable.tabsViewBtnBackColor;
-    let appTabsViewBtnActiveTextColor = appThemeColor;
-    let appTabsViewBtnActiveBackColor = defaultVariable.tabsViewBtnBackColor;
-    let appTabsViewBtnTextColor = defaultVariable.tabsViewBtnTextColor;
+    let tabsViewBtnActiveTextColor = themeColor;
+    let tabsViewBtnActiveBackColor = defaultVariable.tabsViewBtnBackColor;
     if (appTheme === 'dark') {
-      appTabsViewBackColor = darkVariable.tabsViewBackColor;
-      appTabsViewBtnBackColor = darkVariable.tabsViewBtnBackColor;
-      appTabsViewBtnActiveBackColor = appThemeColor;
-      appTabsViewBtnActiveTextColor = darkVariable.tabsViewBtnActiveTextColor;
-      appTabsViewBtnTextColor = darkVariable.tabsViewBtnTextColor;
+      tabsViewBackColor = darkVariable.tabsViewBackColor;
+      tabsViewBtnBackColor = darkVariable.tabsViewBtnBackColor;
+      tabsViewBtnActiveBackColor = themeColor;
+      tabsViewBtnActiveTextColor = darkVariable.tabsViewBtnActiveTextColor;
+      tabsViewBtnTextColor = darkVariable.tabsViewBtnTextColor;
     }
     // 全局
-    let appBackgroundColor = defaultVariable.backgroundColor;
-    let appFontColor = defaultVariable.fontColor;
     if (appTheme === 'dark') {
-      appBackgroundColor = darkVariable.backgroundColor;
-      appFontColor = darkVariable.fontColor;
+      backgroundColor = darkVariable.backgroundColor;
+      fontColor = darkVariable.fontColor;
+      borderDivideColor = darkVariable.borderDivideColor;
+    }
+    // 滚动条
+    if (appTheme === 'dark') {
+      scrollbarThumbBackColor = darkVariable.scrollbarThumbBackColor;
+      scrollbarThumbHoverBackColor = darkVariable.scrollbarThumbHoverBackColor;
+      scrollbarTrackPieceBackColor = darkVariable.scrollbarTrackPieceBackColor;
+    }
+    // 卡片
+    if (appTheme === 'dark') {
+      cardBackgroundColor = darkVariable.cardBackgroundColor;
+      cardBoxShadow = darkVariable.cardBoxShadow;
     }
     return {
-      '--app-theme-color': appThemeColor,
-      '--app-header-back-color': appHeaderBackColor,
-      '--app-header-text-color': appHeaderTextColor,
-      '--app-sider-back-color': appSiderBackColor,
-      '--app-sider-text-color': appSiderTextColor,
-      '--app-footer-back-color': appFooterBackColor,
-      '--app-footer-text-color': appFooterTextColor,
-      '--app-tabs-view-back-color': appTabsViewBackColor,
-      '--app-tabs-view-btn-back-color': appTabsViewBtnBackColor,
-      '--app-tabs-view-btn-active-back-color': appTabsViewBtnActiveBackColor,
-      '--app-tabs-view-btn-active-text-color': appTabsViewBtnActiveTextColor,
-      '--app-tabs-view-btn-text-color': appTabsViewBtnTextColor,
-      '--app-background-color': appBackgroundColor,
-      '--app-font-color': appFontColor,
+      '--app-theme-color': themeColor,
+      '--app-header-back-color': headerBackColor,
+      '--app-header-text-color': headerTextColor,
+      '--app-sider-back-color': siderBackColor,
+      '--app-sider-text-color': siderTextColor,
+      '--app-footer-back-color': footerBackColor,
+      '--app-footer-text-color': footerTextColor,
+      '--app-tabs-view-back-color': tabsViewBackColor,
+      '--app-tabs-view-btn-back-color': tabsViewBtnBackColor,
+      '--app-tabs-view-btn-active-back-color': tabsViewBtnActiveBackColor,
+      '--app-tabs-view-btn-active-text-color': tabsViewBtnActiveTextColor,
+      '--app-tabs-view-btn-text-color': tabsViewBtnTextColor,
+      '--app-background-color': backgroundColor,
+      '--app-font-color': fontColor,
+      '--app-scrollbar-thumb-back-color': scrollbarThumbBackColor,
+      '--app-scrollbar-thumb-hover-back-color': scrollbarThumbHoverBackColor,
+      '--app-scrollbar-track-piece-back-color': scrollbarTrackPieceBackColor,
+      '--app-card-background-color': cardBackgroundColor,
+      '--app-card-box-shadow': cardBoxShadow,
+      '--app-card-border-radius': cardBorderRadius,
+      '--app-card-border-color': cardBorderColor,
+      '--app-border-divide-color': borderDivideColor,
+      '--app-border-input-color': borderInputColor,
+      '--app-text-warning-color': textWarningColor,
+      '--app-header-height': headerHeight,
+      '--app-footer-height': footerHeight,
+      '--app-tabs-view-height': tabsViewHeight,
     };
   });
 

@@ -1,16 +1,13 @@
 <script lang="ts" setup>
   import { computed, ref, unref } from 'vue';
-  import {
-    // useSearch,
-    useSetting,
-  } from '@/hooks';
+  import { useSearch, useSetting } from '@/hooks';
   import LayoutLogo from '@/layout/components/LayoutLogo.vue';
   import LayoutMenu from '@/layout/components/LayoutMenu.vue';
   import LayoutHeader from '@/layout/components/LayoutHeader.vue';
   import LayoutTabsView from '@/layout/components/LayoutTagsView.vue';
-  // import LayoutMain from '@/layout/components/LayoutMain.vue';
+  import LayoutMain from '@/layout/components/LayoutMain.vue';
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
-  // import LayoutSearch from '@/layout/components/LayoutSearch.vue';
+  import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
   const { getNavMode, getMenuSetting } = useSetting();
 
@@ -107,7 +104,7 @@
       </n-layout-header>
 
       <main class="lnf-content">
-        <!-- <transition name="searchView">
+        <transition name="searchView">
           <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
         </transition>
 
@@ -117,7 +114,7 @@
           </div>
         </transition>
 
-        <n-back-top :right="70" :bottom="70" /> -->
+        <n-back-top :right="70" :bottom="70" />
       </main>
 
       <footer v-if="isFooter" class="lnf-footer">
@@ -149,8 +146,6 @@
 
     .lnf-header {
       width: 100%;
-      color: $header-text-color;
-      background-color: $header-back-color;
     }
 
     .lnf-content {

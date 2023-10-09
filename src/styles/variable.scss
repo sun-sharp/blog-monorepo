@@ -6,17 +6,17 @@ $sider-back-color: var(--app-sider-back-color);
 $sider-text-color: var(--app-sider-text-color);
 
 /* 顶部 */
-$header-height: var(--app-header-height, 64px);
+$header-height: var(--app-header-height);
 $header-back-color: var(--app-header-back-color);
 $header-text-color: var(--app-header-text-color);
 
 /* 底部 */
-$footer-height: var(--app-footer-height, 44px);
+$footer-height: var(--app-footer-height);
 $footer-back-color: var(--app-footer-back-color);
 $footer-text-color: var(--app-footer-text-color);
 
 /* 标签页 */
-$tabs-view-height: var(--app-tabs-view-height, 44px);
+$tabs-view-height: var(--app-tabs-view-height);
 $tabs-view-back-color: var(--app-tabs-view-back-color);
 $tabs-view-btn-back-color: var(--app-tabs-view-btn-back-color);
 $tabs-view-btn-text-color: var(--app-tabs-view-btn-text-color);
@@ -24,8 +24,8 @@ $tabs-view-btn-active-back-color: var(--app-tabs-view-btn-active-back-color);
 $tabs-view-btn-active-text-color: var(--app-tabs-view-btn-active-text-color);
 
 /* 边框 */
-$border-divide-color: var(--app-border-divide-color, #ccc);
-$border-input-color: var(--app-border-input-color, #e0e0e6);
+$border-divide-color: var(--app-border-divide-color);
+$border-input-color: var(--app-border-input-color);
 
 /* 文字 */
 $font-color: var(--app-font-color);
@@ -34,10 +34,17 @@ $font-color: var(--app-font-color);
 $background-color: var(--app-background-color);
 
 /* 卡片 */
-$card-background-color: var(--app-card-background-color, #fff);
-$card-border-color: var(--app-card-border-color, #ccc);
-$card-border-radius: var(--app-card-border-radius, 8px);
-$card-box-shadow: 0 0 $card-border-radius $card-border-color;
+$card-background-color: var(--app-card-background-color);
+$card-border-color: var(--app-card-border-color);
+$card-border-radius: var(--app-card-border-radius);
+$card-box-shadow: var(-app-card-box-shadow);
 
 /* 警告 */
-$text-warning-color: var(--app-text-warning-color, #ff6767);
+$text-warning-color: var(--app-text-warning-color);
+
+/* 滚动条 */
+$scrollbar-thumb-back-color: var(--app-scrollbar-thumb-back-color);
+$scrollbar-thumb-hover-back-color: var(--app-scrollbar-thumb-hover-back-color);
+$scrollbar-track-piece-back-color: var(--app-scrollbar-track-piece-back-color);
+
+
