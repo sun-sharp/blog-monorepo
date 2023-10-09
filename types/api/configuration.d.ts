@@ -100,19 +100,19 @@ export interface ApiConfiguration {
   // 固定底部
   footerFixed: boolean;
   // 顶部
-  headerSetting: ApiConfHeaderSetting;
-  // 底部
-  footerSetting: ApiConfFooterSetting;
-  // 多标签
-  multiTabsSetting: ApiConfMultiTabsSetting;
-  // 菜单
-  menuSetting: ApiConfMenuSetting;
-  // 面包屑
-  crumbsSetting: ApiConfCrumbsSetting;
-  // 是否开启路由动画
-  isPageAnimate: boolean;
-  // 路由动画类型
-  pageAnimateType: string;
+  // headerSetting: ApiConfHeaderSetting;
+  // // 底部
+  // footerSetting: ApiConfFooterSetting;
+  // // 多标签
+  // multiTabsSetting: ApiConfMultiTabsSetting;
+  // // 菜单
+  // menuSetting: ApiConfMenuSetting;
+  // // 面包屑
+  // crumbsSetting: ApiConfCrumbsSetting;
+  // // 是否开启路由动画
+  // isPageAnimate: boolean;
+  // // 路由动画类型
+  // pageAnimateType: string;
 }
 
 /**

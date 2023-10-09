@@ -44,51 +44,51 @@ const defaultConfigInfo: ApiConfigInfo = {
   // 固定顶部
   footerFixed: true,
   // 面包屑
-  crumbsSetting: {
-    // 是否显示
-    show: true,
-    // 显示图标
-    showIcon: false,
-  },
-  // 顶部
-  headerSetting: {
-    // 固定顶部
-    fixed: true,
-    // 显示重载按钮
-    isReload: true,
-  },
-  // 是否开启路由动画
-  isPageAnimate: true,
-  // 菜单
-  menuSetting: {
-    // 默认展开
-    collapsed: false,
-    // 固定菜单
-    fixed: true,
-    // 菜单宽度
-    menuWidth: 200,
-    // 最小宽度
-    minMenuWidth: 64,
-    // 分割菜单
-    mixMenu: false,
-  },
-  // 多标签
-  multiTabsSetting: {
-    // 是否显示
-    show: true,
-    // 固定多标签
-    fixed: true,
-  },
+  // crumbsSetting: {
+  //   // 是否显示
+  //   show: true,
+  //   // 显示图标
+  //   showIcon: false,
+  // },
+  // // 顶部
+  // headerSetting: {
+  //   // 固定顶部
+  //   fixed: true,
+  //   // 显示重载按钮
+  //   isReload: true,
+  // },
+  // // 是否开启路由动画
+  // isPageAnimate: true,
+  // // 菜单
+  // menuSetting: {
+  //   // 默认展开
+  //   collapsed: false,
+  //   // 固定菜单
+  //   fixed: true,
+  //   // 菜单宽度
+  //   menuWidth: 200,
+  //   // 最小宽度
+  //   minMenuWidth: 64,
+  //   // 分割菜单
+  //   mixMenu: false,
+  // },
+  // // 多标签
+  // multiTabsSetting: {
+  //   // 是否显示
+  //   show: true,
+  //   // 固定多标签
+  //   fixed: true,
+  // },
 
-  // 路由动画类型
-  pageAnimateType: 'zoom-fade',
-  // 底部
-  footerSetting: {
-    // 是否显示
-    show: true,
-    //固定底部
-    fixed: true,
-  },
+  // // 路由动画类型
+  // pageAnimateType: 'zoom-fade',
+  // // 底部
+  // footerSetting: {
+  //   // 是否显示
+  //   show: true,
+  //   //固定底部
+  //   fixed: true,
+  // },
 };
 
 export const useUserStore = defineStore({

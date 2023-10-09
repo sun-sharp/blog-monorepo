@@ -26,7 +26,8 @@ export const useLayoutHeader = () => {
   const useLockScreen = useLockScreenStore();
   const message = useMessage();
   const dialog = useDialog();
-  const { getAppThemeColor, getNavMode, getHeaderSetting, getHeadIsDark, getMenuSetting, getCrumbsSetting } = useSetting();
+
+  const { getAppThemeColor, getNavMode, getHeadIsDark } = useSetting();
 
   const { username, avatar } = userStore?.info || {};
 
@@ -38,12 +39,6 @@ export const useLayoutHeader = () => {
     username: username || '',
     avatar: getImgUrl(avatar) || '',
     navMode: getNavMode,
-    headerSetting: getHeaderSetting,
-    crumbsSetting: getCrumbsSetting,
-  });
-
-  const mixMenu = computed(() => {
-    return unref(getMenuSetting).mixMenu;
   });
 
   const router = useRouter();
@@ -205,7 +200,6 @@ export const useLayoutHeader = () => {
 
   return {
     ...toRefs(state),
-    mixMenu,
     breadcrumbList,
     iconList,
     fullscreenBool,

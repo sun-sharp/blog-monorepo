@@ -9,7 +9,7 @@
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const { getNavMode, getHeadFixed, getTabsViewFixed, getFooterFixed, getMenuSetting } = useSetting();
+  const { getNavMode, getHeadFixed, getTabsViewFixed, getFooterFixed } = useSetting();
 
   // 除去右侧
   const noSiderClassName = computed(() => {
@@ -81,9 +81,8 @@
 
   // 菜单是否展示
   const menuIsShow = computed(() => {
-    const mixMenu = unref(getMenuSetting).mixMenu;
     const navMode = unref(getNavMode);
-    if (!mixMenu && navMode === 'horizontal') {
+    if (navMode === 'horizontal') {
       return false;
     }
     return true;

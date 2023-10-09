@@ -14,8 +14,6 @@
 
   const {
     navMode,
-    headerSetting,
-    crumbsSetting,
     breadcrumbList,
     iconList,
     fullscreenBool,
@@ -54,23 +52,23 @@
           </n-icon>
         </div>
         <!-- 刷新 -->
-        <div v-if="headerSetting.isReload" class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
+        <div class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
           <n-icon size="18">
             <ReloadOutlined />
           </n-icon>
         </div>
         <!-- 面包屑 -->
-        <n-breadcrumb v-if="crumbsSetting.show">
+        <n-breadcrumb>
           <template v-for="breadItem in breadcrumbList" :key="breadItem.key">
             <n-breadcrumb-item>
               <n-dropdown v-if="breadItem.children && breadItem.children.length" :options="breadItem.children" @select="dropdownSelect">
                 <span class="link-text">
-                  <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
+                  <component :is="breadItem.icon" v-if="breadItem.icon" />
                   {{ breadItem.label }}
                 </span>
               </n-dropdown>
               <span v-else class="link-text">
-                <component :is="breadItem.icon" v-if="crumbsSetting.showIcon && breadItem.icon" />
+                <component :is="breadItem.icon" v-if="breadItem.icon" />
                 {{ breadItem.label }}
               </span>
             </n-breadcrumb-item>

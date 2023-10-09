@@ -1,6 +1,6 @@
 import { useSetting } from '@/hooks';
 import { useUserStore } from '@/store';
-import { ComputedRef, ExtractPropTypes, reactive, ref, toRefs, unref } from 'vue';
+import { ExtractPropTypes, reactive, ref, toRefs, unref } from 'vue';
 import { ApiAppTheme, ApiConfigInfo } from '/#/api/configuration';
 
 // LayoutHeaderSetting传参
@@ -31,13 +31,13 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     getAppTheme,
     getAppThemeColor,
     getNavMode,
-    getMenuSetting,
-    getHeaderSetting,
-    getMultiTabsSetting,
-    getCrumbsSetting,
-    getIsPageAnimate,
-    getPageAnimateType,
-    getFooterSetting,
+    // getMenuSetting,
+    // getHeaderSetting,
+    // getMultiTabsSetting,
+    // getCrumbsSetting,
+    // getIsPageAnimate,
+    // getPageAnimateType,
+    // getFooterSetting,
     getSiderIsDark,
     getHeadIsDark,
     getHeadFixed,
@@ -46,20 +46,20 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
   } = useSetting();
 
   // 复制computed的内容
-  const copyComputedObj = (obj: ComputedRef) => {
-    return Object.assign({}, unref(obj));
-  };
+  // const copyComputedObj = (obj: ComputedRef) => {
+  //   return Object.assign({}, unref(obj));
+  // };
   const configInfo: ApiConfigInfo = reactive({
     appTheme: unref(getAppTheme),
     appThemeColor: unref(getAppThemeColor),
     navMode: unref(getNavMode),
-    menuSetting: copyComputedObj(getMenuSetting),
-    headerSetting: copyComputedObj(getHeaderSetting),
-    multiTabsSetting: copyComputedObj(getMultiTabsSetting),
-    crumbsSetting: copyComputedObj(getCrumbsSetting),
-    isPageAnimate: unref(getIsPageAnimate),
-    pageAnimateType: unref(getPageAnimateType),
-    footerSetting: unref(getFooterSetting),
+    // menuSetting: copyComputedObj(getMenuSetting),
+    // headerSetting: copyComputedObj(getHeaderSetting),
+    // multiTabsSetting: copyComputedObj(getMultiTabsSetting),
+    // crumbsSetting: copyComputedObj(getCrumbsSetting),
+    // isPageAnimate: unref(getIsPageAnimate),
+    // pageAnimateType: unref(getPageAnimateType),
+    // footerSetting: unref(getFooterSetting),
     siderIsDark: unref(getSiderIsDark),
     headIsDark: unref(getHeadIsDark),
     headFixed: unref(getHeadFixed),
