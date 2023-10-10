@@ -31,6 +31,7 @@
     switchChange,
     selectChange,
     openDrawer,
+    drawerReset,
     drawerSettingSubmit,
   } = useLayoutHeaderSetting(props);
 
@@ -189,6 +190,7 @@
         </div>
       </div>
       <template #footer>
+        <n-button class="mr-15" @click="drawerReset">重置</n-button>
         <n-button type="primary" :loading="submitLoading" @click="drawerSettingSubmit">保存</n-button>
       </template>
     </n-drawer-content>
@@ -205,10 +207,6 @@
     }
 
     &__drawer {
-      // .n-divider:not(.n-divider--vertical) {
-      //   margin: 10px 0;
-      // }
-
       .drawer-setting-item {
         display: flex;
         flex-wrap: wrap;

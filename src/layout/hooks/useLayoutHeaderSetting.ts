@@ -1,6 +1,6 @@
 import { useSetting } from '@/hooks';
 import { useUserStore } from '@/store';
-import { ExtractPropTypes, reactive, ref, toRefs, unref } from 'vue';
+import { ExtractPropTypes, computed, nextTick, reactive, ref, toRefs, unref } from 'vue';
 import { ApiAppTheme, ApiConfigInfo } from '/#/api/configuration';
 
 // LayoutHeaderSetting传参
@@ -45,27 +45,41 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     getPageAnimateType,
   } = useSetting();
 
-  const configInfo = reactive<ApiConfigInfo>({
-    appTheme: unref(getAppTheme),
-    appThemeColor: unref(getAppThemeColor),
-    navMode: unref(getNavMode),
-    siderIsDark: unref(getSiderIsDark),
-    headIsDark: unref(getHeadIsDark),
-    headFixed: unref(getHeadFixed),
-    tabsViewShow: unref(getTabsViewShow),
-    tabsViewFixed: unref(getTabsViewFixed),
-    footerFixed: unref(getFooterFixed),
-    headerReloadShow: unref(getHeaderReloadShow),
-    headerBreadcrumbShow: unref(getHeaderBreadcrumbShow),
-    headerBreadcrumbShowIcon: unref(getHeaderBreadcrumbShowIcon),
-    footerShow: unref(getFooterShow),
-    hasPageAnimate: unref(getHasPageAnimate),
-    pageAnimateType: unref(getPageAnimateType),
+  // 默认配置
+  const defaultConfigInfo = computed<ApiConfigInfo>(() => {
+    return {
+      appTheme: unref(getAppTheme),
+      appThemeColor: unref(getAppThemeColor),
+      navMode: unref(getNavMode),
+      siderIsDark: unref(getSiderIsDark),
+      headIsDark: unref(getHeadIsDark),
+      headFixed: unref(getHeadFixed),
+      tabsViewShow: unref(getTabsViewShow),
+      tabsViewFixed: unref(getTabsViewFixed),
+      footerFixed: unref(getFooterFixed),
+      headerReloadShow: unref(getHeaderReloadShow),
+      headerBreadcrumbShow: unref(getHeaderBreadcrumbShow),
+      headerBreadcrumbShowIcon: unref(getHeaderBreadcrumbShowIcon),
+      footerShow: unref(getFooterShow),
+      hasPageAnimate: unref(getHasPageAnimate),
+      pageAnimateType: unref(getPageAnimateType),
+    };
   });
+
+  const configInfo = reactive<ApiConfigInfo>(JSON.parse(JSON.stringify(unref(defaultConfigInfo))));
+
+  // 重置
+  const drawerReset = () => {
+    nextTick(() => {
+      const defaultInfo = unref(defaultConfigInfo);
+      Object.assign(configInfo, defaultInfo);
+    });
+  };
 
   // 展开
   const openDrawer = () => {
     state.isDrawer = true;
+    drawerReset();
   };
 
   // 关闭
@@ -123,6 +137,7 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     radioChange,
     switchChange,
     selectChange,
+    drawerReset,
     drawerSettingSubmit,
   };
 };
