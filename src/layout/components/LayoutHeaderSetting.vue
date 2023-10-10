@@ -18,7 +18,7 @@
     tabsViewFixed,
     footerFixed,
     headerReloadShow,
-
+    submitLoading,
     togTheme,
     togThemeColor,
     radioChange,
@@ -38,9 +38,9 @@
 
 <template>
   <n-drawer v-model:show="isDrawer" class="layout-header-setting" :width="width" :placement="placement">
-    <n-drawer-content :title="title">
-      <div class="drawer">
-        <n-divider title-placement="center">系统主题</n-divider>
+    <n-drawer-content :title="title" header-style="padding: 10px 16px" footer-style="padding: 10px 16px" body-content-style="padding: 16px">
+      <div class="layout-header-setting__drawer">
+        <n-divider class="mv-10" title-placement="center">系统主题</n-divider>
         <div class="drawer-setting-item justify-center pv-12">
           <n-radio-group v-model:value="appTheme" name="radiogroup" @update:value="togTheme">
             <n-space>
@@ -49,7 +49,7 @@
           </n-radio-group>
         </div>
 
-        <n-divider title-placement="center">系统主题色</n-divider>
+        <n-divider class="mv-10" title-placement="center">系统主题色</n-divider>
         <div class="drawer-setting-item justify-between pv-2">
           <span v-for="(item, index) in appThemeColorList" :key="index" class="theme-item" :style="{ 'background-color': item }" @click="togThemeColor(item)">
             <n-icon v-if="item === appThemeColor" size="12">
@@ -58,7 +58,7 @@
           </span>
         </div>
 
-        <n-divider title-placement="center">菜单模式</n-divider>
+        <n-divider class="mv-10" title-placement="center">菜单模式</n-divider>
         <div class="drawer-setting-item justify-center pv-2">
           <n-radio-group v-model:value="navMode" name="radiogroup" @update:value="radioChange">
             <n-space>
@@ -67,7 +67,7 @@
           </n-radio-group>
         </div>
 
-        <n-divider title-placement="center">导航栏风格</n-divider>
+        <n-divider class="mv-10" title-placement="center">导航栏风格</n-divider>
         <div class="drawer-setting-item pv-5">
           <div class="drawer-setting-item-title">侧边栏主题</div>
           <div class="drawer-setting-item-action">
@@ -113,7 +113,7 @@
           </div>
         </div>
 
-        <n-divider title-placement="center">界面功能</n-divider>
+        <n-divider class="mv-10" title-placement="center">界面功能</n-divider>
 
         <div class="drawer-setting-item pv-5">
           <div class="drawer-setting-item-title">固定顶栏</div>
@@ -136,7 +136,7 @@
           </div>
         </div>
 
-        <n-divider title-placement="center">界面显示</n-divider>
+        <n-divider class="mv-10" title-placement="center">界面显示</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>
@@ -190,7 +190,7 @@
         </div> -->
       </div>
       <template #footer>
-        <n-button type="primary" @click="drawerSettingSubmit">保存</n-button>
+        <n-button type="primary" :loading="submitLoading" @click="drawerSettingSubmit">保存</n-button>
       </template>
     </n-drawer-content>
   </n-drawer>
@@ -204,75 +204,68 @@
       justify-content: space-between;
       width: 100%;
     }
-  }
 
-  .drawer {
-    .n-divider:not(.n-divider--vertical) {
-      margin: 10px 0;
-    }
+    &__drawer {
+      // .n-divider:not(.n-divider--vertical) {
+      //   margin: 10px 0;
+      // }
 
-    &-setting-item {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-
-      &-style {
-        position: relative;
-        display: inline-block;
-        margin-right: 16px;
-        text-align: center;
-        cursor: pointer;
-      }
-
-      &-title {
-        flex: 1 1;
-        font-size: 14px;
-      }
-
-      &-action {
-        flex: 0 0 auto;
-      }
-
-      &-select {
-        flex: 1;
-      }
-
-      &-image {
-        width: 52px;
-        height: 45px;
-      }
-
-      &-dot {
+      .drawer-setting-item {
         display: flex;
-        justify-content: center;
-      }
+        flex-wrap: wrap;
+        align-items: center;
 
-      .theme-item {
-        width: 20px;
-        min-width: 20px;
-        height: 20px;
-        margin: 0 5px 5px 0;
-        text-align: center;
-        border: 1px solid #eee;
-        border-radius: 2px;
-        cursor: pointer;
+        &-style {
+          position: relative;
+          display: inline-block;
+          margin-right: 16px;
+          text-align: center;
+          cursor: pointer;
+        }
 
-        .n-icon {
-          color: #fff;
+        &-title {
+          flex: 1 1;
+          font-size: 14px;
+        }
+
+        &-action {
+          flex: 0 0 auto;
+        }
+
+        &-select {
+          flex: 1;
+        }
+
+        &-image {
+          width: 52px;
+          height: 45px;
+        }
+
+        &-dot {
+          display: flex;
+          justify-content: center;
+        }
+
+        .theme-item {
+          width: 20px;
+          min-width: 20px;
+          height: 20px;
+          margin: 0 5px 5px 0;
+          text-align: center;
+          border: 1px solid #eee;
+          border-radius: 2px;
+          cursor: pointer;
+
+          .n-icon {
+            color: #fff;
+          }
         }
       }
-    }
 
-    .align-items-top {
-      align-items: flex-start;
-      padding: 2px 0;
+      .align-items-top {
+        align-items: flex-start;
+        padding: 2px 0;
+      }
     }
-  }
-
-  .drawer-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
   }
 </style>

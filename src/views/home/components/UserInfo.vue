@@ -7,7 +7,7 @@
   const userStore = useUserStore();
   const { username, avatar, roleName, loginDate } = userStore.info;
 
-  const userAvatar = ref(getImgUrl(avatar) || '');
+  const userAvatar = ref(getImgUrl(avatar));
 
   const showLoginDate = computed(() => {
     return loginDate ? judgeRangeToFormatTime(loginDate) : '';

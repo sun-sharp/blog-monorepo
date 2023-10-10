@@ -1,4 +1,4 @@
-import { computed, reactive, ref, toRefs, unref } from 'vue';
+import { computed, ref, unref } from 'vue';
 import { useRouter, useRoute, RouteLocationMatched, RouteRecordRaw } from 'vue-router';
 import { SearchOutlined, LockOutlined, lighten } from '@/utils';
 import { useDialog, useMessage } from 'naive-ui';
@@ -29,18 +29,15 @@ export const useLayoutHeader = () => {
 
   const { getAppThemeColor, getNavMode, getHeadIsDark, getHeaderReloadShow } = useSetting();
 
-  const { username, avatar } = userStore?.info || {};
+  const { avatar: infoAvatar } = userStore?.info || {};
 
   const headerSettingRef = ref();
 
   const fullscreenBool = ref(false);
 
-  const state = reactive({
-    username: username || '',
-    avatar: getImgUrl(avatar) || '',
-    navMode: getNavMode,
-    headerReloadShow: getHeaderReloadShow,
-  });
+  const avatar = computed(() => getImgUrl(infoAvatar));
+  const navMode = computed(() => unref(getNavMode));
+  const headerReloadShow = computed(() => unref(getHeaderReloadShow));
 
   const router = useRouter();
   const route = useRoute();
@@ -200,7 +197,9 @@ export const useLayoutHeader = () => {
   };
 
   return {
-    ...toRefs(state),
+    avatar,
+    navMode,
+    headerReloadShow,
     breadcrumbList,
     iconList,
     fullscreenBool,
