@@ -27,8 +27,21 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
   const userStore = useUserStore();
 
   // 配置信息
-  const { getAppTheme, getAppThemeColor, getNavMode, getSiderIsDark, getHeadIsDark, getHeadFixed, getTabsViewFixed, getFooterFixed, getHeaderReloadShow } =
-    useSetting();
+  const {
+    getAppTheme,
+    getAppThemeColor,
+    getNavMode,
+    getSiderIsDark,
+    getHeadIsDark,
+    getHeadFixed,
+    getTabsViewShow,
+    getTabsViewFixed,
+    getFooterShow,
+    getFooterFixed,
+    getHeaderReloadShow,
+    getHeaderBreadcrumbShow,
+    getHeaderBreadcrumbShowIcon,
+  } = useSetting();
 
   // 复制computed的内容
   // const copyComputedObj = (obj: ComputedRef) => {
@@ -41,9 +54,13 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     siderIsDark: unref(getSiderIsDark),
     headIsDark: unref(getHeadIsDark),
     headFixed: unref(getHeadFixed),
+    tabsViewShow: unref(getTabsViewShow),
     tabsViewFixed: unref(getTabsViewFixed),
     footerFixed: unref(getFooterFixed),
     headerReloadShow: unref(getHeaderReloadShow),
+    headerBreadcrumbShow: unref(getHeaderBreadcrumbShow),
+    headerBreadcrumbShowIcon: unref(getHeaderBreadcrumbShowIcon),
+    footerShow: unref(getFooterShow),
   });
 
   // 展开

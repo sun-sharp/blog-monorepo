@@ -9,7 +9,7 @@
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   import LayoutSearch from '@/layout/components/LayoutSearch.vue';
 
-  const { getNavMode, getHeadFixed, getTabsViewFixed, getFooterFixed } = useSetting();
+  const { getNavMode, getHeadFixed, getTabsViewShow, getTabsViewFixed, getFooterShow, getFooterFixed } = useSetting();
 
   // 除去右侧
   const noSiderClassName = computed(() => {
@@ -21,8 +21,9 @@
   const noSiderHeadClassName = computed(() => {
     const arr = ['lnf-header'];
     const headFixed = unref(getHeadFixed);
+    const tabsViewShow = unref(getTabsViewShow);
     const tabsViewFixed = unref(getTabsViewFixed);
-    if (headFixed && tabsViewFixed) {
+    if (headFixed && tabsViewFixed && tabsViewShow) {
       arr.push('head_tabs-view');
     } else if (headFixed) {
       arr.push('head');
@@ -56,17 +57,18 @@
     return arr;
   });
 
-  // 底部
+  // 页脚
   const noSiderFootClassName = computed(() => {
     const arr = ['lnf-footer'];
     const footerFixed = unref(getFooterFixed);
-    if (footerFixed) {
+    const footerShow = unref(getFooterShow);
+    if (footerFixed && footerShow) {
       arr.push('footer');
     }
     return arr;
   });
 
-  // 底部固定
+  // 页脚固定
   const lnfContFootClassName = computed(() => {
     const arr = [];
     const footerFixed = unref(getFooterFixed);
@@ -113,7 +115,7 @@
           <layout-header v-model:collapsed="collapsed" />
         </div>
 
-        <div :class="lnfContTabsViewClassName">
+        <div v-if="getTabsViewShow" :class="lnfContTabsViewClassName">
           <layout-tabs-view />
         </div>
 
@@ -127,7 +129,7 @@
           </div>
         </transition>
 
-        <div :class="lnfContFootClassName">
+        <div v-if="getFooterShow" :class="lnfContFootClassName">
           <layout-footer />
         </div>
 

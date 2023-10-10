@@ -95,12 +95,20 @@ export interface ApiConfiguration {
   headIsDark: boolean;
   // 固定顶栏
   headFixed: boolean;
+  // 显示标签页
+  tabsViewShow: boolean;
   // 固定标签页
   tabsViewFixed: boolean;
-  // 固定底部
+  // 显示页脚
+  footerShow: boolean;
+  // 固定页脚
   footerFixed: boolean;
   // 显示重载页面按钮
   headerReloadShow: boolean;
+  // 显示面包屑导航
+  headerBreadcrumbShow: boolean;
+  // 显示面包屑显示图标
+  headerBreadcrumbShowIcon: boolean;
 }
 
 /**

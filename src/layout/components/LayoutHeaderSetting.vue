@@ -18,6 +18,10 @@
     tabsViewFixed,
     footerFixed,
     headerReloadShow,
+    headerBreadcrumbShow,
+    headerBreadcrumbShowIcon,
+    tabsViewShow,
+    footerShow,
     submitLoading,
     togTheme,
     togThemeColor,
@@ -68,7 +72,7 @@
         </div>
 
         <n-divider class="mv-10" title-placement="center">导航栏风格</n-divider>
-        <div class="drawer-setting-item pv-5">
+        <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">侧边栏主题</div>
           <div class="drawer-setting-item-action">
             <n-tooltip placement="bottom">
@@ -90,7 +94,7 @@
             </n-tooltip>
           </div>
         </div>
-        <div class="drawer-setting-item pv-5">
+        <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">顶栏主题</div>
           <div class="drawer-setting-item-action">
             <n-tooltip placement="bottom">
@@ -115,22 +119,22 @@
 
         <n-divider class="mv-10" title-placement="center">界面功能</n-divider>
 
-        <div class="drawer-setting-item pv-5">
+        <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">固定顶栏</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="headFixed" @update:value="switchChange" />
           </div>
         </div>
 
-        <div class="drawer-setting-item pv-5">
-          <div class="drawer-setting-item-title">固定多页签</div>
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">固定标签页</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="tabsViewFixed" @update:value="switchChange" />
           </div>
         </div>
 
-        <div class="drawer-setting-item pv-5">
-          <div class="drawer-setting-item-title">固定底部</div>
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">固定页脚</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="footerFixed" @update:value="switchChange" />
           </div>
@@ -145,47 +149,47 @@
           </div>
         </div>
 
-        <!--<div class="drawer-setting-item">
+        <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑导航</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="crumbsSetting.show" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="headerBreadcrumbShow" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑显示图标</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="crumbsSetting.showIcon" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="headerBreadcrumbShowIcon" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">显示多页签</div>
+          <div class="drawer-setting-item-title">显示标签页</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="multiTabsSetting.show" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="tabsViewShow" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示页脚</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="footerSetting.show" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="footerShow" @update:value="switchChange" />
           </div>
         </div>
 
-        <n-divider title-placement="center">动画</n-divider>
+        <!--<n-divider title-placement="center">动画</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">禁用动画</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="isPageAnimate" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="isPageAnimate" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">动画类型</div>
           <div class="drawer-setting-item-select">
-            <n-select v-model:value="pageAnimateType" :loading="submitLoading" :options="animateSetting" @update:value="selectChange" />
+            <n-select v-model:value="pageAnimateType" :options="animateSetting" @update:value="selectChange" />
           </div>
         </div> -->
       </div>
@@ -214,6 +218,7 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        padding: 5px 0;
 
         &-style {
           position: relative;

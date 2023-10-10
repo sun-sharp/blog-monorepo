@@ -23,14 +23,26 @@ export const useSetting = () => {
   // 固定顶栏
   const getHeadFixed = computed<boolean>(() => userStore.getConfigInfo.headFixed);
 
+  // 显示标签页
+  const getTabsViewShow = computed<boolean>(() => userStore.getConfigInfo.tabsViewShow);
+
   // 固定标签页
   const getTabsViewFixed = computed<boolean>(() => userStore.getConfigInfo.tabsViewFixed);
 
-  // 固定底部
+  // 显示页脚
+  const getFooterShow = computed<boolean>(() => userStore.getConfigInfo.footerShow);
+
+  // 固定页脚
   const getFooterFixed = computed<boolean>(() => userStore.getConfigInfo.footerFixed);
 
   // 显示重载页面按钮
   const getHeaderReloadShow = computed<boolean>(() => userStore.getConfigInfo.headerReloadShow);
+
+  // 显示面包屑导航
+  const getHeaderBreadcrumbShow = computed<boolean>(() => userStore.getConfigInfo.headerBreadcrumbShow);
+
+  // 显示面包屑显示图标
+  const getHeaderBreadcrumbShowIcon = computed<boolean>(() => userStore.getConfigInfo.headerBreadcrumbShowIcon);
 
   return {
     getAppTheme,
@@ -39,8 +51,12 @@ export const useSetting = () => {
     getSiderIsDark,
     getHeadIsDark,
     getHeadFixed,
+    getTabsViewShow,
     getTabsViewFixed,
+    getFooterShow,
     getFooterFixed,
     getHeaderReloadShow,
+    getHeaderBreadcrumbShow,
+    getHeaderBreadcrumbShowIcon,
   };
 };

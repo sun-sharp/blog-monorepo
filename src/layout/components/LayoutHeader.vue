@@ -15,6 +15,8 @@
   const {
     navMode,
     headerReloadShow,
+    headerBreadcrumbShow,
+    headerBreadcrumbShowIcon,
     breadcrumbList,
     iconList,
     fullscreenBool,
@@ -59,17 +61,17 @@
           </n-icon>
         </div>
         <!-- 面包屑 -->
-        <n-breadcrumb>
+        <n-breadcrumb v-if="headerBreadcrumbShow">
           <template v-for="breadItem in breadcrumbList" :key="breadItem.key">
             <n-breadcrumb-item>
               <n-dropdown v-if="breadItem.children && breadItem.children.length" :options="breadItem.children" @select="dropdownSelect">
                 <span class="link-text">
-                  <component :is="breadItem.icon" v-if="breadItem.icon" />
+                  <component :is="breadItem.icon" v-if="headerBreadcrumbShowIcon && breadItem.icon" />
                   {{ breadItem.label }}
                 </span>
               </n-dropdown>
               <span v-else class="link-text">
-                <component :is="breadItem.icon" v-if="breadItem.icon" />
+                <component :is="breadItem.icon" v-if="headerBreadcrumbShowIcon && breadItem.icon" />
                 {{ breadItem.label }}
               </span>
             </n-breadcrumb-item>

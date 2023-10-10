@@ -27,7 +27,7 @@ export const useLayoutHeader = () => {
   const message = useMessage();
   const dialog = useDialog();
 
-  const { getAppThemeColor, getNavMode, getHeadIsDark, getHeaderReloadShow } = useSetting();
+  const { getAppThemeColor, getNavMode, getHeadIsDark, getHeaderReloadShow, getHeaderBreadcrumbShow, getHeaderBreadcrumbShowIcon } = useSetting();
 
   const { avatar: infoAvatar } = userStore?.info || {};
 
@@ -38,6 +38,8 @@ export const useLayoutHeader = () => {
   const avatar = computed(() => getImgUrl(infoAvatar));
   const navMode = computed(() => unref(getNavMode));
   const headerReloadShow = computed(() => unref(getHeaderReloadShow));
+  const headerBreadcrumbShow = computed(() => unref(getHeaderBreadcrumbShow));
+  const headerBreadcrumbShowIcon = computed(() => unref(getHeaderBreadcrumbShowIcon));
 
   const router = useRouter();
   const route = useRoute();
@@ -197,12 +199,14 @@ export const useLayoutHeader = () => {
   };
 
   return {
-    avatar,
     navMode,
     headerReloadShow,
+    headerBreadcrumbShow,
+    headerBreadcrumbShowIcon,
     breadcrumbList,
     iconList,
     fullscreenBool,
+    avatar,
     avatarOptions,
     headThemeOverrides,
     headerSettingRef,
