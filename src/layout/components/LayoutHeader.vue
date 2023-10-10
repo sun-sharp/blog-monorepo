@@ -19,7 +19,7 @@
     headerBreadcrumbShowIcon,
     breadcrumbList,
     iconList,
-    fullscreenBool,
+    isFullscreen,
     avatar,
     avatarOptions,
     headThemeOverrides,
@@ -91,7 +91,7 @@
         <div class="layout-header-trigger layout-header-trigger-min">
           <n-tooltip placement="bottom">
             <template #trigger>
-              <n-icon size="18" :component="fullscreenBool ? FullscreenExitOutlined : FullscreenOutlined" @click="toggleFullscreen"></n-icon>
+              <n-icon size="18" :component="isFullscreen ? FullscreenExitOutlined : FullscreenOutlined" @click="toggleFullscreen"></n-icon>
             </template>
             <span>全屏</span>
           </n-tooltip>

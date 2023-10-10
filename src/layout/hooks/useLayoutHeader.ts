@@ -8,6 +8,7 @@ import { useSearch, useSetting } from '@/hooks';
 import { HeaderBreadcrumbItem } from '/#/layout/header';
 import { PAGE_ENUM, darkNaiveTheme, defaultNaiveTheme } from '@/constant';
 import { formatNaiveTheme } from '@/components/hooks/useAppProvider';
+import { useFullscreen } from '@vueuse/core';
 
 // LayoutHeader传参
 export const LayoutHeaderProps = {
@@ -33,7 +34,7 @@ export const useLayoutHeader = () => {
 
   const headerSettingRef = ref();
 
-  const fullscreenBool = ref(false);
+  // const fullscreenBool = ref(false);
 
   const avatar = computed(() => getImgUrl(infoAvatar));
   const navMode = computed(() => unref(getNavMode));
@@ -44,7 +45,7 @@ export const useLayoutHeader = () => {
   const router = useRouter();
   const route = useRoute();
 
-  // 修改面包屑样式
+  // 修改顶部样式
   const headThemeOverrides = computed(() => {
     const isDark = unref(getHeadIsDark);
     // 默认naive主题
@@ -126,22 +127,8 @@ export const useLayoutHeader = () => {
     });
   };
 
-  // 切换全屏图标
-  const toggleFullscreenIcon = () => (fullscreenBool.value = document.fullscreenElement !== null);
-
-  // 监听全屏切换事件
-  document.addEventListener('fullscreenChange', toggleFullscreenIcon);
-
-  // 全屏切换
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-  };
+  // 全屏控制
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen();
 
   // 图标列表
   const iconList = [
@@ -205,7 +192,7 @@ export const useLayoutHeader = () => {
     headerBreadcrumbShowIcon,
     breadcrumbList,
     iconList,
-    fullscreenBool,
+    isFullscreen,
     avatar,
     avatarOptions,
     headThemeOverrides,

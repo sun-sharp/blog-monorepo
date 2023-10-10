@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import { computed, ref, unref } from 'vue';
-  import { useSearch, useSetting } from '@/hooks';
   import LayoutLogo from '@/layout/components/LayoutLogo.vue';
   import LayoutMenu from '@/layout/components/LayoutMenu.vue';
   import LayoutHeader from '@/layout/components/LayoutHeader.vue';
@@ -8,87 +6,22 @@
   import LayoutMain from '@/layout/components/LayoutMain.vue';
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
   import LayoutSearch from '@/layout/components/LayoutSearch.vue';
+  import { useLayoutIndex } from './hooks/useLayoutIndex';
 
-  const { getNavMode, getHeadFixed, getTabsViewShow, getTabsViewFixed, getFooterShow, getFooterFixed } = useSetting();
-
-  // 除去右侧
-  const noSiderClassName = computed(() => {
-    const arr = ['layout-no-sider'];
-    return arr;
-  });
-
-  // 顶部
-  const noSiderHeadClassName = computed(() => {
-    const arr = ['lnf-header'];
-    const headFixed = unref(getHeadFixed);
-    const tabsViewShow = unref(getTabsViewShow);
-    const tabsViewFixed = unref(getTabsViewFixed);
-    if (headFixed && tabsViewFixed && tabsViewShow) {
-      arr.push('head_tabs-view');
-    } else if (headFixed) {
-      arr.push('head');
-    } else if (tabsViewFixed) {
-      arr.push('tabs-view');
-    }
-    return arr;
-  });
-
-  // 顶部固定
-  const lnfContHeadClassName = computed(() => {
-    const arr = [];
-    const headFixed = unref(getHeadFixed);
-    if (headFixed) {
-      arr.push('head-fixed');
-    }
-    return arr;
-  });
-
-  // 标签页固定
-  const lnfContTabsViewClassName = computed(() => {
-    const arr = [];
-    const headFixed = unref(getHeadFixed);
-    const tabsViewFixed = unref(getTabsViewFixed);
-    if (tabsViewFixed) {
-      arr.push('tabs-view-fixed');
-    }
-    if (headFixed) {
-      arr.push('has-head');
-    }
-    return arr;
-  });
-
-  // 页脚
-  const noSiderFootClassName = computed(() => {
-    const arr = ['lnf-footer'];
-    const footerFixed = unref(getFooterFixed);
-    const footerShow = unref(getFooterShow);
-    if (footerFixed && footerShow) {
-      arr.push('footer');
-    }
-    return arr;
-  });
-
-  // 页脚固定
-  const lnfContFootClassName = computed(() => {
-    const arr = [];
-    const footerFixed = unref(getFooterFixed);
-    if (footerFixed) {
-      arr.push('foot-fixed');
-    }
-    return arr;
-  });
-
-  // 菜单是否折叠
-  const collapsed = ref<boolean>(false);
-
-  // 菜单是否展示
-  const menuIsShow = computed(() => {
-    const navMode = unref(getNavMode);
-    if (navMode === 'horizontal') {
-      return false;
-    }
-    return true;
-  });
+  const {
+    useSearch,
+    noSiderClassName,
+    noSiderHeadClassName,
+    lnfContHeadClassName,
+    lnfContTabsViewClassName,
+    noSiderFootClassName,
+    lnfContFootClassName,
+    siderThemeOverrides,
+    collapsed,
+    menuIsShow,
+    tabsViewShow,
+    footerShow,
+  } = useLayoutIndex();
 </script>
 
 <template>
@@ -104,8 +37,10 @@
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
-      <layout-logo :collapsed="collapsed" />
-      <layout-menu v-model:collapsed="collapsed" :inverted="false" />
+      <n-config-provider :theme-overrides="siderThemeOverrides">
+        <layout-logo :collapsed="collapsed" />
+        <layout-menu v-model:collapsed="collapsed" :inverted="false" />
+      </n-config-provider>
     </n-layout-sider>
     <section :class="noSiderClassName">
       <header :class="noSiderHeadClassName"></header>
@@ -115,7 +50,7 @@
           <layout-header v-model:collapsed="collapsed" />
         </div>
 
-        <div v-if="getTabsViewShow" :class="lnfContTabsViewClassName">
+        <div v-if="tabsViewShow" :class="lnfContTabsViewClassName">
           <layout-tabs-view />
         </div>
 
@@ -129,7 +64,7 @@
           </div>
         </transition>
 
-        <div v-if="getFooterShow" :class="lnfContFootClassName">
+        <div v-if="footerShow" :class="lnfContFootClassName">
           <layout-footer />
         </div>
 
