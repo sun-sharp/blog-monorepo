@@ -17,12 +17,14 @@
     headFixed,
     tabsViewFixed,
     footerFixed,
+    headerReloadShow,
 
     togTheme,
     togThemeColor,
     radioChange,
     switchChange,
     openDrawer,
+    drawerSettingSubmit,
   } = useLayoutHeaderSetting(props);
 
   // 主题按钮样式
@@ -35,7 +37,7 @@
 </script>
 
 <template>
-  <n-drawer v-model:show="isDrawer" :width="width" :placement="placement">
+  <n-drawer v-model:show="isDrawer" class="layout-header-setting" :width="width" :placement="placement">
     <n-drawer-content :title="title">
       <div class="drawer">
         <n-divider title-placement="center">系统主题</n-divider>
@@ -134,16 +136,16 @@
           </div>
         </div>
 
-        <!--<n-divider title-placement="center">界面显示</n-divider>
+        <n-divider title-placement="center">界面显示</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="headerSetting.isReload" :loading="submitLoading" @update:value="switchChange" />
+            <n-switch v-model:value="headerReloadShow" @update:value="switchChange" />
           </div>
         </div>
 
-        <div class="drawer-setting-item">
+        <!--<div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑导航</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="crumbsSetting.show" :loading="submitLoading" @update:value="switchChange" />
@@ -187,11 +189,23 @@
           </div>
         </div> -->
       </div>
+      <template #footer>
+        <n-button type="primary" @click="drawerSettingSubmit">保存</n-button>
+      </template>
     </n-drawer-content>
   </n-drawer>
 </template>
 
 <style lang="scss" scoped>
+  .layout-header-setting {
+    &__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+
   .drawer {
     .n-divider:not(.n-divider--vertical) {
       margin: 10px 0;

@@ -27,7 +27,7 @@ export const useLayoutHeader = () => {
   const message = useMessage();
   const dialog = useDialog();
 
-  const { getAppThemeColor, getNavMode, getHeadIsDark } = useSetting();
+  const { getAppThemeColor, getNavMode, getHeadIsDark, getHeaderReloadShow } = useSetting();
 
   const { username, avatar } = userStore?.info || {};
 
@@ -39,6 +39,7 @@ export const useLayoutHeader = () => {
     username: username || '',
     avatar: getImgUrl(avatar) || '',
     navMode: getNavMode,
+    headerReloadShow: getHeaderReloadShow,
   });
 
   const router = useRouter();

@@ -1,5 +1,4 @@
 import { PAGE_ENUM } from '@/constant';
-import { useSetting } from '@/hooks';
 import { useRouteStore, useTabsViewStore } from '@/store';
 import elementResizeDetectorMaker from 'element-resize-detector';
 import { useMessage } from 'naive-ui';
@@ -10,8 +9,6 @@ import { CloseOutlined, ColumnWidthOutlined, MinusOutlined, ReloadOutlined, rend
 
 /* 处理tabsView */
 export const useLayoutTagsView = () => {
-  const { getHeaderSetting, getMultiTabsSetting } = useSetting();
-
   const message = useMessage();
   const route = useRoute();
   const router = useRouter();
@@ -28,7 +25,6 @@ export const useLayoutTagsView = () => {
     dropdownY: 0,
     showDropdown: false,
     isMultiHeaderFixed: false,
-    multiTabsSetting: getMultiTabsSetting,
   });
 
   // 获取简易的路由对象
@@ -84,7 +80,7 @@ export const useLayoutTagsView = () => {
   //监听滚动条
   function onScroll() {
     const scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop; // 滚动条偏移量
-    state.isMultiHeaderFixed = !!(!unref(getHeaderSetting).fixed && unref(getMultiTabsSetting).fixed && scrollTop >= 64);
+    state.isMultiHeaderFixed = !!(scrollTop >= 64);
   }
 
   window.addEventListener('scroll', onScroll, true);

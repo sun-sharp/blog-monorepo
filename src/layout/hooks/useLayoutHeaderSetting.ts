@@ -27,23 +27,8 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
   const userStore = useUserStore();
 
   // 配置信息
-  const {
-    getAppTheme,
-    getAppThemeColor,
-    getNavMode,
-    // getMenuSetting,
-    // getHeaderSetting,
-    // getMultiTabsSetting,
-    // getCrumbsSetting,
-    // getIsPageAnimate,
-    // getPageAnimateType,
-    // getFooterSetting,
-    getSiderIsDark,
-    getHeadIsDark,
-    getHeadFixed,
-    getTabsViewFixed,
-    getFooterFixed,
-  } = useSetting();
+  const { getAppTheme, getAppThemeColor, getNavMode, getSiderIsDark, getHeadIsDark, getHeadFixed, getTabsViewFixed, getFooterFixed, getHeaderReloadShow } =
+    useSetting();
 
   // 复制computed的内容
   // const copyComputedObj = (obj: ComputedRef) => {
@@ -53,18 +38,12 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     appTheme: unref(getAppTheme),
     appThemeColor: unref(getAppThemeColor),
     navMode: unref(getNavMode),
-    // menuSetting: copyComputedObj(getMenuSetting),
-    // headerSetting: copyComputedObj(getHeaderSetting),
-    // multiTabsSetting: copyComputedObj(getMultiTabsSetting),
-    // crumbsSetting: copyComputedObj(getCrumbsSetting),
-    // isPageAnimate: unref(getIsPageAnimate),
-    // pageAnimateType: unref(getPageAnimateType),
-    // footerSetting: unref(getFooterSetting),
     siderIsDark: unref(getSiderIsDark),
     headIsDark: unref(getHeadIsDark),
     headFixed: unref(getHeadFixed),
     tabsViewFixed: unref(getTabsViewFixed),
     footerFixed: unref(getFooterFixed),
+    headerReloadShow: unref(getHeaderReloadShow),
   });
 
   // 展开
@@ -95,28 +74,25 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
       configInfo.siderIsDark = false;
       configInfo.headIsDark = false;
     }
-    drawerSettingSubmit();
   };
 
   const togNavMode = (mode: string) => {
     configInfo.navMode = mode;
-    drawerSettingSubmit();
   };
 
   // 切换主题色
   const togThemeColor = (color: string) => {
     configInfo.appThemeColor = color;
-    drawerSettingSubmit();
   };
 
   // 单选组件
-  const radioChange = () => drawerSettingSubmit();
+  const radioChange = () => {};
 
   // 开关组件变化
-  const switchChange = () => drawerSettingSubmit();
+  const switchChange = () => {};
 
   // 选择器
-  const selectChange = () => drawerSettingSubmit();
+  const selectChange = () => {};
 
   return {
     ...toRefs(state),
@@ -127,9 +103,9 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     togNavMode,
     openDrawer,
     closeDrawer,
-    drawerSettingSubmit,
     radioChange,
     switchChange,
     selectChange,
+    drawerSettingSubmit,
   };
 };

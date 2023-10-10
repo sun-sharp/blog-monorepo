@@ -14,6 +14,7 @@
 
   const {
     navMode,
+    headerReloadShow,
     breadcrumbList,
     iconList,
     fullscreenBool,
@@ -52,7 +53,7 @@
           </n-icon>
         </div>
         <!-- 刷新 -->
-        <div class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
+        <div v-if="headerReloadShow" class="mr-5 layout-header-trigger layout-header-trigger-min" @click="reloadPage">
           <n-icon size="18">
             <ReloadOutlined />
           </n-icon>

@@ -43,6 +43,8 @@ const defaultConfigInfo: ApiConfigInfo = {
   tabsViewFixed: true,
   // 固定顶部
   footerFixed: true,
+  // 显示重载页面按钮
+  headerReloadShow: true,
   // 面包屑
   // crumbsSetting: {
   //   // 是否显示
