@@ -5,16 +5,13 @@ import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormItemRule, FormRules, MenuOption } from 'naive-ui';
 import { menuApi } from '@/api';
 
-// 单管理 新建/修改 传参
+// 菜单管理 新建/修改 传参
 export const MenuAddUpdateModelProps = {
   tableData: {
     type: Array,
     default: () => [],
   },
 };
-
-// 单管理 新建/修改 父组件方法
-export const MenuAddUpdateModelEmits = 'refurbish';
 
 // 默认表单
 const defaultModelForm = {
@@ -30,10 +27,7 @@ const defaultModelForm = {
 };
 
 // 菜单管理 新建/修改 弹窗
-export const useMenuAddUpdateModel = (
-  props: ExtractPropTypes<typeof MenuAddUpdateModelProps>,
-  emit: (event: typeof MenuAddUpdateModelEmits, ...args: any[]) => void
-) => {
+export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpdateModelProps>, emit: (event: 'refurbish', ...args: any[]) => void) => {
   const modelId = ref('');
   const showModal = ref(false);
 

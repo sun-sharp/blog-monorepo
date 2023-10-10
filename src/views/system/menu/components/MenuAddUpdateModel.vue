@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { menuTypeOption } from '@/constant';
-  import { MenuAddUpdateModelEmits, MenuAddUpdateModelProps, useMenuAddUpdateModel } from '../hooks/useMenuAddUpdateModel';
+  import { MenuAddUpdateModelProps, useMenuAddUpdateModel } from '../hooks/useMenuAddUpdateModel';
 
   const props = defineProps(MenuAddUpdateModelProps);
 
-  const emit = defineEmits([MenuAddUpdateModelEmits]);
+  const emit = defineEmits(['refurbish']);
 
   const {
     modelId,

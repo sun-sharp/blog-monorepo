@@ -3,7 +3,7 @@ import { CSSProperties, ExtractPropTypes, computed, onMounted, reactive, ref, un
 import { ComponentType, FormActionType, FormSchema, SearchFormProps } from '/#/components/form';
 import { ButtonProps, GridItemProps, GridProps } from 'naive-ui';
 
-// 表单管理 新建/修改 传参
+// 表单查询 传参
 export const FormSearchProps = {
   // 标签宽度  固定宽度
   labelWidth: {
