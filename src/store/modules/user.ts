@@ -53,6 +53,10 @@ const defaultConfigInfo: ApiConfigInfo = {
   headerBreadcrumbShow: true,
   // 显示面包屑显示图标
   headerBreadcrumbShowIcon: true,
+  // 页面跳转动画
+  hasPageAnimate: true,
+  // 页面跳转动画类型
+  pageAnimateType: 'zoom-fade',
 };
 
 export const useUserStore = defineStore({

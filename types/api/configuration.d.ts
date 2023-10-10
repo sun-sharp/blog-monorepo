@@ -14,69 +14,24 @@ export type ApiConfNavMode = 'vertical' | 'horizontal' | 'horizontal-mix';
 export type ApiAppTheme = 'light' | 'dark';
 
 /**
+ * @description: 系统主题
+ * zoom-fade 渐变
+ * zoom-out 闪现
+ * fade 消退
+ * fade-slide 滑动
+ * fade-top 头部消退
+ * fade-bottom 底部消退
+ * fade-scale 缩放消退
+ */
+export type ApiAnimate = 'zoom-fade' | 'zoom-out' | 'fade' | 'fade-slide' | 'fade-top' | 'fade-bottom' | 'fade-scale';
+
+/**
  * @description: 设置的id
  */
 export interface ApiImageId {
   // 图片id
   imageId: string;
 }
-
-/**
- * @description 顶部字段
- */
-export interface ApiConfHeaderSetting {
-  //固定顶部
-  fixed: boolean;
-  //显示重载按钮
-  isReload: boolean;
-}
-
-/**
- * @description 多标签字段
- */
-export interface ApiConfMultiTabsSetting {
-  // 是否显示
-  show: boolean;
-  // 固定多标签
-  fixed: boolean;
-}
-
-/**
- * @description 菜单
- */
-export interface ApiConfMenuSetting {
-  // 最小宽度
-  minMenuWidth: number;
-  // 菜单宽度
-  menuWidth: number;
-  // 固定菜单
-  fixed: boolean;
-  // 分割菜单
-  mixMenu: boolean;
-  // 默认展开
-  collapsed: boolean;
-}
-
-/**
- * @description 面包屑
- */
-export interface ApiConfCrumbsSetting {
-  // 是否显示
-  show: boolean;
-  // 显示图标
-  showIcon: boolean;
-}
-
-/**
- * @description 底部字段
- */
-export interface ApiConfFooterSetting {
-  // 是否显示
-  show: boolean;
-  //固定底部
-  fixed: boolean;
-}
-
 /**
  * @description: 设置配置字段
  */
@@ -109,6 +64,10 @@ export interface ApiConfiguration {
   headerBreadcrumbShow: boolean;
   // 显示面包屑显示图标
   headerBreadcrumbShowIcon: boolean;
+  // 页面跳转动画
+  hasPageAnimate: boolean;
+  // 页面跳转动画类型
+  pageAnimateType: ApiAnimate;
 }
 
 /**

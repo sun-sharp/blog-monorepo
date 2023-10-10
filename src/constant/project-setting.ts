@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-09 10:54:32
+ * @LastEditTime: 2023-10-10 14:42:07
  * @Description: 项目配置
  */
 
@@ -9,7 +9,7 @@ import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
 // import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
 import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
 import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
-import { ApiAppTheme } from '/#/api/configuration';
+import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
 import { CTypeOption } from '/#/config';
 import { ThemeCommonVars } from 'naive-ui';
 
@@ -329,11 +329,12 @@ export const navThemeArr = [
 ];
 
 // 动画全部类型
-export const animateSetting = [
+export const animateList: CTypeOption<ApiAnimate>[] = [
   { value: 'zoom-fade', label: '渐变' },
   { value: 'zoom-out', label: '闪现' },
-  { value: 'fade-slide', label: '滑动' },
   { value: 'fade', label: '消退' },
+  { value: 'fade-slide', label: '滑动' },
+  { value: 'fade-top', label: '头部消退' },
   { value: 'fade-bottom', label: '底部消退' },
   { value: 'fade-scale', label: '缩放消退' },
 ];

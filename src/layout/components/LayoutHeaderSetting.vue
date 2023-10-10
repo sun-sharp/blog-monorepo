@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { CheckOutlined, Moon, SunnySharp } from '@/utils';
-  import { appThemeList, appThemeColorList, navModeArr } from '@/constant';
+  import { appThemeList, appThemeColorList, navModeArr, animateList } from '@/constant';
   import { LayoutHeaderSettingProps, useLayoutHeaderSetting } from '@/layout/hooks/useLayoutHeaderSetting';
   // import { CSSProperties } from 'vue';
 
@@ -22,11 +22,14 @@
     headerBreadcrumbShowIcon,
     tabsViewShow,
     footerShow,
+    hasPageAnimate,
+    pageAnimateType,
     submitLoading,
     togTheme,
     togThemeColor,
     radioChange,
     switchChange,
+    selectChange,
     openDrawer,
     drawerSettingSubmit,
   } = useLayoutHeaderSetting(props);
@@ -118,21 +121,18 @@
         </div>
 
         <n-divider class="mv-10" title-placement="center">界面功能</n-divider>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">固定顶栏</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="headFixed" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">固定标签页</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="tabsViewFixed" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">固定页脚</div>
           <div class="drawer-setting-item-action">
@@ -141,35 +141,30 @@
         </div>
 
         <n-divider class="mv-10" title-placement="center">界面显示</n-divider>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="headerReloadShow" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑导航</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="headerBreadcrumbShow" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示面包屑显示图标</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="headerBreadcrumbShowIcon" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示标签页</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="tabsViewShow" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示页脚</div>
           <div class="drawer-setting-item-action">
@@ -177,21 +172,21 @@
           </div>
         </div>
 
-        <!--<n-divider title-placement="center">动画</n-divider>
+        <n-divider class="mv-10" title-placement="center">动画</n-divider>
 
         <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">禁用动画</div>
+          <div class="drawer-setting-item-title">页面跳转动画</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="isPageAnimate" @update:value="switchChange" />
+            <n-switch v-model:value="hasPageAnimate" @update:value="switchChange" />
           </div>
         </div>
 
         <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">动画类型</div>
+          <div class="drawer-setting-item-title">页面跳转动画类型</div>
           <div class="drawer-setting-item-select">
-            <n-select v-model:value="pageAnimateType" :options="animateSetting" @update:value="selectChange" />
+            <n-select v-model:value="pageAnimateType" :options="animateList" @update:value="selectChange" />
           </div>
-        </div> -->
+        </div>
       </div>
       <template #footer>
         <n-button type="primary" :loading="submitLoading" @click="drawerSettingSubmit">保存</n-button>

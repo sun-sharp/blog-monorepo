@@ -119,11 +119,11 @@
           <layout-tabs-view />
         </div>
 
-        <transition name="searchView">
+        <transition name="search-view">
           <layout-search v-show="useSearch" v-press-key:q.alt="() => (useSearch = true)" />
         </transition>
 
-        <transition name="searchView">
+        <transition name="search-view">
           <div v-show="!useSearch" v-press-key:escape="() => (useSearch = false)" class="main-view">
             <layout-main />
           </div>

@@ -41,13 +41,11 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     getHeaderReloadShow,
     getHeaderBreadcrumbShow,
     getHeaderBreadcrumbShowIcon,
+    getHasPageAnimate,
+    getPageAnimateType,
   } = useSetting();
 
-  // 复制computed的内容
-  // const copyComputedObj = (obj: ComputedRef) => {
-  //   return Object.assign({}, unref(obj));
-  // };
-  const configInfo: ApiConfigInfo = reactive({
+  const configInfo = reactive<ApiConfigInfo>({
     appTheme: unref(getAppTheme),
     appThemeColor: unref(getAppThemeColor),
     navMode: unref(getNavMode),
@@ -61,6 +59,8 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     headerBreadcrumbShow: unref(getHeaderBreadcrumbShow),
     headerBreadcrumbShowIcon: unref(getHeaderBreadcrumbShowIcon),
     footerShow: unref(getFooterShow),
+    hasPageAnimate: unref(getHasPageAnimate),
+    pageAnimateType: unref(getPageAnimateType),
   });
 
   // 展开

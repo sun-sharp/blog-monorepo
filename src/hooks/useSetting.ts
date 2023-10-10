@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
-import { ApiAppTheme } from '/#/api/configuration';
+import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
 
 export const useSetting = () => {
   const userStore = useUserStore();
@@ -44,6 +44,12 @@ export const useSetting = () => {
   // 显示面包屑显示图标
   const getHeaderBreadcrumbShowIcon = computed<boolean>(() => userStore.getConfigInfo.headerBreadcrumbShowIcon);
 
+  // 页面跳转动画
+  const getHasPageAnimate = computed<boolean>(() => userStore.getConfigInfo.hasPageAnimate);
+
+  // 页面跳转动画类型
+  const getPageAnimateType = computed<ApiAnimate>(() => userStore.getConfigInfo.pageAnimateType);
+
   return {
     getAppTheme,
     getAppThemeColor,
@@ -58,5 +64,7 @@ export const useSetting = () => {
     getHeaderReloadShow,
     getHeaderBreadcrumbShow,
     getHeaderBreadcrumbShowIcon,
+    getHasPageAnimate,
+    getPageAnimateType,
   };
 };

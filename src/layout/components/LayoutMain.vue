@@ -27,13 +27,13 @@
     },
   });
 
-  const { getIsPageAnimate, getPageAnimateType } = useSetting();
+  const { getHasPageAnimate, getPageAnimateType } = useSetting();
   const routeStore = useRouteStore();
   // 需要缓存的路由组件
   const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
 
   const getTransitionName = computed(() => {
-    return unref(getIsPageAnimate) ? unref(getPageAnimateType) : '';
+    return unref(getHasPageAnimate) ? unref(getPageAnimateType) : '';
   });
 </script>
 
