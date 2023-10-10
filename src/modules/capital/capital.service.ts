@@ -78,7 +78,7 @@ export class CapitalService {
         .catch((err) => {
           logger.error(`返回错误`, err);
           return {
-            code: ApiCode.SUCCESS,
+            code: err.code || ApiCode.ERROR,
             message: err.message || '请求失败！',
           };
         })
