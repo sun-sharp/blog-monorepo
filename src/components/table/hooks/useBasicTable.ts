@@ -73,6 +73,15 @@ export const BasicTableProps = {
   minHeight: {
     type: Number,
   },
+  // 是否是n-card包括的
+  isCardSurround: {
+    type: Boolean,
+    default: false,
+  },
+  cardSurroundPaddingBottom: {
+    type: Number,
+    default: 20,
+  },
 };
 
 // 基础表格
@@ -172,8 +181,6 @@ export const useBasicTable = (
 
   // 设置表格那内容滚动高度
   const computeTableHeight = async () => {
-    console.log('152464');
-
     const table = unref(tableElRef);
     if (!table) return;
     if (!props.canResize) return;
@@ -209,7 +216,6 @@ export const useBasicTable = (
 
     // 其它相关高度
     const tableHeadBorderBottom = 1;
-    const cardPaddingBottom = 20;
     const contPaddingBottom = 10;
 
     /** 高度设置为 lnf-cont 的高度
@@ -220,7 +226,13 @@ export const useBasicTable = (
         - card卡片以下的内边距
         - 内容设置的内边距
       */
-    let height = useContSize.height - (tableHeadTop - headerH) - tableHeadHeight - paginationH - tableHeadBorderBottom - cardPaddingBottom - contPaddingBottom;
+    let height = useContSize.height - (tableHeadTop - headerH) - tableHeadHeight - paginationH - tableHeadBorderBottom - contPaddingBottom;
+
+    // 减去外部card包括的底部内边距
+    const cardPaddingBottom = props.cardSurroundPaddingBottom;
+    if (props.isCardSurround) {
+      height -= cardPaddingBottom;
+    }
 
     // 固定底部后，再减去layout底部高度
     if (!unref(getFooterFixed)) {
