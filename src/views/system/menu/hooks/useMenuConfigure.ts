@@ -1,16 +1,21 @@
-import { h, nextTick, onMounted, ref } from 'vue';
+import { h, nextTick, onMounted, reactive, ref } from 'vue';
 import { constantHtmlIcon, levelMenu } from '@/utils';
 import { NButton, NTag } from 'naive-ui';
 import { menuTypeObj } from '@/constant';
 import { menuApi } from '@/api';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormSchema } from '/#/components/form';
-import { TableDensityOptionKey } from '/#/components/table';
+import { TableSizeType } from '/#/components/table';
+import at from 'await-to-js';
+
+interface ISearchParams {
+  title: string;
+}
 
 /**
  * @description: 根据参数过滤表单数据
  */
-const filterMenuByParams = (arr: ApiLevelMenuItem[], params: { title: string }) => {
+const filterMenuByParams = (arr: ApiLevelMenuItem[], params: ISearchParams) => {
   if (!params.title) return arr;
   const newArr: ApiLevelMenuItem[] = [];
   arr.forEach((m) => {
@@ -43,7 +48,7 @@ export const useMenuConfigure = () => {
   const addUpdateModelRef = ref<Component>();
 
   // 配置表格密度
-  const tableSize = ref<TableDensityOptionKey>('medium');
+  const tableSize = ref<TableSizeType>('medium');
 
   // 表格
   const tableData = ref<ApiLevelMenuItem[]>([]);
@@ -56,18 +61,14 @@ export const useMenuConfigure = () => {
    * 表格
    *  */
   // 获取接口数据
-  const loadDataTable = () => {
+  const loadDataTable = async () => {
     tableLoading.value = true;
-    menuApi
-      .getMenuList()
-      .then((res) => {
-        const levelData = levelMenu(res);
-        tableTempData.value = levelData;
-        tableData.value = levelData;
-      })
-      .finally(() => {
-        tableLoading.value = false;
-      });
+    const [err, res] = await at(menuApi.getMenuList());
+    if (err || !res) return;
+    const levelData = levelMenu(res);
+    tableTempData.value = levelData;
+    tableData.value = levelData;
+    tableLoading.value = false;
   };
 
   // 查询配置
@@ -200,16 +201,19 @@ export const useMenuConfigure = () => {
   /**
    * 查询
    *  */
+  const searchParams = reactive<ISearchParams>({
+    title: '',
+  });
   // 数据查询
-  const searchSubmit = (values: { title: string }) => {
-    console.log(values);
+  const searchSubmit = (values: ISearchParams) => {
+    searchParams.title = values.title;
     tableData.value = filterMenuByParams(tableTempData.value, values);
-    // searchParams = values;
   };
 
-  //密度切换
-  const densitySelect = (e: TableDensityOptionKey) => {
-    tableSize.value = e;
+  // 刷新
+  const reload = async () => {
+    await loadDataTable();
+    searchSubmit(searchParams);
   };
 
   onMounted(() => {
@@ -221,12 +225,12 @@ export const useMenuConfigure = () => {
   return {
     addUpdateModelRef,
     searchSchemas,
+    tableSize,
     columns,
     tableLoading,
     tableData,
-    tableSize,
-    densitySelect,
     searchSubmit,
     loadDataTable,
+    reload,
   };
 };

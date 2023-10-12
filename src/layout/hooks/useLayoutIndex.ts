@@ -1,11 +1,20 @@
 import { formatNaiveTheme } from '@/components/hooks/useAppProvider';
 import { darkNaiveTheme, defaultNaiveTheme } from '@/constant';
 import { lighten } from '@/utils';
-import { computed, ref, unref } from 'vue';
-import { useSearch, useSetting } from '@/hooks';
+import { computed, ref, unref, watchEffect } from 'vue';
+import { useMainSize, useSearch, useSetting } from '@/hooks';
+import { useElementBounding } from '@vueuse/core';
 
 /* 处理useLayoutIndex */
 export const useLayoutIndex = () => {
+  // main-view 的内容
+  const mainViewRef = ref<Component>();
+  const { width: mainWidth, height: mainHeight } = useElementBounding(mainViewRef);
+  watchEffect(() => {
+    useMainSize.width = unref(mainWidth);
+    useMainSize.height = unref(mainHeight);
+  });
+
   const { getAppThemeColor, getNavMode, getHeadFixed, getTabsViewShow, getTabsViewFixed, getFooterShow, getFooterFixed, getSiderIsDark } = useSetting();
 
   // 除去右侧
@@ -122,6 +131,7 @@ export const useLayoutIndex = () => {
   });
 
   return {
+    mainViewRef,
     useSearch,
     noSiderClassName,
     noSiderHeadClassName,

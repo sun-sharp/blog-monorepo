@@ -9,6 +9,7 @@
   import { useLayoutIndex } from './hooks/useLayoutIndex';
 
   const {
+    mainViewRef,
     useSearch,
     noSiderClassName,
     noSiderHeadClassName,
@@ -45,7 +46,7 @@
     <section :class="noSiderClassName">
       <header :class="noSiderHeadClassName"></header>
 
-      <main class="lnf-cont">
+      <main ref="mainViewRef" class="lnf-cont">
         <div :class="lnfContHeadClassName">
           <layout-header v-model:collapsed="collapsed" />
         </div>

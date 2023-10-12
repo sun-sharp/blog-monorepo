@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  // import { PlusOutlined } from '@/utils/icons';
+  import { PlusOutlined } from '@/utils/icons';
   import FormSearch from '@/components/form/FormSearch.vue';
   import BasicTable from '@/components/table/BasicTable.vue';
   import UserAddUpdateModel from './components/UserAddUpdateModel.vue';

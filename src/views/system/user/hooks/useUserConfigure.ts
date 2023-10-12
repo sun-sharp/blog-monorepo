@@ -1,4 +1,4 @@
-import { h, reactive, ref } from 'vue';
+import { h, ref } from 'vue';
 // import TableAction from '@/components/Table/table-action.vue';
 import { userApi } from '@/api';
 import { NAvatar } from 'naive-ui';
@@ -41,11 +41,11 @@ export const useUserConfigure = () => {
       title: '头像',
       key: 'avatar',
       align: 'center',
-      render(row: ApiUserItem) {
+      render(row) {
         return h(NAvatar, {
           size: 48,
           round: true,
-          src: getImgUrl(row.avatar),
+          src: typeof row.avatar === 'string' ? getImgUrl(row.avatar) : '',
         });
       },
     },
@@ -97,7 +97,7 @@ export const useUserConfigure = () => {
   //   });
   // };
 
-  const actionColumn = reactive({});
+  const actionColumn: BasicColumn = { title: '操作', key: 'action' };
 
   // const actionColumn = reactive({
   //   width: 220,
