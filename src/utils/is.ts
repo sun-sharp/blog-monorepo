@@ -89,7 +89,7 @@ export function isBoolean(val: unknown): boolean {
  * @description:  是否为数组
  */
 export function isArray(val: unknown): boolean {
-  return !!val && Array.isArray(val);
+  return typeof val === 'object' && val instanceof Array;
 }
 
 /**

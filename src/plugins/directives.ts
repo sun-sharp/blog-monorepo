@@ -1,5 +1,4 @@
 import type { App } from 'vue';
-import { clickOutside } from '@/plugins/directives/clickOutside';
 import { pressKey } from '@/plugins/directives/pressKey';
 
 /**
@@ -7,6 +6,5 @@ import { pressKey } from '@/plugins/directives/pressKey';
  * @param app
  */
 export function setupDirectives(app: App) {
-  app.directive('click-outside', clickOutside);
   app.directive('press-key', pressKey);
 }

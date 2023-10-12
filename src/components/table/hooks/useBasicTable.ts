@@ -1,11 +1,12 @@
 import { useDataSource } from './useDataSource';
 import { usePagination } from './usePagination';
 import { useTableColumns } from './useTableColumns';
-import { BasicColumn, TablePaginationParams, PaginationProps, TableSizeType } from '/#/components/table';
-import { ExtractPropTypes, computed, reactive, ref, toRaw, toRefs, unref, watch } from 'vue';
-import { useElementBounding } from '@vueuse/core';
-import { useMainSize } from '@/hooks';
-// import { useLoading } from './useLoading';
+import { BasicColumn, TablePaginationParams, PaginationProps, TableSizeType, TablePaginationResult, PaginationConfig } from '/#/components/table';
+import { ExtractPropTypes, computed, nextTick, onMounted, reactive, ref, toRefs, unref, watch } from 'vue';
+import { PAGE_FIELD, SIZE_FIELD } from '@/constant';
+import { getBoundingClientRect, isBoolean } from '@/utils';
+import { useLayoutSizeSetting, useContSize, useSetting } from '@/hooks';
+import { useDebounceFn } from '@vueuse/core';
 
 // 基础表格 传参
 export const BasicTableProps = {
@@ -35,7 +36,7 @@ export const BasicTableProps = {
   },
   // 自定义查询数据方法
   request: {
-    type: Function as PropType<(params: TablePaginationParams) => Promise<any>>,
+    type: Function as PropType<(params: TablePaginationParams) => Promise<TablePaginationResult<any[]>>>,
     required: true,
   },
   // 通过行数据创建行的 key（如果你不想给每一行加上 key）
@@ -58,7 +59,7 @@ export const BasicTableProps = {
   },
   // 分页属性
   pagination: {
-    type: Object as PropType<PaginationProps>,
+    type: Object as PropType<PaginationProps | Boolean>,
   },
   // 每行内操作
   actionColumn: {
@@ -71,7 +72,6 @@ export const BasicTableProps = {
   // 最大高度
   minHeight: {
     type: Number,
-    default: 150,
   },
 };
 
@@ -114,7 +114,9 @@ export const useBasicTable = (
   const { getPaginationInfo, setPagination } = usePagination(props);
 
   //获取分页信息
-  const pagination = computed(() => toRaw(unref(getPaginationInfo)));
+  const pagination = computed(() => {
+    return unref(getPaginationInfo);
+  });
 
   // 表格处理数据
   const { getDataSourceRef, getRowKey, reload } = useDataSource(props, emit, {
@@ -129,26 +131,32 @@ export const useBasicTable = (
   const deviceHeight = ref(props.maxHeight);
   const geTableBindProps = computed(() => {
     const tableData = unref(getDataSourceRef);
-    const maxHeight = tableData.length ? `${unref(deviceHeight)}px` : 'auto';
+    const devH = unref(deviceHeight);
+    const maxHeight = tableData.length && devH ? `${devH}px` : 'auto';
 
     return {
       loading: unref(getLoading),
-      columns: toRaw(unref(getPageColumns)),
+      columns: unref(getPageColumns),
       rowKey: unref(getRowKey),
       data: tableData,
-      'max-height': maxHeight,
+      remote: true, // 表格是否自动分页数据，在异步的状况下你可能需要把它设为 true
+      maxHeight,
     };
   });
 
   //页码切换
   const updatePage = (page: number) => {
-    setPagination({ page });
+    const params: PaginationConfig = {};
+    params[PAGE_FIELD] = page;
+    setPagination(params);
     reload();
   };
 
   //分页数量切换
-  const updatePageSize = (size: number) => {
-    setPagination({ size });
+  const updatePageSize = (pageSize: number) => {
+    const params: PaginationConfig = {};
+    params[SIZE_FIELD] = pageSize;
+    setPagination(params);
     reload();
   };
 
@@ -157,38 +165,93 @@ export const useBasicTable = (
     emit('update:checked-row-keys', rowKeys);
   };
 
+  // layout的高度和宽度
+  const { headerHeight, tabsViewHeight, footerHeight } = useLayoutSizeSetting();
+
+  const { getHeadFixed, getTabsViewShow, getTabsViewFixed, getFooterShow, getFooterFixed } = useSetting();
+
+  // 设置表格那内容滚动高度
   const computeTableHeight = async () => {
+    console.log('152464');
+
     const table = unref(tableElRef);
     if (!table) return;
     if (!props.canResize) return;
     const tableEl = table?.$el;
-    const headEl = tableEl.querySelector('.n-data-table-thead');
-    const { top, height: headHeight } = useElementBounding(headEl);
-    console.log(unref(top), unref(headHeight));
-    // console.log(useMainSize, 'useMainSize');
+    const tableHeadEl = tableEl.querySelector('.n-data-table-thead');
+    const tableHeadClientRect = getBoundingClientRect(tableHeadEl);
+    if (!tableHeadClientRect) return;
 
-    // const headerH = 64;
-    // let paginationH = 2;
-    // let marginH = 24;
-    // let borderH = 1;
-    // if (!isBoolean(pagination)) {
-    //   paginationEl = tableEl.querySelector('.n-data-table__pagination') as HTMLElement;
-    //   if (paginationEl) {
-    //     const offsetHeight = paginationEl.offsetHeight;
-    //     paginationH += offsetHeight || 0;
-    //   } else {
-    //     paginationH += 28;
-    //   }
-    // }
-    let height = useMainSize.height - unref(headHeight);
+    // 获取表格头部离页面顶部的距离 top，表格头部的高度
+    const { top: tableHeadTop, height: tableHeadHeight } = tableHeadClientRect;
+
+    // 获取layout顶栏高度
+    let headerH = 0;
+    if (unref(getHeadFixed)) {
+      headerH += unref(headerHeight);
+    }
+    if (unref(getTabsViewShow) && unref(getTabsViewFixed)) {
+      headerH += unref(tabsViewHeight);
+    }
+    const footerH = unref(footerHeight);
+
+    // 获取分页的高度
+    let paginationH = 0;
+    const paginationMarginTop = 12;
+    if (!isBoolean(pagination)) {
+      const paginationEl = tableEl.querySelector('.n-data-table__pagination');
+      const pageClientRect = getBoundingClientRect(paginationEl);
+      if (pageClientRect) {
+        const { height: pageHeight } = pageClientRect;
+        paginationH = pageHeight + paginationMarginTop;
+      }
+    }
+
+    // 其它相关高度
+    const tableHeadBorderBottom = 1;
+    const cardPaddingBottom = 20;
+    const contPaddingBottom = 10;
+
+    /** 高度设置为 lnf-cont 的高度
+        - 内容里表格以上的高度（表格头部离页面顶部的距离 top - 获取layout顶栏高度 - 设置的向上内边距）
+        - 表格表头的高度
+        - 分页的高度
+        - 表格表头和滚动内容直接的边框
+        - card卡片以下的内边距
+        - 内容设置的内边距
+      */
+    let height = useContSize.height - (tableHeadTop - headerH) - tableHeadHeight - paginationH - tableHeadBorderBottom - cardPaddingBottom - contPaddingBottom;
+
+    // 固定底部后，再减去layout底部高度
+    if (!unref(getFooterFixed)) {
+      height -= footerH;
+    }
+
     const { maxHeight, minHeight } = props;
     if (maxHeight && height > maxHeight) {
       height = maxHeight;
     } else if (height < 0) {
-      height = minHeight;
+      height = minHeight ? minHeight : 0;
     }
     deviceHeight.value = height;
   };
+
+  const debounceTableHeight = useDebounceFn(computeTableHeight, 150);
+
+  // 监听内容展示的模块高度变化
+  watch(
+    () => [useContSize.height, getTabsViewShow, getFooterShow],
+    () => {
+      debounceTableHeight();
+    },
+    { deep: true }
+  );
+
+  onMounted(() => {
+    nextTick(() => {
+      debounceTableHeight();
+    });
+  });
 
   return {
     ...toRefs(state),
@@ -201,6 +264,5 @@ export const useBasicTable = (
     updatePage,
     updatePageSize,
     updateCheckedRowKeys,
-    computeTableHeight,
   };
 };

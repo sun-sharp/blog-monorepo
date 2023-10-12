@@ -1,5 +1,6 @@
 import { AxiosCapital } from '@/api/axios';
 import { ApiUserInfo, ApiUserItem, ApiUserPageData, ApiUserUpdateRoleCodeData, ApiUserUpdateUserInfoData, UserUpdateUserPassword } from '/#/api/user';
+import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/user';
 
@@ -19,7 +20,7 @@ export const getUserInfo = (): Promise<ApiUserInfo> => {
  * @param {ApiUserPageData} data
  * @return {Promise<ApiUserItem>}
  */
-export const getPage = (data: ApiUserPageData): Promise<ApiUserItem> => {
+export const getPage = (data: ApiUserPageData): Promise<TablePaginationResult<ApiUserItem[]>> => {
   return AxiosCapital.request({
     url: `${basic}/find_page`,
     method: 'POST',

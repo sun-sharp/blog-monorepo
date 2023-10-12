@@ -1,7 +1,7 @@
 import { computed, unref } from 'vue';
 import { ThemeCommonVars } from 'naive-ui';
 import { lighten } from '@/utils';
-import { useSetting } from '@/hooks';
+import { useLayoutSizeSetting, useSetting } from '@/hooks';
 import { darkNaiveTheme, darkVariable, defaultNaiveTheme, defaultVariable } from '@/constant';
 
 // 处理Naive主题样式
@@ -12,6 +12,9 @@ export const formatNaiveTheme = (naiveCommon: ThemeCommonVars, otherCommon: Part
 // app 配置
 export const useAppProvider = () => {
   const { getAppTheme, getAppThemeColor, getHeadIsDark, getSiderIsDark } = useSetting();
+
+  // layout的高度和宽度
+  const { headerHeight, footerHeight, tabsViewHeight } = useLayoutSizeSetting();
 
   // 设置主题样式
   const getThemeOverrides = computed(() => {
@@ -72,7 +75,7 @@ export const useAppProvider = () => {
       cardBackgroundColor,
       cardBoxShadow,
     } = defaultVariable;
-    const { cardBorderRadius, cardBorderColor, borderInputColor, textWarningColor, headerHeight, footerHeight, tabsViewHeight } = defaultVariable;
+    const { cardBorderRadius, cardBorderColor, borderInputColor, textWarningColor } = defaultVariable;
     // 顶栏
     if (unref(getHeadIsDark)) {
       headerBackColor = darkVariable.headerBackColor;
@@ -115,6 +118,7 @@ export const useAppProvider = () => {
       cardBackgroundColor = darkVariable.cardBackgroundColor;
       cardBoxShadow = darkVariable.cardBoxShadow;
     }
+
     return {
       '--app-theme-color': themeColor,
       '--app-header-back-color': headerBackColor,
@@ -140,9 +144,9 @@ export const useAppProvider = () => {
       '--app-border-divide-color': borderDivideColor,
       '--app-border-input-color': borderInputColor,
       '--app-text-warning-color': textWarningColor,
-      '--app-header-height': headerHeight,
-      '--app-footer-height': footerHeight,
-      '--app-tabs-view-height': tabsViewHeight,
+      '--app-header-height': `${unref(headerHeight)}px`,
+      '--app-footer-height': `${unref(footerHeight)}px`,
+      '--app-tabs-view-height': `${unref(tabsViewHeight)}px`,
     };
   });
 

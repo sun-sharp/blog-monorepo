@@ -1,7 +1,7 @@
 import { computed, unref, ref, ExtractPropTypes } from 'vue';
 import { PaginationConfig, PaginationProps } from '/#/components/table';
 import { isBoolean } from '@/utils';
-import { DEFAULT_PAGESIZE, PAGE_COUNT_FIELD, PAGE_SIZES, TOTAL_FIELD } from '@/constant';
+import { DEFAULT_PAGESIZE, PAGE_COUNT_FIELD, PAGE_SIZES, SIZE_FIELD, TOTAL_FIELD } from '@/constant';
 import { BasicTableProps } from './useBasicTable';
 
 export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
@@ -14,7 +14,7 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
       return false;
     }
     return {
-      pageSize: DEFAULT_PAGESIZE,
+      pageSize: unref(configRef)[SIZE_FIELD] || DEFAULT_PAGESIZE,
       pageSizes: PAGE_SIZES,
       showSizePicker: true,
       showQuickJumper: true,
@@ -25,10 +25,9 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
   });
 
   // 设置分页
-  const setPagination = (info: Partial<PaginationProps>) => {
-    const paginationInfo = unref(getPaginationInfo);
+  const setPagination = (info: PaginationConfig) => {
     configRef.value = {
-      ...(!isBoolean(paginationInfo) ? paginationInfo : {}),
+      ...unref(configRef),
       ...info,
     };
   };

@@ -102,14 +102,14 @@ export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, e
     return '';
   };
 
-  const getComponentProps = (schema: FormSchema) => {
+  const getComponentProps = (schema: FormSchema): never => {
     const compProps = schema.componentProps ?? {};
     const component = schema.component;
     return {
       clearable: true,
       placeholder: createPlaceholderMessage(unref(component)),
       ...compProps,
-    };
+    } as never;
   };
 
   const getFormBind = computed<SearchFormProps>(() => {

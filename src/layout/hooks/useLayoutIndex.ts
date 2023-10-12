@@ -2,17 +2,17 @@ import { formatNaiveTheme } from '@/components/hooks/useAppProvider';
 import { darkNaiveTheme, defaultNaiveTheme } from '@/constant';
 import { lighten } from '@/utils';
 import { computed, ref, unref, watchEffect } from 'vue';
-import { useMainSize, useSearch, useSetting } from '@/hooks';
+import { useContSize, useSearch, useSetting } from '@/hooks';
 import { useElementBounding } from '@vueuse/core';
 
 /* 处理useLayoutIndex */
 export const useLayoutIndex = () => {
-  // main-view 的内容
-  const mainViewRef = ref<Component>();
-  const { width: mainWidth, height: mainHeight } = useElementBounding(mainViewRef);
+  // lnf-cont 的内容
+  const lnfContRef = ref<Component>();
+  const { width: contWidth, height: contHeight } = useElementBounding(lnfContRef);
   watchEffect(() => {
-    useMainSize.width = unref(mainWidth);
-    useMainSize.height = unref(mainHeight);
+    useContSize.width = unref(contWidth);
+    useContSize.height = unref(contHeight);
   });
 
   const { getAppThemeColor, getNavMode, getHeadFixed, getTabsViewShow, getTabsViewFixed, getFooterShow, getFooterFixed, getSiderIsDark } = useSetting();
@@ -33,7 +33,7 @@ export const useLayoutIndex = () => {
       arr.push('head_tabs-view');
     } else if (headFixed) {
       arr.push('head');
-    } else if (tabsViewFixed) {
+    } else if (tabsViewFixed && tabsViewShow) {
       arr.push('tabs-view');
     }
     return arr;
@@ -131,7 +131,7 @@ export const useLayoutIndex = () => {
   });
 
   return {
-    mainViewRef,
+    lnfContRef,
     useSearch,
     noSiderClassName,
     noSiderHeadClassName,

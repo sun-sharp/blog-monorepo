@@ -98,26 +98,35 @@ export type TotalFieldType = 'total';
  * @description: 分页
  */
 export type PaginationProps = {
+  // 受控模式下的当前页
   page?: number;
-  size?: number;
-  list?: number;
-  total?: number;
+  // 受控模式下的分页大小
+  pageSize?: number;
+  // 总条数
+  itemCount?: number;
+  // 总页数
   pageCount?: number;
+  // 是否显示每页条数的选择器
   showSizePicker?: boolean;
+  // 	是否显示快速跳转
   showQuickJumper?: boolean;
+  // 每页条数， 可自定义
   pageSizes?: number[];
 };
 
 /**
  * @description: 分页配置
  */
-export type PaginationConfig = Partial<Record<PageCountFieldType, number>> & Partial<Record<PageFieldType, number>> & Partial<Record<TotalFieldType, number>>;
+export type PaginationConfig = Partial<Record<PageCountFieldType, number>> &
+  Partial<Record<PageFieldType, number>> &
+  Partial<Record<TotalFieldType, number>> &
+  Partial<Record<SizeFieldType, number>>;
 
 // 分页表格传参
 export type TablePaginationParams = Partial<Record<PageFieldType, number>> & Partial<Record<SizeFieldType, number>>;
 
 // 分页表格返回传参
-export type TablePaginationResult = Record<PageFieldType, number> &
+export type TablePaginationResult<T> = Record<PageFieldType, number> &
   Record<SizeFieldType, number> &
-  Record<ListFieldType, any[]> &
+  Record<ListFieldType, T> &
   Record<TotalFieldType, number>;

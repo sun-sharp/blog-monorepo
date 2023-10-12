@@ -4,7 +4,7 @@ import { reactive, ref } from 'vue';
 export const useSearch = ref<boolean>(false);
 
 // 获取内容展示的宽高
-export const useMainSize = reactive({
+export const useContSize = reactive({
   width: 0,
   height: 0,
 });

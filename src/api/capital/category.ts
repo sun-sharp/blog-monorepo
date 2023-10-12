@@ -1,10 +1,10 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiFindPageData, ApiSaveData } from '/#/api/category';
+import { ApiCategoryFindPageData, ApiCategorySaveData } from '/#/api/category';
 
 const basic = '/category';
 
 /**
- * @description: 获取配置信息
+ * @description: 某种类型的所有配置
  * @param {string} type
  */
 export function certainTypeAll(type: string) {
@@ -18,10 +18,10 @@ export function certainTypeAll(type: string) {
 }
 
 /**
- * @description: 支付宝账单列表
+ * @description: 条件并分页获取全局类型列表
  * @param {FindPageData} data
  */
-export const getPage = (data: ApiFindPageData) => {
+export const getPage = (data: ApiCategoryFindPageData) => {
   return AxiosCapital.request({
     url: `${basic}/find_page`,
     method: 'POST',
@@ -30,10 +30,10 @@ export const getPage = (data: ApiFindPageData) => {
 };
 
 /**
- * @description 新增用户
+ * @description 创建全局类型
  * @param data
  */
-export const save = (data: ApiSaveData) => {
+export const save = (data: ApiCategorySaveData) => {
   return AxiosCapital.request({
     url: `${basic}/save`,
     method: 'POST',

@@ -4,7 +4,7 @@ export interface FormSchema {
   labelMessage?: string;
   labelMessageStyle?: string;
   defaultValue?: any;
-  component?: ComponentType;
+  component?: Component;
   componentProps?: FormSchemaComponentProps;
   slot?: string;
   rules?: FormRules;

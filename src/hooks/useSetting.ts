@@ -1,7 +1,9 @@
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
 import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
+import { defaultLayoutSize } from '@/constant';
 
+// 项目配置
 export const useSetting = () => {
   const userStore = useUserStore();
 
@@ -67,4 +69,20 @@ export const useSetting = () => {
     getHasPageAnimate,
     getPageAnimateType,
   };
+};
+
+// 监听layout的高度或宽度设置
+export const useLayoutSizeSetting = () => {
+  const { headerHeight: headH, footerHeight: footH, tabsViewHeight: tabsViewH } = defaultLayoutSize;
+
+  // 顶栏高度
+  const headerHeight = computed(() => headH);
+
+  // 底部高度
+  const footerHeight = computed(() => footH);
+
+  // 标签页高度
+  const tabsViewHeight = computed(() => tabsViewH);
+
+  return { headerHeight, footerHeight, tabsViewHeight };
 };

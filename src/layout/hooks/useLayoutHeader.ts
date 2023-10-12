@@ -1,5 +1,5 @@
 import { computed, ref, unref } from 'vue';
-import { useRouter, useRoute, RouteLocationMatched, RouteRecordRaw } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { SearchOutlined, LockOutlined, lighten } from '@/utils';
 import { useDialog, useMessage } from 'naive-ui';
 import { useLockScreenStore, useUserStore } from '@/store';
@@ -34,8 +34,6 @@ export const useLayoutHeader = () => {
 
   const headerSettingRef = ref();
 
-  // const fullscreenBool = ref(false);
-
   const avatar = computed(() => getImgUrl(infoAvatar));
   const navMode = computed(() => unref(getNavMode));
   const headerReloadShow = computed(() => unref(getHeaderReloadShow));
@@ -69,7 +67,7 @@ export const useLayoutHeader = () => {
     };
   });
 
-  const generator = (routerMap: RouteLocationMatched[] | RouteRecordRaw[]): HeaderBreadcrumbItem[] => {
+  const generator = (routerMap: any[]): HeaderBreadcrumbItem[] => {
     return routerMap
       .filter((f) => f.path !== PAGE_ENUM.PAGE_PATH && f.path !== '/')
       .map((item) => {

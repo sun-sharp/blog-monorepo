@@ -51,7 +51,6 @@ export function createRouterGuards(router: Router) {
     if (!routeStore.getIsDynamicAddedRoute) {
       // 获取用户信息
       const userInfo = await userStore.GetInfo();
-      console.log(userInfo, 'userInfo');
 
       // 获取用户配置信息
       await userStore.GetConfigInfo();

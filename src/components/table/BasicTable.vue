@@ -1,23 +1,15 @@
 <script lang="ts" setup>
-  import { useWindowSizeFn } from '@/hooks';
   import TableToolbar from './TableToolbar.vue';
   import { BasicTableProps, useBasicTable } from './hooks/useBasicTable';
-  import { nextTick, onMounted } from 'vue';
 
   const props = defineProps(BasicTableProps);
 
   const emit = defineEmits(['fetch-success', 'fetch-error', 'update:checked-row-keys', 'edit-end', 'edit-cancel', 'edit-row-end', 'edit-change']);
 
-  const { tableSize, tableElRef, geTableBindProps, getTableToolbarProps, pagination, updatePage, updatePageSize, updateCheckedRowKeys, computeTableHeight } =
-    useBasicTable(props, emit);
-
-  useWindowSizeFn(computeTableHeight);
-
-  onMounted(() => {
-    nextTick(() => {
-      computeTableHeight();
-    });
-  });
+  const { tableSize, tableElRef, geTableBindProps, getTableToolbarProps, pagination, updatePage, updatePageSize, updateCheckedRowKeys } = useBasicTable(
+    props,
+    emit
+  );
 </script>
 
 <template>

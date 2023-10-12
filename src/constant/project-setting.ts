@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-10 14:42:07
+ * @LastEditTime: 2023-10-12 16:00:17
  * @Description: 项目配置
  */
 
@@ -12,6 +12,13 @@ import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg'
 import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
 import { CTypeOption } from '/#/config';
 import { ThemeCommonVars } from 'naive-ui';
+
+// 默认layout的高度和宽度
+export const defaultLayoutSize = {
+  headerHeight: 64,
+  tabsViewHeight: 44,
+  footerHeight: 44,
+};
 
 // 默认variable样式
 export const defaultVariable = {
@@ -38,9 +45,6 @@ export const defaultVariable = {
   borderDivideColor: 'rgb(239, 239, 245)',
   borderInputColor: '#e0e0e6',
   textWarningColor: '#ff6767',
-  headerHeight: '64px',
-  footerHeight: '44px',
-  tabsViewHeight: '44px',
 };
 // 默认naive组件主题
 export const defaultNaiveTheme: ThemeCommonVars = {

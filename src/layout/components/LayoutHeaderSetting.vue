@@ -27,6 +27,8 @@
     submitLoading,
     togTheme,
     togThemeColor,
+    tabsViewShowChange,
+    footerShowChange,
     radioChange,
     switchChange,
     selectChange,
@@ -121,26 +123,6 @@
           </div>
         </div>
 
-        <n-divider class="mv-10" title-placement="center">界面功能</n-divider>
-        <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">固定顶栏</div>
-          <div class="drawer-setting-item-action">
-            <n-switch v-model:value="headFixed" @update:value="switchChange" />
-          </div>
-        </div>
-        <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">固定标签页</div>
-          <div class="drawer-setting-item-action">
-            <n-switch v-model:value="tabsViewFixed" @update:value="switchChange" />
-          </div>
-        </div>
-        <div class="drawer-setting-item">
-          <div class="drawer-setting-item-title">固定页脚</div>
-          <div class="drawer-setting-item-action">
-            <n-switch v-model:value="footerFixed" @update:value="switchChange" />
-          </div>
-        </div>
-
         <n-divider class="mv-10" title-placement="center">界面显示</n-divider>
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>
@@ -163,25 +145,43 @@
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示标签页</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="tabsViewShow" @update:value="switchChange" />
+            <n-switch v-model:value="tabsViewShow" @update:value="tabsViewShowChange" />
           </div>
         </div>
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示页脚</div>
           <div class="drawer-setting-item-action">
-            <n-switch v-model:value="footerShow" @update:value="switchChange" />
+            <n-switch v-model:value="footerShow" @update:value="footerShowChange" />
+          </div>
+        </div>
+
+        <n-divider class="mv-10" title-placement="center">界面功能</n-divider>
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">固定顶栏</div>
+          <div class="drawer-setting-item-action">
+            <n-switch v-model:value="headFixed" @update:value="switchChange" />
+          </div>
+        </div>
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">固定标签页</div>
+          <div class="drawer-setting-item-action">
+            <n-switch v-model:value="tabsViewFixed" :disabled="!tabsViewShow" @update:value="switchChange" />
+          </div>
+        </div>
+        <div class="drawer-setting-item">
+          <div class="drawer-setting-item-title">固定页脚</div>
+          <div class="drawer-setting-item-action">
+            <n-switch v-model:value="footerFixed" :disabled="!footerShow" @update:value="switchChange" />
           </div>
         </div>
 
         <n-divider class="mv-10" title-placement="center">动画</n-divider>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">页面跳转动画</div>
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="hasPageAnimate" @update:value="switchChange" />
           </div>
         </div>
-
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">页面跳转动画类型</div>
           <div class="drawer-setting-item-select">

@@ -107,13 +107,21 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     }
   };
 
-  const togNavMode = (mode: string) => {
-    configInfo.navMode = mode;
-  };
+  const togNavMode = () => {};
 
   // 切换主题色
   const togThemeColor = (color: string) => {
     configInfo.appThemeColor = color;
+  };
+
+  // 显示标签页
+  const tabsViewShowChange = () => {
+    configInfo.tabsViewFixed = true;
+  };
+
+  // 显示页脚
+  const footerShowChange = () => {
+    configInfo.footerFixed = true;
   };
 
   // 单选组件
@@ -132,6 +140,8 @@ export const useLayoutHeaderSetting = (props: ExtractPropTypes<typeof LayoutHead
     togTheme,
     togThemeColor,
     togNavMode,
+    tabsViewShowChange,
+    footerShowChange,
     openDrawer,
     closeDrawer,
     radioChange,
