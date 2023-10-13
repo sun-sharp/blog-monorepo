@@ -1,8 +1,7 @@
 import { reactive, ref, toRefs, unref, watchEffect } from 'vue';
-import { BasicColumn, ColumnFixedType, TableColumnSettingState } from '/#/components/table';
+import { BasicColumn, ColumnFixedType, TableColumnKey, TableColumnSettingState } from '/#/components/table';
 import { useTableContext } from './useTableContext';
 import { cloneDeep } from 'lodash-es';
-import { ColumnKey } from 'naive-ui/es/data-table/src/interface';
 
 // 表格设置组件 传参
 export const TableColumnSettingProps = {
@@ -92,7 +91,7 @@ export const useTableColumnSetting = () => {
   };
 
   // 列表多选
-  const onCheckboxGroupChange = (checkKeys: ColumnKey[]) => {
+  const onCheckboxGroupChange = (checkKeys: TableColumnKey[]) => {
     const defaultCols = unref(defaultColumnsList);
     // 处理多选列展示选项
     state.checkAll = defaultCols.length === checkKeys.length;

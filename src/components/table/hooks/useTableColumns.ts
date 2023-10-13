@@ -1,8 +1,7 @@
 import { computed, ExtractPropTypes, ref, unref } from 'vue';
 import { cloneDeep } from 'lodash-es';
 import { BasicTableProps } from './useBasicTable';
-import { BasicColumn } from '/#/components/table';
-import { ColumnKey } from 'naive-ui/es/data-table/src/interface';
+import { BasicColumn, TableColumnKey } from '/#/components/table';
 import { isArray } from '@/utils';
 
 // 表格需要展示的列
@@ -17,12 +16,7 @@ export const useTableColumns = (props: ExtractPropTypes<typeof BasicTableProps>)
   });
 
   // 获取列
-  const getColumns = () => {
-    const columns = unref(columnsRef);
-    return columns.map((item) => {
-      return { ...item, title: item.title, key: item.key, fixed: item.fixed };
-    });
-  };
+  const getColumns = () => unref(columnsRef);
 
   // 重新设置列
   const setColumns = (columns: BasicColumn[]) => {
@@ -39,7 +33,7 @@ export const useTableColumns = (props: ExtractPropTypes<typeof BasicTableProps>)
   const getDefaultColumns = (): BasicColumn[] => defaultColumns;
 
   // 获取缓冲列
-  const getDefaultColumnsKeys = (): ColumnKey[] => defaultColumns.map((m) => m.key);
+  const getDefaultColumnsKeys = (): TableColumnKey[] => defaultColumns.map((m) => m.key);
 
   return {
     getPageColumns,

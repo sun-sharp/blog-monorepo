@@ -1,9 +1,11 @@
-import { TableColumn, TableColumnTitle, TableExpandColumnTitle, TableColumnGroupTitle, ColumnKey } from 'naive-ui/es/data-table/src/interface';
+import type { TableBaseColumn, TableSelectionColumn } from 'naive-ui/es/data-table/src/interface';
 // import type { Ref } from 'vue';
+
+export type TableColumnKey = string | number;
 
 export type TableSizeType = 'small' | 'medium' | 'large';
 
-export type ColumnFixedType = 'left' | 'right' | undefined;
+export type ColumnFixedType = 'left' | 'right';
 
 // 配置表格密度类型
 export interface TableDensityOption {
@@ -12,27 +14,25 @@ export interface TableDensityOption {
   key: TableSizeType;
 }
 
+// // 基础列表的列
+// export type BasicTableBaseColumn<T = InternalRowData> = {
+//   type?: string;
+//   title?: string | ((column: BasicTableBaseColumn) => VNodeChild);
+//   key: TableColumnKey;
+//   render?: (rowData: T, rowIndex: number) => VNodeChild;
+// } & CommonColumnInfo<T>;
+
+// export type BasicTableSelectionColumn<T = InternalRowData> = {
+//   type: 'selection';
+//   key: TableColumnKey;
+//   multiple?: boolean;
+//   disabled?: (row: T) => boolean;
+// } & CommonColumnInfo<T>;
+
 /**
  * @description: 表格列表配置
  */
-export type BasicColumn<T = InternalRowData> = TableColumn<T> & {
-  key: ColumnKey;
-  title?: TableColumnTitle | TableExpandColumnTitle | TableColumnGroupTitle;
-} & {
-  // 是否编辑表格
-  edit?: boolean;
-  editRow?: boolean;
-  editable?: boolean;
-  editComponent?: ComponentType;
-  editComponentProps?: Recordable;
-  editRule?: boolean | ((text: string, record: Recordable) => Promise<string>);
-  editValueMap?: (value: any) => string;
-  onEditRow?: () => void;
-  // 权限编码控制是否显示
-  auth?: string[];
-  // 业务控制是否显示
-  ifShow?: boolean | ((column: BasicColumn) => boolean);
-};
+export type BasicColumn<T = InternalRowData> = TableBaseColumn<T> | (TableSelectionColumn<T> & { key: TableColumnKey });
 
 export interface TableActionType {
   // reload: (opt) => Promise<void>;
@@ -40,10 +40,10 @@ export interface TableActionType {
   //   event: 'fetch-success' | 'fetch-error' | 'update:checked-row-keys' | 'edit-end' | 'edit-cancel' | 'edit-row-end' | 'edit-change',
   //   ...args: any[]
   // ) => void;
-  getColumns: (opt?) => BasicColumn[];
-  setColumns: (columns: BasicColumn[]) => void;
-  getDefaultColumns: () => BasicColumn[];
-  getDefaultColumnsKeys: () => ColumnKey[];
+  getColumns: () => BasicColumn<T>[];
+  setColumns: (columns: BasicColumn<T>[]) => void;
+  getDefaultColumns: () => BasicColumn<T>[];
+  getDefaultColumnsKeys: () => TableColumnKey[];
   // setCacheColumnsField: (key: string | undefined, value: Partial<BasicColumn>) => void;
 }
 
@@ -64,8 +64,8 @@ export interface TableColumnSettingState {
   selection: boolean;
   checkAll: boolean;
   allIndeterminate: boolean;
-  checkKeys: ColumnKey[];
-  defaultCheckKeys: ColumnKey[];
+  checkKeys: TableColumnKey[];
+  defaultCheckKeys: TableColumnKey[];
 }
 
 export type TableContextInstance = TableActionType & {
