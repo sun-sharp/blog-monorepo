@@ -21,7 +21,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <table-toolbar v-model:size="tableSize" @reload="reload">
+    <table-toolbar v-model:size="tableSize" :has-column-setting="false" @reload="reload">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
           <template #icon>

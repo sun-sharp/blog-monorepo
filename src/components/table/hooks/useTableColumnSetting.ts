@@ -1,140 +1,141 @@
-// import { useSetting } from '@/hooks';
-// import { computed, reactive, ref, toRaw, toRefs, unref, watchEffect } from 'vue';
-// import { useTableContext } from './useTableContext';
-// import { cloneDeep } from 'lodash-es';
-// import { BasicColumn, ColumnFixedType, TableColumnSettingState } from '/#/components/table';
+import { reactive, ref, toRefs, unref, watchEffect } from 'vue';
+import { BasicColumn, ColumnFixedType, TableColumnSettingState } from '/#/components/table';
+import { useTableContext } from './useTableContext';
+import { cloneDeep } from 'lodash-es';
+import { ColumnKey } from 'naive-ui/es/data-table/src/interface';
+
+// 表格设置组件 传参
+export const TableColumnSettingProps = {
+  // 加载状态
+  className: {
+    type: String,
+    default: '',
+  },
+};
 
 // 表格设置组件
 export const useTableColumnSetting = () => {
-  // const { getAppTheme } = useSetting();
-  // const table = useTableContext();
-  // const columnsList = ref<BasicColumn[]>([]);
-  // const cacheColumnsList = ref<BasicColumn[]>([]);
+  const table = useTableContext();
+  const columnsList = ref<BasicColumn[]>([]);
+  const defaultColumnsList = ref<BasicColumn[]>([]);
 
-  // const state = reactive<TableColumnSettingState>({
-  //   selection: false,
-  //   checkAll: true,
-  //   checkList: [],
-  //   defaultCheckList: [],
-  // });
+  const state = reactive<TableColumnSettingState>({
+    selection: false,
+    checkAll: true,
+    allIndeterminate: false,
+    checkKeys: [],
+    defaultCheckKeys: [],
+  });
 
-  // const getSelection = computed(() => {
-  //   return state.selection;
-  // });
+  // 初始化
+  const init = () => {
+    const columns = getDefaultColumns();
+    const checkKeys = columns.map((item) => item.key);
+    state.checkKeys = checkKeys;
+    state.defaultCheckKeys = checkKeys;
+    if (columns.length > 0) {
+      columnsList.value = cloneDeep(columns);
+      defaultColumnsList.value = cloneDeep(columns);
+    }
+  };
 
-  // watchEffect(() => {
-  //   const columns = table.getColumns();
-  //   if (columns.length) {
-  //     init();
-  //   }
-  // });
+  // 设置
+  const setColumns = (columns: BasicColumn[]) => {
+    table.setColumns(columns);
+  };
 
-  //初始化
-  // const init = () => {
-  //   const columns = getColumns();
-  //   const checkList = columns.map((item) => item.key);
-  //   state.checkList = checkList;
-  //   state.defaultCheckList = checkList;
-  //   const newColumns = columns.filter((item) => item.key != 'action' && item.title != '操作');
-  //   if (!columnsList.value.length) {
-  //     columnsList.value = cloneDeep(newColumns);
-  //     cacheColumnsList.value = cloneDeep(newColumns);
-  //   }
-  // };
+  // 获取表格的列
+  const getDefaultColumns = () => {
+    return cloneDeep(table.getDefaultColumns());
+  };
 
-  // //切换
-  // const onChange = (checkList: string[]) => {
-  //   if (state.selection) {
-  //     checkList.unshift('selection');
-  //   }
-  //   // setColumns(checkList);
-  // };
-
-  //设置
-  // const setColumns = (columns: BasicColumn[]) => {
-  //   table.setColumns(columns);
-  // };
-
-  // //获取
-  // const getColumns = () => {
-  //   const newRet: BasicColumn[] = [];
-  //   table.getColumns().forEach((item) => {
-  //     newRet.push({ ...item });
-  //   });
-  //   return newRet;
-  // };
-
-  // 重置
-  // const resetColumns = () => {
-  //   state.checkList = [...state.defaultCheckList];
-  //   state.checkAll = true;
-  //   const cacheColumnsKeys = table.getCacheColumns();
-  //   const newColumns = cacheColumnsKeys.map((item) => {
-  //     return {
-  //       ...item,
-  //       fixed: undefined,
-  //     };
-  //   });
-  //   setColumns(newColumns);
-  //   columnsList.value = newColumns;
-  // };
-
-  //全选
-  // const onCheckAll = (bool: boolean) => {
-  //   const checkList = table.getCacheColumnsKeys();
-  //   if (bool) {
-  //     // setColumns(checkList);
-  //     state.checkList = checkList;
-  //   } else {
-  //     setColumns([]);
-  //     state.checkList = [];
-  //   }
-  // };
-
-  //拖拽排序
-  // const draggableEnd = () => {
-  //   const newColumns = toRaw(unref(columnsList));
-  //   columnsList.value = newColumns;
-  //   setColumns(newColumns);
-  // };
+  // 全选
+  const onCheckAll = (bool: boolean) => {
+    state.allIndeterminate = false;
+    if (bool) {
+      setColumns(table.getDefaultColumns());
+      state.checkKeys = table.getDefaultColumnsKeys();
+    } else {
+      setColumns([]);
+      state.checkKeys = [];
+    }
+  };
 
   // 勾选列
-  // const onSelection = (bool: boolean) => {
-  //   // const checkList = table.getCacheColumns();
-  //   if (bool) {
-  //     //   checkList.unshift('selection');
-  //     //   setColumns(checkList);
-  //     // } else {
-  //     //   checkList.splice(0, 1);
-  //     //   setColumns(checkList);
-  //   }
-  // };
+  const onSelection = (bool: boolean) => {
+    const newColumns = table.getDefaultColumns();
+    if (bool) {
+      newColumns.unshift({ type: 'selection', key: 'selection' });
+      setColumns(newColumns);
+    } else {
+      const findIndex = newColumns.findIndex((f) => f.type === 'selection' && f.key === 'selection');
+      if (~findIndex) {
+        newColumns.splice(findIndex, 1);
+        setColumns(newColumns);
+      }
+    }
+  };
 
-  // 固定
-  // const fixedColumn = (item: { key: string; fixed: ColumnFixedType }, fixed: ColumnFixedType) => {
-  //   if (!state.checkList.includes(item.key)) return;
-  //   const columns = getColumns();
-  //   const isFixed = item.fixed === fixed ? undefined : fixed;
-  //   console.log(isFixed);
-  //   const index = columns.findIndex((res) => res.key === item.key);
-  //   if (index !== -1) {
-  //     // columns[index].fixed = isFixed;
-  //   }
-  //   // table.setCacheColumnsField(item.key, { fixed: isFixed });
-  //   // columnsList.value[index].fixed = isFixed;
-  //   setColumns(columns);
-  // };
+  // 重置
+  const resetColumns = () => {
+    state.checkAll = true;
+    state.selection = false;
+    state.checkKeys = state.defaultCheckKeys;
+    state.allIndeterminate = false;
+    const newColumns = table.getDefaultColumns();
+    // 重置勾选列
+    const findIndex = newColumns.findIndex((f) => f.type === 'selection' && f.key === 'selection');
+    if (~findIndex) {
+      newColumns.splice(findIndex, 1);
+    }
+    setColumns(newColumns);
+  };
+
+  // 列表多选
+  const onCheckboxGroupChange = (checkKeys: ColumnKey[]) => {
+    const defaultCols = unref(defaultColumnsList);
+    // 处理多选列展示选项
+    state.checkAll = defaultCols.length === checkKeys.length;
+    state.allIndeterminate = defaultCols.length !== checkKeys.length && checkKeys.length !== 0;
+    // 处理表格
+    const newColumns: BasicColumn[] = [];
+    defaultCols.forEach((f) => {
+      if (checkKeys.includes(f.key)) {
+        newColumns.push(f);
+      }
+    });
+    setColumns(newColumns);
+  };
+
+  // 拖拽排序
+  const draggableEnd = () => {
+    const newColumns = unref(columnsList);
+    setColumns(newColumns);
+  };
+
+  const fixedColumn = (item: BasicColumn, fixed: ColumnFixedType) => {
+    if (!state.checkKeys.includes(item.key)) return;
+    const columns = table.getColumns();
+    const isFixed = item.fixed === fixed ? undefined : fixed;
+    const index = columns.findIndex((res) => res.key === item.key);
+    if (index !== -1) {
+      columns[index].fixed = isFixed;
+      columnsList.value[index].fixed = isFixed;
+      setColumns(columns);
+    }
+  };
+
+  watchEffect(init);
 
   return {
-    // ...toRefs(state),
-    // columnsList,
-    // getAppTheme,
-    // onChange,
-    // onCheckAll,
-    // onSelection,
-    // resetColumns,
-    // fixedColumn,
-    // draggableEnd,
+    ...toRefs(state),
+    columnsList,
+    onCheckAll,
+    onSelection,
+    resetColumns,
+    onCheckboxGroupChange,
+    draggableEnd,
+    fixedColumn,
     // getSelection,
   };
 };

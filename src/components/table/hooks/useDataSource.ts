@@ -68,7 +68,6 @@ export const useDataSource = (
     setPagination({
       [PAGE_FIELD]: currentPage,
       [TOTAL_FIELD]: resultTotal,
-      // [PAGE_COUNT_FIELD]:
     });
     emit('fetch-success', {
       items: unref(resultInfo),

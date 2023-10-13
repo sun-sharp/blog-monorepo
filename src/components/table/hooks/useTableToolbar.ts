@@ -15,7 +15,7 @@ export const TableToolbarProps = {
   },
   hasColumnSetting: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 };
 

@@ -7,6 +7,7 @@ import { PAGE_FIELD, SIZE_FIELD } from '@/constant';
 import { getBoundingClientRect, isBoolean } from '@/utils';
 import { useLayoutSizeSetting, useContSize, useSetting } from '@/hooks';
 import { useDebounceFn } from '@vueuse/core';
+import { createTableContext } from './useTableContext';
 
 // 基础表格 传参
 export const BasicTableProps = {
@@ -134,7 +135,7 @@ export const useBasicTable = (
     setLoading,
   });
 
-  const { getPageColumns } = useTableColumns(props);
+  const { getPageColumns, getColumns, setColumns, getDefaultColumns, getDefaultColumnsKeys } = useTableColumns(props);
 
   // 表格 传入参数
   const deviceHeight = ref(props.maxHeight);
@@ -142,6 +143,9 @@ export const useBasicTable = (
     const tableData = unref(getDataSourceRef);
     const devH = unref(deviceHeight);
     const maxHeight = tableData.length && devH ? `${devH}px` : 'auto';
+    const { scrollX } = props;
+
+    console.log(unref(getPageColumns));
 
     return {
       loading: unref(getLoading),
@@ -150,6 +154,7 @@ export const useBasicTable = (
       data: tableData,
       remote: true, // 表格是否自动分页数据，在异步的状况下你可能需要把它设为 true
       maxHeight,
+      scrollX,
     };
   });
 
@@ -264,6 +269,9 @@ export const useBasicTable = (
       debounceTableHeight();
     });
   });
+
+  // 创建表格配置
+  createTableContext({ getColumns, setColumns, getDefaultColumns, getDefaultColumnsKeys });
 
   return {
     ...toRefs(state),

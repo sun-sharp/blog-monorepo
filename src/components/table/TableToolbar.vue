@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { QuestionCircleOutlined, ColumnHeightOutlined, ReloadOutlined } from '@/utils/icons';
-  // import TableColumnSetting from './TableColumnSetting.vue';
+  import TableColumnSetting from './TableColumnSetting.vue';
   import { TableToolbarProps, useTableToolbar } from './hooks/useTableToolbar';
   import { densityOptions } from '@/constant';
 
@@ -60,7 +60,7 @@
       </n-tooltip>
 
       <!--表格设置单独抽离成组件-->
-      <!-- <table-column-setting v-if="hasColumnSetting" /> -->
+      <table-column-setting v-if="hasColumnSetting" class-name="ml-12" />
     </div>
   </div>
 </template>

@@ -1,9 +1,9 @@
-import { TableBaseColumn, ColumnKey } from 'naive-ui/es/data-table/src/interface';
+import { TableColumn, TableColumnTitle, TableExpandColumnTitle, TableColumnGroupTitle, ColumnKey } from 'naive-ui/es/data-table/src/interface';
 // import type { Ref } from 'vue';
 
 export type TableSizeType = 'small' | 'medium' | 'large';
 
-export type ColumnFixedType = boolean | 'left' | 'right';
+export type ColumnFixedType = 'left' | 'right' | undefined;
 
 // 配置表格密度类型
 export interface TableDensityOption {
@@ -15,7 +15,10 @@ export interface TableDensityOption {
 /**
  * @description: 表格列表配置
  */
-export type BasicColumn = TableBaseColumn & {
+export type BasicColumn<T = InternalRowData> = TableColumn<T> & {
+  key: ColumnKey;
+  title?: TableColumnTitle | TableExpandColumnTitle | TableColumnGroupTitle;
+} & {
   // 是否编辑表格
   edit?: boolean;
   editRow?: boolean;
@@ -38,10 +41,10 @@ export interface TableActionType {
   //   ...args: any[]
   // ) => void;
   getColumns: (opt?) => BasicColumn[];
-  setColumns: (columns: BasicColumn[] | string[]) => void;
-  getCacheColumns: () => BasicColumn[];
-  getCacheColumnsKeys: () => string[];
-  setCacheColumnsField: (key: string | undefined, value: Partial<BasicColumn>) => void;
+  setColumns: (columns: BasicColumn[]) => void;
+  getDefaultColumns: () => BasicColumn[];
+  getDefaultColumnsKeys: () => ColumnKey[];
+  // setCacheColumnsField: (key: string | undefined, value: Partial<BasicColumn>) => void;
 }
 
 export interface BasicTableProps {
@@ -60,8 +63,9 @@ export interface BasicTableProps {
 export interface TableColumnSettingState {
   selection: boolean;
   checkAll: boolean;
-  checkList: ColumnKey[];
-  defaultCheckList: ColumnKey[];
+  allIndeterminate: boolean;
+  checkKeys: ColumnKey[];
+  defaultCheckKeys: ColumnKey[];
 }
 
 export type TableContextInstance = TableActionType & {

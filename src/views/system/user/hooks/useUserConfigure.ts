@@ -31,7 +31,7 @@ export const useUserConfigure = () => {
   ];
 
   // 表格字段配置
-  const columns: BasicColumn[] = [
+  const columns: BasicColumn<ApiUserItem>[] = [
     {
       title: '昵称',
       key: 'nickname',
