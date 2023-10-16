@@ -10,6 +10,11 @@ export const TableColumnSettingProps = {
     type: String,
     default: '',
   },
+  // 固定功能
+  tableFixed: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 // 表格设置组件

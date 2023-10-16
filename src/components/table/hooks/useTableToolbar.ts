@@ -17,6 +17,10 @@ export const TableToolbarProps = {
     type: Boolean,
     default: true,
   },
+  columnSettingFixed: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 // 表格工具栏

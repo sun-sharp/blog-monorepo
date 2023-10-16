@@ -35,4 +35,4 @@ export const PAGE_COUNT_FIELD: PageCountFieldType = 'pageCount';
 // 接口返回总条数字段名
 export const TOTAL_FIELD: TotalFieldType = 'total';
 // 可切换每页数量集合
-export const PAGE_SIZES: number[] = [10, 20, 30, 40, 50, 100];
+export const PAGE_SIZES: number[] = [10, 20, 50, 100, 200];

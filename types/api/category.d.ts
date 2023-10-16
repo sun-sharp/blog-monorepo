@@ -1,16 +1,29 @@
 import { ApiPaginateParams } from './common';
 
 /**
+ * @description: 全局类型查询传参
+ */
+export type ApiCategorySearchParams = {
+  type?: string;
+};
+
+/**
  * @description: 条件并分页获取全局类型列表参数
  */
-export interface ApiCategoryFindPageData extends ApiPaginateParams {
-  type?: string;
+export type ApiCategoryFindPageData = ApiPaginateParams & ApiCategorySearchParams;
+
+/**
+ * @description: 全局类型的id
+ */
+export interface ApiCategoryId {
+  // 用户id
+  categoryId: string;
 }
 
 /**
- * @description: 创建全局类型参数
+ * @description: 用户的数据字段
  */
-export interface ApiCategorySaveData {
+export interface ApiCategory {
   // 全局类型分类
   type: string;
 
@@ -23,3 +36,13 @@ export interface ApiCategorySaveData {
   // 全局类型名称
   label: string;
 }
+
+/**
+ * @description: 创建全局类型参数
+ */
+export type ApiCategorySaveData = ApiCategory;
+
+/**
+ * @description: 用户的列表每项
+ */
+export interface ApiCategoryItem extends ApiCategory, ApiCategoryId {}

@@ -53,7 +53,7 @@
                       </n-icon>
                     </span>
                     <n-checkbox :value="element.key" :label="element.title" />
-                    <div class="fixed-item">
+                    <div v-if="tableFixed" class="fixed-item">
                       <n-tooltip trigger="hover" placement="bottom">
                         <template #trigger>
                           <n-icon

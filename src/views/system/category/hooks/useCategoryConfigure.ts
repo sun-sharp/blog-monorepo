@@ -1,6 +1,9 @@
-import { reactive, computed } from 'vue';
+import { computed, h, ref } from 'vue';
 import { FormSchema } from '/#/components/form';
-import { BasicColumn } from '/#/components/table';
+import { BasicColumn, TablePaginationParams } from '/#/components/table';
+import { categoryApi } from '@/api';
+import { ApiCategoryItem, ApiCategorySearchParams } from '/#/api/category';
+import { NButton } from 'naive-ui';
 // import TableAction from '@/components/Table/table-action.vue';
 
 export const useCategoryConfigure = () => {
@@ -17,8 +20,25 @@ export const useCategoryConfigure = () => {
     },
   ]);
 
+  const categoryAddUpdateRef = ref<Component>();
+
+  const actionRef = ref();
+
+  /**
+   * 表格
+   *  */
+  // 获取接口数据
+  const searchParams = ref<ApiCategorySearchParams>({});
+  const loadDataTable = async (pageParams: TablePaginationParams) => {
+    return await categoryApi.getPage({ ...searchParams.value, ...pageParams });
+  };
+  // 刷新数据
+  const reloadTable = () => {
+    actionRef.value.reload();
+  };
+
   // 表格字段配置
-  const columns = computed<BasicColumn[]>(() => [
+  const columns = computed<BasicColumn<ApiCategoryItem>[]>(() => [
     {
       title: '全局类型分类',
       key: 'type',
@@ -40,33 +60,32 @@ export const useCategoryConfigure = () => {
       key: 'label',
       align: 'center',
     },
+    {
+      width: 150,
+      title: '操作',
+      key: 'action',
+      align: 'center',
+      render(row) {
+        return row.categoryId
+          ? h(
+              NButton,
+              {
+                type: 'primary',
+                text: true,
+                onClick: categoryAddUpdateRef.value.init.bind(null, row),
+              },
+              '修改'
+            )
+          : '';
+      },
+    },
   ]);
 
-  const actionColumn = reactive({
-    // width: 150,
-    // title: '操作',
-    // key: 'action',
-    // align: 'center',
-    // fixed: 'right',
-    // render(row: any) {
-    //   return h(TableAction as any, {
-    //     style: 'button',
-    //     actions: [
-    //       {
-    //         ifShow: !!row.aliPayId,
-    //         label: '修改',
-    //         type: 'primary',
-    //         text: true,
-    //         onClick: updateModelRef.value.init.bind(null, row),
-    //       },
-    //     ],
-    //   });
-    // },
-  });
-
-  return {
-    searchSchemas,
-    columns,
-    actionColumn,
+  // 数据查询
+  const searchSubmit = (values: Recordable) => {
+    searchParams.value = values;
+    actionRef.value.updatePage(1);
   };
+
+  return { categoryAddUpdateRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit };
 };

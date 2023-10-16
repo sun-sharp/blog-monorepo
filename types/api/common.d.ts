@@ -13,7 +13,7 @@ export interface ApiResponse<T> {
  */
 export interface ApiPaginateParams {
   // 每页多少个
-  size: number;
+  size?: number;
   // 第几页
-  current: number;
+  current?: number;
 }

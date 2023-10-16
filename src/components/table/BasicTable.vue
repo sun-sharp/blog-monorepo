@@ -28,10 +28,6 @@
       @update:page="updatePage"
       @update:page-size="updatePageSize"
       @on-update:checked-row-keys="updateCheckedRowKeys"
-    >
-      <template v-for="item in Object.keys($slots)" #[item]="data" :key="item">
-        <slot :name="item" v-bind="data"></slot>
-      </template>
-    </n-data-table>
+    />
   </div>
 </template>

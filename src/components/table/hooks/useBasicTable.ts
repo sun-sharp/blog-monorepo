@@ -95,6 +95,9 @@ export const useBasicTable = (
 ) => {
   const tableElRef = ref<Component>();
 
+  // 表格固定功能
+  const columnSettingFixed = ref<boolean>(false);
+
   // 设置加载状态
   const loadingRef = ref(props.loading);
   watch(
@@ -153,6 +156,7 @@ export const useBasicTable = (
       remote: true, // 表格是否自动分页数据，在异步的状况下你可能需要把它设为 true
       maxHeight,
       scrollX,
+      columnSettingFixed: unref(columnSettingFixed),
     };
   });
 
