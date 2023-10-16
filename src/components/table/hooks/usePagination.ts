@@ -1,7 +1,7 @@
 import { computed, unref, ref, ExtractPropTypes } from 'vue';
 import { PaginationConfig, PaginationProps } from '/#/components/table';
 import { isBoolean } from '@/utils';
-import { DEFAULT_PAGESIZE, PAGE_COUNT_FIELD, PAGE_SIZES, SIZE_FIELD, TOTAL_FIELD } from '@/constant';
+import { DEFAULT_PAGESIZE, PAGE_COUNT_FIELD, PAGE_FIELD, PAGE_SIZES, SIZE_FIELD, TOTAL_FIELD } from '@/constant';
 import { BasicTableProps } from './useBasicTable';
 
 export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
@@ -14,6 +14,7 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
       return false;
     }
     return {
+      page: unref(configRef)[PAGE_FIELD] || 1,
       pageSize: unref(configRef)[SIZE_FIELD] || DEFAULT_PAGESIZE,
       pageSizes: PAGE_SIZES,
       showSizePicker: true,

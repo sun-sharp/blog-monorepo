@@ -145,8 +145,6 @@ export const useBasicTable = (
     const maxHeight = tableData.length && devH ? `${devH}px` : 'auto';
     const { scrollX } = props;
 
-    console.log(unref(getPageColumns));
-
     return {
       loading: unref(getLoading),
       columns: unref(getPageColumns),
@@ -169,6 +167,7 @@ export const useBasicTable = (
   //分页数量切换
   const updatePageSize = (pageSize: number) => {
     const params: PaginationConfig = {};
+    params[PAGE_FIELD] = 1;
     params[SIZE_FIELD] = pageSize;
     setPagination(params);
     reload();
@@ -284,5 +283,6 @@ export const useBasicTable = (
     updatePage,
     updatePageSize,
     updateCheckedRowKeys,
+    reload,
   };
 };

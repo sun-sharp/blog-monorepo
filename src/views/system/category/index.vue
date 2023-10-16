@@ -43,7 +43,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" :columns="columns" is-card-surround :request="loadDataTable" :row-key="(row: any) => row.id" :scroll-x="1200">
+    <basic-table ref="actionRef" :columns="columns" is-card-surround :request="loadDataTable" :row-key="(row: any) => row.id">
       <template #tableTitle>
         <n-button type="primary" @click="categoryAddUpdateRef.init()">
           <template #icon>
