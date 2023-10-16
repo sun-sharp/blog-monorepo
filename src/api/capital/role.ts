@@ -1,5 +1,6 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiRoleItem, ApiRolePageData, ApiRoleSaveData, ApiRoleUpdateData } from '/#/api/role';
+import { ApiRoleItem, ApiRolePageData, ApiRoleSaveData, ApiRoleUpdateData, ApiSwaggerJsonAllAssociateResult } from '/#/api/role';
+import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/role';
 
@@ -7,7 +8,7 @@ const basic = '/role';
  * @description 分页查询角色列表
  * @param data
  */
-export function getPage(data: ApiRolePageData): Promise<ApiRoleItem[]> {
+export function getPage(data: ApiRolePageData): Promise<TablePaginationResult<ApiRoleItem[]>> {
   return AxiosCapital.request({
     url: `${basic}/role_page`,
     method: 'POST',
@@ -72,9 +73,9 @@ export const remove = (roleId: string): Promise<undefined> => {
 /**
  * @description 获取全部api接口列表
  */
-// export function getApiAll() {
-//   return AxiosCapital.request({
-//     url: `${basic}/api_all`,
-//     method: 'GET',
-//   });
-// }
+export function getApiAll(): Promise<ApiSwaggerJsonAllAssociateResult[]> {
+  return AxiosCapital.request({
+    url: `${basic}/api_all`,
+    method: 'GET',
+  });
+}

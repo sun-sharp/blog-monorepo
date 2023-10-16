@@ -1,7 +1,7 @@
 import { FormItemRule } from 'naive-ui';
 
 /**
- * @description: 分页参数
+ * @description: 全局类型新增/编辑表单输入参数
  */
 export interface CategoryItemForm {
   type: null | string;
@@ -11,7 +11,7 @@ export interface CategoryItemForm {
 }
 
 /**
- * @description: 分页添加修改验证
+ * @description: 全局类型新增/编辑表单输入权限
  */
 export interface CategoryItemFormRules {
   type: FormItemRule;

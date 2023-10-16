@@ -50,7 +50,7 @@ export const useUserConfigure = () => {
    * 表格按钮操作配置
    *  */
   // 删除
-  const handleDelete = (row: Recordable) => {
+  const handleDelete = (row: ApiUserItem) => {
     capitalApi.removeUser(row.userId).then(() => {
       reloadTable();
     });

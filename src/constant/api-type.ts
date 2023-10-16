@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-09-22 11:58:37
+ * @LastEditTime: 2023-10-16 16:58:41
  * @Description: 接口类型
  */
 
@@ -43,18 +43,18 @@ export const menuTypeOption = [
 ];
 export const menuTypeObj = arrEnumToObj(menuTypeOption);
 
-// // 角色权限类型枚举值
-// export const roleTypeOption = [
-//   {
-//     value: 1,
-//     label: '全部权限',
-//   },
-//   {
-//     value: 2,
-//     label: '自定义权限',
-//   },
-// ];
-// export const roleTypeObj = arrEnumToObj(roleTypeOption);
+// 角色权限类型枚举值
+export const roleTypeOption = [
+  {
+    value: 1,
+    label: '全部权限',
+  },
+  {
+    value: 2,
+    label: '自定义权限',
+  },
+];
+export const roleTypeObj = arrEnumToObj(roleTypeOption);
 
 // // 账单“收入/支出”枚举值
 // export const incomeOrPayMap = {
