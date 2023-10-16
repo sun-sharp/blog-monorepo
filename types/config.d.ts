@@ -20,4 +20,8 @@ export interface GlobalEnvConfig {
   staticDirName: string;
   // 图片前缀
   imageRefixName: string;
+  // capital数据库名称
+  capitalDatabaseName: string;
+  // blog数据库名称
+  blogDatabaseName: string;
 }

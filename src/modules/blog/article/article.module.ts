@@ -7,8 +7,13 @@ import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { ArticleCategoryModule } from '../article-category/article-category.module';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
+import { useCustomConfig } from 'src/config';
 
-const ARTICLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }], 'blog');
+const customConfig = useCustomConfig();
+
+const { blogDatabaseName } = customConfig;
+
+const ARTICLE_MONGO_MODULE = MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }], blogDatabaseName);
 
 @Module({
   imports: [ARTICLE_MONGO_MODULE, ArticleCategoryModule, UserModule, forwardRef(() => RoleModule)],

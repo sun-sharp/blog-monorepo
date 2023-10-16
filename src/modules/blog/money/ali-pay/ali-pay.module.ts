@@ -6,8 +6,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AliPay, AliPaySchema } from 'src/schemas/blog/money/ali-pay.schema';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
+import { useCustomConfig } from 'src/config';
 
-const ALI_PAY_MONGO_MODULE = MongooseModule.forFeature([{ name: AliPay.name, schema: AliPaySchema }], 'blog');
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
+
+const ALI_PAY_MONGO_MODULE = MongooseModule.forFeature([{ name: AliPay.name, schema: AliPaySchema }], blogDatabaseName);
 
 @Module({
   imports: [ALI_PAY_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],

@@ -4,7 +4,7 @@ import { logger } from '../journal';
 
 const customConfig = useCustomConfig();
 
-const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery } = customConfig;
+const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery, capitalDatabaseName, blogDatabaseName } = customConfig;
 // 账号登录
 const mongodbAccountAndPassword = mongodbAccount && mongodbPassword ? `${mongodbAccount}:${mongodbPassword}@` : '';
 // mongodb路径的基础配置
@@ -12,11 +12,11 @@ const mongodbBaseUrl = `mongodb://${mongodbAccountAndPassword}${serverIp}:${data
 logger.log(mongodbBaseUrl, mongodbQuery, 'mongodb配置信息');
 
 // capital的mongoose配置
-export const capitalMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/capital${mongodbQuery}`, {
-  connectionName: 'capital',
+export const capitalMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/${capitalDatabaseName}${mongodbQuery}`, {
+  connectionName: capitalDatabaseName,
 });
 
 // blog的mongoose配置
-export const blogMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/blog${mongodbQuery}`, {
-  connectionName: 'blog',
+export const blogMongooseModuleForRoot = MongooseModule.forRoot(`${mongodbBaseUrl}/${blogDatabaseName}${mongodbQuery}`, {
+  connectionName: blogDatabaseName,
 });

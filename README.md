@@ -13,30 +13,14 @@ $ yarn
 ## 运行
 
 ```bash
-# development
-$ yarn start
-
-# watch mode
+# 运行dev的内容
 $ yarn start:dev
 
-# production mode
+# 运行prod的内容
 $ yarn start:prod
 ```
 
-## 测试
-
-```bash
-# unit tests
-$ yarn test
-
-# e2e tests
-$ yarn test:e2e
-
-# test coverage
-$ yarn test:cov
-```
-
-## 文档
+## 生产接口文档
 
 ```bash
 $ yarn compodoc
@@ -44,8 +28,27 @@ $ yarn compodoc
 
 ## 部署
 
-```bash
+### 部署dev环境
 
+
+``` bash
+# 先拉取全部远程分支和tag
+$ git fetch origin
+
+# 切换到dev分支上
+$ git checkout dev
+
+# 拉取一下最新代码
+$ git pull origin dev
+
+# 打包部署应用 dev_nest
+$ yarn update_dev_pm2
+
+```
+
+### 用main部署生产prod
+
+```bash
 # 在服务器中拉取代码项目
 $ git init
 $ git remote add origin git@github.com:sun-sharp/alone-blog-api.git
@@ -72,6 +75,8 @@ $ pm2 list
 $ pm2 start --name nest dist/main.js
 
 ```
+
+### 用tag部署生产prod
 
 ``` bash
 # 或者

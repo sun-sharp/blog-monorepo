@@ -6,8 +6,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RoleModule } from '../role/role.module';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { UserModule } from '../user/user.module';
+import { useCustomConfig } from 'src/config';
 
-const CONFIGURATION_MONGO_MODULE = MongooseModule.forFeature([{ name: Configuration.name, schema: ConfigurationSchema }], 'capital');
+const customConfig = useCustomConfig();
+
+const { capitalDatabaseName } = customConfig;
+
+const CONFIGURATION_MONGO_MODULE = MongooseModule.forFeature([{ name: Configuration.name, schema: ConfigurationSchema }], capitalDatabaseName);
 
 @Module({
   imports: [CONFIGURATION_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],

@@ -6,8 +6,13 @@ import { Category, CategorySchema } from 'src/schemas/capital/category.schema';
 import { UserModule } from '../user/user.module';
 import { RoleModule } from '../role/role.module';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
+import { useCustomConfig } from 'src/config';
 
-const CATEGORY_MONGO_MODULE = MongooseModule.forFeature([{ name: Category.name, schema: CategorySchema }], 'capital');
+const customConfig = useCustomConfig();
+
+const { capitalDatabaseName } = customConfig;
+
+const CATEGORY_MONGO_MODULE = MongooseModule.forFeature([{ name: Category.name, schema: CategorySchema }], capitalDatabaseName);
 
 @Module({
   imports: [CATEGORY_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],

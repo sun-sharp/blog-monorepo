@@ -6,8 +6,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
 import { WeChat, WeChatSchema } from 'src/schemas/blog/money/we-chat.schema';
+import { useCustomConfig } from 'src/config';
 
-const WE_CHAT_MONGO_MODULE = MongooseModule.forFeature([{ name: WeChat.name, schema: WeChatSchema }], 'blog');
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
+
+const WE_CHAT_MONGO_MODULE = MongooseModule.forFeature([{ name: WeChat.name, schema: WeChatSchema }], blogDatabaseName);
 
 @Module({
   imports: [WE_CHAT_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],

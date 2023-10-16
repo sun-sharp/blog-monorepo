@@ -6,8 +6,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
+import { useCustomConfig } from 'src/config';
 
-const ARTICLE_CATEGORY_MONGO_MODULE = MongooseModule.forFeature([{ name: ArticleCategory.name, schema: ArticleCategorySchema }], 'blog');
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
+
+const ARTICLE_CATEGORY_MONGO_MODULE = MongooseModule.forFeature([{ name: ArticleCategory.name, schema: ArticleCategorySchema }], blogDatabaseName);
 
 @Module({
   imports: [ARTICLE_CATEGORY_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],

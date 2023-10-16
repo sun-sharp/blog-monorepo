@@ -9,9 +9,11 @@ import { UserModule } from 'src/modules/capital/user/user.module';
 import { useCustomConfig } from 'src/config';
 import { ArticleModule } from 'src/modules/blog/article/article.module';
 
-const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], 'capital');
-
 const customConfig = useCustomConfig();
+
+const { staticDirPosition, staticDirName, imageRefixName, capitalDatabaseName } = customConfig;
+
+const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], capitalDatabaseName);
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ const customConfig = useCustomConfig();
     MulterModule.register({
       storage: diskStorage({
         // 配置文件上传后的文件夹路径
-        destination: `${customConfig.staticDirPosition}${customConfig.staticDirName}/image`,
+        destination: `${staticDirPosition}${staticDirName}/image`,
         filename: (req, file, cb) => {
           const image = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
           const mimeType = file.mimetype.split('/')[1];
@@ -33,7 +35,7 @@ const customConfig = useCustomConfig();
             return cb(new BadRequestException('图片格式错误！'), '');
           }
           // 在此处自定义保存后的文件名称
-          const filename = `${customConfig.imageRefixName || ''}${new Date().getTime()}.${file.originalname.split('.')[1]}`;
+          const filename = `${imageRefixName || ''}${new Date().getTime()}.${file.originalname.split('.')[1]}`;
           return cb(null, filename);
         },
       }),

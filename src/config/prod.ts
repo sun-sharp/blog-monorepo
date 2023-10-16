@@ -11,6 +11,8 @@ const glob: Readonly<GlobalEnvConfig> = {
   staticDirPosition: '../',
   staticDirName: 'api_static_dir',
   imageRefixName: 'sharp_network_',
+  capitalDatabaseName: 'capital',
+  blogDatabaseName: 'blog',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;

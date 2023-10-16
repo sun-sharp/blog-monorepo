@@ -6,8 +6,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Menu, MenuSchema } from 'src/schemas/capital/menu.schema';
 import { UserModule } from '../user/user.module';
 import { RoleModule } from '../role/role.module';
+import { useCustomConfig } from 'src/config';
 
-const MENU_MONGO_MODULE = MongooseModule.forFeature([{ name: Menu.name, schema: MenuSchema }], 'capital');
+const customConfig = useCustomConfig();
+
+const { capitalDatabaseName } = customConfig;
+
+const MENU_MONGO_MODULE = MongooseModule.forFeature([{ name: Menu.name, schema: MenuSchema }], capitalDatabaseName);
 
 @Module({
   imports: [MENU_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],
