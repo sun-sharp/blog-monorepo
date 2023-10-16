@@ -44,10 +44,9 @@ export const levelMenu = (menuMap: ApiMenuItem[], parentId: string | number = '0
  * @return {*}
  *  */
 export const pathFormat = (item: ApiMenuItem): string => {
-  const { component, name = '' } = item;
+  const { component = '', name = '' } = item;
   let path: string;
   if (component.indexOf('/') !== -1) {
-    // console.log(component, 'component');
     path = component.replace('/index', '');
     path = (path.match(/\/\\/g) || []).length === 0 ? path : path.replace(/(.*)[/]/, '$1-');
   } else {
@@ -87,7 +86,7 @@ export const dynamicImport = (viewsModules: Record<string, () => Promise<Recorda
  * @param {string} iframeSrc
  */
 const viewsModules: Record<string, () => Promise<Recordable>> = import.meta.glob('../views/**/*.{vue,tsx}');
-export const formatRouteComponent = (component: string, iframeSrc: string) => {
+export const formatRouteComponent = (component: string = '', iframeSrc: string) => {
   let newComponent: Component | string;
   if (component.indexOf('/') >= 0) {
     newComponent = dynamicImport(viewsModules, component as string);

@@ -1,7 +1,7 @@
 import { h, nextTick, onMounted, reactive, ref } from 'vue';
 import { constantHtmlIcon, levelMenu } from '@/utils';
 import { NButton, NTag } from 'naive-ui';
-import { menuTypeObj } from '@/constant';
+import { menuTagTypeNameObj, menuTypeObj } from '@/constant';
 import { menuApi } from '@/api';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormSchema } from '/#/components/form';
@@ -29,19 +29,6 @@ const filterMenuByParams = (arr: ApiLevelMenuItem[], params: ISearchParams) => {
     }
   });
   return newArr;
-};
-
-/**
- * 表格按钮操作配置
- *  */
-const typeNameObj: {
-  [x: number]: string;
-} = {
-  1: 'info',
-  2: 'info',
-  5: 'success',
-  6: 'warning',
-  7: 'error',
 };
 
 export const useMenuConfigure = () => {
@@ -120,7 +107,7 @@ export const useMenuConfigure = () => {
         return h(
           NTag as Component,
           {
-            type: typeNameObj[row.menuType],
+            type: menuTagTypeNameObj[row.menuType],
           },
           {
             default: () => menuTypeObj[row.menuType],

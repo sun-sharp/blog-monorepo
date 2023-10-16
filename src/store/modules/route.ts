@@ -47,7 +47,7 @@ export const useRouteStore = defineStore({
     },
     // 设置查询列表的菜单
     setSearchMenus(searchMenus: ApiMenuItem[]) {
-      this.searchMenus = searchMenus.filter((f) => f.component !== 'layout').map((m) => ({ ...m, icon: constantRouterIcon[m.icon] }));
+      this.searchMenus = searchMenus.filter((f) => f.component || f.iframeSrc).map((m) => ({ ...m, icon: constantRouterIcon[m.icon] }));
     },
     setKeepAliveComponents(compNames: string[]) {
       // 设置需要缓存的组件

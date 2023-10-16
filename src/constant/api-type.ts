@@ -1,47 +1,52 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-16 16:58:41
+ * @LastEditTime: 2023-10-16 17:54:20
  * @Description: 接口类型
  */
 
 import { arrEnumToObj } from '@/utils';
 
-// 一级目录
-export const MAIN_DIRECTORY_VALUE = 1;
+// 目录
+export const MAIN_DIRECTORY_VALUE: number = 1;
 
 // 菜单
-export const MENU_VALUE = 5;
+export const MENU_VALUE: number = 5;
 
 // 内嵌
-export const EMBEDDED_VALUE = 6;
+export const EMBEDDED_VALUE: number = 6;
 
 // 外链
-export const OUTSIDE_THE_CHAIN_VALUE = 7;
+export const OUTSIDE_THE_CHAIN_VALUE: number = 7;
 
 // 菜单类型枚举值
 export const menuTypeOption = [
   {
     value: MAIN_DIRECTORY_VALUE,
-    label: '一级目录',
-  },
-  {
-    value: 2,
-    label: '次级目录',
+    label: '目录',
+    tagTypeName: 'info',
   },
   {
     value: MENU_VALUE,
     label: '菜单',
+    tagTypeName: 'success',
   },
   {
     value: EMBEDDED_VALUE,
     label: '内嵌',
+    tagTypeName: 'warning',
   },
   {
     value: OUTSIDE_THE_CHAIN_VALUE,
     label: '外链',
+    tagTypeName: 'error',
   },
 ];
 export const menuTypeObj = arrEnumToObj(menuTypeOption);
+
+/**
+ * 菜单类型 tag 标签类型
+ *  */
+export const menuTagTypeNameObj = arrEnumToObj(menuTypeOption, 'value', 'tagTypeName');
 
 // 角色权限类型枚举值
 export const roleTypeOption = [

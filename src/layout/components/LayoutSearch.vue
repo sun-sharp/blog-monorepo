@@ -4,7 +4,7 @@
   import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import { useSearch } from '@/hooks';
-  import { APP_ENV_CONFIG } from '@/constant';
+  import { APP_ENV_CONFIG, menuTagTypeNameObj, menuTypeObj } from '@/constant';
 
   const router = useRouter();
 
@@ -59,11 +59,14 @@
     <n-card :bordered="false" class="layout-search__main" content-style="height: 0;padding: 5px">
       <n-scrollbar v-if="filterMenu.length > 0" trigger="none">
         <div v-for="(item, index) in filterMenu" :key="index" class="main-item" @click="toNestRouter(item)">
-          <component :is="item.icon" :key="item.menuId" class="main-item--icon" />
-          <div class="main-item--cont">
-            <div class="name">{{ item.title }}</div>
-            <div class="path">{{ item.component }}</div>
+          <div class="flex ai-c">
+            <component :is="item.icon" :key="item.menuId" class="main-item--icon" />
+            <div class="main-item--cont">
+              <div class="name">{{ item.title }}</div>
+              <div class="path">{{ item.component || item.iframeSrc }}</div>
+            </div>
           </div>
+          <n-tag class="mr-30" :type="menuTagTypeNameObj[item.menuType]">{{ menuTypeObj[item.menuType] }}</n-tag>
         </div>
       </n-scrollbar>
       <n-empty v-else class="w-full h-full justify-center" description="抱歉，没有找到相关页面！！"></n-empty>
@@ -73,6 +76,9 @@
 
 <style lang="scss" scoped>
   .layout-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     box-sizing: border-box;
     width: 100%;
     height: 100%;
@@ -118,11 +124,13 @@
     }
 
     &__main {
-      height: calc(100% - 170px);
+      flex: 1;
+      height: 0;
 
       .main-item {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 10px;
         color: #444;
         border-left: 4px solid transparent;

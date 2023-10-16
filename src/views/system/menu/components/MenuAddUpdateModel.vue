@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { menuTypeOption } from '@/constant';
+  import { EMBEDDED_VALUE, MENU_VALUE, OUTSIDE_THE_CHAIN_VALUE, menuTypeOption } from '@/constant';
   import { MenuAddUpdateModelProps, useMenuAddUpdateModel } from '../hooks/useMenuAddUpdateModel';
 
   const props = defineProps(MenuAddUpdateModelProps);
@@ -26,7 +26,7 @@
   <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelId ? '修改' : '新增'">
     <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="类型" path="menuType">
-        <n-radio-group v-model:value="modelForm.menuType" name="radiogroup">
+        <n-radio-group v-model:value="modelForm.menuType" :disabled="!!modelId" name="radiogroup">
           <n-space>
             <n-radio v-for="item in menuTypeOption" :key="item.value" :value="item.value">
               {{ item.label }}
@@ -40,16 +40,16 @@
       <n-form-item label="上级菜单" path="parentId">
         <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="menuId" />
       </n-form-item>
-      <n-form-item v-if="[7].includes(modelForm.menuType)" label="外链的链接" path="name">
+      <n-form-item v-if="[OUTSIDE_THE_CHAIN_VALUE].includes(modelForm.menuType)" label="外链的链接" path="name">
         <n-input v-model:value="modelForm.name" placeholder="请输入外链的链接" />
       </n-form-item>
       <n-form-item v-else label="标识" path="name">
         <n-input v-model:value="modelForm.name" placeholder="请输入标识" />
       </n-form-item>
-      <n-form-item v-if="![2, 6, 7].includes(modelForm.menuType)" label="位置" path="component">
+      <n-form-item v-if="[MENU_VALUE].includes(modelForm.menuType)" label="位置" path="component">
         <n-input v-model:value="modelForm.component" placeholder="请输入位置" />
       </n-form-item>
-      <n-form-item v-if="[6].includes(modelForm.menuType)" label="链接" path="iframeSrc">
+      <n-form-item v-if="[EMBEDDED_VALUE].includes(modelForm.menuType)" label="链接" path="iframeSrc">
         <n-input v-model:value="modelForm.iframeSrc" placeholder="请输入链接" />
       </n-form-item>
       <n-form-item label="图标" path="icon">
