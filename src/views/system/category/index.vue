@@ -6,7 +6,7 @@
   import { PlusOutlined } from '@/utils';
 
   // 配置
-  const { categoryAddUpdateRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit } = useCategoryConfigure();
+  const { categoryAddUpdateRef, actionRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit } = useCategoryConfigure();
 </script>
 
 <template>

@@ -40,14 +40,19 @@ export interface ApiUserInfo extends Omit<ApiUser, 'password'>, ApiUserId {
 export interface ApiUserItem extends ApiUser, ApiUserId {}
 
 /**
+ * @description: 用户列表查询传参
+ */
+export type ApiUserSearchParams = {
+  // 昵称
+  nickname?: string;
+  // 用户名
+  username?: string;
+};
+
+/**
  * @description: 分页查询用户列表传参
  */
-export interface ApiUserPageData extends ApiPaginateParams {
-  // 昵称
-  nickname: string;
-  // 用户名
-  username: string;
-}
+export type ApiUserPageData = ApiUserSearchParams & ApiPaginateParams;
 
 /**
  * @description: 修改用户角色传参

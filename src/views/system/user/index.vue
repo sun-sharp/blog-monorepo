@@ -5,7 +5,7 @@
   import UserAddUpdateModel from './components/UserAddUpdateModel.vue';
   import { useUserConfigure } from './hooks/useUserConfigure';
 
-  const { addUpdateModelRef, searchSchemas, columns, actionColumn, tableRowKey, searchSubmit, loadDataTable } = useUserConfigure();
+  const { addUpdateModelRef, actionRef, searchSchemas, columns, tableRowKey, searchSubmit, loadDataTable } = useUserConfigure();
 </script>
 
 <template>
@@ -18,7 +18,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :action-column="actionColumn" :scroll-x="1090">
+    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
           <template #icon>

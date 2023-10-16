@@ -87,5 +87,5 @@ export const useCategoryConfigure = () => {
     actionRef.value.updatePage(1);
   };
 
-  return { categoryAddUpdateRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit };
+  return { categoryAddUpdateRef, actionRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit };
 };
