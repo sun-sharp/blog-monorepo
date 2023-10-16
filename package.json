@@ -3,8 +3,8 @@
   "version": "2.1.0",
   "scripts": {
     "dev": "vite --mode dev",
-    "dev:prod": "vite --mode prod-local",
     "dev:debug": "vite --mode dev --debug",
+    "dev:prod": "vite --mode prod-local",
     "build": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview --outDir manage --base /manage/",
     "lint": "eslint \"{src,mock,build,types}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",

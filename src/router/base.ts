@@ -72,7 +72,7 @@ export const ErrorPageRoute: AppRouteRecordRaw = {
 
 // 重定向
 export const RedirectRoute: AppRouteRecordRaw = {
-  path: '/redirect',
+  path: PAGE_ENUM.REDIRECT_PATH,
   name: PAGE_ENUM.REDIRECT_PAGE_NAME,
   component: Layout,
   meta: {
@@ -80,7 +80,7 @@ export const RedirectRoute: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: '/redirect/:path(.*)',
+      path: `${PAGE_ENUM.REDIRECT_PATH}/:path(.*)`,
       name: PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME,
       component: RedirectComponent,
       meta: {

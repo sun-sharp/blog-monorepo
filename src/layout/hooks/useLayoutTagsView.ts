@@ -131,7 +131,7 @@ export const useLayoutTagsView = () => {
   const reloadPage = () => {
     delKeepAliveCompName();
     router.push({
-      path: '/redirect' + unref(route).fullPath,
+      path: PAGE_ENUM.REDIRECT_PATH + unref(route).fullPath,
     });
   };
 

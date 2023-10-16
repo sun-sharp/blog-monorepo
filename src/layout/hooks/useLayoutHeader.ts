@@ -97,7 +97,7 @@ export const useLayoutHeader = () => {
   // 刷新页面
   const reloadPage = () => {
     router.push({
-      path: '/redirect' + unref(route).fullPath,
+      path: PAGE_ENUM.REDIRECT_PATH + unref(route).fullPath,
     });
   };
 

@@ -8,7 +8,7 @@
 
   // 表格key
   const rowKey = (row: ApiLevelMenuItem) => row.name;
-  const { addUpdateModelRef, searchSchemas, tableSize, tableLoading, tableData, columns, searchSubmit, loadDataTable, reload } = useMenuConfigure();
+  const { addUpdateModelRef, searchSchemas, tableSize, tableLoading, tableData, columns, searchSubmit, reload } = useMenuConfigure();
 </script>
 
 <template>
@@ -34,6 +34,6 @@
       </template>
     </table-toolbar>
     <n-data-table :size="tableSize" :loading="tableLoading" :columns="columns" :data="tableData" :row-key="rowKey" />
-    <menu-add-update-model ref="addUpdateModelRef" :table-data="tableData" @refurbish="loadDataTable" />
+    <menu-add-update-model ref="addUpdateModelRef" :table-data="tableData" />
   </n-card>
 </template>

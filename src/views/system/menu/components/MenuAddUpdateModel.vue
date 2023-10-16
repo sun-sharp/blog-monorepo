@@ -4,8 +4,6 @@
 
   const props = defineProps(MenuAddUpdateModelProps);
 
-  const emit = defineEmits(['refurbish']);
-
   const {
     modelId,
     showModal,
@@ -19,7 +17,7 @@
     iconRenderLabel,
     init,
     confirmForm,
-  } = useMenuAddUpdateModel(props, emit);
+  } = useMenuAddUpdateModel(props);
 
   defineExpose({ init });
 </script>

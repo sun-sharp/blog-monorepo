@@ -17,7 +17,6 @@ export const useRouteStore = defineStore({
   state: (): RouteState => ({
     menus: [],
     searchMenus: [],
-    // routers: constantRouter,
     addRouters: [],
     keepAliveComponents: [],
     // 是否已动态添加路由
@@ -41,7 +40,6 @@ export const useRouteStore = defineStore({
     // 设置动态路由
     setRouters(routers: AppRouteRecordRaw[]) {
       this.addRouters = routers;
-      // this.routers = constantRouter.concat(routers);
     },
     setMenus(menus: AppRouteRecordRaw[]) {
       // 设置动态路由

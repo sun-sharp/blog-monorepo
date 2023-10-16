@@ -230,7 +230,6 @@ export const useMenuConfigure = () => {
     tableLoading,
     tableData,
     searchSubmit,
-    loadDataTable,
     reload,
   };
 };

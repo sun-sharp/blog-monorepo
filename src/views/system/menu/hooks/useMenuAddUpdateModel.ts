@@ -1,9 +1,11 @@
-import { menuTypeObj } from '@/constant';
+import { PAGE_ENUM, menuTypeObj } from '@/constant';
 import { constantHtmlIcon } from '@/utils';
 import { ExtractPropTypes, VNode, nextTick, reactive, ref, unref, watch } from 'vue';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormItemRule, FormRules, MenuOption } from 'naive-ui';
 import { menuApi } from '@/api';
+import { useRoute, useRouter } from 'vue-router';
+import { useRouteStore } from '@/store';
 
 // 菜单管理 新建/修改 传参
 export const MenuAddUpdateModelProps = {
@@ -27,9 +29,14 @@ const defaultModelForm = {
 };
 
 // 菜单管理 新建/修改 弹窗
-export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpdateModelProps>, emit: (event: 'refurbish', ...args: any[]) => void) => {
+export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpdateModelProps>) => {
   const modelId = ref('');
   const showModal = ref(false);
+
+  const router = useRouter();
+  const route = useRoute();
+
+  const routeStore = useRouteStore();
 
   const formBtnLoading = ref(false);
   const modelFromRef = ref();
@@ -137,16 +144,9 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
     }
   };
 
-  // 改变类型
-  // const menuTypeChange = (e) => {
-
-  // };
   // 重置
   const resetFields = () => {
     Object.assign(modelForm, defaultModelForm);
-    // Object.keys(defaultModelForm).forEach((key) => {
-    //   modelForm[key] = defaultModelForm[key];
-    // });
     nextTick(() => {
       modelFromRef.value.restoreValidation();
     });
@@ -178,7 +178,11 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
         const request = modelId.value ? menuApi.updateMenu({ menuId: modelId.value, ...params }) : menuApi.saveMenu(params);
         request.then(() => {
           showModal.value = false;
-          emit('refurbish');
+          // 重新刷新
+          routeStore.setDynamicAddedRoute(false);
+          router.push({
+            path: PAGE_ENUM.REDIRECT_PATH + unref(route).fullPath,
+          });
         });
       }
       formBtnLoading.value = false;
