@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiCategoryFindPageData, ApiCategoryItem, ApiCategorySaveData } from '/#/api/category';
+import { ApiCategoryFindPageData, ApiCategoryItem, ApiCategorySaveData, ApiCategoryUpdateData } from '/#/api/category';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/category';
@@ -38,6 +38,21 @@ export const save = (data: ApiCategorySaveData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/save`,
     method: 'POST',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
+ * @description 修改全局类型
+ * @param data
+ */
+export const update = (data: ApiCategoryUpdateData): Promise<undefined> => {
+  return AxiosCapital.request({
+    url: `${basic}/update`,
+    method: 'PUT',
     data,
     responseOptions: {
       isShowSuccessMessage: true,

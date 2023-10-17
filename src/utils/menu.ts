@@ -2,7 +2,7 @@ import { IframeComponent, LayoutRouterView } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
-import { MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
+import { EMBEDDED_VALUE, MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
 
@@ -153,6 +153,9 @@ export const filterChildrenRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRe
         filterList.push(item);
       }
       if (item.meta && item.meta.menuType === MENU_VALUE) {
+        filterList.push(item);
+      }
+      if (item.meta && item.meta.menuType === EMBEDDED_VALUE && item.meta.iframeSrc) {
         filterList.push(item);
       }
     }

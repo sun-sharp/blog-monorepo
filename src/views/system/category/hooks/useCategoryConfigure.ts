@@ -74,7 +74,9 @@ export const useCategoryConfigure = () => {
                 text: true,
                 onClick: categoryAddUpdateRef.value.init.bind(null, row),
               },
-              '修改'
+              {
+                default: () => '修改',
+              }
             )
           : '';
       },

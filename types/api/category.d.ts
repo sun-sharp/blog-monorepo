@@ -43,6 +43,11 @@ export interface ApiCategory {
 export type ApiCategorySaveData = ApiCategory;
 
 /**
+ * @description: 修改全局类型参数
+ */
+export interface ApiCategoryUpdateData extends ApiCategorySaveData, ApiCategoryId {}
+
+/**
  * @description: 用户的列表每项
  */
 export interface ApiCategoryItem extends ApiCategory, ApiCategoryId {}
