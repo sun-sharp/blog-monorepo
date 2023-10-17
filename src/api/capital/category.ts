@@ -7,8 +7,9 @@ const basic = '/category';
 /**
  * @description: 某种类型的所有配置
  * @param {string} type
+ * @returns {Promise<ApiCategoryItem[]>}
  */
-export function certainTypeAll(type: string): Promise<ApiCategoryItem[]> {
+export const certainTypeAll = (type: string): Promise<ApiCategoryItem[]> => {
   return AxiosCapital.request({
     url: `${basic}/certain_type_all`,
     method: 'get',
@@ -16,11 +17,12 @@ export function certainTypeAll(type: string): Promise<ApiCategoryItem[]> {
       type,
     },
   });
-}
+};
 
 /**
  * @description: 条件并分页获取全局类型列表
  * @param {FindPageData} data
+ * @returns {Promise<TablePaginationResult<ApiCategoryItem[]>>}
  */
 export const getPage = (data: ApiCategoryFindPageData): Promise<TablePaginationResult<ApiCategoryItem[]>> => {
   return AxiosCapital.request({
@@ -32,7 +34,8 @@ export const getPage = (data: ApiCategoryFindPageData): Promise<TablePaginationR
 
 /**
  * @description 创建全局类型
- * @param data
+ * @param {ApiCategorySaveData} data
+ * @returns {Promise<undefined>}
  */
 export const save = (data: ApiCategorySaveData): Promise<undefined> => {
   return AxiosCapital.request({
@@ -47,13 +50,29 @@ export const save = (data: ApiCategorySaveData): Promise<undefined> => {
 
 /**
  * @description 修改全局类型
- * @param data
+ * @param {ApiCategoryUpdateData} data
+ * @returns {Promise<undefined>}
  */
 export const update = (data: ApiCategoryUpdateData): Promise<undefined> => {
   return AxiosCapital.request({
     url: `${basic}/update`,
     method: 'PUT',
     data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
+ * @description: 删除全局类型
+ * @param {string} categoryId
+ * @return {Promise<undefined>}
+ */
+export const remove = (categoryId: string): Promise<undefined> => {
+  return AxiosCapital.request({
+    url: `${basic}/${categoryId}`,
+    method: 'DELETE',
     responseOptions: {
       isShowSuccessMessage: true,
     },

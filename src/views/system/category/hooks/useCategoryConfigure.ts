@@ -4,6 +4,7 @@ import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { categoryApi } from '@/api';
 import { ApiCategoryItem, ApiCategorySearchParams } from '/#/api/category';
 import { NButton } from 'naive-ui';
+import { useApiTypeStore } from '@/store';
 // import TableAction from '@/components/Table/table-action.vue';
 
 export const useCategoryConfigure = () => {
@@ -24,6 +25,8 @@ export const useCategoryConfigure = () => {
 
   const actionRef = ref();
 
+  const apiTypeStore = useApiTypeStore();
+
   /**
    * 表格
    *  */
@@ -35,6 +38,14 @@ export const useCategoryConfigure = () => {
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();
+  };
+
+  // 删除
+  const handleDelete = (row: ApiCategoryItem) => {
+    categoryApi.remove(row.categoryId).then(() => {
+      if (row.type) apiTypeStore.againGetApiType(row.type);
+      reloadTable();
+    });
   };
 
   // 表格字段配置
@@ -61,23 +72,38 @@ export const useCategoryConfigure = () => {
       align: 'center',
     },
     {
-      width: 150,
+      width: 220,
       title: '操作',
       key: 'action',
       align: 'center',
       render(row) {
         return row.categoryId
-          ? h(
-              NButton,
-              {
-                type: 'primary',
-                text: true,
-                onClick: categoryAddUpdateRef.value.init.bind(null, row),
-              },
-              {
-                default: () => '修改',
-              }
-            )
+          ? [
+              h(
+                NButton,
+                {
+                  class: 'mh-3',
+                  type: 'primary',
+                  text: true,
+                  onClick: categoryAddUpdateRef.value.init.bind(null, row),
+                },
+                {
+                  default: () => '修改',
+                }
+              ),
+              h(
+                NButton,
+                {
+                  class: 'mh-3',
+                  type: 'error',
+                  text: true,
+                  onClick: handleDelete.bind(null, row),
+                },
+                {
+                  default: () => '删除',
+                }
+              ),
+            ]
           : '';
       },
     },
