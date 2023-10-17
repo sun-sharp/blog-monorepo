@@ -1,127 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsInt, ValidateNested } from 'class-validator';
-
-/**
- * @description 顶部字段
- * @class HeaderSettingDto
- */
-class HeaderSettingDto {
-  @ApiProperty({
-    description: '固定顶部',
-    example: true,
-  })
-  @IsBoolean({ message: '固定顶部必须是枚举值' })
-  fixed: boolean;
-
-  @ApiProperty({
-    description: '显示重载按钮',
-    example: true,
-  })
-  @IsBoolean({ message: '显示重载按钮必须是枚举值' })
-  isReload: boolean;
-}
-
-/**
- * @description 多标签字段
- * @class MultiTabsSettingDto
- */
-class MultiTabsSettingDto {
-  @ApiProperty({
-    description: '是否显示多标签',
-    example: true,
-  })
-  @IsBoolean({ message: '是否显示多标签必须是枚举值' })
-  show: boolean;
-
-  @ApiProperty({
-    description: '固定多标签',
-    example: true,
-  })
-  @IsBoolean({ message: '固定多标签必须是枚举值' })
-  fixed: boolean;
-}
-
-/**
- * @description 菜单
- * @class MenuSettingDto
- */
-class MenuSettingDto {
-  @ApiProperty({
-    description: '菜单最小宽度',
-    example: 64,
-  })
-  @IsInt({ message: '菜单最小宽度必须是整数' })
-  minMenuWidth: number;
-
-  @ApiProperty({
-    description: '菜单宽度',
-    example: 200,
-  })
-  @IsInt({ message: '菜单宽度必须是整数' })
-  menuWidth: number;
-
-  @ApiProperty({
-    description: '固定菜单',
-    example: true,
-  })
-  @IsBoolean({ message: '固定菜单必须是枚举值' })
-  fixed: boolean;
-
-  @ApiProperty({
-    description: '分割菜单',
-    example: false,
-  })
-  @IsBoolean({ message: '分割菜单必须是枚举值' })
-  mixMenu: boolean;
-
-  @ApiProperty({
-    description: '默认展开',
-    example: false,
-  })
-  @IsBoolean({ message: '默认展开必须是枚举值' })
-  collapsed: boolean;
-}
-
-/**
- * @description 面包屑
- * @class CrumbsSettingDto
- */
-class CrumbsSettingDto {
-  @ApiProperty({
-    description: '是否显示',
-    example: true,
-  })
-  @IsBoolean({ message: '默认展开必须是枚举值' })
-  show: boolean;
-
-  @ApiProperty({
-    description: '显示图标',
-    example: true,
-  })
-  @IsBoolean({ message: '显示图标必须是枚举值' })
-  showIcon: boolean;
-}
-
-/**
- * @description 底部字段
- * @class FooterSettingDto
- */
-class FooterSettingDto {
-  @ApiProperty({
-    description: '是否显示底部',
-    example: true,
-  })
-  @IsBoolean({ message: '是否显示底部必须是枚举值' })
-  show: boolean;
-
-  @ApiProperty({
-    description: '固定底部',
-    example: true,
-  })
-  @IsBoolean({ message: '固定底部必须是枚举值' })
-  fixed: boolean;
-}
+import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 /**
  * @description: 创建主题
@@ -131,17 +9,17 @@ class FooterSettingDto {
 export class CreateConfigurationDto {
   @ApiProperty({
     description: '深色主题',
-    example: false,
+    example: 'light',
   })
-  @IsBoolean({ message: '深色主题必须是枚举值' })
-  isDarkTheme: boolean;
+  @IsNotEmpty({ message: '系统主题不能为空' })
+  appTheme: string;
 
   @ApiProperty({
     description: '系统主题色',
     example: '#2d8cf0',
   })
   @IsNotEmpty({ message: '系统主题色不能为空' })
-  appTheme: string;
+  appThemeColor: string;
 
   @ApiProperty({
     description: '导航模式',
@@ -151,58 +29,76 @@ export class CreateConfigurationDto {
   navMode: string;
 
   @ApiProperty({
-    description: '导航风格',
-    example: 'dark',
+    description: '侧边栏样式',
+    example: false,
   })
-  @IsNotEmpty({ message: '导航风格不能为空' })
-  navTheme: string;
+  @IsBoolean({ message: '侧边栏样式必须是枚举值' })
+  siderIsDark: boolean;
 
   @ApiProperty({
-    description: '顶部',
+    description: '顶栏样式',
   })
-  @ValidateNested()
-  @Type(() => HeaderSettingDto)
-  headerSetting: HeaderSettingDto;
+  @IsBoolean({ message: '顶栏样式必须是枚举值' })
+  headIsDark: boolean;
 
   @ApiProperty({
-    description: '底部',
+    description: '固定顶栏',
   })
-  @ValidateNested()
-  @Type(() => FooterSettingDto)
-  footerSetting: FooterSettingDto;
+  @IsBoolean({ message: '顶栏样式必须是枚举值' })
+  headFixed: boolean;
 
   @ApiProperty({
-    description: '多标签',
+    description: '显示标签页',
   })
-  @ValidateNested()
-  @Type(() => MultiTabsSettingDto)
-  multiTabsSetting: MultiTabsSettingDto;
+  @IsBoolean({ message: '顶栏样式必须是枚举值' })
+  tabsViewShow: boolean;
 
   @ApiProperty({
-    description: '菜单',
+    description: '固定标签页',
   })
-  @ValidateNested()
-  @Type(() => MenuSettingDto)
-  menuSetting: MenuSettingDto;
+  @IsBoolean({ message: '固定标签页必须是枚举值' })
+  tabsViewFixed: boolean;
 
   @ApiProperty({
-    description: '面包屑',
+    description: '显示页脚',
   })
-  @ValidateNested()
-  @Type(() => CrumbsSettingDto)
-  crumbsSetting: CrumbsSettingDto;
+  @IsBoolean({ message: '显示页脚必须是枚举值' })
+  footerShow: boolean;
 
   @ApiProperty({
-    description: '是否开启路由动画',
-    example: true,
+    description: '固定页脚',
   })
-  @IsBoolean({ message: '是否开启路由动画必须是枚举值' })
-  isPageAnimate: boolean;
+  @IsBoolean({ message: '固定页脚须是枚举值' })
+  footerFixed: boolean;
 
   @ApiProperty({
-    description: '路由动画类型',
-    example: 'zoom-fade',
+    description: '显示重载页面按钮',
   })
-  @IsNotEmpty({ message: '路由动画类型不能为空' })
+  @IsBoolean({ message: '显示重载页面按钮必须是枚举值' })
+  headerReloadShow: boolean;
+
+  @ApiProperty({
+    description: '显示面包屑导航',
+  })
+  @IsBoolean({ message: '显示面包屑导航必须是枚举值' })
+  headerBreadcrumbShow: boolean;
+
+  @ApiProperty({
+    description: '显示面包屑显示图标',
+  })
+  @IsBoolean({ message: '显示面包屑显示图标必须是枚举值' })
+  headerBreadcrumbShowIcon: boolean;
+
+  @ApiProperty({
+    description: '页面跳转动画',
+  })
+  @IsBoolean({ message: '页面跳转动画必须是枚举值' })
+  hasPageAnimate: boolean;
+
+  // 页面跳转动画类型
+  @ApiProperty({
+    description: '页面跳转动画类型',
+  })
+  @IsNotEmpty({ message: '页面跳转动画类型不能为空' })
   pageAnimateType: string;
 }

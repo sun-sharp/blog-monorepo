@@ -2,93 +2,6 @@ import { SchemaFactory, Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 /**
- * @description 顶部字段
- * @export
- * @class HeaderSetting
- */
-export class HeaderSetting {
-  //固定顶部
-  @Prop()
-  fixed: boolean;
-
-  //显示重载按钮
-  @Prop()
-  isReload: boolean;
-}
-
-/**
- * @description 多标签字段
- * @export
- * @class MultiTabsSetting
- */
-export class MultiTabsSetting {
-  // 是否显示
-  @Prop()
-  show: boolean;
-
-  // 固定多标签
-  @Prop()
-  fixed: boolean;
-}
-
-/**
- * @description 菜单
- * @export
- * @class MenuSetting
- */
-export class MenuSetting {
-  // 最小宽度
-  @Prop()
-  minMenuWidth: number;
-
-  // 菜单宽度
-  @Prop()
-  menuWidth: number;
-
-  // 固定菜单
-  @Prop()
-  fixed: boolean;
-
-  // 分割菜单
-  @Prop()
-  mixMenu: boolean;
-
-  // 默认展开
-  @Prop()
-  collapsed: boolean;
-}
-
-/**
- * @description 面包屑
- * @export
- * @class CrumbsSetting
- */
-export class CrumbsSetting {
-  // 是否显示
-  @Prop()
-  show: boolean;
-
-  // 显示图标
-  @Prop()
-  showIcon: boolean;
-}
-
-/**
- * @description 底部字段
- * @export
- * @class FooterSetting
- */
-export class FooterSetting {
-  // 是否显示
-  @Prop()
-  show: boolean;
-
-  //固定底部
-  @Prop()
-  fixed: boolean;
-}
-
-/**
  * @description 设置数据字段
  * @export
  * @class Configuration
@@ -102,47 +15,63 @@ export class Configuration extends Document {
   @Prop()
   userId: string;
 
-  // 深色主题
+  // 系统主题
   @Prop()
-  isDarkTheme: boolean;
+  appTheme: string;
 
   // 系统主题色
   @Prop()
-  appTheme: string;
+  appThemeColor: string;
 
   // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
   @Prop()
   navMode: string;
 
-  // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
+  // 侧边栏深色主题
   @Prop()
-  navTheme: string;
+  siderIsDark: boolean;
 
-  // 顶部
+  // 顶栏样式
   @Prop()
-  headerSetting: HeaderSetting;
+  headIsDark: boolean;
 
-  // 底部
+  // 固定顶栏
   @Prop()
-  footerSetting: FooterSetting;
+  headFixed: boolean;
 
-  // 多标签
+  // 显示标签页
   @Prop()
-  multiTabsSetting: MultiTabsSetting;
+  tabsViewShow: boolean;
 
-  // 菜单
+  // 固定标签页
   @Prop()
-  menuSetting: MenuSetting;
+  tabsViewFixed: boolean;
 
-  // 面包屑
+  // 显示页脚
   @Prop()
-  crumbsSetting: CrumbsSetting;
+  footerShow: boolean;
 
-  // 是否开启路由动画
+  // 固定页脚
   @Prop()
-  isPageAnimate: boolean;
+  footerFixed: boolean;
 
-  // 路由动画类型
+  // 显示重载页面按钮
+  @Prop()
+  headerReloadShow: boolean;
+
+  // 显示面包屑导航
+  @Prop()
+  headerBreadcrumbShow: boolean;
+
+  // 显示面包屑显示图标
+  @Prop()
+  headerBreadcrumbShowIcon: boolean;
+
+  // 页面跳转动画
+  @Prop()
+  hasPageAnimate: boolean;
+
+  // 页面跳转动画类型
   @Prop()
   pageAnimateType: string;
 }

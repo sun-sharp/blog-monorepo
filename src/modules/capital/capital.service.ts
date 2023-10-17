@@ -104,59 +104,36 @@ export class CapitalService {
           }
           // 默认配置信息
           const defaultConfigInfo: CreateConfigurationDto = {
+            // 系统主题
+            appTheme: 'light',
             // 系统主题色
-            appTheme: '#2d8cf0',
-            // 面包屑
-            crumbsSetting: {
-              // 是否显示
-              show: true,
-              // 显示图标
-              showIcon: false,
-            },
-            // 顶部
-            headerSetting: {
-              // 固定顶部
-              fixed: true,
-              // 显示重载按钮
-              isReload: true,
-            },
-            // 深色主题
-            isDarkTheme: false,
-            // 是否开启路由动画
-            isPageAnimate: true,
-            // 菜单
-            menuSetting: {
-              // 默认展开
-              collapsed: false,
-              // 固定菜单
-              fixed: true,
-              // 菜单宽度
-              menuWidth: 200,
-              // 最小宽度
-              minMenuWidth: 64,
-              // 分割菜单
-              mixMenu: false,
-            },
-            // 多标签
-            multiTabsSetting: {
-              // 是否显示
-              show: true,
-              // 固定多标签
-              fixed: true,
-            },
+            appThemeColor: '#2d8cf0',
             // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
             navMode: 'vertical',
-            // 导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
-            navTheme: 'dark',
-            // 路由动画类型
+            // 侧边栏样式
+            siderIsDark: false,
+            // 顶栏样式
+            headIsDark: false,
+            // 固定顶栏
+            headFixed: true,
+            // 固定标签页
+            tabsViewShow: true,
+            // 固定标签页
+            tabsViewFixed: true,
+            // 显示页脚
+            footerShow: true,
+            // 固定页脚
+            footerFixed: true,
+            // 显示重载页面按钮
+            headerReloadShow: true,
+            // 显示面包屑导航
+            headerBreadcrumbShow: true,
+            // 显示面包屑显示图标
+            headerBreadcrumbShowIcon: true,
+            // 页面跳转动画
+            hasPageAnimate: true,
+            // 页面跳转动画类型
             pageAnimateType: 'zoom-fade',
-            // 底部
-            footerSetting: {
-              // 是否显示
-              show: true,
-              // 固定底部
-              fixed: true,
-            },
           };
           const { code: configCode, message: configMessage } = await this.configurationService.save(userId, defaultConfigInfo);
           if (configCode !== ApiCode.SUCCESS) {

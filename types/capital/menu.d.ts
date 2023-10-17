@@ -13,17 +13,17 @@ export interface ApiMenu {
   // 菜单是否隐藏
   hidden: boolean;
   // 组件内容或地址
-  component: string;
+  component?: string;
   // 菜单的排序
   sort: number;
   // 菜单的图标
-  icon: string;
+  icon?: string;
   // 内嵌iframe地址
-  iframeSrc: string;
+  iframeSrc?: string;
   // 外链跳转地址
-  externalLink: string;
+  externalLink?: string;
   // 是否不缓存
-  noKeepAlive: boolean;
+  noKeepAlive?: boolean;
 }
 
 /**

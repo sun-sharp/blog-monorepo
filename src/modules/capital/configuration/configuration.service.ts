@@ -94,16 +94,35 @@ export class ConfigurationService {
           const config = await this.configurationModel.findOne({ userId }).lean();
           const result: ApiConfiguration = {
             userId: config.userId,
-            isDarkTheme: config.isDarkTheme,
+            // 系统主题
             appTheme: config.appTheme,
+            // 系统主题色
+            appThemeColor: config.appThemeColor,
+            // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
             navMode: config.navMode,
-            navTheme: config.navTheme,
-            headerSetting: config.headerSetting,
-            footerSetting: config.footerSetting,
-            multiTabsSetting: config.multiTabsSetting,
-            menuSetting: config.menuSetting,
-            crumbsSetting: config.crumbsSetting,
-            isPageAnimate: config.isPageAnimate,
+            // 侧边栏样式
+            siderIsDark: config.siderIsDark,
+            // 顶栏样式
+            headIsDark: config.headIsDark,
+            // 固定顶栏
+            headFixed: config.headFixed,
+            // 固定标签页
+            tabsViewShow: config.tabsViewShow,
+            // 固定标签页
+            tabsViewFixed: config.tabsViewFixed,
+            // 显示页脚
+            footerShow: config.footerShow,
+            // 固定页脚
+            footerFixed: config.footerFixed,
+            // 显示重载页面按钮
+            headerReloadShow: config.headerReloadShow,
+            // 显示面包屑导航
+            headerBreadcrumbShow: config.headerBreadcrumbShow,
+            // 显示面包屑显示图标
+            headerBreadcrumbShowIcon: config.headerBreadcrumbShowIcon,
+            // 页面跳转动画
+            hasPageAnimate: config.hasPageAnimate,
+            // 页面跳转动画类型
             pageAnimateType: config.pageAnimateType,
           };
           return {
