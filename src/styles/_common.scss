@@ -88,6 +88,7 @@
   height: 100%;
 }
 
+/* flex */
 .flex {
   display: flex;
 }
@@ -126,6 +127,10 @@
 
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .inline-block {

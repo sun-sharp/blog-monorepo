@@ -3,14 +3,13 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { RouteState } from '/#/store';
 import { ApiUserInfo } from '/#/api/user';
-// import { constantRouter } from '@/router';
 import { capitalApi } from '@/api';
 import at from 'await-to-js';
-import { constantRouterIcon, routerScreen, sortRouteMenu } from '@/utils';
+import { constantRouterIcon, formatTrendsMenus, isHttpUrl, routerScreen } from '@/utils';
 import { AppRouteRecordRaw } from '/#/router';
-import { ApiMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem } from '/#/api/menu';
 import { ViewsMenu } from '/#/views/menu';
-import { HomeRoute, PageRoute } from '@/router/base';
+import { PageRoute } from '@/router/base';
 
 export const useRouteStore = defineStore({
   id: 'app-route',
@@ -23,7 +22,7 @@ export const useRouteStore = defineStore({
     isDynamicAddedRoute: false,
   }),
   getters: {
-    getMenus(): AppRouteRecordRaw[] {
+    getMenus(): ApiLevelMenuItem[] {
       return this.menus;
     },
     getSearchMenus(): ViewsMenu[] {
@@ -41,13 +40,13 @@ export const useRouteStore = defineStore({
     setRouters(routers: AppRouteRecordRaw[]) {
       this.addRouters = routers;
     },
-    setMenus(menus: AppRouteRecordRaw[]) {
-      // 设置动态路由
+    // 设置菜单
+    setMenus(menus: ApiLevelMenuItem[]) {
       this.menus = menus;
     },
     // 设置查询列表的菜单
-    setSearchMenus(searchMenus: ApiMenuItem[]) {
-      this.searchMenus = searchMenus.filter((f) => f.component || f.iframeSrc).map((m) => ({ ...m, icon: constantRouterIcon[m.icon] }));
+    setSearchMenus(searchMenus: ViewsMenu[]) {
+      this.searchMenus = searchMenus;
     },
     setKeepAliveComponents(compNames: string[]) {
       // 设置需要缓存的组件
@@ -61,12 +60,18 @@ export const useRouteStore = defineStore({
       const [err, resp] = await at(capitalApi.adminMenus(roleCode));
       if (err) return toRaw([]);
       // 设置菜单搜索
-      this.setSearchMenus(resp);
+      const searchMenus = resp
+        .filter((f) => f.component || f.iframeSrc || isHttpUrl(f.name))
+        .map((m) => ({ ...m, icon: m.icon ? constantRouterIcon[m.icon] : null }));
+      this.setSearchMenus(searchMenus);
+      // 创建菜单
+      const formatMenus = formatTrendsMenus(resp);
+      this.setMenus(formatMenus);
+      // 创建路由
       const accessedRouters = routerScreen(resp);
       PageRoute.children = accessedRouters;
       const routers = [PageRoute];
       this.setRouters(routers);
-      this.setMenus([HomeRoute, ...sortRouteMenu(accessedRouters)]);
       return toRaw(routers);
     },
   },

@@ -7,44 +7,11 @@ import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
 
 /**
- * 将数组菜单组合成多层菜单
- */
-export const levelMenu = (menuMap: ApiMenuItem[], parentId: string | number = '0') => {
-  const menuArr: ApiLevelMenuItem[] = [];
-  menuMap.forEach((i) => {
-    const item: ApiLevelMenuItem = i;
-    // 查找上级菜单
-    const menuFind = menuMap.find((f) => f.menuId === item.parentId);
-    if (item.parentId === parentId) {
-      // 是否有子菜单，并递归处理
-      const itemChildren = levelMenu(menuMap, item.menuId);
-      if (itemChildren && itemChildren.length > 0) {
-        // 添加子数据
-        item.children = itemChildren;
-      }
-      // 添加上级菜单的名称
-      if (menuFind) {
-        item.parentName = menuFind.title;
-      }
-      menuArr.push(item);
-    } else if (parentId === '0') {
-      // 判断这个菜单是否没有上级
-      if (!menuFind) {
-        item.parentName = '查询的数据没有上级菜单';
-        menuArr.push(item);
-      }
-    }
-  });
-  return menuArr;
-};
-
-/**
  * 对路由的path进行处理
  * @param component
  * @return {*}
  *  */
-export const pathFormat = (item: ApiMenuItem): string => {
-  const { component = '', name = '' } = item;
+export const pathFormat = (component: string = '', name: string = ''): string => {
   let path: string;
   if (component.indexOf('/') !== -1) {
     path = component.replace('/index', '');
@@ -86,7 +53,7 @@ export const dynamicImport = (viewsModules: Record<string, () => Promise<Recorda
  * @param {string} iframeSrc
  */
 const viewsModules: Record<string, () => Promise<Recordable>> = import.meta.glob('../views/**/*.{vue,tsx}');
-export const formatRouteComponent = (component: string = '', iframeSrc: string) => {
+export const formatRouteComponent = (component: string = '', iframeSrc?: string) => {
   let newComponent: Component | string;
   if (component.indexOf('/') >= 0) {
     newComponent = dynamicImport(viewsModules, component as string);
@@ -120,7 +87,7 @@ export const routerGenerator = (routerMap: MenuRouteItem[], _parentId = '0'): Ap
         // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
         meta: {
           ...other,
-          icon: constantRouterIcon[other.icon] || null,
+          icon: other.icon ? constantRouterIcon[other.icon] : null,
         },
       };
       // 是否有子菜单，并递归处理
@@ -149,12 +116,14 @@ export const filterChildrenRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRe
       if (m.children && m.children.length > 0) {
         item.children = filterChildrenRouter(m.children);
       }
+      // 过滤掉没下级的目录
       if (item.meta && item.meta.menuType === MAIN_DIRECTORY_VALUE && item.children && item.children.length > 0) {
         filterList.push(item);
       }
       if (item.meta && item.meta.menuType === MENU_VALUE) {
         filterList.push(item);
       }
+      // 过滤掉没连接的内嵌
       if (item.meta && item.meta.menuType === EMBEDDED_VALUE && item.meta.iframeSrc) {
         filterList.push(item);
       }
@@ -167,54 +136,76 @@ export const filterChildrenRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRe
  * @description: 处理路由表
  * @param routerMap
  */
-export const routerScreen = (routerMap: ApiMenuItem[]): AppRouteRecordRaw[] => {
-  return filterChildrenRouter(
-    routerGenerator(
-      routerMap.map((m) => {
-        const path = pathFormat(m);
-        const component = formatRouteComponent(m.component, m.iframeSrc);
-        return {
-          ...m,
-          path,
-          component,
-        };
-      })
-    )
-  );
+export const routerScreen = (menuData: ApiMenuItem[]): AppRouteRecordRaw[] => {
+  // 获取（目录，菜单，内嵌）的数据
+  const routeList = menuData
+    .filter((f) => [MAIN_DIRECTORY_VALUE, MENU_VALUE, EMBEDDED_VALUE].includes(f.menuType))
+    .map((m) => {
+      const path = pathFormat(m.component, m.name);
+      const component = formatRouteComponent(m.component, m.iframeSrc);
+      return {
+        ...m,
+        path,
+        component,
+      };
+    });
+  return filterChildrenRouter(routerGenerator(routeList));
 };
 
 /**
- * @description: 排除Router
- * */
-export const filterRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
-  return routerMap.filter((item) => {
-    return (item.meta?.hidden || false) != true && !['/:path(.*)*', '/', PAGE_ENUM.REDIRECT_PATH, PAGE_ENUM.LOGIN_PATH].includes(item.path);
+ * 将数组菜单组合成多层菜单
+ */
+export const levelMenu = (menuMap: ApiMenuItem[], parentId: string | number = '0') => {
+  const menuArr: ApiLevelMenuItem[] = [];
+  menuMap.forEach((i) => {
+    const item: ApiLevelMenuItem = i;
+    // 查找上级菜单
+    const menuFind = menuMap.find((f) => f.menuId === item.parentId);
+    if (item.parentId === parentId) {
+      // 是否有子菜单，并递归处理
+      const itemChildren = levelMenu(menuMap, item.menuId);
+      if (itemChildren && itemChildren.length > 0) {
+        // 添加子数据
+        item.children = itemChildren;
+      }
+      // 添加上级菜单的名称
+      if (menuFind) {
+        item.parentName = menuFind.title;
+      }
+      menuArr.push(item);
+    } else if (parentId === '0') {
+      // 判断这个菜单是否没有上级
+      if (!menuFind) {
+        item.parentName = '查询的数据没有上级菜单';
+        menuArr.push(item);
+      }
+    }
   });
+  return menuArr;
 };
 
 /**
  * @description: 递归组装菜单格式
- * @param {AppRouteRecordRaw[]} list
+ * @param {ApiLevelMenuItem[]} list
  */
-export const generatorMenu = (list: AppRouteRecordRaw[]): NaiveMenuOption[] => {
-  return filterRouter(list).map((m) => {
+export const generatorMenu = (list: ApiLevelMenuItem[]): NaiveMenuOption[] => {
+  return list.map((m) => {
     const currentMenu: NaiveMenuOption = {
       // 是否禁用菜单项
       disabled: false,
       // 菜单项的图标
-      icon: m.meta?.icon,
+      icon: m.icon ? constantRouterIcon[m.icon] : null,
       // 菜单项的标识符
       key: m.name,
       // 菜单项的内容
-      label: m.meta?.title,
+      label: m.title,
       // 是否显示菜单项
-      show: !m.meta?.hidden,
+      show: !m.hidden,
+      path: pathFormat(m.component, m.name),
     };
     // 是否有子菜单，并递归处理
     if (m.children && m.children.length > 0) {
       currentMenu.children = generatorMenu(m.children);
-    } else if (m.meta?.menuType === 1) {
-      currentMenu.children = [];
     }
     return currentMenu;
   });
@@ -223,20 +214,21 @@ export const generatorMenu = (list: AppRouteRecordRaw[]): NaiveMenuOption[] => {
 /**
  * @description: 混合菜单获取对应的菜单
  * */
-export function getChildrenMix(newArr: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] {
+export function getChildrenMix(newArr: ApiLevelMenuItem[], routerName: string): NaiveMenuOption[] {
   const firstRouter: NaiveMenuOption[] = [];
-  filterRouter(newArr).forEach((m) => {
+  newArr.forEach((m) => {
     const currentMenu: NaiveMenuOption = {
       // 是否禁用菜单项
       disabled: false,
       // 菜单项的图标
-      icon: m.meta?.icon,
+      icon: m.icon ? constantRouterIcon[m.icon] : null,
       // 菜单项的标识符
       key: m.name,
       // 菜单项的内容
-      label: m.meta?.title,
+      label: m.title,
       // 是否显示菜单项
-      show: !m.meta?.hidden,
+      show: !m.hidden,
+      path: pathFormat(m.component, m.name),
     };
     if (m.name !== routerName) {
       if (m.children && m.children.length > 0) {
@@ -253,20 +245,21 @@ export function getChildrenMix(newArr: AppRouteRecordRaw[], routerName: string):
 /**
  * @description: 混合菜单获取对应的整体菜单
  * */
-export function getCurrentChildrenMix(newArr: AppRouteRecordRaw[], routerName: string): NaiveMenuOption[] {
+export function getCurrentChildrenMix(newArr: ApiLevelMenuItem[], routerName: string): NaiveMenuOption[] {
   const firstRouter: NaiveMenuOption[] = [];
-  filterRouter(newArr).forEach((m) => {
+  newArr.forEach((m) => {
     const currentMenu: NaiveMenuOption = {
       // 是否禁用菜单项
       disabled: false,
       // 菜单项的图标
-      icon: m.meta?.icon,
+      icon: m.icon ? constantRouterIcon[m.icon] : null,
       // 菜单项的标识符
       key: m.name,
       // 菜单项的内容
-      label: m.meta?.title,
+      label: m.title,
       // 是否显示菜单项
-      show: !m.meta?.hidden,
+      show: !m.hidden,
+      path: pathFormat(m.component, m.name),
     };
     if (m.name === routerName) {
       firstRouter.push(currentMenu);
@@ -283,7 +276,7 @@ export function getCurrentChildrenMix(newArr: AppRouteRecordRaw[], routerName: s
  * @description: 混合菜单
  * @param {AppRouteRecordRaw[]} list
  */
-export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string, mode: string): NaiveMenuOption[] => {
+export const generatorMenuMix = (list: ApiLevelMenuItem[], routerName: string, mode: string): NaiveMenuOption[] => {
   const cloneListMap = cloneDeep(list);
   if (mode === 'horizontal') {
     return getCurrentChildrenMix(cloneListMap, routerName);
@@ -293,17 +286,36 @@ export const generatorMenuMix = (list: AppRouteRecordRaw[], routerName: string, 
 
 /**
  * @description: 对菜单进行排序
- * @param {AppRouteRecordRaw[]} list
+ * @param {ApiLevelMenuItem[]} list
  */
-export const sortRouteMenu = (list: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
+export const sortLevelMenu = (list: ApiLevelMenuItem[]): ApiLevelMenuItem[] => {
   const routeList = list;
-  routeList.sort((a: AppRouteRecordRaw, b: AppRouteRecordRaw) => (a.meta?.sort || 0) - (b.meta?.sort || 0));
-  routeList.forEach((i: AppRouteRecordRaw) => {
+  routeList.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+  routeList.forEach((i) => {
     const item = i;
     if (item.children && item.children.length > 0) {
-      item.children = sortRouteMenu(item.children);
+      item.children = sortLevelMenu(item.children);
     }
     return item;
   });
   return routeList;
+};
+
+/**
+ * @description: 处理动态菜单
+ * @param {ApiMenuItem[]} menuData
+ */
+export const formatTrendsMenus = (menuData: ApiMenuItem[]): ApiLevelMenuItem[] => {
+  const homeMenuItem: ApiLevelMenuItem = {
+    hidden: false,
+    icon: PAGE_ENUM.HOME_ICON,
+    menuId: '001',
+    menuType: MENU_VALUE,
+    name: PAGE_ENUM.HOME_NAME,
+    parentId: '0',
+    sort: 0,
+    title: PAGE_ENUM.HOME_TITLE,
+  };
+  const trendsMenus = sortLevelMenu(levelMenu(menuData));
+  return [homeMenuItem, ...trendsMenus];
 };

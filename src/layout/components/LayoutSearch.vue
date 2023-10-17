@@ -4,7 +4,8 @@
   import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import { useSearch } from '@/hooks';
-  import { APP_ENV_CONFIG, menuTagTypeNameObj, menuTypeObj } from '@/constant';
+  import { APP_ENV_CONFIG, OUTSIDE_THE_CHAIN_VALUE, menuTagTypeNameObj, menuTypeObj } from '@/constant';
+  import { ApiMenuItem } from '/#/api/menu';
 
   const router = useRouter();
 
@@ -22,19 +23,23 @@
     }
 
     return searchMenus.value.filter((item) => {
-      return item.component.indexOf(searchValue.value) !== -1 || item.title.indexOf(searchValue.value) !== -1;
+      return (item.component && item.component.indexOf(searchValue.value) !== -1) || item.title.indexOf(searchValue.value) !== -1;
     });
   });
 
   // 点击跳转页面
-  const toNestRouter = (item: { name: string }) => {
-    router
-      .push({
-        name: item.name,
-      })
-      .then(() => {
-        useSearch.value = false;
-      });
+  const toNestRouter = (item: ApiMenuItem) => {
+    if (item.menuType === OUTSIDE_THE_CHAIN_VALUE) {
+      window.open(item.name);
+    } else {
+      router
+        .push({
+          name: item.name,
+        })
+        .then(() => {
+          useSearch.value = false;
+        });
+    }
   };
 </script>
 
@@ -63,7 +68,7 @@
             <component :is="item.icon" :key="item.menuId" class="main-item--icon" />
             <div class="main-item--cont">
               <div class="name">{{ item.title }}</div>
-              <div class="path">{{ item.component || item.iframeSrc }}</div>
+              <div class="path">{{ item.component || item.iframeSrc || item.name }}</div>
             </div>
           </div>
           <n-tag class="mr-30" :type="menuTagTypeNameObj[item.menuType]">{{ menuTypeObj[item.menuType] }}</n-tag>

@@ -14,6 +14,8 @@ export interface NaiveMenuOption {
   key: string;
   // 菜单项的内容
   label: string | (() => VNodeChild);
-  // 	是否显示菜单项
+  // 是否显示菜单项
   show?: boolean;
+  // path
+  path: string;
 }

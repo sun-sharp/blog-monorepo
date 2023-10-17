@@ -97,7 +97,7 @@ export const useMenuConfigure = () => {
       align: 'center',
       key: 'icon',
       render(row: ApiLevelMenuItem) {
-        return constantHtmlIcon[row.icon];
+        return row.icon ? constantHtmlIcon[row.icon] : '';
       },
     },
     {

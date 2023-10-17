@@ -93,8 +93,6 @@ export const useRoleAddUpdateModel = (emit: (event: 'refurbish', ...args: any[])
   const loadMenuList = () => {
     menuApi.getMenuList().then((res) => {
       menuData.value = levelMenu(res);
-      console.log(menuData.value, 'menuData.value');
-
       menuListLoading.value = true;
     });
   };

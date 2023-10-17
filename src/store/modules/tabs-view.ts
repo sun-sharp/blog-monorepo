@@ -4,7 +4,16 @@ import { TabsViewState } from '/#/store';
 import { RouteItem } from '/#/router';
 
 // 不需要出现在标签页中的路由
-const whiteList = [PAGE_ENUM.ERROR_PAGE_NAME, PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME, PAGE_ENUM.LOGIN_NAME];
+const noNeedList = [
+  // 404错误
+  PAGE_ENUM.ERROR_PAGE_NAME,
+  PAGE_ENUM.ERROR_CHILD_PAGE_NAME,
+  // 重定向
+  PAGE_ENUM.REDIRECT_PAGE_NAME,
+  PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME,
+  // 登录
+  PAGE_ENUM.LOGIN_NAME,
+];
 
 export const useTabsViewStore = defineStore({
   id: 'app-tabs-view',
@@ -15,11 +24,11 @@ export const useTabsViewStore = defineStore({
   actions: {
     initTabs(routes: RouteItem[]) {
       // 初始化标签页
-      this.tabsList = routes;
+      this.tabsList = routes.filter((f) => !noNeedList.includes(f.name));
     },
     addTabs(route: RouteItem): boolean {
       // 添加标签页
-      if (whiteList.includes(route.name)) return false;
+      if (noNeedList.includes(route.name)) return false;
       const isExists = this.tabsList.some((item) => item.fullPath == route.fullPath);
       if (!isExists) {
         this.tabsList.push(route);

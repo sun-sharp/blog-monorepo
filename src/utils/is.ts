@@ -138,3 +138,9 @@ export const isNullOrUnDef = (val: unknown): boolean => {
 export const isEmpty = (val: unknown): boolean => {
   return JSON.stringify(val) === '{}' || isUnDef(val) || isNull(val) || val === '';
 };
+
+// 是否为url连接
+export const isHttpUrl = (val: string): boolean => {
+  if (!val) return false;
+  return /http(s)?:/.test(val);
+};

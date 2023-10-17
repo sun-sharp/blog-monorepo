@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center page-container">
+  <div class="error-404">
     <div class="text-center">
       <img src="~@/assets/images/error/404.svg" alt="" />
     </div>
@@ -20,13 +20,19 @@
 </script>
 
 <style lang="scss" scoped>
-  .page-container {
+  .error-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     padding: 50px 0;
     border-radius: 4px;
 
     .text-center {
+      text-align: center;
+
       h1 {
         padding: 20px 0;
         color: #666;

@@ -13,7 +13,7 @@ export type LockScreenState = {
 
 // 路由配置
 export interface RouteState {
-  menus: AppRouteRecordRaw[];
+  menus: ApiLevelMenuItem[];
   searchMenus: ViewsMenu[];
   // routers: any[];
   addRouters: AppRouteRecordRaw[];

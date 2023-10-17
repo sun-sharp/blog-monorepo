@@ -1,4 +1,4 @@
-import { generatorMenu, generatorMenuMix } from '@/utils';
+import { generatorMenu, generatorMenuMix, isHttpUrl } from '@/utils';
 import { ExtractPropTypes, computed, onMounted, ref, unref, watch } from 'vue';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { useSetting } from '@/hooks';
@@ -77,11 +77,11 @@ export const useLayoutMenu = (props: ExtractPropTypes<typeof LayoutMenuProps>, e
   };
 
   // 点击菜单
-  const clickMenuItem = (key: string) => {
-    if (/http(s)?:/.test(key)) {
+  const clickMenuItem = (key: string, item: NaiveMenuOption) => {
+    if (isHttpUrl(key)) {
       window.open(key);
     } else {
-      router.push({ name: key });
+      router.push(item.path);
     }
   };
 
