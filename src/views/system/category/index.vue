@@ -6,7 +6,7 @@
   import { PlusOutlined } from '@/utils';
 
   // 配置
-  const { categoryAddUpdateRef, actionRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit } = useCategoryConfigure();
+  const { categoryAddUpdateRef, actionRef, searchSchemas, columns, loadDataTable, tableRowKey, reloadTable, searchSubmit } = useCategoryConfigure();
 </script>
 
 <template>
@@ -19,7 +19,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" :columns="columns" is-card-surround :request="loadDataTable" :row-key="(row: any) => row.id">
+    <basic-table ref="actionRef" :columns="columns" is-card-surround :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-button type="primary" @click="categoryAddUpdateRef.init()">
           <template #icon>

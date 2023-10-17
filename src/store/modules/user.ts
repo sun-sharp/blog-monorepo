@@ -89,10 +89,12 @@ export const useUserStore = defineStore({
     },
     // 设置用户信息
     setUserInfo(info: ApiUserInfo) {
+      storage.set(CURRENT_USER, info);
       this.info = info;
     },
     // 设置配置信息
     setConfigInfo(configInfo: ApiConfigInfo) {
+      storage.set(USER_CONFIG, configInfo);
       this.configInfo = configInfo;
     },
     // 登录
@@ -112,7 +114,6 @@ export const useUserStore = defineStore({
       const self = this;
       const [err, resp] = await at(userApi.getUserInfo());
       if (err || !resp) return;
-      storage.set(CURRENT_USER, resp);
       self.setUserInfo(resp);
       return resp;
     },
@@ -121,7 +122,6 @@ export const useUserStore = defineStore({
       const self = this;
       const [err, resp] = await at(configurationApi.getConfigInfo());
       if (err || !resp) return;
-      storage.set(USER_CONFIG, resp);
       self.setConfigInfo(resp);
       return;
     },
@@ -139,7 +139,6 @@ export const useUserStore = defineStore({
     async updateApiConfigInfo(configInfo: ApiConfigInfo) {
       const [err, resp] = await at(configurationApi.update(configInfo));
       if (err) return false;
-      storage.set(USER_CONFIG, configInfo);
       this.setConfigInfo(configInfo);
       return resp;
     },

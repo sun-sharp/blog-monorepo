@@ -39,6 +39,8 @@ export const useCategoryConfigure = () => {
   const reloadTable = () => {
     actionRef.value.reload();
   };
+  // 配置
+  const tableRowKey = (row: ApiCategoryItem): string => row.categoryId;
 
   // 删除
   const handleDelete = (row: ApiCategoryItem) => {
@@ -115,5 +117,5 @@ export const useCategoryConfigure = () => {
     actionRef.value.updatePage(1);
   };
 
-  return { categoryAddUpdateRef, actionRef, searchSchemas, columns, loadDataTable, reloadTable, searchSubmit };
+  return { categoryAddUpdateRef, actionRef, searchSchemas, columns, loadDataTable, tableRowKey, reloadTable, searchSubmit };
 };

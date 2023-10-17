@@ -30,11 +30,9 @@ export const useLayoutHeader = () => {
 
   const { getAppThemeColor, getNavMode, getHeadIsDark, getHeaderReloadShow, getHeaderBreadcrumbShow, getHeaderBreadcrumbShowIcon } = useSetting();
 
-  const { avatar: infoAvatar } = userStore?.info || {};
+  const headerSettingRef = ref<Component>();
 
-  const headerSettingRef = ref();
-
-  const avatar = computed(() => getImgUrl(infoAvatar));
+  const avatar = computed(() => getImgUrl(userStore?.info.avatar));
   const navMode = computed(() => unref(getNavMode));
   const headerReloadShow = computed(() => unref(getHeaderReloadShow));
   const headerBreadcrumbShow = computed(() => unref(getHeaderBreadcrumbShow));
