@@ -26,13 +26,6 @@ export type ApiAppTheme = 'light' | 'dark';
 export type ApiAnimate = 'zoom-fade' | 'zoom-out' | 'fade' | 'fade-slide' | 'fade-top' | 'fade-bottom' | 'fade-scale';
 
 /**
- * @description: 设置的id
- */
-export interface ApiImageId {
-  // 图片id
-  imageId: string;
-}
-/**
  * @description: 设置配置字段
  */
 export interface ApiConfiguration {

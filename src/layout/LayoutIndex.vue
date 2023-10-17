@@ -39,8 +39,8 @@
       @expand="collapsed = false"
     >
       <n-config-provider :theme-overrides="siderThemeOverrides">
-        <layout-logo :collapsed="collapsed" />
-        <layout-menu v-model:collapsed="collapsed" :inverted="false" />
+        <layout-logo class="layout-sider__logo" :collapsed="collapsed" />
+        <layout-menu v-model:collapsed="collapsed" class="layout-sider__menu" :inverted="false" />
       </n-config-provider>
     </n-layout-sider>
     <section :class="noSiderClassName">
@@ -82,10 +82,23 @@
     height: 100vh;
 
     &-sider {
+      position: relative;
       min-height: 100vh;
       color: $sider-text-color;
       background-color: $sider-back-color;
       transition: all 0.2s ease-in-out;
+
+      &__logo {
+        position: absolute;
+        top: 0;
+        z-index: 10;
+        width: 100%;
+        background-color: $sider-back-color;
+      }
+
+      &__menu {
+        padding-top: $header-height;
+      }
     }
 
     &-no-sider {

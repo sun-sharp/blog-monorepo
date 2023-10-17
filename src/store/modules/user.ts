@@ -5,6 +5,7 @@ import { store } from '@/store';
 import { ACCESS_TOKEN, APP_ENV_CONFIG, CURRENT_USER, IS_LOCK_SCREEN, RESULT_ENUM, USER_CONFIG } from '@/constant';
 import {
   capitalApi,
+  configurationApi,
   // configurationApi,
   userApi,
 } from '@/api';
@@ -118,9 +119,8 @@ export const useUserStore = defineStore({
     // 获取用户配置
     async GetConfigInfo() {
       const self = this;
-      // const [err, resp] = await at(configurationApi.getConfigInfo());
-      // if (err || !resp) return;
-      const resp = defaultConfigInfo;
+      const [err, resp] = await at(configurationApi.getConfigInfo());
+      if (err || !resp) return;
       storage.set(USER_CONFIG, resp);
       self.setConfigInfo(resp);
       return;
@@ -137,11 +137,11 @@ export const useUserStore = defineStore({
     },
     // 接口修改配置
     async updateApiConfigInfo(configInfo: ApiConfigInfo) {
-      // const [err, resp] = await at(configurationApi.update(configInfo));
-      // if (err) return false;
+      const [err, resp] = await at(configurationApi.update(configInfo));
+      if (err) return false;
       storage.set(USER_CONFIG, configInfo);
       this.setConfigInfo(configInfo);
-      // return resp;
+      return resp;
     },
   },
 });

@@ -15,13 +15,17 @@ export interface ApiWaitForDo {
   // 分类
   classify: number;
   // 截止时间
-  deadline: string;
+  deadline?: string;
   // 备注
   remark: string;
   // 状态
   state: number;
   // 排序
   sort: number;
+  // 是否删除
+  isRemove: boolean;
+  // 用户id
+  userId: string;
 }
 
 /**

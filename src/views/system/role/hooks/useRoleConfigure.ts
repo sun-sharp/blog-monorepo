@@ -70,7 +70,9 @@ export const useRoleConfigure = () => {
               type: 'primary',
               onClick: addUpdateModelRef.value.init.bind(null, row),
             },
-            '编辑'
+            {
+              default: () => '编辑',
+            }
           ),
           h(
             NButton,
@@ -80,7 +82,9 @@ export const useRoleConfigure = () => {
               type: 'error',
               onClick: handleDelete.bind(null, row),
             },
-            '删除'
+            {
+              default: () => '删除',
+            }
           ),
         ];
       },
