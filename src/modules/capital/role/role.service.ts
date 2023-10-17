@@ -42,7 +42,7 @@ export class RoleService {
           const total = await this.roleModel.find(findData).count();
           const findArr = await this.roleModel.find(findData).limit(limit).skip(skip);
           const list: ApiRoleItem[] = findArr.map((m) => ({
-            roleId: m._id,
+            roleId: m.id,
             name: m.name,
             roleCode: m.roleCode,
             roleType: m.roleType,
@@ -77,7 +77,7 @@ export class RoleService {
         .then(async () => {
           const findArr = await this.roleModel.find().sort({ sort: 1 });
           const result: ApiRoleItem[] = findArr.map((m) => ({
-            roleId: m._id,
+            roleId: m.id,
             name: m.name,
             roleCode: m.roleCode,
             roleType: m.roleType,

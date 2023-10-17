@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -6,6 +6,7 @@ import { CategoryCertainTypeDto } from './dto/category-certain-type.dto';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageCategoryDto } from './dto/page-category.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('category')
 @ApiTags('全局类型')
@@ -32,5 +33,12 @@ export class CategoryController {
   @ApiOperation({ summary: '创建全局类型' })
   create(@Body() body: CreateCategoryDto) {
     return this.categoryService.create(body);
+  }
+
+  @Put('update')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '修改全局类型' })
+  update(@Body() body: UpdateCategoryDto) {
+    return this.categoryService.update(body);
   }
 }

@@ -89,7 +89,7 @@ export class WaitForDoService {
           const findArr = await this.findByClassify(classify, state);
           const result = findArr.map((m) => {
             const item: ApiWaitForDoItem = {
-              waitForDoId: m._id,
+              waitForDoId: m.id,
               title: m.title,
               classify: m.classify,
               remark: m.remark,

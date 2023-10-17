@@ -9,6 +9,7 @@ import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ApiCategoryItem } from 'types/capital/category';
 import { IResponse } from 'types/common';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -83,7 +84,7 @@ export class CategoryService {
         .then(async (type) => {
           const findArr = await this.findByType(type);
           const result: ApiCategoryItem[] = findArr.map((m) => ({
-            categoryId: m._id,
+            categoryId: m.id,
             type: m.type,
             valueStr: m.valueStr,
             value: m.value,
@@ -142,7 +143,7 @@ export class CategoryService {
           const findArr = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
           const list: ApiCategoryItem[] = (findArr || []).map((m) => {
             return {
-              categoryId: m._id,
+              categoryId: m.id,
               type: m.type,
               valueStr: m.valueStr,
               value: m.value,
@@ -160,6 +161,57 @@ export class CategoryService {
           return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 修改全局类型
+   * @param {UpdateCategoryDto} updateCategoryDto
+   * @return {Promise<IResponse>}
+   */
+  public update(updateCategoryDto: UpdateCategoryDto): Promise<IResponse> {
+    return (
+      Promise.resolve(updateCategoryDto)
+        // 修改
+        .then(async (body) => {
+          const { categoryId, value, type, valueStr } = body;
+          const findTypeData = await this.categoryModel.find({ type });
+          const filterData = findTypeData.filter((f) => f.id !== categoryId);
+          if (value) {
+            const findValue = filterData.find((f) => f.value === value);
+            if (findValue) {
+              throw {
+                code: ApiCode.ERROR,
+                message: '全局类型标识重复',
+              };
+            }
+            return body;
+          } else if (valueStr) {
+            const findValueStr = filterData.find((f) => f.valueStr === valueStr);
+            if (findValueStr) {
+              throw {
+                code: ApiCode.ERROR,
+                message: '全局类型标识（字符串类型）重复',
+              };
+            }
+            return body;
+          }
+        })
+        .then(async (body) => {
+          const { categoryId, ...other } = body;
+          await this.categoryModel.updateOne({ _id: categoryId }, other);
+          return {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          return {
+            code: ApiCode.ERROR,
+            message: err.message || '修改失败！',
           };
         })
     );

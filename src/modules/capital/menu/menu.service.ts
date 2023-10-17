@@ -54,7 +54,7 @@ export class MenuService {
           const findData = query ? { name: { $regex: query.name || '' } } : {};
           const menuList = await this.menuModel.find(findData).sort({ sort: 1 });
           const result: ApiMenuItem[] = menuList.map((m) => ({
-            menuId: m._id,
+            menuId: m.id,
             name: m.name,
             title: m.title,
             parentId: m.parentId,

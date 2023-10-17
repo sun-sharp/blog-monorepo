@@ -202,7 +202,7 @@ export class UserService {
           const total = await this.userModel.find(findData).count();
           const findArr = await this.userModel.find(findData).limit(limit).skip(skip);
           const list: ApiUserItem[] = findArr.map((m) => ({
-            userId: m._id,
+            userId: m.id,
             roleCode: m.roleCode,
             loginDate: m.loginDate,
             username: m.username,
