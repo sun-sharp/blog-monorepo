@@ -216,4 +216,29 @@ export class CategoryService {
         })
     );
   }
+
+  /**
+   * @description: 删除全局类型
+   * @param {string} categoryId
+   * @return {Promise<IResponse>}
+   */
+  public remove(categoryId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(categoryId)
+        .then(async (categoryId) => {
+          await this.categoryModel.deleteOne({ _id: categoryId });
+          return {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          return {
+            code: ApiCode.ERROR,
+            message: err.message || '删除失败！',
+          };
+        })
+    );
+  }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -40,5 +40,11 @@ export class CategoryController {
   @ApiOperation({ summary: '修改全局类型' })
   update(@Body() body: UpdateCategoryDto) {
     return this.categoryService.update(body);
+  }
+
+  @Delete(':categoryId')
+  @ApiOperation({ summary: '删除全局类型' })
+  remove(@Param('categoryId') categoryId: string) {
+    return this.categoryService.remove(categoryId);
   }
 }
