@@ -3,7 +3,7 @@
   import BasicTable from '@/components/table/BasicTable.vue';
   import { UploadOutlined } from '@/utils';
   import BankUploadFileModel from './components/BankUploadFileModel.vue';
-  import UpdateModel from './update-model.vue';
+  import BankUpdateModel from './components/BankUpdateModel.vue';
   import { useBankConfigure } from './hooks/useBankConfigure';
 
   const { uploadFileModelRef, searchSchemas, actionRef, columns, updateModelRef, loadDataTable, reloadTable, searchSubmit, tableRowKey } = useBankConfigure();
@@ -32,6 +32,6 @@
       </template>
     </basic-table>
     <bank-upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
-    <update-model ref="updateModelRef" @refurbish="reloadTable" />
+    <bank-update-model ref="updateModelRef" @refurbish="reloadTable" />
   </n-card>
 </template>
