@@ -1,30 +1,30 @@
-import { aliPayApi } from '@/api';
-import { useApiType } from '@/hooks';
-import { getUploadAliPayAction } from '@/utils';
 import { computed, h, ref, unref } from 'vue';
-import { ApiAliPayBatchSaveItem, ApiAliPayUpload } from '/#/api/ali-pay';
+import { ApiWeChatBase, ApiWeChatBatchSaveItem } from '/#/api/we-chat';
+import { useApiType } from '@/hooks';
 import { BasicColumn } from '/#/components/table';
 import { incomeOrPayMap, inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
+import { weChatApi } from '@/api';
+import { getUploadWeCharAction } from '@/utils';
 
-export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
+// 微信账单批量导入 弹窗
+export const useWeChatUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
   const showModal = ref<boolean>(false);
-  const tableData = ref<ApiAliPayBatchSaveItem[]>([]);
+  const tableData = ref<ApiWeChatBatchSaveItem[]>([]);
   const excelUploadTotal = ref<number>(0);
   const btnDisabled = computed<boolean>(() => {
     return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.billType).length !== 0;
   });
-
   // 获取账单类型
   const { getBillTypeOption, getBillMethodOption } = useApiType();
 
-  const columns = computed<BasicColumn<ApiAliPayBatchSaveItem>[]>(() => [
+  const columns = computed<BasicColumn<ApiWeChatBatchSaveItem>[]>(() => [
     {
       title: '序号',
-      key: 'index',
       align: 'center',
+      key: 'index',
       width: 60,
-      render(_row, rowIdx) {
+      render(_row, rowIdx: number) {
         return rowIdx + 1;
       },
     },
@@ -45,8 +45,8 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
       align: 'center',
     },
     {
-      title: '商品说明',
-      key: 'productDescription',
+      title: '商品',
+      key: 'goods',
       align: 'center',
     },
     {
@@ -64,13 +64,18 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
       },
     },
     {
-      title: '收/付款方式',
+      title: '支付方式',
       key: 'paymentMethod',
       align: 'center',
     },
     {
-      title: '对方账号',
-      key: 'oppositeAccount',
+      title: '当前状态',
+      key: 'currentStatus',
+      align: 'center',
+    },
+    {
+      title: '备注',
+      key: 'remarks',
       align: 'center',
     },
     {
@@ -79,11 +84,7 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
       key: 'inflowOrOutflow',
       width: 170,
       render(row) {
-        let inflowOrOutflow = incomeOrPayMap[row.incomeOrPay] || null;
-        if (!inflowOrOutflow && ['余额宝-笔笔攒-单笔攒入'].includes(row.productDescription)) {
-          inflowOrOutflow = 1;
-        }
-        if (inflowOrOutflow) row.inflowOrOutflow = inflowOrOutflow;
+        row.inflowOrOutflow = incomeOrPayMap[row.incomeOrPay] || undefined;
         return h(
           NSpace,
           {
@@ -142,7 +143,6 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
       },
     },
   ]);
-
   const uploadFileList = ref([]);
 
   // 重新刷新
@@ -159,7 +159,7 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
   };
 
   // 表格样式
-  const rowClassName = (row: ApiAliPayBatchSaveItem) => {
+  const rowClassName = (row: ApiWeChatBatchSaveItem) => {
     return ![1, 2].includes(row.inflowOrOutflow || 0) || !row.billMethod || !row.billType ? 'bg-red-td' : '';
   };
 
@@ -167,7 +167,7 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
   const btnLoading = ref(false);
   const confirmForm = () => {
     btnLoading.value = true;
-    aliPayApi
+    weChatApi
       .batchSave({
         batches: tableData.value,
       })
@@ -181,16 +181,15 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
   };
 
   // 账单上传成功
-  const excelUploadChange = (data: ApiAliPayUpload[]) => {
+  const excelUploadChange = (data: ApiWeChatBase) => {
     const uploadTableData = data;
     excelUploadTotal.value = tableData.value.concat(uploadTableData).length;
     tableData.value = tableData.value.concat(uploadTableData).slice(0, 100);
   };
 
   const modalTitle = computed(() => {
-    return '导入支付宝账单' + `(${tableData.value.length}/${excelUploadTotal.value})`;
+    return '导入微信账单' + `(${tableData.value.length}/${excelUploadTotal.value})`;
   });
-
   return {
     modalTitle,
     showModal,
@@ -199,7 +198,7 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
     rowClassName,
     excelUploadTotal,
     columns,
-    uploadAction: getUploadAliPayAction(),
+    uploadAction: getUploadWeCharAction(),
     uploadFileList,
     btnLoading,
     init,

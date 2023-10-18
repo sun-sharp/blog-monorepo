@@ -1,17 +1,17 @@
-import { computed, h, onMounted, ref, unref } from 'vue';
-import { aliPayApi } from '@/api';
 import { getBillMethodData, getBillTypeData, useApiType } from '@/hooks';
+import { computed, h, onMounted, ref, unref } from 'vue';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
-import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
+import { ApiWeChatItem, ApiWeChatSearchParams } from '/#/api/we-chat';
+import { weChatApi } from '@/api';
 import { FormSchema } from '/#/components/form';
-import { ApiAliPayItem, ApiAliPaySearchParams } from '/#/api/ali-pay';
+import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { CNumOption } from '/#/config';
 import { BalanceDateRangeType } from '/#/views/money';
 import { ApiStartEndTimeParams } from '/#/api/common';
 import { NButton } from 'naive-ui';
 
-//
-export const useAliPayConfigure = () => {
+// 微信账单
+export const useWeChatConfigure = () => {
   // 导入弹窗
   const uploadFileModelRef = ref<Component>();
 
@@ -26,16 +26,16 @@ export const useAliPayConfigure = () => {
    *  */
   const actionRef = ref<Component>();
   // 获取接口数据
-  const searchParams = ref<ApiAliPaySearchParams>({});
+  const searchParams = ref<ApiWeChatSearchParams>({});
   const loadDataTable = async (pageParams: TablePaginationParams) => {
-    return await aliPayApi.getPage({ ...searchParams.value, ...pageParams });
+    return await weChatApi.getPage({ ...searchParams.value, ...pageParams });
   };
   // 刷新数据
   const reloadTable = () => {
     actionRef.value.reload();
   };
   // 表格key配置
-  const tableRowKey = (row: ApiAliPayItem): string => row.aliPayId;
+  const tableRowKey = (row: ApiWeChatItem): string => row.weChatId;
 
   // 查询配置
   const searchSchemas = computed<FormSchema[]>(() => [
@@ -79,7 +79,7 @@ export const useAliPayConfigure = () => {
   ]);
 
   // 表格字段配置
-  const columns = computed<BasicColumn<ApiAliPayItem>[]>(() => [
+  const columns = computed<BasicColumn<ApiWeChatItem>[]>(() => [
     {
       title: '交易时间',
       key: 'tradeTime',
@@ -114,15 +114,7 @@ export const useAliPayConfigure = () => {
       key: 'balance',
       align: 'center',
       render(row) {
-        return typeof row.balance === 'number' ? `￥${row.balance}` : '';
-      },
-    },
-    {
-      title: '余额宝(元)',
-      key: 'balanceBaby',
-      align: 'center',
-      render(row) {
-        return typeof row.balanceBaby === 'number' ? `￥${row.balanceBaby}` : '';
+        return row.balance ? `￥${row.balance}` : '';
       },
     },
     {
@@ -156,8 +148,8 @@ export const useAliPayConfigure = () => {
       key: 'action',
       align: 'center',
       fixed: 'right',
-      render(row: any) {
-        return !!row.aliPayId
+      render(row) {
+        return !!row.weChatId
           ? h(
               NButton,
               {
@@ -176,7 +168,7 @@ export const useAliPayConfigure = () => {
   ]);
 
   // 数据查询
-  const searchSubmit = (values: ApiAliPaySearchParams) => {
+  const searchSubmit = (values: ApiWeChatSearchParams) => {
     searchParams.value = values;
     actionRef.value.updatePage(1);
   };
@@ -198,40 +190,13 @@ export const useAliPayConfigure = () => {
       params.endTime = dateRange[1] + ' 23:59:59';
     }
     btnBalanceLoading.value = true;
-    aliPayApi
+    weChatApi
       .updateBalance(params)
       .then(() => {
         reloadTable();
       })
       .finally(() => {
         btnBalanceLoading.value = false;
-      });
-  };
-
-  // 处理余额宝弹窗
-  const balanceBodyTimeRef = ref();
-  const handleBalanceBaby = () => {
-    balanceBodyTimeRef.value.init();
-  };
-  // 处理余额宝
-  const btnBalanceBabyLoading = ref(false);
-  const balanceBodyChange = (dateRange: BalanceDateRangeType) => {
-    const params: ApiStartEndTimeParams = {
-      startTime: '',
-      endTime: '',
-    };
-    if (dateRange && dateRange.length > 0) {
-      params.startTime = dateRange[0] + ' 00:00:00';
-      params.endTime = dateRange[1] + ' 23:59:59';
-    }
-    btnBalanceBabyLoading.value = true;
-    aliPayApi
-      .updateBalanceBaby(params)
-      .then(() => {
-        reloadTable();
-      })
-      .finally(() => {
-        btnBalanceBabyLoading.value = false;
       });
   };
 
@@ -248,15 +213,11 @@ export const useAliPayConfigure = () => {
     columns,
     balanceTimeRef,
     btnBalanceLoading,
-    balanceBodyTimeRef,
-    btnBalanceBabyLoading,
+    balanceChange,
+    handleBalance,
     searchSubmit,
     loadDataTable,
-    reloadTable,
     tableRowKey,
-    handleBalance,
-    balanceChange,
-    handleBalanceBaby,
-    balanceBodyChange,
+    reloadTable,
   };
 };
