@@ -2,12 +2,12 @@ import { aliPayApi } from '@/api';
 import { useApiType } from '@/hooks';
 import { getUploadAliPayAction } from '@/utils';
 import { computed, h, ref, unref } from 'vue';
-import { ApiAliPayBatchSaveItem, ApiAliPayUpload } from '/#/api/ali-pay';
+import { ApiAliPayBase, ApiAliPayBatchSaveItem } from '/#/api/ali-pay';
 import { BasicColumn } from '/#/components/table';
 import { incomeOrPayMap, inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
 
-export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
+export const useAliPayUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
   const showModal = ref<boolean>(false);
   const tableData = ref<ApiAliPayBatchSaveItem[]>([]);
   const excelUploadTotal = ref<number>(0);
@@ -181,7 +181,7 @@ export const useUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => v
   };
 
   // 账单上传成功
-  const excelUploadChange = (data: ApiAliPayUpload[]) => {
+  const excelUploadChange = (data: ApiAliPayBase[]) => {
     const uploadTableData = data;
     excelUploadTotal.value = tableData.value.concat(uploadTableData).length;
     tableData.value = tableData.value.concat(uploadTableData).slice(0, 100);

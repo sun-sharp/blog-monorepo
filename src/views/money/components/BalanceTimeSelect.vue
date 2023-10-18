@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { lastMonthFormatRange } from '@/utils';
   import { ref } from 'vue';
+  import { BalanceDateRangeType } from '/#/views/money';
 
   const emit = defineEmits(['balanceChange']);
 

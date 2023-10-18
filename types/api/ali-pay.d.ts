@@ -1,4 +1,5 @@
 import { ApiPaginateParams } from './common';
+import { ApiUserId } from './user';
 
 /**
  * @description: 全局类型查询传参
@@ -30,10 +31,7 @@ export interface ApiAliPayId {
 /**
  * @description: 支付宝账单数据字段
  */
-export interface ApiAliPay {
-  // 用户id
-  userId: string;
-
+export interface ApiAliPayBase {
   // 交易时间
   tradeTime: string;
 
@@ -64,14 +62,19 @@ export interface ApiAliPay {
   // 对方账号
   oppositeAccount: string;
 
-  // 流入/流出
-  inflowOrOutflow: number;
-
   // 账单说明
   explain: string;
 
   // 使用地点
   place: string;
+}
+
+/**
+ * @description: 微信账单创建数据字段
+ */
+export interface ApiAliPayCreate {
+  // 流入/流出
+  inflowOrOutflow: number;
 
   // 账单类型
   billType: number;
@@ -89,51 +92,15 @@ export interface ApiAliPay {
 /**
  * @description: 支付宝账单的列表每项
  */
-export interface ApiAliPayItem extends ApiAliPay, ApiAliPayId {}
-
-/**
- * @description: 支付宝账单的导入信息
- */
-export interface ApiAliPayUpload {
-  // 交易时间
-  tradeTime: string;
-
-  // 交易类型
-  tradeType: string;
-
-  // 交易对方
-  tradeOtherPerson: string;
-
-  // 对方账号
-  oppositeAccount: string;
-
-  // 商品说明
-  productDescription: string;
-
-  // 收/支
-  incomeOrPay: string;
-
-  // 金额(元)
-  moneyAmount: number;
-
-  // 收/付款方式
-  paymentMethod: string;
-
-  // 交易状态
-  tradeStatus: string;
-}
+export type ApiAliPayItem = ApiAliPayBase & ApiAliPayCreate & ApiAliPayId & ApiUserId;
 
 /**
  * @description: 支付宝账单创建单个参数
  */
-export type ApiAliPayBatchSaveItem = ApiAliPayUpload & {
-  inflowOrOutflow?: number;
-  billMethod?: number;
-  billType?: number;
-};
+export type ApiAliPayBatchSaveItem = ApiAliPayBase & Partial<ApiAliPayCreate>;
 
 /**
- * @description: 修改全局类型参数
+ * @description: 修改支付宝账单参数
  */
 export interface ApiAliPayUpdateData extends ApiAliPayId {
   tradeOtherPersonRemarks?: string;

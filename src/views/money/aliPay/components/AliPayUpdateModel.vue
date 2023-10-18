@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { inflowOrOutflowOption } from '@/constant';
-  import { useUpdateAliPayModel } from '../hooks/useUpdateAliPayModel';
+  import { useAliPayUpdateModel } from '../hooks/useAliPayUpdateModel';
 
   const emit = defineEmits(['refurbish']);
 
   const { modelId, showModal, modelFromRef, modelForm, modelRules, formBtnLoading, billTypeOption, billMethodOption, init, confirmForm } =
-    useUpdateAliPayModel(emit);
+    useAliPayUpdateModel(emit);
 
   defineExpose({ init });
 </script>

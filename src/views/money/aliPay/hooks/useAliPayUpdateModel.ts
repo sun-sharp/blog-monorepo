@@ -12,6 +12,7 @@ const modelFields = {
   productDescription: '',
   incomeOrPay: '',
   moneyAmount: null,
+  otherCost: null,
   balance: undefined,
   balanceBaby: undefined,
   paymentMethod: '',
@@ -24,7 +25,7 @@ const modelFields = {
 };
 
 // 修改支付宝账单 弹窗
-export const useUpdateAliPayModel = (emit: (event: 'refurbish', ...args: any[]) => void) => {
+export const useAliPayUpdateModel = (emit: (event: 'refurbish', ...args: any[]) => void) => {
   const modelId = ref('');
   const showModal = ref(false);
 

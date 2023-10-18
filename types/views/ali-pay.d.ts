@@ -1,50 +1,16 @@
 import { FormItemRule } from 'naive-ui';
+import { ApiAliPayBase, ApiAliPayCreate } from '/#/api/ali-pay';
 
 /**
  * @description:  支付宝账单 编辑表单 输入参数
  */
-export interface AliPayItemForm {
-  // 交易时间
-  tradeTime: string;
-
-  // 交易类型
-  tradeType: string;
-
-  // 交易对方
-  tradeOtherPerson: string;
-
-  // 对方账号
-  oppositeAccount: string;
-
-  // 商品说明
-  productDescription: string;
-
-  // 收/支
-  incomeOrPay: string;
-
-  // 金额(元)
+export interface AliPayItemForm extends ApiAliPayBase, ApiAliPayCreate {
   moneyAmount: number | null;
-
-  // 收/付款方式
-  paymentMethod: string;
-
-  // 账单方式
-  billMethod: number | null;
-
-  // 账单类型
-  billType: number | null;
-
-  // 流入/流出
+  otherCost: number | null;
   inflowOrOutflow: number | null;
-
-  tradeOtherPersonRemarks?: string;
-
-  explain?: string;
-
-  place?: string;
-
+  billType: number | null;
+  billMethod: number | null;
   balance?: number;
-
   balanceBaby?: number;
 }
 

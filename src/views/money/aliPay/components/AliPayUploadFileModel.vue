@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import TableAll from '@/components/table/TableAll.vue';
   import FormUploadExcel from '@/components/form/FormUploadExcel.vue';
-  import { useUploadFileModel } from '../hooks/useUploadFileModel';
+  import { useAliPayUploadFileModel } from '../hooks/useAliPayUploadFileModel';
 
   const emit = defineEmits(['refresh']);
 
@@ -19,7 +19,7 @@
     excelUploadChange,
     confirmForm,
     init,
-  } = useUploadFileModel(emit);
+  } = useAliPayUploadFileModel(emit);
 
   defineExpose({ init });
 </script>
@@ -45,3 +45,4 @@
     </template>
   </n-modal>
 </template>
+../hooks/useAliPayUploadFileModel

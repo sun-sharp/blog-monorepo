@@ -17,8 +17,11 @@
     excelUploadChange,
     rowClassName,
     reload,
+    init,
     confirmForm,
   } = useWeChatUploadFileModel(emit);
+
+  defineExpose({ init });
 </script>
 
 <template>
