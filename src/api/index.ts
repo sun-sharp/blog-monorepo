@@ -14,7 +14,7 @@ export * as waitForDoApi from './capital/wait-for-do';
 // export * as articleAPi from './blog/article';
 
 // money
-// export * as moneyApi from './blog/money/index';
+export * as moneyApi from './blog/money/index';
 export * as weChatApi from './blog/money/we-chat';
 export * as aliPayApi from './blog/money/ali-pay';
 export * as bankApi from './blog/money/bank';
