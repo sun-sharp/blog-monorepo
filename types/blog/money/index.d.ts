@@ -15,39 +15,16 @@ export interface ApiBankFlow {
 /**
  * @description: 银行数据流动数据返回
  */
-export interface ApiBankFlowResult {
-  // 工商银行
-  business: ApiBankFlow;
-  // 农业银行
-  agriculture: ApiBankFlow;
-  // 建设银行
-  build: ApiBankFlow;
-  // 民生银行
-  civil: ApiBankFlow;
-  // 招商银行
-  attractInvestment: ApiBankFlow;
+export interface ApiBankFlowResult extends ApiBankFlow {
+  name: string;
 }
 
 /**
  * @description: 统计各个的方式的余额返回
  */
 export interface ApiMoneyBalanceResult {
-  // 微信余额
-  weChatBalance: number;
-  // 支付宝余额
-  aliPayBalance: number;
-  // 支付宝余额宝
-  aliPayBalanceBaby: number;
-  // 工商银行余额
-  businessBank: number;
-  // 农业银行余额
-  agricultureBank: number;
-  // 建设银行余额
-  buildBank: number;
-  // 民生银行余额
-  civilBank: number;
-  // 招商银行余额
-  attractInvestmentBank: number;
+  name: string;
+  value: number;
 }
 
 /**

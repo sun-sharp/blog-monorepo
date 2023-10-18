@@ -106,13 +106,28 @@ export class MoneyService {
             }
             return bankFlow;
           };
-          const result: ApiBankFlowResult = {
-            business: bankFlowFun(businessArr),
-            agriculture: bankFlowFun(agricultureArr),
-            build: bankFlowFun(buildArr),
-            civil: bankFlowFun(civilArr),
-            attractInvestment: bankFlowFun(attractInvestmentArr),
-          };
+          const result: ApiBankFlowResult[] = [
+            {
+              name: '工商银行',
+              ...bankFlowFun(businessArr),
+            },
+            {
+              name: '农业银行',
+              ...bankFlowFun(agricultureArr),
+            },
+            {
+              name: '建设银行',
+              ...bankFlowFun(buildArr),
+            },
+            {
+              name: '民生银行',
+              ...bankFlowFun(civilArr),
+            },
+            {
+              name: '招商银行',
+              ...bankFlowFun(attractInvestmentArr),
+            },
+          ];
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -177,16 +192,40 @@ export class MoneyService {
           const aliPayBalance = await this.aliPayService.findLastOneBalance(userId, 'balance');
           // 支付宝余额宝
           const aliPayBalanceBaby = await this.aliPayService.findLastOneBalance(userId, 'balanceBaby');
-          const result: ApiMoneyBalanceResult = {
-            weChatBalance: weChat.length > 0 ? weChat[0].balance : 0,
-            aliPayBalance: aliPayBalance.length > 0 ? aliPayBalance[0].balance : 0,
-            aliPayBalanceBaby: aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0].balanceBaby : 0,
-            businessBank: bankBalanceFun(businessArr),
-            agricultureBank: bankBalanceFun(agricultureArr),
-            buildBank: bankBalanceFun(buildArr),
-            civilBank: bankBalanceFun(civilArr),
-            attractInvestmentBank: bankBalanceFun(attractInvestmentArr),
-          };
+          const result: ApiMoneyBalanceResult[] = [
+            {
+              name: '微信零钱',
+              value: weChat.length > 0 ? weChat[0].balance : 0,
+            },
+            {
+              name: '支付宝余额',
+              value: aliPayBalance.length > 0 ? aliPayBalance[0].balance : 0,
+            },
+            {
+              name: '支付宝余额宝',
+              value: aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0].balanceBaby : 0,
+            },
+            {
+              name: '工商银行',
+              value: bankBalanceFun(businessArr),
+            },
+            {
+              name: '农业银行',
+              value: bankBalanceFun(agricultureArr),
+            },
+            {
+              name: '建设银行',
+              value: bankBalanceFun(buildArr),
+            },
+            {
+              name: '民生银行',
+              value: bankBalanceFun(civilArr),
+            },
+            {
+              name: '招商银行',
+              value: bankBalanceFun(attractInvestmentArr),
+            },
+          ];
           return {
             code: ApiCode.SUCCESS,
             result,
