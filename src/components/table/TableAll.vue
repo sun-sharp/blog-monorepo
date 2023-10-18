@@ -27,7 +27,7 @@
       type: [Number, String],
     },
     rowClassName: {
-      type: String,
+      type: [String, Function] as PropType<string | ((record: any) => string)>,
     },
     // 表格头部标题
     title: {

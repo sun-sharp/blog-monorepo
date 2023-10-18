@@ -19,7 +19,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" pagination :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
+    <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-button type="success" @click="uploadFileModelRef.init()">
           <template #icon>

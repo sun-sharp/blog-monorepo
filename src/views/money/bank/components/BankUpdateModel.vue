@@ -4,7 +4,7 @@
 
   const emit = defineEmits(['refresh']);
 
-  const { showModal, modelId, modelForm, modelRules, formBtnLoading, billTypeOption, init, confirmForm } = useBankUpdateModel(emit);
+  const { showModal, modelId, modelFromRef, modelForm, modelRules, formBtnLoading, billTypeOption, init, confirmForm } = useBankUpdateModel(emit);
 
   defineExpose({ init });
 </script>

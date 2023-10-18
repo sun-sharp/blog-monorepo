@@ -159,6 +159,7 @@ export const useBankConfigure = () => {
               h(
                 NButton,
                 {
+                  class: 'mh-3',
                   type: 'primary',
                   text: true,
                   onClick: updateModelRef.value.init.bind(null, row),
@@ -170,13 +171,13 @@ export const useBankConfigure = () => {
               h(
                 NButton,
                 {
-                  label: '删除',
+                  class: 'mh-3',
                   type: 'error',
                   text: true,
                   onClick: handleDelete.bind(null, row.bankId),
                 },
                 {
-                  default: () => '修改',
+                  default: () => '删除',
                 }
               ),
             ]

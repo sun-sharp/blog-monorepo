@@ -1,7 +1,7 @@
 import { useApiType } from '@/hooks';
 import { computed, h, ref, unref } from 'vue';
 import { BasicColumn } from '/#/components/table';
-import { ApiBankBatchSaveItem } from '/#/api/bank';
+import { ApiBankBase, ApiBankBatchSaveItem } from '/#/api/bank';
 import { CNumOption } from '/#/config';
 import { incomeOrPayMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
@@ -170,8 +170,8 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
   };
 
   // 表格样式
-  const rowClassName = (row: any) => {
-    return ![1, 2].includes(row.inflowOrOutflow) || !row.billMethod || !row.billType ? 'bg-red-td' : '';
+  const rowClassName = (row: ApiBankBatchSaveItem) => {
+    return ![1, 2].includes(row.inflowOrOutflow || 0) || !row.bankBillType || !row.bankType ? 'bg-red-td' : '';
   };
 
   // 保存列表数据
@@ -192,7 +192,7 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
   };
 
   // 账单上传成功
-  const excelUploadChange = (data: any[]) => {
+  const excelUploadChange = (data: ApiBankBase) => {
     excelUploadTotal.value = tableData.value.concat(data).length;
     tableData.value = tableData.value.concat(data).slice(0, 100);
   };
