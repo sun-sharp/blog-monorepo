@@ -6,7 +6,7 @@ import { FormItemRule } from 'naive-ui';
 export interface RoleItemForm {
   name: null | string;
   roleCode: null | string;
-  roleType: null | string;
+  roleType: null | number;
   menuPermission: string[];
   apiPermission: string[];
 }

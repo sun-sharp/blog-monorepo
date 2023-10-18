@@ -17,3 +17,14 @@ export interface ApiPaginateParams {
   // 第几页
   current?: number;
 }
+
+/**
+ * @description: 开始结束时间传参
+ */
+export interface ApiStartEndTimeParams {
+  // 开始时间
+  startTime: string;
+
+  // 结束时间
+  endTime: string;
+}

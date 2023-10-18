@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-16 17:54:20
+ * @LastEditTime: 2023-10-18 11:01:06
  * @Description: 接口类型
  */
 
@@ -61,38 +61,38 @@ export const roleTypeOption = [
 ];
 export const roleTypeObj = arrEnumToObj(roleTypeOption);
 
-// // 账单“收入/支出”枚举值
-// export const incomeOrPayMap = {
-//   收入: 1,
-//   支出: 2,
-// };
+// 账单“收入/支出”枚举值
+export const incomeOrPayMap: { [x: string]: number } = {
+  收入: 1,
+  支出: 2,
+};
 
-// // 账单“流入/流出”枚举值
-// export const inflowOrOutflowOption = [
-//   {
-//     value: 1,
-//     label: '流入',
-//   },
-//   {
-//     value: 2,
-//     label: '流出',
-//   },
-// ];
-// export const inflowOrOutflowMap = arrEnumToObj(inflowOrOutflowOption);
+// 账单“流入/流出”枚举值
+export const inflowOrOutflowOption = [
+  {
+    value: 1,
+    label: '流入',
+  },
+  {
+    value: 2,
+    label: '流出',
+  },
+];
+export const inflowOrOutflowMap = arrEnumToObj(inflowOrOutflowOption);
 
-// // 账单“凭证类型”枚举值
-// export const voucherTypeOption = [
-//   {
-//     value: 1,
-//     label: '存折',
-//   },
-//   {
-//     value: 2,
-//     label: '储蓄卡',
-//   },
-//   {
-//     value: 3,
-//     label: '信用卡',
-//   },
-// ];
-// export const voucherTypeMap = arrEnumToObj(voucherTypeOption);
+// 账单“凭证类型”枚举值
+export const voucherTypeOption = [
+  {
+    value: 1,
+    label: '存折',
+  },
+  {
+    value: 2,
+    label: '储蓄卡',
+  },
+  {
+    value: 3,
+    label: '信用卡',
+  },
+];
+export const voucherTypeMap = arrEnumToObj(voucherTypeOption);

@@ -23,9 +23,7 @@
     confirmForm,
   } = useRoleAddUpdateModel(emit);
 
-  defineExpose({
-    init,
-  });
+  defineExpose({ init });
 </script>
 
 <template>

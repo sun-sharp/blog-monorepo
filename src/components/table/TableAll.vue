@@ -20,7 +20,7 @@
     },
     // 最大高度
     maxHeight: {
-      type: Number,
+      type: [Number, String],
     },
     // 表格内容的横向宽度，如果列被水平固定了，则需要设定它
     scrollX: {

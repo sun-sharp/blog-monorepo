@@ -19,7 +19,7 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :scroll-x="1090">
+    <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :scroll-x="1090">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
           <template #icon>
