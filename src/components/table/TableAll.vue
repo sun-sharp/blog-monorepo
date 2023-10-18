@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
-  import TableToolbar from './table-toolbar.vue';
+  import TableToolbar from './TableToolbar.vue';
   import { BasicColumn, TableSizeType } from '/#/components/table';
 
   const props = defineProps({
@@ -70,6 +70,7 @@
     return {
       title: props.title,
       titleTooltip: props.titleTooltip,
+      hasColumnSetting: false,
     };
   });
 

@@ -1,17 +1,13 @@
 <script lang="ts" setup>
   import BasicTable from '@/components/table/BasicTable.vue';
   import FormSearch from '@/components/form/FormSearch.vue';
-  // import ImageOnlyPublicModel from '@/views/file/components/image-only-public-model.vue';
+  import ImageOnlyPublicModel from './components/ImageOnlyPublicModel.vue';
   import ImageNotUseModel from './components/ImageNotUseModel.vue';
   import { useImageConfigure } from './hooks/useImageConfigure';
 
   // 配置
   const { imageOnlyPublicModelRef, imageNotUseModelRef, searchSchemas, actionRef, columns, searchSubmit, loadDataTable, tableRowKey, reloadTable } =
     useImageConfigure();
-
-  // const onlyPublicImage = async () => {
-  //   await imageApi.getOnlyPublic();
-  // };
 </script>
 
 <template>
@@ -30,7 +26,7 @@
         <n-button type="primary" @click="imageNotUseModelRef.init()">查询未使用的图片</n-button>
       </template>
     </basic-table>
-    <!-- <image-only-public-model ref="imageOnlyPublicModelRef" /> -->
+    <image-only-public-model ref="imageOnlyPublicModelRef" />
     <image-not-use-model ref="imageNotUseModelRef" @refresh="reloadTable" />
   </n-card>
 </template>
