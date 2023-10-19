@@ -18,6 +18,8 @@ export const useApiType = () => {
 
   const getWaitForDoClassifyOption = computed<CNumOption[]>(() => apiTypeStore.getWaitForDoClassifyOption);
 
+  const getArticleCategoryOption = computed<CNumOption[]>(() => apiTypeStore.getArticleCategoryOption);
+
   return {
     getBillTypeOption,
     getBillTypeMap,
@@ -25,6 +27,7 @@ export const useApiType = () => {
     getBillMethodOption,
     getImageSourceOption,
     getWaitForDoClassifyOption,
+    getArticleCategoryOption,
   };
 };
 
@@ -56,4 +59,10 @@ export const getImageSourceData = () => {
 export const getWaitForDoClassifyData = () => {
   const apiTypeStore = useApiTypeStore();
   apiTypeStore.getWaitForDoClassify();
+};
+
+// 获取文章类型数据
+export const getArticleCategoryData = () => {
+  const apiTypeStore = useApiTypeStore();
+  apiTypeStore.getArticleCategory();
 };

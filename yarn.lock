@@ -1426,10 +1426,10 @@
     "@typescript-eslint/types" "6.4.1"
     eslint-visitor-keys "^3.4.1"
 
-"@vavt/util@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@vavt/util/-/util-1.2.0.tgz#c8273cc9e0c4dc6eb39bad1e75cbdb84a3568850"
-  integrity sha512-g/20ugYpM09EpzvGvLPUReEo3fPBefq810NYR31EZwPozZvymkPs1pM1A60GfG0wlQq35iiWoV6HHTyDy/FbwA==
+"@vavt/util@^1.3.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@vavt/util/-/util-1.4.0.tgz#1c3aea33bf0de04bd71a7c319b2b8306d9127f3a"
+  integrity sha512-qLhaokwifMTFqoo4UE2JZUyaxCzX9T4WcIt2KzznbtBrCM4CG119pY/cKqq6jDa3c1phUvPCoIfjWfnF9nj4NA==
 
 "@vicons/antd@^0.12.0":
   version "0.12.0"
@@ -4675,15 +4675,15 @@ mathml-tag-names@^2.0.1, mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-md-editor-v3@^4.2.2:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/md-editor-v3/-/md-editor-v3-4.4.0.tgz#edd63759e8448fd94a6f666c11c54481a4d3f09b"
-  integrity sha512-Wb6bueyqCBwgJu0ic9Af+t+kJZDgZEyeSAmYieLhp+/XlxwBSQV5kDvUtUDxfUK4ZEAaI7w+DCV+y4r0uMGYPw==
+md-editor-v3@^4.8.1:
+  version "4.8.1"
+  resolved "https://registry.yarnpkg.com/md-editor-v3/-/md-editor-v3-4.8.1.tgz#7afea040cf0115daac839ed3a7b6abcaa1732c8e"
+  integrity sha512-Ur6Z0M/w+lKQ5o5AhqjBTmaIuSuuyZ1MYZTyhix6lrGMLw7oSxHJ9YHYnJ7Oz1n9Ct9az1NhWTe8yU8zsDbIvA==
   dependencies:
     "@codemirror/lang-markdown" "^6.1.1"
     "@codemirror/language-data" "^6.3.0"
     "@types/markdown-it" "^12.2.3"
-    "@vavt/util" "^1.2.0"
+    "@vavt/util" "^1.3.0"
     codemirror "^6.0.1"
     copy-to-clipboard "^3.3.3"
     lru-cache "^8.0.4"

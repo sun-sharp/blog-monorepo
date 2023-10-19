@@ -11,6 +11,7 @@ enum categoryTypeEnum {
   moneyBillMethod = 'money_bill_method', // 金额账单方式
   capitalImageSource = 'capital_image_source', // 图片来源
   capitalWaitForDoClassify = 'capital_wait-for-do_classify', // 待办分类
+  blogArticleCategory = 'blog_article_category', // 文章类型
 }
 
 export type IApiTypeState = {
@@ -19,6 +20,7 @@ export type IApiTypeState = {
   billMethodOption: CNumOption[]; // 金额账单方式
   imageSourceOption: CStrOption[]; // 图片来源
   waitForDoClassifyOption: CNumOption[]; // 待办分类
+  articleCategoryOption: CNumOption[]; // 文章类型
 };
 
 export const useApiTypeStore = defineStore({
@@ -29,6 +31,7 @@ export const useApiTypeStore = defineStore({
     billMethodOption: [], // 金额账单方式
     imageSourceOption: [], // 图片来源
     waitForDoClassifyOption: [], // 待办分类
+    articleCategoryOption: [], // 文章类型
   }),
   getters: {
     getBillTypeOption(): CNumOption[] {
@@ -45,6 +48,9 @@ export const useApiTypeStore = defineStore({
     },
     getWaitForDoClassifyOption(): CNumOption[] {
       return this.waitForDoClassifyOption;
+    },
+    getArticleCategoryOption(): CNumOption[] {
+      return this.articleCategoryOption;
     },
   },
   actions: {
@@ -128,6 +134,22 @@ export const useApiTypeStore = defineStore({
         value: m.value || 0,
       }));
     },
+    // 获取文章类型
+    async getArticleCategory(bool: boolean = false) {
+      // 已经加载的数据，取消重复加载
+      if (!bool && this.articleCategoryOption.length > 0) {
+        return;
+      }
+      const [err, resp] = await at(categoryApi.certainTypeAll(categoryTypeEnum.blogArticleCategory));
+      if (err || !resp) {
+        this.articleCategoryOption = [];
+        return;
+      }
+      this.articleCategoryOption = resp.map((m) => ({
+        label: m.label,
+        value: m.value || 0,
+      }));
+    },
     // 重新获取全局类型
     againGetApiType(type: string) {
       switch (type) {
@@ -145,6 +167,9 @@ export const useApiTypeStore = defineStore({
           break;
         case categoryTypeEnum.capitalWaitForDoClassify:
           this.getWaitForDoClassify(true);
+          break;
+        case categoryTypeEnum.blogArticleCategory:
+          this.getArticleCategory(true);
           break;
         default:
           break;

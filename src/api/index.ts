@@ -11,7 +11,7 @@ export * as waitForDoApi from './capital/wait-for-do';
 // blog
 // export * as homeApi from './blog/home';
 // export * as articleCategoryAPi from './blog/article-category';
-// export * as articleAPi from './blog/article';
+export * as articleAPi from './blog/article';
 
 // money
 export * as moneyApi from './blog/money/index';

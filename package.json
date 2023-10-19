@@ -22,7 +22,7 @@
     "echarts": "^5.4.3",
     "element-resize-detector": "^1.2.4",
     "makeit-captcha": "^2.0.6",
-    "md-editor-v3": "^4.2.2",
+    "md-editor-v3": "^4.8.1",
     "mockjs": "^1.1.0",
     "naive-ui": "^2.35.0",
     "pinia": "^2.1.6",
