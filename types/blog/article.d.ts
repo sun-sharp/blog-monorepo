@@ -31,9 +31,6 @@ export interface ApiArticle {
   // 文章的类型标识
   categoryVal: number;
 
-  // 文章的名称
-  categoryName: string;
-
   // 文章的创建时间
   createTime: string;
 }

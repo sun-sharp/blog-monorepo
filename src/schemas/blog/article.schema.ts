@@ -39,10 +39,6 @@ export class Article extends Document {
   @Prop()
   categoryVal: number;
 
-  // 文章的名称
-  @Prop()
-  categoryName: string;
-
   // 文章的创建时间
   @Prop()
   createTime: string;
