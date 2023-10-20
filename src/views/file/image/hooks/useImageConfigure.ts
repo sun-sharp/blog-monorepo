@@ -1,6 +1,6 @@
 import { h, unref, computed, ref, onMounted } from 'vue';
 import { imageApi } from '@/api';
-import { NImage } from 'naive-ui';
+import { NButton, NImage, NPopconfirm } from 'naive-ui';
 import { getImgUrl } from '@/utils';
 import { CStrOption } from '/#/config';
 import { getImageSourceData, useApiType } from '@/hooks';
@@ -56,6 +56,18 @@ export const useImageConfigure = () => {
     },
   ]);
 
+  // 删除图片和数据
+  const removePublicAndData = (row: Recordable) => {
+    imageApi.removePublicAndData(row.imageId).then(() => {
+      reloadTable();
+    });
+  };
+  // 删除没有图片文件的数据
+  const removeData = (row: Recordable) => {
+    imageApi.removeData(row.imageId).then(() => {
+      reloadTable();
+    });
+  };
   // 表格字段配置
   const columns = computed<BasicColumn<ApiImageItem>[]>(() => [
     {
@@ -99,23 +111,72 @@ export const useImageConfigure = () => {
       key: 'uploadTime',
       align: 'center',
     },
+    {
+      width: 220,
+      title: '操作',
+      key: 'action',
+      align: 'center',
+      render(row) {
+        return row.imageId
+          ? [
+              row.exists
+                ? h(
+                    NPopconfirm,
+                    {
+                      negativeText: null,
+                      onPositiveClick: removePublicAndData.bind(null, row),
+                    },
+                    {
+                      trigger: () =>
+                        h(
+                          NButton,
+                          {
+                            class: 'mh-3',
+                            text: true,
+                            type: 'error',
+                          },
+                          {
+                            default: () => '删除图片和数据',
+                          }
+                        ),
+                      default: () => '是否确定删除',
+                    }
+                  )
+                : '',
+              !row.exists
+                ? h(
+                    NPopconfirm,
+                    {
+                      negativeText: null,
+                      onPositiveClick: removeData.bind(null, row),
+                    },
+                    {
+                      trigger: () =>
+                        h(
+                          NButton,
+                          {
+                            class: 'mh-3',
+                            type: 'error',
+                            text: true,
+                          },
+                          {
+                            default: () => '删除数据',
+                          }
+                        ),
+                      default: () => '是否确定删除',
+                    }
+                  )
+                : '',
+            ]
+          : '';
+      },
+    },
   ]);
 
   /**
    * 表格按钮操作配置
    *  */
-  // 删除图片和数据
-  // const removePublicAndData = (row: Recordable) => {
-  //   imageApi.removePublicAndData(row.imageId).then(() => {
-  //     reloadTable();
-  //   });
-  // };
-  // // 删除没有图片文件的数据
-  // const removeData = (row: Recordable) => {
-  //   imageApi.removeData(row.imageId).then(() => {
-  //     reloadTable();
-  //   });
-  // };
+
   // const actionColumn = reactive({
   //   width: 200,
   //   title: '操作',

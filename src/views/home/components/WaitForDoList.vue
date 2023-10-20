@@ -119,6 +119,7 @@
     };
     waitForDoApi.save(postData).then(() => {
       addTitleValue.value = '';
+      waitTabsName.value = defaultWaitState;
       loadWaitData(addClassify, defaultWaitState);
     });
   };

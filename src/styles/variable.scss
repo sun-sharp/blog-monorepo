@@ -37,7 +37,7 @@ $background-color: var(--app-background-color);
 $card-background-color: var(--app-card-background-color);
 $card-border-color: var(--app-card-border-color);
 $card-border-radius: var(--app-card-border-radius);
-$card-box-shadow: var(-app-card-box-shadow);
+$card-box-shadow: var(--app-card-box-shadow);
 
 /* 警告 */
 $text-warning-color: var(--app-text-warning-color);

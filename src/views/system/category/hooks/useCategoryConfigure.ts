@@ -5,18 +5,20 @@ import { categoryApi } from '@/api';
 import { ApiCategoryItem, ApiCategorySearchParams } from '/#/api/category';
 import { NButton } from 'naive-ui';
 import { useApiTypeStore } from '@/store';
-// import TableAction from '@/components/Table/table-action.vue';
+import { categoryTypeOption } from '@/constant';
 
 export const useCategoryConfigure = () => {
   // 查询配置
   const searchSchemas = computed<FormSchema[]>(() => [
     {
       field: 'type',
-      component: 'NInput',
+      component: 'NSelect',
       label: '全局类型分类',
       labelWidth: 110,
       componentProps: {
+        filterable: true,
         placeholder: '请输入全局类型分类',
+        options: categoryTypeOption,
       },
     },
   ]);
@@ -57,6 +59,10 @@ export const useCategoryConfigure = () => {
       key: 'type',
       align: 'center',
       width: 170,
+      render(row) {
+        const find = categoryTypeOption.find((f) => f.value === row.type);
+        return find ? find.label : '';
+      },
     },
     {
       title: '全局类型标识',

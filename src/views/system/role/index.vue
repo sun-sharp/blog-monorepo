@@ -6,7 +6,7 @@
   import { useRoleConfigure } from './hooks/useRoleConfigure';
 
   // 配置
-  const { addUpdateModelRef, searchSchemas, columns, searchSubmit, loadDataTable, reloadTable, tableRowKey } = useRoleConfigure();
+  const { addUpdateModelRef, searchSchemas, actionRef, columns, searchSubmit, loadDataTable, reloadTable, tableRowKey } = useRoleConfigure();
 </script>
 
 <template>

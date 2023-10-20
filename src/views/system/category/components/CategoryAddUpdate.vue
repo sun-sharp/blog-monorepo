@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { categoryTypeOption } from '@/constant';
   import { useCategoryAddUpdate } from '../hooks/useCategoryAddUpdate';
 
   const emit = defineEmits(['refurbish']);
@@ -25,7 +26,7 @@
   <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelTitle">
     <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="全局类型分类" path="type">
-        <n-input v-model:value="modelForm.type" placeholder="请输入全局类型分类" />
+        <n-select v-model:value="modelForm.type" :options="categoryTypeOption" :virtual-scroll="false" placeholder="请选择全局类型分类"></n-select>
       </n-form-item>
       <n-form-item ref="modelFromValueRef" label="全局类型标识" path="value">
         <n-input-number

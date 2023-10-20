@@ -30,8 +30,8 @@ export const useCategoryAddUpdate = (emit: (event: 'refurbish', ...args: any[]) 
   const modelRules = reactive<CategoryItemFormRules>({
     type: {
       required: true,
-      trigger: ['blur', 'input'],
-      message: `请输入全局类型分类`,
+      trigger: ['blur', 'change'],
+      message: `请选择全局类型分类`,
     },
     value: {
       required: true,

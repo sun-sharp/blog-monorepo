@@ -5,7 +5,7 @@
   import UserAddUpdateModel from './components/UserAddUpdateModel.vue';
   import { useUserConfigure } from './hooks/useUserConfigure';
 
-  const { addUpdateModelRef, actionRef, searchSchemas, columns, tableRowKey, searchSubmit, loadDataTable } = useUserConfigure();
+  const { addUpdateModelRef, actionRef, searchSchemas, columns, tableRowKey, searchSubmit, loadDataTable, reloadTable } = useUserConfigure();
 </script>
 
 <template>
@@ -30,7 +30,7 @@
         </n-button>
       </template>
     </basic-table>
-    <user-add-update-model ref="addUpdateModelRef" />
+    <user-add-update-model ref="addUpdateModelRef" @refurbish="reloadTable" />
   </n-card>
 </template>
 

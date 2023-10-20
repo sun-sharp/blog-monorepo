@@ -3,16 +3,7 @@ import { store } from '@/store';
 import at from 'await-to-js';
 import { categoryApi } from '@/api';
 import { CNumOption, CStrOption } from '/#/config';
-
-// 分类类型
-enum categoryTypeEnum {
-  moneyBillType = 'money_bill_type', // 金额账单类型
-  moneyBankType = 'money_bank_type', // 金额银行类型
-  moneyBillMethod = 'money_bill_method', // 金额账单方式
-  capitalImageSource = 'capital_image_source', // 图片来源
-  capitalWaitForDoClassify = 'capital_wait-for-do_classify', // 待办分类
-  blogArticleCategory = 'blog_article_category', // 文章类型
-}
+import { categoryTypeEnum } from '@/constant';
 
 export type IApiTypeState = {
   billTypeOption: CNumOption[]; // 账单类型

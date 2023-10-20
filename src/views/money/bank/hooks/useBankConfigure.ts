@@ -5,7 +5,7 @@ import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { ApiBankItem, ApiBankSearchParams } from '/#/api/bank';
 import { CNumOption } from '/#/config';
 import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
-import { NButton } from 'naive-ui';
+import { NButton, NPopconfirm } from 'naive-ui';
 import { bankApi } from '@/api';
 
 // 银行账单管理
@@ -169,15 +169,25 @@ export const useBankConfigure = () => {
                 }
               ),
               h(
-                NButton,
+                NPopconfirm,
                 {
-                  class: 'mh-3',
-                  type: 'error',
-                  text: true,
-                  onClick: handleDelete.bind(null, row.bankId),
+                  negativeText: null,
+                  onPositiveClick: handleDelete.bind(null, row.bankId),
                 },
                 {
-                  default: () => '删除',
+                  trigger: () =>
+                    h(
+                      NButton,
+                      {
+                        class: 'mh-3',
+                        type: 'error',
+                        text: true,
+                      },
+                      {
+                        default: () => '删除',
+                      }
+                    ),
+                  default: () => '是否确定删除',
                 }
               ),
             ]

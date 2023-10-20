@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-18 11:01:06
+ * @LastEditTime: 2023-10-20 10:54:49
  * @Description: 接口类型
  */
 
@@ -96,3 +96,49 @@ export const voucherTypeOption = [
   },
 ];
 export const voucherTypeMap = arrEnumToObj(voucherTypeOption);
+
+// 分类类型
+export const categoryTypeEnum: { [x: string]: string } = {
+  moneyBillType: 'money_bill_type', // 金额账单类型
+  moneyBankType: 'money_bank_type', // 金额银行类型
+  moneyBillMethod: 'money_bill_method', // 金额账单方式
+  capitalImageSource: 'capital_image_source', // 图片来源
+  capitalWaitForDoClassify: 'capital_wait-for-do_classify', // 待办分类
+  blogArticleCategory: 'blog_article_category', // 文章类型
+};
+
+// 分类类型枚举值
+export const categoryTypeOption = Object.keys(categoryTypeEnum).map((key) => ({
+  value: categoryTypeEnum[key],
+  label: categoryTypeEnum[key],
+}));
+// export const categoryTypeOption = [
+//   {
+//     value: categoryTypeEnum.moneyBillType,
+//     label: '金额账单类型',
+//   },
+//   {
+//     value: categoryTypeEnum.moneyBankType,
+//     label: '金额银行类型',
+//   },
+//   {
+//     value: categoryTypeEnum.moneyBillMethod,
+//     label: '金额账单方式',
+//   },
+//   {
+//     value: categoryTypeEnum.capitalImageSource,
+//     label: '图片来源',
+//   },
+//   {
+//     value: categoryTypeEnum.capitalWaitForDoClassify,
+//     label: '待办分类',
+//   },
+//   {
+//     value: categoryTypeEnum.capitalMenuType,
+//     label: '菜单类型',
+//   },
+//   {
+//     value: categoryTypeEnum.blogArticleCategory,
+//     label: '文章类型',
+//   },
+// ];

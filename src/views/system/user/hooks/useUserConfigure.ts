@@ -1,7 +1,7 @@
 import { h, ref } from 'vue';
 // import TableAction from '@/components/Table/table-action.vue';
 import { capitalApi, userApi } from '@/api';
-import { NAvatar, NButton } from 'naive-ui';
+import { NAvatar, NButton, NPopconfirm } from 'naive-ui';
 import { getImgUrl } from '@/utils';
 import { FormSchema } from '/#/components/form';
 import { ApiUserItem, ApiUserSearchParams } from '/#/api/user';
@@ -110,15 +110,25 @@ export const useUserConfigure = () => {
             }
           ),
           h(
-            NButton,
+            NPopconfirm,
             {
-              class: 'mh-3',
-              text: true,
-              type: 'error',
-              onClick: handleDelete.bind(null, row),
+              negativeText: null,
+              onPositiveClick: handleDelete.bind(null, row),
             },
             {
-              default: () => '删除',
+              trigger: () =>
+                h(
+                  NButton,
+                  {
+                    class: 'mh-3',
+                    text: true,
+                    type: 'error',
+                  },
+                  {
+                    default: () => '删除',
+                  }
+                ),
+              default: () => '是否确定删除',
             }
           ),
         ];
@@ -140,5 +150,6 @@ export const useUserConfigure = () => {
     tableRowKey,
     searchSubmit,
     loadDataTable,
+    reloadTable,
   };
 };

@@ -4,7 +4,7 @@ import { ApiArticleItem, ApiArticleSearchParams } from '/#/api/article';
 import { articleAPi } from '@/api';
 import { FormSchema } from '/#/components/form';
 import { useApiType } from '@/hooks';
-import { NButton } from 'naive-ui';
+import { NButton, NPopconfirm } from 'naive-ui';
 import { CNumOption } from '/#/config';
 
 // 文章列表
@@ -103,15 +103,25 @@ export const useArticleList = (emit: (event: 'editChange', ...args: any[]) => vo
             }
           ),
           h(
-            NButton,
+            NPopconfirm,
             {
-              class: 'mh-3',
-              text: true,
-              type: 'error',
-              onClick: handleDelete.bind(null, row),
+              negativeText: null,
+              onPositiveClick: handleDelete.bind(null, row),
             },
             {
-              default: () => '删除',
+              trigger: () =>
+                h(
+                  NButton,
+                  {
+                    class: 'mh-3',
+                    text: true,
+                    type: 'error',
+                  },
+                  {
+                    default: () => '删除',
+                  }
+                ),
+              default: () => '是否确定删除',
             }
           ),
         ];
