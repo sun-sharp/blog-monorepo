@@ -39,6 +39,10 @@ export class WaitForDo extends Document {
   @Prop()
   isRemove: boolean;
 
+  // 已完成时间
+  @Prop()
+  completionTime: Date;
+
   // 用户id
   @Prop()
   userId: string;

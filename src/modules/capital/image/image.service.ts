@@ -280,7 +280,7 @@ export class ImageService {
                   url: m.url,
                   uploadTime: m.uploadTime,
                   source: m.source,
-                  exists: existsSyncHandle(m.url),
+                  exists: existsSyncHandle(`${imageFsDir}${m.fileName}`),
                 };
                 return item;
               }),

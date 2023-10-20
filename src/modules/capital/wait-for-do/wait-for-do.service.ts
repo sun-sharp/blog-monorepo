@@ -10,7 +10,7 @@ import { UpdateWaitForDoStateDto } from './dto/update-wait-for-do-state.dto';
 import { UpdateWaitForDoSortDto } from './dto/update-wait-for-do-sort.dto';
 import { UpdateWaitForDoDto } from './dto/update-wait-for-do.dto';
 import { IResponse } from 'types/common';
-import { ApiWaitForDoItem } from 'types/capital/wait-for-do';
+import { ApiWaitForDoItem, ApiWaitForDoUpdateStateData } from 'types/capital/wait-for-do';
 
 @Injectable()
 export class WaitForDoService {
@@ -152,7 +152,16 @@ export class WaitForDoService {
         // 修改
         .then(async ({ userId, body }) => {
           const { waitForDoId, state } = body;
-          await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, { state });
+          const updateData: ApiWaitForDoUpdateStateData = { state };
+          // 如果修改为已完成状态
+          if (state === 2) {
+            updateData.completionTime = new Date();
+          }
+          // 如果修改为进行中
+          else if (state === 1) {
+            updateData.$unset = { completionTime: '' };
+          }
+          await this.waitForDoModel.updateOne({ userId, _id: waitForDoId }, updateData);
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',

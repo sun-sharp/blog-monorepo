@@ -18,6 +18,8 @@ export interface ApiWaitForDo {
   isRemove: boolean;
   // 用户id
   userId: string;
+  // 完成时间
+  completionTime?: string;
 }
 
 /**
@@ -32,3 +34,12 @@ export interface ApiWaitForDoId {
  * @description: 待办的列表每项
  */
 export interface ApiWaitForDoItem extends ApiWaitForDo, ApiWaitForDoId {}
+
+/**
+ * @description: 修改待办的状态 修改参数
+ */
+export interface ApiWaitForDoUpdateStateData {
+  state: number;
+  completionTime?: Date;
+  $unset?: { completionTime: '' };
+}
