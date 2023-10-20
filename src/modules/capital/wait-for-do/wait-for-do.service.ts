@@ -310,4 +310,42 @@ export class WaitForDoService {
         })
     );
   }
+
+  /**
+   * @description: 删除特定时间前已完成数据
+   * @param diff 时间差
+   * @return {Promise<boolean>}
+   */
+  public removePeriodCompleted(diff: number): Promise<boolean> {
+    return (
+      Promise.resolve(diff)
+        // 获取前一周的时间
+        .then((diff) => {
+          const nowTimeNum = Date.now();
+          const beforeTimeNum = nowTimeNum - diff;
+          return new Date(beforeTimeNum);
+        })
+        // 查询前一周已完成的数据，状态为已完成，但完成时间为空
+        .then(async (beforeDate) => {
+          const findData = { $or: [{ completionTime: { $lt: beforeDate } }, { completionTime: null, state: 2 }] };
+          const find = await this.waitForDoModel.find(findData);
+          if (find.length === 0) {
+            throw '前一周已完成的数据为空！';
+          }
+          return find;
+        })
+        // 批量删除前一周已完成数据
+        .then(async (find) => {
+          const waitForDoIdArr = find.map((m) => m._id);
+          await this.waitForDoModel.deleteMany({ _id: { $in: waitForDoIdArr } });
+          logger.log('删除特定时间后的已完成数据', `删除（${find.map((m) => m.title).join('，')}）成功！`);
+          return true;
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error('删除特定时间后的已完成数据', err || '删除失败！');
+          return false;
+        })
+    );
+  }
 }
