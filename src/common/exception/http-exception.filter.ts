@@ -9,7 +9,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const excRes: any = exception instanceof HttpException && exception.getResponse();
-    console.log(excRes, 'excRes');
 
     let excResMessage = '';
     if (excRes.message instanceof Array) {
@@ -19,8 +18,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (typeof excRes === 'string') {
       excResMessage = excRes;
     }
-    console.log(excResMessage, 'excResMessage');
-
     const message = checkMessage(status, excResMessage);
     const code = checkCode(status);
     // @todo 记录日志
