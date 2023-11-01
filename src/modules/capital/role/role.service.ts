@@ -22,9 +22,12 @@ import {
 } from 'types/capital/role';
 import { IResponse } from 'types/common';
 
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
+
 @Injectable()
 export class RoleService {
-  constructor(@InjectModel('Role') private readonly roleModel: Model<Role>) {}
+  constructor(@InjectModel(Role.name, capitalDatabaseName) private readonly roleModel: Model<Role>) {}
 
   /**
    * @description: 条件并分页获取权限列表

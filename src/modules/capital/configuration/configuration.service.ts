@@ -8,10 +8,14 @@ import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
 import { ApiConfiguration } from 'types/capital/configuration';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class ConfigurationService {
-  constructor(@InjectModel('Configuration') private readonly configurationModel: Model<Configuration>) {}
+  constructor(@InjectModel(Configuration.name, capitalDatabaseName) private readonly configurationModel: Model<Configuration>) {}
 
   /**
    * @description: 创建配置信息

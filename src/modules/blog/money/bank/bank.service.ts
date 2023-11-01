@@ -13,10 +13,14 @@ import { UpdateBankDto } from './dto/update-bank.dto';
 import { bankExcelTargetHandler } from 'src/common/utils/money';
 import { ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class BankService {
-  constructor(@InjectModel('Bank') private readonly bankModel: Model<Bank>) {}
+  constructor(@InjectModel(Bank.name, blogDatabaseName) private readonly bankModel: Model<Bank>) {}
 
   /**
    * @description: 银行账单导入

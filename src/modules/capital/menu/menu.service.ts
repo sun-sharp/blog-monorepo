@@ -8,10 +8,14 @@ import { menuFindAllDto } from './dto/menu-find-all-dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { ApiMenuItem } from 'types/capital/menu';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class MenuService {
-  constructor(@InjectModel('Menu') private readonly menuModel: Model<Menu>) {}
+  constructor(@InjectModel(Menu.name, capitalDatabaseName) private readonly menuModel: Model<Menu>) {}
 
   /**
    * @description: 新增系统菜单

@@ -12,10 +12,14 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { ApiArticleItem } from 'types/blog/article';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class ArticleService {
-  constructor(@InjectModel('Article') private readonly articleModel: Model<Article>) {}
+  constructor(@InjectModel(Article.name, blogDatabaseName) private readonly articleModel: Model<Article>) {}
 
   /**
    * @description: 条件并分页获取文章列表

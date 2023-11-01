@@ -15,13 +15,17 @@ import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { RoleService } from '../role/role.service';
 import { ApiUserInfo, ApiUserItem } from 'types/capital/user';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class UserService {
   private USERNAME_LENGTH_MAX = 10;
   private USERNAME_LENGTH_MIN = 3;
   constructor(
-    @InjectModel('User') private readonly userModel: Model<User>,
+    @InjectModel(User.name, capitalDatabaseName) private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
     private readonly roleService: RoleService,
   ) {}

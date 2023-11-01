@@ -10,10 +10,14 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { ApiCategoryItem } from 'types/capital/category';
 import { IResponse } from 'types/common';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectModel('Category') private readonly categoryModel: Model<Category>) {}
+  constructor(@InjectModel(Category.name, capitalDatabaseName) private readonly categoryModel: Model<Category>) {}
 
   /**
    * @description: 新增文章分类

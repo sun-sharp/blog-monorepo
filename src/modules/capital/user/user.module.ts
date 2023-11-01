@@ -9,7 +9,6 @@ import { JwtModuleRegister } from 'src/jwt/jwt.constants';
 import { useCustomConfig } from 'src/config';
 
 const customConfig = useCustomConfig();
-
 const { capitalDatabaseName } = customConfig;
 
 const USER_MONGO_MODULE = MongooseModule.forFeature([{ name: User.name, schema: UserSchema }], capitalDatabaseName);

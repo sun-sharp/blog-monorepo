@@ -13,10 +13,14 @@ import { weChatExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiWeChatItem, ApiWeChatUpload } from 'types/blog/money/we-chat';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class WeChatService {
-  constructor(@InjectModel('WeChat') private readonly weChatModel: Model<WeChat>) {}
+  constructor(@InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>) {}
 
   /**
    * @description: 微信账单导入

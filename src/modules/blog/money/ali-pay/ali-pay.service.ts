@@ -13,10 +13,14 @@ import { aliPayExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class AliPayService {
-  constructor(@InjectModel('AliPay') private readonly aliPayModel: Model<AliPay>) {}
+  constructor(@InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>) {}
 
   /**
    * @description: 支付宝账单导入

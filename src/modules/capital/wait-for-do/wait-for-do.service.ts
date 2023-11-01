@@ -11,10 +11,14 @@ import { UpdateWaitForDoSortDto } from './dto/update-wait-for-do-sort.dto';
 import { UpdateWaitForDoDto } from './dto/update-wait-for-do.dto';
 import { IResponse } from 'types/common';
 import { ApiWaitForDoItem, ApiWaitForDoUpdateStateData } from 'types/capital/wait-for-do';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class WaitForDoService {
-  constructor(@InjectModel('WaitForDo') private readonly waitForDoModel: Model<WaitForDo>) {}
+  constructor(@InjectModel(WaitForDo.name, capitalDatabaseName) private readonly waitForDoModel: Model<WaitForDo>) {}
 
   /**
    * @description: 新增文章分类

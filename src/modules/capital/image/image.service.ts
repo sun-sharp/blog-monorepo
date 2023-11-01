@@ -16,13 +16,14 @@ import { useCustomConfig } from 'src/config';
 import { IResponse } from 'types/common';
 
 const customConfig = useCustomConfig();
-const imageReadDir = `${customConfig.fileAccessPath}/image`;
-const imageFsDir = `${customConfig.staticDirPosition}${customConfig.staticDirName}/image/`;
+const { capitalDatabaseName, fileAccessPath, staticDirPosition, staticDirName } = customConfig;
+const imageReadDir = `${fileAccessPath}/image`;
+const imageFsDir = `${staticDirPosition}${staticDirName}/image/`;
 
 @Injectable()
 export class ImageService {
   constructor(
-    @InjectModel('Image') private readonly imageModel: Model<Image>,
+    @InjectModel(Image.name, capitalDatabaseName) private readonly imageModel: Model<Image>,
     private readonly userService: UserService,
     private readonly articleService: ArticleService,
   ) {}
