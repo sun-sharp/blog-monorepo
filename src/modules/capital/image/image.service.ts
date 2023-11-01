@@ -75,6 +75,7 @@ export class ImageService {
             uploadTime: saveItem.uploadTime,
             source: saveItem.source,
           };
+          logger.log(`单图片上传 ${saveItem._id}`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -100,6 +101,7 @@ export class ImageService {
       Promise.resolve()
         .then(async () => {
           const result = await readdirOfImageHandle(imageFsDir);
+          logger.log(`获取图片目录的全部文件 ${result.length}个`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -138,6 +140,7 @@ export class ImageService {
             const findIndex = imageData.findIndex((d) => p.name === d.name);
             return findIndex === -1;
           });
+          logger.log(`查询只有图片文件没有数据的文件 ${result.length}个`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -185,7 +188,7 @@ export class ImageService {
             }
             if (useStatus) result.push(f);
           }
-          logger.log(`获取只有图片文件没有数据的文件`, result);
+          logger.log(`获取只有图片文件没有数据的文件 ${result.length}个`);
           return {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
@@ -223,6 +226,7 @@ export class ImageService {
       Promise.resolve()
         .then(async () => {
           const result = await this.imageModel.find();
+          logger.log(`获取图片全部列表数据 ${result.length}个`);
           return {
             code: ApiCode.SUCCESS,
             result: (result || []).map((m) => {
@@ -267,6 +271,7 @@ export class ImageService {
           if (source) findData.source = source;
           const total = await this.imageModel.find(findData).count();
           const list = await this.imageModel.find(findData).limit(limit).skip(skip).sort({ uploadTime: -1 });
+          logger.log(`条件并分页获取图片数据列表 ${total}个`);
           return {
             code: ApiCode.SUCCESS,
             result: {
@@ -318,6 +323,7 @@ export class ImageService {
         // 删除文件
         .then(async (publicName) => {
           await unlinkHandle(publicName);
+          logger.log(`删除图片目录下的图片`);
           return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
@@ -349,6 +355,7 @@ export class ImageService {
         // 删除文件
         .then(async (fileNameArr) => {
           const result = await unlinkListHandle(`${customConfig.staticDirPosition}${customConfig.staticDirName}/image`, fileNameArr);
+          logger.log(`批量删除图片目录下的图片`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -375,6 +382,7 @@ export class ImageService {
       Promise.resolve(imageId)
         .then(async (imageId) => {
           await this.imageModel.deleteOne({ _id: imageId });
+          logger.log(`删除图片下的数据 ${imageId}`);
           return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
@@ -400,6 +408,7 @@ export class ImageService {
       Promise.resolve(removeDataAllImageDto)
         .then(async ({ imageIdArr }) => {
           await this.imageModel.deleteMany({ _id: { $in: imageIdArr } });
+          logger.log(`批量删除图片下的数据 ${imageIdArr.join(',')}`);
           return {
             code: ApiCode.SUCCESS,
             message: '删除成功！',
@@ -434,6 +443,7 @@ export class ImageService {
         })
         // 删除文件
         .then(async ({ imageId, fileName }) => {
+          logger.log(`删除 图片目录下的图片 ${fileName}`);
           const { code, message } = await this.removePublic(fileName);
           if (code === ApiCode.ERROR) {
             throw {
@@ -444,6 +454,7 @@ export class ImageService {
         })
         // 删除数据
         .then(async (imageId) => {
+          logger.log(`删除 图片下的数据 ${imageId}`);
           return await this.removeData(imageId);
         })
         // 返回错误
@@ -475,6 +486,7 @@ export class ImageService {
         })
         // 删除文件
         .then(async ({ imageIdArr, fileNameArr }) => {
+          logger.log(`批量删除 图片目录下的图片 ${fileNameArr.join(',')}`);
           const { code, message } = await this.removePublicAll({ fileNameArr });
           if (code === ApiCode.ERROR) {
             throw {
@@ -485,6 +497,7 @@ export class ImageService {
         })
         // 删除数据
         .then(async (imageIdArr) => {
+          logger.log(`批量删除 图片下的数据 ${imageIdArr.join(',')}`);
           return await this.removeDataAll({ imageIdArr });
         })
         // 返回错误
