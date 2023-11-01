@@ -5,12 +5,14 @@ import { UserService } from 'src/modules/capital/user/user.service';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private readonly userService: UserService, private readonly roleService: RoleService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly roleService: RoleService,
+  ) {
     super();
   }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    // console.log(req.route, 'req.route.path');
 
     return (
       Promise.resolve({ req })
