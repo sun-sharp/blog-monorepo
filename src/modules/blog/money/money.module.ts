@@ -13,5 +13,6 @@ import { RoleModule } from 'src/modules/capital/role/role.module';
   imports: [WeChatModule, AliPayModule, BankModule, JwtModuleRegister, UserModule, CategoryModule, forwardRef(() => RoleModule)],
   controllers: [MoneyController],
   providers: [MoneyService],
+  exports: [MoneyService],
 })
 export class MoneyModule {}

@@ -416,4 +416,23 @@ export class UserService {
         })
     );
   }
+
+  /**
+   * @description: 获取用户数据库信息
+   * @return {Promise<User>}
+   */
+  public findAllToData(): Promise<User> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.userModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
 }

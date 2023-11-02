@@ -49,5 +49,6 @@ import { BankModule } from './money/bank/bank.module';
   ],
   controllers: [BlogController],
   providers: [BlogService],
+  exports: [BlogService],
 })
 export class BlogModule {}

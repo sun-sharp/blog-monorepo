@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { CapitalModule } from './modules/capital/capital.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { useCustomConfig } from 'src/config';
-import { CapitalTasksModule } from './tasks/capital/capital.tasks.module';
+import { AppTasksModule } from './tasks/app.tasks.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { CapitalTasksModule } from './tasks/capital/capital.tasks.module';
     }),
     BlogModule,
     // 定时任务
-    CapitalTasksModule,
+    AppTasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

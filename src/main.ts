@@ -8,18 +8,16 @@ import * as pkg from '../package.json';
 import { join } from 'path';
 import * as express from 'express';
 import { logger } from './common/journal';
-import { writeFileSync } from 'fs';
 import { useCustomConfig } from './config';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 
 const customConfig = useCustomConfig();
-
+const { fileAccessPath, staticDirPosition, staticDirName, port } = customConfig;
 const { version } = pkg;
-
 const title = 'NestJs博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
-const port = customConfig.port;
-const desc = `我的测试博客API \n\n swagger的JSON文件：/${customConfig.fileAccessPath}/json/${swaggerUrl}.json`;
+const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPath}/json/${swaggerUrl}.json`;
 
 (async () => {
   // create app
@@ -34,14 +32,24 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${customConfig.
         .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'jwt')
         .build();
       const document = SwaggerModule.createDocument(app, config);
-      writeFileSync(`${customConfig.staticDirPosition}${customConfig.staticDirName}/json/${swaggerUrl}.json`, JSON.stringify(document));
+      // 判断json目录是否路径存在
+      const jsonDir = `${staticDirPosition}${staticDirName}/json`;
+      const hasDir = existsSync(jsonDir);
+      if (!hasDir) {
+        // 创建json目录
+        mkdirSync(jsonDir);
+        logger.log('创建json目录');
+      }
+      // 写入swaggerUrl.json文件
+      writeFileSync(`${jsonDir}/${swaggerUrl}.json`, JSON.stringify(document, null, '\t'));
+      logger.log('写入swaggerUrl.json文件');
       SwaggerModule.setup(swaggerUrl, app, document);
       return app;
     })
     // 配置 public 文件夹为静态目录，以达到可直接访问下面文件的目的
     .then((app) => {
-      const rootDir = join(__dirname, `../${customConfig.staticDirPosition}`);
-      app.use(`/${customConfig.fileAccessPath}`, express.static(join(rootDir, customConfig.staticDirName)));
+      const rootDir = join(__dirname, `../${staticDirPosition}`);
+      app.use(`/${fileAccessPath}`, express.static(join(rootDir, staticDirName)));
       return app;
     })
     // 设置全局前缀

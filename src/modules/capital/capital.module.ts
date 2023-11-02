@@ -63,5 +63,6 @@ import { WaitForDoModule } from './wait-for-do/wait-for-do.module';
   ],
   controllers: [CapitalController],
   providers: [CapitalService],
+  exports: [CapitalService],
 })
 export class CapitalModule {}

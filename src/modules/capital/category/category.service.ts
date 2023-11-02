@@ -67,7 +67,7 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误`, err);
+          logger.log(`返回错误 ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
@@ -102,7 +102,7 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误`, err);
+          logger.log(`返回错误 ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
@@ -242,6 +242,25 @@ export class CategoryService {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
           };
+        })
+    );
+  }
+
+  /**
+   * @description: 获取全局类型数据库信息
+   * @return {Promise<Category>}
+   */
+  public findAllToData(): Promise<Category> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.categoryModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }

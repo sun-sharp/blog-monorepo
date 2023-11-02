@@ -11,6 +11,12 @@ import { CategoryService } from 'src/modules/capital/category/category.service';
 import { ApiAliPayAndWeChatChild, ApiBankFlow, ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from 'types/blog/money';
 import { ApiBank } from 'types/blog/money/bank';
 import { IResponse } from 'types/common';
+import { useCustomConfig } from 'src/config';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { logger } from 'src/common/journal';
+
+const customConfig = useCustomConfig();
+const { staticDirPosition, staticDirName } = customConfig;
 
 @Injectable()
 export class MoneyService {
@@ -388,6 +394,52 @@ export class MoneyService {
           return {
             code: ApiCode.ERROR,
             message: err.message || '获取失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 备份数据库Blog/money数据
+   * @return {Promise<IResponse>}
+   */
+  public backupsCapital(): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          // 判断json/blog目录是否路径存在
+          const blogDir = `${staticDirPosition}${staticDirName}/json/blog`;
+          const hasDir = existsSync(blogDir);
+          if (!hasDir) {
+            // 创建json/blog目录
+            mkdirSync(blogDir);
+          }
+          // 备份blog/bank
+          const bankData = await this.bankService.findAllToData();
+          const bankStr = JSON.stringify(bankData, null, '\t');
+          writeFileSync(`${blogDir}/bank.json`, bankStr);
+          logger.log('备份数据库blog/bank数据');
+          // 备份blog/weChat
+          const weChatData = await this.weChatService.findAllToData();
+          const weChatStr = JSON.stringify(weChatData, null, '\t');
+          writeFileSync(`${blogDir}/weChat.json`, weChatStr);
+          logger.log('备份数据库blog/weChat数据');
+          // 备份blog/aliPay
+          const aliPayData = await this.aliPayService.findAllToData();
+          const aliPayStr = JSON.stringify(aliPayData, null, '\t');
+          writeFileSync(`${blogDir}/aliPay.json`, aliPayStr);
+          logger.log('备份数据库blog/aliPay数据');
+          return {
+            code: ApiCode.SUCCESS,
+            message: '备份成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.log(`备份数据库blog/money 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err.message || '备份失败！',
           };
         })
     );

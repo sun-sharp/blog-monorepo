@@ -169,4 +169,23 @@ export class ConfigurationService {
         })
     );
   }
+
+  /**
+   * @description: 获取配置信息数据库信息
+   * @return {Promise<Configuration>}
+   */
+  public findAllToData(): Promise<Configuration> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.configurationModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
 }

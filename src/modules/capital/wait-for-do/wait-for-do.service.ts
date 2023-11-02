@@ -70,7 +70,7 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误`, err);
+          logger.log(`返回错误 ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err.message || '添加失败！',
@@ -115,7 +115,7 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误`, err);
+          logger.log(`返回错误 ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
@@ -342,13 +342,32 @@ export class WaitForDoService {
         .then(async (find) => {
           const waitForDoIdArr = find.map((m) => m._id);
           await this.waitForDoModel.deleteMany({ _id: { $in: waitForDoIdArr } });
-          logger.log('删除特定时间后的已完成数据', `删除（${find.map((m) => m.title).join('，')}）成功！`);
+          logger.log(`删除特定时间后的已完成数据 删除（${find.map((m) => m.title).join('，')}）成功！`);
           return true;
         })
         // 返回错误
         .catch((err) => {
-          logger.error('删除特定时间后的已完成数据', err || '删除失败！');
+          logger.error(`删除特定时间后的已完成数据 ${err || '删除失败！'}`);
           return false;
+        })
+    );
+  }
+
+  /**
+   * @description: 获取特定数据库信息
+   * @return {Promise<WaitForDo>}
+   */
+  public findAllToData(): Promise<WaitForDo> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.waitForDoModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }

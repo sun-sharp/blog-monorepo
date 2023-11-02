@@ -8,12 +8,21 @@ import { Image, ImageSchema } from 'src/schemas/capital/image.schema';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { useCustomConfig } from 'src/config';
 import { ArticleModule } from 'src/modules/blog/article/article.module';
+import { existsSync, mkdirSync } from 'node:fs';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
-
 const { staticDirPosition, staticDirName, imageRefixName, capitalDatabaseName } = customConfig;
-
 const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], capitalDatabaseName);
+
+// 判断image目录是否路径存在
+const imageDir = `${staticDirPosition}${staticDirName}/image`;
+const hasDir = existsSync(imageDir);
+if (!hasDir) {
+  // 创建image目录
+  mkdirSync(imageDir);
+  logger.log('创建image目录');
+}
 
 @Module({
   imports: [
@@ -23,7 +32,7 @@ const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema
     MulterModule.register({
       storage: diskStorage({
         // 配置文件上传后的文件夹路径
-        destination: `${staticDirPosition}${staticDirName}/image`,
+        destination: imageDir,
         filename: (req, file, cb) => {
           const image = ['gif', 'png', 'jpg', 'jpeg', 'bmp', 'webp'];
           const mimeType = file.mimetype.split('/')[1];

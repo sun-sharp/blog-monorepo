@@ -388,4 +388,23 @@ export class AliPayService {
         })
     );
   }
+
+  /**
+   * @description: 获取文章数据库信息
+   * @return {Promise<AliPay>}
+   */
+  public findAllToData(): Promise<AliPay> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.aliPayModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
 }

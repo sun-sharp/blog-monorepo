@@ -132,7 +132,7 @@ export class MenuService {
    * @param {UpdateMenuDto} body
    * @return {Promise<IResponse>}
    */
-  update(body: UpdateMenuDto): Promise<IResponse> {
+  public update(body: UpdateMenuDto): Promise<IResponse> {
     return (
       Promise.resolve(body)
         // 修改
@@ -154,7 +154,7 @@ export class MenuService {
     );
   }
 
-  remove(menuId: string) {
+  public remove(menuId: string) {
     return (
       Promise.resolve(menuId)
         // 查询当前以下有菜单
@@ -180,6 +180,25 @@ export class MenuService {
             code: ApiCode.ERROR,
             message: err.message || '删除失败！',
           };
+        })
+    );
+  }
+
+  /**
+   * @description: 获取菜单数据库信息
+   * @return {Promise<Menu>}
+   */
+  public findAllToData(): Promise<Menu> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.menuModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }

@@ -192,7 +192,7 @@ export class ArticleService {
    * @param {string} image
    * @return {Promise<User>}
    */
-  public findOneByImage(image: string): Promise<User> {
+  public findOneByImage(image: string): Promise<Article> {
     return (
       Promise.resolve(image)
         // 图片头像是否合理
@@ -208,6 +208,25 @@ export class ArticleService {
         // 判断username 是否为合法字符
         .then(async (image) => {
           return await this.articleModel.findOne({ markdownContent: { $regex: image } });
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 获取文章数据库信息
+   * @return {Promise<Article>}
+   */
+  public findAllToData(): Promise<Article> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.articleModel.find();
+          return list;
         })
         // 返回错误
         .catch((err) => {

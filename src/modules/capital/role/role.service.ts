@@ -269,7 +269,7 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`获取全部接口列表的一维数据`, err);
+          logger.error(`获取全部接口列表的一维数据 ${err}`);
           return [];
         })
     );
@@ -289,7 +289,7 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`查询需要jwt验证的接口列表失败`, err);
+          logger.error(`查询需要jwt验证的接口列表失败 ${err}`);
           return [];
         })
     );
@@ -321,7 +321,7 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`查询需要jwt验证的接口列表失败`, err);
+          logger.error(`查询需要jwt验证的接口列表失败 ${err}`);
           return false;
         })
     );
@@ -346,11 +346,30 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`返回错误`, err);
+          logger.error(`返回错误 ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err.message || '查询失败！',
           };
+        })
+    );
+  }
+
+  /**
+   * @description: 获取角色数据库信息
+   * @return {Promise<Role>}
+   */
+  public findAllToData(): Promise<Role> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const list = await this.roleModel.find();
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
         })
     );
   }
