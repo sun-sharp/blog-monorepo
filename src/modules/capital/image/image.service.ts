@@ -180,11 +180,17 @@ export class ImageService {
             if (lib === 'user') {
               const userFindOne = await this.userService.findOneByAvatar(f.url);
               useStatus = !userFindOne;
+              if (!userFindOne) {
+                logger.log(`${f.url} 是用户头像`);
+              }
             }
             // 是否文章
             if (lib === 'article') {
-              const userFindOne = await this.articleService.findOneByImage(f.url);
-              useStatus = !userFindOne;
+              const articleFindOne = await this.articleService.findOneByImage(f.url);
+              useStatus = !articleFindOne;
+              if (!articleFindOne) {
+                logger.log(`${f.url} 是文章图片`);
+              }
             }
             if (useStatus) result.push(f);
           }
