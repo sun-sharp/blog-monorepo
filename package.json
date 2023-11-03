@@ -1,6 +1,6 @@
 {
   "name": "alone-blog-api",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "",
   "author": "yrr",
   "private": true,
@@ -34,6 +34,7 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "exceljs": "^4.4.0",
     "mongoose": "^7.6.4",

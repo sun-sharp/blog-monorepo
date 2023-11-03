@@ -14,6 +14,7 @@ import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto'
 import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
+import { format } from 'date-fns';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -159,9 +160,15 @@ export class AliPayService {
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson, inflowOrOutflow, billType, billMethod } = body;
+          const { size, current, tradeTime, tradeOtherPerson, inflowOrOutflow, billType, billMethod } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<AliPay> = { userId };
+          if (tradeTime) {
+            // 筛选当天的数据
+            const startTime = format(new Date(tradeTime), `yyyy-MM-dd 00:00:00`);
+            const endTime = format(new Date(tradeTime), `yyyy-MM-dd 23:59:59`);
+            findData.tradeTime = { $gte: startTime, $lte: endTime };
+          }
           if (tradeOtherPerson) findData.$or = [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }];
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (billType) findData.billType = billType;

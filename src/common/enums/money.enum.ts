@@ -3,7 +3,9 @@ export enum billTypeEnum {
   redPacket = 2, // 微信红包
   manageMoneyMatters = 5, // 理财
   phoneBill = 20, // 话费
+  consumptionClothingShoes = 102, // 消费-衣鞋
   consumptionSupermarket = 103, // 消费-超市
+  trafficTrain = 131, // 交通-火车
   trafficBicycle = 132, // 交通-单车
   trafficTaxi = 134, // 交通-打车
   trafficSubway = 136, // 交通-地铁

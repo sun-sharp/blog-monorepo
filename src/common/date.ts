@@ -1,7 +1,7 @@
 /**
  * @description: 时间，日期转化
  * @param {string | Date} defaultTime
- * @return {string}
+ * @return {string} yyyy-MM-DD HH:mm:ss
  */
 export const nowDateFun = (defaultTime?: string | Date): string => {
   const newDate = defaultTime ? new Date(defaultTime) : new Date();

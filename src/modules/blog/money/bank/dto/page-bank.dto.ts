@@ -3,6 +3,12 @@ import { PaginateDto } from 'src/common/paginate/paginate.dto';
 
 export class PageBankDto extends PaginateDto {
   @ApiProperty({
+    description: '交易时间',
+    required: false,
+  })
+  readonly tradeTime: string;
+
+  @ApiProperty({
     description: '交易对方',
     required: false,
   })

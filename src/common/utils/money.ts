@@ -8,22 +8,43 @@ export const weChatExcelTargetHandler = (target: any) => {
   const paymentMethod = oldTarget.paymentMethod;
   const tradeOtherPerson = oldTarget.tradeOtherPerson;
   const goods = oldTarget.goods;
-  if (['微信红包', '企业微信红包'].includes(tradeType)) {
+  if (['微信红包', '企业微信红包'].includes(tradeType) || tradeOtherPerson.indexOf('红包') !== -1) {
     target.billType = billTypeEnum.redPacket;
-  } else if (['美团平台商户'].includes(tradeOtherPerson)) {
+  } else if (['美团平台商户'].includes(tradeOtherPerson) || tradeOtherPerson.indexOf('美团') !== -1) {
     target.billType = billTypeEnum.mtOrder;
   } else if (['手机充值'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.phoneBill;
-  } else if (tradeOtherPerson.indexOf('超市') !== -1 || tradeOtherPerson.indexOf('便利店') !== -1 || ['成都红旗连锁股份有限公司'].includes(tradeOtherPerson)) {
+  } else if (['超市', '便利店', '成都红旗连锁股份有限公司', '华润万家', '中港CC店'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.consumptionSupermarket;
   } else if (tradeType === '零钱充值') {
     target.billType = billTypeEnum.weChatChangeRecharge;
   } else if (['广州骑安'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficBicycle;
-  } else if (['兄弟江油肥肠', '大米先生'].includes(tradeOtherPerson)) {
+  } else if (
+    [
+      '兄弟江油肥肠',
+      '大米先生',
+      '黄焖鸡米饭',
+      '71号豆汤饭',
+      '面',
+      '通宇物业',
+      '星巴克',
+      '肯德基',
+      '蒸福包点',
+      '米线',
+      '巴食小厨',
+      '包子',
+      '佳馨包点',
+      '早餐店',
+      '土豆',
+      '麦当劳',
+    ].find((f) => tradeOtherPerson.indexOf(f) !== -1)
+  ) {
     target.billType = billTypeEnum.eatingRestaurant;
   } else if (tradeOtherPerson === '高德' && goods === '高德打车') {
     target.billType = billTypeEnum.trafficTaxi;
+  } else if (['中铁网络'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.trafficTrain;
   }
   if (currentStatus === '已存入零钱' || paymentMethod === '零钱' || tradeType === '零钱充值') {
     target.billMethod = billMethodEnum.weChatChange;

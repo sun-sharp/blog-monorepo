@@ -14,6 +14,7 @@ import { bankExcelTargetHandler } from 'src/common/utils/money';
 import { ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
+import { format } from 'date-fns';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -131,9 +132,15 @@ export class BankService {
       Promise.resolve({ userId, body })
         // 分页查询
         .then(async ({ userId, body }) => {
-          const { size, current, tradeOtherPerson, inflowOrOutflow, bankBillType, bankType } = body;
+          const { size, current, tradeTime, tradeOtherPerson, inflowOrOutflow, bankBillType, bankType } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<Bank> = { userId };
+          if (tradeTime) {
+            // 筛选当天的数据
+            const startTime = format(new Date(tradeTime), `yyyy-MM-dd 00:00:00`);
+            const endTime = format(new Date(tradeTime), `yyyy-MM-dd 23:59:59`);
+            findData.tradeTime = { $gte: startTime, $lte: endTime };
+          }
           if (tradeOtherPerson) findData.$or = [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }];
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (bankBillType) findData.bankBillType = bankBillType;

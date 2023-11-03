@@ -3,11 +3,16 @@ import { PaginateDto } from 'src/common/paginate/paginate.dto';
 
 export class PageWeChatDto extends PaginateDto {
   @ApiProperty({
+    description: '交易时间',
+    required: false,
+  })
+  readonly tradeTime: string;
+
+  @ApiProperty({
     description: '交易对方',
     required: false,
-    default: '',
   })
-  readonly tradeOtherPerson: string = '';
+  readonly tradeOtherPerson: string;
 
   @ApiProperty({
     description: '流入/流出',
