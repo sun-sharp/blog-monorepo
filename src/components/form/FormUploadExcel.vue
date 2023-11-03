@@ -18,7 +18,7 @@
     :multiple="multiple"
     :custom-request="customRequest"
     list-type="image"
-    :file-list="fileList"
+    :default-file-list="fileList"
   >
     <n-button :type="buttonType">{{ buttonText }}</n-button>
   </n-upload>

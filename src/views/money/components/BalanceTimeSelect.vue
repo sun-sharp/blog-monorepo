@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { lastMonthFormatRange } from '@/utils';
+  import { lastHalfYearFormatRange } from '@/utils';
   import { ref } from 'vue';
   import { BalanceDateRangeType } from '/#/views/money';
 
@@ -8,7 +8,7 @@
   const modelTitle = '时间范围选择';
   const showModal = ref(false);
 
-  const balanceDateRange = ref<BalanceDateRangeType>(lastMonthFormatRange('yyyy-MM-dd'));
+  const balanceDateRange = ref<BalanceDateRangeType>(lastHalfYearFormatRange('yyyy-MM-dd'));
 
   const formBtnLoading = ref(false);
 
@@ -20,7 +20,7 @@
 
   // 重置
   const resetFields = () => {
-    balanceDateRange.value = lastMonthFormatRange('yyyy-MM-dd');
+    balanceDateRange.value = lastHalfYearFormatRange('yyyy-MM-dd');
   };
 
   // 提交

@@ -76,7 +76,8 @@ export const useFormUploadExcel = (
     return {};
   });
 
-  const customRequest = ({ file, headers, data, withCredentials, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
+  // 自定义导入
+  const customRequest = ({ file, headers: oldHeaders, data, withCredentials, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
     const formData = new FormData();
     if (data) {
       Object.keys(data).forEach((key) => {
@@ -84,6 +85,7 @@ export const useFormUploadExcel = (
       });
     }
     formData.append('file', file.file as File);
+    const headers = { ...oldHeaders, 'Content-Type': 'multipart/form-data' };
     axios
       .request({
         url: uploadAction.value as string,

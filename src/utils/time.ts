@@ -14,6 +14,48 @@ export const lastMonthFormatRange = (formatStr: string): [string, string] => {
 };
 
 /**
+ * @description: 获取近六个月的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const lastHalfYearFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear();
+  const month = nowTime.getMonth();
+  let day = 0;
+  for (let i = 0; i < 6; i++) {
+    if (month - i >= 0) {
+      day += new Date(year, month - i, 0).getDate();
+    } else {
+      day += new Date(year - 1, 12 + month - i, 0).getDate();
+    }
+  }
+  console.log(day);
+  return [format(nowTime.getTime() - day * 24 * 60 * 60 * 1000, formatStr), format(nowTime, formatStr)];
+};
+
+/**
+ * @description: 获取近一年的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const lastYearFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear();
+  const month = nowTime.getMonth();
+  let day = 0;
+  for (let i = 0; i < 12; i++) {
+    if (month - i >= 0) {
+      day += new Date(year, month - i, 0).getDate();
+    } else {
+      day += new Date(year - 1, 12 + month - i, 0).getDate();
+    }
+  }
+  console.log(day);
+  return [format(nowTime.getTime() - day * 24 * 60 * 60 * 1000, formatStr), format(nowTime, formatStr)];
+};
+
+/**
  * 某年全部的天数
  * @param {number} year
  * @returns {number}
