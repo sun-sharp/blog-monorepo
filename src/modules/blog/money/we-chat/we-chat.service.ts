@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { weChatExcelCellHandle } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
@@ -161,10 +161,8 @@ export class WeChatService {
         .then(async ({ userId, body }) => {
           const { size, current, tradeOtherPerson, inflowOrOutflow, billType, billMethod } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData: any = {
-            userId,
-            $or: [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }],
-          };
+          const findData: FilterQuery<WeChat> = { userId };
+          if (tradeOtherPerson) findData.$or = [{ tradeOtherPerson: { $regex: tradeOtherPerson } }, { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } }];
           if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
           if (billType) findData.billType = billType;
           if (billMethod) findData.billMethod = billMethod;

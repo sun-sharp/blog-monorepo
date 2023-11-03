@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { Role } from 'src/schemas/capital/role.schema';
@@ -41,7 +41,9 @@ export class RoleService {
         .then(async (body) => {
           const { size, current, name, roleCode } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { name: { $regex: name }, roleCode: { $regex: roleCode } };
+          const findData: FilterQuery<Role> = {};
+          if (name) findData.name = { $regex: name };
+          if (roleCode) findData.roleCode = { $regex: roleCode };
           const total = await this.roleModel.find(findData).count();
           const findArr = await this.roleModel.find(findData).limit(limit).skip(skip);
           const list: ApiRoleItem[] = findArr.map((m) => ({

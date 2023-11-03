@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { comparePassword, hashPassword } from 'src/common/bcrypt';
 import { ApiCode } from 'src/common/enums/api-code.enum';
@@ -202,7 +202,9 @@ export class UserService {
         .then(async (body) => {
           const { size, current, nickname, username } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { nickname: { $regex: nickname }, username: { $regex: username } };
+          const findData: FilterQuery<User> = {};
+          if (nickname) findData.nickname = { $regex: nickname };
+          if (username) findData.username = { $regex: username };
           const total = await this.userModel.find(findData).count();
           const findArr = await this.userModel.find(findData).limit(limit).skip(skip);
           const list: ApiUserItem[] = findArr.map((m) => ({

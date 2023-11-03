@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { existsSyncHandle, readdirOfImageHandle, readFileHandle, readFileListHandle, unlinkHandle, unlinkListHandle } from 'src/common/fs-handle';
@@ -10,7 +10,7 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
-import { ApiImage, ApiImageItem, ImageFindPageParams, UploadedImage } from 'types/capital/image';
+import { ApiImage, ApiImageItem, UploadedImage } from 'types/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
 import { IResponse } from 'types/common';
@@ -273,10 +273,11 @@ export class ImageService {
         .then(async (body) => {
           const { size, current, name, source } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData: ImageFindPageParams = { name: { $regex: name } };
+          const findData: FilterQuery<Image> = {};
+          if (name) findData.name = { $regex: name };
           if (source) findData.source = source;
-          const total = await this.imageModel.find(findData).count();
-          const list = await this.imageModel.find(findData).limit(limit).skip(skip).sort({ uploadTime: -1 });
+          const total = await this.imageModel.find().count();
+          const list = await this.imageModel.find().limit(limit).skip(skip).sort({ uploadTime: -1 });
           logger.log(`条件并分页获取图片数据列表 ${total}个`);
           return {
             code: ApiCode.SUCCESS,

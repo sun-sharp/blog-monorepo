@@ -55,7 +55,7 @@ export class MenuService {
       Promise.resolve(query)
         // 查询
         .then(async (query) => {
-          const findData = query ? { name: { $regex: query.name || '' } } : {};
+          const findData = query && query.name ? { name: { $regex: query.name } } : {};
           const menuList = await this.menuModel.find(findData).sort({ sort: 1 });
           const result: ApiMenuItem[] = menuList.map((m) => ({
             menuId: m.id,

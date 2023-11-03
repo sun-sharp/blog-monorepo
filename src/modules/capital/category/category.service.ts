@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
 import { Category } from 'src/schemas/capital/category.schema';
@@ -142,7 +142,8 @@ export class CategoryService {
         .then(async (body) => {
           const { size, current, type } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData = { type: { $regex: type } };
+          const findData: FilterQuery<Category> = {};
+          if (type) findData.type = type;
           const total = await this.categoryModel.find(findData).count();
           const findArr = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
           const list: ApiCategoryItem[] = (findArr || []).map((m) => {
