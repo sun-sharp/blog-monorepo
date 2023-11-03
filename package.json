@@ -1,8 +1,8 @@
 {
   "name": "alone-blog-api",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "",
-  "author": "",
+  "author": "yrr",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

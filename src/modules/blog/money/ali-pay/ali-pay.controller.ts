@@ -25,7 +25,7 @@ export class AliPayController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  upload(@UploadedFile() file: Express.Multer.File) {
+  upload(@UploadedFile() file: UploadAliPayDto) {
     return this.aliPayService.upload(file);
   }
 
