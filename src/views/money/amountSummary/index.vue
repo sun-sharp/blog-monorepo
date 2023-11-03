@@ -158,11 +158,7 @@
       </div>
       <div class="summary-card full-card" style="height: 800px">
         <div class="summary-card__head">
-          <span>
-            各方式所流入/流出的金额
-            <span class="sub-title">流出总金额：{{ outflowMoneySumTotal || 0 }}</span>
-            <span class="sub-title">流入总金额：{{ inflowMoneySumTotal || 0 }}</span>
-          </span>
+          <span>各方式所流入/流出的金额</span>
           <n-date-picker
             :formatted-value="inflowOrOutflowMoneyDateRange"
             style="width: 280px"
@@ -175,24 +171,34 @@
         </div>
         <div class="summary-card__chart">
           <div class="chart-separate">
-            <single-column-chart
-              v-if="outflowMoneyData.length > 0"
-              :chart-data="outflowMoneyData"
-              :custom-cfg="outflowMoneyCustomCfg"
-              x-field="name"
-              y-field="money"
-            ></single-column-chart>
-            <n-empty v-else class="w-full h-full justify-center" description="无流出数据"></n-empty>
+            <div class="chart-separate__head">
+              <span>流入总金额：{{ inflowMoneySumTotal || 0 }} 元</span>
+            </div>
+            <div class="chart-separate__cont">
+              <single-column-chart
+                v-if="inflowMoneyData.length > 0"
+                :chart-data="inflowMoneyData"
+                :custom-cfg="inflowMoneyCustomCfg"
+                x-field="name"
+                y-field="money"
+              ></single-column-chart>
+              <n-empty v-else class="w-full h-full justify-center" description="无流入数据"></n-empty>
+            </div>
           </div>
           <div class="chart-separate mt-10">
-            <single-column-chart
-              v-if="inflowMoneyData.length > 0"
-              :chart-data="inflowMoneyData"
-              :custom-cfg="inflowMoneyCustomCfg"
-              x-field="name"
-              y-field="money"
-            ></single-column-chart>
-            <n-empty v-else class="w-full h-full justify-center" description="无流入数据"></n-empty>
+            <div class="chart-separate__head">
+              <span>流出总金额：{{ outflowMoneySumTotal || 0 }} 元</span>
+            </div>
+            <div class="chart-separate__cont">
+              <single-column-chart
+                v-if="outflowMoneyData.length > 0"
+                :chart-data="outflowMoneyData"
+                :custom-cfg="outflowMoneyCustomCfg"
+                x-field="name"
+                y-field="money"
+              ></single-column-chart>
+              <n-empty v-else class="w-full h-full justify-center" description="无流出数据"></n-empty>
+            </div>
           </div>
         </div>
       </div>
@@ -242,7 +248,20 @@
         overflow: hidden;
 
         .chart-separate {
+          display: flex;
+          flex-direction: column;
           height: calc(50% - 5px);
+
+          &__head {
+            padding: 20px 0;
+            font-weight: 400;
+            font-size: 14px;
+          }
+
+          &__cont {
+            flex: 1;
+            height: 0;
+          }
         }
       }
 
