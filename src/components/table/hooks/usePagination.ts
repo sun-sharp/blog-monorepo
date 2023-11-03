@@ -3,6 +3,7 @@ import { PaginationConfig, PaginationProps } from '/#/components/table';
 import { isBoolean } from '@/utils';
 import { DEFAULT_PAGESIZE, PAGE_COUNT_FIELD, PAGE_FIELD, PAGE_SIZES, SIZE_FIELD, TOTAL_FIELD } from '@/constant';
 import { BasicTableProps } from './useBasicTable';
+import { PaginationInfo } from 'naive-ui';
 
 export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
   const configRef = ref<PaginationConfig>({});
@@ -21,6 +22,7 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
       showQuickJumper: true,
       pageCount: unref(configRef)[PAGE_COUNT_FIELD],
       itemCount: unref(configRef)[TOTAL_FIELD],
+      prefix: (info: PaginationInfo) => `共 ${info.itemCount} 项`,
       ...(isBoolean(pagination) ? {} : pagination),
     };
   });

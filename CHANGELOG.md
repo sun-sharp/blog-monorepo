@@ -1,4 +1,7 @@
-# CHANGELOG
+# CHANGELOG bmw-xxx
+
+## 2.1.3
+- 修改表格组件-添加总数
 
 ## 2.1.2
 - 修改bug 首页-任务查看问题
