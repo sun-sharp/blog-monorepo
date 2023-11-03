@@ -40,11 +40,20 @@ export const useAliPayConfigure = () => {
   // 查询配置
   const searchSchemas = computed<FormSchema[]>(() => [
     {
+      field: 'tradeTime',
+      component: 'NDatePicker',
+      label: '交易时间',
+      componentProps: {
+        placeholder: '请输入交易时间',
+        valueFormat: 'yyyy-MM-dd',
+      },
+    },
+    {
       field: 'tradeOtherPerson',
       component: 'NInput',
       label: '交易对方',
       componentProps: {
-        placeholder: '请输入昵称',
+        placeholder: '请输入交易对方',
       },
     },
     {

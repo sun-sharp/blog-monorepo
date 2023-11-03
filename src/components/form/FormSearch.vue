@@ -59,6 +59,14 @@
               </n-space>
             </n-radio-group>
           </template>
+          <!-- 时间组件 -->
+          <component
+            v-bind="getComponentProps(schema)"
+            :is="schema.component"
+            v-if="['NDatePicker', 'NTimePicker'].includes(schema.component)"
+            v-model:formatted-value="formModel[schema.field]"
+            :class="{ isFull: schema.isFull != false && isFull }"
+          />
           <!--动态渲染表单组件-->
           <component
             v-bind="getComponentProps(schema)"

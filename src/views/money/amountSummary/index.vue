@@ -30,7 +30,7 @@
           fontSize: '20px',
         },
         customHtml: (_container: any, _view: any, datum: { value: any }, data: any[]) => {
-          const text = datum ? `¥ ${datum.value}` : `¥ ${data.reduce((r: any, d: { value: any }) => r + d.value, 0)}`;
+          const text = datum ? `¥ ${datum.value.toFixed(2)}` : `¥ ${data.reduce((r: any, d: { value: any }) => r + d.value, 0).toFixed(2)}`;
           return text;
         },
       },
