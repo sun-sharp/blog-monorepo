@@ -15,6 +15,7 @@ import { ApiWeChatItem, ApiWeChatUpload } from 'types/blog/money/we-chat';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
+import { nowDateFun } from 'src/common/date';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -199,7 +200,7 @@ export class WeChatService {
             }) => ({
               weChatId: _id,
               userId,
-              tradeTime,
+              tradeTime: nowDateFun(tradeTime),
               tradeType,
               tradeOtherPerson,
               tradeOtherPersonRemarks,

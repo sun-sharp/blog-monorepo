@@ -48,7 +48,7 @@ export class ArticleService {
             authorId: m.authorId,
             authorNickname: m.authorNickname,
             categoryVal: m.categoryVal,
-            createTime: m.createTime,
+            createTime: nowDateFun(m.createTime),
           }));
           return {
             code: ApiCode.SUCCESS,
@@ -169,7 +169,7 @@ export class ArticleService {
             authorId: find.authorId,
             authorNickname: find.authorNickname,
             categoryVal: find.categoryVal,
-            createTime: find.createTime,
+            createTime: nowDateFun(find.createTime),
           };
           return {
             code: ApiCode.SUCCESS,

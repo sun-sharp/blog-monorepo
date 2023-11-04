@@ -41,7 +41,7 @@ export class Article extends Document {
 
   // 文章的创建时间
   @Prop()
-  createTime: string;
+  createTime: Date;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

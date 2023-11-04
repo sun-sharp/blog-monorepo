@@ -4,7 +4,7 @@ import { filterStr } from '../string';
 // 微信账单key值重命名
 export const weChatExcelCellHandle = {
   1: (tar: any, val: any) => {
-    tar['tradeTime'] = nowDateFun(val);
+    tar['tradeTime'] = new Date(nowDateFun(val));
   }, // 交易时间
   2: (tar: any, val: any) => {
     tar['tradeType'] = val || '';
@@ -37,7 +37,7 @@ export const weChatExcelCellHandle = {
 export const aliPayExcelCellHandle = {
   // 交易时间
   1: (tar: any, val: any) => {
-    tar['tradeTime'] = nowDateFun(val);
+    tar['tradeTime'] = new Date(nowDateFun(val));
   },
   // 交易分类
   2: (tar: any, val: any) => {
@@ -84,7 +84,7 @@ export const bankExcelCellMap = {
         tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 卡号
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = new Date(nowDateFun(val));
       }, // 交易日期
       8: (tar: any, val: any) => {
         tar['explain'] = val;
@@ -121,7 +121,7 @@ export const bankExcelCellMap = {
         tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 账号
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = new Date(nowDateFun(val));
       }, // 交易时间
       3: (tar: any, val: any) => {
         tar['explain'] = val;
@@ -158,7 +158,7 @@ export const bankExcelCellMap = {
         tar['explain'] = val;
       }, // 摘要
       5: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = new Date(nowDateFun(val));
       }, // 交易日期
       6: (tar: any, val: any) => {
         if (typeof val !== 'number') {
@@ -197,7 +197,7 @@ export const bankExcelCellMap = {
         tar['voucherNo'] = val;
       }, // 凭证号码
       3: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = new Date(nowDateFun(val));
       }, // 交易时间
       4: (tar: any, val: any) => {
         tar['explain'] = val;
@@ -234,7 +234,7 @@ export const bankExcelCellMap = {
         tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 交易时间
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = new Date(nowDateFun(val));
       }, // 交易时间
       3: (tar: any, val: any) => {
         if (typeof val !== 'number') {

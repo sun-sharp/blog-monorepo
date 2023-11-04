@@ -11,10 +11,11 @@ import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 import { bankExcelTargetHandler } from 'src/common/utils/money';
-import { ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
+import { ApiBank, ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
+import { nowDateFun } from 'src/common/date';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -170,7 +171,7 @@ export class BankService {
             }) => ({
               bankId: _id,
               userId,
-              tradeTime,
+              tradeTime: nowDateFun(tradeTime),
               tradeType,
               bankType,
               voucherType,
@@ -235,15 +236,19 @@ export class BankService {
    * @param {string} userId
    * @param {string} startTime?
    * @param {string} endTime?
-   * @return {Promise<Array<Bank>>}
+   * @return {Promise<ApiBank[]>}
    */
-  public findModelAll(userId: string, startTime?: string, endTime?: string): Promise<Array<Bank>> {
+  public findModelAll(userId: string, startTime?: string, endTime?: string): Promise<ApiBank[]> {
     return (
       Promise.resolve()
         .then(async () => {
           const findData: any = { userId };
           if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
-          return await this.bankModel.find(findData).sort({ tradeTime: 1 });
+          const list = await this.bankModel.find(findData).sort({ tradeTime: 1 });
+          return list.map((m) => ({
+            ...m,
+            tradeTime: nowDateFun(m.tradeTime),
+          }));
         })
         // 返回错误
         .catch((err) => {

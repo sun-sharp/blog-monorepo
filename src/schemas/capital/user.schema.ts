@@ -29,7 +29,7 @@ export class User extends Document {
 
   // 上次登录时间
   @Prop()
-  loginDate: string;
+  loginDate: Date;
 
   // 角色类型
   @Prop()

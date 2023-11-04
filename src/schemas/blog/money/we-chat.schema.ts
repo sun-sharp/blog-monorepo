@@ -17,7 +17,7 @@ export class WeChat extends Document {
 
   // 交易时间
   @Prop()
-  tradeTime: string;
+  tradeTime: Date;
 
   // 交易类型
   @Prop()

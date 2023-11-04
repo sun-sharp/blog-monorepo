@@ -169,7 +169,7 @@ export class UserService {
             userId: user._id,
             roleCode: user.roleCode,
             roleName: routeFind.name,
-            loginDate: user.loginDate,
+            loginDate: nowDateFun(user.loginDate),
             username: user.username,
             avatar: user.avatar,
             nickname: user.nickname,
@@ -210,7 +210,7 @@ export class UserService {
           const list: ApiUserItem[] = findArr.map((m) => ({
             userId: m.id,
             roleCode: m.roleCode,
-            loginDate: m.loginDate,
+            loginDate: nowDateFun(m.loginDate),
             username: m.username,
             avatar: m.avatar,
             nickname: m.nickname,

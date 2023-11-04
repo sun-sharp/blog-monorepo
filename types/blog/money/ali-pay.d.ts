@@ -75,7 +75,7 @@ export interface ApiAliPayItem extends ApiAliPay, ApiAliPayId {}
  */
 export interface ApiAliPayUpload {
   // 交易时间
-  tradeTime: string;
+  tradeTime: Date;
 
   // 交易类型
   tradeType: string;
