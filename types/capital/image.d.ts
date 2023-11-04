@@ -33,14 +33,15 @@ export interface ApiImage {
   imageType: string;
   fileName: string;
   url: string;
-  uploadTime: string;
+  uploadTime: Date;
   source: string;
 }
 
 /**
  * @description: 图片的列表每项
  */
-export interface ApiImageItem extends ApiImage, ApiImageId {
+export interface ApiImageItem extends Omit<ApiImage, 'uploadTime'>, ApiImageId {
   // 判断目录里的图片是否存在
   exists?: boolean;
+  uploadTime: string;
 }

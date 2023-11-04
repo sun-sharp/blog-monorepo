@@ -371,7 +371,7 @@ export class UserService {
     return (
       Promise.resolve(userId)
         .then(async (userId) => {
-          const loginDate = nowDateFun();
+          const loginDate = new Date();
           return this.userModel.updateOne({ _id: userId }, { loginDate });
         })
         // 返回错误

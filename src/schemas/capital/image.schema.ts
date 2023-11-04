@@ -30,7 +30,7 @@ export class Image extends Document {
   imageType: string; // 图片类型
 
   @Prop()
-  uploadTime: string; // 图片创建的时间
+  uploadTime: Date; // 图片创建的时间
 }
 
 export const ImageSchema = SchemaFactory.createForClass(Image);

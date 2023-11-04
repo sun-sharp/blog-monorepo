@@ -10,7 +10,7 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
-import { ApiImage, ApiImageItem, UploadedImage } from 'types/capital/image';
+import { ApiImageItem, ApiImage, UploadedImage } from 'types/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
 import { IResponse } from 'types/common';
@@ -55,7 +55,7 @@ export class ImageService {
             imageType,
             fileName: filename,
             url: `${imageReadDir}/${filename}`,
-            uploadTime: nowDateFun(),
+            uploadTime: new Date(),
             source: source,
           } as ApiImage;
         })
@@ -72,7 +72,7 @@ export class ImageService {
             imageType: saveItem.imageType,
             fileName: saveItem.fileName,
             url: saveItem.url,
-            uploadTime: saveItem.uploadTime,
+            uploadTime: nowDateFun(saveItem.uploadTime),
             source: saveItem.source,
           };
           logger.log(`单图片上传 ${saveItem._id}`);
@@ -243,7 +243,7 @@ export class ImageService {
                 name: m.name,
                 imageType: m.imageType,
                 url: m.url,
-                uploadTime: m.uploadTime,
+                uploadTime: nowDateFun(m.uploadTime),
                 source: m.source,
               };
               return item;
@@ -291,7 +291,7 @@ export class ImageService {
                   name: m.name,
                   imageType: m.imageType,
                   url: m.url,
-                  uploadTime: m.uploadTime,
+                  uploadTime: nowDateFun(m.uploadTime),
                   source: m.source,
                   exists: existsSyncHandle(`${imageFsDir}${m.fileName}`),
                 };
