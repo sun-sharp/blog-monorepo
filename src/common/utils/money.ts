@@ -97,11 +97,11 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.phoneBill;
   } else if (['哈啰出行', '广州骑安科技有限公司'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficBicycle;
-  } else if (['滴滴出行'].includes(tradeOtherPerson)) {
+  } else if (['滴滴出行', '高德打车'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficTaxi;
-  } else if (['成都金控数据服务有限公司'].includes(tradeOtherPerson)) {
+  } else if (['成都金控数据服务有限公司', '地铁', '一应黔行'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.trafficSubway;
-  } else if (tradeOtherPerson.indexOf('京东便利店') !== -1 || tradeOtherPerson.indexOf('超市') !== -1 || ['红旗连锁'].includes(tradeOtherPerson)) {
+  } else if (['便利店', '超市', '红旗连锁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.consumptionSupermarket;
   } else if (['成都空港公共交通有限公司'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficTransit;
@@ -109,6 +109,8 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.returnBorrow;
   } else if (productDescription.indexOf('主动还款-花呗') !== -1) {
     target.billType = billTypeEnum.returnHuaBei;
+  } else if (['中国铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.trafficTrain;
   }
   if (['充值-普通充值', '余额宝-单次转入'].includes(productDescription) || ['花呗'].includes(tradeOtherPerson)) {
     target['incomeOrPay'] = '收入';

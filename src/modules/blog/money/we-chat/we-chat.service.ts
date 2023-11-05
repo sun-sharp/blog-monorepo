@@ -134,7 +134,14 @@ export class WeChatService {
             throw {
               message: '保存的数据交易时间全部和数据库的相同！',
             };
-          await this.weChatModel.create(...filterArr.map((m) => ({ ...m, userId, balance: 0 })));
+          await this.weChatModel.create(
+            ...filterArr.map((m) => ({
+              ...m,
+              tradeTime: new Date(m.tradeTime),
+              userId,
+              balance: 0,
+            })),
+          );
           return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',

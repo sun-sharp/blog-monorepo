@@ -134,7 +134,13 @@ export class AliPayService {
             throw {
               message: '保存的数据交易时间全部和数据库的相同！',
             };
-          await this.aliPayModel.create(...filterArr.map((m) => ({ ...m, userId })));
+          await this.aliPayModel.create(
+            ...filterArr.map((m) => ({
+              ...m,
+              tradeTime: new Date(m.tradeTime),
+              userId,
+            })),
+          );
           return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',

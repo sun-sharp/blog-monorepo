@@ -106,7 +106,13 @@ export class BankService {
             throw {
               message: '新增的数据全部和数据库的相同！',
             };
-          await this.bankModel.create(...filterArr.map((m) => ({ ...m, userId })));
+          await this.bankModel.create(
+            ...filterArr.map((m) => ({
+              ...m,
+              tradeTime: new Date(m.tradeTime),
+              userId,
+            })),
+          );
           return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
