@@ -33,6 +33,6 @@
       </template>
     </basic-table>
     <bank-upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
-    <bank-update-model ref="updateModelRef" @refurbish="reloadTable" />
+    <bank-update-model ref="updateModelRef" @refresh="reloadTable" />
   </n-card>
 </template>

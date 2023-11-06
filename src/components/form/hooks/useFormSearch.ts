@@ -110,7 +110,6 @@ export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, e
   const getComponentProps = (schema: FormSchema): any => {
     const compProps = schema.componentProps ?? {};
     const component = schema.component;
-    console.log(compProps, 'compProps');
     return {
       clearable: true,
       placeholder: createPlaceholderMessage(unref(component)),
