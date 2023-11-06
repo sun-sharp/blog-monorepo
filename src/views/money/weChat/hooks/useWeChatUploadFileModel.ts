@@ -184,7 +184,7 @@ export const useWeChatUploadFileModel = (emit: (event: 'refresh', ...args: any[]
   const excelUploadChange = (data: ApiWeChatBase) => {
     const uploadTableData = data;
     excelUploadTotal.value = tableData.value.concat(uploadTableData).length;
-    tableData.value = tableData.value.concat(uploadTableData).slice(0, 100);
+    tableData.value = tableData.value.concat(uploadTableData).slice(0, 50);
   };
 
   const modalTitle = computed(() => {

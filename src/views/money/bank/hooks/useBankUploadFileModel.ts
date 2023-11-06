@@ -194,7 +194,7 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
   // 账单上传成功
   const excelUploadChange = (data: ApiBankBase) => {
     excelUploadTotal.value = tableData.value.concat(data).length;
-    tableData.value = tableData.value.concat(data).slice(0, 100);
+    tableData.value = tableData.value.concat(data).slice(0, 50);
   };
 
   const modalTitle = computed(() => {
