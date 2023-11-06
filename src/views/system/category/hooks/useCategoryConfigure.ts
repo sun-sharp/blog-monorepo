@@ -17,8 +17,17 @@ export const useCategoryConfigure = () => {
       labelWidth: 110,
       componentProps: {
         filterable: true,
-        placeholder: '请输入全局类型分类',
+        placeholder: '请选择全局类型分类',
         options: categoryTypeOption,
+      },
+    },
+    {
+      field: 'label',
+      component: 'NInput',
+      label: '全局类型名称',
+      labelWidth: 110,
+      componentProps: {
+        placeholder: '请输入全局类型名称',
       },
     },
   ]);
