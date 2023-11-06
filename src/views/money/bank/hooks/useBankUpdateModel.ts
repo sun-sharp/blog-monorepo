@@ -1,9 +1,10 @@
-import { nextTick, reactive, ref } from 'vue';
+import { computed, nextTick, reactive, ref, unref } from 'vue';
 import { BankFormRules, BankItemForm } from '/#/views/bank';
 import { useApiType } from '@/hooks';
 import { ApiBankItem } from '/#/api/bank';
 import { FormItemRule } from 'naive-ui';
 import { bankApi } from '@/api';
+import { CNumOption } from '/#/config';
 
 const modelFields = {
   tradeTime: '',
@@ -48,7 +49,13 @@ export const useBankUpdateModel = (emit: (event: 'refresh', ...args: any[]) => v
   });
 
   // 获取账单类型
-  const { getBillTypeOption } = useApiType();
+  const { getBillTypeOption, getBankTypeOption } = useApiType();
+
+  // 银行类型
+  const bankTypeLabel = computed(() => {
+    const find = unref(getBankTypeOption).find((f: CNumOption) => f.value === modelForm.bankType);
+    return find ? find.label : '';
+  });
 
   // 初始化
   const init = (row: ApiBankItem) => {
@@ -101,6 +108,7 @@ export const useBankUpdateModel = (emit: (event: 'refresh', ...args: any[]) => v
     modelRules,
     formBtnLoading,
     billTypeOption: getBillTypeOption,
+    bankTypeLabel,
     init,
     confirmForm,
   };

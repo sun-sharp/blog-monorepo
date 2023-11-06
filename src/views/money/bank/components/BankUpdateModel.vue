@@ -4,7 +4,8 @@
 
   const emit = defineEmits(['refresh']);
 
-  const { showModal, modelId, modelFromRef, modelForm, modelRules, formBtnLoading, billTypeOption, init, confirmForm } = useBankUpdateModel(emit);
+  const { showModal, modelId, modelFromRef, modelForm, modelRules, formBtnLoading, billTypeOption, bankTypeLabel, init, confirmForm } =
+    useBankUpdateModel(emit);
 
   defineExpose({ init });
 </script>
@@ -23,6 +24,9 @@
       </n-form-item>
       <n-form-item label="凭证号码">
         {{ modelForm.voucherNo }}
+      </n-form-item>
+      <n-form-item label="银行账单类型" path="bankType">
+        {{ bankTypeLabel }}
       </n-form-item>
       <n-form-item label="交易对方">
         {{ modelForm.tradeOtherPerson }}
@@ -58,6 +62,7 @@
       <n-form-item label="使用地点" path="place">
         <n-input v-model:value="modelForm.place" type="textarea" :rows="2" placeholder="请输入使用地点" />
       </n-form-item>
+
       <n-form-item label="银行账单类型" path="bankBillType">
         <n-select v-model:value="modelForm.bankBillType" filterable :options="billTypeOption" placeholder="请选择银行账单类型" />
       </n-form-item>

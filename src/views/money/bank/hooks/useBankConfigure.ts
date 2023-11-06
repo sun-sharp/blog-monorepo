@@ -81,8 +81,6 @@ export const useBankConfigure = () => {
   };
   // 刷新数据
   const reloadTable = () => {
-    console.log('1254');
-
     actionRef.value.reload();
   };
   // 表格key配置
