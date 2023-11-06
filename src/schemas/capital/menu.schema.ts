@@ -52,9 +52,9 @@ export class Menu extends Document {
   @Prop()
   externalLink: string;
 
-  // 是否不缓存
+  // 是否缓存
   @Prop()
-  noKeepAlive: boolean;
+  keepAlive: boolean;
 }
 
 export const MenuSchema = SchemaFactory.createForClass(Menu);

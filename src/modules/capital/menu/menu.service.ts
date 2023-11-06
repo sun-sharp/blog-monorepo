@@ -69,7 +69,7 @@ export class MenuService {
             icon: m.icon,
             iframeSrc: m.iframeSrc,
             externalLink: m.externalLink,
-            noKeepAlive: m.noKeepAlive,
+            keepAlive: m.keepAlive,
           }));
           return {
             code: ApiCode.SUCCESS,

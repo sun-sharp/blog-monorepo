@@ -209,7 +209,7 @@ export class CapitalService {
               menuType: m.menuType,
               hidden: m.hidden,
               externalLink: m.externalLink,
-              noKeepAlive: m.noKeepAlive,
+              keepAlive: m.keepAlive,
             }));
             return {
               code: ApiCode.SUCCESS,
