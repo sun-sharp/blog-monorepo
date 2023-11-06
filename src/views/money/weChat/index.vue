@@ -26,14 +26,7 @@
 
 <template>
   <n-card :bordered="false">
-    <form-search
-      inline
-      :grid-props="{ cols: '1 s:2 m:3 l:4 xl:5 2xl:6' }"
-      :show-reset-button="false"
-      :show-advanced-button="false"
-      :schemas="searchSchemas"
-      @submit="searchSubmit"
-    />
+    <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:4 xl:5 2xl:6' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
     <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-space>

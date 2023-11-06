@@ -6,12 +6,20 @@
 
   const emit = defineEmits(['fetch-success', 'fetch-error', 'update:checked-row-keys', 'edit-end', 'edit-cancel', 'edit-row-end', 'edit-change']);
 
-  const { tableSize, tableElRef, geTableBindProps, getTableToolbarProps, pagination, updatePage, updatePageSize, updateCheckedRowKeys, reload } = useBasicTable(
-    props,
-    emit
-  );
+  const {
+    tableSize,
+    tableElRef,
+    geTableBindProps,
+    getTableToolbarProps,
+    pagination,
+    updatePage,
+    updatePageSize,
+    updateCheckedRowKeys,
+    reload,
+    debounceTableHeight,
+  } = useBasicTable(props, emit);
 
-  defineExpose({ updatePage, reload });
+  defineExpose({ updatePage, reload, debounceTableHeight });
 </script>
 
 <template>

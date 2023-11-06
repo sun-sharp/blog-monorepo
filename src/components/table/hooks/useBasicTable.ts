@@ -288,5 +288,6 @@ export const useBasicTable = (
     updatePageSize,
     updateCheckedRowKeys,
     reload,
+    debounceTableHeight,
   };
 };

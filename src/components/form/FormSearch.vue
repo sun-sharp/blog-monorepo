@@ -4,12 +4,10 @@
 
   const props = defineProps(FormSearchProps);
 
-  const emit = defineEmits(['submit']);
+  const emit = defineEmits(['submit', 'unfold']);
 
-  const { formElRef, formModel, getGrid, getFormBind, getSchema, getSubmitBtnOptions, handleSubmit, getComponentProps, unfoldToggle } = useFormSearch(
-    props,
-    emit
-  );
+  const { formElRef, formModel, getGrid, getFormBind, getSchema, getSubmitBtnOptions, handleSubmit, getComponentProps, unfoldToggle, handleReset } =
+    useFormSearch(props, emit);
 </script>
 
 <template>
@@ -88,6 +86,7 @@
             <n-button v-if="showSubmitButton" v-bind="getSubmitBtnOptions" @click="handleSubmit">
               {{ submitButtonText }}
             </n-button>
+            <n-button v-if="showResetButton" v-bind="getSubmitBtnOptions" @click="handleReset">重置</n-button>
             <n-button v-if="showAdvancedButton" type="primary" text icon-placement="right" @click="unfoldToggle">
               <template #icon>
                 <n-icon v-if="overflow" size="14" class="unfold-icon">

@@ -35,27 +35,32 @@ export const FormSearchProps = {
     type: Boolean,
     default: true,
   },
-  //是否显示操作按钮（查询）
+  //是否显示操作按钮（提交 重置 展开 收起）
   showActionButtonGroup: {
     type: Boolean,
     default: true,
   },
-  // 显示确认按钮
+  // 显示提交按钮
   showSubmitButton: {
     type: Boolean,
     default: true,
   },
-  // 确认按钮配置
+  // 提交按钮配置
   submitButtonOptions: Object as PropType<Partial<ButtonProps>>,
-  //展开收起按钮
+  // 提交按钮文字
+  submitButtonText: {
+    type: String,
+    default: '查询',
+  },
+  // 展开收起按钮
   showAdvancedButton: {
     type: Boolean,
     default: true,
   },
-  // 确认按钮文字
-  submitButtonText: {
-    type: String,
-    default: '查询',
+  // 重置按钮
+  showResetButton: {
+    type: Boolean,
+    default: true,
   },
   //grid 配置
   gridProps: Object as PropType<GridProps>,
@@ -78,7 +83,7 @@ export const FormSearchProps = {
 };
 
 // 表单查询
-export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, emit: (event: 'submit', ...args: any[]) => void) => {
+export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, emit: (event: 'submit' | 'unfold', ...args: any[]) => void) => {
   const formModel = reactive<Recordable>({});
   const schemaRef = ref<Nullable<FormSchema[]>>(null);
   const formElRef = ref<Nullable<FormActionType>>(null);
@@ -143,7 +148,7 @@ export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, e
     return schemas;
   });
 
-  //初始化默认值
+  // 初始化默认值
   const initDefault = () => {
     const schemas = unref(getSchema);
     schemas.forEach((item) => {
@@ -164,6 +169,12 @@ export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, e
 
   const unfoldToggle = () => {
     gridCollapsed.value = !gridCollapsed.value;
+    emit('unfold');
+  };
+
+  // 重置
+  const handleReset = () => {
+    initDefault();
   };
 
   watch(
@@ -193,5 +204,6 @@ export const useFormSearch = (props: ExtractPropTypes<typeof FormSearchProps>, e
     handleSubmit,
     getComponentProps,
     unfoldToggle,
+    handleReset,
   };
 };
