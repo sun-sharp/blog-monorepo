@@ -6,4 +6,9 @@ export class PageCategoryDto extends PaginateDto {
     description: '全局类型分类',
   })
   readonly type: string = '';
+
+  @ApiProperty({
+    description: '全局类型名称',
+  })
+  readonly label: string = '';
 }

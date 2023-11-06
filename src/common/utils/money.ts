@@ -134,25 +134,32 @@ export const bankExcelTargetHandler = (target: any) => {
   if (
     ['支付宝（中国）网络技术有限公司', '⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690', '蚂蚁基金'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
     ['215500690'].includes(tradeOtherPersonAccount) ||
-    ['⽀付宝'].find((f) => explain.indexOf(f) !== -1)
+    ['⽀付宝'].find((f) => explain.indexOf(f) !== -1) ||
+    ['⽀付宝'].find((f) => tradeType.indexOf(f) !== -1)
   ) {
     target['bankBillType'] = billTypeEnum.bankAliPayUse;
   } else if (
     ['财付通'].find((f) => explain.indexOf(f) !== -1) ||
-    ['243300133', '财付通支付科技有限公司', '微信转账', '微信零钱充值账户'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
+    ['243300133', '财付通', '微信支付', '财付通支付科技有限公司', '微信转账', '微信零钱充值账户'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
     ['243300133'].includes(tradeOtherPersonAccount) ||
     ['微信零钱提现'].find((f) => tradeType.indexOf(f) !== -1)
   ) {
     target['bankBillType'] = billTypeEnum.bankWeChatUse;
-  } else if (['工资', '劳务'].find((f) => explain.indexOf(f) !== -1)) {
+  } else if (['工资', '劳务'].find((f) => explain.indexOf(f) !== -1) || ['工资', '奖金'].find((f) => tradeType.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.basicCapital;
   } else if (['地铁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.trafficSubway;
-  } else if (['利息'].find((f) => explain.indexOf(f) !== -1)) {
+  } else if (['利息'].find((f) => explain.indexOf(f) !== -1) || ['存款利息'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.interest;
-  } else if (['报销'].find((f) => explain.indexOf(f) !== -1)) {
+  } else if (['报销'].find((f) => explain.indexOf(f) !== -1) || ['报销'].find((f) => tradeType.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.companyReimbursement;
   } else if (['存款'].find((f) => explain.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.cashTransit;
+  } else if (['杨锐锐（中国工商银行）'].includes(tradeOtherPerson)) {
+    target['bankBillType'] = billTypeEnum.withdrawBusiness;
+  } else if (['网银在线-北京京东叁佰陆拾度电子商务有限公司'].includes(tradeOtherPerson)) {
+    target['bankBillType'] = billTypeEnum.jdPurchase;
+  } else if (['公积金'].find((f) => tradeType.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.accumulationFund;
   }
 };

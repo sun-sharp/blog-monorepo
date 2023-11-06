@@ -140,10 +140,11 @@ export class CategoryService {
       Promise.resolve(pageCategoryDto)
         // 查询
         .then(async (body) => {
-          const { size, current, type } = body;
+          const { size, current, type, label } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<Category> = {};
           if (type) findData.type = type;
+          if (label) findData.label = { $regex: label };
           const total = await this.categoryModel.find(findData).count();
           const findArr = await this.categoryModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
           const list: ApiCategoryItem[] = (findArr || []).map((m) => {

@@ -18,6 +18,7 @@ export enum billTypeEnum {
   returnHuaBei = 253, // 归还-花呗
   returnBorrow = 255, // 归还-借呗
   basicCapital = 501, // 基本工资
+  accumulationFund = 504, // 公积金
   companyReimbursement = 505, // 公司报销
   weChatChangeRecharge = 601, // 微信零钱充值
   aliPayBalanceRecharge = 602, // 支付宝余额充值
@@ -25,6 +26,7 @@ export enum billTypeEnum {
   bankWeChatUse = 604, // 银行微信使用
   bankAliPayUse = 605, // 银行支付宝使用
   mtOrder = 631, // 美团订单
+  jdPurchase = 611, // 京东购买
   cashTransit = 701, // 现金中转
   cashSpend = 702, // 现金花费
   cashPartTransit = 703, // 现金部分中转
