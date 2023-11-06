@@ -30,8 +30,8 @@ export interface ApiMenu {
   iframeSrc?: string;
   // 外链跳转地址
   externalLink?: string;
-  // 是否不缓存
-  noKeepAlive?: boolean;
+  // 是否缓存
+  keepAlive?: boolean;
 }
 
 /**

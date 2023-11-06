@@ -61,6 +61,9 @@
       <n-form-item label="是否隐藏" path="hidden">
         <n-switch v-model:value="modelForm.hidden" />
       </n-form-item>
+      <n-form-item label="是否缓存" path="keepAlive">
+        <n-switch v-model:value="modelForm.keepAlive" />
+      </n-form-item>
     </n-form>
 
     <template #action>

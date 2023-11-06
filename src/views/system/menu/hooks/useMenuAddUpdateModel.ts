@@ -26,6 +26,7 @@ const defaultModelForm = {
   sort: 0,
   parentId: '0',
   hidden: false,
+  keepAlive: false,
 };
 
 // 菜单管理 新建/修改 弹窗
@@ -141,6 +142,7 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
       modelForm.sort = row.sort;
       modelForm.parentId = row.parentId;
       modelForm.hidden = row.hidden;
+      modelForm.keepAlive = row.keepAlive;
     }
   };
 
@@ -166,6 +168,7 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
           sort: modelForm.sort,
           parentId: modelForm.parentId,
           hidden: modelForm.hidden,
+          keepAlive: modelForm.keepAlive,
         };
         // 当不为次级目录，内嵌，外接
         if (![2, 6, 7].includes(modelForm.menuType)) {

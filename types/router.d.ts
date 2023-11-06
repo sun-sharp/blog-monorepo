@@ -15,8 +15,8 @@ export interface Meta extends RouteMeta {
   title: string;
   // 是否忽略权限
   ignoreAuth?: boolean;
-  // 是否不缓存
-  noKeepAlive?: boolean;
+  // 是否缓存
+  keepAlive?: boolean;
   // 是否固定在tab上
   affix?: boolean;
   // tab上的图标
