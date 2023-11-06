@@ -2,6 +2,7 @@
 export enum billTypeEnum {
   redPacket = 2, // 微信红包
   manageMoneyMatters = 5, // 理财
+  interest = 8, // 利息
   phoneBill = 20, // 话费
   consumptionClothingShoes = 102, // 消费-衣鞋
   consumptionSupermarket = 103, // 消费-超市
@@ -17,11 +18,12 @@ export enum billTypeEnum {
   returnHuaBei = 253, // 归还-花呗
   returnBorrow = 255, // 归还-借呗
   basicCapital = 501, // 基本工资
+  companyReimbursement = 505, // 公司报销
   weChatChangeRecharge = 601, // 微信零钱充值
   aliPayBalanceRecharge = 602, // 支付宝余额充值
   aliPayBalanceBabyRecharge = 603, // 支付宝余额宝充值
-  bankAliPayUse = 604, // 银行支付宝使用
-  bankWeChatUse = 605, // 银行微信使用
+  bankWeChatUse = 604, // 银行微信使用
+  bankAliPayUse = 605, // 银行支付宝使用
   mtOrder = 631, // 美团订单
   cashTransit = 701, // 现金中转
   cashSpend = 702, // 现金花费

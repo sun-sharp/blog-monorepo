@@ -106,7 +106,11 @@ export const bankExcelCellMap = {
         tar['tradeOtherPerson'] = filterStr(val);
       }, // 对方户名
       13: (tar: any, val: any) => {
-        tar['tradeOtherPersonAccount'] = filterStr(val);
+        if (typeof val === 'string') {
+          tar['tradeOtherPersonAccount'] = filterStr(val);
+        } else {
+          tar['tradeOtherPersonAccount'] = String(val);
+        }
       }, // 对方账号
       14: (tar: any, val: any) => {
         tar['tradeType'] = val;

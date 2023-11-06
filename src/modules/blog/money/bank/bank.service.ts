@@ -63,13 +63,9 @@ export class BankService {
             throw {
               message: '导入的数据全部和数据库的相同！',
             };
-          // 对数据进行排序，排序优先级（银行类型，交易时间）
+          // 对数据进行排序，排序优先级（交易时间）
           result.sort(function (a, b) {
-            if (a.bankType === b.bankType) {
-              return b.tradeTime > a.tradeTime ? -1 : 1;
-            } else {
-              return b.bankType > a.bankType ? -1 : 1;
-            }
+            return b.tradeTime > a.tradeTime ? -1 : 1;
           });
           return {
             code: ApiCode.SUCCESS,
@@ -248,9 +244,9 @@ export class BankService {
     return (
       Promise.resolve()
         .then(async () => {
-          const findData: any = { userId };
+          const findData: FilterQuery<Bank> = { userId };
           if (startTime && endTime) findData.tradeTime = { $gte: startTime, $lte: endTime };
-          const list = await this.bankModel.find(findData).sort({ tradeTime: 1 });
+          const list = await this.bankModel.find(findData).sort({ tradeTime: 1 }).lean();
           return list.map((m) => ({
             ...m,
             tradeTime: nowDateFun(m.tradeTime),

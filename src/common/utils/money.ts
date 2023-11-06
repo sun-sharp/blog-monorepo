@@ -127,29 +127,32 @@ export const aliPayExcelTargetHandler = (target: any) => {
 // 银行账单数据整体处理
 export const bankExcelTargetHandler = (target: any) => {
   const oldTarget = JSON.parse(JSON.stringify(target));
-  const explain = oldTarget['explain'];
-  const tradeOtherPerson = oldTarget['tradeOtherPerson'];
-  const tradeType = oldTarget['tradeType'];
-  const tradeOtherPersonAccount = oldTarget['tradeOtherPersonAccount'];
-  const tradeOtherPersonRemarks = oldTarget['tradeOtherPersonRemarks'];
+  const explain = oldTarget['explain'] || '';
+  const tradeOtherPerson = oldTarget['tradeOtherPerson'] || ''; // 交易对方
+  const tradeType = oldTarget['tradeType'] || '';
+  const tradeOtherPersonAccount = oldTarget['tradeOtherPersonAccount']; // 凭证号码
   if (
-    ['支付宝（中国）网络技术有限公司', '⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690', '蚂蚁基金'].includes(tradeOtherPerson) ||
+    ['支付宝（中国）网络技术有限公司', '⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690', '蚂蚁基金'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
     ['215500690'].includes(tradeOtherPersonAccount) ||
-    ['⽀付宝'].includes(explain) ||
-    ['支付宝'].includes(tradeOtherPersonRemarks)
-  ) {
-    target['bankBillType'] = billTypeEnum.bankWeChatUse;
-  } else if (
-    ['财付通'].includes(explain) ||
-    ['243300133', '财付通支付科技有限公司', '微信转账', '微信零钱充值账户'].includes(tradeOtherPerson) ||
-    ['243300133'].includes(tradeOtherPersonAccount) ||
-    ['微信零钱提现'].includes(tradeType) ||
-    ['财付通'].includes(tradeOtherPersonRemarks)
+    ['⽀付宝'].find((f) => explain.indexOf(f) !== -1)
   ) {
     target['bankBillType'] = billTypeEnum.bankAliPayUse;
-  } else if (['⼯资', '劳务'].includes(explain)) {
+  } else if (
+    ['财付通'].find((f) => explain.indexOf(f) !== -1) ||
+    ['243300133', '财付通支付科技有限公司', '微信转账', '微信零钱充值账户'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
+    ['243300133'].includes(tradeOtherPersonAccount) ||
+    ['微信零钱提现'].find((f) => tradeType.indexOf(f) !== -1)
+  ) {
+    target['bankBillType'] = billTypeEnum.bankWeChatUse;
+  } else if (['工资', '劳务'].find((f) => explain.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.basicCapital;
-  } else if (!oldTarget['bankBillType']) {
-    target['bankBillType'] = billTypeEnum.invalid;
+  } else if (['地铁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.trafficSubway;
+  } else if (['利息'].find((f) => explain.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.interest;
+  } else if (['报销'].find((f) => explain.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.companyReimbursement;
+  } else if (['存款'].find((f) => explain.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.cashTransit;
   }
 };
