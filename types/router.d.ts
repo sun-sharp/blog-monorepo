@@ -25,7 +25,7 @@ export interface Meta extends RouteMeta {
   iframeSrc?: string;
   // 外链跳转地址
   externalLink?: string;
-  //隐藏
+  // 隐藏
   hidden?: boolean;
   // 排序
   sort?: number;
