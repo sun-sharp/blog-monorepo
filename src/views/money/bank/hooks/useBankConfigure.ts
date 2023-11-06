@@ -211,6 +211,11 @@ export const useBankConfigure = () => {
     actionRef.value.updatePage(1);
   };
 
+  // 查询展开，更新表格高度
+  const searchUnfold = () => {
+    actionRef.value.debounceTableHeight();
+  };
+
   onMounted(() => {
     getBillTypeData();
     getBankTypeData();
@@ -222,9 +227,10 @@ export const useBankConfigure = () => {
     actionRef,
     columns,
     updateModelRef,
+    searchSubmit,
+    searchUnfold,
     loadDataTable,
     reloadTable,
-    searchSubmit,
     tableRowKey,
   };
 };

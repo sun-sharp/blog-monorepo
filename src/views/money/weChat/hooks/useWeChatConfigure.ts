@@ -182,6 +182,11 @@ export const useWeChatConfigure = () => {
     actionRef.value.updatePage(1);
   };
 
+  // 查询展开，更新表格高度
+  const searchUnfold = () => {
+    actionRef.value.debounceTableHeight();
+  };
+
   // 处理余额弹窗
   const balanceTimeRef = ref<Component>();
   const handleBalance = () => {
@@ -225,6 +230,7 @@ export const useWeChatConfigure = () => {
     balanceChange,
     handleBalance,
     searchSubmit,
+    searchUnfold,
     loadDataTable,
     tableRowKey,
     reloadTable,

@@ -6,12 +6,20 @@
   import BankUpdateModel from './components/BankUpdateModel.vue';
   import { useBankConfigure } from './hooks/useBankConfigure';
 
-  const { uploadFileModelRef, searchSchemas, actionRef, columns, updateModelRef, loadDataTable, reloadTable, searchSubmit, tableRowKey } = useBankConfigure();
+  const { uploadFileModelRef, searchSchemas, actionRef, columns, updateModelRef, searchSubmit, searchUnfold, loadDataTable, reloadTable, tableRowKey } =
+    useBankConfigure();
 </script>
 
 <template>
   <n-card :bordered="false">
-    <form-search inline :grid-props="{ cols: '1 s:2 m:3 l:3 xl:4 2xl:5' }" :show-reset-button="false" :schemas="searchSchemas" @submit="searchSubmit" />
+    <form-search
+      inline
+      :grid-props="{ cols: '1 s:2 m:3 l:3 xl:4 2xl:5' }"
+      :show-reset-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
+      @unfold="searchUnfold"
+    />
     <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-button type="success" @click="uploadFileModelRef.init()">
