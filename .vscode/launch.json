@@ -18,9 +18,7 @@
         "start:dev_watch_debug"
       ],
       "console": "integratedTerminal",
-      "protocol": "auto",
       "restart": true,
-      "port": 3000,
       "autoAttachChildProcesses": true
     },
     {
@@ -37,9 +35,7 @@
         "start:prod_watch_debug"
       ],
       "console": "integratedTerminal",
-      "protocol": "auto",
       "restart": true,
-      "port": 3000,
       "autoAttachChildProcesses": true
     }
   ]

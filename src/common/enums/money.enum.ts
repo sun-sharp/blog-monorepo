@@ -1,6 +1,7 @@
 // 账单类型
 export enum billTypeEnum {
   redPacket = 2, // 微信红包
+  parents = 3, // 父母
   manageMoneyMatters = 5, // 理财
   interest = 8, // 利息
   phoneBill = 20, // 话费
@@ -15,6 +16,7 @@ export enum billTypeEnum {
   withdrawBusiness = 201, // 提现-中国工商银行
   withdrawAgriculture = 202, // 提现-中国农业银行
   withdrawBuild = 203, // 提现-中国建设银行
+  withdrawAttractInvestment = 205, // 提现-招商银行
   returnHuaBei = 253, // 归还-花呗
   returnBorrow = 255, // 归还-借呗
   basicCapital = 501, // 基本工资

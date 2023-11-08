@@ -155,11 +155,19 @@ export const bankExcelTargetHandler = (target: any) => {
     target['bankBillType'] = billTypeEnum.companyReimbursement;
   } else if (['存款'].find((f) => explain.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.cashTransit;
-  } else if (['杨锐锐（中国工商银行）'].includes(tradeOtherPerson)) {
+  } else if (['杨锐锐（中国工商银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.withdrawBusiness;
-  } else if (['网银在线-北京京东叁佰陆拾度电子商务有限公司'].includes(tradeOtherPerson)) {
+  } else if (['杨锐锐（中国建设银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.withdrawBuild;
+  } else if (['杨锐锐（招商银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.withdrawAttractInvestment;
+  } else if (['网银在线-北京京东叁佰陆拾度电子商务有限公司'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.jdPurchase;
   } else if (['公积金'].find((f) => tradeType.indexOf(f) !== -1)) {
     target['bankBillType'] = billTypeEnum.accumulationFund;
+  } else if (['付天分', '杨江怀'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.parents;
+  } else if (['12306铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target['bankBillType'] = billTypeEnum.trafficTrain;
   }
 };
