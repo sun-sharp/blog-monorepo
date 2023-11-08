@@ -13,6 +13,7 @@ export enum billTypeEnum {
   trafficSubway = 136, // 交通-地铁
   trafficTransit = 138, // 交通-公交
   eatingRestaurant = 142, // 吃-餐馆
+  eatingSnack = 143, // 吃-小吃
   withdrawBusiness = 201, // 提现-中国工商银行
   withdrawAgriculture = 202, // 提现-中国农业银行
   withdrawBuild = 203, // 提现-中国建设银行

@@ -38,10 +38,15 @@ export const weChatExcelTargetHandler = (target: any) => {
       '早餐店',
       '土豆',
       '麦当劳',
-    ].find((f) => tradeOtherPerson.indexOf(f) !== -1)
+      '餐饮店',
+      '抄手',
+    ].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
+    ['兄弟江油肥肠'].find((f) => goods.indexOf(f) !== -1)
   ) {
     target.billType = billTypeEnum.eatingRestaurant;
-  } else if (tradeOtherPerson === '高德' && goods === '高德打车') {
+  } else if (['苕皮'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.eatingSnack;
+  } else if (['高德'].find((f) => tradeOtherPerson.indexOf(f) !== -1) || ['高德打车', '百度用车'].find((f) => goods.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.trafficTaxi;
   } else if (['中铁网络'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.trafficTrain;
