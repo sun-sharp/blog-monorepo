@@ -142,7 +142,7 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
       modelForm.sort = row.sort;
       modelForm.parentId = row.parentId;
       modelForm.hidden = row.hidden;
-      modelForm.keepAlive = row.keepAlive;
+      modelForm.keepAlive = row.keepAlive || false;
     }
   };
 
