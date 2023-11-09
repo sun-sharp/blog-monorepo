@@ -13,8 +13,8 @@ export class AppTasksService {
    * @description 定时备份Capital数据库
    * 每天23点59分59秒启动
    */
-  @Cron('59 59 23 * * *')
-  // @Cron('59 * 14 * * *')
+  // @Cron('59 59 23 * * *')
+  @Cron('59 20 14 * * *')
   cronBackupsCapital() {
     this.capitalService.backupsCapital();
   }
@@ -23,8 +23,8 @@ export class AppTasksService {
    * @description 定时备份blog数据库
    * 每天23点59分59秒启动
    */
-  @Cron('59 59 23 * * *')
-  // @Cron('59 * 14 * * *')
+  // @Cron('59 59 23 * * *')
+  @Cron('59 20 15 * * *')
   cronBackupsBlog() {
     this.blogService.backupsCapital();
   }
