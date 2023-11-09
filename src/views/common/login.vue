@@ -95,8 +95,8 @@
   const autoLogin = ref(true);
 
   const formInline = reactive({
-    username: 'nest',
-    password: '123456',
+    username: '',
+    password: '',
     isCaptcha: false,
   });
 
