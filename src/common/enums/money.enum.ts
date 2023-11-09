@@ -1,6 +1,6 @@
 // 账单类型
 export enum billTypeEnum {
-  redPacket = 2, // 微信红包
+  redPacket = 2, // 红包
   parents = 3, // 父母
   manageMoneyMatters = 5, // 理财
   interest = 8, // 利息
@@ -12,6 +12,7 @@ export enum billTypeEnum {
   trafficTaxi = 134, // 交通-打车
   trafficSubway = 136, // 交通-地铁
   trafficTransit = 138, // 交通-公交
+  eatingDish = 141, // 吃-果蔬肉
   eatingRestaurant = 142, // 吃-餐馆
   eatingSnack = 143, // 吃-小吃
   withdrawBusiness = 201, // 提现-中国工商银行
@@ -28,8 +29,10 @@ export enum billTypeEnum {
   aliPayBalanceBabyRecharge = 603, // 支付宝余额宝充值
   bankWeChatUse = 604, // 银行微信使用
   bankAliPayUse = 605, // 银行支付宝使用
-  mtOrder = 631, // 美团订单
   jdPurchase = 611, // 京东购买
+  taoBaoPurchase = 621, // 淘宝购买
+  mtOrder = 631, // 美团订单
+  pinDuoDuoPurchase = 641, // 拼多多购买
   cashTransit = 701, // 现金中转
   cashSpend = 702, // 现金花费
   cashPartTransit = 703, // 现金部分中转

@@ -13,7 +13,11 @@ export const weChatExcelCellHandle = {
     tar['tradeOtherPerson'] = filterStr(val);
   }, // 交易对方
   4: (tar: any, val: any) => {
-    tar['goods'] = val || '';
+    if (typeof val === 'string') {
+      tar['goods'] = filterStr(val);
+    } else {
+      tar['goods'] = String(val);
+    }
   }, // 商品
   5: (tar: any, val: any) => {
     tar['incomeOrPay'] = val || '';

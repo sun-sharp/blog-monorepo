@@ -8,18 +8,23 @@ export const weChatExcelTargetHandler = (target: any) => {
   const paymentMethod = oldTarget.paymentMethod;
   const tradeOtherPerson = oldTarget.tradeOtherPerson;
   const goods = oldTarget.goods;
-  if (['微信红包', '企业微信红包'].includes(tradeType) || tradeOtherPerson.indexOf('红包') !== -1) {
+  if (
+    ['微信红包', '企业微信红包'].includes(tradeType) ||
+    ['红包', '打开拼多多，点击底部"多多视频"', '新人限时下单100微信打款'].find((f) => tradeOtherPerson.indexOf(f) !== -1)
+  ) {
     target.billType = billTypeEnum.redPacket;
   } else if (['美团平台商户'].includes(tradeOtherPerson) || tradeOtherPerson.indexOf('美团') !== -1) {
     target.billType = billTypeEnum.mtOrder;
   } else if (['手机充值'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.phoneBill;
-  } else if (['超市', '便利店', '成都红旗连锁股份有限公司', '华润万家', '中港CC店'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  } else if (['超市', '便利店', '红旗连锁', '华润万家', '中港CC店', '上龙门联合一百'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.consumptionSupermarket;
   } else if (tradeType === '零钱充值') {
     target.billType = billTypeEnum.weChatChangeRecharge;
   } else if (['广州骑安'].includes(tradeOtherPerson)) {
     target.billType = billTypeEnum.trafficBicycle;
+  } else if (['天天蔬菜店', '黄秀丽蔬菜'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.eatingDish;
   } else if (
     [
       '兄弟江油肥肠',
@@ -40,18 +45,27 @@ export const weChatExcelTargetHandler = (target: any) => {
       '麦当劳',
       '餐饮店',
       '抄手',
+      '米粉',
+      '水饺',
     ].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
-    ['兄弟江油肥肠'].find((f) => goods.indexOf(f) !== -1)
+    ['兄弟江油肥肠', '抄手'].find((f) => goods.indexOf(f) !== -1)
   ) {
     target.billType = billTypeEnum.eatingRestaurant;
-  } else if (['苕皮'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  } else if (['苕皮', '哈尔滨烤饼'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.eatingSnack;
   } else if (['高德'].find((f) => tradeOtherPerson.indexOf(f) !== -1) || ['高德打车', '百度用车'].find((f) => goods.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.trafficTaxi;
   } else if (['中铁网络'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.trafficTrain;
+  } else if (['拼多多'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.pinDuoDuoPurchase;
   }
-  if (currentStatus === '已存入零钱' || paymentMethod === '零钱' || tradeType === '零钱充值') {
+  if (
+    currentStatus === '已存入零钱' ||
+    paymentMethod === '零钱' ||
+    tradeType === '零钱充值' ||
+    tradeOtherPerson.indexOf('打开拼多多，点击底部"多多视频"') !== -1
+  ) {
     target.billMethod = billMethodEnum.weChatChange;
   }
   if (tradeType === '零钱充值') {
