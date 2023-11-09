@@ -9,6 +9,7 @@ import { UpdateMenuDto } from './dto/update-menu.dto';
 import { ApiMenuItem } from 'types/capital/menu';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
 const { capitalDatabaseName } = customConfig;
@@ -37,9 +38,10 @@ export class MenuService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`新增系统菜单 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -79,9 +81,10 @@ export class MenuService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`查询全部系统菜单 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -122,6 +125,7 @@ export class MenuService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`根据权限的menuPermission查找系统菜单详情 失败！${err}`);
           return err;
         })
     );
@@ -146,24 +150,27 @@ export class MenuService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改系统菜单 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
   }
 
+  /**
+   * @description: 删除菜单
+   * @param {string} menuId
+   * @return {Promise<IResponse>}
+   */
   public remove(menuId: string) {
     return (
       Promise.resolve(menuId)
         // 查询当前以下有菜单
         .then(async (menuId) => {
           const findResult = await this.menuModel.findOne({ parentId: menuId });
-          if (findResult)
-            throw {
-              message: '请先删除当前下面的菜单',
-            };
+          if (findResult) throw '请先删除当前下面的菜单';
           return menuId;
         })
         // 删除
@@ -176,9 +183,10 @@ export class MenuService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除菜单 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -198,6 +206,7 @@ export class MenuService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取菜单数据库信息 失败！${err}`);
           return err;
         })
     );

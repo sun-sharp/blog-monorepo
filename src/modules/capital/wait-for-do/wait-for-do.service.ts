@@ -21,7 +21,7 @@ export class WaitForDoService {
   constructor(@InjectModel(WaitForDo.name, capitalDatabaseName) private readonly waitForDoModel: Model<WaitForDo>) {}
 
   /**
-   * @description: 新增文章分类
+   * @description: 新增待办
    * @param {CreateWaitForDoDto} createWaitForDoDto
    * @return {Promise<IResponse>}
    */
@@ -32,10 +32,7 @@ export class WaitForDoService {
         .then(async ({ userId, body }) => {
           const { deadline } = body;
           if (deadline && !isDateFormat(deadline)) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '截止时间格式不对',
-            };
+            throw '截止时间格式不对';
           }
           return {
             ...body,
@@ -53,10 +50,7 @@ export class WaitForDoService {
               isRemove: false,
             };
           } else {
-            throw {
-              code: ApiCode.ERROR,
-              message: '处理排序问题失败！',
-            };
+            throw '处理排序问题失败！';
           }
         })
         // 添加
@@ -70,10 +64,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误 ${err}`);
+          logger.log(`新增待办失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -115,10 +109,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误 ${err}`);
+          logger.log(`获取某种类型，状态的所有待办失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -139,6 +133,7 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`获取某个类型，状态，没有删除的全部待办列表 失败！ ${err}`);
           return err;
         })
     );
@@ -173,9 +168,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`修改待办的状态 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -204,9 +200,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`批量修改待办的排序 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -224,10 +221,7 @@ export class WaitForDoService {
         .then(async (body) => {
           const { deadline } = body;
           if (deadline && !isDateFormat(deadline)) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '截止时间格式不对',
-            };
+            throw '截止时间格式不对';
           }
           return { ...body, deadline: deadline ? new Date(deadline) : null };
         })
@@ -242,9 +236,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`修改待办的名称，备注，截止时间 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -261,10 +256,7 @@ export class WaitForDoService {
         .then(async (waitForDoId) => {
           const result = await this.waitForDoModel.findOne({ _id: waitForDoId }).lean();
           if (!result) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '查询待办详情失败',
-            };
+            throw '查询待办详情失败';
           }
           let deadline = undefined;
           if (result.deadline) {
@@ -281,9 +273,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`查询待办详情 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -307,9 +300,10 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`删除待办 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -367,6 +361,7 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
+          logger.log(`获取特定数据库信息 失败！ ${err}`);
           return err;
         })
     );

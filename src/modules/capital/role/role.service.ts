@@ -62,9 +62,10 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取权限列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -97,9 +98,10 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取全部权限列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -124,9 +126,10 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改权限列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -152,9 +155,10 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`新增权限 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -178,9 +182,10 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除权限 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -199,6 +204,7 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`根据roleCode查找权限详情 失败！${err}`);
           return err;
         })
     );
@@ -220,6 +226,7 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取全部swagger-api.json数据 失败！${err}`);
           return err;
         })
     );
@@ -348,10 +355,10 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`返回错误 ${err}`);
+          logger.error(`获取全部接口列表并关联失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -371,6 +378,7 @@ export class RoleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取角色数据库信息 失败！ ${err}`);
           return err;
         })
     );

@@ -142,9 +142,10 @@ export class MoneyService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`统计银行数据的流动 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '获取失败！',
+            message: err || '获取失败！',
           };
         })
     );
@@ -240,9 +241,10 @@ export class MoneyService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`统计各个的方式的余额 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '获取失败！',
+            message: err || '获取失败！',
           };
         })
     );
@@ -391,9 +393,10 @@ export class MoneyService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`统计某时间范围内的方式流入/流出的金额 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '获取失败！',
+            message: err || '获取失败！',
           };
         })
     );
@@ -459,7 +462,7 @@ export class MoneyService {
           logger.log(`备份数据库blog/money 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '备份失败！',
+            message: err || '备份失败！',
           };
         })
     );

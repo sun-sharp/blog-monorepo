@@ -16,6 +16,7 @@ import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
 import { nowDateFun } from 'src/common/date';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -46,27 +47,19 @@ export class BankService {
               targetHandler: bankExcelTargetHandler,
               otherObj: { bankType: Number(itKey) },
             });
-            if (!excelArr)
-              throw {
-                message: sheetName + '表导入的数据失败！',
-              };
+            if (!excelArr) throw sheetName + '表导入的数据失败！';
             list = list.concat(excelArr);
           }
-          if (list.length === 0)
-            throw {
-              message: '导入的数据为空！',
-            };
+          if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
           const result: ApiBankUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
-          if (result.length === 0)
-            throw {
-              message: '导入的数据全部和数据库的相同！',
-            };
+          if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据进行排序，排序优先级（交易时间）
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
+          logger.log(`银行账单导入${result.length}个`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -75,9 +68,10 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`银行账单导入 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '导入失败！',
+            message: err || '导入失败！',
           };
         })
     );
@@ -98,10 +92,7 @@ export class BankService {
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
           const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
-          if (filterArr.length === 0)
-            throw {
-              message: '新增的数据全部和数据库的相同！',
-            };
+          if (filterArr.length === 0) throw '新增的数据全部和数据库的相同！';
           await this.bankModel.create(
             ...filterArr.map((m) => ({
               ...m,
@@ -116,9 +107,10 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`批量新增银行账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -199,9 +191,10 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取银行账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -225,9 +218,10 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改银行账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -254,6 +248,7 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`根据交易时间范围查询全部银行账单 失败! ${err}`);
           return err;
         })
     );
@@ -276,9 +271,10 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`批量删除银行账单的数据 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -301,9 +297,10 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除银行账单的数据 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -323,6 +320,7 @@ export class BankService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取文章数据库信息 失败! ${err}`);
           return err;
         })
     );

@@ -18,10 +18,10 @@ export class BlogService {
   ) {}
 
   /**
-   * @description: 备份数据库Capital数据
+   * @description: 备份数据库blog数据
    * @return {Promise<IResponse>}
    */
-  public backupsCapital(): Promise<IResponse> {
+  public backupsBlog(): Promise<IResponse> {
     return (
       Promise.resolve()
         .then(async () => {
@@ -69,7 +69,7 @@ export class BlogService {
           logger.error(`备份数据库blog 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '备份失败！',
+            message: err || '备份失败！',
           };
         })
     );

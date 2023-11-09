@@ -48,20 +48,14 @@ export class CapitalService {
           const { username } = res;
           const user = await this.userService.findOneByName(username);
           if (!user) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '用户尚未注册',
-            };
+            throw '用户尚未注册';
           }
           if (await comparePassword(res.password, user.password)) {
             return {
               _id: user._id,
             };
           } else {
-            throw {
-              code: ApiCode.ERROR,
-              message: '密码错误',
-            };
+            throw '密码错误';
           }
         })
         // 修改登录时间
@@ -87,10 +81,10 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`返回错误 ${err}`);
+          logger.error(`登录失败！ ${err}`);
           return {
-            code: err.code || ApiCode.ERROR,
-            message: err.message || '请求失败！',
+            code: ApiCode.ERROR,
+            message: err || '登录失败！',
           };
         })
     );
@@ -108,10 +102,7 @@ export class CapitalService {
         .then(async (body) => {
           const { result: userId, code, message } = await this.userService.create(body);
           if (code !== ApiCode.SUCCESS) {
-            throw {
-              code: ApiCode.ERROR,
-              message: message || '创建用户失败',
-            };
+            throw message || '创建用户失败';
           }
           // 默认配置信息
           const defaultConfigInfo: CreateConfigurationDto = {
@@ -148,11 +139,9 @@ export class CapitalService {
           };
           const { code: configCode, message: configMessage } = await this.configurationService.save(userId, defaultConfigInfo);
           if (configCode !== ApiCode.SUCCESS) {
-            throw {
-              code: ApiCode.ERROR,
-              message: configMessage || '创建配置信息失败',
-            };
+            throw configMessage || '创建配置信息失败';
           }
+          logger.log(`注册用户，请求成功！${userId}`);
           return {
             code: ApiCode.SUCCESS,
             result: userId,
@@ -161,9 +150,10 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`注册 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '注册失败！',
+            message: err || '注册失败！',
           };
         })
     );
@@ -181,10 +171,7 @@ export class CapitalService {
         .then(async (roleCode) => {
           const routeFind = await this.roleService.findOneByRoleCode(roleCode);
           if (!routeFind) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '查询角色失败',
-            };
+            throw '查询角色失败';
           }
           // 如果你是管理员账号，那就获取全部菜单
           if (routeFind.roleType === 1) {
@@ -220,9 +207,10 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`路由权限获取管理系统菜单列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -239,17 +227,11 @@ export class CapitalService {
         .then(async (userId) => {
           const { code: userCode, message: userMessage } = await this.userService.remove(userId);
           if (userCode !== ApiCode.SUCCESS) {
-            throw {
-              code: ApiCode.ERROR,
-              message: userMessage || '删除用户失败',
-            };
+            throw userMessage || '删除用户失败';
           }
           const { code: configCode, message: configMessage } = await this.configurationService.remove(userId);
           if (configCode !== ApiCode.SUCCESS) {
-            throw {
-              code: ApiCode.ERROR,
-              message: configMessage || '删除用户配置信息失败',
-            };
+            throw configMessage || '删除用户配置信息失败';
           }
           return {
             code: ApiCode.SUCCESS,
@@ -258,9 +240,10 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除用户和用户相关数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -343,9 +326,10 @@ export class CapitalService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`备份数据库Capital数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '备份失败！',
+            message: err || '备份失败！',
           };
         })
     );

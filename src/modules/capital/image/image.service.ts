@@ -40,15 +40,9 @@ export class ImageService {
         .then(async ({ image, source }) => {
           const { filename, size } = image;
           const name = filename.split('.')[0];
-          if (!name)
-            throw {
-              message: '图片名称出错！',
-            };
+          if (!name) throw '图片名称出错！';
           const imageType = filename.split('.')[1];
-          if (!imageType)
-            throw {
-              message: '图片类型出错！',
-            };
+          if (!imageType) throw '图片类型出错！';
           return {
             size,
             name,
@@ -61,10 +55,7 @@ export class ImageService {
         })
         .then(async (body) => {
           const saveItem = await this.imageModel.create(body);
-          if (!saveItem)
-            throw {
-              message: '图片类型出错！',
-            };
+          if (!saveItem) throw '图片类型出错！';
           const result: ApiImageItem = {
             imageId: saveItem._id,
             size: saveItem.size,
@@ -84,9 +75,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`单图片上传 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '上传失败！',
+            message: err || '上传失败！',
           };
         })
     );
@@ -110,9 +102,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取图片目录的全部文件 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -149,9 +142,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`查询只有图片文件没有数据的文件 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -215,9 +209,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`查询未使用的图片 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -253,9 +248,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取图片全部列表数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -305,9 +301,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取图片数据列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -338,9 +335,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除图片目录下的图片 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -371,9 +369,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`批量删除图片目录下的图片 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -397,9 +396,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除图片下的数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -423,9 +423,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`批量删除图片下的数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -442,10 +443,7 @@ export class ImageService {
         // 先查找数据
         .then(async (imageId) => {
           const findOne = await this.imageModel.findOne({ _id: imageId });
-          if (!findOne)
-            throw {
-              message: '未找到当前图片数据！',
-            };
+          if (!findOne) throw '未找到当前图片数据！';
           return { imageId, fileName: findOne.fileName };
         })
         // 删除文件
@@ -466,9 +464,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除 图片目录下的图片 和 图片下的数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -485,10 +484,7 @@ export class ImageService {
         // 先查找数据
         .then(async ({ imageIdArr }) => {
           const find = await this.imageModel.find({ _id: { $in: imageIdArr } });
-          if (find.length <= 0)
-            throw {
-              message: '未找到当前图片数据！',
-            };
+          if (find.length <= 0) throw '未找到当前图片数据！';
           return { imageIdArr, fileNameArr: find.map((m) => m.fileName) };
         })
         // 删除文件
@@ -509,9 +505,10 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`批量删除 图片目录下的图片 和 图片下的数据 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -531,6 +528,7 @@ export class ImageService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取图片数据库信息 失败！${err}`);
           return err;
         })
     );

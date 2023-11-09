@@ -43,21 +43,12 @@ export class WeChatService {
             cellHandler: weChatExcelCellHandle,
             targetHandler: weChatExcelTargetHandler,
           });
-          if (!list)
-            throw {
-              message: '导入的数据失败！',
-            };
-          if (list.length === 0)
-            throw {
-              message: '导入的数据为空！',
-            };
+          if (!list) throw '导入的数据失败！';
+          if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同交易时间的数据
           const find = await this.weChatModel.find();
           const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime');
-          if (result.length === 0)
-            throw {
-              message: '导入的数据交易时间全部和数据库的相同！',
-            };
+          if (result.length === 0) throw '导入的数据交易时间全部和数据库的相同！';
           // 对数据按照交易时间排序
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
@@ -74,7 +65,7 @@ export class WeChatService {
           logger.error(`微信账单导入失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '导入失败！',
+            message: err || '导入失败！',
           };
         })
     );
@@ -94,10 +85,7 @@ export class WeChatService {
           // 查询是否已经存在某交易时间的数据
           const { tradeTime = '' } = body;
           const find = await this.weChatModel.find({ userId, tradeTime });
-          if (!find)
-            throw {
-              message: '保存的数据交易时间和数据库的相同！',
-            };
+          if (!find) throw '保存的数据交易时间和数据库的相同！';
           await this.weChatModel.create({
             ...body,
             userId,
@@ -110,9 +98,10 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`新增微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -133,10 +122,7 @@ export class WeChatService {
           // 过滤掉相同交易时间的数据
           const find = await this.weChatModel.find();
           const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
-          if (filterArr.length === 0)
-            throw {
-              message: '保存的数据交易时间全部和数据库的相同！',
-            };
+          if (filterArr.length === 0) throw '保存的数据交易时间全部和数据库的相同！';
           await this.weChatModel.create(
             ...filterArr.map((m) => ({
               ...m,
@@ -152,9 +138,10 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`批量新增微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -237,9 +224,10 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -262,6 +250,7 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`根据交易时间范围查询全部微信账单 失败! ${err}`);
           return err;
         })
     );
@@ -281,6 +270,7 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取微信零钱，交易时间最新一条的数据 失败! ${err}`);
           return err;
         })
     );
@@ -304,9 +294,10 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -346,9 +337,10 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`处理微信余额 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '处理失败！',
+            message: err || '处理失败！',
           };
         })
     );
@@ -368,6 +360,7 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取文章数据库信息 失败! ${err}`);
           return err;
         })
     );

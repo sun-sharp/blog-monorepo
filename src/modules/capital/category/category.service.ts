@@ -31,28 +31,19 @@ export class CategoryService {
         .then(async (body) => {
           const { type, value, valueStr, label } = body;
           if (!value && !valueStr) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '请输入全局类型标识',
-            };
+            throw '请输入全局类型标识';
           }
           const findTypeData = await this.categoryModel.find({ type });
           if (value) {
             const findValue = findTypeData.find((f) => f.value === value);
             if (findValue) {
-              throw {
-                code: ApiCode.ERROR,
-                message: '全局类型标识重复',
-              };
+              throw '全局类型标识重复';
             }
             return { type, value, label };
           } else if (valueStr) {
             const findValueStr = findTypeData.find((f) => f.valueStr === valueStr);
             if (findValueStr) {
-              throw {
-                code: ApiCode.ERROR,
-                message: '全局类型标识（字符串类型）重复',
-              };
+              throw '全局类型标识（字符串类型）重复';
             }
             return { type, valueStr, label };
           }
@@ -67,10 +58,10 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误 ${err}`);
+          logger.log(`新增文章分类失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -102,10 +93,10 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`返回错误 ${err}`);
+          logger.log(`获取某种类型的所有配置失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -164,9 +155,10 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取全局类型列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -188,19 +180,13 @@ export class CategoryService {
           if (value) {
             const findValue = filterData.find((f) => f.value === value);
             if (findValue) {
-              throw {
-                code: ApiCode.ERROR,
-                message: '全局类型标识重复',
-              };
+              throw '全局类型标识重复';
             }
             return body;
           } else if (valueStr) {
             const findValueStr = filterData.find((f) => f.valueStr === valueStr);
             if (findValueStr) {
-              throw {
-                code: ApiCode.ERROR,
-                message: '全局类型标识（字符串类型）重复',
-              };
+              throw '全局类型标识（字符串类型）重复';
             }
             return body;
           }
@@ -215,9 +201,10 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改全局类型 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -240,9 +227,10 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除全局类型 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );

@@ -13,6 +13,7 @@ import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { ApiArticleItem } from 'types/blog/article';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -58,9 +59,10 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取文章列表 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -90,9 +92,10 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`新增文章 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -117,9 +120,10 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改文章 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -141,14 +145,19 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除文章 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
   }
 
+  /**
+   * @description: 获取文章详情
+   * @return {Promise<IResponse>}
+   */
   public findDetails(articleId: string): Promise<IResponse> {
     return (
       Promise.resolve(articleId)
@@ -179,9 +188,10 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取文章详情 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );

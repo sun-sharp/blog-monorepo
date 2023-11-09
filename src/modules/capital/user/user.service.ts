@@ -16,6 +16,7 @@ import { RoleService } from '../role/role.service';
 import { ApiUserInfo, ApiUserItem } from 'types/capital/user';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
 const { capitalDatabaseName } = customConfig;
@@ -42,15 +43,9 @@ export class UserService {
         .then((body) => {
           const { username } = body;
           if (username.length > this.USERNAME_LENGTH_MAX || username.length < this.USERNAME_LENGTH_MIN)
-            throw {
-              code: ApiCode.ERROR,
-              message: `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`,
-            };
+            throw `账号长度应为${this.USERNAME_LENGTH_MIN}-${this.USERNAME_LENGTH_MAX}`;
           if (!/^[a-z][a-z_`~@*|()+-]{3,40}$/.test(username)) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '账号不符合规定',
-            };
+            throw '账号不符合规定';
           }
           return body;
         })
@@ -58,22 +53,14 @@ export class UserService {
         .then(async (body) => {
           const { username } = body;
           const user = await this.userModel.findOne({ username });
-          if (user)
-            throw {
-              code: ApiCode.ERROR,
-              message: '用户名已注册',
-            };
+          if (user) throw '用户名已注册';
           return body;
         })
         // 判断头像是否合理
         .then(async (body) => {
           const { avatar } = body;
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps)
-            throw {
-              code: ApiCode.ERROR,
-              message: '头像保存的不合理，请处理之后再上传！',
-            };
+          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
           return body;
         })
         // 注册用户
@@ -91,9 +78,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`创建用户 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '创建用户失败！',
+            message: err || '创建用户失败！',
           };
         })
     );
@@ -113,6 +101,7 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`运用username查找用户 失败！ ${err}`);
           return err;
         })
     );
@@ -129,11 +118,7 @@ export class UserService {
         // 判断头像是否合理
         .then(async (avatar) => {
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps)
-            throw {
-              code: ApiCode.ERROR,
-              message: '头像保存的不合理，请处理之后再上传！',
-            };
+          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
           return avatar;
         })
         // 判断username 是否为合法字符
@@ -142,6 +127,7 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`运用avatar查找用户 失败！ ${err}`);
           return err;
         })
     );
@@ -182,9 +168,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`运用_id查找用户信息 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -223,9 +210,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`条件并分页获取用户列表 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -249,9 +237,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改用户权限 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -270,11 +259,7 @@ export class UserService {
         .then(async ({ userId, body }) => {
           const { avatar } = body;
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps)
-            throw {
-              code: ApiCode.ERROR,
-              message: '头像保存的不合理，请处理之后再上传！',
-            };
+          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
           return { userId, body };
         })
         // 修改用户基本信息
@@ -287,9 +272,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改用户基本信息 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -308,10 +294,7 @@ export class UserService {
         .then(async ({ user, body }) => {
           const verify = await comparePassword(body.password, user.password);
           if (!verify) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '密码错误',
-            };
+            throw '密码错误';
           }
           return {
             userId: user._id,
@@ -329,9 +312,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`更新用户密码 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改密码失败！',
+            message: err || '修改密码失败！',
           };
         })
     );
@@ -354,9 +338,10 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除用户 失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -376,6 +361,7 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改登录时间 失败！ ${err}`);
           return err;
         })
     );
@@ -395,7 +381,8 @@ export class UserService {
           return _id;
         })
         // 返回错误
-        .catch(() => {
+        .catch((err) => {
+          logger.error(`校验 token 失败！ ${err}`);
           return '';
         })
     );
@@ -413,7 +400,8 @@ export class UserService {
           return await this.userModel.findOne({ _id: userId });
         })
         // 返回错误
-        .catch(() => {
+        .catch((err) => {
+          logger.error(`根据用户ID校验用户 失败！ ${err}`);
           return false;
         })
     );
@@ -433,6 +421,7 @@ export class UserService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取用户数据库信息 失败！ ${err}`);
           return err;
         })
     );

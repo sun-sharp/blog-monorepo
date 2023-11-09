@@ -9,6 +9,7 @@ import { UpdateConfigurationDto } from './dto/update-configuration.dto';
 import { ApiConfiguration } from 'types/capital/configuration';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
 const { capitalDatabaseName } = customConfig;
@@ -29,11 +30,7 @@ export class ConfigurationService {
         // 判断是否已经添加
         .then(async ({ userId, body }) => {
           const configFind = await this.configurationModel.findOne({ userId });
-          if (configFind)
-            throw {
-              code: ApiCode.ERROR,
-              message: '用户已添加配置',
-            };
+          if (configFind) throw '用户已添加配置';
           return { userId, body };
         })
         // 添加
@@ -52,7 +49,7 @@ export class ConfigurationService {
         .catch((err) => {
           return {
             code: ApiCode.ERROR,
-            message: err.message || '添加失败！',
+            message: err || '添加失败！',
           };
         })
     );
@@ -77,9 +74,10 @@ export class ConfigurationService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`修改配置信息 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '修改失败！',
+            message: err || '修改失败！',
           };
         })
     );
@@ -137,9 +135,10 @@ export class ConfigurationService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取用户的配置信息 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '查询失败！',
+            message: err || '查询失败！',
           };
         })
     );
@@ -162,9 +161,10 @@ export class ConfigurationService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`删除用户的配置信息 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err.message || '删除失败！',
+            message: err || '删除失败！',
           };
         })
     );
@@ -184,6 +184,7 @@ export class ConfigurationService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取配置信息数据库信息 失败！${err}`);
           return err;
         })
     );
