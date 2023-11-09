@@ -3,6 +3,7 @@
 /node_modules
 /documentation
 /api_static_dir
+/api_store_dir
 
 # Logs
 logs

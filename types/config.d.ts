@@ -24,4 +24,8 @@ export interface GlobalEnvConfig {
   capitalDatabaseName: string;
   // blog数据库名称
   blogDatabaseName: string;
+  // 存储根目录位置
+  storeDirPosition: string;
+  // 存储根目录名称
+  storeDirName: string;
 }

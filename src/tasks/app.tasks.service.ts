@@ -14,6 +14,7 @@ export class AppTasksService {
    * 每天23点59分59秒启动
    */
   @Cron('59 59 23 * * *')
+  // @Cron('59 * 14 * * *')
   cronBackupsCapital() {
     this.capitalService.backupsCapital();
   }
@@ -23,6 +24,7 @@ export class AppTasksService {
    * 每天23点59分59秒启动
    */
   @Cron('59 59 23 * * *')
+  // @Cron('59 * 14 * * *')
   cronBackupsBlog() {
     this.blogService.backupsCapital();
   }

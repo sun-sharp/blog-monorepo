@@ -16,6 +16,7 @@ import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
 import { nowDateFun } from 'src/common/date';
+import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -61,6 +62,7 @@ export class WeChatService {
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
+          logger.log(`微信账单导入${result.length}个`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -69,6 +71,7 @@ export class WeChatService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`微信账单导入失败! ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err.message || '导入失败！',

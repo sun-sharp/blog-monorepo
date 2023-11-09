@@ -20,7 +20,7 @@ import { ImageService } from './image/image.service';
 import { CategoryService } from './category/category.service';
 
 const customConfig = useCustomConfig();
-const { staticDirPosition, staticDirName } = customConfig;
+const { storeDirPosition, storeDirName } = customConfig;
 
 @Injectable()
 export class CapitalService {
@@ -274,13 +274,33 @@ export class CapitalService {
     return (
       Promise.resolve()
         .then(async () => {
+          // 判断store目录是否存在
+          const storeDir = `${storeDirPosition}${storeDirName}`;
+          const hasStoreDir = existsSync(storeDir);
+          if (!hasStoreDir) {
+            // 创建store目录
+            mkdirSync(storeDir);
+            logger.log('创建store存储目录');
+          }
+          // 判断json目录是否存在
+          const jsonDir = `${storeDir}/json`;
+          const hasJsonDir = existsSync(jsonDir);
+          if (!hasJsonDir) {
+            // 创建json目录
+            mkdirSync(jsonDir);
+            logger.log('创建json目录');
+          }
           // 判断json/capital目录是否路径存在
-          const capitalDir = `${staticDirPosition}${staticDirName}/json/capital`;
+          const capitalDir = `${jsonDir}/capital`;
           const hasDir = existsSync(capitalDir);
           if (!hasDir) {
             // 创建json/capital目录
             mkdirSync(capitalDir);
+            logger.log('创建json/capital目录');
           }
+          return capitalDir;
+        })
+        .then(async (capitalDir) => {
           // 备份capital/user
           const userData = await this.userService.findAllToData();
           const userStr = JSON.stringify(userData, null, '\t');
