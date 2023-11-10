@@ -1,6 +1,6 @@
 {
   "name": "blog-manage-web",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "scripts": {
     "dev": "vite --mode dev",
     "dev:debug": "vite --mode dev --debug",
