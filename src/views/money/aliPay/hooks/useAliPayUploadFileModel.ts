@@ -12,7 +12,7 @@ export const useAliPayUploadFileModel = (emit: (event: 'refresh', ...args: any[]
   const tableData = ref<ApiAliPayBatchSaveItem[]>([]);
   const excelUploadTotal = ref<number>(0);
   const btnDisabled = computed<boolean>(() => {
-    return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.billType).length !== 0;
+    return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.billMethod || !f.billType).length !== 0;
   });
 
   // 获取账单类型

@@ -45,4 +45,3 @@
     </template>
   </n-modal>
 </template>
-../hooks/useAliPayUploadFileModel
