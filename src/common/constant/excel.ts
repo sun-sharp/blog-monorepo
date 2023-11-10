@@ -1,5 +1,12 @@
 import { nowDateFun } from '../date';
-import { filterStr } from '../string';
+
+// 过滤掉\n，空格
+const filterStr = (str: any): string => {
+  if (typeof str !== 'string') {
+    return str ? String(str) : '';
+  }
+  return str.replace(/\n/g, '').replace(/[ ]/g, '');
+};
 
 // 微信账单key值重命名
 export const weChatExcelCellHandle = {
@@ -7,33 +14,29 @@ export const weChatExcelCellHandle = {
     tar['tradeTime'] = nowDateFun(val);
   }, // 交易时间
   2: (tar: any, val: any) => {
-    tar['tradeType'] = val || '';
+    tar['tradeType'] = filterStr(val);
   }, // 交易类型
   3: (tar: any, val: any) => {
     tar['tradeOtherPerson'] = filterStr(val);
   }, // 交易对方
   4: (tar: any, val: any) => {
-    if (typeof val === 'string') {
-      tar['goods'] = filterStr(val);
-    } else {
-      tar['goods'] = String(val);
-    }
+    tar['goods'] = filterStr(val);
   }, // 商品
   5: (tar: any, val: any) => {
-    tar['incomeOrPay'] = val || '';
+    tar['incomeOrPay'] = filterStr(val);
   }, // 收入
   6: (tar: any, val: any) => {
     const money = val.replace(/[¥￥]/, '');
     tar['moneyAmount'] = isNaN(Number(money)) ? 0 : Number(money);
   }, // 金额(元)
   7: (tar: any, val: any) => {
-    tar['paymentMethod'] = val || '';
+    tar['paymentMethod'] = filterStr(val);
   }, // 支付方式
   8: (tar: any, val: any) => {
-    tar['currentStatus'] = val || '';
+    tar['currentStatus'] = filterStr(val);
   }, // 当前状态
   11: (tar: any, val: any) => {
-    tar['remarks'] = val || '';
+    tar['remarks'] = filterStr(val);
   }, // 备注
 };
 
@@ -45,7 +48,7 @@ export const aliPayExcelCellHandle = {
   },
   // 交易分类
   2: (tar: any, val: any) => {
-    tar['tradeType'] = val || '';
+    tar['tradeType'] = filterStr(val);
   },
   // 交易对方
   3: (tar: any, val: any) => {
@@ -53,15 +56,15 @@ export const aliPayExcelCellHandle = {
   },
   // 对方账号
   4: (tar: any, val: any) => {
-    tar['oppositeAccount'] = val || '';
+    tar['oppositeAccount'] = filterStr(val);
   },
   // 商品说明
   5: (tar: any, val: any) => {
-    tar['productDescription'] = val || '';
+    tar['productDescription'] = filterStr(val);
   },
   // 收/支
   6: (tar: any, val: any) => {
-    tar['incomeOrPay'] = val || '';
+    tar['incomeOrPay'] = filterStr(val);
   },
   // 金额
   7: (tar: any, val: any) => {
@@ -70,11 +73,11 @@ export const aliPayExcelCellHandle = {
   },
   // 收/付款方式
   8: (tar: any, val: any) => {
-    tar['paymentMethod'] = val || '';
+    tar['paymentMethod'] = filterStr(val);
   },
   // 交易状态
   9: (tar: any, val: any) => {
-    tar['tradeStatus'] = val || '';
+    tar['tradeStatus'] = filterStr(val);
   },
 };
 
@@ -110,11 +113,7 @@ export const bankExcelCellMap = {
         tar['tradeOtherPerson'] = filterStr(val);
       }, // 对方户名
       13: (tar: any, val: any) => {
-        if (typeof val === 'string') {
-          tar['tradeOtherPersonAccount'] = filterStr(val);
-        } else {
-          tar['tradeOtherPersonAccount'] = String(val);
-        }
+        tar['tradeOtherPersonAccount'] = filterStr(val);
       }, // 对方账号
       14: (tar: any, val: any) => {
         tar['tradeType'] = val;

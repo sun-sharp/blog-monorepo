@@ -4,6 +4,7 @@ export enum billTypeEnum {
   parents = 3, // 父母
   manageMoneyMatters = 5, // 理财
   interest = 8, // 利息
+  waterElectricFee = 17, // 水电费
   phoneBill = 20, // 话费
   consumptionClothingShoes = 102, // 消费-衣鞋
   consumptionSupermarket = 103, // 消费-超市
@@ -21,6 +22,7 @@ export enum billTypeEnum {
   withdrawAttractInvestment = 205, // 提现-招商银行
   returnHuaBei = 253, // 归还-花呗
   returnBorrow = 255, // 归还-借呗
+  medicalInsurance = 306, // 医疗-保险
   basicCapital = 501, // 基本工资
   accumulationFund = 504, // 公积金
   companyReimbursement = 505, // 公司报销
@@ -51,5 +53,5 @@ export enum billMethodEnum {
   aliPayBalanceBaby = 112, // 支付宝余额宝
   aliPayHuaBei = 113, // 花呗
   aliPayTradeClosure = 901, // 支付宝交易关闭
-  other = 1001,
+  other = 1001, // 其它
 }

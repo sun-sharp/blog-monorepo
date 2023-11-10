@@ -82,18 +82,16 @@ export const aliPayExcelTargetHandler = (target: any) => {
   const tradeOtherPerson = oldTarget.tradeOtherPerson;
   const productDescription = oldTarget.productDescription;
   const tradeStatus = oldTarget.tradeStatus;
-  if (tradeStatus === '交易关闭') {
-    target.billMethod = billMethodEnum.aliPayTradeClosure;
-  } else if (paymentMethod === '余额') {
+  if (['余额', '账户余额'].includes(paymentMethod) || '余额&'.indexOf(paymentMethod) !== -1) {
     target.billMethod = billMethodEnum.aliPayBalance;
   } else if (['余额宝'].includes(paymentMethod) || ['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
     target.billMethod = billMethodEnum.aliPayBalanceBaby;
   } else if (['花呗', '花呗&红包'].includes(paymentMethod)) {
     target.billMethod = billMethodEnum.aliPayHuaBei;
-  } else if (['单车骑行卡抵扣'].includes(paymentMethod)) {
-    target.billMethod = billMethodEnum.other;
   } else if (['中国工商银行储蓄卡(3413)'].includes(paymentMethod)) {
     target.billMethod = billMethodEnum.business;
+  } else if (['单车骑行卡抵扣', '医保支付(不含自费)'].includes(productDescription)) {
+    target.billMethod = billMethodEnum.other;
   }
 
   if (tradeStatus === '交易关闭') {
@@ -108,7 +106,7 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.aliPayBalanceBabyRecharge;
   } else if (tradeType === '餐饮美食') {
     target.billType = billTypeEnum.eatingRestaurant;
-  } else if (paymentMethod === '余额' && ['充值-普通充值', '余额宝-转出到余额'].includes(productDescription)) {
+  } else if (['余额', '账户余额'].includes(paymentMethod) && ['充值-普通充值', '余额宝-转出到余额'].includes(productDescription)) {
     target.billType = billTypeEnum.aliPayBalanceRecharge;
   } else if (tradeType === '投资理财') {
     target.billType = billTypeEnum.manageMoneyMatters;
@@ -130,6 +128,10 @@ export const aliPayExcelTargetHandler = (target: any) => {
     target.billType = billTypeEnum.returnHuaBei;
   } else if (['中国铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
     target.billType = billTypeEnum.trafficTrain;
+  } else if (['网上国网'].find((f) => productDescription.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.waterElectricFee;
+  } else if (['医保支付(不含自费)'].find((f) => productDescription.indexOf(f) !== -1)) {
+    target.billType = billTypeEnum.medicalInsurance;
   }
   if (['充值-普通充值', '余额宝-单次转入'].includes(productDescription) || ['花呗'].includes(tradeOtherPerson)) {
     target['incomeOrPay'] = '收入';

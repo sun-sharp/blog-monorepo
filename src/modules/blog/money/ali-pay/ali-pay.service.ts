@@ -66,7 +66,7 @@ export class AliPayService {
           logger.error(`支付宝账单导入 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '导入失败！',
+            message: `${err}` || '导入失败！',
           };
         })
     );
