@@ -5,11 +5,12 @@
 
   const emit = defineEmits(['update:fileList', 'uploadChange']);
 
-  const { uploadHeaders, uploadData, customRequest } = useFormUploadExcel(props, emit);
+  const { uploadHeaders, uploadData, uploadFileList, customRequest } = useFormUploadExcel(props, emit);
 </script>
 
 <template>
   <n-upload
+    v-model:file-list="uploadFileList"
     :headers="uploadHeaders"
     :data="uploadData"
     :show-remove-button="showRemoveButton"
@@ -18,7 +19,6 @@
     :multiple="multiple"
     :custom-request="customRequest"
     list-type="image"
-    :default-file-list="fileList"
   >
     <n-button :type="buttonType">{{ buttonText }}</n-button>
   </n-upload>

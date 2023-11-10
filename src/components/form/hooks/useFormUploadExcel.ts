@@ -1,6 +1,6 @@
 import { useUserStoreWidthOut } from '@/store';
 import { UploadCustomRequestOptions, useMessage } from 'naive-ui';
-import { ExtractPropTypes, computed } from 'vue';
+import { ExtractPropTypes, computed, ref, watch } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 
 // 上次文件组件 传参
@@ -57,6 +57,19 @@ export const useFormUploadExcel = (
   emit: (event: 'update:fileList' | 'uploadChange', ...args: any[]) => void
 ) => {
   const nMessage = useMessage();
+
+  const uploadFileList = ref(props.fileList);
+
+  watch(
+    () => props.fileList,
+    (arr) => {
+      uploadFileList.value = arr;
+    },
+    {
+      immediate: true,
+      deep: true,
+    }
+  );
 
   // 上传文件
   const uploadAction = computed(() => {
@@ -117,6 +130,7 @@ export const useFormUploadExcel = (
 
   return {
     uploadHeaders,
+    uploadFileList,
     uploadData,
     customRequest,
   };
