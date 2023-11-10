@@ -47,8 +47,8 @@ export class WeChatService {
           if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同交易时间的数据
           const find = await this.weChatModel.find();
-          const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime');
-          if (result.length === 0) throw '导入的数据交易时间全部和数据库的相同！';
+          const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['moneyAmount', 'goods', 'tradeOtherPerson']);
+          if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据按照交易时间排序
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
@@ -83,9 +83,9 @@ export class WeChatService {
         // 添加
         .then(async ({ userId, body }) => {
           // 查询是否已经存在某交易时间的数据
-          const { tradeTime = '' } = body;
-          const find = await this.weChatModel.find({ userId, tradeTime });
-          if (!find) throw '保存的数据交易时间和数据库的相同！';
+          const { tradeTime, moneyAmount, goods, tradeOtherPerson } = body;
+          const find = await this.weChatModel.find({ userId, tradeTime, moneyAmount, goods, tradeOtherPerson });
+          if (!find) throw '保存的数据和数据库的相同！';
           await this.weChatModel.create({
             ...body,
             userId,
@@ -121,8 +121,8 @@ export class WeChatService {
           const { batches } = body;
           // 过滤掉相同交易时间的数据
           const find = await this.weChatModel.find();
-          const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime');
-          if (filterArr.length === 0) throw '保存的数据交易时间全部和数据库的相同！';
+          const filterArr = twoArrForTimeSameFilter(batches, find, 'tradeTime', ['moneyAmount', 'goods', 'tradeOtherPerson']);
+          if (filterArr.length === 0) throw '保存的数据全部和数据库的相同！';
           await this.weChatModel.create(
             ...filterArr.map((m) => ({
               ...m,

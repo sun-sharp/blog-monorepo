@@ -28,6 +28,11 @@ export class CreateAliPayDto {
   tradeOtherPersonRemarks: string;
 
   @ApiProperty({
+    description: '商品说明',
+  })
+  productDescription: string;
+
+  @ApiProperty({
     description: '商品',
   })
   goods: string;

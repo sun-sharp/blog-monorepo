@@ -97,7 +97,7 @@ export const twoArrForTimeSameFilter = (arrFilter: any[], findArr: any[], timeKe
     const find = findArr.find((f) => {
       let dis = getTimeStamp(fil[timeKey]) === getTimeStamp(f[timeKey]);
       if (keyArr.length > 0) {
-        dis = dis && keyArr.filter((fKey) => fil[fKey] === f[fKey]).length > 0;
+        dis = dis && keyArr.filter((fKey) => fil[fKey] !== f[fKey]).length === 0;
       }
       return dis;
     });
