@@ -120,7 +120,7 @@
 <template>
   <n-card :bordered="false">
     <div class="amount-summary">
-      <div class="summary-card">
+      <div class="summary-card" style="height: 400px">
         <div class="summary-card__head">
           <span>各个方式的余额</span>
         </div>
@@ -156,7 +156,7 @@
           <n-empty v-else class="w-full h-full justify-center" description="无数据"></n-empty>
         </div>
       </div>
-      <div class="summary-card full-card" style="height: 800px">
+      <div class="summary-card full-card mt-20" style="height: 800px">
         <div class="summary-card__head">
           <span>各方式所流入/流出的金额</span>
           <n-date-picker
@@ -216,7 +216,6 @@
       display: flex;
       flex-direction: column;
       width: calc(50% - 10px);
-      height: 400px;
       background: #fff;
       box-shadow: 2px 0 9px 2px #f0f0f0;
 
@@ -274,12 +273,12 @@
         .list-ul {
           display: flex;
           flex-wrap: wrap;
-          justify-content: space-between;
         }
 
         .list-item {
-          width: calc(100% / 3 - 5px);
+          min-width: 120px;
           margin-top: 5px;
+          margin-right: 10px;
           padding: 5px;
           border: 1px solid #e4e4e4;
 
@@ -291,10 +290,6 @@
             color: #878787;
           }
         }
-      }
-
-      &:nth-child(n + 3) {
-        margin-top: 20px;
       }
     }
   }
