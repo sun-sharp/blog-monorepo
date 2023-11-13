@@ -8,6 +8,7 @@ import { MoneyModule } from './money/money.module';
 import { WeChatModule } from './money/we-chat/we-chat.module';
 import { AliPayModule } from './money/ali-pay/ali-pay.module';
 import { BankModule } from './money/bank/bank.module';
+import { BillUploadModule } from './money/bill-upload/bill-upload.module';
 
 @Module({
   imports: [
@@ -40,6 +41,10 @@ import { BankModule } from './money/bank/bank.module';
               {
                 path: '/',
                 module: BankModule,
+              },
+              {
+                path: '/',
+                module: BillUploadModule,
               },
             ],
           },

@@ -8,9 +8,10 @@ import { JwtModuleRegister } from 'src/jwt/jwt.constants';
 import { CategoryModule } from 'src/modules/capital/category/category.module';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
+import { BillUploadModule } from './bill-upload/bill-upload.module';
 
 @Module({
-  imports: [WeChatModule, AliPayModule, BankModule, JwtModuleRegister, UserModule, CategoryModule, forwardRef(() => RoleModule)],
+  imports: [WeChatModule, AliPayModule, BankModule, BillUploadModule, JwtModuleRegister, UserModule, CategoryModule, forwardRef(() => RoleModule)],
   controllers: [MoneyController],
   providers: [MoneyService],
   exports: [MoneyService],
