@@ -1,5 +1,3 @@
-import { billTypeEnum, billMethodEnum } from '../enums/money.enum';
-
 // 微信账单数据整体处理
 export const weChatExcelTargetHandler = () => {
   // const oldTarget = JSON.parse(JSON.stringify(target));
@@ -74,119 +72,118 @@ export const weChatExcelTargetHandler = () => {
 };
 
 // 支付宝账单数据整体处理
-export const aliPayExcelTargetHandler = (target: any) => {
-  const oldTarget = JSON.parse(JSON.stringify(target));
-  const tradeType = oldTarget.tradeType;
-  const paymentMethod = oldTarget.paymentMethod || '';
-  const tradeOtherPerson = oldTarget.tradeOtherPerson;
-  const productDescription = oldTarget.productDescription;
-  const tradeStatus = oldTarget.tradeStatus;
-  if (['余额', '账户余额'].includes(paymentMethod) || paymentMethod.indexOf('余额&') !== -1) {
-    target.billMethod = billMethodEnum.aliPayBalance;
-  } else if (['余额宝'].includes(paymentMethod) || ['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
-    target.billMethod = billMethodEnum.aliPayBalanceBaby;
-  } else if (['花呗', '花呗&红包'].includes(paymentMethod)) {
-    target.billMethod = billMethodEnum.aliPayHuaBei;
-  } else if (['中国工商银行储蓄卡(3413)', '工商银行储蓄卡(3413)'].includes(paymentMethod)) {
-    target.billMethod = billMethodEnum.business;
-  } else if (['单车骑行卡抵扣', '医保支付(不含自费)'].includes(productDescription)) {
-    target.billMethod = billMethodEnum.other;
-  }
-
-  if (tradeStatus === '交易关闭') {
-    target.billType = billTypeEnum.invalid;
-  } else if (
-    (tradeType === '交通出行' &&
-      ['成都金控数据服务有限公司', '成都天府通数字科技有限公司'].includes(tradeOtherPerson) &&
-      ['天府通扫码乘车', '天府通APP乘车'].includes(productDescription)) ||
-    ['地铁', '一应黔行', '重庆轨道交通'].find((f) => tradeOtherPerson.indexOf(f) !== -1)
-  ) {
-    target.billType = billTypeEnum.trafficSubway;
-  } else if (['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
-    target.billType = billTypeEnum.aliPayBalanceBabyRecharge;
-  } else if (tradeType === '餐饮美食') {
-    target.billType = billTypeEnum.eatingRestaurant;
-  } else if (['余额', '账户余额'].includes(paymentMethod) && ['充值-普通充值', '余额宝-转出到余额'].includes(productDescription)) {
-    target.billType = billTypeEnum.aliPayBalanceRecharge;
-  } else if (tradeType === '投资理财') {
-    target.billType = billTypeEnum.manageMoneyMatters;
-  } else if (productDescription.indexOf('手机充值') !== -1) {
-    target.billType = billTypeEnum.phoneBill;
-  } else if (['哈啰出行', '广州骑安科技有限公司'].includes(tradeOtherPerson)) {
-    target.billType = billTypeEnum.trafficBicycle;
-  } else if (['滴滴出行', '高德打车'].includes(tradeOtherPerson)) {
-    target.billType = billTypeEnum.trafficTaxi;
-  } else if (['便利店', '超市', '红旗连锁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target.billType = billTypeEnum.consumptionSupermarket;
-  } else if (['成都空港公共交通有限公司'].includes(tradeOtherPerson)) {
-    target.billType = billTypeEnum.trafficTransit;
-  } else if (productDescription === '借呗还款') {
-    target.billType = billTypeEnum.returnBorrow;
-  } else if (productDescription.indexOf('主动还款-花呗') !== -1) {
-    target.billType = billTypeEnum.returnHuaBei;
-  } else if (['中国铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target.billType = billTypeEnum.trafficTrain;
-  } else if (['网上国网'].find((f) => productDescription.indexOf(f) !== -1)) {
-    target.billType = billTypeEnum.waterElectricFee;
-  } else if (['医保支付(不含自费)'].find((f) => productDescription.indexOf(f) !== -1)) {
-    target.billType = billTypeEnum.medicalInsurance;
-  }
-  if (['充值-普通充值', '余额宝-单次转入'].includes(productDescription) || ['花呗'].includes(tradeOtherPerson)) {
-    target['incomeOrPay'] = '收入';
-  } else if (
-    ['借呗还款', '提现-快速提现'].includes(productDescription) ||
-    ['借呗'].includes(tradeOtherPerson) ||
-    productDescription.indexOf('主动还款-花呗') !== -1 ||
-    productDescription.indexOf('手机充值') !== -1
-  ) {
-    target['incomeOrPay'] = '支出';
-  }
+export const aliPayExcelTargetHandler = () => {
+  // const oldTarget = JSON.parse(JSON.stringify(target));
+  // const tradeType = oldTarget.tradeType;
+  // const paymentMethod = oldTarget.paymentMethod || '';
+  // const tradeOtherPerson = oldTarget.tradeOtherPerson;
+  // const productDescription = oldTarget.productDescription;
+  // const tradeStatus = oldTarget.tradeStatus;
+  // if (['余额', '账户余额'].includes(paymentMethod) || paymentMethod.indexOf('余额&') !== -1) {
+  //   target.billMethod = billMethodEnum.aliPayBalance;
+  // } else if (['余额宝'].includes(paymentMethod) || ['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
+  //   target.billMethod = billMethodEnum.aliPayBalanceBaby;
+  // } else if (['花呗', '花呗&红包'].includes(paymentMethod)) {
+  //   target.billMethod = billMethodEnum.aliPayHuaBei;
+  // } else if (['中国工商银行储蓄卡(3413)', '工商银行储蓄卡(3413)'].includes(paymentMethod)) {
+  //   target.billMethod = billMethodEnum.business;
+  // } else if (['单车骑行卡抵扣', '医保支付(不含自费)'].includes(productDescription)) {
+  //   target.billMethod = billMethodEnum.other;
+  // }
+  // if (tradeStatus === '交易关闭') {
+  //   target.billType = billTypeEnum.invalid;
+  // } else if (
+  //   (tradeType === '交通出行' &&
+  //     ['成都金控数据服务有限公司', '成都天府通数字科技有限公司'].includes(tradeOtherPerson) &&
+  //     ['天府通扫码乘车', '天府通APP乘车'].includes(productDescription)) ||
+  //   ['地铁', '一应黔行', '重庆轨道交通'].find((f) => tradeOtherPerson.indexOf(f) !== -1)
+  // ) {
+  //   target.billType = billTypeEnum.trafficSubway;
+  // } else if (['余额宝-笔笔攒-单笔攒入', '余额宝-单次转入'].includes(productDescription)) {
+  //   target.billType = billTypeEnum.aliPayBalanceBabyRecharge;
+  // } else if (tradeType === '餐饮美食') {
+  //   target.billType = billTypeEnum.eatingRestaurant;
+  // } else if (['余额', '账户余额'].includes(paymentMethod) && ['充值-普通充值', '余额宝-转出到余额'].includes(productDescription)) {
+  //   target.billType = billTypeEnum.aliPayBalanceRecharge;
+  // } else if (tradeType === '投资理财') {
+  //   target.billType = billTypeEnum.manageMoneyMatters;
+  // } else if (productDescription.indexOf('手机充值') !== -1) {
+  //   target.billType = billTypeEnum.phoneBill;
+  // } else if (['哈啰出行', '广州骑安科技有限公司'].includes(tradeOtherPerson)) {
+  //   target.billType = billTypeEnum.trafficBicycle;
+  // } else if (['滴滴出行', '高德打车'].includes(tradeOtherPerson)) {
+  //   target.billType = billTypeEnum.trafficTaxi;
+  // } else if (['便利店', '超市', '红旗连锁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target.billType = billTypeEnum.consumptionSupermarket;
+  // } else if (['成都空港公共交通有限公司'].includes(tradeOtherPerson)) {
+  //   target.billType = billTypeEnum.trafficTransit;
+  // } else if (productDescription === '借呗还款') {
+  //   target.billType = billTypeEnum.returnBorrow;
+  // } else if (productDescription.indexOf('主动还款-花呗') !== -1) {
+  //   target.billType = billTypeEnum.returnHuaBei;
+  // } else if (['中国铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target.billType = billTypeEnum.trafficTrain;
+  // } else if (['网上国网'].find((f) => productDescription.indexOf(f) !== -1)) {
+  //   target.billType = billTypeEnum.waterElectricFee;
+  // } else if (['医保支付(不含自费)'].find((f) => productDescription.indexOf(f) !== -1)) {
+  //   target.billType = billTypeEnum.medicalInsurance;
+  // }
+  // if (['充值-普通充值', '余额宝-单次转入'].includes(productDescription) || ['花呗'].includes(tradeOtherPerson)) {
+  //   target['incomeOrPay'] = '收入';
+  // } else if (
+  //   ['借呗还款', '提现-快速提现'].includes(productDescription) ||
+  //   ['借呗'].includes(tradeOtherPerson) ||
+  //   productDescription.indexOf('主动还款-花呗') !== -1 ||
+  //   productDescription.indexOf('手机充值') !== -1
+  // ) {
+  //   target['incomeOrPay'] = '支出';
+  // }
 };
 
 // 银行账单数据整体处理
-export const bankExcelTargetHandler = (target: any) => {
-  const oldTarget = JSON.parse(JSON.stringify(target));
-  const explain = oldTarget['explain'] || '';
-  const tradeOtherPerson = oldTarget['tradeOtherPerson'] || ''; // 交易对方
-  const tradeType = oldTarget['tradeType'] || '';
-  const tradeOtherPersonAccount = oldTarget['tradeOtherPersonAccount']; // 凭证号码
-  if (
-    ['支付宝（中国）网络技术有限公司', '⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690', '蚂蚁基金'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
-    ['215500690'].includes(tradeOtherPersonAccount) ||
-    ['⽀付宝'].find((f) => explain.indexOf(f) !== -1) ||
-    ['⽀付宝'].find((f) => tradeType.indexOf(f) !== -1)
-  ) {
-    target['bankBillType'] = billTypeEnum.bankAliPayUse;
-  } else if (
-    ['财付通'].find((f) => explain.indexOf(f) !== -1) ||
-    ['243300133', '财付通', '微信支付', '财付通支付科技有限公司', '微信转账', '微信零钱充值账户'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
-    ['243300133'].includes(tradeOtherPersonAccount) ||
-    ['微信零钱提现'].find((f) => tradeType.indexOf(f) !== -1)
-  ) {
-    target['bankBillType'] = billTypeEnum.bankWeChatUse;
-  } else if (['工资', '劳务'].find((f) => explain.indexOf(f) !== -1) || ['工资', '奖金'].find((f) => tradeType.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.basicCapital;
-  } else if (['地铁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.trafficSubway;
-  } else if (['利息'].find((f) => explain.indexOf(f) !== -1) || ['存款利息'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.interest;
-  } else if (['报销'].find((f) => explain.indexOf(f) !== -1) || ['报销'].find((f) => tradeType.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.companyReimbursement;
-  } else if (['存款'].find((f) => explain.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.cashTransit;
-  } else if (['杨锐锐（中国工商银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.withdrawBusiness;
-  } else if (['杨锐锐（中国建设银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.withdrawBuild;
-  } else if (['杨锐锐（招商银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.withdrawAttractInvestment;
-  } else if (['网银在线-北京京东叁佰陆拾度电子商务有限公司'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.jdPurchase;
-  } else if (['公积金'].find((f) => tradeType.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.accumulationFund;
-  } else if (['付天分', '杨江怀'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.parents;
-  } else if (['12306铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
-    target['bankBillType'] = billTypeEnum.trafficTrain;
-  }
+export const bankExcelTargetHandler = () => {
+  // const oldTarget = JSON.parse(JSON.stringify(target));
+  // const explain = oldTarget['explain'] || '';
+  // const tradeOtherPerson = oldTarget['tradeOtherPerson'] || ''; // 交易对方
+  // const tradeType = oldTarget['tradeType'] || '';
+  // const tradeOtherPersonAccount = oldTarget['tradeOtherPersonAccount']; // 凭证号码
+  // if (
+  //   ['支付宝（中国）网络技术有限公司', '⽀付宝（中国）⽹络技术有限公司', '⽀付宝', '215500690', '蚂蚁基金'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
+  //   ['215500690'].includes(tradeOtherPersonAccount) ||
+  //   ['⽀付宝'].find((f) => explain.indexOf(f) !== -1) ||
+  //   ['⽀付宝'].find((f) => tradeType.indexOf(f) !== -1)
+  // ) {
+  //   target['bankBillType'] = billTypeEnum.bankAliPayUse;
+  // } else if (
+  //   ['财付通'].find((f) => explain.indexOf(f) !== -1) ||
+  //   ['243300133', '财付通', '微信支付', '财付通支付科技有限公司', '微信转账', '微信零钱充值账户'].find((f) => tradeOtherPerson.indexOf(f) !== -1) ||
+  //   ['243300133'].includes(tradeOtherPersonAccount) ||
+  //   ['微信零钱提现'].find((f) => tradeType.indexOf(f) !== -1)
+  // ) {
+  //   target['bankBillType'] = billTypeEnum.bankWeChatUse;
+  // } else if (['工资', '劳务'].find((f) => explain.indexOf(f) !== -1) || ['工资', '奖金'].find((f) => tradeType.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.basicCapital;
+  // } else if (['地铁'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.trafficSubway;
+  // } else if (['利息'].find((f) => explain.indexOf(f) !== -1) || ['存款利息'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.interest;
+  // } else if (['报销'].find((f) => explain.indexOf(f) !== -1) || ['报销'].find((f) => tradeType.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.companyReimbursement;
+  // } else if (['存款'].find((f) => explain.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.cashTransit;
+  // } else if (['杨锐锐（中国工商银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.withdrawBusiness;
+  // } else if (['杨锐锐（中国建设银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.withdrawBuild;
+  // } else if (['杨锐锐（招商银行）'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.withdrawAttractInvestment;
+  // } else if (['网银在线-北京京东叁佰陆拾度电子商务有限公司'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.jdPurchase;
+  // } else if (['公积金'].find((f) => tradeType.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.accumulationFund;
+  // } else if (['付天分', '杨江怀'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.parents;
+  // } else if (['12306铁路'].find((f) => tradeOtherPerson.indexOf(f) !== -1)) {
+  //   target['bankBillType'] = billTypeEnum.trafficTrain;
+  // }
 };

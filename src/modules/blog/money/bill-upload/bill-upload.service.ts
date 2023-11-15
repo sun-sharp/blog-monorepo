@@ -65,11 +65,11 @@ export class BillUploadService {
       Promise.resolve(pageBillUploadDto)
         // 查询
         .then(async (body) => {
-          const { size, current, type, label } = body;
+          const { size, current, billUploadType, judgeWay } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<BillUpload> = {};
-          if (type) findData.type = type;
-          if (label) findData.label = { $regex: label };
+          if (billUploadType) findData.billUploadType = billUploadType;
+          if (judgeWay) findData.judgeWay = judgeWay;
           const total = await this.billUploadModel.find(findData).count();
           const findArr = await this.billUploadModel.find(findData).limit(limit).skip(skip).sort({ billUploadType: 1, handleType: -1, priorityWeight: -1 });
           const list = (findArr || []).map((m) => {

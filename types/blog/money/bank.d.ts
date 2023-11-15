@@ -95,4 +95,6 @@ export interface ApiBankUpload {
   tradeType: string;
   // 银行账单类型
   bankBillType: number;
+  // 流入/流出
+  inflowOrOutflow: number;
 }

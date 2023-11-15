@@ -3,12 +3,12 @@ import { PaginateDto } from 'src/common/paginate/paginate.dto';
 
 export class PageBillUploadDto extends PaginateDto {
   @ApiProperty({
-    description: '全局类型分类',
+    description: '账单导入类型',
   })
-  readonly type: string = '';
+  readonly billUploadType: number;
 
   @ApiProperty({
-    description: '全局类型名称',
+    description: '账单导入方式',
   })
-  readonly label: string = '';
+  readonly judgeWay: string = '';
 }

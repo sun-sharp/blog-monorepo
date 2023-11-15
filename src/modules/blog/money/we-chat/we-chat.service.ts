@@ -9,7 +9,6 @@ import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
-import { weChatExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiWeChatItem, ApiWeChatUpload } from 'types/blog/money/we-chat';
 import { IResponse } from 'types/common';
@@ -46,7 +45,6 @@ export class WeChatService {
             buffer: buffer,
             startNum: 18,
             cellHandler: weChatExcelCellHandle,
-            targetHandler: weChatExcelTargetHandler,
           });
           if (!list) throw '导入的数据失败！';
           if (list.length === 0) throw '导入的数据为空！';

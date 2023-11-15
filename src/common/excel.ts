@@ -7,7 +7,7 @@ interface excelCsvHandleBufferObj {
   startNum: number;
   endNum?: number;
   cellHandler: object;
-  targetHandler: (tar: any) => void;
+  targetHandler?: (tar: any) => void;
   otherObj?: object;
 }
 
@@ -17,7 +17,7 @@ interface excelXlsxHandleBufferObj {
   startNum: number;
   endNum?: number;
   cellHandler: object;
-  targetHandler: (tar: any) => void;
+  targetHandler?: (tar: any) => void;
   otherObj?: object;
 }
 
@@ -49,7 +49,7 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
         }
         cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
       });
-      targetHandler(target);
+      if (typeof targetHandler === 'function') targetHandler(target);
       result.push(target);
     }
   });
@@ -77,7 +77,7 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
         }
         cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
       });
-      targetHandler(target);
+      if (typeof targetHandler === 'function') targetHandler(target);
       result.push(target);
     }
   });

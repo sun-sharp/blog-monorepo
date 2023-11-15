@@ -7,6 +7,7 @@ import { AliPay, AliPaySchema } from 'src/schemas/blog/money/ali-pay.schema';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
 import { useCustomConfig } from 'src/config';
+import { BillUploadModule } from '../bill-upload/bill-upload.module';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -14,7 +15,7 @@ const { blogDatabaseName } = customConfig;
 const ALI_PAY_MONGO_MODULE = MongooseModule.forFeature([{ name: AliPay.name, schema: AliPaySchema }], blogDatabaseName);
 
 @Module({
-  imports: [ALI_PAY_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],
+  imports: [ALI_PAY_MONGO_MODULE, UserModule, BillUploadModule, forwardRef(() => RoleModule)],
   controllers: [AliPayController],
   providers: [AliPayService, JwtStrategy],
   exports: [AliPayService],

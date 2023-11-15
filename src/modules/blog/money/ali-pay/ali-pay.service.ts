@@ -9,7 +9,6 @@ import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
 import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
-import { aliPayExcelTargetHandler } from 'src/common/utils/money';
 import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
 import { IResponse } from 'types/common';
@@ -17,13 +16,18 @@ import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
 import { nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
+import { billUploadTypeEnum } from 'src/common/enums/money.enum';
+import { BillUploadService } from '../bill-upload/bill-upload.service';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class AliPayService {
-  constructor(@InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>) {}
+  constructor(
+    @InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>,
+    private readonly billUploadService: BillUploadService,
+  ) {}
 
   /**
    * @description: 支付宝账单导入
@@ -42,7 +46,6 @@ export class AliPayService {
             startNum: 26,
             endNum: 0,
             cellHandler: aliPayExcelCellHandle,
-            targetHandler: aliPayExcelTargetHandler,
           });
           if (!list) throw '导入的数据失败！';
           if (list.length === 0) throw '导入的数据为空！';
@@ -53,6 +56,50 @@ export class AliPayService {
           // 对数据按照交易时间排序
           result.sort((a, b) => {
             return b.tradeTime > a.tradeTime ? -1 : 1;
+          });
+          return result;
+        })
+        // 对数据进行批量处理
+        .then(async (list) => {
+          const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.aliPay);
+          // 处理每项数据
+          const formatBillUploadItem = (m: ApiAliPayUpload) => {
+            const item = { ...m };
+            for (let i = 0; i < billUploadList.length; i++) {
+              const f = billUploadList[i];
+              // 判断是否赋值
+              let isAssignment = false;
+              if (f.judgeWay === 'includes') {
+                isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
+              } else if (f.judgeWay === 'indexOf') {
+                isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
+              }
+              if (isAssignment) {
+                if (f.handleType === 'inflowOrOutflow') {
+                  // 存在则不再次赋值
+                  if (!item.inflowOrOutflow) {
+                    item.inflowOrOutflow = f.inflowOrOutflow;
+                  }
+                  continue;
+                } else if (isAssignment && f.handleType === 'billType') {
+                  // 存在则不再次赋值
+                  if (!item.billType) {
+                    item.billType = f.billType;
+                  }
+                  continue;
+                } else if (isAssignment && f.handleType === 'billMethod') {
+                  // 存在则不再次赋值
+                  if (!item.billMethod) {
+                    item.billMethod = f.billMethod;
+                  }
+                  continue;
+                }
+              }
+            }
+            return item;
+          };
+          const result = list.map((m) => {
+            return formatBillUploadItem(m);
           });
           logger.log(`支付宝账单导入${result.length}个`);
           return {

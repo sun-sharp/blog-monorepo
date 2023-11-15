@@ -76,34 +76,26 @@ export interface ApiAliPayItem extends ApiAliPay, ApiAliPayId {}
 export interface ApiAliPayUpload {
   // 交易时间
   tradeTime: string;
-
   // 交易类型
   tradeType: string;
-
   // 交易对方
   tradeOtherPerson: string;
-
   // 对方账号
   oppositeAccount: string;
-
   // 商品说明
   productDescription: string;
-
   // 收/支
   incomeOrPay: string;
-
   // 金额(元)
   moneyAmount: number;
-
   // 收/付款方式
   paymentMethod: string;
-
   // 交易状态
   tradeStatus: string;
-
   // 账单方式
   billMethod: number;
-
+  // 流入/流出
+  inflowOrOutflow: number;
   // 账单类型
   billType: number;
 }

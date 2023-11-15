@@ -10,20 +10,24 @@ import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
-import { bankExcelTargetHandler } from 'src/common/utils/money';
 import { ApiBank, ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
 import { nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
+import { BillUploadService } from '../bill-upload/bill-upload.service';
+import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class BankService {
-  constructor(@InjectModel(Bank.name, blogDatabaseName) private readonly bankModel: Model<Bank>) {}
+  constructor(
+    @InjectModel(Bank.name, blogDatabaseName) private readonly bankModel: Model<Bank>,
+    private readonly billUploadService: BillUploadService,
+  ) {}
 
   /**
    * @description: 银行账单导入
@@ -44,7 +48,6 @@ export class BankService {
               buffer: buffer,
               startNum: 2,
               cellHandler: excelCellHandle,
-              targetHandler: bankExcelTargetHandler,
               otherObj: { bankType: Number(itKey) },
             });
             if (!excelArr) throw sheetName + '表导入的数据失败！';
@@ -58,6 +61,44 @@ export class BankService {
           // 对数据进行排序，排序优先级（交易时间）
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
+          });
+          return result;
+        })
+        // 对数据进行批量处理
+        .then(async (list) => {
+          const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.bank);
+          // 处理每项数据
+          const formatBillUploadItem = (m: ApiBankUpload) => {
+            const item = { ...m };
+            for (let i = 0; i < billUploadList.length; i++) {
+              const f = billUploadList[i];
+              // 判断是否赋值
+              let isAssignment = false;
+              if (f.judgeWay === 'includes') {
+                isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
+              } else if (f.judgeWay === 'indexOf') {
+                isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
+              }
+              if (isAssignment) {
+                if (f.handleType === 'inflowOrOutflow') {
+                  // 存在则不再次赋值
+                  if (!item.inflowOrOutflow) {
+                    item.inflowOrOutflow = f.inflowOrOutflow;
+                  }
+                  continue;
+                } else if (isAssignment && f.handleType === 'billType') {
+                  // 存在则不再次赋值
+                  if (!item.bankBillType) {
+                    item.bankBillType = f.billType;
+                  }
+                  continue;
+                }
+              }
+            }
+            return item;
+          };
+          const result = list.map((m) => {
+            return formatBillUploadItem(m);
           });
           logger.log(`银行账单导入${result.length}个`);
           return {

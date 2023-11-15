@@ -7,6 +7,7 @@ import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
 import { Bank, BankSchema } from 'src/schemas/blog/money/bank.schema';
 import { useCustomConfig } from 'src/config';
+import { BillUploadModule } from '../bill-upload/bill-upload.module';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -14,7 +15,7 @@ const { blogDatabaseName } = customConfig;
 const BANK_MONGO_MODULE = MongooseModule.forFeature([{ name: Bank.name, schema: BankSchema }], blogDatabaseName);
 
 @Module({
-  imports: [BANK_MONGO_MODULE, UserModule, forwardRef(() => RoleModule)],
+  imports: [BANK_MONGO_MODULE, UserModule, BillUploadModule, forwardRef(() => RoleModule)],
   controllers: [BankController],
   providers: [BankService, JwtStrategy],
   exports: [BankService],
