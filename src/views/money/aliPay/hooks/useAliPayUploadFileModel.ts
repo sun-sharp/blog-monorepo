@@ -4,7 +4,7 @@ import { getUploadAliPayAction } from '@/utils';
 import { computed, h, ref, unref } from 'vue';
 import { ApiAliPayBase, ApiAliPayBatchSaveItem } from '/#/api/ali-pay';
 import { BasicColumn } from '/#/components/table';
-import { incomeOrPayMap, inflowOrOutflowOption } from '@/constant';
+import { inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
 
 export const useAliPayUploadFileModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
@@ -79,11 +79,6 @@ export const useAliPayUploadFileModel = (emit: (event: 'refresh', ...args: any[]
       key: 'inflowOrOutflow',
       width: 170,
       render(row) {
-        let inflowOrOutflow = incomeOrPayMap[row.incomeOrPay] || null;
-        if (!inflowOrOutflow && ['余额宝-笔笔攒-单笔攒入'].includes(row.productDescription)) {
-          inflowOrOutflow = 1;
-        }
-        if (inflowOrOutflow) row.inflowOrOutflow = inflowOrOutflow;
         return h(
           NSpace,
           {

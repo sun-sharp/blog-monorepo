@@ -80,11 +80,13 @@
         </n-icon>
       </n-form-item>
       <n-form-item v-if="modelForm.judgeVal.length > 0" label="取值" path="judgeVal">
-        <div v-for="(val, idx) in modelForm.judgeVal" :key="val" class="flex ai-c">
-          <span class="mr-10" :style="`color: ${appThemeColor}`">{{ val }}</span>
-          <n-icon class="cursor-pointer mr-20" color="#d03050" @click="judgeValRemove(idx)">
-            <TrashOutline />
-          </n-icon>
+        <div class="flex fw-w">
+          <div v-for="(val, idx) in modelForm.judgeVal" :key="val" class="flex ai-c mv-5">
+            <span class="mr-10" :style="`color: ${appThemeColor}`">{{ val }}</span>
+            <n-icon class="cursor-pointer mr-20" color="#d03050" @click="judgeValRemove(idx)">
+              <TrashOutline />
+            </n-icon>
+          </div>
         </div>
       </n-form-item>
       <!-- <n-form-item label="其它费用">
