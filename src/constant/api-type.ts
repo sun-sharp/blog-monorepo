@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-11-15 11:15:46
+ * @LastEditTime: 2023-11-15 14:47:06
  * @Description: 接口类型
  */
 
@@ -133,15 +133,15 @@ export const billUploadTypeMap = arrEnumToObj(billUploadTypeOption);
 // 账单导入类型
 export const handleTypeOption = [
   {
-    value: 1,
+    value: 'inflowOrOutflow',
     label: '流入/流出',
   },
   {
-    value: 2,
+    value: 'billType',
     label: '账单类型',
   },
   {
-    value: 3,
+    value: 'billMethod',
     label: '账单方式',
   },
 ];
@@ -158,6 +158,7 @@ export const billJudgeKeyArr = [
   'tradeStatus',
   'explain',
   'tradeOtherPersonAccount',
+  'incomeOrPay',
 ];
 export const billJudgeKeyOption = billJudgeKeyArr.map((m) => ({ value: m, label: m }));
 

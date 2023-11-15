@@ -15,6 +15,7 @@ const modelFields = {
   handleType: null,
   inflowOrOutflow: null,
   billMethod: null,
+  priorityWeight: 0,
 };
 
 // 修改、创建银行导入 弹窗
@@ -35,7 +36,6 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
       message: `请选择账单导入类型`,
     },
     handleType: {
-      type: 'number',
       required: true,
       trigger: ['blur', 'change'],
       message: `请选择需处理类型`,
@@ -89,6 +89,7 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
   // 重置
   const resetFields = () => {
     Object.assign(modelForm, modelFields);
+    modelForm.judgeVal = [];
     nextTick(() => {
       modelFromRef.value.restoreValidation();
     });
@@ -116,17 +117,18 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
         const params: ApiBillUploadSaveData = {
           billUploadType: modelForm.billUploadType || 0,
           billJudgeKey: modelForm.billJudgeKey || '',
-          handleType: modelForm.handleType || 0,
+          handleType: modelForm.handleType || '',
           judgeVal: modelForm.judgeVal || [],
           judgeWay: modelForm.judgeWay || '',
+          priorityWeight: modelForm.priorityWeight,
         };
-        if (modelForm.handleType === 1 && modelForm.inflowOrOutflow) {
+        if (modelForm.handleType === 'inflowOrOutflow' && modelForm.inflowOrOutflow) {
           params.inflowOrOutflow = modelForm.inflowOrOutflow;
         }
-        if (modelForm.handleType === 2 && modelForm.billType) {
+        if (modelForm.handleType === 'billType' && modelForm.billType) {
           params.billType = modelForm.billType;
         }
-        if (modelForm.handleType === 3 && modelForm.billMethod) {
+        if (modelForm.handleType === 'billMethod' && modelForm.billMethod) {
           params.billMethod = modelForm.billMethod;
         }
         const request = modelId.value ? billUploadApi.update({ billUploadId: modelId.value, ...params }) : billUploadApi.save(params);

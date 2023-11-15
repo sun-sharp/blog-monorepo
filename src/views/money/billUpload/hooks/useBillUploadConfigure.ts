@@ -3,7 +3,7 @@ import { FormSchema } from '/#/components/form';
 import { ApiBillUploadItem, ApiBillUploadSearchParams } from '/#/api/blog/bill-upload';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { billUploadApi } from '@/api';
-import { getBillTypeData, useApiType } from '@/hooks';
+import { getBillTypeData, getBillMethodData, useApiType } from '@/hooks';
 import { NButton, NPopconfirm } from 'naive-ui';
 import { billUploadTypeMap, handleTypeMap, billUploadTypeOption, inflowOrOutflowMap } from '@/constant';
 
@@ -75,7 +75,7 @@ export const useBillUploadConfigure = () => {
       },
     },
     {
-      title: '账单导入类型',
+      title: '需处理类型',
       key: 'handleType',
       align: 'center',
       render(row) {
@@ -180,6 +180,7 @@ export const useBillUploadConfigure = () => {
 
   onMounted(() => {
     getBillTypeData();
+    getBillMethodData();
   });
 
   return {

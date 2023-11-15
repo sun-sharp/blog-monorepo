@@ -2,7 +2,7 @@ import { computed, h, ref, unref } from 'vue';
 import { ApiWeChatBase, ApiWeChatBatchSaveItem } from '/#/api/we-chat';
 import { useApiType } from '@/hooks';
 import { BasicColumn } from '/#/components/table';
-import { incomeOrPayMap, inflowOrOutflowOption } from '@/constant';
+import { inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
 import { weChatApi } from '@/api';
 import { getUploadWeCharAction } from '@/utils';
@@ -84,7 +84,6 @@ export const useWeChatUploadFileModel = (emit: (event: 'refresh', ...args: any[]
       key: 'inflowOrOutflow',
       width: 170,
       render(row) {
-        row.inflowOrOutflow = incomeOrPayMap[row.incomeOrPay] || undefined;
         return h(
           NSpace,
           {

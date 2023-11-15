@@ -115,7 +115,7 @@ export const useFormUploadExcel = (
         if (code === 0 && typeof result === 'object' && result instanceof Array && result.length > 0) {
           nMessage.success(message);
           emit('uploadChange', result);
-          emit('update:fileList', result);
+          // emit('update:fileList', file);
           onFinish();
         } else {
           nMessage.error(message);

@@ -17,11 +17,13 @@ export interface BillUploadItemForm {
   // 判断取值输入
   judgeInputVal: null | string;
   // 需处理类型
-  handleType: null | number;
+  handleType: null | string;
   // 流入/流出
   inflowOrOutflow: null | number;
   // 账单方式
   billMethod: null | number;
+  // 优先权重
+  priorityWeight: number;
 }
 
 /**

@@ -27,7 +27,7 @@ export interface ApiBillUpload {
   billJudgeKey: string;
 
   // 需处理类型
-  handleType: number;
+  handleType: string;
 
   // 流入/流出
   inflowOrOutflow?: number;
@@ -37,6 +37,9 @@ export interface ApiBillUpload {
 
   // 账单方式
   billMethod?: number;
+
+  // 优先权重
+  priorityWeight: number;
 
   // 判断方式
   judgeWay: string;
