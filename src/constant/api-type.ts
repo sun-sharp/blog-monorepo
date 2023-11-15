@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-11-15 14:47:06
+ * @LastEditTime: 2023-11-15 22:24:00
  * @Description: 接口类型
  */
 
@@ -60,12 +60,6 @@ export const roleTypeOption = [
   },
 ];
 export const roleTypeObj = arrEnumToObj(roleTypeOption);
-
-// 账单“收入/支出”枚举值
-export const incomeOrPayMap: { [x: string]: number } = {
-  收入: 1,
-  支出: 2,
-};
 
 // 账单“流入/流出”枚举值
 export const inflowOrOutflowOption = [

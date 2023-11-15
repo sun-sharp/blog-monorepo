@@ -3,7 +3,7 @@ import { computed, h, ref, unref } from 'vue';
 import { BasicColumn } from '/#/components/table';
 import { ApiBankBase, ApiBankBatchSaveItem } from '/#/api/bank';
 import { CNumOption } from '/#/config';
-import { incomeOrPayMap, inflowOrOutflowOption, voucherTypeMap } from '@/constant';
+import { inflowOrOutflowOption, voucherTypeMap } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
 import { bankApi } from '@/api';
 import { getUploadBankAction } from '@/utils';
@@ -111,7 +111,6 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
       width: 170,
       key: 'inflowOrOutflow',
       render(row) {
-        row.inflowOrOutflow = incomeOrPayMap[row.incomeOrPay];
         return h(
           NSpace,
           {
