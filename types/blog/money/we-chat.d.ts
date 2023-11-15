@@ -94,4 +94,8 @@ export interface ApiWeChatUpload {
   remarks: string;
   // 账单方式
   billMethod: number;
+  // 流入/流出
+  inflowOrOutflow: number;
+  // 账单类型
+  billType: number;
 }

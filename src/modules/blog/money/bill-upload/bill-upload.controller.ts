@@ -7,7 +7,7 @@ import { PageBillUploadDto } from './dto/page-bill-upload.dto';
 import { CreateBillUploadDto } from './dto/create-bill-upload.dto';
 import { UpdateBillUploadDto } from './dto/update-bill-upload.dto';
 
-@Controller('billUpload')
+@Controller('bill-upload')
 @ApiTags('账单导入')
 @ApiBearerAuth('jwt')
 @UseGuards(JwtAuthGuard)

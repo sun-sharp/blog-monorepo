@@ -17,13 +17,18 @@ import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
 import { nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
+import { BillUploadService } from '../bill-upload/bill-upload.service';
+import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class WeChatService {
-  constructor(@InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>) {}
+  constructor(
+    @InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>,
+    private readonly billUploadService: BillUploadService,
+  ) {}
 
   /**
    * @description: 微信账单导入
@@ -52,6 +57,50 @@ export class WeChatService {
           // 对数据按照交易时间排序
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
+          });
+          return result;
+        })
+        // 对数据进行批量处理
+        .then(async (list) => {
+          const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.weChat);
+          // 处理每项数据
+          const formatBillUploadItem = (m: ApiWeChatUpload) => {
+            const item = { ...m };
+            for (let i = 0; i < billUploadList.length; i++) {
+              const f = billUploadList[i];
+              // 判断是否赋值
+              let isAssignment = false;
+              if (f.judgeWay === 'includes') {
+                isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
+              } else if (f.judgeWay === 'indexOf') {
+                isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
+              }
+              if (isAssignment) {
+                if (f.handleType === 'inflowOrOutflow') {
+                  // 存在则不再次赋值
+                  if (!item.inflowOrOutflow) {
+                    item.inflowOrOutflow = f.inflowOrOutflow;
+                  }
+                  continue;
+                } else if (isAssignment && f.handleType === 'billType') {
+                  // 存在则不再次赋值
+                  if (!item.billType) {
+                    item.billType = f.billType;
+                  }
+                  continue;
+                } else if (isAssignment && f.handleType === 'billMethod') {
+                  // 存在则不再次赋值
+                  if (!item.billMethod) {
+                    item.billMethod = f.billMethod;
+                  }
+                  continue;
+                }
+              }
+            }
+            return item;
+          };
+          const result = list.map((m) => {
+            return formatBillUploadItem(m);
           });
           logger.log(`微信账单导入${result.length}个`);
           return {

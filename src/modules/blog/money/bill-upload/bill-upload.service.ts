@@ -27,7 +27,18 @@ export class BillUploadService {
     return (
       Promise.resolve(createBillUploadDto)
         .then(async (body) => {
-          await this.billUploadModel.create(body);
+          const createData = {
+            billUploadType: body.billUploadType,
+            billJudgeKey: body.billJudgeKey,
+            judgeVal: body.judgeVal,
+            judgeWay: body.judgeWay,
+            handleType: body.handleType,
+            inflowOrOutflow: body.inflowOrOutflow,
+            billType: body.billType,
+            billMethod: body.billMethod,
+            priorityWeight: body.priorityWeight || 0,
+          };
+          await this.billUploadModel.create(createData);
           return {
             code: ApiCode.SUCCESS,
             message: '添加成功！',
@@ -60,14 +71,19 @@ export class BillUploadService {
           if (type) findData.type = type;
           if (label) findData.label = { $regex: label };
           const total = await this.billUploadModel.find(findData).count();
-          const findArr = await this.billUploadModel.find(findData).limit(limit).skip(skip).sort({ type: 1, value: 1 });
+          const findArr = await this.billUploadModel.find(findData).limit(limit).skip(skip).sort({ billUploadType: 1, handleType: -1, priorityWeight: -1 });
           const list = (findArr || []).map((m) => {
             return {
               billUploadId: m.id,
-              billType: m.billType,
+              billUploadType: m.billUploadType,
               billJudgeKey: m.billJudgeKey,
               judgeVal: m.judgeVal,
               judgeWay: m.judgeWay,
+              handleType: m.handleType,
+              inflowOrOutflow: m.inflowOrOutflow,
+              billType: m.billType,
+              billMethod: m.billMethod,
+              priorityWeight: m.priorityWeight,
             };
           });
           return {
@@ -96,8 +112,19 @@ export class BillUploadService {
     return (
       Promise.resolve(updateBillUploadDto)
         .then(async (body) => {
-          const { billUploadId, ...other } = body;
-          await this.billUploadModel.updateOne({ _id: billUploadId }, other);
+          const { billUploadId } = body;
+          const updateData = {
+            billUploadType: body.billUploadType,
+            billJudgeKey: body.billJudgeKey,
+            judgeVal: body.judgeVal,
+            judgeWay: body.judgeWay,
+            handleType: body.handleType,
+            inflowOrOutflow: body.inflowOrOutflow,
+            billType: body.billType,
+            billMethod: body.billMethod,
+            priorityWeight: body.priorityWeight || 0,
+          };
+          await this.billUploadModel.updateOne({ _id: billUploadId }, updateData);
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
@@ -141,10 +168,30 @@ export class BillUploadService {
   }
 
   /**
-   * @description: 获取账单导入数据库信息
-   * @return {Promise<BillUpload>}
+   * @description: 根据账单导入类型获取数据
+   * @param {number} billUploadType
+   * @return {Promise<BillUpload[]>}
    */
-  public findAllToData(): Promise<BillUpload> {
+  public getDataByBillUploadType(billUploadType: number): Promise<BillUpload[]> {
+    return (
+      Promise.resolve(billUploadType)
+        // 分页查询
+        .then(async (billUploadType) => {
+          const list = await this.billUploadModel.find({ billUploadType }).lean().sort({ billUploadType: 1, priorityWeight: -1 });
+          return list;
+        })
+        // 返回错误
+        .catch((err) => {
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 获取账单导入数据库信息
+   * @return {Promise<BillUpload[]>}
+   */
+  public findAllToData(): Promise<BillUpload[]> {
     return (
       Promise.resolve()
         // 分页查询

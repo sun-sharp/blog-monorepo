@@ -55,3 +55,10 @@ export enum billMethodEnum {
   aliPayTradeClosure = 901, // 支付宝交易关闭
   other = 1001, // 其它
 }
+
+// 账单导入类型
+export enum billUploadTypeEnum {
+  weChat = 1, // 微信账单
+  aliPay = 2, // 支付宝账单
+  bank = 3, // 银行账单
+}

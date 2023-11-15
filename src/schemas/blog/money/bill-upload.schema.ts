@@ -15,13 +15,25 @@ export class BillUpload extends Document {
   @Prop()
   billUploadType: number;
 
+  // 账单判断字段
+  @Prop()
+  billJudgeKey: string;
+
+  // 需处理类型
+  @Prop()
+  handleType: string;
+
+  // 流入/流出
+  @Prop()
+  inflowOrOutflow: number;
+
   // 账单类型
   @Prop()
   billType: number;
 
-  // 账单判断字段
+  // 账单方式
   @Prop()
-  billJudgeKey: string;
+  billMethod: number;
 
   // 判断方式
   @Prop()
@@ -30,6 +42,10 @@ export class BillUpload extends Document {
   // 判断取值
   @Prop()
   judgeVal: Array<string>;
+
+  // 优先权重
+  @Prop()
+  priorityWeight: number;
 }
 
 export const BillUploadSchema = SchemaFactory.createForClass(BillUpload);
