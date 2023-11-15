@@ -2,7 +2,7 @@
   import { roleTypeOption } from '@/constant';
   import { useRoleAddUpdateModel } from '../hooks/useRoleAddUpdateModel';
 
-  const emit = defineEmits(['refurbish']);
+  const emit = defineEmits(['refresh']);
 
   const {
     modelId,

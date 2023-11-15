@@ -2,7 +2,7 @@
   import FormUploadImage from '@/components/form/FormUploadImage.vue';
   import { useUserAddUpdateModel } from '../hooks/useUserAddUpdateModel';
 
-  const emit = defineEmits(['refurbish']);
+  const emit = defineEmits(['refresh']);
 
   const { modelId, showModal, modelFromRef, modelForm, modelRules, formBtnLoading, roleOption, init, confirmForm } = useUserAddUpdateModel(emit);
 

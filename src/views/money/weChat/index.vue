@@ -51,7 +51,7 @@
       </template>
     </basic-table>
     <we-chat-upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
-    <we-chat-update-model ref="updateModelRef" @refurbish="reloadTable" />
+    <we-chat-update-model ref="updateModelRef" @refresh="reloadTable" />
     <balance-time-select ref="balanceTimeRef" @balanceChange="balanceChange" />
   </n-card>
 </template>

@@ -31,6 +31,6 @@
         </n-button>
       </template>
     </basic-table>
-    <category-add-update ref="categoryAddUpdateRef" @refurbish="reloadTable" />
+    <category-add-update ref="categoryAddUpdateRef" @refresh="reloadTable" />
   </n-card>
 </template>

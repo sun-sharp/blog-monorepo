@@ -2,7 +2,7 @@
   import { inflowOrOutflowOption } from '@/constant';
   import { useWeChatUpdateModel } from '../hooks/useWeChatUpdateModel';
 
-  const emit = defineEmits(['refurbish']);
+  const emit = defineEmits(['refresh']);
 
   const { modelId, showModal, modelFromRef, modelForm, modelRules, formBtnLoading, billTypeOption, billMethodOption, init, confirmForm } =
     useWeChatUpdateModel(emit);

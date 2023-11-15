@@ -31,7 +31,7 @@
         </n-button>
       </template>
     </basic-table>
-    <add-update-model ref="addUpdateModelRef" @refurbish="reloadTable" />
+    <add-update-model ref="addUpdateModelRef" @refresh="reloadTable" />
   </n-card>
 </template>
 

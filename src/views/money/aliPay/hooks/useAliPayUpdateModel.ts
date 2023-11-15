@@ -25,7 +25,7 @@ const modelFields = {
 };
 
 // 修改支付宝账单 弹窗
-export const useAliPayUpdateModel = (emit: (event: 'refurbish', ...args: any[]) => void) => {
+export const useAliPayUpdateModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
   const modelId = ref('');
   const showModal = ref(false);
 
@@ -91,7 +91,7 @@ export const useAliPayUpdateModel = (emit: (event: 'refurbish', ...args: any[]) 
           })
           .then(() => {
             showModal.value = false;
-            emit('refurbish');
+            emit('refresh');
           });
       }
       formBtnLoading.value = false;

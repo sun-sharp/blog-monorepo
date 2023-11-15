@@ -56,7 +56,7 @@
       </template>
     </basic-table>
     <ali-pay-upload-file-model ref="uploadFileModelRef" @refresh="reloadTable" />
-    <ali-pay-update-model ref="updateModelRef" @refurbish="reloadTable" />
+    <ali-pay-update-model ref="updateModelRef" @refresh="reloadTable" />
     <balance-time-select ref="balanceTimeRef" @balanceChange="balanceChange" />
     <balance-time-select ref="balanceBodyTimeRef" @balanceChange="balanceBodyChange" />
   </n-card>

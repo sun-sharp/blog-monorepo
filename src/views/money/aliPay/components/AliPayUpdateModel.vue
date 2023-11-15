@@ -2,7 +2,7 @@
   import { inflowOrOutflowOption } from '@/constant';
   import { useAliPayUpdateModel } from '../hooks/useAliPayUpdateModel';
 
-  const emit = defineEmits(['refurbish']);
+  const emit = defineEmits(['refresh']);
 
   const { modelId, showModal, modelFromRef, modelForm, modelRules, formBtnLoading, billTypeOption, billMethodOption, init, confirmForm } =
     useAliPayUpdateModel(emit);

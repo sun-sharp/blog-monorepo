@@ -19,7 +19,7 @@ const defaultModelForm = {
 };
 
 // 用户管理 新建/修改 弹窗
-export const useUserAddUpdateModel = (emit: (event: 'refurbish', ...args: any[]) => void) => {
+export const useUserAddUpdateModel = (emit: (event: 'refresh', ...args: any[]) => void) => {
   const modelId = ref('');
   const showModal = ref(false);
 
@@ -130,7 +130,7 @@ export const useUserAddUpdateModel = (emit: (event: 'refurbish', ...args: any[])
             });
         request.then(() => {
           showModal.value = false;
-          emit('refurbish');
+          emit('refresh');
         });
       }
       formBtnLoading.value = false;

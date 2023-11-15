@@ -2,7 +2,7 @@
   import { categoryTypeOption } from '@/constant';
   import { useCategoryAddUpdate } from '../hooks/useCategoryAddUpdate';
 
-  const emit = defineEmits(['refurbish']);
+  const emit = defineEmits(['refresh']);
 
   const {
     showModal,

@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-10-20 10:54:49
+ * @LastEditTime: 2023-11-15 11:15:46
  * @Description: 接口类型
  */
 
@@ -112,33 +112,55 @@ export const categoryTypeOption = Object.keys(categoryTypeEnum).map((key) => ({
   value: categoryTypeEnum[key],
   label: categoryTypeEnum[key],
 }));
-// export const categoryTypeOption = [
-//   {
-//     value: categoryTypeEnum.moneyBillType,
-//     label: '金额账单类型',
-//   },
-//   {
-//     value: categoryTypeEnum.moneyBankType,
-//     label: '金额银行类型',
-//   },
-//   {
-//     value: categoryTypeEnum.moneyBillMethod,
-//     label: '金额账单方式',
-//   },
-//   {
-//     value: categoryTypeEnum.capitalImageSource,
-//     label: '图片来源',
-//   },
-//   {
-//     value: categoryTypeEnum.capitalWaitForDoClassify,
-//     label: '待办分类',
-//   },
-//   {
-//     value: categoryTypeEnum.capitalMenuType,
-//     label: '菜单类型',
-//   },
-//   {
-//     value: categoryTypeEnum.blogArticleCategory,
-//     label: '文章类型',
-//   },
-// ];
+
+// 账单导入类型
+export const billUploadTypeOption = [
+  {
+    value: 1,
+    label: '微信账单',
+  },
+  {
+    value: 2,
+    label: '支付宝账单',
+  },
+  {
+    value: 3,
+    label: '银行账单',
+  },
+];
+export const billUploadTypeMap = arrEnumToObj(billUploadTypeOption);
+
+// 账单导入类型
+export const handleTypeOption = [
+  {
+    value: 1,
+    label: '流入/流出',
+  },
+  {
+    value: 2,
+    label: '账单类型',
+  },
+  {
+    value: 3,
+    label: '账单方式',
+  },
+];
+export const handleTypeMap = arrEnumToObj(handleTypeOption);
+
+// 账单导入字段
+export const billJudgeKeyArr = [
+  'tradeType',
+  'currentStatus',
+  'paymentMethod',
+  'tradeOtherPerson',
+  'goods',
+  'productDescription',
+  'tradeStatus',
+  'explain',
+  'tradeOtherPersonAccount',
+];
+export const billJudgeKeyOption = billJudgeKeyArr.map((m) => ({ value: m, label: m }));
+
+// 账单导入方式
+export const judgeWayArr = ['indexOf', 'includes'];
+export const judgeWayOption = judgeWayArr.map((m) => ({ value: m, label: m }));

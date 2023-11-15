@@ -14,7 +14,7 @@ const defaultModelForm = {
 };
 
 // 全局类型管理 新建/修改 弹窗
-export const useCategoryAddUpdate = (emit: (event: 'refurbish', ...args: any[]) => void) => {
+export const useCategoryAddUpdate = (emit: (event: 'refresh', ...args: any[]) => void) => {
   const apiTypeStore = useApiTypeStore();
 
   // 弹窗
@@ -109,7 +109,7 @@ export const useCategoryAddUpdate = (emit: (event: 'refurbish', ...args: any[]) 
         request.then(() => {
           showModal.value = false;
           if (modelForm.type) apiTypeStore.againGetApiType(modelForm.type);
-          emit('refurbish');
+          emit('refresh');
         });
       }
       formBtnLoading.value = false;
