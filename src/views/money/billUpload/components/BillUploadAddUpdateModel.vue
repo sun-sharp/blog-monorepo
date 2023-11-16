@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { PlusCircleOutlined, TrashOutline } from '@/utils';
   import { useBillUploadAddUpdateModel } from '../hooks/useBillUploadAddUpdateModel';
-  import { billUploadTypeOption, handleTypeOption, judgeWayOption, inflowOrOutflowOption, billJudgeKeyOption } from '@/constant';
+  import { billUploadTypeOption, handleTypeOption, judgeWayOption, inflowOrOutflowOption } from '@/constant';
 
   const emit = defineEmits(['refresh']);
 
@@ -15,6 +15,7 @@
     formBtnLoading,
     billTypeOption,
     billMethodOption,
+    billJudgeKeyOptions,
     init,
     judgeInputAdd,
     judgeValRemove,
@@ -80,7 +81,7 @@
       <n-form-item label="账单导入字段" path="billJudgeKey">
         <n-select
           v-model:value="modelForm.billJudgeKey"
-          :options="billJudgeKeyOption"
+          :options="billJudgeKeyOptions"
           :virtual-scroll="false"
           filterable
           clearable

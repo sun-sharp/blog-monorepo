@@ -4,6 +4,14 @@ import { useApiType, useSetting } from '@/hooks';
 import { ApiBillUploadItem, ApiBillUploadSaveData } from '/#/api/blog/bill-upload';
 import { FormItemRule } from 'naive-ui';
 import { billUploadApi } from '@/api';
+import {
+  aliPayBillJudgeOptions,
+  aliPayBillUploadType,
+  bankBillJudgeOptions,
+  bankBillUploadType,
+  weChatBillJudgeOptions,
+  weChatBillUploadType,
+} from '@/constant';
 
 const modelFields = {
   billUploadType: null,
@@ -75,6 +83,17 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
 
   // 配置信息
   const { getAppThemeColor } = useSetting();
+
+  const billJudgeKeyOptions = computed(() => {
+    if (modelForm.billUploadType === weChatBillUploadType) {
+      return weChatBillJudgeOptions.map((m) => ({ value: m.value, label: `${m.label}(${m.value})` }));
+    } else if (modelForm.billUploadType === aliPayBillUploadType) {
+      return aliPayBillJudgeOptions.map((m) => ({ value: m.value, label: `${m.label}(${m.value})` }));
+    } else if (modelForm.billUploadType === bankBillUploadType) {
+      return bankBillJudgeOptions.map((m) => ({ value: m.value, label: `${m.label}(${m.value})` }));
+    }
+    return [];
+  });
 
   // 初始化
   const init = (row: ApiBillUploadItem) => {
@@ -151,6 +170,7 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
     formBtnLoading,
     billTypeOption: getBillTypeOption,
     billMethodOption: getBillMethodOption,
+    billJudgeKeyOptions,
     init,
     judgeInputAdd,
     judgeValRemove,

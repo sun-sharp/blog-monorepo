@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-11-15 22:24:00
+ * @LastEditTime: 2023-11-17 00:06:39
  * @Description: 接口类型
  */
 
@@ -107,24 +107,30 @@ export const categoryTypeOption = Object.keys(categoryTypeEnum).map((key) => ({
   label: categoryTypeEnum[key],
 }));
 
+// 微信账单导入类型
+export const weChatBillUploadType = 1;
+// 支付宝账单导入类型
+export const aliPayBillUploadType = 2;
+// 银行账单导入类型
+export const bankBillUploadType = 3;
 // 账单导入类型
 export const billUploadTypeOption = [
   {
-    value: 1,
+    value: weChatBillUploadType,
     label: '微信账单',
   },
   {
-    value: 2,
+    value: aliPayBillUploadType,
     label: '支付宝账单',
   },
   {
-    value: 3,
+    value: bankBillUploadType,
     label: '银行账单',
   },
 ];
 export const billUploadTypeMap = arrEnumToObj(billUploadTypeOption);
 
-// 账单导入类型
+// 需处理账单类型
 export const handleTypeOption = [
   {
     value: 'inflowOrOutflow',
@@ -140,6 +146,96 @@ export const handleTypeOption = [
   },
 ];
 export const handleTypeMap = arrEnumToObj(handleTypeOption);
+
+// 微信账单导入字段
+export const weChatBillJudgeOptions = [
+  {
+    value: 'tradeType',
+    label: '交易类型',
+  },
+  {
+    value: 'tradeOtherPerson',
+    label: '交易对方',
+  },
+  {
+    value: 'goods',
+    label: '商品',
+  },
+  {
+    value: 'incomeOrPay',
+    label: '收/支',
+  },
+  {
+    value: 'paymentMethod',
+    label: '支付方式',
+  },
+  {
+    value: 'currentStatus',
+    label: '当前状态',
+  },
+  {
+    value: 'remarks',
+    label: '备注',
+  },
+];
+// 支付宝账单导入字段
+export const aliPayBillJudgeOptions = [
+  {
+    value: 'tradeType',
+    label: '交易类型',
+  },
+  {
+    value: 'tradeOtherPerson',
+    label: '交易对方',
+  },
+  {
+    value: 'oppositeAccount',
+    label: '对方账号',
+  },
+  {
+    value: 'productDescription',
+    label: '商品说明',
+  },
+  {
+    value: 'incomeOrPay',
+    label: '收/支',
+  },
+  {
+    value: 'paymentMethod',
+    label: '支付方式',
+  },
+  {
+    value: 'tradeStatus',
+    label: '交易状态',
+  },
+];
+// 银行账单导入字段
+export const bankBillJudgeOptions = [
+  {
+    value: 'explain',
+    label: '摘要',
+  },
+  {
+    value: 'incomeOrPay',
+    label: '收/支',
+  },
+  {
+    value: 'tradeOtherPerson',
+    label: '对方户名',
+  },
+  {
+    value: 'tradeOtherPersonAccount',
+    label: '对方账号',
+  },
+  {
+    value: 'tradeType',
+    label: '渠道',
+  },
+  {
+    value: 'tradeOtherPersonRemarks',
+    label: '交易对方备注',
+  },
+];
 
 // 账单导入字段
 export const billJudgeKeyArr = [
