@@ -54,6 +54,9 @@ export const useBillUploadConfigure = () => {
           filterable: true,
           placeholder: '请选择需处理类型',
           options: handleTypeOption,
+          'onUpdate:value': (val) => {
+            searchParams.value.handleType = val;
+          },
         },
       },
     ];
@@ -68,6 +71,20 @@ export const useBillUploadConfigure = () => {
           filterable: true,
           placeholder: '请选择账单类型',
           options: unref(getBillTypeOption),
+        },
+      });
+    }
+    // 添加账单方式查询
+    else if (searchParams.value.handleType === 'billMethod') {
+      arr.push({
+        field: 'billMethod',
+        component: 'NSelect',
+        label: '账单方式',
+        labelWidth: 110,
+        componentProps: {
+          filterable: true,
+          placeholder: '请选择账单方式',
+          options: unref(getBillMethodOption),
         },
       });
     }
