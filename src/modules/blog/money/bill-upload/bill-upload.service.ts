@@ -26,6 +26,23 @@ export class BillUploadService {
   public create(createBillUploadDto: CreateBillUploadDto): Promise<IResponse> {
     return (
       Promise.resolve(createBillUploadDto)
+        // 判断类型是否相同
+        .then(async (body) => {
+          const find = await this.billUploadModel.find({
+            inflowOrOutflow: body.inflowOrOutflow,
+            billType: body.billType,
+            billMethod: body.billMethod,
+            billUploadType: body.billUploadType,
+            handleType: body.handleType,
+            billJudgeKey: body.billJudgeKey,
+            judgeWay: body.judgeWay,
+          });
+          if (find.length > 0) {
+            throw '请切换类型，并重新保存';
+          }
+          return body;
+        })
+        // 保存
         .then(async (body) => {
           const createData = {
             billUploadType: body.billUploadType,
