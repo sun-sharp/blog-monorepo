@@ -5,7 +5,7 @@ import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { billUploadApi } from '@/api';
 import { getBillTypeData, getBillMethodData, useApiType } from '@/hooks';
 import { NButton, NPopconfirm } from 'naive-ui';
-import { billUploadTypeMap, handleTypeMap, billUploadTypeOption, inflowOrOutflowMap, judgeWayOption } from '@/constant';
+import { billUploadTypeMap, handleTypeMap, billUploadTypeOption, inflowOrOutflowMap, judgeWayOption, handleTypeOption } from '@/constant';
 
 // 微信账单
 export const useBillUploadConfigure = () => {
@@ -42,6 +42,17 @@ export const useBillUploadConfigure = () => {
         filterable: true,
         placeholder: '请选择账单导入类型',
         options: billUploadTypeOption,
+      },
+    },
+    {
+      field: 'handleType',
+      component: 'NSelect',
+      label: '需处理类型',
+      labelWidth: 110,
+      componentProps: {
+        filterable: true,
+        placeholder: '请选择需处理类型',
+        options: handleTypeOption,
       },
     },
     {

@@ -32,39 +32,70 @@
           v-model:value="modelForm.billUploadType"
           :options="billUploadTypeOption"
           :virtual-scroll="false"
+          filterable
           clearable
           placeholder="请选择账单导入类型"
         ></n-select>
       </n-form-item>
       <n-form-item label="需处理类型" path="handleType">
-        <n-select v-model:value="modelForm.handleType" :options="handleTypeOption" :virtual-scroll="false" clearable placeholder="请选择需处理类型"></n-select>
+        <n-select
+          v-model:value="modelForm.handleType"
+          :options="handleTypeOption"
+          :virtual-scroll="false"
+          filterable
+          clearable
+          placeholder="请选择需处理类型"
+        ></n-select>
       </n-form-item>
       <n-form-item v-if="modelForm.handleType === 'inflowOrOutflow'" label="流入/流出" path="inflowOrOutflow">
         <n-select
           v-model:value="modelForm.inflowOrOutflow"
           :options="inflowOrOutflowOption"
           :virtual-scroll="false"
+          filterable
           clearable
           placeholder="请选择流入/流出"
         ></n-select>
       </n-form-item>
       <n-form-item v-else-if="modelForm.handleType === 'billType'" label="账单类型" path="billType">
-        <n-select v-model:value="modelForm.billType" :options="billTypeOption" :virtual-scroll="false" clearable placeholder="请选择账单类型"></n-select>
+        <n-select
+          v-model:value="modelForm.billType"
+          :options="billTypeOption"
+          :virtual-scroll="false"
+          filterable
+          clearable
+          placeholder="请选择账单类型"
+        ></n-select>
       </n-form-item>
       <n-form-item v-else-if="modelForm.handleType === 'billMethod'" label="账单方式" path="billMethod">
-        <n-select v-model:value="modelForm.billMethod" :options="billMethodOption" :virtual-scroll="false" clearable placeholder="请选择账单方式"></n-select>
+        <n-select
+          v-model:value="modelForm.billMethod"
+          :options="billMethodOption"
+          :virtual-scroll="false"
+          filterable
+          clearable
+          placeholder="请选择账单方式"
+        ></n-select>
       </n-form-item>
       <n-form-item label="账单导入字段" path="billJudgeKey">
         <n-select
           v-model:value="modelForm.billJudgeKey"
           :options="billJudgeKeyOption"
           :virtual-scroll="false"
+          filterable
           clearable
           placeholder="请选择账单导入字段"
         ></n-select>
       </n-form-item>
       <n-form-item label="账单导入方式" path="judgeWay">
-        <n-select v-model:value="modelForm.judgeWay" :options="judgeWayOption" :virtual-scroll="false" clearable placeholder="请选择账单导入方式"></n-select>
+        <n-select
+          v-model:value="modelForm.judgeWay"
+          :options="judgeWayOption"
+          :virtual-scroll="false"
+          filterable
+          clearable
+          placeholder="请选择账单导入方式"
+        ></n-select>
       </n-form-item>
       <n-form-item label="优先权重" path="priorityWeight">
         <n-input-number v-model:value="modelForm.priorityWeight" class="w-full" />
