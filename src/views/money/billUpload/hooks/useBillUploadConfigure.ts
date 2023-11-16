@@ -32,30 +32,46 @@ export const useBillUploadConfigure = () => {
   const tableRowKey = (row: ApiBillUploadItem): string => row.billUploadId;
 
   // 查询配置
-  const searchSchemas = computed<FormSchema[]>(() => [
-    {
-      field: 'billUploadType',
-      component: 'NSelect',
-      label: '账单导入类型',
-      labelWidth: 110,
-      componentProps: {
-        filterable: true,
-        placeholder: '请选择账单导入类型',
-        options: billUploadTypeOption,
+  const searchSchemas = computed<FormSchema[]>(() => {
+    const arr = [
+      {
+        field: 'billUploadType',
+        component: 'NSelect',
+        label: '账单导入类型',
+        labelWidth: 110,
+        componentProps: {
+          filterable: true,
+          placeholder: '请选择账单导入类型',
+          options: billUploadTypeOption,
+        },
       },
-    },
-    {
-      field: 'handleType',
-      component: 'NSelect',
-      label: '需处理类型',
-      labelWidth: 110,
-      componentProps: {
-        filterable: true,
-        placeholder: '请选择需处理类型',
-        options: handleTypeOption,
+      {
+        field: 'handleType',
+        component: 'NSelect',
+        label: '需处理类型',
+        labelWidth: 110,
+        componentProps: {
+          filterable: true,
+          placeholder: '请选择需处理类型',
+          options: handleTypeOption,
+        },
       },
-    },
-    {
+    ];
+    // 添加账单类型查询
+    if (searchParams.value.handleType === 'billType') {
+      arr.push({
+        field: 'billType',
+        component: 'NSelect',
+        label: '账单类型',
+        labelWidth: 110,
+        componentProps: {
+          filterable: true,
+          placeholder: '请选择账单类型',
+          options: unref(getBillTypeOption),
+        },
+      });
+    }
+    arr.push({
       field: 'judgeWay',
       component: 'NSelect',
       label: '账单导入方式',
@@ -65,8 +81,9 @@ export const useBillUploadConfigure = () => {
         placeholder: '请选择账单导入方式',
         options: unref(judgeWayOption),
       },
-    },
-  ]);
+    });
+    return arr;
+  });
 
   // 删除
   const handleDelete = (row: ApiBillUploadItem) => {

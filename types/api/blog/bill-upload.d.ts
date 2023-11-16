@@ -1,7 +1,16 @@
 /**
  * @description: 账单导入列表查询传参
  */
-export type ApiBillUploadSearchParams = {};
+export type ApiBillUploadSearchParams = {
+  // 账单导入类型
+  billUploadType?: number;
+
+  // 需处理类型
+  handleType?: string;
+
+  // 判断方式
+  judgeWay?: string;
+};
 
 /**
  * @description: 条件并分页获取账单导入列表参数
