@@ -33,7 +33,7 @@ export const useBillUploadConfigure = () => {
 
   // 查询配置
   const searchSchemas = computed<FormSchema[]>(() => {
-    const arr = [
+    const arr: FormSchema[] = [
       {
         field: 'billUploadType',
         component: 'NSelect',
@@ -54,7 +54,7 @@ export const useBillUploadConfigure = () => {
           filterable: true,
           placeholder: '请选择需处理类型',
           options: handleTypeOption,
-          'onUpdate:value': (val) => {
+          'onUpdate:value': (val: string) => {
             searchParams.value.handleType = val;
           },
         },

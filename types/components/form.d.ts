@@ -15,9 +15,11 @@ export interface FormSchema {
 }
 
 export interface FormSchemaComponentProps {
+  filterable?: boolean;
   clearable?: boolean;
   placeholder?: string;
   options?: CStrOption[] | CNumOption[];
+  'onUpdate:value'?: (val?) => void;
 }
 
 export interface SearchFormProps {
