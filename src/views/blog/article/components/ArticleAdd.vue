@@ -1,13 +1,14 @@
 <script lang="ts" setup>
   import { LeftOutlined } from '@/utils';
   import MdEditorInput from '@/components/editor/MdEditorInput.vue';
+  import CodeMirrorInput from '@/components/editor/CodeMirrorInput.vue';
   import { ArticleAddProps, useArticleAdd } from '../hooks/useArticleAdd';
 
   const props = defineProps(ArticleAddProps);
 
   const emit = defineEmits(['changeShowType', 'finished']);
 
-  const { addFormRef, addFromModel, addFromRules, categoryOptions, onSubmitOrEdit } = useArticleAdd(props, emit);
+  const { addFormRef, addFromModel, contTab, addFromRules, categoryOptions, onSubmitOrEdit } = useArticleAdd(props, emit);
 </script>
 
 <template>
@@ -44,7 +45,15 @@
       <n-select v-model:value="addFromModel.categoryVal" placeholder="请选择文章分类" filterable :options="categoryOptions" />
     </n-form-item>
     <n-form-item path="markdownContent" label="文章内容">
-      <md-editor-input v-model:markdown-text="addFromModel.markdownContent" v-model:html-text="addFromModel.htmlContent" image-source="article_content" />
+      <n-tabs v-model:value="contTab" type="card">
+        <n-tab-pane tab="markdown编辑器" name="md">
+          <md-editor-input v-model:markdown-text="addFromModel.markdownContent" v-model:html-text="addFromModel.htmlContent" image-source="article_content" />
+        </n-tab-pane>
+        <n-tab-pane tab="code编辑器" name="code">
+          <code-mirror-input />
+        </n-tab-pane>
+      </n-tabs>
+      <!-- <md-editor-input v-model:markdown-text="addFromModel.markdownContent" v-model:html-text="addFromModel.htmlContent" image-source="article_content" /> -->
     </n-form-item>
   </n-form>
 </template>

@@ -25,6 +25,7 @@ export const ArticleAddProps = {
 export const useArticleAdd = (props: ExtractPropTypes<typeof ArticleAddProps>, emit: (event: 'changeShowType' | 'finished', ...args: any[]) => void) => {
   const addFormRef = ref<Component>();
   const addFromModel = reactive<ApiArticleItemForm>(Object.assign({}, defaultFromFields));
+  const contTab = ref('md');
 
   const { getArticleCategoryOption } = useApiType();
 
@@ -102,6 +103,7 @@ export const useArticleAdd = (props: ExtractPropTypes<typeof ArticleAddProps>, e
   return {
     addFormRef,
     addFromModel,
+    contTab,
     addFromRules,
     categoryOptions: getArticleCategoryOption,
     onSubmitOrEdit,

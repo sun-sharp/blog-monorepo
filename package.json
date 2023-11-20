@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@antv/g2plot": "^2.4.31",
+    "@codemirror/theme-one-dark": "^6.1.2",
     "@vicons/antd": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vueuse/core": "^10.3.0",
