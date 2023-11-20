@@ -1,20 +1,31 @@
 <script setup lang="ts">
+  import { computed, onBeforeUnmount, onMounted, shallowRef, toRaw, watch } from 'vue';
+  import { EditorView } from '@codemirror/view';
+  import { EditorState } from '@codemirror/state';
+  import {
+    ConfigProps,
+    DEFAULT_CONFIG,
+    createEditorState,
+    CodeMirrorInputProps,
+    createEditorView,
+    getEditorTools,
+    destroyEditorView,
+  } from './hooks/useCodeMirrorInput';
+
+  const props = defineProps(CodeMirrorInputProps);
+
+  const emit = defineEmits(['change', 'update', 'focus', 'blur', 'ready', 'update:modelValue']);
+
   const container = shallowRef<HTMLDivElement>();
   const state = shallowRef<EditorState>();
   const view = shallowRef<EditorView>();
 
-  const defaultConfig: ConfigProps = {
-    ...DEFAULT_CONFIG,
-    ...useGlobalConfig(),
-  };
-
   const config = computed<ConfigProps>(() => {
     const result = {} as Required<ConfigProps>;
-    Object.keys(toRaw(props)).forEach((key: any) => {
+    Object.keys(toRaw(props)).forEach((key: string) => {
       if (key !== 'modelValue') {
         // @ts-ignore
-        // MARK: ensure access to `prop[key]` original object
-        result[key] = props[key] ?? defaultConfig[key];
+        result[key] = props[key] ?? DEFAULT_CONFIG[key];
       }
     });
     return result;
@@ -24,17 +35,14 @@
     state.value = createEditorState({
       doc: props.modelValue,
       selection: config.value.selection,
-      // The extensions are split into two parts, global and component prop.
-      // Only the global part is initialized here.
-      // The prop part is dynamically reconfigured after the component is mounted.
-      extensions: defaultConfig.extensions ?? [],
-      onFocus: (viewUpdate) => context.emit(EventKey.Focus, viewUpdate),
-      onBlur: (viewUpdate) => context.emit(EventKey.Blur, viewUpdate),
-      onUpdate: (viewUpdate) => context.emit(EventKey.Update, viewUpdate),
+      extensions: DEFAULT_CONFIG.extensions ?? [],
+      onFocus: (viewUpdate) => emit('focus', viewUpdate),
+      onBlur: (viewUpdate) => emit('blur', viewUpdate),
+      onUpdate: (viewUpdate) => emit('update', viewUpdate),
       onChange: (newDoc, viewUpdate) => {
         if (newDoc !== props.modelValue) {
-          context.emit(EventKey.Change, newDoc, viewUpdate);
-          context.emit(EventKey.ModelUpdate, newDoc, viewUpdate);
+          emit('change', newDoc, viewUpdate);
+          emit('update:modelValue', newDoc, viewUpdate);
         }
       },
     });
@@ -106,12 +114,12 @@
       { immediate: true }
     );
 
-    // immediate autofocus
+    // 立即对焦
     if (config.value.autofocus) {
       editorTools.focus();
     }
 
-    context.emit(EventKey.Ready, {
+    emit('ready', {
       state: state.value!,
       view: view.value!,
       container: container.value!,

@@ -1,60 +1,13 @@
-import { defineComponent, shallowRef, computed, watch, toRaw, onMounted, onBeforeUnmount, h, ExtractPropTypes, PropType } from 'vue';
-import { App, inject } from 'vue';
+import { ExtractPropTypes } from 'vue';
 import { basicSetup } from 'codemirror';
 import type { CSSProperties } from 'vue';
 import { EditorState, EditorStateConfig, Compartment, Extension, StateEffect } from '@codemirror/state';
-import { EditorView, EditorViewConfig, ViewUpdate, keymap, placeholder } from '@codemirror/view';
+import { EditorView, EditorViewConfig, keymap, placeholder } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
 import { indentUnit } from '@codemirror/language';
+import { CreateStateOptions, EditorTools } from '/#/components/editor';
 
-export enum EventKey {
-  Change = 'change',
-  Update = 'update',
-  Focus = 'focus',
-  Blur = 'blur',
-  Ready = 'ready',
-  ModelUpdate = 'update:modelValue',
-}
-
-export const editorEvents = {
-  // when content(doc) change only
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [EventKey.Change]: (_value: string, _viewUpdate: ViewUpdate) => {
-    return true;
-  },
-  // when codemirror state change
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [EventKey.Update]: (_viewUpdate: ViewUpdate) => {
-    return true;
-  },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [EventKey.Focus]: (_viewUpdate: ViewUpdate) => {
-    return true;
-  },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [EventKey.Blur]: (_viewUpdate: ViewUpdate) => {
-    return true;
-  },
-  // when component mounted
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [EventKey.Ready]: (_payload: { view: EditorView; state: EditorState; container: HTMLDivElement }) => {
-    return true;
-  },
-};
-
-export const modelUpdateEvent = {
-  [EventKey.ModelUpdate]: editorEvents[EventKey.Change],
-};
-
-export const events = {
-  ...editorEvents,
-  ...modelUpdateEvent,
-};
-
-export type EditorEvents = typeof editorEvents;
-export type Events = typeof events;
-
-const UNDEFINED = void 0;
+const UNDEFINED = 0;
 const NonDefaultBooleanType = {
   type: Boolean,
   default: UNDEFINED,
@@ -82,14 +35,12 @@ export const modelValueProp = {
   },
 };
 
-export const props = {
+export const CodeMirrorInputProps = {
   ...configProps,
   ...modelValueProp,
 };
 
 export type ConfigProps = ExtractPropTypes<typeof configProps>;
-export type Props = ExtractPropTypes<typeof props>;
-export type PropKey = keyof Props;
 
 export const DEFAULT_CONFIG: Readonly<Partial<ConfigProps>> = Object.freeze({
   autofocus: false,
@@ -100,22 +51,6 @@ export const DEFAULT_CONFIG: Readonly<Partial<ConfigProps>> = Object.freeze({
   autoDestroy: true,
   extensions: [basicSetup],
 });
-
-const CONFIG_SYMBOL = Symbol('vue-codemirror-global-config');
-export const injectGlobalConfig = (app: App, config?: ConfigProps) => {
-  app.provide(CONFIG_SYMBOL, config);
-};
-
-export const useGlobalConfig = () => {
-  return inject<ConfigProps>(CONFIG_SYMBOL, {} as ConfigProps);
-};
-
-export interface CreateStateOptions extends EditorStateConfig {
-  onChange(doc: string, viewUpdate: ViewUpdate): void;
-  onUpdate(viewUpdate: ViewUpdate): void;
-  onFocus(viewUpdate: ViewUpdate): void;
-  onBlur(viewUpdate: ViewUpdate): void;
-}
 
 export const createEditorState = ({ onUpdate, onChange, onFocus, onBlur, ...config }: CreateStateOptions) => {
   return EditorState.create({
@@ -165,8 +100,8 @@ export const createEditorExtensionToggler = (view: EditorView, extension: Extens
   };
 };
 
-export const getEditorTools = (view: EditorView) => {
-  // doc state
+export const getEditorTools = (view: EditorView): EditorTools => {
+  // 设置文本
   const getDoc = () => view.state.doc.toString();
   const setDoc = (newDoc: string) => {
     if (newDoc !== getDoc()) {
@@ -180,40 +115,37 @@ export const getEditorTools = (view: EditorView) => {
     }
   };
 
-  // UX operations
+  // 获得焦点
   const focus = () => view.focus();
 
-  // reconfigure extension
+  // 重新配置扩展
   const { run: reExtensions } = createEditorCompartment(view);
 
-  // disabled editor
+  // 改变禁止
   const toggleDisabled = createEditorExtensionToggler(view, [EditorView.editable.of(false), EditorState.readOnly.of(true)]);
 
-  // https://codemirror.net/examples/tab/
+  // 改变标签
   const toggleIndentWithTab = createEditorExtensionToggler(view, keymap.of([indentWithTab]));
 
-  // tab size
-  // https://gist.github.com/s-cork/e7104bace090702f6acbc3004228f2cb
+  // 设置编辑器的标签大小
   const { run: reTabSize } = createEditorCompartment(view);
   const setTabSize = (tabSize: number) => {
     reTabSize([EditorState.tabSize.of(tabSize), indentUnit.of(' '.repeat(tabSize))]);
   };
 
-  // phrases
-  // https://codemirror.net/examples/translate/
+  // 设置编辑器的词组
   const { run: rePhrases } = createEditorCompartment(view);
   const setPhrases = (phrases: Record<string, string>) => {
     rePhrases([EditorState.phrases.of(phrases)]);
   };
 
-  // set editor's placeholder
+  // 设置编辑器的占位符
   const { run: rePlaceholder } = createEditorCompartment(view);
   const setPlaceholder = (value: string) => {
     rePlaceholder(placeholder(value));
   };
 
-  // set style to editor element
-  // https://codemirror.net/examples/styling/
+  // 设置编辑器的样式
   const { run: reStyle } = createEditorCompartment(view);
   const setStyle = (style: CSSProperties = {}) => {
     reStyle(EditorView.theme({ '&': { ...(style as any) } }));
@@ -232,142 +164,3 @@ export const getEditorTools = (view: EditorView) => {
     setStyle,
   };
 };
-
-export const Codemirror = defineComponent({
-  name: 'VueCodemirror',
-  props: { ...props },
-  emits: { ...events },
-  setup(props, context) {
-    const container = shallowRef<HTMLDivElement>();
-    const state = shallowRef<EditorState>();
-    const view = shallowRef<EditorView>();
-
-    const defaultConfig: ConfigProps = {
-      ...DEFAULT_CONFIG,
-      ...useGlobalConfig(),
-    };
-
-    const config = computed<ConfigProps>(() => {
-      const result = {} as Required<ConfigProps>;
-      Object.keys(toRaw(props)).forEach((key: any) => {
-        if (key !== 'modelValue') {
-          // @ts-ignore
-          // MARK: ensure access to `prop[key]` original object
-          result[key] = props[key] ?? defaultConfig[key];
-        }
-      });
-      return result;
-    });
-
-    onMounted(() => {
-      state.value = createEditorState({
-        doc: props.modelValue,
-        selection: config.value.selection,
-        // The extensions are split into two parts, global and component prop.
-        // Only the global part is initialized here.
-        // The prop part is dynamically reconfigured after the component is mounted.
-        extensions: defaultConfig.extensions ?? [],
-        onFocus: (viewUpdate) => context.emit(EventKey.Focus, viewUpdate),
-        onBlur: (viewUpdate) => context.emit(EventKey.Blur, viewUpdate),
-        onUpdate: (viewUpdate) => context.emit(EventKey.Update, viewUpdate),
-        onChange: (newDoc, viewUpdate) => {
-          if (newDoc !== props.modelValue) {
-            context.emit(EventKey.Change, newDoc, viewUpdate);
-            context.emit(EventKey.ModelUpdate, newDoc, viewUpdate);
-          }
-        },
-      });
-
-      view.value = createEditorView({
-        state: state.value,
-        parent: container.value!,
-        root: config.value.root,
-      });
-
-      const editorTools = getEditorTools(view.value);
-
-      // watch prop.modelValue
-      watch(
-        () => props.modelValue,
-        (newValue) => {
-          if (newValue !== editorTools.getDoc()) {
-            editorTools.setDoc(newValue);
-          }
-        }
-      );
-
-      // watch prop.extensions
-      watch(
-        () => props.extensions,
-        (extensions) => editorTools.reExtensions(extensions || []),
-        { immediate: true }
-      );
-
-      // watch prop.disabled
-      watch(
-        () => config.value.disabled,
-        (disabled) => editorTools.toggleDisabled(disabled),
-        { immediate: true }
-      );
-
-      // watch prop.indentWithTab
-      watch(
-        () => config.value.indentWithTab,
-        (iwt) => editorTools.toggleIndentWithTab(iwt),
-        { immediate: true }
-      );
-
-      // watch prop.tabSize
-      watch(
-        () => config.value.tabSize,
-        (tabSize) => editorTools.setTabSize(tabSize!),
-        { immediate: true }
-      );
-
-      // watch prop.phrases
-      watch(
-        () => config.value.phrases,
-        (phrases) => editorTools.setPhrases(phrases || {}),
-        { immediate: true }
-      );
-
-      // watch prop.placeholder
-      watch(
-        () => config.value.placeholder,
-        (placeholder) => editorTools.setPlaceholder(placeholder!),
-        { immediate: true }
-      );
-
-      // watch prop.style
-      watch(
-        () => config.value.style,
-        (style) => editorTools.setStyle(style),
-        { immediate: true }
-      );
-
-      // immediate autofocus
-      if (config.value.autofocus) {
-        editorTools.focus();
-      }
-
-      context.emit(EventKey.Ready, {
-        state: state.value!,
-        view: view.value!,
-        container: container.value!,
-      });
-    });
-
-    onBeforeUnmount(() => {
-      if (config.value.autoDestroy && view.value) {
-        destroyEditorView(view.value);
-      }
-    });
-
-    return () => {
-      return h('div', {
-        style: { display: 'contents' },
-        ref: container,
-      });
-    };
-  },
-});
