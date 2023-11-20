@@ -69,6 +69,9 @@ export const useArticleList = (emit: (event: 'editChange', ...args: any[]) => vo
     {
       title: '文章简介',
       key: 'brief',
+      ellipsis: {
+        tooltip: true,
+      },
     },
     {
       title: '文章分类名称',

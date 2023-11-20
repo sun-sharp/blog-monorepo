@@ -41,6 +41,7 @@ export const useArticleConfigure = () => {
   onMounted(init);
 
   return {
+    articleListRef,
     showType,
     articleCategoryOption: getArticleCategoryOption,
     rowParams,

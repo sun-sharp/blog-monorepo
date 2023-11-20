@@ -3,7 +3,7 @@
   import ArticleList from './components/ArticleList.vue';
   import ArticleAdd from './components/ArticleAdd.vue';
 
-  const { showType, articleCategoryOption, rowParams, editChange, addChange, changeShowType, addFinished } = useArticleConfigure();
+  const { showType, articleListRef, articleCategoryOption, rowParams, editChange, addChange, changeShowType, addFinished } = useArticleConfigure();
 </script>
 
 <template>

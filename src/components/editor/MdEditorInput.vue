@@ -116,13 +116,14 @@
         return new Promise((resolve, reject) => {
           const formData = new FormData();
           formData.append('image', file);
+          const headers = { ...uploadHeaders.value, 'Content-Type': 'multipart/form-data' };
           axios
             .request({
               url: uploadImageAction as string,
               method: 'POST',
               data: formData,
               withCredentials: false,
-              headers: uploadHeaders.value,
+              headers: headers,
             } as AxiosRequestConfig)
             .then((res: any) => {
               const infoField = COMPONENT_UPLOAD.apiInfoField;
