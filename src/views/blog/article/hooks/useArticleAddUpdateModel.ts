@@ -73,6 +73,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
         req
           .then(() => {
             emit('finished');
+            showModal.value = false;
           })
           .finally(() => {
             formBtnLoading.value = false;
