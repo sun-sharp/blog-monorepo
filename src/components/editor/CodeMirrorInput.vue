@@ -44,7 +44,8 @@
 
   // 扩展配置
   const extensionsConfig = computed(() => {
-    const arr = [basicSetup];
+    // 基础设置，自动换行
+    const arr = [basicSetup, EditorView.lineWrapping];
     switch (props.languageType) {
       case 'javaScript':
         arr.push(javascript());

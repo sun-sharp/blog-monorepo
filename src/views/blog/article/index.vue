@@ -1,26 +1,35 @@
 <script lang="ts" setup>
   import { useArticleConfigure } from './hooks/useArticleConfigure';
-  import ArticleList from './components/ArticleList.vue';
-  import ArticleAdd from './components/ArticleAdd.vue';
+  import { PlusOutlined } from '@/utils';
+  import FormSearch from '@/components/form/FormSearch.vue';
+  import BasicTable from '@/components/table/BasicTable.vue';
+  import ArticleAddUpdateModel from './components/ArticleAddUpdateModel.vue';
 
-  const { showType, articleListRef, articleCategoryOption, rowParams, editChange, addChange, changeShowType, addFinished } = useArticleConfigure();
+  const { actionRef, addUpdateModelRef, searchSchemas, columns, searchSubmit, loadDataTable, tableRowKey, reloadTable } = useArticleConfigure();
 </script>
 
 <template>
   <n-card :bordered="false">
-    <article-list
-      v-show="showType === 'list'"
-      ref="articleListRef"
-      :category-options="articleCategoryOption"
-      @edit-change="editChange"
-      @add-change="addChange"
+    <form-search
+      inline
+      :grid-props="{ cols: '1 s:1 m:2 l:3 xl:4 2xl:4' }"
+      :show-reset-button="false"
+      :show-advanced-button="false"
+      :schemas="searchSchemas"
+      @submit="searchSubmit"
     />
-    <article-add
-      v-if="showType === 'add'"
-      :row="rowParams"
-      :category-options="articleCategoryOption"
-      @changeShowType="changeShowType"
-      @finished="addFinished"
-    />
+    <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :scroll-x="1090">
+      <template #tableTitle>
+        <n-button type="primary" @click="addUpdateModelRef.init()">
+          <template #icon>
+            <n-icon>
+              <PlusOutlined />
+            </n-icon>
+          </template>
+          新建
+        </n-button>
+      </template>
+    </basic-table>
+    <article-add-update-model ref="addUpdateModelRef" @finished="reloadTable" />
   </n-card>
 </template>

@@ -1,4 +1,4 @@
-import { ExtractPropTypes, nextTick, reactive, ref, watch } from 'vue';
+import { computed, nextTick, reactive, ref, unref } from 'vue';
 import { ApiArticleFormRules, ApiArticleItem, ApiArticleItemForm } from '/#/api/article';
 import { FormItemRule } from 'naive-ui';
 import { articleAPi } from '@/api';
@@ -13,18 +13,18 @@ const defaultFromFields = {
   htmlContent: '',
 };
 
-// 添加文章 传参
-export const ArticleAddProps = {
-  row: {
-    type: Object as PropType<Partial<ApiArticleItem>>,
-    default: () => ({}),
-  },
-};
+// 添加文章弹窗 传参
+export const ArticleAddUpdateModelProps = {};
 
-// 添加文章
-export const useArticleAdd = (props: ExtractPropTypes<typeof ArticleAddProps>, emit: (event: 'changeShowType' | 'finished', ...args: any[]) => void) => {
-  const addFormRef = ref<Component>();
-  const addFromModel = reactive<ApiArticleItemForm>(Object.assign({}, defaultFromFields));
+// 添加文章弹窗
+export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[]) => void) => {
+  // 弹窗
+  const modelId = ref('');
+  const showModal = ref(false);
+  const modelTitle = computed(() => (unref(modelId) ? '修改' : '新增') + '文章');
+
+  const modelFromRef = ref<Component>();
+  const modelForm = reactive<ApiArticleItemForm>(Object.assign({}, defaultFromFields));
   const contTab = ref('md');
 
   const { getArticleCategoryOption } = useApiType();
@@ -33,12 +33,12 @@ export const useArticleAdd = (props: ExtractPropTypes<typeof ArticleAddProps>, e
   const validateMarkdown = (_rule: FormItemRule, value: string) => {
     if (!value) {
       return new Error('请输入文章内容');
-    } else if (!addFromModel.htmlContent) {
+    } else if (!modelForm.htmlContent) {
       return new Error('预览文章内容数据不能为空，请检查代码');
     }
     return true;
   };
-  const addFromRules: ApiArticleFormRules = {
+  const modelRules: ApiArticleFormRules = {
     title: [
       { required: true, message: '请输入文章标题', trigger: ['blur', 'input'] },
       { min: 2, max: 30, message: '输入长度为2-30', trigger: ['blur', 'input'] },
@@ -57,56 +57,63 @@ export const useArticleAdd = (props: ExtractPropTypes<typeof ArticleAddProps>, e
 
   // 确认保存或编辑
   const addFromId = ref('');
+  const formBtnLoading = ref(false);
   const onSubmitOrEdit = () => {
-    addFormRef.value.validate((errors: FormItemRule) => {
+    formBtnLoading.value = true;
+    modelFromRef.value.validate((errors: FormItemRule) => {
       if (!errors) {
         const postData = {
-          title: addFromModel.title || '',
-          brief: addFromModel.brief || '',
-          categoryVal: addFromModel.categoryVal || 0,
-          markdownContent: addFromModel.markdownContent,
-          htmlContent: addFromModel.htmlContent,
+          title: modelForm.title || '',
+          brief: modelForm.brief || '',
+          categoryVal: modelForm.categoryVal || 0,
+          markdownContent: modelForm.markdownContent,
+          htmlContent: modelForm.htmlContent,
         };
         const req = addFromId.value ? articleAPi.update({ articleId: addFromId.value, ...postData }) : articleAPi.save(postData);
-        req.then(() => {
-          emit('changeShowType', 'list');
-          emit('finished');
-        });
+        req
+          .then(() => {
+            emit('finished');
+          })
+          .finally(() => {
+            formBtnLoading.value = false;
+          });
       }
     });
   };
 
   // 重置
   const resetFields = () => {
-    Object.assign(addFromModel, defaultFromFields);
+    Object.assign(modelForm, defaultFromFields);
     nextTick(() => {
-      addFormRef.value.restoreValidation();
+      modelFromRef.value.restoreValidation();
     });
   };
 
-  watch(
-    () => props.row,
-    (obj) => {
-      addFromId.value = obj.articleId || '';
-      resetFields();
-      if (addFromId.value) {
-        addFromModel.title = obj.title || '';
-        addFromModel.brief = obj.brief || '';
-        addFromModel.categoryVal = obj.categoryVal || 0;
-        addFromModel.markdownContent = obj.markdownContent || '';
-        addFromModel.htmlContent = obj.htmlContent || '';
-      }
-    },
-    { immediate: true, deep: true }
-  );
+  // 初始化
+  const init = (row: ApiArticleItem) => {
+    addFromId.value = row?.articleId;
+    showModal.value = true;
+    resetFields();
+    if (addFromId.value) {
+      modelForm.title = row.title || '';
+      modelForm.brief = row.brief || '';
+      modelForm.categoryVal = row.categoryVal || 0;
+      modelForm.markdownContent = row.markdownContent || '';
+      modelForm.htmlContent = row.htmlContent || '';
+    }
+  };
 
   return {
-    addFormRef,
-    addFromModel,
+    showModal,
+    modelTitle,
+    modelFromRef,
+    modelForm,
+    modelRules,
     contTab,
-    addFromRules,
     categoryOptions: getArticleCategoryOption,
+    formBtnLoading,
     onSubmitOrEdit,
     resetFields,
+    init,
   };
 };

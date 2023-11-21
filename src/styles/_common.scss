@@ -80,6 +80,14 @@
 @include base-width(400, 2000, 100);
 @include base-line-height(30, 100);
 
+.w-vw {
+  width: 100vw;
+}
+
+.h-vh {
+  height: 100vh;
+}
+
 .w-full {
   width: 100%;
 }

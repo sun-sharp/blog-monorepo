@@ -27,6 +27,12 @@
     emit('update:markdownText', mdText);
   };
 
+  // 处理markdown展示问题
+  const formatMdText = (val: string) => {
+    console.log(val, 'val');
+    return val.replace(/\n/g, '<br>');
+  };
+
   // 监听 prop.htmlText
   watch(
     () => props.htmlText,
@@ -41,7 +47,7 @@
 </script>
 
 <template>
-  <div class="html-to-markdown">{{ markdownText }}</div>
+  <div class="html-to-markdown" v-html="formatMdText(markdownText)"></div>
 </template>
 
 <style lang="scss">
