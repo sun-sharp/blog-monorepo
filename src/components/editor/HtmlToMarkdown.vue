@@ -29,7 +29,6 @@
 
   // 处理markdown展示问题
   const formatMdText = (val: string) => {
-    console.log(val, 'val');
     return val.replace(/\n/g, '<br>');
   };
 
