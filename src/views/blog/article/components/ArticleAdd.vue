@@ -3,6 +3,7 @@
   import MdEditorInput from '@/components/editor/MdEditorInput.vue';
   import CodeMirrorInput from '@/components/editor/CodeMirrorInput.vue';
   import { ArticleAddProps, useArticleAdd } from '../hooks/useArticleAdd';
+  import HtmlToMarkdown from '@/components/editor/HtmlToMarkdown.vue';
 
   const props = defineProps(ArticleAddProps);
 
@@ -50,10 +51,17 @@
           <md-editor-input v-model:markdown-text="addFromModel.markdownContent" v-model:html-text="addFromModel.htmlContent" image-source="article_content" />
         </n-tab-pane>
         <n-tab-pane tab="code编辑器" name="code">
-          <code-mirror-input />
+          <code-mirror-input
+            v-model:model-value="addFromModel.htmlContent"
+            :language-type="'html'"
+            :autofocus="true"
+            :show-html-to-md="true"
+            :indent-with-tab="true"
+            :tab-size="2"
+          />
+          <html-to-markdown v-model:markdown-text="addFromModel.markdownContent" :html-text="addFromModel.htmlContent" class="mt-10" />
         </n-tab-pane>
       </n-tabs>
-      <!-- <md-editor-input v-model:markdown-text="addFromModel.markdownContent" v-model:html-text="addFromModel.htmlContent" image-source="article_content" /> -->
     </n-form-item>
   </n-form>
 </template>

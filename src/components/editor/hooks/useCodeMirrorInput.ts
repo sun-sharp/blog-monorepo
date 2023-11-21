@@ -1,5 +1,4 @@
 import { ExtractPropTypes } from 'vue';
-import { basicSetup } from 'codemirror';
 import type { CSSProperties } from 'vue';
 import { EditorState, EditorStateConfig, Compartment, Extension, StateEffect } from '@codemirror/state';
 import { EditorView, EditorViewConfig, keymap, placeholder } from '@codemirror/view';
@@ -7,7 +6,7 @@ import { indentWithTab } from '@codemirror/commands';
 import { indentUnit } from '@codemirror/language';
 import { CreateStateOptions, EditorTools } from '/#/components/editor';
 
-const UNDEFINED = 0;
+const UNDEFINED = false;
 const NonDefaultBooleanType = {
   type: Boolean,
   default: UNDEFINED,
@@ -24,7 +23,13 @@ export const configProps = {
   phrases: Object as PropType<Record<string, string>>,
   // codemirror options
   root: Object as PropType<ShadowRoot | Document>,
-  extensions: Array as PropType<EditorStateConfig['extensions']>,
+  languageType: {
+    validator(value: string) {
+      return ['javaScript', 'html', 'css', 'sass', 'less', 'json', 'markdown', 'vue', 'python'].includes(value);
+    },
+    default: 'javaScript',
+  },
+  // extensions: Array as PropType<EditorStateConfig['extensions']>,
   selection: Object as PropType<EditorStateConfig['selection']>,
 };
 
@@ -42,6 +47,7 @@ export const CodeMirrorInputProps = {
 
 export type ConfigProps = ExtractPropTypes<typeof configProps>;
 
+// 默认配置
 export const DEFAULT_CONFIG: Readonly<Partial<ConfigProps>> = Object.freeze({
   autofocus: false,
   disabled: false,
@@ -49,9 +55,9 @@ export const DEFAULT_CONFIG: Readonly<Partial<ConfigProps>> = Object.freeze({
   tabSize: 2,
   placeholder: '',
   autoDestroy: true,
-  extensions: [basicSetup],
 });
 
+// 装机编辑器状态
 export const createEditorState = ({ onUpdate, onChange, onFocus, onBlur, ...config }: CreateStateOptions) => {
   return EditorState.create({
     doc: config.doc,
@@ -59,13 +65,12 @@ export const createEditorState = ({ onUpdate, onChange, onFocus, onBlur, ...conf
     extensions: [
       ...(Array.isArray(config.extensions) ? config.extensions : [config.extensions]),
       EditorView.updateListener.of((viewUpdate) => {
-        // https://discuss.codemirror.net/t/codemirror-6-proper-way-to-listen-for-changes/2395/11
         onUpdate(viewUpdate);
-        // doc changed
+        // 改变文本
         if (viewUpdate.docChanged) {
           onChange(viewUpdate.state.doc.toString(), viewUpdate);
         }
-        // focus state change
+        // 焦点状态变化
         if (viewUpdate.focusChanged) {
           viewUpdate.view.hasFocus ? onFocus(viewUpdate) : onBlur(viewUpdate);
         }
@@ -77,9 +82,7 @@ export const createEditorState = ({ onUpdate, onChange, onFocus, onBlur, ...conf
 export const createEditorView = (config: EditorViewConfig) => new EditorView({ ...config });
 export const destroyEditorView = (view: EditorView) => view.destroy();
 
-// https://codemirror.net/examples/config/
-// https://github.com/uiwjs/react-codemirror/blob/22cc81971a/src/useCodeMirror.ts#L144
-// https://gist.github.com/s-cork/e7104bace090702f6acbc3004228f2cb
+// 创建编辑器运行方法
 export const createEditorCompartment = (view: EditorView) => {
   const compartment = new Compartment();
   const run = (extension: Extension) => {
@@ -90,7 +93,7 @@ export const createEditorCompartment = (view: EditorView) => {
   return { compartment, run };
 };
 
-// https://codemirror.net/examples/reconfigure/
+// 创建编辑器改变切换配置
 export const createEditorExtensionToggler = (view: EditorView, extension: Extension) => {
   const { compartment, run } = createEditorCompartment(view);
   return (targetApply?: boolean) => {

@@ -1,7 +1,18 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, shallowRef, toRaw, watch } from 'vue';
+  import { basicSetup } from 'codemirror';
   import { EditorView } from '@codemirror/view';
   import { EditorState } from '@codemirror/state';
+  import { javascript } from '@codemirror/lang-javascript';
+  import { html } from '@codemirror/lang-html';
+  import { json } from '@codemirror/lang-json';
+  import { css } from '@codemirror/lang-css';
+  import { sass } from '@codemirror/lang-sass';
+  import { less } from '@codemirror/lang-less';
+  import { vue } from '@codemirror/lang-vue';
+  import { markdown } from '@codemirror/lang-markdown';
+  import { python } from '@codemirror/lang-python';
+  import { java } from '@codemirror/lang-java';
   import {
     ConfigProps,
     DEFAULT_CONFIG,
@@ -16,7 +27,7 @@
 
   const emit = defineEmits(['change', 'update', 'focus', 'blur', 'ready', 'update:modelValue']);
 
-  const container = shallowRef<HTMLDivElement>();
+  const codeMirrorInputRef = shallowRef<HTMLDivElement>();
   const state = shallowRef<EditorState>();
   const view = shallowRef<EditorView>();
 
@@ -31,11 +42,51 @@
     return result;
   });
 
+  // 扩展配置
+  const extensionsConfig = computed(() => {
+    const arr = [basicSetup];
+    switch (props.languageType) {
+      case 'javaScript':
+        arr.push(javascript());
+        break;
+      case 'html':
+        arr.push(html());
+        break;
+      case 'css':
+        arr.push(css());
+        break;
+      case 'sass':
+        arr.push(sass());
+        break;
+      case 'less':
+        arr.push(less());
+        break;
+      case 'json':
+        arr.push(json());
+        break;
+      case 'markdown':
+        arr.push(markdown());
+        break;
+      case 'vue':
+        arr.push(vue());
+        break;
+      case 'python':
+        arr.push(python());
+        break;
+      case 'java':
+        arr.push(java());
+        break;
+      default:
+        break;
+    }
+    return arr;
+  });
+
   onMounted(() => {
     state.value = createEditorState({
       doc: props.modelValue,
       selection: config.value.selection,
-      extensions: DEFAULT_CONFIG.extensions ?? [],
+      extensions: extensionsConfig.value,
       onFocus: (viewUpdate) => emit('focus', viewUpdate),
       onBlur: (viewUpdate) => emit('blur', viewUpdate),
       onUpdate: (viewUpdate) => emit('update', viewUpdate),
@@ -49,13 +100,13 @@
 
     view.value = createEditorView({
       state: state.value,
-      parent: container.value!,
+      parent: codeMirrorInputRef.value,
       root: config.value.root,
     });
 
     const editorTools = getEditorTools(view.value);
 
-    // watch prop.modelValue
+    // 监听 prop.modelValue
     watch(
       () => props.modelValue,
       (newValue) => {
@@ -65,49 +116,51 @@
       }
     );
 
-    // watch prop.extensions
+    // 监听 prop.extensions
     watch(
-      () => props.extensions,
-      (extensions) => editorTools.reExtensions(extensions || []),
+      () => props.languageType,
+      () => editorTools.reExtensions(extensionsConfig.value || []),
       { immediate: true }
     );
 
-    // watch prop.disabled
+    // 监听 prop.disabled
     watch(
       () => config.value.disabled,
       (disabled) => editorTools.toggleDisabled(disabled),
       { immediate: true }
     );
 
-    // watch prop.indentWithTab
+    // 监听 prop.indentWithTab
     watch(
       () => config.value.indentWithTab,
       (iwt) => editorTools.toggleIndentWithTab(iwt),
       { immediate: true }
     );
 
-    // watch prop.tabSize
+    // 监听 prop.tabSize
     watch(
       () => config.value.tabSize,
       (tabSize) => editorTools.setTabSize(tabSize!),
       { immediate: true }
     );
 
-    // watch prop.phrases
+    // 监听 props.phrases
     watch(
-      () => config.value.phrases,
-      (phrases) => editorTools.setPhrases(phrases || {}),
+      () => props.phrases,
+      (phrases = {}) => {
+        editorTools.setPhrases(phrases);
+      },
       { immediate: true }
     );
 
-    // watch prop.placeholder
+    // 监听 prop.placeholder
     watch(
       () => config.value.placeholder,
       (placeholder) => editorTools.setPlaceholder(placeholder!),
       { immediate: true }
     );
 
-    // watch prop.style
+    // 监听 prop.style
     watch(
       () => config.value.style,
       (style) => editorTools.setStyle(style),
@@ -122,7 +175,7 @@
     emit('ready', {
       state: state.value!,
       view: view.value!,
-      container: container.value!,
+      container: codeMirrorInputRef.value!,
     });
   });
 
@@ -134,19 +187,18 @@
 </script>
 
 <template>
-  <div ref="container" class="code-mirror-input"></div>
+  <div ref="codeMirrorInputRef" class="code-mirror-input"></div>
 </template>
 
 <style lang="scss">
   .code-mirror-input {
-    display: contents;
+    display: flex;
     width: 100%;
-    height: 300px;
+    height: 100%;
 
     .cm-editor {
       width: 100%;
-      height: 300px;
-      margin: 0 1rem;
+      min-height: 300px;
       border: 1px solid #ddd;
     }
   }
