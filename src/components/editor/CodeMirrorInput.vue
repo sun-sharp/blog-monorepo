@@ -199,7 +199,8 @@
 
     .cm-editor {
       width: 100%;
-      min-height: 300px;
+      min-height: 200px;
+      max-height: 360px;
       border: 1px solid #ddd;
     }
   }

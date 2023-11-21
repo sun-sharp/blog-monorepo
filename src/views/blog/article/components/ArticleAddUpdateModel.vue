@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-  import HtmlToMarkdown from '@/components/editor/HtmlToMarkdown.vue';
+  // import HtmlToMarkdown from '@/components/editor/HtmlToMarkdown.vue';
   import MdEditorInput from '@/components/editor/MdEditorInput.vue';
   import CodeMirrorInput from '@/components/editor/CodeMirrorInput.vue';
   import { useArticleAddUpdateModel } from '../hooks/useArticleAddUpdateModel';
+  import HtmlToMarkdown from '@/components/editor/HtmlToMarkdown.vue';
 
   const emit = defineEmits(['finished']);
 
-  const { showModal, modelTitle, modelFromRef, modelForm, modelRules, contTab, categoryOptions, formBtnLoading, init, onSubmitOrEdit } =
-    useArticleAddUpdateModel(emit);
+  const { showModal, modelTitle, modelFromRef, modelForm, modelRules, categoryOptions, formBtnLoading, init, onSubmitOrEdit } = useArticleAddUpdateModel(emit);
 
   defineExpose({ init });
 </script>
@@ -37,22 +37,20 @@
           <n-select v-model:value="modelForm.categoryVal" placeholder="请选择文章分类" filterable :options="categoryOptions" />
         </n-form-item>
         <n-form-item path="markdownContent" label="文章内容">
-          <n-tabs v-model:value="contTab" type="card">
-            <n-tab-pane tab="markdown编辑器" name="md">
-              <md-editor-input v-model:markdown-text="modelForm.markdownContent" v-model:html-text="modelForm.htmlContent" image-source="article_content" />
-            </n-tab-pane>
-            <n-tab-pane tab="code编辑器" name="code">
-              <code-mirror-input
-                v-model:model-value="modelForm.htmlContent"
-                :language-type="'html'"
-                :autofocus="true"
-                :show-html-to-md="true"
-                :indent-with-tab="true"
-                :tab-size="2"
-              />
-              <html-to-markdown v-model:markdown-text="modelForm.markdownContent" :html-text="modelForm.htmlContent" class="mt-10" />
-            </n-tab-pane>
-          </n-tabs>
+          <div class="w-full">
+            <md-editor-input v-model:markdown-text="modelForm.markdownContent" v-model:html-text="modelForm.htmlContent" image-source="article_content" />
+            <code-mirror-input
+              v-model:model-value="modelForm.htmlContent"
+              :language-type="'html'"
+              :autofocus="true"
+              :show-html-to-md="true"
+              :indent-with-tab="true"
+              :tab-size="2"
+              class="mt-10"
+            />
+            <!-- html转化md -->
+            <html-to-markdown v-show="false" v-model:markdown-text="modelForm.markdownContent" :html-text="modelForm.htmlContent" class="mt-10" />
+          </div>
         </n-form-item>
       </n-form>
     </n-scrollbar>
