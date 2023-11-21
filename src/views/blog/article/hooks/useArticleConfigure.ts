@@ -46,7 +46,8 @@ export const useArticleConfigure = () => {
       label: '文章分类',
       componentProps: {
         defaultValue: null,
-        clearable: false,
+        filterable: true,
+        // clearable: false,
         placeholder: '请选择文章分类',
         options: unref(getArticleCategoryOption),
       },
@@ -63,6 +64,9 @@ export const useArticleConfigure = () => {
     {
       title: '文章标题',
       key: 'title',
+      ellipsis: {
+        tooltip: true,
+      },
     },
     {
       title: '文章简介',
