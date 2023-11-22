@@ -1,4 +1,4 @@
-# CHANGELOG
+# CHANGELOG bow-xxx
 
 ## 2.2.12
 - 修改logo图标
