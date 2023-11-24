@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class CreateArticleDto {
   @ApiProperty({
@@ -33,4 +33,12 @@ export class CreateArticleDto {
   })
   @IsNotEmpty({ message: '文章的类型标识不能为空' })
   categoryVal: number;
+
+  @ApiProperty({
+    description: '是否私密',
+    example: 1,
+  })
+  @IsNotEmpty({ message: '是否私密不能为空' })
+  @IsBoolean({ message: '是否私密必须是枚举值' })
+  isPrivate: boolean;
 }

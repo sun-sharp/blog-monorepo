@@ -14,6 +14,7 @@ import { ApiArticleItem } from 'types/blog/article';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
+import { AllPageArticleDto } from './dto/all-page-article.dto';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -23,7 +24,7 @@ export class ArticleService {
   constructor(@InjectModel(Article.name, blogDatabaseName) private readonly articleModel: Model<Article>) {}
 
   /**
-   * @description: 条件并分页获取文章列表
+   * @description: 条件并分页获取不加密文章列表
    * @param {PageArticleDto} body
    * @return {Promise<IResponse>}
    */
@@ -38,8 +39,55 @@ export class ArticleService {
           if (categoryVal) {
             findData.categoryVal = categoryVal;
           }
+          findData.isPrivate = false;
           const total = await this.articleModel.find(findData).count();
-          const findArr = await this.articleModel.find(findData).limit(limit).skip(skip);
+          const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
+          const list: ApiArticleItem[] = findArr.map((m) => ({
+            articleId: m._id,
+            title: m.title,
+            brief: m.brief,
+            htmlContent: m.htmlContent,
+            markdownContent: m.markdownContent,
+            authorId: m.authorId,
+            authorNickname: m.authorNickname,
+            categoryVal: m.categoryVal,
+            createTime: nowDateFun(m.createTime),
+          }));
+          return {
+            code: ApiCode.SUCCESS,
+            result: { current, list, size, total },
+            message: '查询成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`条件并分页获取不加密文章列表 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 条件并分页获取文章列表
+   * @param {PageArticleDto} body
+   * @return {Promise<IResponse>}
+   */
+  public findAllPage(body: AllPageArticleDto): Promise<IResponse> {
+    return (
+      Promise.resolve(body)
+        // 分页查询
+        .then(async (body) => {
+          const { size, current, keywords, categoryVal } = body;
+          const { limit, skip } = PaginateHandle(size, current);
+          const findData: FilterQuery<Article> = keywords ? { $or: [{ title: { $regex: keywords } }, { brief: { $regex: keywords } }] } : {};
+          if (categoryVal) {
+            findData.categoryVal = categoryVal;
+          }
+          const total = await this.articleModel.find(findData).count();
+          const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
           const list: ApiArticleItem[] = findArr.map((m) => ({
             articleId: m._id,
             title: m.title,
@@ -80,10 +128,15 @@ export class ArticleService {
         // 添加
         .then(async ({ user, body }) => {
           await this.articleModel.create({
-            ...body,
+            title: body.title,
+            brief: body.brief,
+            htmlContent: body.htmlContent,
+            markdownContent: body.markdownContent,
+            categoryVal: body.categoryVal,
             createTime: nowDateFun(),
             authorId: user._id,
             authorNickname: user.nickname,
+            isPrivate: body.isPrivate,
           });
           return {
             code: ApiCode.SUCCESS,
@@ -111,8 +164,8 @@ export class ArticleService {
       Promise.resolve(body)
         // 修改
         .then(async (body) => {
-          const { articleId, ...updateData } = body;
-          await this.articleModel.updateOne({ _id: articleId }, updateData);
+          const { articleId, title, brief, htmlContent, markdownContent, categoryVal, isPrivate } = body;
+          await this.articleModel.updateOne({ _id: articleId }, { title, brief, htmlContent, markdownContent, categoryVal, isPrivate });
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
@@ -155,19 +208,56 @@ export class ArticleService {
   }
 
   /**
-   * @description: 获取文章详情
+   * @description: 获取不加密文章详情
    * @return {Promise<IResponse>}
    */
   public findDetails(articleId: string): Promise<IResponse> {
     return (
       Promise.resolve(articleId)
         .then(async (articleId) => {
+          const find = await this.articleModel.findOne({ _id: articleId, isPrivate: false }).lean();
+          if (!find) {
+            throw '获取不加密文章详情失败';
+          }
+          const result: ApiArticleItem = {
+            articleId: find._id,
+            title: find.title,
+            brief: find.brief,
+            htmlContent: find.htmlContent,
+            markdownContent: find.markdownContent,
+            authorId: find.authorId,
+            authorNickname: find.authorNickname,
+            categoryVal: find.categoryVal,
+            createTime: nowDateFun(find.createTime),
+          };
+          return {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`获取不加密文章详情 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 获取文章详情
+   * @return {Promise<IResponse>}
+   */
+  public findAllDetails(articleId: string): Promise<IResponse> {
+    return (
+      Promise.resolve(articleId)
+        .then(async (articleId) => {
           const find = await this.articleModel.findOne({ _id: articleId }).lean();
           if (!find) {
-            throw {
-              code: ApiCode.ERROR,
-              message: '查询文章详情失败',
-            };
+            throw '查询文章详情失败';
           }
           const result: ApiArticleItem = {
             articleId: find._id,

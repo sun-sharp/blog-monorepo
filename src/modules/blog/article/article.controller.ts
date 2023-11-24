@@ -6,6 +6,7 @@ import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { AllPageArticleDto } from './dto/all-page-article.dto';
 
 @Controller('article')
 @ApiTags('文章')
@@ -17,6 +18,15 @@ export class ArticleController {
   @ApiOperation({ summary: '条件并分页获取文章列表' })
   findPage(@Body() pageArticleDto: PageArticleDto) {
     return this.articleService.findPage(pageArticleDto);
+  }
+
+  @Post('find_all_page')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '条件并分页获取文章列表' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  findAllPage(@Body() pageArticleDto: AllPageArticleDto) {
+    return this.articleService.findAllPage(pageArticleDto);
   }
 
   @Post('save')
@@ -46,8 +56,17 @@ export class ArticleController {
 
   @Get('details')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '获取文章详情' })
+  @ApiOperation({ summary: '获取不加密文章详情' })
   findDetails(@Query('articleId') articleId: string) {
     return this.articleService.findDetails(articleId);
+  }
+
+  @Get('all_details')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '获取全部文章详情' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  findAllDetails(@Query('articleId') articleId: string) {
+    return this.articleService.findAllDetails(articleId);
   }
 }

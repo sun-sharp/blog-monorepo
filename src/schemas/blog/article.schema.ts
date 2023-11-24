@@ -42,6 +42,10 @@ export class Article extends Document {
   // 文章的创建时间
   @Prop()
   createTime: Date;
+
+  // 是否私密
+  @Prop()
+  isPrivate: boolean;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
