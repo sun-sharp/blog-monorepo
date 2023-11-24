@@ -3,12 +3,10 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { logger } from 'src/common/journal';
 import { IResponse } from 'types/common';
 import { ArticleService } from './article/article.service';
-import { useCustomConfig } from 'src/config';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { MoneyService } from './money/money.service';
-
-const customConfig = useCustomConfig();
-const { storeDirPosition, storeDirName } = customConfig;
+import { createStoreDir } from 'src/common/fs-mkdir';
+import { storeDirStr } from 'src/common/constant/config';
 
 @Injectable()
 export class BlogService {
@@ -26,15 +24,9 @@ export class BlogService {
       Promise.resolve()
         .then(async () => {
           // 判断store目录是否存在
-          const storeDir = `${storeDirPosition}${storeDirName}`;
-          const hasStoreDir = existsSync(storeDir);
-          if (!hasStoreDir) {
-            // 创建store目录
-            mkdirSync(storeDir);
-            logger.log('创建store存储目录');
-          }
+          createStoreDir();
           // 判断json目录是否存在
-          const jsonDir = `${storeDir}/json`;
+          const jsonDir = `${storeDirStr}/json`;
           const hasJsonDir = existsSync(jsonDir);
           if (!hasJsonDir) {
             // 创建json目录

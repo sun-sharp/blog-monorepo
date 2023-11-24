@@ -1,4 +1,4 @@
-import { PathLike, readdir, readFile, existsSync, unlink } from 'fs';
+import { PathLike, readdir, readFile, existsSync, unlink } from 'node:fs';
 import { useCustomConfig } from 'src/config';
 import { ReadImageItem } from 'types/capital/image';
 

@@ -14,13 +14,11 @@ import { IResponse } from 'types/common';
 import { ApiCapitalLoginResult } from 'types/capital';
 import { ApiMenuItem } from 'types/capital/menu';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { useCustomConfig } from 'src/config';
 import { WaitForDoService } from './wait-for-do/wait-for-do.service';
 import { ImageService } from './image/image.service';
 import { CategoryService } from './category/category.service';
-
-const customConfig = useCustomConfig();
-const { storeDirPosition, storeDirName } = customConfig;
+import { storeDirStr } from 'src/common/constant/config';
+import { createStoreDir } from 'src/common/fs-mkdir';
 
 @Injectable()
 export class CapitalService {
@@ -258,15 +256,9 @@ export class CapitalService {
       Promise.resolve()
         .then(async () => {
           // 判断store目录是否存在
-          const storeDir = `${storeDirPosition}${storeDirName}`;
-          const hasStoreDir = existsSync(storeDir);
-          if (!hasStoreDir) {
-            // 创建store目录
-            mkdirSync(storeDir);
-            logger.log('创建store存储目录');
-          }
+          createStoreDir();
           // 判断json目录是否存在
-          const jsonDir = `${storeDir}/json`;
+          const jsonDir = `${storeDirStr}/json`;
           const hasJsonDir = existsSync(jsonDir);
           if (!hasJsonDir) {
             // 创建json目录

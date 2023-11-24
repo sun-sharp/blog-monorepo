@@ -1,17 +1,21 @@
-import { GlobalEnvConfig } from 'types/config';
+import { readFileSync } from 'node:fs';
+import { storeDirStr } from 'src/common/constant/config';
+import { createStoreDir } from 'src/common/fs-mkdir';
+import { DatabaseConfig, GlobalEnvConfig } from 'types/config';
+
+// 获取数据库配置文件信息
+createStoreDir();
+const buffer = readFileSync(`${storeDirStr}/json/database/prod.json`, 'utf-8');
+
+// 数据库配置
+const database: DatabaseConfig = JSON.parse(buffer);
 
 const glob: Readonly<GlobalEnvConfig> = {
+  ...database,
   port: 3000,
-  serverIp: '120.79.162.189',
-  databasePort: 5606,
-  mongodbAccount: 'yrr',
-  mongodbPassword: 'AlyYrrAdmin123',
-  mongodbQuery: '?authSource=admin',
   fileAccessPath: 'api_file',
   staticDirPosition: '../',
   staticDirName: 'api_static_dir',
-  storeDirPosition: '../',
-  storeDirName: 'api_store_dir',
   imageRefixName: 'sharp_network_',
   capitalDatabaseName: 'capital',
   blogDatabaseName: 'blog',
