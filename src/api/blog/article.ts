@@ -11,7 +11,7 @@ const basic = '/article';
  */
 export const getFindPage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiArticleItem[]>> => {
   return AxiosBlog.request({
-    url: `${basic}/find_page`,
+    url: `${basic}/find_all_page`,
     method: 'POST',
     data,
   });

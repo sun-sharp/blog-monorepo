@@ -58,7 +58,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
   // 确认保存或编辑
   const addFromId = ref('');
   const formBtnLoading = ref(false);
-  const onSubmitOrEdit = () => {
+  const onSubmitOrEdit = (isPrivate = false) => {
     formBtnLoading.value = true;
     modelFromRef.value.validate((errors: FormItemRule) => {
       if (!errors) {
@@ -68,6 +68,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
           categoryVal: modelForm.categoryVal || 0,
           markdownContent: modelForm.markdownContent,
           htmlContent: modelForm.htmlContent,
+          isPrivate,
         };
         const req = addFromId.value ? articleAPi.update({ articleId: addFromId.value, ...postData }) : articleAPi.save(postData);
         req

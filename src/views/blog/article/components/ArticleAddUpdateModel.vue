@@ -9,6 +9,16 @@
 
   const { showModal, modelTitle, modelFromRef, modelForm, modelRules, categoryOptions, formBtnLoading, init, onSubmitOrEdit } = useArticleAddUpdateModel(emit);
 
+  // 修改文章内容md
+  const markdownContentChange = (val: string) => {
+    modelForm.markdownContent = val;
+  };
+
+  // 修改文章内容html
+  const htmlContentChange = (val: string) => {
+    modelForm.htmlContent = val;
+  };
+
   defineExpose({ init });
 </script>
 
@@ -38,18 +48,31 @@
         </n-form-item>
         <n-form-item path="markdownContent" label="文章内容">
           <div class="w-full">
-            <md-editor-input v-model:markdown-text="modelForm.markdownContent" v-model:html-text="modelForm.htmlContent" image-source="article_content" />
+            <md-editor-input
+              :markdown-text="modelForm.markdownContent"
+              :html-text="modelForm.htmlContent"
+              image-source="article_content"
+              @update:markdown-text="markdownContentChange"
+              @update:html-text="htmlContentChange"
+            />
             <code-mirror-input
-              v-model:model-value="modelForm.htmlContent"
+              :model-value="modelForm.htmlContent"
               :language-type="'html'"
               :autofocus="true"
               :show-html-to-md="true"
               :indent-with-tab="true"
               :tab-size="2"
               class="mt-10"
+              @update:model-value="htmlContentChange"
             />
             <!-- html转化md -->
-            <html-to-markdown v-show="false" v-model:markdown-text="modelForm.markdownContent" :html-text="modelForm.htmlContent" class="mt-10" />
+            <html-to-markdown
+              v-show="false"
+              :markdown-text="modelForm.markdownContent"
+              :html-text="modelForm.htmlContent"
+              class="mt-10"
+              @update:markdown-text="markdownContentChange"
+            />
           </div>
         </n-form-item>
       </n-form>
@@ -58,7 +81,8 @@
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit">确定</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit(true)">加密保存</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit">保存</n-button>
       </n-space>
     </template>
   </n-modal>
