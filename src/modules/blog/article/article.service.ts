@@ -98,6 +98,7 @@ export class ArticleService {
             authorNickname: m.authorNickname,
             categoryVal: m.categoryVal,
             createTime: nowDateFun(m.createTime),
+            isPrivate: m.isPrivate,
           }));
           return {
             code: ApiCode.SUCCESS,
