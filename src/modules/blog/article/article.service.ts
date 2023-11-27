@@ -15,6 +15,7 @@ import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 import { AllPageArticleDto } from './dto/all-page-article.dto';
+import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -170,6 +171,33 @@ export class ArticleService {
         .then(async (body) => {
           const { articleId, title, brief, htmlContent, markdownContent, categoryVal, isPrivate } = body;
           await this.articleModel.updateOne({ _id: articleId }, { title, brief, htmlContent, markdownContent, categoryVal, isPrivate });
+          return {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`修改文章 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '修改失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 根据id批量修改文章加密
+   * @param {BatchUpdatePrivateArticleDto} body
+   * @return {Promise<IResponse>}
+   */
+  public batchUpdatePrivate(body: BatchUpdatePrivateArticleDto): Promise<IResponse> {
+    return (
+      Promise.resolve(body)
+        // 修改
+        .then(async ({ articleIdArr, isPrivate }) => {
+          await this.articleModel.updateMany({ _id: { $in: articleIdArr } }, { isPrivate });
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',

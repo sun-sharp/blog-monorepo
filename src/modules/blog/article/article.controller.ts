@@ -7,6 +7,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { AllPageArticleDto } from './dto/all-page-article.dto';
+import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 
 @Controller('article')
 @ApiTags('文章')
@@ -44,6 +45,14 @@ export class ArticleController {
   @UseGuards(JwtAuthGuard)
   update(@Body() updateArticleDto: UpdateArticleDto) {
     return this.articleService.update(updateArticleDto);
+  }
+
+  @Put('batch_update_private')
+  @ApiOperation({ summary: '根据id批量修改文章加密' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  batchUpdatePrivate(@Body() body: BatchUpdatePrivateArticleDto) {
+    return this.articleService.batchUpdatePrivate(body);
   }
 
   @Delete(':articleId')

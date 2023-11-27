@@ -164,7 +164,7 @@ export class MenuService {
    * @param {string} menuId
    * @return {Promise<IResponse>}
    */
-  public remove(menuId: string) {
+  public remove(menuId: string): Promise<IResponse> {
     return (
       Promise.resolve(menuId)
         // 查询当前以下有菜单
