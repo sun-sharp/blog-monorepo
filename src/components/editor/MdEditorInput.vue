@@ -67,7 +67,7 @@
     },
   });
 
-  const emit = defineEmits(['onSave', 'update:htmlText', 'update:markdownText']);
+  const emit = defineEmits(['onSave', 'update:htmlText', 'update:markdownText', 'focus', 'blur']);
 
   const nMessage = useMessage();
 
@@ -159,8 +159,27 @@
   const onChange = (v: string) => {
     emit('update:markdownText', v);
   };
+
+  // 输入框失去焦点时触发事件
+  const onBlur = () => {
+    emit('blur', false);
+  };
+
+  // 输入框获得焦点时触发事件
+  const onFocus = () => {
+    emit('focus', true);
+  };
 </script>
 
 <template>
-  <md-editor v-model="text" v-bind="getMdEditorBind" @onChange="onChange" @onSave="onSave" @onUploadImg="onUploadImg" @onHtmlChanged="onHtmlChanged" />
+  <md-editor
+    v-model="text"
+    v-bind="getMdEditorBind"
+    @onChange="onChange"
+    @onSave="onSave"
+    @onUploadImg="onUploadImg"
+    @onHtmlChanged="onHtmlChanged"
+    @onBlur="onBlur"
+    @onFocus="onFocus"
+  />
 </template>

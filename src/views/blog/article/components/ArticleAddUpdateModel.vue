@@ -7,17 +7,28 @@
 
   const emit = defineEmits(['finished']);
 
-  const { showModal, modelTitle, modelFromRef, modelForm, modelRules, categoryOptions, formBtnLoading, init, onSubmitOrEdit } = useArticleAddUpdateModel(emit);
-
-  // 修改文章内容md
-  const markdownContentChange = (val: string) => {
-    modelForm.markdownContent = val;
-  };
-
-  // 修改文章内容html
-  const htmlContentChange = (val: string) => {
-    modelForm.htmlContent = val;
-  };
+  const {
+    showModal,
+    modelTitle,
+    modelFromRef,
+    modelForm,
+    modelRules,
+    categoryOptions,
+    formBtnLoading,
+    formBtnDisabled,
+    mdMarkdownText,
+    mdHtmlText,
+    codeMarkdownText,
+    codeHtmlText,
+    init,
+    onSubmitOrEdit,
+    mdUpdateIsFocus,
+    mdUpdateMarkdownText,
+    mdUpdateHtmlText,
+    codeUpdateIsFocus,
+    codeUpdateModelValue,
+    codeUpdateMarkdownText,
+  } = useArticleAddUpdateModel(emit);
 
   defineExpose({ init });
 </script>
@@ -25,7 +36,7 @@
 <template>
   <n-modal v-model:show="showModal" class="article-add-update-model" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelTitle">
     <n-scrollbar class="article-add-update-model__scroll" trigger="none">
-      <n-form ref="modelFromRef" :model="modelForm" :rules="modelRules">
+      <n-form ref="modelFromRef" class="article-add-update-model__form" :model="modelForm" :rules="modelRules">
         <n-form-item path="title" label="文章标题">
           <n-input v-model:value="modelForm.title" placeholder="请输入文章标题" @keydown.enter.prevent />
         </n-form-item>
@@ -49,29 +60,33 @@
         <n-form-item path="markdownContent" label="文章内容">
           <div class="w-full">
             <md-editor-input
-              :markdown-text="modelForm.markdownContent"
-              :html-text="modelForm.htmlContent"
+              :markdown-text="mdMarkdownText"
+              :html-text="mdHtmlText"
               image-source="article_content"
-              @update:markdown-text="markdownContentChange"
-              @update:html-text="htmlContentChange"
+              @update:markdown-text="mdUpdateMarkdownText"
+              @update:html-text="mdUpdateHtmlText"
+              @focus="mdUpdateIsFocus(true)"
+              @blur="mdUpdateIsFocus(false)"
             />
             <code-mirror-input
-              :model-value="modelForm.htmlContent"
+              :model-value="codeHtmlText"
               :language-type="'html'"
               :autofocus="true"
               :show-html-to-md="true"
               :indent-with-tab="true"
               :tab-size="2"
               class="mt-10"
-              @update:model-value="htmlContentChange"
+              @update:model-value="codeUpdateModelValue"
+              @focus="codeUpdateIsFocus(true)"
+              @blur="codeUpdateIsFocus(false)"
             />
             <!-- html转化md -->
             <html-to-markdown
               v-show="false"
-              :markdown-text="modelForm.markdownContent"
-              :html-text="modelForm.htmlContent"
+              :markdown-text="codeMarkdownText"
+              :html-text="codeHtmlText"
               class="mt-10"
-              @update:markdown-text="markdownContentChange"
+              @update:markdown-text="codeUpdateMarkdownText"
             />
           </div>
         </n-form-item>
@@ -81,8 +96,8 @@
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit(true)">加密保存</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit()">保存</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading || formBtnDisabled" @click="onSubmitOrEdit(true)">加密保存</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading || formBtnDisabled" @click="onSubmitOrEdit()">保存</n-button>
       </n-space>
     </template>
   </n-modal>
@@ -97,6 +112,10 @@
 
     &__scroll {
       max-height: 82vh;
+    }
+
+    &__form {
+      padding: 0 40px;
     }
   }
 </style>
