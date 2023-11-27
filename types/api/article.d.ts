@@ -9,6 +9,8 @@ export type ApiArticleSearchParams = {
   keywords?: string;
   // 文章分类
   categoryVal?: number;
+  // 是否加密
+  isPrivate?: boolean;
 };
 
 /**
@@ -42,6 +44,9 @@ export interface ApiArticleSaveData {
 
   // 文章的markdown内容
   markdownContent: string;
+
+  // 是否加密
+  isPrivate: boolean;
 }
 
 /**

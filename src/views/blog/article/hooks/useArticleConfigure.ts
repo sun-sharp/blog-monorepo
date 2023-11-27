@@ -52,6 +52,27 @@ export const useArticleConfigure = () => {
         options: unref(getArticleCategoryOption),
       },
     },
+    {
+      field: 'isPrivate',
+      component: 'NSelect',
+      label: '是否加密',
+      componentProps: {
+        defaultValue: null,
+        filterable: true,
+        // clearable: false,
+        placeholder: '请选择是否加密',
+        options: [
+          {
+            value: false,
+            label: '不加密',
+          },
+          {
+            value: true,
+            label: '加密',
+          },
+        ],
+      },
+    },
   ]);
 
   // 删除
@@ -86,6 +107,13 @@ export const useArticleConfigure = () => {
     {
       title: '创建时间',
       key: 'createTime',
+    },
+    {
+      title: '是否加密',
+      key: 'isPrivate',
+      render(row) {
+        return row.isPrivate ? '是' : '否';
+      },
     },
     {
       width: 200,
