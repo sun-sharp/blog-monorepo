@@ -1,8 +1,9 @@
 import { computed, nextTick, reactive, ref, unref } from 'vue';
-import { ApiArticleFormRules, ApiArticleItem, ApiArticleItemForm } from '/#/api/article';
+import { ApiArticleItem } from '/#/api/article';
 import { FormItemRule } from 'naive-ui';
 import { articleAPi } from '@/api';
 import { useApiType } from '@/hooks';
+import { ArticleFormRules, ArticleItemForm } from '/#/views/article';
 
 // 初始化表单数据
 const defaultFromFields = {
@@ -24,7 +25,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
   const modelTitle = computed(() => (unref(modelId) ? '修改' : '新增') + '文章');
 
   const modelFromRef = ref<Component>();
-  const modelForm = reactive<ApiArticleItemForm>(Object.assign({}, defaultFromFields));
+  const modelForm = reactive<ArticleItemForm>(Object.assign({}, defaultFromFields));
   const contTab = ref('md');
 
   const { getArticleCategoryOption } = useApiType();
@@ -38,7 +39,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
     }
     return true;
   };
-  const modelRules: ApiArticleFormRules = {
+  const modelRules: ArticleFormRules = {
     title: [
       { required: true, message: '请输入文章标题', trigger: ['blur', 'input'] },
       { min: 2, max: 30, message: '输入长度为2-30', trigger: ['blur', 'input'] },

@@ -1,4 +1,3 @@
-import { FormItemRule } from 'naive-ui';
 import { ApiPaginateParams } from './common';
 
 /**
@@ -69,25 +68,6 @@ export interface ApiArticle extends ApiArticleSaveData {
 export interface ApiArticleItem extends ApiArticle, ApiArticleId {}
 
 /**
- * @description:  文章 编辑表单 输入参数
- */
-export interface ApiArticleItemForm extends ApiArticleSaveData {
-  title: null | string;
-  brief: null | string;
-  categoryVal: null | number;
-}
-
-/**
  * @description:  文章保存参数
  */
 export type ApiArticleUpdateData = ApiArticleSaveData & ApiArticleId;
-
-/**
- * @description: 文章 编辑表单 输入权限
- */
-export interface ApiArticleFormRules {
-  title: FormItemRule[];
-  brief: FormItemRule[];
-  categoryVal: FormItemRule;
-  markdownContent: FormItemRule;
-}
