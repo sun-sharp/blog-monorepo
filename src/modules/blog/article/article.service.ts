@@ -249,7 +249,7 @@ export class ArticleService {
         .then(async (articleId) => {
           const find = await this.articleModel.findOne({ _id: articleId, isPrivate: false }).lean();
           if (!find) {
-            throw '获取不加密文章详情失败';
+            throw '获取文章详情失败';
           }
           const result: ApiArticleItem = {
             articleId: find._id,
