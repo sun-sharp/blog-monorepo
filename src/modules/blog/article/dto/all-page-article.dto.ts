@@ -14,4 +14,10 @@ export class AllPageArticleDto extends PaginateDto {
     required: false,
   })
   readonly categoryVal: number;
+
+  @ApiProperty({
+    description: '是否加密',
+    required: false,
+  })
+  readonly isPrivate: boolean;
 }

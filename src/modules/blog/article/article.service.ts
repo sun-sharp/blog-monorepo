@@ -80,11 +80,14 @@ export class ArticleService {
       Promise.resolve(body)
         // 分页查询
         .then(async (body) => {
-          const { size, current, keywords, categoryVal } = body;
+          const { size, current, keywords, categoryVal, isPrivate } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<Article> = keywords ? { $or: [{ title: { $regex: keywords } }, { brief: { $regex: keywords } }] } : {};
           if (categoryVal) {
             findData.categoryVal = categoryVal;
+          }
+          if (typeof isPrivate === 'boolean') {
+            findData.isPrivate = isPrivate;
           }
           const total = await this.articleModel.find(findData).count();
           const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
