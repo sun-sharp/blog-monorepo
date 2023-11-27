@@ -4,12 +4,13 @@ import { roleApi } from '@/api';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { ApiRoleItem, ApiRoleSearchParams } from '/#/api/role';
 import { NButton, NPopconfirm } from 'naive-ui';
+import { FormSchema } from '/#/components/form';
 
 export const useRoleConfigure = () => {
   const addUpdateModelRef = ref<Component>();
 
   // 查询配置
-  const searchSchemas = [
+  const searchSchemas: FormSchema[] = [
     {
       field: 'name',
       component: 'NInput',
