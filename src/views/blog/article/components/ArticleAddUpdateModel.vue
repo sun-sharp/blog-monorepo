@@ -82,7 +82,7 @@
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
         <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit(true)">加密保存</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit">保存</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit()">保存</n-button>
       </n-space>
     </template>
   </n-modal>
