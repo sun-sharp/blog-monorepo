@@ -9,7 +9,7 @@
   const {
     tableSize,
     tableElRef,
-    geTableBindProps,
+    getTableBindProps,
     getTableToolbarProps,
     pagination,
     updatePage,
@@ -19,7 +19,7 @@
     debounceTableHeight,
   } = useBasicTable(props, emit);
 
-  defineExpose({ updatePage, reload, debounceTableHeight });
+  defineExpose({ updatePage, reload, debounceTableHeight, updateCheckedRowKeys });
 </script>
 
 <template>
@@ -31,11 +31,11 @@
   <div class="basic-table">
     <n-data-table
       ref="tableElRef"
-      v-bind="geTableBindProps"
+      v-bind="getTableBindProps"
       :pagination="pagination"
       @update:page="updatePage"
       @update:page-size="updatePageSize"
-      @on-update:checked-row-keys="updateCheckedRowKeys"
+      @update:checked-row-keys="updateCheckedRowKeys"
     />
   </div>
 </template>

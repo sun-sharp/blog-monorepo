@@ -60,7 +60,7 @@
       </n-tooltip>
 
       <!--表格设置单独抽离成组件-->
-      <table-column-setting v-if="hasColumnSetting" class-name="ml-12" :table-fixed="columnSettingFixed" />
+      <table-column-setting v-if="hasColumnSetting" class-name="ml-12" :table-fixed="columnSettingFixed" :has-selection="hasSelection" />
     </div>
   </div>
 </template>

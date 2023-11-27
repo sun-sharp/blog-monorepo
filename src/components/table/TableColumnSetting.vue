@@ -4,7 +4,7 @@
   import Draggable from 'vuedraggable';
   import { useSetting } from '@/hooks';
 
-  defineProps(TableColumnSettingProps);
+  const props = defineProps(TableColumnSettingProps);
 
   const { getAppThemeColor } = useSetting();
 
@@ -20,7 +20,7 @@
     onCheckboxGroupChange,
     draggableEnd,
     fixedColumn,
-  } = useTableColumnSetting();
+  } = useTableColumnSetting(props);
 </script>
 
 <template>

@@ -5,7 +5,22 @@
   import BasicTable from '@/components/table/BasicTable.vue';
   import ArticleAddUpdateModel from './components/ArticleAddUpdateModel.vue';
 
-  const { actionRef, addUpdateModelRef, searchSchemas, columns, searchSubmit, loadDataTable, tableRowKey, reloadTable } = useArticleConfigure();
+  const {
+    actionRef,
+    addUpdateModelRef,
+    searchSchemas,
+    columns,
+    checkedRowKeysDisabled,
+    privateBtnDisabled,
+    notPrivateBtnDisabled,
+    searchSubmit,
+    loadDataTable,
+    tableRowKey,
+    reloadTable,
+    tableCheckedRowKeys,
+    privateChange,
+    notPrivateChange,
+  } = useArticleConfigure();
 </script>
 
 <template>
@@ -18,16 +33,29 @@
       :schemas="searchSchemas"
       @submit="searchSubmit"
     />
-    <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :scroll-x="1090">
+    <basic-table
+      ref="actionRef"
+      is-card-surround
+      :columns="columns"
+      :request="loadDataTable"
+      :row-key="tableRowKey"
+      :scroll-x="1090"
+      has-selection
+      @update:checked-row-keys="tableCheckedRowKeys"
+    >
       <template #tableTitle>
-        <n-button type="primary" @click="addUpdateModelRef.init()">
-          <template #icon>
-            <n-icon>
-              <PlusOutlined />
-            </n-icon>
-          </template>
-          新建
-        </n-button>
+        <n-space>
+          <n-button type="primary" @click="addUpdateModelRef.init()">
+            <template #icon>
+              <n-icon>
+                <PlusOutlined />
+              </n-icon>
+            </template>
+            新建
+          </n-button>
+          <n-button :disabled="checkedRowKeysDisabled || privateBtnDisabled" type="success" @click="privateChange">加密</n-button>
+          <n-button :disabled="checkedRowKeysDisabled || notPrivateBtnDisabled" type="success" @click="notPrivateChange">不加密</n-button>
+        </n-space>
       </template>
     </basic-table>
     <article-add-update-model ref="addUpdateModelRef" @finished="reloadTable" />

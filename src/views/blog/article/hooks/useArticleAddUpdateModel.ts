@@ -1,5 +1,5 @@
 import { computed, nextTick, reactive, ref, unref } from 'vue';
-import { ApiArticleItem } from '/#/api/article';
+import { ApiArticleItem } from '/#/api/blog/article';
 import { FormItemRule } from 'naive-ui';
 import { articleAPi } from '@/api';
 import { useApiType } from '@/hooks';

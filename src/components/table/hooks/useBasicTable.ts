@@ -83,6 +83,11 @@ export const BasicTableProps = {
     type: Number,
     default: 20,
   },
+  // 默认勾选
+  hasSelection: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 // 基础表格
@@ -120,6 +125,7 @@ export const useBasicTable = (
     return {
       title: props.title,
       titleTooltip: props.titleTooltip,
+      hasSelection: props.hasSelection,
     };
   });
 
@@ -142,7 +148,8 @@ export const useBasicTable = (
 
   // 表格 传入参数
   const deviceHeight = ref(props.maxHeight);
-  const geTableBindProps = computed(() => {
+  const checkedRowKeysRef = ref<Array<string | number>>([]);
+  const getTableBindProps = computed(() => {
     const tableData = unref(getDataSourceRef);
     const devH = unref(deviceHeight);
     const maxHeight = tableData.length && devH ? `${devH}px` : 'auto';
@@ -152,6 +159,7 @@ export const useBasicTable = (
       loading: unref(getLoading),
       columns: unref(getPageColumns),
       rowKey: unref(getRowKey),
+      checkedRowKeys: unref(checkedRowKeysRef),
       data: tableData,
       remote: true, // 表格是否自动分页数据，在异步的状况下你可能需要把它设为 true
       maxHeight,
@@ -165,6 +173,7 @@ export const useBasicTable = (
     const params: PaginationConfig = {};
     params[PAGE_FIELD] = page;
     setPagination(params);
+    updateCheckedRowKeys();
     reload();
   };
 
@@ -174,11 +183,13 @@ export const useBasicTable = (
     params[PAGE_FIELD] = 1;
     params[SIZE_FIELD] = pageSize;
     setPagination(params);
+    updateCheckedRowKeys();
     reload();
   };
 
   // 选中行
   const updateCheckedRowKeys = (rowKeys?: Array<string | number>) => {
+    checkedRowKeysRef.value = rowKeys || [];
     emit('update:checked-row-keys', rowKeys);
   };
 
@@ -280,7 +291,7 @@ export const useBasicTable = (
     ...toRefs(state),
     getTableToolbarProps,
     tableElRef,
-    geTableBindProps,
+    getTableBindProps,
     pagination,
     getLoading,
     setLoading,

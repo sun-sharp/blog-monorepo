@@ -1,6 +1,6 @@
 import { getArticleCategoryData, useApiType } from '@/hooks';
 import { computed, h, onActivated, onMounted, ref, unref } from 'vue';
-import { ApiArticleItem, ApiArticleSearchParams } from '/#/api/article';
+import { ApiArticleItem, ApiArticleSearchParams, ApiBatchUpdatePrivateArticleData } from '/#/api/blog/article';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { articleAPi } from '@/api';
 import { FormSchema } from '/#/components/form';
@@ -47,7 +47,6 @@ export const useArticleConfigure = () => {
       componentProps: {
         defaultValue: null,
         filterable: true,
-        // clearable: false,
         placeholder: '请选择文章分类',
         options: unref(getArticleCategoryOption),
       },
@@ -59,16 +58,15 @@ export const useArticleConfigure = () => {
       componentProps: {
         defaultValue: null,
         filterable: true,
-        // clearable: false,
         placeholder: '请选择是否加密',
         options: [
           {
-            value: false,
-            label: '不加密',
+            value: 1,
+            label: '加密',
           },
           {
-            value: true,
-            label: '加密',
+            value: 2,
+            label: '不加密',
           },
         ],
       },
@@ -167,8 +165,54 @@ export const useArticleConfigure = () => {
    *  */
   // 数据查询
   const searchSubmit = (values: ApiArticleSearchParams) => {
-    searchParams.value = values;
+    searchParams.value = {
+      ...values,
+      isPrivate: values ? (values.isPrivate === 1 ? true : values.isPrivate === 2 ? false : undefined) : undefined,
+    };
     actionRef.value.updatePage(1);
+    actionRef.value.updateCheckedRowKeys();
+  };
+
+  // 列表选中
+  const checkedRowKeys = ref<string[]>([]);
+  const checkedRowKeysDisabled = computed(() => checkedRowKeys.value.length === 0);
+  const tableCheckedRowKeys = (rowKeys?: string[]) => {
+    checkedRowKeys.value = rowKeys ? rowKeys : [];
+  };
+
+  // 调用批量修改文章加密接口
+  const privateBtnDisabled = ref(false);
+  const notPrivateBtnDisabled = ref(false);
+  const callBatchUpdatePrivate = async (isPrivate: boolean) => {
+    const params: ApiBatchUpdatePrivateArticleData = {
+      articleIdArr: unref(checkedRowKeys),
+      isPrivate,
+    };
+    return await articleAPi.batchUpdatePrivate(params);
+  };
+
+  // 加密
+  const privateChange = () => {
+    privateBtnDisabled.value = true;
+    callBatchUpdatePrivate(true)
+      .then(() => {
+        reloadTable();
+      })
+      .finally(() => {
+        privateBtnDisabled.value = false;
+      });
+  };
+
+  // 不加密
+  const notPrivateChange = () => {
+    notPrivateBtnDisabled.value = true;
+    callBatchUpdatePrivate(false)
+      .then(() => {
+        reloadTable();
+      })
+      .finally(() => {
+        notPrivateBtnDisabled.value = false;
+      });
   };
 
   // 初始化
@@ -184,9 +228,15 @@ export const useArticleConfigure = () => {
     addUpdateModelRef,
     searchSchemas,
     columns,
+    checkedRowKeysDisabled,
+    privateBtnDisabled,
+    notPrivateBtnDisabled,
     searchSubmit,
     loadDataTable,
     tableRowKey,
     reloadTable,
+    tableCheckedRowKeys,
+    privateChange,
+    notPrivateChange,
   };
 };

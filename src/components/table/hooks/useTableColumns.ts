@@ -6,8 +6,9 @@ import { isArray } from '@/utils';
 
 // 表格需要展示的列
 export const useTableColumns = (props: ExtractPropTypes<typeof BasicTableProps>) => {
-  const columnsRef = ref<BasicColumn[]>(props.columns);
-  const defaultColumns = props.columns;
+  const selectionColumns: BasicColumn[] = [{ type: 'selection', key: 'selection' }];
+  const defaultColumns = props.hasSelection ? selectionColumns.concat(props.columns) : props.columns;
+  const columnsRef = ref<BasicColumn[]>(defaultColumns);
 
   const getPageColumns = computed(() => {
     const pageColumns = unref(columnsRef);

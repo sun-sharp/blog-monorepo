@@ -1,5 +1,5 @@
 import { AxiosBlog } from '@/api/axios';
-import { ApiArticleFindPageData, ApiArticleItem, ApiArticleSaveData, ApiArticleUpdateData } from '/#/api/article';
+import { ApiArticleFindPageData, ApiArticleItem, ApiArticleSaveData, ApiArticleUpdateData, ApiBatchUpdatePrivateArticleData } from '/#/api/blog/article';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/article';
@@ -55,6 +55,22 @@ export const save = (data: ApiArticleSaveData): Promise<undefined> => {
 export const update = (data: ApiArticleUpdateData): Promise<undefined> => {
   return AxiosBlog.request({
     url: `${basic}/update`,
+    method: 'PUT',
+    data,
+    responseOptions: {
+      isShowSuccessMessage: true,
+    },
+  });
+};
+
+/**
+ * @description: 根据id批量修改文章加密
+ * @param {ApiBatchUpdatePrivateArticleData} data
+ * @returns {Promise<undefined>}
+ */
+export const batchUpdatePrivate = (data: ApiBatchUpdatePrivateArticleData): Promise<undefined> => {
+  return AxiosBlog.request({
+    url: `${basic}/batch_update_private`,
     method: 'PUT',
     data,
     responseOptions: {

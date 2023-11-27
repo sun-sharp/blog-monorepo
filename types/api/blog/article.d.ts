@@ -9,7 +9,7 @@ export type ApiArticleSearchParams = {
   // 文章分类
   categoryVal?: number;
   // 是否加密
-  isPrivate?: boolean;
+  isPrivate?: boolean | number;
 };
 
 /**
@@ -71,3 +71,14 @@ export interface ApiArticleItem extends ApiArticle, ApiArticleId {}
  * @description:  文章保存参数
  */
 export type ApiArticleUpdateData = ApiArticleSaveData & ApiArticleId;
+
+/**
+ * @description:  根据id批量修改文章加密参数
+ */
+export type ApiBatchUpdatePrivateArticleData = {
+  // 文章id数组
+  articleIdArr: string[];
+
+  // 是否加密
+  isPrivate: boolean;
+};

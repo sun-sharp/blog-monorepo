@@ -1,4 +1,4 @@
-import { reactive, ref, toRefs, unref, watchEffect } from 'vue';
+import { ExtractPropTypes, reactive, ref, toRefs, unref, watchEffect } from 'vue';
 import { BasicColumn, ColumnFixedType, TableColumnKey, TableColumnSettingState } from '/#/components/table';
 import { useTableContext } from './useTableContext';
 import { cloneDeep } from 'lodash-es';
@@ -15,16 +15,21 @@ export const TableColumnSettingProps = {
     type: Boolean,
     default: false,
   },
+  // 默认勾选
+  hasSelection: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 // 表格设置组件
-export const useTableColumnSetting = () => {
+export const useTableColumnSetting = (props: ExtractPropTypes<typeof TableColumnSettingProps>) => {
   const table = useTableContext();
   const columnsList = ref<BasicColumn[]>([]);
   const defaultColumnsList = ref<BasicColumn[]>([]);
 
   const state = reactive<TableColumnSettingState>({
-    selection: false,
+    selection: props.hasSelection,
     checkAll: true,
     allIndeterminate: false,
     checkKeys: [],

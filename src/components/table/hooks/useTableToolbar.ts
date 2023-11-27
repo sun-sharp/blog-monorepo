@@ -21,6 +21,10 @@ export const TableToolbarProps = {
     type: Boolean,
     default: false,
   },
+  hasSelection: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 // 表格工具栏
