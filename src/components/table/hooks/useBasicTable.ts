@@ -271,7 +271,7 @@ export const useBasicTable = (
 
   // 监听内容展示的模块高度变化
   watch(
-    () => [useContSize.height, getTabsViewShow, getFooterShow],
+    () => [useContSize.width, useContSize.height, getTabsViewShow, getFooterShow],
     () => {
       debounceTableHeight();
     },
