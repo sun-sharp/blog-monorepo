@@ -9,3 +9,4 @@ export * from './domUtils';
 export * from './array';
 export * from './time';
 export * from './style';
+export * from './string';

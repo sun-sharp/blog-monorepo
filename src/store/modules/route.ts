@@ -9,7 +9,7 @@ import { constantRouterIcon, formatTrendsMenus, isHttpUrl, routerScreen } from '
 import { AppRouteRecordRaw } from '/#/router';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { ViewsMenu } from '/#/views/menu';
-import { PageRoute } from '@/router/base';
+// import { PageRoute } from '@/router/base';
 
 export const useRouteStore = defineStore({
   id: 'app-route',
@@ -69,8 +69,8 @@ export const useRouteStore = defineStore({
       this.setMenus(formatMenus);
       // 创建路由
       const accessedRouters = routerScreen(resp);
-      PageRoute.children = accessedRouters;
-      const routers = [PageRoute];
+      // PageRoute.children = accessedRouters;
+      const routers = accessedRouters;
       this.setRouters(routers);
       return toRaw(routers);
     },

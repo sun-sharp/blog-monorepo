@@ -1,10 +1,11 @@
-import { IframeComponent, LayoutRouterView } from '@/router/router-component';
+import { IframeComponent, Layout } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
 import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
 import { EMBEDDED_VALUE, MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
+import { toUnderscoreCase } from './string';
 
 /**
  * 对路由的path进行处理
@@ -14,7 +15,7 @@ import { cloneDeep } from 'lodash-es';
 export const pathFormat = (component: string = '', name: string = ''): string => {
   let path: string;
   if (component.indexOf('/') !== -1) {
-    path = component.replace('/index', '');
+    path = toUnderscoreCase(component).replace('/index', '');
     path = (path.match(/\/\\/g) || []).length === 0 ? path : path.replace(/(.*)[/]/, '$1-');
   } else {
     path = `/${name.toLowerCase()}`;
@@ -60,9 +61,32 @@ export const formatRouteComponent = (component: string = '', iframeSrc?: string)
   } else if (iframeSrc) {
     newComponent = IframeComponent;
   } else {
-    newComponent = LayoutRouterView;
+    newComponent = Layout;
   }
   return newComponent;
+};
+
+/**
+ * @description: 处理单个路由对象
+ * @param {MenuRouteItem} obj
+ * @return {*}
+ */
+export const formatRouteItem = (obj: MenuRouteItem): AppRouteRecordRaw => {
+  const { path, name, component, ...other } = obj;
+  const currentRouter: AppRouteRecordRaw = {
+    // 路由地址 动态拼接生成如 /dashboard/workplace
+    path,
+    // 路由名称，建议唯一
+    name: name || '',
+    // 该路由对应页面的 组件
+    component,
+    // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
+    meta: {
+      ...other,
+      icon: other.icon ? constantRouterIcon[other.icon] : null,
+    },
+  };
+  return currentRouter;
 };
 
 /**
@@ -75,23 +99,16 @@ export const formatRouteComponent = (component: string = '', iframeSrc?: string)
 export const routerGenerator = (routerMap: MenuRouteItem[], _parentId = '0'): AppRouteRecordRaw[] => {
   const resultArr: AppRouteRecordRaw[] = [];
   routerMap.forEach((i) => {
-    const { path, menuId, name, component, parentId, ...other } = i;
+    const { menuId, parentId } = i;
     if (_parentId === parentId) {
-      const currentRouter: AppRouteRecordRaw = {
-        // 路由地址 动态拼接生成如 /dashboard/workplace
-        path,
-        // 路由名称，建议唯一
-        name: name || '',
-        // 该路由对应页面的 组件
-        component,
-        // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
-        meta: {
-          ...other,
-          icon: other.icon ? constantRouterIcon[other.icon] : null,
-        },
-      };
+      const currentRouter: AppRouteRecordRaw = formatRouteItem(i);
       // 是否有子菜单，并递归处理
-      const itemChildren = routerGenerator(routerMap, menuId);
+      // const itemChildren = routerGenerator(routerMap, menuId);
+      const itemChildren = routerMap
+        .filter((f) => f.parentId === menuId)
+        .map((m) => {
+          return formatRouteItem(m);
+        });
       if (itemChildren && itemChildren.length > 0) {
         //如果未定义 redirect 默认第一个子路由为 redirect
         currentRouter.redirect = `${itemChildren[0].path}`;
