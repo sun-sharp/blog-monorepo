@@ -103,7 +103,6 @@ export const routerGenerator = (routerMap: MenuRouteItem[], _parentId = '0'): Ap
     if (_parentId === parentId) {
       const currentRouter: AppRouteRecordRaw = formatRouteItem(i);
       // 是否有子菜单，并递归处理
-      // const itemChildren = routerGenerator(routerMap, menuId);
       const itemChildren = routerMap
         .filter((f) => f.parentId === menuId)
         .map((m) => {

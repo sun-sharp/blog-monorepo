@@ -70,6 +70,7 @@ export const useRouteStore = defineStore({
       // 创建路由
       const accessedRouters = routerScreen(resp);
       // PageRoute.children = accessedRouters;
+      console.log(accessedRouters);
       const routers = accessedRouters;
       this.setRouters(routers);
       return toRaw(routers);
