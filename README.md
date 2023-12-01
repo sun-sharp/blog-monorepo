@@ -29,7 +29,8 @@ $ yarn compodoc
 ## 部署
 
 ### 在服务器中拉取代码项目
-``` bash
+
+```bash
 $ git init
 $ git remote add origin git@github.com:sun-sharp/alone-blog-api.git
 $ git pull origin main
@@ -39,9 +40,12 @@ $ git clone git@github.com:sun-sharp/alone-blog-api.git
 
 ### 部署dev环境
 
-``` bash
+```bash
+# 清空本地的修改
+$ git reset --hard HEAD
+
 # 先拉取全部远程分支和tag
-$ git fetch origin
+$ git fetch --prune
 
 # 切换到dev分支上
 $ git checkout dev
@@ -55,7 +59,7 @@ $ pm2 stop dev_nest
 $ pm2 delete dev_nest
 $ yarn build:dev
 $ pm2 list
-$ pm2 start --name dev_nest dev_dist/main.js # 添加进程/应用 dev_nest
+$ pm2 start --name dev_nest dist_dev/main.js # 添加进程/应用 dev_nest
 # or
 $ yarn update_dev_pm2
 
@@ -76,12 +80,12 @@ $ git pull origin main
 
 ### 用tag部署生产prod
 
-``` bash
+```bash
 # 清空本地的修改
 $ git reset --hard HEAD
 
 # 先拉取全部远程分支和tag
-$ git fetch origin
+$ git fetch --prune
 
 # 查看所有tag
 $ git tag -l -n
