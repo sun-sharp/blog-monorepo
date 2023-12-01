@@ -144,7 +144,7 @@ export const useMenuConfigure = () => {
       key: 'keepAlive',
       align: 'center',
       render(row) {
-        return row.keepAlive ? '是' : '否';
+        return typeof row.keepAlive === 'boolean' ? (row.keepAlive ? '是' : '否') : '';
       },
     },
     {
