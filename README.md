@@ -77,6 +77,9 @@ $ git pull origin main
 ### 用tag部署生产prod
 
 ``` bash
+# 清空本地的修改
+$ git reset --hard HEAD
+
 # 先拉取全部远程分支和tag
 $ git fetch origin
 
