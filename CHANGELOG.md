@@ -1,5 +1,8 @@
 # CHANGELOG aba-xxx
 
+## 2.3.1
+- 修改部署问题
+
 ## 2.3.0
 - 对swagger文档在线上进行限制
 - 添加dev部署

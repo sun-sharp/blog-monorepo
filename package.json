@@ -7,18 +7,18 @@
   "license": "UNLICENSED",
   "scripts": {
     "start:dev": "cross-env RUNNING_ENV=dev nest start",
-    "start:dev_watch_debug": "rimraf dist && cross-env RUNNING_ENV=dev nest start --watch --debug",
+    "start:dev_watch_debug": "rimraf dist_dev && cross-env RUNNING_ENV=dev nest start --watch --debug",
     "start:prod": "cross-env RUNNING_ENV=prod nest start",
-    "start:prod_watch_debug": "rimraf dist && cross-env RUNNING_ENV=prod nest start --watch --debug",
-    "rim:dist": "rimraf dist",
-    "start:dist": "cross-env RUNNING_ENV=prod node dist/main",
-    "build:dev": "rimraf dist && cross-env RUNNING_ENV=dev nest build",
-    "build:prod": "rimraf dist && cross-env RUNNING_ENV=prod nest build",
+    "start:prod_watch_debug": "rimraf dist_prod && cross-env RUNNING_ENV=prod nest start --watch --debug",
+    "rim:dist_dev": "rimraf dist_dev",
+    "start:dist_dev": "cross-env RUNNING_ENV=prod node dist_dev/main",
+    "build:dev": "rimraf dist_dev && cross-env RUNNING_ENV=dev nest build",
+    "build:prod": "rimraf dist_prod && cross-env RUNNING_ENV=prod nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark",
-    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build:dev && pm2 list && pm2 start --name dev_nest dist/main.js",
-    "update_main_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build:prod && pm2 list && pm2 start --name nest dist/main.js"
+    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build:dev && pm2 list && pm2 start --name dev_nest dist_dev/main.js",
+    "update_prod_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build:prod && pm2 list && pm2 start --name nest dist_prod/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.7",

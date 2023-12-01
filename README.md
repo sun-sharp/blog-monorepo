@@ -55,7 +55,7 @@ $ pm2 stop dev_nest
 $ pm2 delete dev_nest
 $ yarn build:dev
 $ pm2 list
-$ pm2 start --name dev_nest dist/main.js # 添加进程/应用 dev_nest
+$ pm2 start --name dev_nest dev_dist/main.js # 添加进程/应用 dev_nest
 # or
 $ yarn update_dev_pm2
 
@@ -95,8 +95,8 @@ $ pm2 stop nest # 暂停进程/应用
 $ pm2 delete nest # 删除进程/应用
 $ yarn build:prod # 打包
 $ pm2 list # 列出所有进程/应用
-$ pm2 start --name nest dist/main.js # 添加进程/应用 nest
+$ pm2 start --name nest dist_prod/main.js # 添加进程/应用 nest
 # or
-$ yarn update_main_pm2
+$ yarn update_prod_pm2
 
 ```
