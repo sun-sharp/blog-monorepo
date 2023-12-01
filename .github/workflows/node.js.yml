@@ -12,7 +12,6 @@ on:
 
 jobs:
   build:
-    if: github.ref_name === 'dev'
     name: build-nest
     runs-on: ubuntu-latest
     steps:
