@@ -19,6 +19,8 @@ const glob: Readonly<GlobalEnvConfig> = {
   imageRefixName: 'sharp_network_',
   capitalDatabaseName: 'capital',
   blogDatabaseName: 'blog',
+  buildOutDirPosition: './',
+  buildOutDirName: 'dist_prod',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;

@@ -28,8 +28,8 @@ export interface GlobalEnvConfig extends DatabaseConfig {
   capitalDatabaseName: string;
   // blog数据库名称
   blogDatabaseName: string;
-  // // 存储根目录位置
-  // storeDirPosition: string;
-  // // 存储根目录名称
-  // storeDirName: string;
+  // 打包输出目录位置
+  buildOutDirPosition: string;
+  // 打包输出目录名称
+  buildOutDirName: string;
 }

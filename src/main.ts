@@ -12,12 +12,18 @@ import { useCustomConfig } from './config';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 
 const customConfig = useCustomConfig();
-const { fileAccessPath, staticDirPosition, staticDirName, port } = customConfig;
+const { fileAccessPath, staticDirPosition, staticDirName, port, buildOutDirName, buildOutDirPosition } = customConfig;
 const { version } = pkg;
 const title = 'NestJs博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
 const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPath}/json/${swaggerUrl}.json`;
+
+// 修改打包文件夹名称
+import * as tsconfig from '../tsconfig.json';
+const buildOutDir = `${buildOutDirPosition}${buildOutDirName}`;
+tsconfig.compilerOptions.outDir = buildOutDir;
+writeFileSync('./tsconfig.json', JSON.stringify(tsconfig, null, 2), { encoding: 'utf-8' });
 
 (async () => {
   // create app
@@ -43,7 +49,11 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPat
       // 写入swaggerUrl.json文件
       writeFileSync(`${jsonDir}/${swaggerUrl}.json`, JSON.stringify(document, null, '\t'));
       logger.log('写入swaggerUrl.json文件');
-      SwaggerModule.setup(swaggerUrl, app, document);
+      // 只在开发时运行swagger路径
+      const { RUNNING_ENV } = process.env;
+      if (RUNNING_ENV === 'dev') {
+        SwaggerModule.setup(swaggerUrl, app, document);
+      }
       return app;
     })
     // 配置 public 文件夹为静态目录，以达到可直接访问下面文件的目的
@@ -70,7 +80,11 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPat
     // listen port
     .then((app) => app.listen(port))
     .finally(() => {
-      logger.log(`http://127.0.0.1:${port}/${swaggerUrl}`);
+      // 只在开发时运行swagger路径
+      const { RUNNING_ENV } = process.env;
+      if (RUNNING_ENV === 'dev') {
+        logger.log(`http://127.0.0.1:${port}/${swaggerUrl}`);
+      }
       logger.log(`http://127.0.0.1:${port}${globalPrefix}`);
     });
 })();

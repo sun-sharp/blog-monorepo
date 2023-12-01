@@ -1,5 +1,7 @@
 # compiled output
 /dist
+/dist_dev
+/dist_prod
 /node_modules
 /documentation
 /api_static_dir
