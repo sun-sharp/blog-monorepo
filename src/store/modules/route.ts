@@ -5,10 +5,11 @@ import { RouteState } from '/#/store';
 import { ApiUserInfo } from '/#/api/user';
 import { capitalApi } from '@/api';
 import at from 'await-to-js';
-import { constantRouterIcon, formatTrendsMenus, isHttpUrl, routerScreen } from '@/utils';
+import { constantRouterIcon, formatTrendsMenus, isHttpUrl, routerClassify, routerScreen } from '@/utils';
 import { AppRouteRecordRaw } from '/#/router';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { ViewsMenu } from '/#/views/menu';
+import { PageRoute } from '@/router/base';
 // import { PageRoute } from '@/router/base';
 
 export const useRouteStore = defineStore({
@@ -69,9 +70,9 @@ export const useRouteStore = defineStore({
       this.setMenus(formatMenus);
       // 创建路由
       const accessedRouters = routerScreen(resp);
-      // PageRoute.children = accessedRouters;
-      console.log(accessedRouters);
-      const routers = accessedRouters;
+      const { oneRouters, otherRouters } = routerClassify(accessedRouters);
+      PageRoute.children = oneRouters;
+      const routers = [PageRoute, ...otherRouters];
       this.setRouters(routers);
       return toRaw(routers);
     },

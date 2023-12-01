@@ -169,6 +169,33 @@ export const routerScreen = (menuData: ApiMenuItem[]): AppRouteRecordRaw[] => {
 };
 
 /**
+ * @description: 对路由进行分类
+ * @param {AppRouteRecordRaw[]} routeList
+ * @return {{ oneRouters: AppRouteRecordRaw[]; otherRouters: AppRouteRecordRaw[]; }}
+ */
+export const routerClassify = (
+  routeList: AppRouteRecordRaw[]
+): {
+  oneRouters: AppRouteRecordRaw[];
+  otherRouters: AppRouteRecordRaw[];
+} => {
+  const isOneRoute = (item: AppRouteRecordRaw) => !item.children && !item.redirect;
+  const oneRouters: AppRouteRecordRaw[] = [];
+  const otherRouters: AppRouteRecordRaw[] = [];
+  routeList.forEach((f) => {
+    if (isOneRoute(f)) {
+      oneRouters.push(f);
+    } else {
+      otherRouters.push(f);
+    }
+  });
+  return {
+    oneRouters,
+    otherRouters,
+  };
+};
+
+/**
  * 将数组菜单组合成多层菜单
  */
 export const levelMenu = (menuMap: ApiMenuItem[], parentId: string | number = '0') => {

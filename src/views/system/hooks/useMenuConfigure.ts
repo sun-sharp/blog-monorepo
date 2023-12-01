@@ -1,9 +1,9 @@
-import { h, nextTick, onMounted, reactive, ref } from 'vue';
+import { computed, h, nextTick, onMounted, reactive, ref, unref } from 'vue';
 import { constantHtmlIcon, levelMenu } from '@/utils';
-import { NButton, NPopconfirm, NTag } from 'naive-ui';
-import { menuTagTypeNameObj, menuTypeObj } from '@/constant';
+import { DataTableColumns, NButton, NPopconfirm, NTag } from 'naive-ui';
+import { MAIN_DIRECTORY_VALUE, menuTagTypeNameObj, menuTypeObj } from '@/constant';
 import { menuApi } from '@/api';
-import { ApiLevelMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
 import { FormSchema } from '/#/components/form';
 import { TableSizeType } from '/#/components/table';
 import at from 'await-to-js';
@@ -40,6 +40,7 @@ export const useMenuConfigure = () => {
   // 表格
   const tableData = ref<ApiLevelMenuItem[]>([]);
   const tableTempData = ref<ApiLevelMenuItem[]>([]);
+  const smoothData = ref<ApiMenuItem[]>([]);
 
   // 表格加载
   const tableLoading = ref(false);
@@ -52,6 +53,7 @@ export const useMenuConfigure = () => {
     tableLoading.value = true;
     const [err, res] = await at(menuApi.getMenuList());
     if (err || !res) return;
+    smoothData.value = res;
     const levelData = levelMenu(res);
     tableTempData.value = levelData;
     tableData.value = levelData;
@@ -71,24 +73,17 @@ export const useMenuConfigure = () => {
   ];
 
   // 表格字段配置
-  const columns = [
+  const columns: DataTableColumns<ApiLevelMenuItem> = [
     {
-      with: 200,
+      minWidth: 200,
       title: '名称',
       key: 'title',
     },
     {
-      title: '上级菜单',
-      key: 'parentName',
-    },
-    {
-      title: '路由',
-      key: 'path',
-    },
-    {
       title: '标识',
+      key: 'name',
       align: 'center',
-      render(row: ApiLevelMenuItem) {
+      render(row) {
         return row.menuType === 7 ? '' : row.name;
       },
     },
@@ -96,14 +91,15 @@ export const useMenuConfigure = () => {
       title: '图标',
       align: 'center',
       key: 'icon',
-      render(row: ApiLevelMenuItem) {
+      render(row) {
         return row.icon ? constantHtmlIcon[row.icon] : '';
       },
     },
     {
       title: '类型',
+      key: 'menuType',
       align: 'center',
-      render(row: ApiLevelMenuItem) {
+      render(row) {
         return h(
           NTag as Component,
           {
@@ -123,7 +119,8 @@ export const useMenuConfigure = () => {
     {
       title: '菜单URL',
       align: 'center',
-      render(row: ApiLevelMenuItem) {
+      key: 'component',
+      render(row) {
         let menuUrl = row.component;
         if (row.menuType === 6) {
           menuUrl = row.iframeSrc;
@@ -136,18 +133,27 @@ export const useMenuConfigure = () => {
     },
     {
       title: '是否隐藏',
+      key: 'hidden',
       align: 'center',
-      render(row: ApiLevelMenuItem) {
+      render(row) {
         return row.hidden ? '是' : '否';
       },
     },
     {
-      with: 100,
+      title: '是否缓存',
+      key: 'keepAlive',
+      align: 'center',
+      render(row) {
+        return row.keepAlive ? '是' : '否';
+      },
+    },
+    {
+      minWidth: 100,
       title: '操作',
       key: 'actions',
       align: 'center',
       fixed: 'right',
-      render(row: ApiLevelMenuItem) {
+      render(row) {
         return [
           h(
             NButton,
@@ -188,6 +194,12 @@ export const useMenuConfigure = () => {
     },
   ];
 
+  const expandedRowKeys = computed<Array<string | number>>(() => {
+    return unref(smoothData)
+      .filter((f) => f.menuType === MAIN_DIRECTORY_VALUE)
+      .map((m) => m.name);
+  });
+
   // 删除
   const handleDelete = (row: ApiLevelMenuItem) => {
     menuApi.removeMenu(row.menuId).then(() => {
@@ -226,6 +238,7 @@ export const useMenuConfigure = () => {
     columns,
     tableLoading,
     tableData,
+    expandedRowKeys,
     searchSubmit,
     reload,
   };

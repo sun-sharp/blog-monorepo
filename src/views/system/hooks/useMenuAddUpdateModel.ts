@@ -1,6 +1,6 @@
-import { PAGE_ENUM, menuTypeObj } from '@/constant';
+import { MAIN_DIRECTORY_VALUE, PAGE_ENUM, menuTypeObj } from '@/constant';
 import { constantHtmlIcon } from '@/utils';
-import { ExtractPropTypes, VNode, nextTick, reactive, ref, unref, watch } from 'vue';
+import { ExtractPropTypes, VNode, computed, nextTick, reactive, ref, unref, watch } from 'vue';
 import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormItemRule, FormRules, MenuOption } from 'naive-ui';
 import { menuApi } from '@/api';
@@ -10,7 +10,7 @@ import { useRouteStore } from '@/store';
 // 菜单管理 新建/修改 传参
 export const MenuAddUpdateModelProps = {
   tableData: {
-    type: Array,
+    type: Array as PropType<ApiLevelMenuItem[]>,
     default: () => [],
   },
 };
@@ -27,6 +27,20 @@ const defaultModelForm = {
   parentId: '0',
   hidden: false,
   keepAlive: false,
+};
+
+// 获取菜单级别数据
+const getMenuDirectory = (tableData: ApiLevelMenuItem[]): ApiLevelMenuItem[] => {
+  return tableData
+    .filter((f) => f.menuType === MAIN_DIRECTORY_VALUE)
+    .map((m) => {
+      const { children = [], ...other } = m;
+      const it: ApiLevelMenuItem = { ...other };
+      if (children.filter((f) => f.menuType === MAIN_DIRECTORY_VALUE).length > 0) {
+        it.children = getMenuDirectory(children);
+      }
+      return it;
+    });
 };
 
 // 菜单管理 新建/修改 弹窗
@@ -87,31 +101,23 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
       message: '请输入排序号',
     },
   });
-  const parentIdOptions = ref([
-    {
-      menuId: '0',
-      title: '根目录',
-      children: props.tableData || [],
-    },
-  ]);
+  const parentIdOptions = computed(() => {
+    const parentChildren = getMenuDirectory(props.tableData);
+    return [
+      {
+        menuId: '0',
+        title: '根目录',
+        children: parentChildren,
+      },
+    ];
+  });
   watch(
     () => modelForm.menuType,
     (menuType) => {
       menuTypeName.value = menuTypeObj[menuType];
     }
   );
-  watch(
-    () => unref(props).tableData,
-    (tableData) => {
-      parentIdOptions.value = [
-        {
-          menuId: '0',
-          title: '根目录',
-          children: tableData || [],
-        },
-      ];
-    }
-  );
+
   // 图标
   const iconOptions = ref<MenuOption[]>([]);
   iconOptions.value = Object.keys(constantHtmlIcon).map((key) => ({
