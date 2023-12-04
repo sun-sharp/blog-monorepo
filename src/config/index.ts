@@ -11,6 +11,9 @@ const configs = {
 };
 
 const { RUNNING_ENV } = process.env;
+
+console.log(RUNNING_ENV, 'RUNNING_ENV');
+
 let env = 'prod';
 if (RUNNING_ENV === 'dev') {
   env = 'dev';
