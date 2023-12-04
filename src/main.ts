@@ -12,6 +12,8 @@ import { useCustomConfig } from './config';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 
 const customConfig = useCustomConfig();
+console.log(customConfig, 'customConfig');
+
 const { fileAccessPath, staticDirPosition, staticDirName, port } = customConfig;
 const { version } = pkg;
 const title = 'NestJs博客API';
