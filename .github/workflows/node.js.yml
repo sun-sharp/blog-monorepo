@@ -37,7 +37,9 @@ jobs:
             git fetch origin
             git tag -l -n
             git checkout ${{ github.ref_name }}
+            git pull origin dev
             yarn update_dev_pm2
+            mv dist dist_dev
             ls -al
 
       - name: build prod
@@ -62,4 +64,5 @@ jobs:
             git tag -l -n
             git checkout ${{ github.ref_name }}
             yarn update_prod_pm2
+            mv dist dist_prod
             ls -al
