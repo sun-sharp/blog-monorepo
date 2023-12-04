@@ -13,9 +13,9 @@ const database: DatabaseConfig = JSON.parse(buffer);
 const glob: Readonly<GlobalEnvConfig> = {
   ...database,
   port: 3002,
-  fileAccessPath: 'api_file',
-  staticDirPosition: './',
-  staticDirName: 'api_static_dir',
+  fileAccessPath: 'api_dev_file',
+  staticDirPosition: '../',
+  staticDirName: 'api_dev_static_dir',
   imageRefixName: 'sharp_local_',
   capitalDatabaseName: 'dev_capital',
   blogDatabaseName: 'dev_blog',
