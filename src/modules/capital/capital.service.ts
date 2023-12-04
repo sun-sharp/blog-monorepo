@@ -19,6 +19,10 @@ import { ImageService } from './image/image.service';
 import { CategoryService } from './category/category.service';
 import { storeDirStr } from 'src/common/constant/config';
 import { createStoreDir } from 'src/common/fs-mkdir';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class CapitalService {
@@ -266,7 +270,7 @@ export class CapitalService {
             logger.log('创建json目录');
           }
           // 判断json/capital目录是否路径存在
-          const capitalDir = `${jsonDir}/capital`;
+          const capitalDir = `${jsonDir}/${capitalDatabaseName}`;
           const hasDir = existsSync(capitalDir);
           if (!hasDir) {
             // 创建json/capital目录

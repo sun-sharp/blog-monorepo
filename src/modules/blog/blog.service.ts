@@ -7,6 +7,10 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { MoneyService } from './money/money.service';
 import { createStoreDir } from 'src/common/fs-mkdir';
 import { storeDirStr } from 'src/common/constant/config';
+import { useCustomConfig } from 'src/config';
+
+const customConfig = useCustomConfig();
+const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class BlogService {
@@ -34,12 +38,12 @@ export class BlogService {
             logger.log('创建json目录');
           }
           // 判断json/blog目录是否路径存在
-          const blogDir = `${jsonDir}/blog`;
+          const blogDir = `${jsonDir}/${blogDatabaseName}`;
           const hasDir = existsSync(blogDir);
           if (!hasDir) {
             // 创建json/blog目录
             mkdirSync(blogDir);
-            logger.log('创建json/capital目录');
+            logger.log('创建json/blog目录');
           }
           return blogDir;
         })
