@@ -1,6 +1,6 @@
 {
   "name": "alone-blog-api",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "",
   "author": "yrr",
   "private": true,
@@ -11,13 +11,12 @@
     "start:prod": "cross-env RUNNING_ENV=prod nest start",
     "start:prod_watch_debug": "rimraf dist && cross-env RUNNING_ENV=prod nest start --watch --debug",
     "rim:dist": "rimraf dist",
-    "build:dev": "rimraf dist_dev && cross-env RUNNING_ENV=dev nest build",
-    "build:prod": "rimraf dist_prod && cross-env RUNNING_ENV=prod nest build",
+    "build": "rimraf dist && nest build",
     "format": "prettier --write \"{src,types}/**/*.ts\"",
     "lint": "eslint \"{src,types}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark",
-    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build:dev && mv dist dist_dev && pm2 list && cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist_dev/main.js",
-    "update_prod_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build:prod && mv dist dist_dev && pm2 list && cross-env RUNNING_ENV=prod pm2 start --name nest dist_prod/main.js"
+    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build && pm2 list && cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist/main.js",
+    "update_prod_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build && pm2 list && cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.7",

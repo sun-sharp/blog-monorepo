@@ -57,9 +57,9 @@ $ git pull origin dev
 $ yarn
 $ pm2 stop dev_nest
 $ pm2 delete dev_nest
-$ yarn build:dev
+$ yarn build
 $ pm2 list
-$ pm2 start --name dev_nest dist_dev/main.js # 添加进程/应用 dev_nest
+$ cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist/main.js # 添加进程/应用 dev_nest
 # or
 $ yarn update_dev_pm2
 
@@ -69,12 +69,7 @@ $ yarn update_dev_pm2
 
 ```bash
 # 在服务器中拉取代码项目
-
 $ git pull origin main
-# or
-$ git pull origin main
-
-
 
 ```
 
@@ -97,9 +92,9 @@ $ git checkout aba-xxx
 $ yarn # 安装插件
 $ pm2 stop nest # 暂停进程/应用
 $ pm2 delete nest # 删除进程/应用
-$ yarn build:prod # 打包
+$ yarn build # 打包
 $ pm2 list # 列出所有进程/应用
-$ pm2 start --name nest dist_prod/main.js # 添加进程/应用 nest
+$ cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js # 添加进程/应用 nest
 # or
 $ yarn update_prod_pm2
 
