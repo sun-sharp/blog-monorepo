@@ -15,6 +15,14 @@ const customConfig = useCustomConfig();
 const { staticDirPosition, staticDirName, imageRefixName, capitalDatabaseName } = customConfig;
 const IMAGE_MONGO_MODULE = MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }], capitalDatabaseName);
 
+// 判断static目录是否路径存在
+const staticDir = `${staticDirPosition}${staticDirName}`;
+const hasStaticDir = existsSync(staticDir);
+if (!hasStaticDir) {
+  // 创建static目录
+  mkdirSync(staticDir);
+  logger.log('创建static目录');
+}
 // 判断image目录是否路径存在
 const imageDir = `${staticDirPosition}${staticDirName}/image`;
 const hasDir = existsSync(imageDir);

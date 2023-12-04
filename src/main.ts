@@ -12,18 +12,12 @@ import { useCustomConfig } from './config';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 
 const customConfig = useCustomConfig();
-const { fileAccessPath, staticDirPosition, staticDirName, port, buildOutDirName, buildOutDirPosition } = customConfig;
+const { fileAccessPath, staticDirPosition, staticDirName, port } = customConfig;
 const { version } = pkg;
 const title = 'NestJs博客API';
 const globalPrefix = '/';
 const swaggerUrl = 'swagger-api';
 const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPath}/json/${swaggerUrl}.json`;
-
-// 修改打包文件夹名称
-import * as tsconfig from '../tsconfig.json';
-const buildOutDir = `${buildOutDirPosition}${buildOutDirName}`;
-tsconfig.compilerOptions.outDir = buildOutDir;
-writeFileSync('./tsconfig.json', JSON.stringify(tsconfig, null, 2), { encoding: 'utf-8' });
 
 (async () => {
   // create app
