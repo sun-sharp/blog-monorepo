@@ -16,8 +16,8 @@
     "format": "prettier --write \"{src,types}/**/*.ts\"",
     "lint": "eslint \"{src,types}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark",
-    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build:dev && pm2 list && pm2 start --name dev_nest dist_dev/main.js",
-    "update_prod_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build:prod && pm2 list && pm2 start --name nest dist_prod/main.js"
+    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build:dev && mv dist dist_dev && pm2 list && pm2 start --name dev_nest dist_dev/main.js",
+    "update_prod_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build:prod && mv dist dist_dev && pm2 list && pm2 start --name nest dist_prod/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.7",
