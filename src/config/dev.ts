@@ -17,7 +17,7 @@ const glob: Readonly<GlobalEnvConfig> = {
   staticDirPosition: '../',
   staticDirName: 'api_dev_static_dir',
   imageRefixName: 'sharp_local_',
-  imagePrefixUrl: 'https://api.yangruirui.top/dev_nest/',
+  imagePrefixUrl: '',
   capitalDatabaseName: 'dev_capital',
   blogDatabaseName: 'dev_blog',
 };
