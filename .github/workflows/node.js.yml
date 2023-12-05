@@ -43,7 +43,7 @@ jobs:
 
       - name: build prod
         uses: appleboy/ssh-action@master
-        if: ${{ github.ref_name == 'aba-' }}
+        if: ${{ startsWith(github.ref_name, 'aba-') }}
         with:
           # 服务器地址
           host: ${{ secrets.SERVER_HOST }}
