@@ -58,10 +58,10 @@ export class UserService {
         })
         // 判断头像是否合理
         .then(async (body) => {
-          const { avatar } = body;
-          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
-          return body;
+          let newAvatar = body.avatar;
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(body.avatar);
+          if (hasHttpOrHttps) newAvatar = newAvatar.replace(imagePrefixUrl, '');
+          return { ...body, avatar: newAvatar };
         })
         // 注册用户
         .then(async (body) => {
@@ -117,9 +117,10 @@ export class UserService {
       Promise.resolve(avatar)
         // 判断头像是否合理
         .then(async (avatar) => {
+          let newAvatar = avatar;
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
-          return avatar;
+          if (hasHttpOrHttps) newAvatar = newAvatar.replace(imagePrefixUrl, '');
+          return newAvatar;
         })
         // 判断username 是否为合法字符
         .then(async (avatar) => {
@@ -257,10 +258,10 @@ export class UserService {
       Promise.resolve({ userId, body: updateUserInfoDto })
         // 判断头像是否合理
         .then(async ({ userId, body }) => {
-          const { avatar } = body;
-          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
-          return { userId, body };
+          let newAvatar = body.avatar;
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(body.avatar);
+          if (hasHttpOrHttps) newAvatar = newAvatar.replace(imagePrefixUrl, '');
+          return { userId, body: { ...body, avatar: newAvatar } };
         })
         // 修改用户基本信息
         .then(async ({ userId, body }) => {
