@@ -5,7 +5,7 @@ import { format } from 'date-fns';
  * @param {string} formatStr
  * @return {[string, string]}
  */
-export const lastMonthFormatRange = (formatStr: string): [string, string] => {
+export const nearlyMonthFormatRange = (formatStr: string): [string, string] => {
   const nowTime = new Date();
   const year = nowTime.getFullYear();
   const month = nowTime.getMonth();
@@ -35,11 +35,75 @@ export const lastHalfYearFormatRange = (formatStr: string): [string, string] => 
 };
 
 /**
- * @description: 获取近一年的时间间隔(格式化后的数据)
+ * @description: 获取上一个月的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const lastMonthFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear();
+  const month = nowTime.getMonth();
+  const day = new Date(year, month, 0).getDate();
+  return [format(new Date(year, month - 1, 1), formatStr), format(new Date(year, month - 1, day), formatStr)];
+};
+
+/**
+ * @description: 获取去年的时间间隔(格式化后的数据)
  * @param {string} formatStr
  * @return {[string, string]}
  */
 export const lastYearFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear() - 1;
+  const day = new Date(year, 12, 0).getDate();
+  return [format(new Date(year, 0, 1), formatStr), format(new Date(year, 11, day), formatStr)];
+};
+
+/**
+ * @description: 获取今年的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const thisYearFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear();
+  return [format(new Date(year, 0, 1), formatStr), format(nowTime, formatStr)];
+};
+
+/**
+ * @description: 获取上半年的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const firstHalfYearFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear();
+  const month = nowTime.getMonth();
+  let endTime = nowTime;
+  if (month > 6) {
+    const day = new Date(year, 6, 0).getDate();
+    endTime = new Date(year, 5, day);
+  }
+  return [format(new Date(year, 0, 1), formatStr), format(endTime, formatStr)];
+};
+
+/**
+ * @description: 获取下半年的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const secondHalfYearFormatRange = (formatStr: string): [string, string] => {
+  const nowTime = new Date();
+  const year = nowTime.getFullYear();
+  return [format(new Date(year, 5, 1), formatStr), format(nowTime, formatStr)];
+};
+
+/**
+ * @description: 获取近一年的时间间隔(格式化后的数据)
+ * @param {string} formatStr
+ * @return {[string, string]}
+ */
+export const nearlyYearFormatRange = (formatStr: string): [string, string] => {
   const nowTime = new Date();
   const year = nowTime.getFullYear();
   const month = nowTime.getMonth();
@@ -51,7 +115,6 @@ export const lastYearFormatRange = (formatStr: string): [string, string] => {
       day += new Date(year - 1, 12 + month - i, 0).getDate();
     }
   }
-  console.log(day);
   return [format(nowTime.getTime() - day * 24 * 60 * 60 * 1000, formatStr), format(nowTime, formatStr)];
 };
 

@@ -6,6 +6,7 @@
   import { lastMonthFormatRange } from '@/utils';
   import { ApiBankFlowResult, ApiMoneyBalanceResult } from '/#/api/money';
   import { ApiStartEndTimeParams } from '/#/api/common';
+  import MoneyTimeTypeSelect from './components/MoneyTimeTypeSelect.vue';
 
   const moneyBalanceCustomCfg = {
     label: {
@@ -66,6 +67,10 @@
       })
       .finally(() => {});
   };
+  // 点击改变时间
+  const bankFlowTimeSelectChange = (formattedValue: [string, string]) => {
+    getBankFlow(formattedValue);
+  };
 
   // 统计某时间范围内的方式流入/流出的金额
   const inflowOrOutflowMoneyDateRange = ref(lastMonthFormatRange('yyyy-MM-dd'));
@@ -107,6 +112,10 @@
       })
       .finally(() => {});
   };
+  // 点击改变时间
+  const inflowOrOutflowTimeSelectChange = (formattedValue: [string, string]) => {
+    getInflowOrOutflowMoney(formattedValue);
+  };
 
   const init = () => {
     getMoneyBalance();
@@ -120,7 +129,7 @@
 <template>
   <n-card :bordered="false">
     <div class="amount-summary">
-      <div class="summary-card" style="height: 400px">
+      <div class="summary-card" style="height: 440px">
         <div class="summary-card__head">
           <span>各个方式的余额</span>
         </div>
@@ -132,15 +141,7 @@
       <div class="summary-card">
         <div class="summary-card__head">
           <span>银行流动</span>
-          <n-date-picker
-            :formatted-value="bankFlowDateRange"
-            style="width: 280px"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            clearable
-            @update:formatted-value="getBankFlow($event)"
-          />
+          <money-time-type-select direction="vertical" @time-select-change="bankFlowTimeSelectChange" @date-picker-change="getBankFlow($event)" />
         </div>
         <div class="summary-card__list">
           <ul v-if="bankFlowData.length > 0" class="list-ul">
@@ -159,15 +160,7 @@
       <div class="summary-card full-card mt-20" style="height: 800px">
         <div class="summary-card__head">
           <span>各方式所流入/流出的金额</span>
-          <n-date-picker
-            :formatted-value="inflowOrOutflowMoneyDateRange"
-            style="width: 280px"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            clearable
-            @update:formatted-value="getInflowOrOutflowMoney($event)"
-          />
+          <money-time-type-select @time-select-change="inflowOrOutflowTimeSelectChange" @date-picker-change="getInflowOrOutflowMoney($event)" />
         </div>
         <div class="summary-card__chart">
           <div class="chart-separate">
@@ -237,6 +230,25 @@
           margin-left: 10px;
           font-weight: 400;
           font-size: 14px;
+        }
+
+        .time-select {
+          display: flex;
+          align-items: center;
+
+          &--item {
+            font-weight: normal;
+            font-size: 13px;
+            cursor: pointer;
+
+            &:not(:first-child) {
+              margin-left: 8px;
+            }
+
+            &.active {
+              color: $theme-color;
+            }
+          }
         }
       }
 

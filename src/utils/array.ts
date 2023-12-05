@@ -17,3 +17,13 @@ export const arrEnumToObj = (
   });
   return obj;
 };
+
+/**
+ * @description: 判断数组相同
+ * @param {Array} arr1
+ * @param {Array} arr2
+ * @return {boolean}
+ */
+export const isArrayEqual = (arr1: Array<string | number>, arr2: Array<string | number>): boolean => {
+  return arr1.join(',') === arr2.join(',');
+};
