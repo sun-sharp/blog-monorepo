@@ -3,7 +3,7 @@ import { useCustomConfig } from 'src/config';
 import { ReadImageItem } from 'types/capital/image';
 
 const customConfig = useCustomConfig();
-const { fileAccessPath, imagePrefixUrl } = customConfig;
+const { fileAccessPath } = customConfig;
 
 /**
  * @description: 获取静态目录里的图片
@@ -21,7 +21,7 @@ export const readdirOfImageHandle = (pathName: PathLike): Promise<ReadImageItem[
         name: fileName.split('.')[0] || '',
         imageType: fileName.split('.')[1] || '',
         fileName: fileName,
-        url: `${imagePrefixUrl}${fileAccessPath}/image/${fileName}`,
+        url: `/${fileAccessPath}/image/${fileName}`,
       }));
       resolve(result);
     });

@@ -19,7 +19,7 @@ import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
-const { capitalDatabaseName, imagePrefixUrl } = customConfig;
+const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class UserService {
@@ -58,10 +58,10 @@ export class UserService {
         })
         // 判断头像是否合理
         .then(async (body) => {
-          let newAvatar = body.avatar;
-          const hasHttpOrHttps = imageIsHasHttpOrHttps(body.avatar);
-          if (hasHttpOrHttps) newAvatar = newAvatar.replace(imagePrefixUrl, '');
-          return { ...body, avatar: newAvatar };
+          const { avatar } = body;
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
+          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
+          return body;
         })
         // 注册用户
         .then(async (body) => {
@@ -117,10 +117,9 @@ export class UserService {
       Promise.resolve(avatar)
         // 判断头像是否合理
         .then(async (avatar) => {
-          let newAvatar = avatar;
           const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
-          if (hasHttpOrHttps) newAvatar = newAvatar.replace(imagePrefixUrl, '');
-          return newAvatar;
+          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
+          return avatar;
         })
         // 判断username 是否为合法字符
         .then(async (avatar) => {
@@ -158,7 +157,7 @@ export class UserService {
             roleName: routeFind.name,
             loginDate: nowDateFun(user.loginDate),
             username: user.username,
-            avatar: `${imagePrefixUrl}${user.avatar}`,
+            avatar: user.avatar,
             nickname: user.nickname,
           };
           return {
@@ -200,7 +199,7 @@ export class UserService {
             roleCode: m.roleCode,
             loginDate: nowDateFun(m.loginDate),
             username: m.username,
-            avatar: `${imagePrefixUrl}${m.avatar}`,
+            avatar: m.avatar,
             nickname: m.nickname,
           }));
           return {
@@ -258,10 +257,10 @@ export class UserService {
       Promise.resolve({ userId, body: updateUserInfoDto })
         // 判断头像是否合理
         .then(async ({ userId, body }) => {
-          let newAvatar = body.avatar;
-          const hasHttpOrHttps = imageIsHasHttpOrHttps(body.avatar);
-          if (hasHttpOrHttps) newAvatar = newAvatar.replace(imagePrefixUrl, '');
-          return { userId, body: { ...body, avatar: newAvatar } };
+          const { avatar } = body;
+          const hasHttpOrHttps = imageIsHasHttpOrHttps(avatar);
+          if (hasHttpOrHttps) throw '头像保存的不合理，请处理之后再上传！';
+          return { userId, body };
         })
         // 修改用户基本信息
         .then(async ({ userId, body }) => {

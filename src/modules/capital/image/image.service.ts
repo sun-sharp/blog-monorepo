@@ -16,7 +16,7 @@ import { useCustomConfig } from 'src/config';
 import { IResponse } from 'types/common';
 
 const customConfig = useCustomConfig();
-const { capitalDatabaseName, fileAccessPath, staticDirPosition, staticDirName, imagePrefixUrl } = customConfig;
+const { capitalDatabaseName, fileAccessPath, staticDirPosition, staticDirName } = customConfig;
 const imageReadDir = `${fileAccessPath}/image`;
 const imageFsDir = `${staticDirPosition}${staticDirName}/image/`;
 
@@ -48,7 +48,7 @@ export class ImageService {
             name,
             imageType,
             fileName: filename,
-            url: `${imageReadDir}/${filename}`,
+            url: `/${imageReadDir}/${filename}`,
             uploadTime: new Date(),
             source: source,
           } as ApiImage;
@@ -62,8 +62,7 @@ export class ImageService {
             name: saveItem.name,
             imageType: saveItem.imageType,
             fileName: saveItem.fileName,
-            keyUrl: saveItem.url,
-            url: `${imagePrefixUrl}${saveItem.url}`,
+            url: saveItem.url,
             uploadTime: nowDateFun(saveItem.uploadTime),
             source: saveItem.source,
           };
@@ -199,8 +198,7 @@ export class ImageService {
                 fileName: m.fileName,
                 name: m.name,
                 imageType: m.imageType,
-                keyUrl: m.url,
-                url: `${imagePrefixUrl}${m.url}`,
+                url: m.url,
                 uploadTime: m.uploadTime,
                 source: m.source,
               };
@@ -239,8 +237,7 @@ export class ImageService {
                 fileName: m.fileName,
                 name: m.name,
                 imageType: m.imageType,
-                keyUrl: m.url,
-                url: `${imagePrefixUrl}${m.url}`,
+                url: m.url,
                 uploadTime: nowDateFun(m.uploadTime),
                 source: m.source,
               };
@@ -289,8 +286,7 @@ export class ImageService {
                   fileName: m.fileName,
                   name: m.name,
                   imageType: m.imageType,
-                  keyUrl: m.url,
-                  url: `${imagePrefixUrl}${m.url}`,
+                  url: m.url,
                   uploadTime: nowDateFun(m.uploadTime),
                   source: m.source,
                   exists: existsSyncHandle(`${imageFsDir}${m.fileName}`),
@@ -358,12 +354,12 @@ export class ImageService {
       Promise.resolve(removePublicAllImageDto)
         // 读取文件
         .then(async ({ fileNameArr }) => {
-          await readFileListHandle(`${staticDirPosition}${staticDirName}/image`, fileNameArr);
+          await readFileListHandle(`${customConfig.staticDirPosition}${customConfig.staticDirName}/image`, fileNameArr);
           return fileNameArr;
         })
         // 删除文件
         .then(async (fileNameArr) => {
-          const result = await unlinkListHandle(`${staticDirPosition}${staticDirName}/image`, fileNameArr);
+          const result = await unlinkListHandle(`${customConfig.staticDirPosition}${customConfig.staticDirName}/image`, fileNameArr);
           logger.log(`批量删除图片目录下的图片`);
           return {
             code: ApiCode.SUCCESS,
