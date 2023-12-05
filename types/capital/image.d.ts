@@ -41,6 +41,8 @@ export interface ApiImage {
  * @description: 图片的列表每项
  */
 export interface ApiImageItem extends Omit<ApiImage, 'uploadTime'>, ApiImageId {
+  // 图片key值
+  keyUrl: string;
   // 判断目录里的图片是否存在
   exists?: boolean;
   uploadTime: string;
