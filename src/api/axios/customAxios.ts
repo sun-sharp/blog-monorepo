@@ -2,11 +2,9 @@ import { useUserStoreWidthOut } from '@/store';
 import axios, { AxiosHeaderValue, AxiosInstance, AxiosResponse, HeadersDefaults } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
 import { formatRequestDate, isEmpty, isString, joinTimestamp } from '@/utils';
-import { APP_ENV_CONFIG, RESULT_ENUM } from '@/constant';
+import { RESULT_ENUM } from '@/constant';
 import { checkStatus } from './checkStatus';
 import { VNodeChild } from 'vue';
-
-const urlPrefix = APP_ENV_CONFIG.urlPrefix || '';
 
 const win: WindowConfig = window;
 
@@ -118,17 +116,12 @@ export class CustomAxios {
   private requestInterceptors(config: CustomAxiosConfig) {
     // 请求之前处理config
     const conf: any = Object.assign({}, config);
-    const { apiUrl, joinPrefix, formatDate, joinTime = true } = this.requestOptions;
+    const { apiUrl, formatDate, joinTime = true } = this.requestOptions;
     const userStore = useUserStoreWidthOut();
     const completeToken = userStore.getCompleteToken;
     if (completeToken) {
       // jwt token
       conf.headers.Authorization = completeToken;
-    }
-
-    // 添加接口前缀
-    if (joinPrefix) {
-      conf.url = `${urlPrefix}${conf.url}`;
     }
 
     // 添加API接口前缀

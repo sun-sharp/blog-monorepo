@@ -1,5 +1,5 @@
 import { useUserStoreWidthOut } from '@/store';
-import { getImgUrl, getUploadImageAction } from '@/utils';
+import { getUploadImageAction } from '@/utils';
 import { UploadCustomRequestOptions, useMessage } from 'naive-ui';
 import { ExtractPropTypes, computed, reactive, toRefs } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
@@ -95,7 +95,7 @@ export const useFormUploadImage = (
             url
               ? [
                   {
-                    url: getImgUrl(url),
+                    url,
                     key: url,
                     status: 'finished',
                   },

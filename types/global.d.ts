@@ -45,12 +45,8 @@ declare global {
     VITE_CAPITAL_API_URL: string;
     // blog接口地址
     VITE_BLOG_API_URL: string;
-    // 接口前缀
-    VITE_API_URL_PREFIX?: string;
     // Project abbreviation
     VITE_APP_SHORT_NAME: string;
-    //图片前缀地址
-    VITE_IMG_URL?: string;
     // token前缀
     VITE_AUTHORIZATION_HEAD?: string;
     /* vite运行部署配置 */

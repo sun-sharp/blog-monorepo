@@ -1,7 +1,6 @@
 import { h, unref, computed, ref, onMounted } from 'vue';
 import { imageApi } from '@/api';
 import { NButton, NImage, NPopconfirm } from 'naive-ui';
-import { getImgUrl } from '@/utils';
 import { CStrOption } from '/#/config';
 import { getImageSourceData, useApiType } from '@/hooks';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
@@ -82,7 +81,7 @@ export const useImageConfigure = () => {
       width: 100,
       render(row) {
         return h(NImage, {
-          src: getImgUrl(row.url),
+          src: row.url,
           alt: '图片文件不存在',
         });
       },

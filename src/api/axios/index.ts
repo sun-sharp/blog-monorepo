@@ -1,7 +1,7 @@
 import { CustomAxios } from './customAxios';
 import { APP_ENV_CONFIG } from '@/constant';
 
-const urlPrefix = APP_ENV_CONFIG.urlPrefix || '';
+const urlPrefix = '';
 
 export const AxiosCapital = new CustomAxios({
   timeout: 60 * 1000,

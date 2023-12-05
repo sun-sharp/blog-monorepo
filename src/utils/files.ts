@@ -3,8 +3,8 @@ import { APP_ENV_CONFIG } from '@/constant';
 //组装完整图片地址
 export const getImgUrl = (url: string): string => {
   if (!url) return '';
-  const { imgUrl } = APP_ENV_CONFIG;
-  return /(^http|https:\/\/)/g.test(url) ? url : `${imgUrl}/${url}`;
+  if (/(^http|https:\/\/)/g.test(url)) return url;
+  return `https://www.yangruirui.top${url}`;
 };
 
 // 上传图片接口路径

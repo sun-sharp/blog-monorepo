@@ -5,8 +5,6 @@ export interface GlobConfig {
   capitalApiUrl: string;
   blogApiUrl: string;
   shortName: string;
-  urlPrefix?: string;
-  imgUrl?: string;
   tokenHead?: string;
 }
 
