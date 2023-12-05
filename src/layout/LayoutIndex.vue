@@ -69,7 +69,7 @@
           <layout-footer />
         </div>
 
-        <n-back-top :right="70" :bottom="70" />
+        <!-- <n-back-top :right="50" :bottom="5" /> -->
       </main>
 
       <footer :class="noSiderFootClassName"></footer>
