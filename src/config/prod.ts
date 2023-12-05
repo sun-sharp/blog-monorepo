@@ -17,10 +17,9 @@ const glob: Readonly<GlobalEnvConfig> = {
   staticDirPosition: '../',
   staticDirName: 'api_static_dir',
   imageRefixName: 'sharp_network_',
+  imagePrefixUrl: 'https://api.yangruirui.top/',
   capitalDatabaseName: 'capital',
   blogDatabaseName: 'blog',
-  buildOutDirPosition: './',
-  buildOutDirName: 'dist_prod',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;

@@ -19,7 +19,7 @@ import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 
 const customConfig = useCustomConfig();
-const { capitalDatabaseName } = customConfig;
+const { capitalDatabaseName, imagePrefixUrl } = customConfig;
 
 @Injectable()
 export class UserService {
@@ -157,7 +157,7 @@ export class UserService {
             roleName: routeFind.name,
             loginDate: nowDateFun(user.loginDate),
             username: user.username,
-            avatar: user.avatar,
+            avatar: `${imagePrefixUrl}${user.avatar}`,
             nickname: user.nickname,
           };
           return {
@@ -199,7 +199,7 @@ export class UserService {
             roleCode: m.roleCode,
             loginDate: nowDateFun(m.loginDate),
             username: m.username,
-            avatar: m.avatar,
+            avatar: `${imagePrefixUrl}${m.avatar}`,
             nickname: m.nickname,
           }));
           return {
