@@ -115,6 +115,7 @@ export const useImageConfigure = () => {
       title: '操作',
       key: 'action',
       align: 'center',
+      fixed: 'right',
       render(row) {
         return row.imageId
           ? [
