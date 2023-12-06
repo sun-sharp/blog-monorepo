@@ -29,7 +29,6 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
 
   // 保存按钮
   const formBtnLoading = ref(false);
-  const formBtnDisabled = ref(false);
 
   // 表单
   const modelFromRef = ref<Component>();
@@ -72,74 +71,11 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
     });
   };
 
-  // md焦点
-  const mdIsFocus = ref(false);
-  const mdMarkdownText = ref('');
-  const mdHtmlText = ref('');
-
-  // 修改焦点
-  const mdUpdateIsFocus = (bool: boolean) => {
-    mdIsFocus.value = bool;
-    if (!bool) {
-      codeMarkdownText.value = modelForm.markdownContent;
-      codeHtmlText.value = modelForm.htmlContent;
-    }
-    formBtnDisabled.value = bool;
-  };
-  // md编辑器文章内容md
-  const mdUpdateMarkdownText = (val: string) => {
-    mdMarkdownText.value = val;
-    if (mdIsFocus.value) {
-      modelForm.markdownContent = val;
-    }
-  };
-  // md编辑器文章内容html
-  const mdUpdateHtmlText = (val: string) => {
-    mdHtmlText.value = val;
-    if (mdIsFocus.value) {
-      modelForm.htmlContent = val;
-    }
-    if (!codeIsFocus.value) {
-      formBtnDisabled.value = false;
-      codeHtmlText.value = val;
-    }
-  };
-
-  // 代码编辑器焦点
-  const codeIsFocus = ref(false);
-  const codeMarkdownText = ref('');
-  const codeHtmlText = ref('');
-  // 修改焦点
-  const codeUpdateIsFocus = (bool: boolean) => {
-    codeIsFocus.value = bool;
-    if (!bool) {
-      mdMarkdownText.value = modelForm.markdownContent;
-    } else {
-      formBtnDisabled.value = true;
-    }
-  };
-  // 代码编辑器文章内容html
-  const codeUpdateModelValue = (val: string) => {
-    codeHtmlText.value = val;
-    if (codeIsFocus.value) {
-      modelForm.htmlContent = val;
-    }
-  };
-  // 代码编辑器文章内容html
-  const codeUpdateMarkdownText = (val: string) => {
-    codeMarkdownText.value = val;
-    if (codeIsFocus.value) {
-      modelForm.markdownContent = val;
-    }
-  };
-
   // 确认保存或编辑
   const onSubmitOrEdit = (isPrivate = false) => {
-    // 编辑器焦点去掉才行
-    if (mdIsFocus.value || codeIsFocus.value) return;
-    formBtnLoading.value = true;
     modelFromRef.value.validate((errors: FormItemRule) => {
       if (!errors) {
+        formBtnLoading.value = true;
         const postData = {
           title: modelForm.title || '',
           brief: modelForm.brief || '',
@@ -173,11 +109,6 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
       modelForm.markdownContent = row.markdownContent || '';
       modelForm.htmlContent = row.htmlContent || '';
     }
-    // 编辑器
-    mdMarkdownText.value = modelForm.markdownContent;
-    mdHtmlText.value = modelForm.htmlContent;
-    codeMarkdownText.value = modelForm.markdownContent;
-    codeHtmlText.value = modelForm.htmlContent;
   };
 
   return {
@@ -189,19 +120,8 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
     contTab,
     categoryOptions: getArticleCategoryOption,
     formBtnLoading,
-    formBtnDisabled,
-    mdMarkdownText,
-    mdHtmlText,
-    codeMarkdownText,
-    codeHtmlText,
     onSubmitOrEdit,
     resetFields,
     init,
-    mdUpdateIsFocus,
-    mdUpdateMarkdownText,
-    mdUpdateHtmlText,
-    codeUpdateIsFocus,
-    codeUpdateModelValue,
-    codeUpdateMarkdownText,
   };
 };

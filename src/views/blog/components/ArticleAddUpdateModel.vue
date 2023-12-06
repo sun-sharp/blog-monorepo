@@ -1,34 +1,10 @@
 <script lang="ts" setup>
-  // import HtmlToMarkdown from '@/components/editor/HtmlToMarkdown.vue';
   import MdEditorInput from '@/components/editor/MdEditorInput.vue';
-  import CodeMirrorInput from '@/components/editor/CodeMirrorInput.vue';
   import { useArticleAddUpdateModel } from '../hooks/useArticleAddUpdateModel';
-  import HtmlToMarkdown from '@/components/editor/HtmlToMarkdown.vue';
 
   const emit = defineEmits(['finished']);
 
-  const {
-    showModal,
-    modelTitle,
-    modelFromRef,
-    modelForm,
-    modelRules,
-    categoryOptions,
-    formBtnLoading,
-    formBtnDisabled,
-    mdMarkdownText,
-    mdHtmlText,
-    codeMarkdownText,
-    codeHtmlText,
-    init,
-    onSubmitOrEdit,
-    mdUpdateIsFocus,
-    mdUpdateMarkdownText,
-    mdUpdateHtmlText,
-    codeUpdateIsFocus,
-    codeUpdateModelValue,
-    codeUpdateMarkdownText,
-  } = useArticleAddUpdateModel(emit);
+  const { showModal, modelTitle, modelFromRef, modelForm, modelRules, categoryOptions, formBtnLoading, init, onSubmitOrEdit } = useArticleAddUpdateModel(emit);
 
   defineExpose({ init });
 </script>
@@ -59,16 +35,8 @@
         </n-form-item>
         <n-form-item path="markdownContent" label="文章内容">
           <div class="w-full">
-            <md-editor-input
-              :markdown-text="mdMarkdownText"
-              :html-text="mdHtmlText"
-              image-source="article_content"
-              @update:markdown-text="mdUpdateMarkdownText"
-              @update:html-text="mdUpdateHtmlText"
-              @focus="mdUpdateIsFocus(true)"
-              @blur="mdUpdateIsFocus(false)"
-            />
-            <code-mirror-input
+            <md-editor-input v-model:markdown-text="modelForm.markdownContent" v-model::html-text="modelForm.htmlContent" image-source="article_content" />
+            <!-- <code-mirror-input
               :model-value="codeHtmlText"
               :language-type="'html'"
               :autofocus="true"
@@ -80,14 +48,13 @@
               @focus="codeUpdateIsFocus(true)"
               @blur="codeUpdateIsFocus(false)"
             />
-            <!-- html转化md -->
             <html-to-markdown
               v-show="false"
               :markdown-text="codeMarkdownText"
               :html-text="codeHtmlText"
               class="mt-10"
               @update:markdown-text="codeUpdateMarkdownText"
-            />
+            /> -->
           </div>
         </n-form-item>
       </n-form>
@@ -96,8 +63,8 @@
     <template #action>
       <n-space>
         <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading || formBtnDisabled" @click="onSubmitOrEdit(true)">加密保存</n-button>
-        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading || formBtnDisabled" @click="onSubmitOrEdit()">保存</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit(true)">加密保存</n-button>
+        <n-button type="info" :loading="formBtnLoading" :disabled="formBtnLoading" @click="onSubmitOrEdit()">保存</n-button>
       </n-space>
     </template>
   </n-modal>

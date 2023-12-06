@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import TurndownService from 'turndown';
   import { watch } from 'vue';
+  import { initTurndownService } from './hooks/useHtmlToMarkdown';
 
   const props = defineProps({
     htmlText: {
@@ -15,14 +15,10 @@
 
   const emit = defineEmits(['update:markdownText']);
 
+  const turndownService = initTurndownService();
+
   // 将html转化为markdown
   const formatHtmlToMd = (htmlText: string) => {
-    const turndownService = new TurndownService({
-      headingStyle: 'atx',
-      codeBlockStyle: 'indented',
-      bulletListMarker: '-',
-      hr: '- - -',
-    });
     const mdText = turndownService.turndown(htmlText);
     emit('update:markdownText', mdText);
   };
