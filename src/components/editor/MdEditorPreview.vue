@@ -1,0 +1,83 @@
+<script lang="ts" setup>
+  import { ReaderOutline } from '@/utils';
+  import { MdPreview, MdCatalog } from 'md-editor-v3';
+  // preview.css相比style.css少了编辑器那部分样式
+  import 'md-editor-v3/lib/preview.css';
+  import { ref } from 'vue';
+
+  defineProps({
+    editorId: {
+      type: String,
+      default: 'preview-only',
+    },
+    markdownText: {
+      type: String,
+      default: '# Hello Editor',
+    },
+  });
+
+  const previewId = `mdEditPreview-${Date.now()}`;
+
+  const scrollElement = document.getElementById(previewId) as HTMLElement;
+
+  // 展示目录
+  const showCatalog = ref(false);
+  const showCatalogChange = () => {
+    showCatalog.value = !showCatalog.value;
+  };
+</script>
+
+<template>
+  <div class="md-edit-preview">
+    <div :id="previewId" class="md-edit-preview__cont">
+      <MdPreview :editor-id="editorId" :model-value="markdownText" />
+    </div>
+    <n-icon size="18" class="catalog-icon" @click="showCatalogChange()">
+      <ReaderOutline />
+    </n-icon>
+    <div v-show="showCatalog" class="catalog-cont">
+      <MdCatalog :editor-id="editorId" :scroll-element="scrollElement" />
+    </div>
+  </div>
+</template>
+
+<style lang="scss">
+  .md-edit-preview {
+    width: 100%;
+    min-height: 300px;
+    border: 1px solid #ddd;
+    position: relative;
+
+    &:hover {
+      .catalog-icon {
+        color: #333;
+      }
+    }
+
+    &__cont {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .catalog-icon {
+      position: absolute;
+      top: 5px;
+      right: 15px;
+      cursor: pointer;
+      color: #cfcfcf;
+    }
+
+    .catalog-cont {
+      position: absolute;
+      top: 30px;
+      right: 15px;
+      width: 200px;
+      height: 200px;
+      overflow-y: auto;
+      background-color: #fafaff;
+      box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.05);
+      z-index: 4999;
+    }
+  }
+</style>

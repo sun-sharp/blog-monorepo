@@ -103,9 +103,10 @@ const formatTurndownRules = (turndownService: Turndown) => {
 export const initTurndownService = () => {
   const turndownService = new Turndown({
     headingStyle: 'atx',
-    codeBlockStyle: 'indented',
+    codeBlockStyle: 'fenced',
     bulletListMarker: '-',
     hr: '- - -',
+    linkStyle: 'inlined',
   });
   formatTurndownKeep(turndownService);
   formatTurndownRules(turndownService);

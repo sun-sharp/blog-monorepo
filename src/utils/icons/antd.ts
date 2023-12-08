@@ -53,4 +53,5 @@ export {
   AlipayCircleOutlined,
   BankOutlined,
   PlusCircleOutlined,
+  CopyOutlined,
 } from '@vicons/antd';

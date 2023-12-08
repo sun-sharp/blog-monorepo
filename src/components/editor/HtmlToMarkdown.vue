@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-  import { watch } from 'vue';
+  import { ref, watch } from 'vue';
   import { initTurndownService } from './hooks/useHtmlToMarkdown';
+  import { useClipboard } from '@vueuse/core';
+  import { CopyOutlined } from '@/utils';
 
   const props = defineProps({
     htmlText: {
@@ -20,6 +22,7 @@
   // 将html转化为markdown
   const formatHtmlToMd = (htmlText: string) => {
     const mdText = turndownService.turndown(htmlText);
+    source.value = mdText;
     emit('update:markdownText', mdText);
   };
 
@@ -27,6 +30,10 @@
   const formatMdText = (val: string) => {
     return val.replace(/\n/g, '<br>');
   };
+
+  // 复制
+  const source = ref(props.markdownText);
+  const { copy, copied, isSupported } = useClipboard({ source });
 
   // 监听 prop.htmlText
   watch(
@@ -42,15 +49,51 @@
 </script>
 
 <template>
-  <div class="html-to-markdown" v-html="formatMdText(markdownText)"></div>
+  <div class="html-to-markdown">
+    <div class="html-to-markdown__cont" v-html="formatMdText(markdownText)"></div>
+    <n-icon v-if="isSupported" size="18" class="copy-icon" @click="copy(source)">
+      <CopyOutlined />
+    </n-icon>
+    <div v-show="copied" class="copy-tips">复制到剪贴板</div>
+  </div>
 </template>
 
 <style lang="scss">
   .html-to-markdown {
     width: 100%;
     min-height: 300px;
-    padding: 10px;
-    overflow-y: auto;
     border: 1px solid #ddd;
+    position: relative;
+
+    &:hover {
+      .copy-icon {
+        color: #333;
+      }
+    }
+
+    &__cont {
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .copy-icon {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      color: #cfcfcf;
+    }
+
+    .copy-tips {
+      position: absolute;
+      top: 30px;
+      right: 5px;
+      padding: 5px;
+      background: #fafaff;
+      box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.05);
+      font-size: 12px;
+    }
   }
 </style>
