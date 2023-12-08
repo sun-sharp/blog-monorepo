@@ -16,6 +16,7 @@ export function createRouterGuards(router: Router) {
   router.beforeEach(async (to, from, next) => {
     const Loading = win['$loading'] || null;
     Loading && Loading.start();
+    // 从登录页进入404页面
     if (from.path === LOGIN_PATH && (to.name === PAGE_ENUM.ERROR_PAGE_NAME || to.name === PAGE_ENUM.ERROR_CHILD_PAGE_NAME)) {
       next(PAGE_ENUM.HOME_PATH);
       return;
