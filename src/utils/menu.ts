@@ -1,11 +1,12 @@
 import { IframeComponent, Layout } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
 import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
-import { AppRouteRecordRaw, MenuRouteItem } from '/#/router';
+import { AppRouteRecordRaw } from '/#/router';
 import { EMBEDDED_VALUE, MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
 import { toUnderscoreCase } from './string';
+import { PageRoute } from '@/router/base';
 
 /**
  * 对路由的path进行处理
@@ -60,125 +61,76 @@ export const formatRouteComponent = (component: string = '', iframeSrc?: string)
     newComponent = dynamicImport(viewsModules, component as string);
   } else if (iframeSrc) {
     newComponent = IframeComponent;
-  } else {
-    newComponent = Layout;
   }
   return newComponent;
 };
 
 /**
  * @description: 处理单个路由对象
- * @param {MenuRouteItem} obj
+ * @param {ApiMenuItem} obj
  * @return {*}
  */
-export const formatRouteItem = (obj: MenuRouteItem): AppRouteRecordRaw => {
-  const { path, name, component, ...other } = obj;
+export const formatRouteItem = (obj: ApiMenuItem, parentId = '0'): AppRouteRecordRaw => {
+  const { name, component, iframeSrc, hidden, keepAlive, menuType, sort, title, icon } = obj;
+  const path = pathFormat(component, name);
   const currentRouter: AppRouteRecordRaw = {
     // 路由地址 动态拼接生成如 /dashboard/workplace
     path,
     // 路由名称，建议唯一
     name: name || '',
-    // 该路由对应页面的 组件
-    component,
     // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
     meta: {
-      ...other,
-      icon: other.icon ? constantRouterIcon[other.icon] : null,
+      hidden,
+      keepAlive,
+      menuType,
+      sort,
+      title,
+      icon: icon ? constantRouterIcon[icon] : null,
     },
   };
+  // 该路由对应页面的 组件
+  let newComponent = formatRouteComponent(component, iframeSrc);
+  if (parentId === '0') {
+    newComponent = Layout;
+  }
+  if (newComponent) {
+    currentRouter.component = newComponent;
+  }
   return currentRouter;
 };
 
 /**
  * @description: 格式化 后端 结构信息并递归生成层级路由表
- * @param routerMap
- * @param routerMap
+ * @param routerList
  * @param _parentId
  * @returns {*}
  */
-export const routerGenerator = (routerMap: MenuRouteItem[], _parentId = '0'): AppRouteRecordRaw[] => {
-  const resultArr: AppRouteRecordRaw[] = [];
-  routerMap.forEach((i) => {
+export const routerGenerator = (routerList: ApiMenuItem[], _parentId = '0'): AppRouteRecordRaw[] => {
+  const resultList: AppRouteRecordRaw[] = [];
+  routerList.forEach((i) => {
     const { menuId, parentId } = i;
-    if (_parentId === parentId) {
-      const currentRouter: AppRouteRecordRaw = formatRouteItem(i);
-      // 是否有子菜单，并递归处理
-      const itemChildren = routerMap
-        .filter((f) => f.parentId === menuId)
-        .map((m) => {
-          return formatRouteItem(m);
-        });
+    if (parentId === _parentId) {
+      const currentRouter: AppRouteRecordRaw = formatRouteItem(i, parentId);
+      // 处理子菜单，并递归
+      const itemChildren = routerList.filter((f) => f.parentId === menuId);
       if (itemChildren && itemChildren.length > 0) {
-        //如果未定义 redirect 默认第一个子路由为 redirect
-        currentRouter.redirect = `${itemChildren[0].path}`;
         // Recursion
-        currentRouter.children = itemChildren;
+        currentRouter.children = routerGenerator(routerList, menuId);
+        // 如果未定义 redirect 默认第一个子路由为 redirect
+        currentRouter.redirect = `${currentRouter.children[0].path}`;
       }
-      resultArr.push(currentRouter);
+      resultList.push(currentRouter);
     }
   });
-  return resultArr;
-};
-
-/**
- * @description: 处理路由表
- * @param routerMap
- */
-export const filterChildrenRouter = (routerMap: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
-  const filterList: AppRouteRecordRaw[] = [];
-  routerMap.forEach((m) => {
-    const item = { ...m };
-    if (m.path && m.component) {
-      if (m.children && m.children.length > 0) {
-        item.children = filterChildrenRouter(m.children);
-      }
-      // 过滤掉没下级的目录
-      if (item.meta && item.meta.menuType === MAIN_DIRECTORY_VALUE && item.children && item.children.length > 0) {
-        filterList.push(item);
-      }
-      if (item.meta && item.meta.menuType === MENU_VALUE) {
-        filterList.push(item);
-      }
-      // 过滤掉没连接的内嵌
-      if (item.meta && item.meta.menuType === EMBEDDED_VALUE && item.meta.iframeSrc) {
-        filterList.push(item);
-      }
-    }
-  });
-  return filterList;
-};
-
-/**
- * @description: 处理路由表
- * @param routerMap
- */
-export const routerScreen = (menuData: ApiMenuItem[]): AppRouteRecordRaw[] => {
-  // 获取（目录，菜单，内嵌）的数据
-  const routeList = menuData
-    .filter((f) => [MAIN_DIRECTORY_VALUE, MENU_VALUE, EMBEDDED_VALUE].includes(f.menuType))
-    .map((m) => {
-      const path = pathFormat(m.component, m.name);
-      const component = formatRouteComponent(m.component, m.iframeSrc);
-      return {
-        ...m,
-        path,
-        component,
-      };
-    });
-  return filterChildrenRouter(routerGenerator(routeList));
+  return resultList;
 };
 
 /**
  * @description: 对路由进行分类
  * @param {AppRouteRecordRaw[]} routeList
- * @return {{ oneRouters: AppRouteRecordRaw[]; otherRouters: AppRouteRecordRaw[]; }}
+ * @return {AppRouteRecordRaw[]}
  */
-export const routerClassify = (
-  routeList: AppRouteRecordRaw[]
-): {
-  oneRouters: AppRouteRecordRaw[];
-  otherRouters: AppRouteRecordRaw[];
-} => {
+export const routerClassify = (routeList: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
   const isOneRoute = (item: AppRouteRecordRaw) => !item.children && !item.redirect;
   const oneRouters: AppRouteRecordRaw[] = [];
   const otherRouters: AppRouteRecordRaw[] = [];
@@ -189,10 +141,29 @@ export const routerClassify = (
       otherRouters.push(f);
     }
   });
-  return {
-    oneRouters,
-    otherRouters,
-  };
+  PageRoute.children = oneRouters;
+  return [PageRoute, ...otherRouters];
+};
+
+/**
+ * @description: 处理路由表
+ * @param menuData
+ */
+export const routerScreen = (menuData: ApiMenuItem[]): AppRouteRecordRaw[] => {
+  // 获取（目录，菜单，内嵌）的数据
+  const routerList = menuData.filter((f) => [MAIN_DIRECTORY_VALUE, MENU_VALUE, EMBEDDED_VALUE].includes(f.menuType));
+  // .map((m) => {
+  //
+  //   const component = formatRouteComponent(m.component, m.iframeSrc);
+  //   return {
+  //     ...m,
+  //     path,
+  //     component,
+  //   };
+  // })
+  console.log(routerGenerator(routerList), 'routerGenerator(routerList)');
+
+  return routerGenerator(routerList);
 };
 
 /**
