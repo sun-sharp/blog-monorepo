@@ -1,9 +1,9 @@
-import { computed, h, nextTick, onMounted, reactive, ref, unref } from 'vue';
+import { h, nextTick, onMounted, reactive, ref } from 'vue';
 import { constantHtmlIcon, levelMenu } from '@/utils';
 import { DataTableColumns, NButton, NPopconfirm, NTag } from 'naive-ui';
 import { MAIN_DIRECTORY_VALUE, menuTagTypeNameObj, menuTypeObj } from '@/constant';
 import { menuApi } from '@/api';
-import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem } from '/#/api/menu';
 import { FormSchema } from '/#/components/form';
 import { TableSizeType } from '/#/components/table';
 import at from 'await-to-js';
@@ -40,10 +40,12 @@ export const useMenuConfigure = () => {
   // 表格
   const tableData = ref<ApiLevelMenuItem[]>([]);
   const tableTempData = ref<ApiLevelMenuItem[]>([]);
-  const smoothData = ref<ApiMenuItem[]>([]);
 
   // 表格加载
   const tableLoading = ref(false);
+
+  // 表格展开值
+  const expandedRowKeys = ref<Array<string | number>>([]);
 
   /**
    * 表格
@@ -53,7 +55,7 @@ export const useMenuConfigure = () => {
     tableLoading.value = true;
     const [err, res] = await at(menuApi.getMenuList());
     if (err || !res) return;
-    smoothData.value = res;
+    expandedRowKeys.value = res.filter((f) => f.menuType === MAIN_DIRECTORY_VALUE).map((m) => m.name);
     const levelData = levelMenu(res);
     tableTempData.value = levelData;
     tableData.value = levelData;
@@ -193,12 +195,6 @@ export const useMenuConfigure = () => {
       },
     },
   ];
-
-  const expandedRowKeys = computed<Array<string | number>>(() => {
-    return unref(smoothData)
-      .filter((f) => f.menuType === MAIN_DIRECTORY_VALUE)
-      .map((m) => m.name);
-  });
 
   // 删除
   const handleDelete = (row: ApiLevelMenuItem) => {

@@ -38,7 +38,15 @@
         <n-input v-model:value="modelForm.title" :placeholder="`请输入${menuTypeName}名称`" />
       </n-form-item>
       <n-form-item label="上级菜单" path="parentId">
-        <n-tree-select v-model:value="modelForm.parentId" filterable :options="parentIdOptions" clearable label-field="title" key-field="menuId" />
+        <n-tree-select
+          v-model:value="modelForm.parentId"
+          filterable
+          :options="parentIdOptions"
+          :default-expanded-keys="['0']"
+          clearable
+          label-field="title"
+          key-field="menuId"
+        />
       </n-form-item>
       <n-form-item v-if="[OUTSIDE_THE_CHAIN_VALUE].includes(modelForm.menuType)" label="外链的链接" path="name">
         <n-input v-model:value="modelForm.name" placeholder="请输入外链的链接" />

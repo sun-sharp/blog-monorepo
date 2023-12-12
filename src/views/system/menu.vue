@@ -33,7 +33,14 @@
         </n-button>
       </template>
     </table-toolbar>
-    <n-data-table :size="tableSize" :loading="tableLoading" :columns="columns" :expanded-row-keys="expandedRowKeys" :data="tableData" :row-key="rowKey" />
+    <n-data-table
+      v-model:expanded-row-keys="expandedRowKeys"
+      :size="tableSize"
+      :loading="tableLoading"
+      :columns="columns"
+      :data="tableData"
+      :row-key="rowKey"
+    />
     <menu-add-update-model ref="addUpdateModelRef" :table-data="tableData" />
   </n-card>
 </template>
