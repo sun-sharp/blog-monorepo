@@ -12,13 +12,9 @@
     },
     markdownText: {
       type: String,
-      default: '# Hello Editor',
+      default: '',
     },
   });
-
-  const previewId = `mdEditPreview-${Date.now()}`;
-
-  const scrollElement = document.getElementById(previewId) as HTMLElement;
 
   // 展示目录
   const showCatalog = ref(false);
@@ -29,14 +25,12 @@
 
 <template>
   <div class="md-edit-preview">
-    <div :id="previewId" class="md-edit-preview__cont">
-      <MdPreview :editor-id="editorId" :model-value="markdownText" />
-    </div>
+    <MdPreview class="md-edit-preview__cont" :editor-id="editorId" :model-value="markdownText" />
     <n-icon size="18" class="catalog-icon" @click="showCatalogChange()">
       <ReaderOutline />
     </n-icon>
     <div v-show="showCatalog" class="catalog-cont">
-      <MdCatalog :editor-id="editorId" :scroll-element="scrollElement" />
+      <MdCatalog :editor-id="editorId" />
     </div>
   </div>
 </template>
@@ -57,7 +51,6 @@
     &__cont {
       width: 100%;
       height: 100%;
-      overflow-y: auto;
     }
 
     .catalog-icon {
