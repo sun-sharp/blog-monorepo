@@ -42,9 +42,7 @@ export const dynamicImport = (viewsModules: Record<string, () => Promise<Recorda
     return viewsModules[matchKey];
   }
   if (matchKeys?.length > 1) {
-    console.warn(
-      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure'
-    );
+    console.warn('请不要创建`.vue `和`.TSX`视图文件夹下同一层次目录中具有相同文件名的文件。这将导致动态导入失败');
     return;
   }
 };
@@ -85,16 +83,16 @@ export const formatRouteItem = (obj: ApiMenuItem, parentId = '0'): AppRouteRecor
       menuType,
       sort,
       title,
+      iframeSrc,
       icon: icon ? constantRouterIcon[icon] : null,
     },
   };
   // 该路由对应页面的 组件
   let newComponent = formatRouteComponent(component, iframeSrc);
-  if (parentId === '0') {
-    newComponent = Layout;
-  }
   if (newComponent) {
     currentRouter.component = newComponent;
+  } else if (parentId === '0') {
+    newComponent = Layout;
   }
   return currentRouter;
 };
@@ -134,6 +132,8 @@ export const routerClassify = (routeList: AppRouteRecordRaw[]): AppRouteRecordRa
   const isOneRoute = (item: AppRouteRecordRaw) => !item.children && !item.redirect;
   const oneRouters: AppRouteRecordRaw[] = [];
   const otherRouters: AppRouteRecordRaw[] = [];
+  console.log(routeList, 'routeList');
+
   routeList.forEach((f) => {
     if (isOneRoute(f)) {
       oneRouters.push(f);
@@ -152,18 +152,7 @@ export const routerClassify = (routeList: AppRouteRecordRaw[]): AppRouteRecordRa
 export const routerScreen = (menuData: ApiMenuItem[]): AppRouteRecordRaw[] => {
   // 获取（目录，菜单，内嵌）的数据
   const routerList = menuData.filter((f) => [MAIN_DIRECTORY_VALUE, MENU_VALUE, EMBEDDED_VALUE].includes(f.menuType));
-  // .map((m) => {
-  //
-  //   const component = formatRouteComponent(m.component, m.iframeSrc);
-  //   return {
-  //     ...m,
-  //     path,
-  //     component,
-  //   };
-  // })
-  console.log(routerGenerator(routerList), 'routerGenerator(routerList)');
-
-  return routerGenerator(routerList);
+  return routerClassify(routerGenerator(routerList));
 };
 
 /**
