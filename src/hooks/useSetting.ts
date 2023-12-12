@@ -73,7 +73,7 @@ export const useSetting = () => {
 
 // 监听layout的高度或宽度设置
 export const useLayoutSizeSetting = () => {
-  const { headerHeight: headH, footerHeight: footH, tabsViewHeight: tabsViewH } = defaultLayoutSize;
+  const { headerHeight: headH, footerHeight: footH, tabsViewHeight: tabsViewH, mainViewPadding: mainViewP } = defaultLayoutSize;
 
   // 顶栏高度
   const headerHeight = computed(() => headH);
@@ -84,5 +84,8 @@ export const useLayoutSizeSetting = () => {
   // 标签页高度
   const tabsViewHeight = computed(() => tabsViewH);
 
-  return { headerHeight, footerHeight, tabsViewHeight };
+  // 标签页高度
+  const mainViewPadding = computed(() => mainViewP);
+
+  return { headerHeight, footerHeight, tabsViewHeight, mainViewPadding };
 };

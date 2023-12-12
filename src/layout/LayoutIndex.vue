@@ -168,8 +168,7 @@
     }
 
     .main-view {
-      // min-height: 100%;
-      padding: 10px;
+      padding: $main-view-padding;
     }
   }
 </style>

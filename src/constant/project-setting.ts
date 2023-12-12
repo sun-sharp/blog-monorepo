@@ -18,6 +18,7 @@ export const defaultLayoutSize = {
   headerHeight: 64,
   tabsViewHeight: 44,
   footerHeight: 44,
+  mainViewPadding: 10,
 };
 
 // 默认variable样式

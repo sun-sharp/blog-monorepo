@@ -194,13 +194,15 @@
 <style lang="scss">
   .code-mirror-input {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
 
     .cm-editor {
       width: 100%;
       min-height: 200px;
-      max-height: 360px;
+      height: 0;
+      flex: 1;
       border: 1px solid #ddd;
     }
   }

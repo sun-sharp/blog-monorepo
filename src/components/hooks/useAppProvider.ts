@@ -14,7 +14,7 @@ export const useAppProvider = () => {
   const { getAppTheme, getAppThemeColor, getHeadIsDark, getSiderIsDark } = useSetting();
 
   // layout的高度和宽度
-  const { headerHeight, footerHeight, tabsViewHeight } = useLayoutSizeSetting();
+  const { headerHeight, footerHeight, tabsViewHeight, mainViewPadding } = useLayoutSizeSetting();
 
   // 设置主题样式
   const getThemeOverrides = computed(() => {
@@ -147,6 +147,7 @@ export const useAppProvider = () => {
       '--app-header-height': `${unref(headerHeight)}px`,
       '--app-footer-height': `${unref(footerHeight)}px`,
       '--app-tabs-view-height': `${unref(tabsViewHeight)}px`,
+      '--app-main-view-padding': `${unref(mainViewPadding)}px`,
     };
   });
 
