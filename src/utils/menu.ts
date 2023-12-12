@@ -68,8 +68,8 @@ export const formatRouteComponent = (component: string = '', iframeSrc?: string)
  * @param {ApiMenuItem} obj
  * @return {*}
  */
-export const formatRouteItem = (obj: ApiMenuItem, parentId = '0'): AppRouteRecordRaw => {
-  const { name, component, iframeSrc, hidden, keepAlive, menuType, sort, title, icon } = obj;
+export const formatRouteItem = (obj: ApiMenuItem): AppRouteRecordRaw => {
+  const { name, component, iframeSrc, hidden, keepAlive, menuType, sort, title, icon, parentId } = obj;
   const path = pathFormat(component, name);
   const currentRouter: AppRouteRecordRaw = {
     // 路由地址 动态拼接生成如 /dashboard/workplace
@@ -89,11 +89,10 @@ export const formatRouteItem = (obj: ApiMenuItem, parentId = '0'): AppRouteRecor
   };
   // 该路由对应页面的 组件
   let newComponent = formatRouteComponent(component, iframeSrc);
-  if (newComponent) {
-    currentRouter.component = newComponent;
-  } else if (parentId === '0') {
+  if (!newComponent && parentId === '0') {
     newComponent = Layout;
   }
+  currentRouter.component = newComponent;
   return currentRouter;
 };
 
@@ -108,7 +107,7 @@ export const routerGenerator = (routerList: ApiMenuItem[], _parentId = '0'): App
   routerList.forEach((i) => {
     const { menuId, parentId } = i;
     if (parentId === _parentId) {
-      const currentRouter: AppRouteRecordRaw = formatRouteItem(i, parentId);
+      const currentRouter: AppRouteRecordRaw = formatRouteItem(i);
       // 处理子菜单，并递归
       const itemChildren = routerList.filter((f) => f.parentId === menuId);
       if (itemChildren && itemChildren.length > 0) {
