@@ -356,8 +356,11 @@ export class MoneyService {
                 billTypeEnum.withdrawBusiness,
                 billTypeEnum.withdrawAgriculture,
                 billTypeEnum.withdrawBuild,
+                billTypeEnum.withdrawCivil,
+                billTypeEnum.withdrawAttractInvestment,
                 billTypeEnum.bankAliPayUse,
                 billTypeEnum.bankWeChatUse,
+                billTypeEnum.invalid,
               ].includes(f.billType),
           );
           const outflowMoneyArr = outflowFilter
@@ -370,7 +373,17 @@ export class MoneyService {
           const outflowSumTotal = sumArrayToMoney(outflowFilter.map((m: { outflowMoney: number }) => m.outflowMoney).concat([bankCashOutflow]));
           // 汇总流入的数据
           const inflowFilterArr = aliPayAndWeChatInflowOrOutflowArr.filter(
-            (f: { billType: number }) => ![billTypeEnum.weChatChangeRecharge, billTypeEnum.aliPayBalanceRecharge].includes(f.billType),
+            (f: { billType: number }) =>
+              ![
+                billTypeEnum.weChatChangeRecharge,
+                billTypeEnum.aliPayBalanceRecharge,
+                billTypeEnum.withdrawBusiness,
+                billTypeEnum.withdrawAgriculture,
+                billTypeEnum.withdrawBuild,
+                billTypeEnum.withdrawCivil,
+                billTypeEnum.withdrawAttractInvestment,
+                billTypeEnum.invalid,
+              ].includes(f.billType),
           );
           const inflowMoneyArr = inflowFilterArr
             .map((m: { name: string; inflowMoney: number }) => ({

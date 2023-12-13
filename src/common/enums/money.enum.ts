@@ -16,10 +16,11 @@ export enum billTypeEnum {
   eatingDish = 141, // 吃-果蔬肉
   eatingRestaurant = 142, // 吃-餐馆
   eatingSnack = 143, // 吃-小吃
-  withdrawBusiness = 201, // 提现-中国工商银行
-  withdrawAgriculture = 202, // 提现-中国农业银行
-  withdrawBuild = 203, // 提现-中国建设银行
-  withdrawAttractInvestment = 205, // 提现-招商银行
+  withdrawBusiness = 201, // 转入-中国工商银行
+  withdrawAgriculture = 202, // 转入-中国农业银行
+  withdrawBuild = 203, // 转入-中国建设银行
+  withdrawCivil = 204, // 转入-民生银行
+  withdrawAttractInvestment = 205, // 转入-招商银行
   returnHuaBei = 253, // 归还-花呗
   returnBorrow = 255, // 归还-借呗
   medicalInsurance = 306, // 医疗-保险
