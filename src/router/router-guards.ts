@@ -80,13 +80,14 @@ export function createRouterGuards(router: Router) {
     if (currentComName && !keepAliveComponents.includes(currentComName) && to.meta?.keepAlive) {
       // 需要缓存的组件
       keepAliveComponents.push(currentComName);
-    } else if (!to.meta?.keepAlive || to.name === PAGE_ENUM.REDIRECT_NAME || to.name === PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME) {
-      // 不需要缓存的组件
-      const index = routeStore.keepAliveComponents.findIndex((name) => name == currentComName);
-      if (index != -1) {
-        keepAliveComponents.splice(index, 1);
-      }
     }
+    // else if (!to.meta?.keepAlive || to.name === PAGE_ENUM.REDIRECT_NAME || to.name === PAGE_ENUM.REDIRECT_CHILD_PAGE_NAME) {
+    //   // 不需要缓存的组件
+    //   const index = routeStore.keepAliveComponents.findIndex((name) => name == currentComName);
+    //   if (index != -1) {
+    //     keepAliveComponents.splice(index, 1);
+    //   }
+    // }
     routeStore.setKeepAliveComponents(keepAliveComponents);
     const Loading = win['$loading'] || null;
     Loading && Loading.finish();

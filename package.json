@@ -2,7 +2,8 @@
   "name": "blog-manage-web",
   "version": "2.3.6",
   "scripts": {
-    "dev": "vite --mode dev",
+    "dev": "vite --mode dev-local",
+    "dev:text": "vite --mode dev",
     "dev:debug": "vite --mode dev --debug",
     "dev:prod": "vite --mode prod-local",
     "build": "vue-tsc --noEmit && vite build --mode prod",
