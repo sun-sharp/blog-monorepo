@@ -14,7 +14,7 @@ import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
-import { nowDateFun } from 'src/common/date';
+import { isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
@@ -48,6 +48,9 @@ export class AliPayService {
             cellHandler: aliPayExcelCellHandle,
           });
           if (!list) throw '导入的数据失败！';
+          // 判断验证数据是有问题
+          const listFilter = list.filter((f) => typeof f.moneyAmount !== 'number' || !isDateFormat(f.tradeTime));
+          if (listFilter.length > 0) throw `时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
           if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同交易时间的数据
           const find = await this.aliPayModel.find().lean();

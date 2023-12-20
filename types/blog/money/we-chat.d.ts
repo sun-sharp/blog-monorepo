@@ -75,7 +75,7 @@ export interface ApiWeChatItem extends ApiWeChat, ApiWeChatId {}
  */
 export interface ApiWeChatUpload {
   // 交易时间
-  tradeTime: Date;
+  tradeTime: string;
   // 交易类型
   tradeType: string;
   // 交易对方

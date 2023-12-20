@@ -14,7 +14,7 @@ import { ApiBank, ApiBankItem, ApiBankUpload } from 'types/blog/money/bank';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
-import { nowDateFun } from 'src/common/date';
+import { isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
@@ -53,6 +53,16 @@ export class BankService {
             if (!excelArr) throw sheetName + '表导入的数据失败！';
             list = list.concat(excelArr);
           }
+          // 判断验证数据是有问题
+          const listFilter = list.filter(
+            (f) =>
+              typeof f.balance !== 'number' ||
+              typeof f.moneyAmount !== 'number' ||
+              typeof f.voucherType !== 'number' ||
+              !f.voucherNo ||
+              !isDateFormat(f.tradeTime),
+          );
+          if (listFilter.length > 0) throw `时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
           if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
@@ -77,7 +87,7 @@ export class BankService {
               if (f.judgeWay === 'includes') {
                 isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
               } else if (f.judgeWay === 'indexOf') {
-                isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
+                isAssignment = isAssignment || !!f.judgeVal.find((fi) => typeof m[f.billJudgeKey] === 'string' && m[f.billJudgeKey].indexOf(fi) !== -1);
               }
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {

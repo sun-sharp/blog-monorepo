@@ -78,7 +78,7 @@ export interface ApiBankUpload {
   // 凭证类型
   voucherType: number;
   // 交易时间
-  tradeTime: Date;
+  tradeTime: string;
   // 账单说明
   explain: string;
   // 收/支
@@ -91,6 +91,8 @@ export interface ApiBankUpload {
   tradeOtherPerson: string;
   // 交易对方账号
   tradeOtherPersonAccount: string;
+  // 交易对方备注
+  tradeOtherPersonRemarks: string;
   // 交易类型
   tradeType: string;
   // 银行账单类型
