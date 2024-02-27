@@ -27,6 +27,10 @@ export class Article extends Document {
   @Prop()
   markdownContent: string;
 
+  // 文章的css内容
+  @Prop()
+  cssContent: string;
+
   // 文章的作者
   @Prop()
   authorId: string;

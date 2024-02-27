@@ -28,6 +28,12 @@ export class CreateArticleDto {
   markdownContent: string;
 
   @ApiProperty({
+    description: '文章的css内容',
+    example: '',
+  })
+  cssContent: string;
+
+  @ApiProperty({
     description: '文章的类型标识',
     example: 1,
   })

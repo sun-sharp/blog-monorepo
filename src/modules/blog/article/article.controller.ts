@@ -1,4 +1,4 @@
-import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -8,6 +8,7 @@ import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { AllPageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
+import { Response } from 'express';
 
 @Controller('article')
 @ApiTags('文章')
@@ -77,5 +78,14 @@ export class ArticleController {
   @UseGuards(JwtAuthGuard)
   findAllDetails(@Query('articleId') articleId: string) {
     return this.articleService.findAllDetails(articleId);
+  }
+
+  @Get('export_article/:articleId')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '导出文章' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  exportArticle(@Param('articleId') articleId: string, @Res() res: Response) {
+    return this.articleService.exportArticle(articleId, res);
   }
 }

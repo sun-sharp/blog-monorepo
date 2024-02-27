@@ -16,6 +16,8 @@ import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 import { AllPageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
+import { launch } from 'puppeteer';
+import { Response } from 'express';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -48,6 +50,7 @@ export class ArticleService {
             title: m.title,
             brief: m.brief,
             htmlContent: m.htmlContent,
+            cssContent: m.cssContent,
             markdownContent: m.markdownContent,
             authorId: m.authorId,
             authorNickname: m.authorNickname,
@@ -97,6 +100,7 @@ export class ArticleService {
             title: m.title,
             brief: m.brief,
             htmlContent: m.htmlContent,
+            cssContent: m.cssContent,
             markdownContent: m.markdownContent,
             authorId: m.authorId,
             authorNickname: m.authorNickname,
@@ -136,6 +140,7 @@ export class ArticleService {
             title: body.title,
             brief: body.brief,
             htmlContent: body.htmlContent,
+            cssContent: body.cssContent,
             markdownContent: body.markdownContent,
             categoryVal: body.categoryVal,
             createTime: nowDateFun(),
@@ -169,8 +174,8 @@ export class ArticleService {
       Promise.resolve(body)
         // 修改
         .then(async (body) => {
-          const { articleId, title, brief, htmlContent, markdownContent, categoryVal, isPrivate } = body;
-          await this.articleModel.updateOne({ _id: articleId }, { title, brief, htmlContent, markdownContent, categoryVal, isPrivate });
+          const { articleId, title, brief, htmlContent, cssContent, markdownContent, categoryVal, isPrivate } = body;
+          await this.articleModel.updateOne({ _id: articleId }, { title, brief, htmlContent, cssContent, markdownContent, categoryVal, isPrivate });
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
@@ -256,6 +261,7 @@ export class ArticleService {
             title: find.title,
             brief: find.brief,
             htmlContent: find.htmlContent,
+            cssContent: find.cssContent,
             markdownContent: find.markdownContent,
             authorId: find.authorId,
             authorNickname: find.authorNickname,
@@ -296,6 +302,7 @@ export class ArticleService {
             title: find.title,
             brief: find.brief,
             htmlContent: find.htmlContent,
+            cssContent: find.cssContent,
             markdownContent: find.markdownContent,
             authorId: find.authorId,
             authorNickname: find.authorNickname,
@@ -363,6 +370,59 @@ export class ArticleService {
         // 返回错误
         .catch((err) => {
           return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 导出文章
+   * @param {string} articleId
+   * @return {Promise<IResponse | Buffer>}
+   */
+  public exportArticle(articleId: string, res: Response): Promise<IResponse | Buffer> {
+    return (
+      Promise.resolve(articleId)
+        .then(async (articleId) => {
+          const find = await this.articleModel.findOne({ _id: articleId }).lean();
+          if (!find) {
+            throw '获取文章详情失败';
+          }
+          const htmlBody = `
+            <html>
+              <head>
+                <style>${find.cssContent}</style>
+              </head>
+              <body>
+                <div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">
+                  <div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">
+                    <article id="preview-only-preview" class="md-editor-preview default-theme">
+                      ${find.htmlContent}
+                    </article>
+                  </div>
+                </div>
+              </body>
+            </html>
+          `;
+
+          const browser = await launch();
+          const page = await browser.newPage();
+          await page.setContent(htmlBody);
+          const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', 'attachment; filename=output.pdf');
+          res.send(pdfBuffer);
+
+          await browser.close();
+          return pdfBuffer;
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`导出文章 失败! ${JSON.stringify(err)}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '导出文章！',
+          };
         })
     );
   }
