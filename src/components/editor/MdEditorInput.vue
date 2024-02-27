@@ -6,6 +6,7 @@
   import { getImgUrl, getUploadImageAction } from '@/utils';
   import { MdEditor, ToolbarNames } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
+  import cssTextCont from 'md-editor-v3/lib/style.css?inline';
   import { computed, ref, watchEffect } from 'vue';
 
   const props = defineProps({
@@ -61,13 +62,17 @@
       type: String,
       default: '',
     },
+    cssText: {
+      type: String,
+      default: cssTextCont,
+    },
     imageSource: {
       type: String,
       required: true,
     },
   });
 
-  const emit = defineEmits(['onSave', 'update:htmlText', 'update:markdownText', 'focus', 'blur']);
+  const emit = defineEmits(['onSave', 'update:htmlText', 'update:markdownText', 'update:cssText', 'focus', 'blur']);
 
   const nMessage = useMessage();
 
@@ -91,10 +96,12 @@
     if (h) {
       h.then((html) => {
         emit('update:htmlText', html);
+        emit('update:cssText', cssTextCont);
         emit('onSave', v, html);
       });
     } else {
       emit('update:htmlText', '');
+      emit('update:cssText', '');
       emit('onSave', v, '');
     }
   };
@@ -153,6 +160,7 @@
   // html 变化回调事件
   const onHtmlChanged = (h: string) => {
     emit('update:htmlText', h);
+    emit('update:cssText', cssTextCont);
   };
 
   // 内容变化回调事件

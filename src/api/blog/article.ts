@@ -78,3 +78,17 @@ export const batchUpdatePrivate = (data: ApiBatchUpdatePrivateArticleData): Prom
     },
   });
 };
+
+/**
+ * @description 导出文章
+ * @param articleId
+ */
+export const exportArticle = (articleId: string, fileName: string) => {
+  return AxiosBlog.downloadExportFile(
+    {
+      url: `${basic}/export_article/${articleId}`,
+      method: 'GET',
+    },
+    { fileName }
+  );
+};

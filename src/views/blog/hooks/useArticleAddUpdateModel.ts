@@ -12,6 +12,7 @@ const defaultFromFields = {
   categoryVal: null,
   markdownContent: '',
   htmlContent: '',
+  cssContent: '',
 };
 
 // 添加文章弹窗 传参
@@ -82,6 +83,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
           categoryVal: modelForm.categoryVal || 0,
           markdownContent: modelForm.markdownContent,
           htmlContent: modelForm.htmlContent,
+          cssContent: modelForm.cssContent,
           isPrivate,
         };
         const req = addFromId.value ? articleAPi.update({ articleId: addFromId.value, ...postData }) : articleAPi.save(postData);

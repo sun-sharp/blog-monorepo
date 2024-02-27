@@ -44,6 +44,9 @@ export interface ApiArticleSaveData {
   // 文章的markdown内容
   markdownContent: string;
 
+  // 文章的css内容
+  cssContent: string;
+
   // 是否加密
   isPrivate: boolean;
 }

@@ -9,6 +9,7 @@ export interface ArticleItemForm {
   categoryVal: null | number;
   markdownContent: string;
   htmlContent: string;
+  cssContent: string;
 }
 
 /**

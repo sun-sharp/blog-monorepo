@@ -4,11 +4,13 @@ import { ApiArticleItem, ApiArticleSearchParams, ApiBatchUpdatePrivateArticleDat
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { articleAPi } from '@/api';
 import { FormSchema } from '/#/components/form';
-import { NButton, NPopconfirm } from 'naive-ui';
+import { NButton, NPopconfirm, useMessage } from 'naive-ui';
 import { CNumOption } from '/#/config';
 
 // 文章管理
 export const useArticleConfigure = () => {
+  const nMessage = useMessage();
+
   const { getArticleCategoryOption } = useApiType();
 
   // 新增弹窗
@@ -77,6 +79,13 @@ export const useArticleConfigure = () => {
   const handleDelete = (row: Recordable) => {
     articleAPi.remove(row.articleId).then(() => {
       reloadTable();
+    });
+  };
+  // 导出
+  const handleExport = (row: Recordable) => {
+    const fileName = `${row.title}.pdf`;
+    articleAPi.exportArticle(row.articleId, fileName).then(() => {
+      nMessage.success('导出成功！');
     });
   };
   const columns = computed<BasicColumn<ApiArticleItem>[]>(() => [
@@ -153,6 +162,18 @@ export const useArticleConfigure = () => {
                   }
                 ),
               default: () => '是否确定删除',
+            }
+          ),
+          h(
+            NButton,
+            {
+              class: 'mh-3',
+              text: true,
+              type: 'success',
+              onClick: handleExport.bind(null, row),
+            },
+            {
+              default: () => '导出',
             }
           ),
         ];
