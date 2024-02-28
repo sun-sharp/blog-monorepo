@@ -430,7 +430,7 @@ export class ArticleService {
           logger.error(`导出文章 setHeader`);
 
           await browser.close();
-          logger.error(`导出文章 browser.close`);
+          logger.error(`导出文章 browser.close `);
 
           return pdfBuffer;
         })
