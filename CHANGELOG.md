@@ -1,5 +1,8 @@
 # CHANGELOG aba-xxx
 
+## 2.3.9
+- 修改导出文章pdf数据问题
+
 ## 2.3.8
 - 导出文章pdf
 
