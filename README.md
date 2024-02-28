@@ -101,3 +101,30 @@ $ cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js # 添加进程/�
 $ yarn update_prod_pm2
 
 ```
+
+### 部署注意的问题
+
+##### 关于 puppeteer 安装问题
+
+1. 导出pdf在 CentOS 上会报错
+2. 首先安装工具包以及安装chromium
+
+```bash
+$ sudo yum install epel-release
+
+$ sudo yum install -y chromium
+```
+
+3. Puppeteer 导出的 pdf 会出现部分中文显示乱码
+
+这并不是Puppeteer的问题，实际上是Linux字体库对中文支持不好的原因。
+需要给服务器的Linux系统安装支持的中文字体库即可
+
+```bash
+# 查找文泉驿安装包
+$ sudo yum search wqy
+
+# 安装文泉驿字体
+$ sudo yum install wqy-microhei-fonts.noarch -y
+$ sudo yum install wqy-unibit-fonts.noarch -y
+```
