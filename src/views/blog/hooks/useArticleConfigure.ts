@@ -84,9 +84,14 @@ export const useArticleConfigure = () => {
   // 导出
   const handleExport = (row: Recordable) => {
     const fileName = `${row.title}.pdf`;
-    articleAPi.exportArticle(row.articleId, fileName).then(() => {
-      nMessage.success('导出成功！');
-    });
+    articleAPi
+      .exportArticle(row.articleId, fileName)
+      .then(() => {
+        nMessage.success('导出成功！');
+      })
+      .catch(() => {
+        nMessage.error('导出失败！');
+      });
   };
   const columns = computed<BasicColumn<ApiArticleItem>[]>(() => [
     {
