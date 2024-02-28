@@ -387,22 +387,19 @@ export class ArticleService {
           if (!find) {
             throw '获取文章详情失败';
           }
-          const htmlBody = `
-            <html>
-              <head>
-                <style>${find.cssContent}</style>
-              </head>
-              <body>
-                <div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">
-                  <div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">
-                    <article id="preview-only-preview" class="md-editor-preview default-theme">
-                      ${find.htmlContent}
-                    </article>
-                  </div>
-                </div>
-              </body>
-            </html>
-          `;
+          const htmlBody =
+            `<html>` +
+            `<head>` +
+            `<style>${find.cssContent}</style>` +
+            `</head>` +
+            `<body>` +
+            `<div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">` +
+            `<div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">` +
+            `<article id="preview-only-preview" class="md-editor-preview default-theme">${find.htmlContent}</article>` +
+            `</div>` +
+            `</div>` +
+            `</body>` +
+            `</html>`;
 
           const browser = await launch();
           const page = await browser.newPage();
