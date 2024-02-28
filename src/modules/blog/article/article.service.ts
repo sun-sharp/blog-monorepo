@@ -402,6 +402,7 @@ export class ArticleService {
             `</html>`;
 
           logger.error(`导出文章 html`);
+          logger.error(`导出文章 ${JSON.stringify(puppeteer)}`);
           const browser = await puppeteer.launch();
           if (!browser) {
             throw 'browser处理失败！';
