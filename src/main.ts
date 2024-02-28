@@ -11,6 +11,8 @@ import { logger } from './common/journal';
 import { useCustomConfig } from './config';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 
+import * as bodyParser from 'body-parser';
+
 const customConfig = useCustomConfig();
 
 const { fileAccessPath, staticDirPosition, staticDirName, port } = customConfig;
@@ -55,6 +57,13 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPat
     .then((app) => {
       const rootDir = join(__dirname, `../${staticDirPosition}`);
       app.use(`/${fileAccessPath}`, express.static(join(rootDir, staticDirName)));
+      return app;
+    })
+    // 修改body传参的数据量为50mb
+    .then((app) => {
+      const limit = '50mb';
+      app.use(bodyParser.json({ limit }));
+      app.use(bodyParser.urlencoded({ limit, extended: true }));
       return app;
     })
     // 设置全局前缀

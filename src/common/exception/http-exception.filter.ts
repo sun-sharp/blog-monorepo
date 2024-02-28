@@ -21,7 +21,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message = checkMessage(status, excResMessage);
     const code = checkCode(status);
     // @todo 记录日志
-    checkHttpLog(status, request.method, request.url, message);
+    checkHttpLog(status, request.method, request.url, `${message} ${excResMessage}`);
     response.status(status).json({
       code,
       message,
