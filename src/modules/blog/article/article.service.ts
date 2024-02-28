@@ -401,25 +401,37 @@ export class ArticleService {
             `</body>` +
             `</html>`;
 
+          logger.error(`导出文章 html`);
           const browser = await launch();
           if (!browser) {
             throw 'browser处理失败！';
           }
+          logger.error(`导出文章 browser`);
+
           const page = await browser.newPage();
           if (!page) {
             throw '生成page处理失败！';
           }
+          logger.error(`导出文章 newPage`);
+
           await page.setContent(htmlBody);
+          logger.error(`导出文章 setContent`);
+
           const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
           if (!pdfBuffer) {
             throw '生成pdfBuffer处理失败！';
           }
+          logger.error(`导出文章 pdfBuffer`);
 
           res.setHeader('Content-Type', 'application/pdf');
           res.setHeader('Content-Disposition', 'attachment; filename=article.pdf');
           res.send(pdfBuffer);
 
+          logger.error(`导出文章 setHeader`);
+
           await browser.close();
+          logger.error(`导出文章 browser.close`);
+
           return pdfBuffer;
         })
         // 返回错误
