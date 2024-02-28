@@ -16,7 +16,7 @@ import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 import { AllPageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
-import { launch } from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { Response } from 'express';
 
 const customConfig = useCustomConfig();
@@ -402,7 +402,7 @@ export class ArticleService {
             `</html>`;
 
           logger.error(`导出文章 html`);
-          const browser = await launch();
+          const browser = await puppeteer.launch();
           if (!browser) {
             throw 'browser处理失败！';
           }
@@ -430,7 +430,7 @@ export class ArticleService {
           logger.error(`导出文章 setHeader`);
 
           await browser.close();
-          logger.error(`导出文章 browser.close `);
+          logger.error(`导出文章 browser.close`);
 
           return pdfBuffer;
         })
