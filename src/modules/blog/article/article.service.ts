@@ -402,12 +402,21 @@ export class ArticleService {
             `</html>`;
 
           const browser = await launch();
+          if (!browser) {
+            throw 'browser处理失败！';
+          }
           const page = await browser.newPage();
+          if (!page) {
+            throw '生成page处理失败！';
+          }
           await page.setContent(htmlBody);
           const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+          if (!pdfBuffer) {
+            throw '生成pdfBuffer处理失败！';
+          }
 
           res.setHeader('Content-Type', 'application/pdf');
-          res.setHeader('Content-Disposition', 'attachment; filename=output.pdf');
+          res.setHeader('Content-Disposition', 'attachment; filename=article.pdf');
           res.send(pdfBuffer);
 
           await browser.close();
