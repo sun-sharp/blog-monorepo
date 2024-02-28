@@ -37,7 +37,7 @@
           <div class="w-full">
             <md-editor-input
               v-model:markdown-text="modelForm.markdownContent"
-              v-model::html-text="modelForm.htmlContent"
+              v-model:html-text="modelForm.htmlContent"
               v-model:css-text="modelForm.cssContent"
               image-source="article_content"
             />

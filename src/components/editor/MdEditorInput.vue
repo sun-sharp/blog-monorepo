@@ -159,7 +159,8 @@
 
   // html 变化回调事件
   const onHtmlChanged = (h: string) => {
-    emit('update:htmlText', h);
+    const html = h;
+    emit('update:htmlText', html);
     emit('update:cssText', cssTextCont);
   };
 

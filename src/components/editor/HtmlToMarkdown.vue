@@ -60,10 +60,10 @@
 
 <style lang="scss">
   .html-to-markdown {
+    position: relative;
     width: 100%;
     min-height: 300px;
     border: 1px solid #ddd;
-    position: relative;
 
     &:hover {
       .copy-icon {
@@ -82,8 +82,8 @@
       position: absolute;
       top: 5px;
       right: 5px;
-      cursor: pointer;
       color: #cfcfcf;
+      cursor: pointer;
     }
 
     .copy-tips {
@@ -91,9 +91,9 @@
       top: 30px;
       right: 5px;
       padding: 5px;
-      background: #fafaff;
-      box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.05);
       font-size: 12px;
+      background: #fafaff;
+      box-shadow: 0 0 2px 2px rgb(0 0 0 / 5%);
     }
   }
 </style>

@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-08-01 14:12:16
+ * @LastEditTime: 2024-02-28 19:51:28
  * @Description: stylelint验证代码
  *
  * stylelint ---- 主依赖
@@ -38,7 +38,7 @@ module.exports = {
   ],
   rules: {
     'no-empty-source': null, // 允许空文件
-    'no-descending-specificity': true, // 禁止低优先级的选择器出现在高优先级的选择器之后
+    'no-descending-specificity': null, // 禁止低优先级的选择器出现在高优先级的选择器之后
     'selector-class-pattern': null, // 允许下划线以及其他类型
   },
 };
