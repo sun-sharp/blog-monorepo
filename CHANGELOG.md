@@ -1,5 +1,8 @@
 # CHANGELOG aba-xxx
 
+## 2.3.12
+- 导出文章pdf配置问题
+
 ## 2.3.11
 - 修改body传参的数据量为50mb
 
