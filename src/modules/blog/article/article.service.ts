@@ -387,6 +387,7 @@ export class ArticleService {
           if (!find) {
             throw '获取文章详情失败';
           }
+
           const htmlBody =
             `<html>` +
             `<head>` +
@@ -400,27 +401,42 @@ export class ArticleService {
             `</div>` +
             `</body>` +
             `</html>`;
+          logger.log(`导出文章 htmlBody`);
+
           const browser = await puppeteer.launch({
             args: ['--no-sandbox'],
             env: {
               DISPLAY: ':10.0',
             },
           });
+          logger.log(`导出文章 puppeteer.launch`);
+
           const page = await browser.newPage();
+          logger.log(`导出文章 newPage`);
+
           await page.setContent(htmlBody);
+          logger.log(`导出文章 setContent`);
+
           const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
+            preferCSSPageSize: true,
             displayHeaderFooter: true,
-            headerTemplate: 'title',
-            footerTemplate: 'pageNumber',
+            headerTemplate:
+              `<div style="width:100%;font-size:10px; border-bottom:1px solid #ddd; padding:10px 0; text-align: center;">` + find.title + `</div>`,
+            footerTemplate:
+              `<div style="width:100%;font-size:8px;border-top:1px solid #ddd;padding:10px 0;text-align:center;">` +
+              `<span class="pageNumber"></span><span> / </span><span class="totalPages"></span>` +
+              `</div>`,
             margin: {
-              top: 0,
-              bottom: 10,
-              left: 10,
-              right: 10,
+              top: '60px',
+              bottom: '60px',
+              left: '20px',
+              right: '20px',
             },
           });
+          logger.log(`导出文章 pdf`);
+
           res.setHeader('Content-Type', 'application/pdf');
           res.setHeader('Content-Disposition', 'attachment; filename=article.pdf');
           res.send(pdfBuffer);
