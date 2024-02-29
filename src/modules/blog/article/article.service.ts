@@ -408,7 +408,19 @@ export class ArticleService {
           });
           const page = await browser.newPage();
           await page.setContent(htmlBody);
-          const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+          const pdfBuffer = await page.pdf({
+            format: 'A4',
+            printBackground: true,
+            displayHeaderFooter: true,
+            headerTemplate: 'title',
+            footerTemplate: 'pageNumber',
+            margin: {
+              top: 0,
+              bottom: 10,
+              left: 10,
+              right: 10,
+            },
+          });
           res.setHeader('Content-Type', 'application/pdf');
           res.setHeader('Content-Disposition', 'attachment; filename=article.pdf');
           res.send(pdfBuffer);
