@@ -82,8 +82,10 @@ export const useArticleConfigure = () => {
     });
   };
   // 导出
+  const exportLoading = ref<boolean>(false);
   const handleExport = (row: Recordable) => {
     const fileName = `${row.title}.pdf`;
+    exportLoading.value = true;
     articleAPi
       .exportArticle(row.articleId, fileName)
       .then(() => {
@@ -91,6 +93,9 @@ export const useArticleConfigure = () => {
       })
       .catch(() => {
         nMessage.error('导出失败！');
+      })
+      .finally(() => {
+        exportLoading.value = false;
       });
   };
   const columns = computed<BasicColumn<ApiArticleItem>[]>(() => [
@@ -175,6 +180,7 @@ export const useArticleConfigure = () => {
               class: 'mh-3',
               text: true,
               type: 'success',
+              loading: exportLoading.value,
               onClick: handleExport.bind(null, row),
             },
             {
