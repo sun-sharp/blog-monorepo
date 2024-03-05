@@ -60,8 +60,8 @@
 
 <style lang="scss">
   .transform-html {
-    height: 100%;
     position: relative;
+    height: 100%;
 
     &__preview {
       // position: absolute;

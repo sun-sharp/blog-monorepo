@@ -199,10 +199,10 @@
     height: 100%;
 
     .cm-editor {
-      width: 100%;
-      min-height: 200px;
-      height: 0;
       flex: 1;
+      width: 100%;
+      height: 0;
+      min-height: 200px;
       border: 1px solid #ddd;
     }
   }
