@@ -26,7 +26,7 @@ jobs:
       #     port: ${{ secrets.SERVER_PORT }}
       #     # 连接用户名
       #     username: ${{ secrets.SERVER_USERNAME }}
-      #     # 私钥，到服务器的/root/.ssh/authorized_keys中拷贝
+      #     # 私钥，到服务器的/root/.ssh/id_rsa中拷贝
       #     key: ${{ secrets.SERVER_KEY }}
       #     # 当出现第一个错误时停止执行命令
       #     script_stop: true
@@ -51,7 +51,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           # 连接用户名
           username: ${{ secrets.SERVER_USERNAME }}
-          # 私钥，到服务器的/root/.ssh/authorized_keys中拷贝
+          # 私钥，到服务器的/root/.ssh/id_rsa中拷贝
           key: ${{ secrets.SERVER_KEY }}
           # 当出现第一个错误时停止执行命令
           script_stop: true
