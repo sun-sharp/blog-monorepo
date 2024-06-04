@@ -1,5 +1,8 @@
 # CHANGELOG aba-xxx
 
+## 2.3.13
+- 备份数据库blog/billUpload数据
+
 ## 2.3.12
 - 导出文章pdf配置问题
 
