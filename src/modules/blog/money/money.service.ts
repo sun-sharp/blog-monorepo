@@ -16,6 +16,7 @@ import { logger } from 'src/common/journal';
 import { createStoreDir } from 'src/common/fs-mkdir';
 import { storeDirStr } from 'src/common/constant/config';
 import { useCustomConfig } from 'src/config';
+import { BillUploadService } from './bill-upload/bill-upload.service';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -27,6 +28,7 @@ export class MoneyService {
     private readonly weChatService: WeChatService,
     private readonly aliPayService: AliPayService,
     private readonly categoryService: CategoryService,
+    private readonly billUploadService: BillUploadService,
   ) {}
 
   index() {
@@ -461,6 +463,11 @@ export class MoneyService {
           const aliPayStr = JSON.stringify(aliPayData, null, '\t');
           writeFileSync(`${blogDir}/aliPay.json`, aliPayStr);
           logger.log('备份数据库blog/aliPay数据');
+          // 备份blog/billUpload
+          const billUploadData = await this.billUploadService.findAllToData();
+          const billUploadStr = JSON.stringify(billUploadData, null, '\t');
+          writeFileSync(`${blogDir}/billUpload.json`, billUploadStr);
+          logger.log('备份数据库blog/billUpload数据');
           return {
             code: ApiCode.SUCCESS,
             message: '备份成功！',
