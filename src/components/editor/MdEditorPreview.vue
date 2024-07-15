@@ -37,10 +37,10 @@
 
 <style lang="scss">
   .md-edit-preview {
+    position: relative;
     width: 100%;
     min-height: 300px;
     border: 1px solid #ddd;
-    position: relative;
 
     &:hover {
       .catalog-icon {
@@ -57,20 +57,20 @@
       position: absolute;
       top: 5px;
       right: 15px;
-      cursor: pointer;
       color: #cfcfcf;
+      cursor: pointer;
     }
 
     .catalog-cont {
       position: absolute;
       top: 30px;
       right: 15px;
+      z-index: 4999;
       width: 200px;
       height: 200px;
       overflow-y: auto;
       background-color: #fafaff;
-      box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.05);
-      z-index: 4999;
+      box-shadow: 0 0 2px 2px rgb(0 0 0 / 5%);
     }
   }
 </style>
