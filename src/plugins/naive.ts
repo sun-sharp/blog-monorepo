@@ -69,6 +69,7 @@ import {
   NTreeSelect,
   NEmpty,
   NScrollbar,
+  NCalendar,
 } from 'naive-ui';
 
 const naive = create({
@@ -141,6 +142,7 @@ const naive = create({
     NTreeSelect,
     NEmpty,
     NScrollbar,
+    NCalendar,
   ],
 });
 
