@@ -27,7 +27,7 @@
 
 <template>
   <n-modal v-model:show="showModal" class="w-600" :show-icon="false" :mask-closable="false" preset="dialog" :title="modelTitle">
-    <n-form ref="modelFromRef" class="we-chat-update-model__body" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
+    <n-form ref="modelFromRef" class="add-update-model__body" :model="modelForm" :rules="modelRules" label-placement="left" :label-width="120">
       <n-form-item label="账单导入类型" path="billUploadType">
         <n-select
           v-model:value="modelForm.billUploadType"
@@ -154,8 +154,8 @@
   </n-modal>
 </template>
 
-<style lang="scss">
-  .we-chat-update-model {
+<style lang="scss" scoped>
+  .add-update-model {
     &__body {
       max-height: 60vh;
       padding-right: 20px;

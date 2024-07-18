@@ -43,5 +43,11 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'vue/no-setup-props-destructure': 'off',
     'vue/no-v-html': 'off',
+    // 'prettier/prettier': [
+    //   'error',
+    //   {
+    //     // tabWidth: 0,
+    //   },
+    // ],
   },
 };
