@@ -6,11 +6,13 @@ import { useCustomConfig } from 'src/config';
 import { IResponse } from 'types/common';
 import { PageScheduleDto } from './dto/page-schedule.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { ApiScheduleItem } from 'types/blog/schedule';
+import { ApiSchedule, ApiScheduleItem } from 'types/blog/schedule';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
-import { UserService } from 'src/modules/capital/user/user.service';
 import { User } from 'src/schemas/capital/user.schema';
+import { CreateScheduleDto } from './dto/create-schedule.dto';
+import { nowDateFun } from 'src/common/date';
+import { UpdateScheduleDto } from './dto/update-schedule.dto';
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
@@ -19,7 +21,6 @@ export class ScheduleService {
   constructor(
     @InjectModel(Schedule.name, blogDatabaseName)
     private readonly scheduleModel: Model<Schedule>,
-    private readonly userService: UserService,
   ) {}
 
   /**
@@ -55,10 +56,108 @@ export class ScheduleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`条件并分页获取不加密文章列表 失败! ${err}`);
+          logger.error(`条件并分页获取日程列表 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 新增日程
+   * @param {User} user
+   * @param {CreateScheduleDto} body
+   * @return {Promise<IResponse>}
+   */
+  public save(user: User, body: CreateScheduleDto): Promise<IResponse> {
+    return (
+      Promise.resolve({ user, body })
+        // 添加
+        .then(async ({ user, body }) => {
+          const params: ApiSchedule = {
+            title: body.title,
+            content: body.content,
+            startDate: body.startDate,
+            endDate: body.endDate,
+            startTime: body.startTime,
+            endTime: body.endTime,
+            createTime: nowDateFun(),
+            userId: user._id,
+          };
+          await this.scheduleModel.create(params);
+          return {
+            code: ApiCode.SUCCESS,
+            message: '添加成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`新增日程 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '添加失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 修改日程
+   * @param {UpdateScheduleDto} body
+   * @return {Promise<IResponse>}
+   */
+  public update(body: UpdateScheduleDto): Promise<IResponse> {
+    return (
+      Promise.resolve(body)
+        // 修改
+        .then(async (body) => {
+          const params = {
+            title: body.title,
+            content: body.content,
+            startDate: body.startDate,
+            endDate: body.endDate,
+            startTime: body.startTime,
+            endTime: body.endTime,
+          };
+          await this.scheduleModel.updateOne({ _id: body.scheduleId }, params);
+          return {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`修改日程 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '修改失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 删除文章
+   * @return {Promise<IResponse>}
+   */
+  public remove(id: string): Promise<IResponse> {
+    return (
+      Promise.resolve(id)
+        .then(async (id) => {
+          await this.scheduleModel.deleteOne({ _id: id });
+          return {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`删除文章 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '删除失败！',
           };
         })
     );
