@@ -29,3 +29,11 @@ export interface ScheduleFormRules {
   // 结束日期
   endDate: FormItemRule;
 }
+
+/**
+ * @description: 每日 日程数据
+ */
+export interface ScheduleDailyItem {
+  time?: string;
+  children?: Array;
+}

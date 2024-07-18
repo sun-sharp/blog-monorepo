@@ -81,7 +81,7 @@ export const useAddUpdateModel = (emit: (event: 'finish', ...args: any[]) => voi
         const params: ApiScheduleSaveData = {
           title: modelForm.title,
           // 日程内容
-          content: modelForm.title,
+          content: modelForm.content,
           // 开始日期
           startDate: modelForm.startDate || '',
           // 结束日期

@@ -1,6 +1,8 @@
 import { AxiosBlog } from '@/api/axios';
 import { TablePaginationResult } from '/#/components/table';
 import { ApiScheduleFindPageData, ApiScheduleItem, ApiScheduleSaveData, ApiScheduleUpdateData } from '/#/api/blog/schedule';
+import { ApiStartEndTimeParams } from '/#/api/common';
+import { ScheduleDailyItem } from '/#/views/schedule';
 
 const basic = '/schedule';
 
@@ -60,5 +62,18 @@ export const update = (data: ApiScheduleUpdateData): Promise<undefined> => {
     responseOptions: {
       isShowSuccessMessage: true,
     },
+  });
+};
+
+/**
+ * @description: 修改
+ * @param {ApiStartEndTimeParams} params
+ * @returns {Promise<ScheduleDailyItem[]>}
+ */
+export const daily = (params: ApiStartEndTimeParams): Promise<ScheduleDailyItem[]> => {
+  return AxiosBlog.request({
+    url: `${basic}/daily`,
+    method: 'GET',
+    params,
   });
 };
