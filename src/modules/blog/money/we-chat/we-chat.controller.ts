@@ -8,7 +8,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadWeChatDto } from './dto/upload-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
-import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
+import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 
 @Controller('we-chat')
 @ApiTags('微信')

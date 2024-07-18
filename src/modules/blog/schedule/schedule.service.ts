@@ -13,6 +13,8 @@ import { User } from 'src/schemas/capital/user.schema';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { nowDateFun } from 'src/common/date';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
+import { format } from 'date-fns';
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
@@ -149,6 +151,58 @@ export class ScheduleService {
           await this.scheduleModel.deleteOne({ _id: id });
           return {
             code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`删除文章 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '删除失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 每日的日程
+   * @param {string} userId
+   * @param {StatisticsStartEndTimeDto} query
+   * @return {Promise<IResponse>}
+   */
+  public daily(userId: string, query: StatisticsStartEndTimeDto): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          const findData: FilterQuery<Schedule> = { userId };
+          const { startTime, endTime } = query;
+          if (startTime && endTime) {
+            findData.startDate = { $gte: startTime, $lte: endTime };
+            findData.endDate = { $gte: startTime, $lte: endTime };
+          }
+          const list = await this.scheduleModel.find(findData).lean();
+          const startTimeAll = new Date(startTime);
+          const endTimeAll = new Date(endTime);
+          const differ = endTimeAll.getTime() - startTimeAll.getTime();
+          const oneDay = 1000 * 60 * 60 * 24;
+          const day = parseInt(String(differ / oneDay)) + 1;
+          const result = [];
+          for (let i = 0; i < day; i++) {
+            const time = startTimeAll.getTime() + oneDay * i;
+            const filter = list.filter((f) => {
+              const stD = new Date(f.startDate);
+              const enD = new Date(f.endDate);
+              return time >= stD.getTime() && time <= enD.getTime();
+            });
+            result.push({
+              time: format(time, 'yyyy-MM-dd'),
+              children: filter,
+            });
+          }
+          return {
+            code: ApiCode.SUCCESS,
+            result,
             message: '删除成功！',
           };
         })

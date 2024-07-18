@@ -1,4 +1,4 @@
-import { Controller, Post, Request, Body, UseGuards, HttpCode, Put, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Request, Body, UseGuards, HttpCode, Put, Delete, Param, Get, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -6,6 +6,7 @@ import { ScheduleService } from './schedule.service';
 import { PageScheduleDto } from './dto/page-schedule.dto';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 
 @Controller('schedule')
 @ApiTags('日程')
@@ -29,14 +30,20 @@ export class ScheduleController {
   }
 
   @Put('update')
-  @ApiOperation({ summary: '修改文章' })
+  @ApiOperation({ summary: '修改' })
   update(@Body() updateScheduleDto: UpdateScheduleDto) {
     return this.scheduleService.update(updateScheduleDto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: '删除文章' })
+  @ApiOperation({ summary: '删除' })
   remove(@Param('id') id: string) {
     return this.scheduleService.remove(id);
+  }
+
+  @Get('daily')
+  @ApiOperation({ summary: '每日的日程' })
+  daily(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
+    return this.scheduleService.daily(req.user._id, query);
   }
 }

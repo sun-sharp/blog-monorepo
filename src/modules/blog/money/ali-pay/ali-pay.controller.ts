@@ -8,7 +8,7 @@ import { CreateAliPayBatchDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
 import { UploadAliPayDto } from './dto/upload-we-chat.dto';
-import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
+import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 
 @Controller('ali-pay')
 @ApiTags('支付宝')

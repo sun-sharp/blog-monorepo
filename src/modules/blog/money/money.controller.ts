@@ -2,7 +2,7 @@ import { Controller, Get, Query, Request, UseGuards } from '@nestjs/common';
 import { MoneyService } from './money.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
-import { StatisticsStartEndTimeDto } from './dto/statistics-start-end-time.dto';
+import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 
 @Controller('money')
 @ApiTags('金钱')

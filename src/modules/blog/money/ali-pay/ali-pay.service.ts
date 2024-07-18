@@ -9,7 +9,6 @@ import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
 import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
-import { StatisticsStartEndTimeDto } from '../dto/statistics-start-end-time.dto';
 import { ApiAliPayItem, ApiAliPayUpload } from 'types/blog/money/ali-pay';
 import { IResponse } from 'types/common';
 import { useCustomConfig } from 'src/config';
@@ -18,6 +17,7 @@ import { isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
+import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
