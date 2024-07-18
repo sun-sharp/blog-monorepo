@@ -14,7 +14,7 @@ export class ScheduleController {
 
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '条件并分页获取文章列表' })
+  @ApiOperation({ summary: '条件并分页获取列表' })
   findPage(@Request() req, @Body() pageScheduleDto: PageScheduleDto) {
     return this.scheduleService.findPage(req.user, pageScheduleDto);
   }
