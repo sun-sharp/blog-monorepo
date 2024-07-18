@@ -9,16 +9,22 @@ import { WeChatModule } from './money/we-chat/we-chat.module';
 import { AliPayModule } from './money/ali-pay/ali-pay.module';
 import { BankModule } from './money/bank/bank.module';
 import { BillUploadModule } from './money/bill-upload/bill-upload.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
     blogMongooseModuleForRoot,
     ArticleModule,
     MoneyModule,
+    ScheduleModule,
     RouterModule.register([
       {
         path: 'blog',
         children: [
+          {
+            path: '/',
+            module: ScheduleModule,
+          },
           {
             path: '/',
             module: ArticleModule,

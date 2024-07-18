@@ -138,12 +138,38 @@ export class UserService {
    * @param {string} userId
    * @return {Promise<User>}
    */
+  public findOneByUserId(userId: string): Promise<ApiUserItem | false> {
+    return (
+      Promise.resolve(userId)
+        // 获取信息
+        .then(async (userId) => {
+          const { _id, ...user } = await this.userModel.findOne({ _id: userId }).lean();
+          const result: ApiUserItem = {
+            ...user,
+            userId: _id,
+            loginDate: nowDateFun(user.loginDate),
+          };
+          return result;
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`运用_id查找用户信息 失败！ ${err}`);
+          return false;
+        })
+    );
+  }
+
+  /**
+   * @description: 运用_id查找用户信息
+   * @param {string} userId
+   * @return {Promise<User>}
+   */
   public findOneById(userId: string): Promise<IResponse> {
     return (
       Promise.resolve(userId)
         // 获取信息
         .then(async (userId) => {
-          const user = await this.userModel.findOne({ _id: userId }).lean();
+          const { _id, ...user } = await this.userModel.findOne({ _id: userId }).lean();
           const routeFind = await this.roleService.findOneByRoleCode(user.roleCode);
           if (!routeFind) {
             throw {
@@ -152,13 +178,10 @@ export class UserService {
             };
           }
           const result: ApiUserInfo = {
-            userId: user._id,
-            roleCode: user.roleCode,
+            ...user,
+            userId: _id,
             roleName: routeFind.name,
             loginDate: nowDateFun(user.loginDate),
-            username: user.username,
-            avatar: user.avatar,
-            nickname: user.nickname,
           };
           return {
             code: ApiCode.SUCCESS,

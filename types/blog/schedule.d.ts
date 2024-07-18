@@ -38,7 +38,8 @@ export interface ApiSchedule {
 /**
  * @description: 日程的列表每项
  */
-export interface ApiScheduleItem extends ApiSchedule, ApiScheduleId {
-  // 创建人物昵称
-  nickName: string;
-}
+export type ApiScheduleItem = ApiSchedule &
+  ApiScheduleId & {
+    // 创建人物昵称
+    nickName: string;
+  };
