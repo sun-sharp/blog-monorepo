@@ -10,6 +10,13 @@
 $ node v20.10.0
 
 $ yarn
+
+$ npm i -g @nestjs/cli
+
+$ nest --help
+
+# 创建当前目录下的CRUD
+$ nest g res modules/blog/schedule
 ```
 
 ## 运行
