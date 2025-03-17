@@ -38,7 +38,9 @@ export class ArticleService {
         .then(async (body) => {
           const { size, current, keywords, categoryVal } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData: FilterQuery<Article> = keywords ? { $or: [{ title: { $regex: keywords } }, { brief: { $regex: keywords } }] } : {};
+          const findData: FilterQuery<Article> = keywords
+            ? { $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }] }
+            : {};
           if (categoryVal) {
             findData.categoryVal = categoryVal;
           }
@@ -86,7 +88,9 @@ export class ArticleService {
         .then(async (body) => {
           const { size, current, keywords, categoryVal, isPrivate } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData: FilterQuery<Article> = keywords ? { $or: [{ title: { $regex: keywords } }, { brief: { $regex: keywords } }] } : {};
+          const findData: FilterQuery<Article> = keywords
+            ? { $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }] }
+            : {};
           if (categoryVal) {
             findData.categoryVal = categoryVal;
           }
