@@ -35,11 +35,11 @@ export const useArticleConfigure = () => {
   // 查询配置
   const searchSchemas = computed<FormSchema[]>(() => [
     {
-      field: 'title',
+      field: 'keywords',
       component: 'NInput',
-      label: '文章标题',
+      label: '文章关键字',
       componentProps: {
-        placeholder: '请输入文章标题',
+        placeholder: '请输入文章关键字',
       },
     },
     {
