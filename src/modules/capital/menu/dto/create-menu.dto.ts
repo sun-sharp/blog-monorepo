@@ -61,4 +61,24 @@ export class CreateMenuDto {
   })
   @IsBoolean({ message: '是否缓存必须是枚举值' })
   readonly keepAlive: boolean;
+
+  @ApiProperty({
+    description: '菜单配置系统',
+  })
+  readonly menuConfigSystem: string;
+
+  @ApiProperty({
+    description: '详情配置系统',
+  })
+  readonly detConfigSystem: string;
+
+  @ApiProperty({
+    description: '详情标识',
+  })
+  readonly detName: string;
+
+  @ApiProperty({
+    description: '详情位置',
+  })
+  readonly detComponent: string;
 }

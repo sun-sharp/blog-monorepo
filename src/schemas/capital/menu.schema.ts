@@ -55,6 +55,22 @@ export class Menu extends Document {
   // 是否缓存
   @Prop()
   keepAlive: boolean;
+
+  // 菜单配置系统
+  @Prop()
+  menuConfigSystem: string;
+
+  // 详情标识
+  @Prop()
+  detName: string;
+
+  // 详情位置
+  @Prop()
+  detComponent: string;
+
+  // 详情配置系统
+  @Prop()
+  detConfigSystem: string;
 }
 
 export const MenuSchema = SchemaFactory.createForClass(Menu);

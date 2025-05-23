@@ -24,6 +24,14 @@ export interface ApiMenu {
   externalLink?: string;
   // 是否缓存
   keepAlive?: boolean;
+  // 菜单配置系统
+  menuConfigSystem?: string;
+  // 详情配置系统
+  detConfigSystem?: string;
+  // 详情标识
+  detName?: string;
+  // 详情位置
+  detComponent?: string;
 }
 
 /**

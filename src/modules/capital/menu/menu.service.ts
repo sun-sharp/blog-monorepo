@@ -72,7 +72,63 @@ export class MenuService {
             iframeSrc: m.iframeSrc,
             externalLink: m.externalLink,
             keepAlive: m.keepAlive,
+            menuConfigSystem: m.menuConfigSystem,
+            detConfigSystem: m.detConfigSystem,
+            detName: m.detName,
+            detComponent: m.detComponent,
           }));
+          return {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`查询全部系统菜单 失败！${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 查询全部h5系统菜单
+   * @param {menuFindAllDto} query
+   * @return {Promise<IResponse>}
+   */
+  public findH5All(query?: menuFindAllDto): Promise<IResponse> {
+    return (
+      Promise.resolve(query)
+        // 查询
+        .then(async (query) => {
+          const findData = query && query.name ? { name: { $regex: query.name } } : {};
+          findData['menuConfigSystem'] = { $regex: 'h5', $options: 'i' };
+          const menuList = await this.menuModel.find(findData).sort({ sort: 1 });
+          const result: ApiMenuItem[] = menuList.map((m) => {
+            const item: ApiMenuItem = {
+              menuId: m.id,
+              name: m.name,
+              title: m.title,
+              parentId: m.parentId,
+              menuType: m.menuType,
+              hidden: m.hidden,
+              component: m.component,
+              sort: m.sort,
+              icon: m.icon,
+              iframeSrc: m.iframeSrc,
+              externalLink: m.externalLink,
+              keepAlive: m.keepAlive,
+              menuConfigSystem: m.menuConfigSystem,
+            };
+            if (m.detConfigSystem && m.detConfigSystem.indexOf('h5') > -1) {
+              item.detName = m.detName;
+              item.detComponent = m.detComponent;
+            }
+            return item;
+          });
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -100,6 +156,47 @@ export class MenuService {
       Promise.resolve(menuPermission)
         .then(async (menuPermission) => {
           const findAll = await this.menuModel.find();
+          const findNameArr = [];
+          const menuFindById = (parentId: string) => {
+            const arr = [];
+            const findById = findAll.find((c) => String(c._id) === parentId);
+            if (findById && findById.parentId) {
+              if (findById.parentId === '0') {
+                arr.push(findById.name);
+              } else {
+                arr.push(...menuFindById(findById.parentId));
+              }
+            }
+            return arr;
+          };
+          findAll.forEach((f) => {
+            if (menuPermission.includes(f.name)) {
+              findNameArr.push(f.name);
+              if (f.parentId !== '0') {
+                findNameArr.push(...menuFindById(f.parentId));
+              }
+            }
+          });
+          return await this.menuModel.find({ name: { $in: findNameArr } }).sort({ sort: 1 });
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`根据权限的menuPermission查找系统菜单详情 失败！${err}`);
+          return err;
+        })
+    );
+  }
+
+  /**
+   * @description: 根据权限的menuPermission查找H5系统菜单详情
+   * @param {Array<string>} menuPermission
+   * @return {Promise<Array<Menu>>}
+   */
+  public findByH5MenuPermission(menuPermission: Array<string>): Promise<Array<Menu>> {
+    return (
+      Promise.resolve(menuPermission)
+        .then(async (menuPermission) => {
+          const findAll = await this.menuModel.find({ menuConfigSystem: { $regex: 'h5', $options: 'i' } });
           const findNameArr = [];
           const menuFindById = (parentId: string) => {
             const arr = [];

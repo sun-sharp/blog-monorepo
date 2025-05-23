@@ -219,6 +219,67 @@ export class CapitalService {
   }
 
   /**
+   * @description: 路由权限获取h5系统菜单列表
+   * @param {string} roleCode
+   * @return {Promise<IResponse>}
+   */
+  public roleMenuH5(roleCode: string): Promise<IResponse> {
+    return (
+      Promise.resolve(roleCode)
+        // 判断用户名是否存在,密码是否正确
+        .then(async (roleCode) => {
+          const routeFind = await this.roleService.findOneByRoleCode(roleCode);
+          if (!routeFind) {
+            throw '查询角色失败';
+          }
+          // 如果你是管理员账号，那就获取全部菜单
+          if (routeFind.roleType === 1) {
+            const response = await this.menuService.findH5All();
+            if (response.code === ApiCode.SUCCESS) {
+              return response;
+            }
+          }
+          // 不是管理员账号，执行下面
+          const routePermission = routeFind.menuPermission;
+          const findArr = await this.menuService.findByH5MenuPermission(routePermission);
+          if (findArr.length > 0) {
+            const result: ApiMenuItem[] = findArr.map((m) => ({
+              menuId: m._id,
+              name: m.name,
+              title: m.title,
+              sort: m.sort,
+              icon: m.icon,
+              parentId: m.parentId,
+              iframeSrc: m.iframeSrc,
+              component: m.component,
+              menuType: m.menuType,
+              hidden: m.hidden,
+              externalLink: m.externalLink,
+              keepAlive: m.keepAlive,
+              menuConfigSystem: m.menuConfigSystem,
+              detConfigSystem: m.detConfigSystem,
+              detName: m.detName,
+              detComponent: m.detComponent,
+            }));
+            return {
+              code: ApiCode.SUCCESS,
+              result,
+              message: '查询成功！',
+            };
+          }
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`路由权限获取管理系统菜单列表 失败！${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
    * @description: 删除用户和用户相关数据
    * @param {string} userId
    * @return {Promise<IResponse>}
