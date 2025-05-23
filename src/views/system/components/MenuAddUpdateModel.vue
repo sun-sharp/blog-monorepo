@@ -72,6 +72,30 @@
       <n-form-item label="是否缓存" path="keepAlive">
         <n-switch v-model:value="modelForm.keepAlive" />
       </n-form-item>
+      <n-form-item v-if="[MENU_VALUE].includes(modelForm.menuType)" label="菜单配置系统" path="menuConfigSystem">
+        <n-checkbox-group v-model:value="modelForm.menuConfigSystem">
+          <n-space>
+            <n-checkbox value="manage" label="manage" />
+            <n-checkbox value="h5" label="h5" />
+          </n-space>
+        </n-checkbox-group>
+      </n-form-item>
+      <n-form-item v-if="[MENU_VALUE].includes(modelForm.menuType)" label="详情配置系统" path="detConfigSystem">
+        <n-checkbox-group v-model:value="modelForm.detConfigSystem">
+          <n-space>
+            <!-- <n-checkbox value="manage" label="manage" /> -->
+            <n-checkbox value="h5" label="h5" />
+          </n-space>
+        </n-checkbox-group>
+      </n-form-item>
+      <template v-if="modelForm.detConfigSystem.length > 0">
+        <n-form-item v-if="![OUTSIDE_THE_CHAIN_VALUE].includes(modelForm.menuType)" label="详情标识" path="detName">
+          <n-input v-model:value="modelForm.detName" placeholder="请输入详情标识" />
+        </n-form-item>
+        <n-form-item v-if="[MENU_VALUE].includes(modelForm.menuType)" label="详情位置" path="detComponent">
+          <n-input v-model:value="modelForm.detComponent" placeholder="请输入详情位置" />
+        </n-form-item>
+      </template>
     </n-form>
 
     <template #action>

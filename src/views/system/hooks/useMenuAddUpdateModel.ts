@@ -1,7 +1,7 @@
 import { MAIN_DIRECTORY_VALUE, PAGE_ENUM, menuTypeObj } from '@/constant';
 import { constantHtmlIcon } from '@/utils';
 import { ExtractPropTypes, VNode, computed, nextTick, reactive, ref, unref, watch } from 'vue';
-import { ApiLevelMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem, ApiMenuSaveData } from '/#/api/menu';
 import { FormItemRule, FormRules, MenuOption } from 'naive-ui';
 import { menuApi } from '@/api';
 import { useRoute, useRouter } from 'vue-router';
@@ -27,6 +27,10 @@ const defaultModelForm = {
   parentId: '0',
   hidden: false,
   keepAlive: false,
+  menuConfigSystem: ['manage'],
+  detConfigSystem: [] as string[],
+  detName: '',
+  detComponent: '',
 };
 
 // 获取菜单级别数据
@@ -100,6 +104,16 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
       trigger: ['blur', 'change'],
       message: '请输入排序号',
     },
+    detName: {
+      required: true,
+      trigger: ['blur', 'input'],
+      message: `请输入详情标识`,
+    },
+    detComponent: {
+      required: true,
+      trigger: ['blur', 'input'],
+      message: `请输入详情位置`,
+    },
   });
   const parentIdOptions = computed(() => {
     const parentChildren = getMenuDirectory(props.tableData);
@@ -149,6 +163,10 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
       modelForm.parentId = row.parentId;
       modelForm.hidden = row.hidden;
       modelForm.keepAlive = row.keepAlive || false;
+      modelForm.menuConfigSystem = row.menuConfigSystem ? row.menuConfigSystem.split(',') : ['manage'];
+      modelForm.detConfigSystem = row.detConfigSystem ? row.detConfigSystem.split(',') : [];
+      modelForm.detName = row.detName || '';
+      modelForm.detComponent = row.detComponent || '';
     }
   };
 
@@ -166,7 +184,7 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
     formBtnLoading.value = true;
     modelFromRef.value.validate((errors: FormItemRule) => {
       if (!errors) {
-        const params: any = {
+        const params: ApiMenuSaveData = {
           menuType: modelForm.menuType,
           title: modelForm.title,
           name: modelForm.name,
@@ -183,6 +201,16 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
         // 如果为内嵌
         if ([6].includes(modelForm.menuType)) {
           params.iframeSrc = modelForm.iframeSrc;
+        }
+        // 菜单配置系统
+        if (modelForm.menuConfigSystem && modelForm.menuConfigSystem.length > 0) {
+          params.menuConfigSystem = modelForm.menuConfigSystem.join(',');
+        }
+        // 详情配置系统
+        if (modelForm.detConfigSystem && modelForm.detConfigSystem.length > 0) {
+          params.detConfigSystem = modelForm.detConfigSystem.join(',');
+          params.detName = modelForm.detName;
+          params.detComponent = modelForm.detComponent;
         }
         const request = modelId.value ? menuApi.updateMenu({ menuId: modelId.value, ...params }) : menuApi.saveMenu(params);
         request.then(() => {
