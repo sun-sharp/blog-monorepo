@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { EMBEDDED_VALUE, MENU_VALUE, OUTSIDE_THE_CHAIN_VALUE, menuTypeOption } from '@/constant';
+  import { EMBEDDED_VALUE, MAIN_DIRECTORY_VALUE, MENU_VALUE, OUTSIDE_THE_CHAIN_VALUE, menuTypeOption } from '@/constant';
   import { MenuAddUpdateModelProps, useMenuAddUpdateModel } from '../hooks/useMenuAddUpdateModel';
 
   const props = defineProps(MenuAddUpdateModelProps);
@@ -72,7 +72,7 @@
       <n-form-item label="是否缓存" path="keepAlive">
         <n-switch v-model:value="modelForm.keepAlive" />
       </n-form-item>
-      <n-form-item v-if="[MENU_VALUE].includes(modelForm.menuType)" label="菜单配置系统" path="menuConfigSystem">
+      <n-form-item v-if="[MAIN_DIRECTORY_VALUE, MENU_VALUE].includes(modelForm.menuType)" label="菜单配置系统" path="menuConfigSystem">
         <n-checkbox-group v-model:value="modelForm.menuConfigSystem">
           <n-space>
             <n-checkbox value="manage" label="manage" />
