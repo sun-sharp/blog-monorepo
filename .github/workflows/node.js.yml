@@ -10,57 +10,57 @@ on:
     branches:
       - dev
 
-jobs:
-  build:
-    name: build-nest
-    runs-on: ubuntu-latest
-    steps:
-      # 连接到服务器并使用SSH进行部署
-      - name: build dev
-        uses: appleboy/ssh-action@master
-        if: ${{ github.ref_name == 'dev' }}
-        with:
-          # 服务器地址
-          host: ${{ secrets.SERVER_HOST }}
-          # ssh连接端口号
-          port: ${{ secrets.SERVER_PORT }}
-          # 连接用户名
-          username: ${{ secrets.SERVER_USERNAME }}
-          # 私钥，到服务器的/root/.ssh/id_rsa中拷贝
-          key: ${{ secrets.SERVER_KEY }}
-          # 当出现第一个错误时停止执行命令
-          script_stop: true
-          # github.ref_name 分支或标记的短参考名称
-          script: |
-            cd /www/wwwroot/nestApi/
-            git reset --hard HEAD
-            git fetch origin
-            git tag -l -n
-            git checkout ${{ github.ref_name }}
-            git pull origin dev
-            yarn update_dev_pm2
-            ls -al
+# jobs:
+#   build:
+#     name: build-nest
+#     runs-on: ubuntu-latest
+#     steps:
+#       # 连接到服务器并使用SSH进行部署
+#       - name: build dev
+#         uses: appleboy/ssh-action@master
+#         if: ${{ github.ref_name == 'dev' }}
+#         with:
+#           # 服务器地址
+#           host: ${{ secrets.SERVER_HOST }}
+#           # ssh连接端口号
+#           port: ${{ secrets.SERVER_PORT }}
+#           # 连接用户名
+#           username: ${{ secrets.SERVER_USERNAME }}
+#           # 私钥，到服务器的/root/.ssh/id_rsa中拷贝
+#           key: ${{ secrets.SERVER_KEY }}
+#           # 当出现第一个错误时停止执行命令
+#           script_stop: true
+#           # github.ref_name 分支或标记的短参考名称
+#           script: |
+#             cd /www/wwwroot/nestApi/
+#             git reset --hard HEAD
+#             git fetch origin
+#             git tag -l -n
+#             git checkout ${{ github.ref_name }}
+#             git pull origin dev
+#             yarn update_dev_pm2
+#             ls -al
 
-      - name: build prod
-        uses: appleboy/ssh-action@master
-        if: ${{ startsWith(github.ref_name, 'aba-') }}
-        with:
-          # 服务器地址
-          host: ${{ secrets.SERVER_HOST }}
-          # ssh连接端口号
-          port: ${{ secrets.SERVER_PORT }}
-          # 连接用户名
-          username: ${{ secrets.SERVER_USERNAME }}
-          # 私钥，到服务器的/root/.ssh/id_rsa中拷贝
-          key: ${{ secrets.SERVER_KEY }}
-          # 当出现第一个错误时停止执行命令
-          script_stop: true
-          # github.ref_name 分支或标记的短参考名称
-          script: |
-            cd /www/wwwroot/nestApi/
-            git reset --hard HEAD
-            git fetch origin
-            git tag -l -n
-            git checkout ${{ github.ref_name }}
-            yarn update_prod_pm2
-            ls -al
+#       - name: build prod
+#         uses: appleboy/ssh-action@master
+#         if: ${{ startsWith(github.ref_name, 'aba-') }}
+#         with:
+#           # 服务器地址
+#           host: ${{ secrets.SERVER_HOST }}
+#           # ssh连接端口号
+#           port: ${{ secrets.SERVER_PORT }}
+#           # 连接用户名
+#           username: ${{ secrets.SERVER_USERNAME }}
+#           # 私钥，到服务器的/root/.ssh/id_rsa中拷贝
+#           key: ${{ secrets.SERVER_KEY }}
+#           # 当出现第一个错误时停止执行命令
+#           script_stop: true
+#           # github.ref_name 分支或标记的短参考名称
+#           script: |
+#             cd /www/wwwroot/nestApi/
+#             git reset --hard HEAD
+#             git fetch origin
+#             git tag -l -n
+#             git checkout ${{ github.ref_name }}
+#             yarn update_prod_pm2
+#             ls -al
