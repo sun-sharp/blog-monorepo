@@ -57,7 +57,8 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
 };
 
 export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Promise<any[]> => {
-  const { buffer, sheetName, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
+  const { sheetName, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
+  const buffer = obj.buffer as any;
   const result = [];
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(buffer); // 加载buffer文件
