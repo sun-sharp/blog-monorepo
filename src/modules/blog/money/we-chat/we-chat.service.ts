@@ -43,7 +43,7 @@ export class WeChatService {
           // 微信的菜单处理
           const list: ApiWeChatUpload[] = await excelCsvHandleBuffer({
             buffer: buffer,
-            startNum: 18,
+            startNum: 19,
             cellHandler: weChatExcelCellHandle,
           });
           if (!list) throw '导入的数据失败！';
