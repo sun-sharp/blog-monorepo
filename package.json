@@ -1,6 +1,6 @@
 {
   "name": "alone-blog-api",
-  "version": "2.5.0",
+  "version": "2.5.5",
   "description": "",
   "author": "yrr",
   "private": true,
@@ -15,8 +15,8 @@
     "format": "prettier --write \"{src,types}/**/*.ts\"",
     "lint": "eslint \"{src,types}/**/*.ts\" --fix",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark",
-    "update_dev_pm2": "yarn && pm2 stop dev_nest && pm2 delete dev_nest && yarn build && pm2 list && cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist/main.js",
-    "update_prod_pm2": "yarn && pm2 stop nest && pm2 delete nest && yarn build && pm2 list && cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js"
+    "update_dev_pm2": "npm install && pm2 stop dev_nest && pm2 delete dev_nest && npm run build && pm2 list && cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist/main.js",
+    "update_prod_pm2": "npm install && pm2 stop nest && pm2 delete nest && npm run build && pm2 list && cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.7",
