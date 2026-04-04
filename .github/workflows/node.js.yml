@@ -10,8 +10,8 @@ on:
     # branches:
     #   - dev
 
-# jobs:
-#   build:
+jobs:
+  build:
 #     name: build-nest
 #     runs-on: ubuntu-latest
 #     steps:
@@ -41,7 +41,7 @@ on:
 #             npm run update_dev_pm2
 #             ls -al
 
-      - name: build prod
+      - name: build-prod
         uses: appleboy/ssh-action@master
         if: ${{ startsWith(github.ref_name, 'aba-') }}
         with:
