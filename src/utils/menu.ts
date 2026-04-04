@@ -15,7 +15,7 @@ import { PageRoute } from '@/router/base';
  *  */
 export const pathFormat = (component: string = '', name: string = ''): string => {
   let path: string;
-  if (component.indexOf('/') !== -1) {
+  if (component && component.indexOf('/') !== -1) {
     path = toUnderscoreCase(component).replace('/index', '');
     path = (path.match(/\/\\/g) || []).length === 0 ? path : path.replace(/(.*)[/]/, '$1-');
   } else {
@@ -55,7 +55,7 @@ export const dynamicImport = (viewsModules: Record<string, () => Promise<Recorda
 const viewsModules: Record<string, () => Promise<Recordable>> = import.meta.glob('../views/**/*.{vue,tsx}');
 export const formatRouteComponent = (component: string = '', iframeSrc?: string) => {
   let newComponent: Component | string;
-  if (component.indexOf('/') >= 0) {
+  if (component && component.indexOf('/') >= 0) {
     newComponent = dynamicImport(viewsModules, component as string);
   } else if (iframeSrc) {
     newComponent = IframeComponent;

@@ -1,6 +1,6 @@
 {
   "name": "blog-manage-web",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "scripts": {
     "dev": "vite --mode dev-local",
     "dev:text": "vite --mode dev",
