@@ -7,8 +7,8 @@ on:
   push:
     tags:
       - 'aba-*'
-    # branches:
-    #   - dev
+    branches:
+      - dev
 
 jobs:
   build:
