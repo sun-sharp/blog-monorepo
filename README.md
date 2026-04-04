@@ -9,6 +9,7 @@
 ```bash
 $ node v24.14.0
 
+# npm i，yarn如果安装报错
 $ yarn
 
 $ npm i -g @nestjs/cli
@@ -62,15 +63,18 @@ $ git checkout dev
 # 拉取一下最新代码
 $ git pull origin dev
 
+# 查看当前分支
+$ git branch -a
+
 # 打包部署应用 dev_nest
-$ yarn
+$ npm install
 $ pm2 stop dev_nest
 $ pm2 delete dev_nest
-$ yarn build
+$ npm run build
 $ pm2 list
 $ cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist/main.js # 添加进程/应用 dev_nest
 # or
-$ yarn update_dev_pm2
+$ npm run update_dev_pm2
 
 ```
 
@@ -97,15 +101,18 @@ $ git tag -l -n
 # 切换到最新tag上
 $ git checkout aba-xxx
 
+# 查看当前分支
+$ git branch -a
+
 # 打包部署应用 nest
-$ yarn # 安装插件
+$ npm install # 安装插件
 $ pm2 stop nest # 暂停进程/应用
 $ pm2 delete nest # 删除进程/应用
-$ yarn build # 打包
+$ npm run build # 打包
 $ pm2 list # 列出所有进程/应用
 $ cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js # 添加进程/应用 nest
 # or
-$ yarn update_prod_pm2
+$ npm run update_prod_pm2
 
 ```
 
