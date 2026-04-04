@@ -16,7 +16,7 @@ const glob: Readonly<GlobalEnvConfig> = {
   fileAccessPath: 'api_dev_file',
   staticDirPosition: '../',
   staticDirName: 'api_dev_static_dir',
-  imageRefixName: 'sharp_local_',
+  imageRefixName: 'sharp_network_',
   capitalDatabaseName: 'dev_capital',
   blogDatabaseName: 'dev_blog',
 };
