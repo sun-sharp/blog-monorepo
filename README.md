@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-$ node v20.10.0
+$ node v24.14.0
 
 $ yarn
 
