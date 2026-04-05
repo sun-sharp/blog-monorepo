@@ -53,7 +53,7 @@ export class WeChatService {
           if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同交易时间的数据
           const find = await this.weChatModel.find();
-          const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['moneyAmount', 'goods', 'tradeOtherPerson']);
+          const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['moneyAmount', 'goods']);
           if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据按照交易时间排序
           result.sort(function (a, b) {

@@ -31,7 +31,7 @@ export const weChatExcelCellHandle = {
     tar['incomeOrPay'] = formatExcelStr(val);
   }, // 收/支
   6: (tar: any, val: any) => {
-    const money = val.replace(/[¥￥]/, '');
+    const money = val.replace(/[¥￥,]/g, '');
     tar['moneyAmount'] = formatExcelNum(money);
   }, // 金额(元)
   7: (tar: any, val: any) => {

@@ -43,7 +43,7 @@ export class WeChat extends Document {
   @Prop()
   moneyAmount: number;
 
-  // 其它费用
+  // 其它费用(元)
   @Prop()
   otherCost: number;
 
@@ -59,7 +59,7 @@ export class WeChat extends Document {
   @Prop()
   remarks: string;
 
-  // 流入/流出
+  // 流入/流出（1/2）
   @Prop()
   inflowOrOutflow: number;
 
@@ -71,15 +71,15 @@ export class WeChat extends Document {
   @Prop()
   place: string;
 
-  // 账单类型
+  // 账单类型（1/2）
   @Prop()
   billType: number;
 
-  // 账单方式
+  // 账单方式（1/2）
   @Prop()
   billMethod: number;
 
-  // 余额
+  // 余额(元)
   @Prop()
   balance: number;
 }
