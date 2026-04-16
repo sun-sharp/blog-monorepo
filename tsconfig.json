@@ -21,6 +21,7 @@
     "noFallthroughCasesInSwitch": true,
 
     /* url */
+    "ignoreDeprecations": "6.0",
     "outDir": "./",
     "baseUrl": ".",
     "paths": {
