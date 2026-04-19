@@ -1,0 +1,32 @@
+@use '../../../styles/variable' as *;
+
+.author-slide-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 250;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.author-slide-container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 300;
+  width: 260px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+// 平板端宽度调整
+@media (min-width: 769px) {
+  .author-slide-container {
+    width: 300px;
+  }
+}

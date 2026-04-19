@@ -4,5 +4,13 @@
     &-container .head-logo {
       display: none;
     }
+
+    &-container .header-right {
+      padding-right: 20px;
+
+      .header-avatar {
+        display: flex;
+      }
+    }
   }
 }

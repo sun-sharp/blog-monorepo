@@ -26,3 +26,10 @@
     }
   }
 }
+
+// 在平板和手机端隐藏右侧 slider
+@media (width <= 992px) {
+  .home-slider {
+    display: none;
+  }
+}

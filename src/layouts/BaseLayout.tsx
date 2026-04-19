@@ -2,6 +2,7 @@ import { FloatButton, Layout } from 'antd';
 import LayoutHeader from './header/LayoutHeader';
 import LayoutFooter from './footer/LayoutFooter';
 import LayoutMain from './main/LayoutMain';
+import AuthorIntroSlide from '@/components/common/AuthorIntroSlide';
 import { clearParticleBack, initParticleBack } from '@/plugins/canvas/particle-back';
 import { useEffect, useState } from 'react';
 import BackTopIcon from '@/components/icon/BackTopIcon';
@@ -46,6 +47,7 @@ const LayoutIndex: React.FC = () => {
       <LayoutHeader hide={headerHide} />
       <LayoutMain />
       <LayoutFooter />
+      <AuthorIntroSlide />
       <FloatButton.Group style={{ right: 100 }}>
         <FloatButton.BackTop icon={<BackTopIcon style={{ fontSize: '20px' }} />} />
       </FloatButton.Group>

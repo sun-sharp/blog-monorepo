@@ -1,15 +1,20 @@
 import {
   // Input,
   Tooltip,
+  Avatar,
 } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { Link, useLocation } from 'react-router-dom';
 import logoImage from '@/assets/logo.png';
+import headSculptureImage from '@/assets/head_sculpture.jpg';
 import { IHeadMenuArr, IHeaderProp } from '/#/layouts/header';
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
+import { useDispatch } from 'react-redux';
+import { setAuthorSlideVisible } from '@/store/modules/common';
 
 const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
+  const dispatch = useDispatch();
   const headMenuArr: IHeadMenuArr[] = [
     {
       title: '首页',
@@ -62,7 +67,16 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
             ))}
           </ul>
         </div>
-        {/* <div className="header-right">{activePath === '/' ? <Search placeholder="请输入关键字" size="middle" onSearch={onSearch} /> : ''}</div> */}
+        <div className="header-right">
+          <Tooltip title="个人介绍">
+            <Avatar
+              className="header-avatar"
+              src={headSculptureImage}
+              size={33}
+              onClick={() => dispatch(setAuthorSlideVisible(true))}
+            />
+          </Tooltip>
+        </div>
       </div>
     </Header>
   );
