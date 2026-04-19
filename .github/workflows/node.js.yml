@@ -14,23 +14,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      
-      # 获取源码，使用actions/checkout@v3
-      - name: Checkout
-        uses: actions/checkout@v3
 
-      # 安装依赖打包静态资源
-      - name: Install & Build 
-        uses: actions/setup-node@v3
+      # 获取源码，使用actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 安装依赖打包静态资源，使用actions/setup-node@v4
+      - name: Install & Build
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 24
           cache: 'npm'
       - run: npm install
       - run: npm run build
 
-      # 部署到云服务器，使用easingthemes/ssh-deploy@v4，通过ssh的方式连接
+      # 部署到云服务器，使用easingthemes/ssh-deploy@main，通过ssh的方式连接
       - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v4
+        uses: easingthemes/ssh-deploy@main
         env:
           # 报错 Load key “/home/runner/.ssh/deploy_key”: invalid format
           # 说明ssh的key格式不匹配，可以参考上面配置 secret重新生成key，也可以将现有的转换成PEM格式：
