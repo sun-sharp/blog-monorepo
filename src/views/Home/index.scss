@@ -1,3 +1,5 @@
+@use '../../styles/variable' as *;
+
 .home {
   display: flex;
 
@@ -13,14 +15,14 @@
   }
 
   &-slider {
-    width: $-right-width;
-    min-width: $-right-min-width;
+    width: $right-width;
+    min-width: $right-min-width;
     height: auto;
     padding-left: 20px;
 
     &__cont {
       width: 100%;
-      box-shadow: 0 0 4px $-card-box-shadow;
+      box-shadow: 0 0 4px $card-box-shadow;
     }
   }
 }

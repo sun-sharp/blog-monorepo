@@ -2,9 +2,9 @@ import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 import BaseLayout from '@/layouts/BaseLayout';
 import Home from '@/views/Home';
 import ErrorLayout from '@/layouts/ErrorLayout';
-import NotAuthorized from '@/views/Error/403';
-import NotFound from '@/views/Error/404';
-import ServiceError from '@/views/Error/500';
+import NotAuthorized from '@/views/error/403';
+import NotFound from '@/views/error/404';
+import ServiceError from '@/views/error/500';
 import Middle from '@/views/Middle';
 import Classify from '@/views/Classify';
 import ArticleDetails from '@/views/ArticleDetails';
@@ -56,8 +56,7 @@ const routers: RouteObject[] = [
 ];
 
 const Router = () => {
-  const routes = useRoutes(routers);
-  return routes;
+  return useRoutes(routers);
 };
 
 export { Router };

@@ -1,3 +1,4 @@
-@import 'media1220';
-@import 'media992';
-@import 'media768';
+// 响应式媒体查询
+@forward 'media1220';
+@forward 'media992';
+@forward 'media768';

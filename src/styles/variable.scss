@@ -1,29 +1,29 @@
 /* 主题色 */
-$-theme-color: var(--root-theme-color, #166bcf);
+$theme-color: var(--root-theme-color, #166bcf);
 
 /* 头部高度 */
-$-layout-header: var(--root-layout-header, 64px);
+$header-height: var(--root-layout-header, 64px);
 
 /* 头部背景色 */
-$-layout-header-background: var(--root-layout-header-background, #fff);
+$header-bg: var(--root-layout-header-background, #fff);
 
 /* 底部高度 */
-$-layout-footer: var(--root-layout-footer, 86px);
+$footer-height: var(--root-layout-footer, 86px);
 
 /* 头部最大宽度 */
-$-header-max-width: var(--root-header-max-width, 1440px);
+$header-max-width: var(--root-header-max-width, 1440px);
 
 /* 内容展示最大宽度 */
-$-main-max-width: var(--root-main-max-width, 1200px);
+$main-max-width: var(--root-main-max-width, 1200px);
 
 /* 滚动条宽度 */
-$-scrollbar-width: var(--root-scrollbar-width, 6px);
+$scrollbar-width: var(--root-scrollbar-width, 6px);
 
 /* 卡片阴影颜色 */
-$-card-box-shadow: var(--root-card-box-shadow, rgb(177 177 177 / 63.7%));
+$card-box-shadow: var(--root-card-box-shadow, rgb(177 177 177 / 63.7%));
 
 /* 右侧最小宽度 */
-$-right-min-width: var(--root-right-min-width, 200px);
+$right-min-width: var(--root-right-min-width, 200px);
 
 /* 右侧宽度 */
-$-right-width: var(--root-right-width, 18%);
+$right-width: var(--root-right-width, 18%);

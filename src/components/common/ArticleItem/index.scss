@@ -1,3 +1,5 @@
+@use '../../../styles/variable' as *;
+
 .article-cont {
   /* 文章列表 */
   .article-item {
@@ -5,12 +7,12 @@
     padding: 15px 10px;
     list-style: none;
     background: transparent;
-    box-shadow: 0 0 4px $-card-box-shadow;
+    box-shadow: 0 0 4px $card-box-shadow;
     cursor: default;
     transition: all .5s linear;
 
     &:hover {
-      box-shadow: 0 10px 30px $-card-box-shadow;
+      box-shadow: 0 10px 30px $card-box-shadow;
       transform: translate3d(0, -2px, 0);
     }
 
@@ -27,7 +29,7 @@
       }
 
       &--title {
-        color: $-theme-color;
+        color: $theme-color;
         font-weight: bold;
         font-size: 24px;
         cursor: pointer;
@@ -44,7 +46,7 @@
         justify-content: flex-end;
 
         .more {
-          color: $-theme-color;
+          color: $theme-color;
           cursor: pointer;
         }
       }

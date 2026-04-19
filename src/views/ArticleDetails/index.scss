@@ -1,3 +1,5 @@
+@use '../../styles/variable' as *;
+
 .article-detail {
   position: relative;
   display: flex;
@@ -48,15 +50,15 @@
 
   /* 文章右边内容 */
   &-slider {
-    width: $-right-width;
-    min-width: $-right-min-width;
+    width: $right-width;
+    min-width: $right-min-width;
     height: auto;
     padding-left: 10px;
     background-color: transparent;
 
     &__author {
       width: 100%;
-      box-shadow: 0 0 4px $-card-box-shadow;
+      box-shadow: 0 0 4px $card-box-shadow;
     }
   }
 
@@ -67,7 +69,7 @@
     width: 100%;
     margin-top: 30px;
     padding: 10px 20px 20px;
-    box-shadow: 0 0 4px $-card-box-shadow;
+    box-shadow: 0 0 4px $card-box-shadow;
 
     &--title {
       margin-bottom: 20px;

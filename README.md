@@ -6,6 +6,8 @@
 
 ## 安装使用
 
+- node 版本 24.14.0
+
 - 获取项目代码
 
 ```bash
@@ -19,28 +21,28 @@ git config --global core.autocrlf false
 
 ```bash
 cd blog-official-website
-yarn
+npm install
 ```
 
 ### scripts
 
 ```bash
 # 运行本地接口项目
-yarn dev
+npm run dev
 # 运行线上接口项目
-yarn dev:prod
+npm run dev:prod
 # 运行并监听本地接口
-yarn dev:debug
+npm run dev:debug
 # 构建项目
-yarn build
+npm run build
 # 直接预览本地打包文件目录
-yarn preview
+npm run preview
 # 执行 eslint 校验，并修复部分问题
-yarn lint
+npm run lint
 # 执行 stylelint 格式化
-yarn lint:stylelint
-# 重新安装依赖 该命令会先删除 node_modules、yarn.lock、package.lock.json，后再进行依赖重新安装（安装速度会明显变慢）
-yarn reinstall
+npm run lint:stylelint
+# 重新安装依赖 该命令会先删除 node_modules、npm run.lock、package.lock.json，后再进行依赖重新安装（安装速度会明显变慢）
+npm run reinstall
 ```
 
 ## 更新日志

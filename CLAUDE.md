@@ -6,22 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # 开发模式（使用 .env.dev）
-yarn dev
+npm run dev
 
 # 使用生产配置本地开发（使用 .env.prod-local）
-yarn dev:prod
+npm run dev:prod
 
 # 生产环境构建（使用 .env.prod）
-yarn build
+npm run build
 
 # 预览生产构建
-yarn preview
+npm run preview
 
 # 检查 TypeScript/JavaScript 文件
-yarn lint
+npm run lint
 
 # 检查并修复样式文件
-yarn lint:stylelint
+npm run lint:stylelint
 ```
 
 ## 架构概述
@@ -61,7 +61,23 @@ yarn lint:stylelint
 - `/#/` → `types/`
 
 ### 样式
-使用 SCSS，共享变量在 `src/styles/variable.scss`（使用 CSS 自定义属性实现主题灵活性）。入口文件是 `src/styles/index.scss`。
+使用 SCSS，完全采用 Sass 3.0.0 兼容的 `@use`/`@forward` 模块化架构。
+
+**样式文件结构：**
+- `src/styles/index.scss` - 主入口，使用 `@use` 导入所有样式模块
+- `src/styles/variable.scss` - 全局变量定义（变量命名格式为 `$xxx`，不含前导 `-`）
+- `src/styles/_common.scss` - mixin 定义和静态工具类
+- `src/styles/_common-exec.scss` - 执行 mixin 生成动态工具类样式
+- `src/styles/_normalize.scss` - 样式重置
+- `src/styles/_animate.scss` - 动画关键帧定义
+- `src/styles/_layout.scss` - 布局样式
+- `src/styles/mixins/index.scss` - 响应式媒体查询（使用 `@forward`）
+
+**重要规范：**
+- 所有 SCSS 文件必须使用 `@use` 或 `@forward`，禁止使用 `@import`（已被 Sass 3.0.0 弃用）
+- 需要使用变量的文件必须在文件开头显式 `@use` 导入：`@use '../../styles/variable' as *;`
+- Vite 配置中设置 `quietDeps: true` 抑制依赖警告
+- `_common-exec.scss` 专门用于执行 mixin，避免在模块定义时直接生成样式
 
 ### TypeScript 类型定义
 全局类型定义在 `types/` 目录：
@@ -78,4 +94,4 @@ yarn lint:stylelint
 - 使用 TypeScript strict 模式
 - 优先使用 interface 而非 type
 - 禁止使用 any，使用 unknown 替代
-- 根据css代码规则写代码
+- **SCSS 规范**：必须使用 `@use`/`@forward` 替代 `@import`，确保与 Sass 3.0.0 兼容。所有样式模块需显式导入变量文件 `@use 'relative/path/to/variable' as *;`

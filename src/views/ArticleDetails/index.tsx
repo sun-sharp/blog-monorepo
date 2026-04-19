@@ -2,7 +2,7 @@ import { articleAPi } from '@/api';
 import './index.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { IArticleItem } from '/#/views/home';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { MdCatalog, MdPreview } from 'md-editor-rt';
 import 'md-editor-rt/lib/preview.css';
 import AuthorIntro from '@/components/common/AuthorIntro';

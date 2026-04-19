@@ -24,9 +24,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'yarn'
-      - run: yarn
-      - run: yarn build
+          cache: 'npm'
+      - run: npm install
+      - run: npm run build
 
       # 部署到云服务器，使用easingthemes/ssh-deploy@v4，通过ssh的方式连接
       - name: Deploy to Server

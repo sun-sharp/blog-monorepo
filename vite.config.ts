@@ -4,6 +4,12 @@ import { resolve } from 'path';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { format } from 'date-fns';
 import pkg from './package.json';
+import viteTsconfigPaths from 'vite-tsconfig-paths';
+import svgr from 'vite-plugin-svgr';
+import viteCompression from 'vite-plugin-compression';
+import checker from 'vite-plugin-checker';
+import ViteImagemin from 'vite-plugin-imagemin';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const { dependencies, devDependencies, name, version } = pkg;
 const __APP_INFO__ = {
@@ -21,7 +27,7 @@ const pathResolve = (dir: string): string => {
 };
 
 /**
- * @description: 处理env文件（将所有环境变量配置文件读取到 process.env）
+ * @description: 处理 env 文件（将所有环境变量配置文件读取到 process.env）
  * @param {Recordable} envConf
  * @return {ViteEnv}
  */
@@ -53,7 +59,7 @@ type ProxyList = ProxyItem[];
 type ProxyTargetList = Record<string, ProxyOptions & { rewrite: (path: string) => string }>;
 const httpsRE = /^https:\/\//;
 /**
- * 创建dev运行跨越
+ * 创建 dev 运行跨越
  * @param list
  */
 const createProxy = (list: ProxyList = []) => {
@@ -80,8 +86,6 @@ export default defineConfig(({ command, mode }) => {
   const viteEnv = wrapperEnv(env);
   const { VITE_APP_TITLE, VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY } = viteEnv;
   const isBuild = command === 'build';
-  // const useMock = !!VITE_USE_MOCK;
-  // console.log(useMock, 'useMock');
   // 输出文件夹
   const OUTPUT_DIR = 'home';
   const ASSETS_DIR = 'static';
@@ -98,18 +102,75 @@ export default defineConfig(({ command, mode }) => {
           replacement: pathResolve('types') + '/',
         },
       ],
-      dedupe: ['vue'],
+      dedupe: ['react', 'react-dom'],
     },
     plugins: [
       react(),
+      // vite-plugin-svgr - SVG 组件支持
+      svgr(),
+      // vite-tsconfig-paths - 路径别名支持
+      viteTsconfigPaths(),
+      // vite-plugin-checker - TypeScript 类型检查（已禁用 eslint 检查，由独立 lint 命令处理）
+      checker({
+        typescript: true,
+        overlay: {
+          initialIsOpen: false,
+        },
+      }),
       // vite-plugin-html
       createHtmlPlugin({
-        minify: isBuild, // 压缩index.html代码
+        minify: isBuild, // 压缩 index.html 代码
         inject: {
-          // 将数据注入ejs模板
+          // 将数据注入 ejs 模板
           data: {
             title: VITE_APP_TITLE,
           },
+        },
+      }),
+      // vite-plugin-compression - Gzip 压缩
+      viteCompression({
+        verbose: true,
+        disable: false,
+        threshold: 10240,
+        algorithm: 'gzip',
+        ext: '.gz',
+      }),
+      // vite-plugin-imagemin - 图片压缩
+      ViteImagemin({
+        gifsicle: { optimizationLevel: 7, interlaced: false },
+        optipng: { optimizationLevel: 7 },
+        mozjpeg: { quality: 20 },
+        pngquant: { quality: [0.8, 0.9], speed: 4 },
+        svgo: { plugins: [{ name: 'removeViewBox' }] },
+      }),
+      // vite-plugin-pwa - PWA 支持
+      VitePWA({
+        registerType: 'manual',
+        injectRegister: 'manual',
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+        manifest: {
+          name: VITE_APP_TITLE,
+          short_name: VITE_APP_TITLE,
+          description: '个人博客官方网站',
+          theme_color: '#ffffff',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable',
+            },
+          ],
         },
       }),
     ],
@@ -120,7 +181,7 @@ export default defineConfig(({ command, mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "./src/styles/variable.scss";', // 添加公共样式
+          quietDeps: true,
         },
       },
     },
@@ -143,6 +204,9 @@ export default defineConfig(({ command, mode }) => {
       minify: 'terser',
       brotliSize: false,
       chunkSizeWarningLimit: 2000,
+    },
+    optimizeDeps: {
+      include: ['antd', 'axios', 'react', 'react-dom', 'react-router-dom'],
     },
   };
 });

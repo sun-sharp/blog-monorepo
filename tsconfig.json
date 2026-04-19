@@ -20,14 +20,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* url */
-    "ignoreDeprecations": "6.0",
-    "outDir": "./",
+    /* Path */
     "baseUrl": ".",
     "paths": {
       "/#/*": ["types/*"],
       "@/*": ["src/*"]
-    }
+    },
+    "forceConsistentCasingInFileNames": true,
   },
   "exclude": ["node_modules", "dist"],
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "types/**/*.d.ts"],

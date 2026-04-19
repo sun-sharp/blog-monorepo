@@ -1,3 +1,5 @@
+@use '../../../styles/variable' as *;
+
 .author-intro {
   min-width: 200px;
   padding-top: 15px;
@@ -20,7 +22,7 @@
   }
 
   &--position {
-    color: $-theme-color;
+    color: $theme-color;
     text-align: center;
   }
 

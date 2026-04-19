@@ -1,5 +1,10 @@
 # CHANGELOG bow-xxx
 
+## 2.3.0
+- 添加CLAUDE.md文件，用AI来方便开发
+- 更新 react18 的最新的环境配置
+- 更新 sass 的语法问题和对应规则报错
+
 ## 2.2.12
 - 修改logo图标
 

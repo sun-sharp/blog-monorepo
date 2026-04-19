@@ -1,5 +1,14 @@
-@import 'normalize';
-@import 'animate';
-@import 'common';
-@import 'layout';
-@import './mixins'
+// 变量（必须在最前面）
+@use './variable' as *;
+
+// 基础样式
+@use './normalize';
+@use './animate';
+@use './common';
+@use './layout';
+
+// 执行 common mixin 生成工具类样式
+@use './common-exec';
+
+// 媒体查询（使用 @forward 语法）
+@use './mixins/index' as *;

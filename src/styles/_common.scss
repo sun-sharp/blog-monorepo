@@ -1,3 +1,4 @@
+// _common.scss - 只定义 mixin，供其他文件 @use
 @mixin base-padding-margin($maxVal) {
   @for $i from 0 to $maxVal {
     .p-#{$i} {
@@ -74,12 +75,7 @@
   }
 }
 
-@include base-padding-margin(100);
-@include base-font-size(12, 40);
-@include base-width(1, 400, 5);
-@include base-width(400, 2000, 100);
-@include base-line-height(30, 100);
-
+// 工具类样式
 .w-full {
   width: 100%;
 }

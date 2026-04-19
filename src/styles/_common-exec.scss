@@ -1,0 +1,9 @@
+// _common-exec.scss - 执行 mixin 生成样式
+@use './common' as *;
+
+// 执行 mixin 生成工具类样式
+@include base-padding-margin(100);
+@include base-font-size(12, 40);
+@include base-width(1, 400, 5);
+@include base-width(400, 2000, 100);
+@include base-line-height(30, 100);
