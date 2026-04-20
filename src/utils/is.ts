@@ -7,7 +7,7 @@ export const isJsonString = (str: string): boolean => {
   try {
     // 为对象和数组的时候会返回true，无法转换时会走catch
     return typeof JSON.parse(str) == 'object';
-  } catch (e) {
+  } catch {
     return false;
   }
 };

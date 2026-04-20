@@ -19,7 +19,7 @@ export const registerPWAUpdateListener = () => {
             // 有新的更新可用
             if (!updateMessageShown) {
               updateMessageShown = true;
-              message.info('发现新版本，点击确定刷新页面',0);
+              message.info('发现新版本，点击确定刷新页面', 0);
             }
           }
         });

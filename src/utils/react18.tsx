@@ -56,15 +56,8 @@ interface SuspenseFallbackProps {
   fallback?: React.ReactNode;
 }
 
-export const SuspenseWrapper: React.FC<SuspenseFallbackProps> = ({
-  children,
-  fallback = <div>Loading...</div>,
-}) => {
-  return (
-    <Suspense fallback={fallback}>
-      {children}
-    </Suspense>
-  );
+export const SuspenseWrapper: React.FC<SuspenseFallbackProps> = ({ children, fallback = <div>Loading...</div> }) => {
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 };
 
 export { useTransition, useDeferredValue, Suspense, startTransition };

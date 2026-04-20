@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
+    "ahooks": "^3.8.4",
     "antd": "^5.24.8",
     "axios": "^1.9.0",
     "date-fns": "^4.1.0",
@@ -23,8 +24,7 @@
     "react-dom": "^18.3.1",
     "react-redux": "^9.2.0",
     "react-router": "^7.5.0",
-    "react-router-dom": "^7.5.0",
-    "ahooks": "^3.8.4"
+    "react-router-dom": "^7.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
@@ -47,8 +47,10 @@
     "prettier": "^3.5.3",
     "sass": "^1.88.0",
     "stylelint": "^16.19.1",
+    "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^37.0.0",
     "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-no-unsupported-browser-features": "^8.1.1",
     "stylelint-order": "^6.0.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1",

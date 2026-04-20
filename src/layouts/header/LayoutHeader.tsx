@@ -69,12 +69,7 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
         </div>
         <div className="header-right">
           <Tooltip title="个人介绍">
-            <Avatar
-              className="header-avatar"
-              src={headSculptureImage}
-              size={33}
-              onClick={() => dispatch(setAuthorSlideVisible(true))}
-            />
+            <Avatar className="header-avatar" src={headSculptureImage} size={33} onClick={() => dispatch(setAuthorSlideVisible(true))} />
           </Tooltip>
         </div>
       </div>

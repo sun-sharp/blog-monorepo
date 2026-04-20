@@ -49,7 +49,7 @@ const heartAnimation = (window: browserWindow & typeof globalThis, document: Doc
     const style = document.createElement('style');
     try {
       style.appendChild(document.createTextNode(css));
-    } catch (ex) {
+    } catch {
       /* empty */
     }
     document.getElementsByTagName('head')[0].appendChild(style);
@@ -75,7 +75,7 @@ const heartAnimation = (window: browserWindow & typeof globalThis, document: Doc
   const attachEvent = () => {
     const old = typeof window.onclick === 'function' && window.onclick;
     window.onclick = (event) => {
-      old && old.call(window, event);
+      if (old) old.call(window, event);
       createHeart(event);
     };
   };

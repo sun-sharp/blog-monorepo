@@ -124,7 +124,7 @@ export class CustomAxios {
     const params = conf.params || {};
     const data = conf.data || false;
     if (!isEmpty(params)) {
-      formatDate && formatRequestDate(params);
+      if (formatDate) formatRequestDate(params);
       conf.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
     } else if (Reflect.has(conf, 'data') && conf.data && Object.keys(conf.data).length) {
       conf.data = data;

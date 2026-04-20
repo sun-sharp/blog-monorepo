@@ -7,25 +7,25 @@
   z-index: 250;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgb(0 0 0 / 50%);
 }
 
 .author-slide-container {
   position: fixed;
-  right: 0;
   top: 0;
+  right: 0;
   z-index: 300;
   width: 260px;
   height: 100vh;
+  overflow-y: auto;
   background: #fff;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  box-shadow: -2px 0 8px rgb(0 0 0 / 15%);
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
-  overflow-y: auto;
 }
 
 // 平板端宽度调整
-@media (min-width: 769px) {
+@media (width >= 769px) {
   .author-slide-container {
     width: 300px;
   }

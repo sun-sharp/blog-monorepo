@@ -49,7 +49,7 @@ export const createStorage = (options?: { prefixKey: string; storage: Storage })
             return value;
           }
           this.remove(this.getKey(key));
-        } catch (e) {
+        } catch {
           return def;
         }
       }
