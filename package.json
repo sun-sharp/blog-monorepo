@@ -14,6 +14,7 @@
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm install"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.1.1",
     "@reduxjs/toolkit": "^2.6.1",
     "ahooks": "^3.8.4",
     "antd": "^5.24.8",

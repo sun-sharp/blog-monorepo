@@ -48,20 +48,6 @@
     }
   }
 
-  /* 文章右边内容 */
-  &-slider {
-    width: $right-width;
-    min-width: $right-min-width;
-    height: auto;
-    padding-left: 10px;
-    background-color: transparent;
-
-    &__author {
-      width: 100%;
-      box-shadow: 0 0 4px $card-box-shadow;
-    }
-  }
-
   // 文章目录
   &-catalog {
     position: sticky;
@@ -84,4 +70,78 @@
       --md-bk-color: transparent;
     }
   }
+
+  // PC端右侧固定布局
+  &-right-side {
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 300px;
+    padding-right: 20px;
+
+    &-slider {
+      width: 100%;
+      height: auto;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: -2px 0 8px rgb(0 0 0 / 15%);
+
+      &__author {
+        width: 100%;
+        padding: 15px 0 20px;
+        box-shadow: 0 0 4px $card-box-shadow;
+      }
+    }
+
+    &-catalog {
+      width: 100%;
+      margin-top: 20px;
+    }
+  }
+
+  // 目录按钮 - 仅在移动端/平板端显示
+  &-catalog-btn {
+    display: none;
+
+    @media (min-width > 992px) {
+      display: none;
+    }
+
+    @media (max-width: 992px) {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 33px;
+      height: 33px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+
+      i {
+        color: #333;
+        font-size: 20px;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  // 移动端和平板端隐藏右侧内容
+  @media (width <=992px) {
+    &-right-side {
+      display: none;
+    }
+  }
 }
+
