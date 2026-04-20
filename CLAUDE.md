@@ -94,4 +94,7 @@ npm run lint:stylelint
 - 使用 TypeScript strict 模式
 - 优先使用 interface 而非 type
 - 禁止使用 any，使用 unknown 替代
+- TypeScript 6.x 需要配置 `"ignoreDeprecations": "6.0"`（字符串值）在 `tsconfig.json` 和 `tsconfig.node.json`
+- 添加 `"types": ["node"]` 到 `tsconfig.json` 的 `compilerOptions` 以解决 `NodeJS` 命名空间问题
+- 安装 `@types/node@latest` 作为开发依赖：`npm install @types/node@latest --save-dev`
 - **SCSS 规范**：必须使用 `@use`/`@forward` 替代 `@import`，确保与 Sass 3.0.0 兼容。所有样式模块需显式导入变量文件 `@use 'relative/path/to/variable' as *;`
