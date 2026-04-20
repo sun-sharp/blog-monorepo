@@ -56,5 +56,14 @@ export default tseslint.config(
         version: 'detect',
       },
     },
+  },
+  // 👇 为所有配置文件添加 Node.js 全局变量
+  {
+    files: ['**/*.config.cjs', '**/*.cjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node, // 这包含了 module, require, __dirname 等所有 Node.js 全局变量
+      },
+    },
   }
 );
