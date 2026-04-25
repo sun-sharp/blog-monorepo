@@ -2,7 +2,10 @@ import {
   // Input,
   Tooltip,
   Avatar,
+  Dropdown,
+  Button,
 } from 'antd';
+import type { MenuProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { Link, useLocation } from 'react-router-dom';
 import logoImage from '@/assets/logo.png';
@@ -12,6 +15,16 @@ import { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { setAuthorSlideVisible } from '@/store/modules/common';
+import { storage } from '@/utils';
+import { ACCESS_TOKEN, CURRENT_USER, USER_CONFIG } from '@/constants/storage-name';
+import { getImgUrl } from '@/utils/files';
+
+// 用户数据类型定义
+interface CurrentUser {
+  avatar?: string;
+  nickname?: string;
+  [key: string]: any;
+}
 
 const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
   const dispatch = useDispatch();
@@ -29,6 +42,16 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
   const location = useLocation();
 
   const [activePath, setActivePath] = useState(location.pathname);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+
+  // 检查登录状态和获取用户信息
+  useEffect(() => {
+    const token = storage.get(ACCESS_TOKEN);
+    const user = storage.get(CURRENT_USER);
+    setIsLoggedIn(!!token);
+    setCurrentUser(user || null);
+  }, []);
 
   const toActivePathChange = (item: IHeadMenuArr) => {
     setActivePath(item.path);
@@ -38,6 +61,47 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
   useEffect(() => {
     setActivePath(location.pathname);
   }, [location.pathname]);
+
+  // 处理个人介绍点击
+  const handleProfileClick = () => {
+    dispatch(setAuthorSlideVisible(true));
+  };
+
+  // 处理退出登录
+  const handleLogout = () => {
+    // 删除存储的token和用户信息
+    storage.remove(ACCESS_TOKEN);
+    storage.remove(CURRENT_USER);
+    storage.remove(USER_CONFIG);
+
+    // 更新登录状态
+    setIsLoggedIn(false);
+
+    // 刷新页面以更新状态
+    window.location.reload();
+  };
+
+  // 处理登录跳转
+  const handleLogin = () => {
+    window.location.href = 'https://www.yangruirui.top/manage';
+  };
+
+  // 下拉菜单项
+  const dropdownItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: '个人介绍',
+      onClick: handleProfileClick,
+    },
+    {
+      key: '2',
+      label: '退出登录',
+      onClick: handleLogout,
+    },
+  ];
+
+  // 获取头像URL，如果用户有自定义头像则使用，否则使用默认头像
+  const avatarSrc = currentUser?.avatar ? getImgUrl(currentUser.avatar) : headSculptureImage;
 
   return (
     <Header className="layout-header">
@@ -68,9 +132,25 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
           </ul>
         </div>
         <div className="header-right">
-          <Tooltip title="个人介绍">
-            <Avatar className="header-avatar" src={headSculptureImage} size={33} onClick={() => dispatch(setAuthorSlideVisible(true))} />
-          </Tooltip>
+          {isLoggedIn ? (
+            <Dropdown menu={{ items: dropdownItems }} placement="bottomRight" arrow>
+              <Tooltip title={currentUser?.nickname || '用户'}>
+                <Avatar
+                  className="header-avatar"
+                  src={avatarSrc}
+                  size={33}
+                  onError={() => {
+                    // 头像加载失败时使用默认头像
+                    return false; // 阻止Antd Avatar的默认错误处理
+                  }}
+                />
+              </Tooltip>
+            </Dropdown>
+          ) : (
+            <Button type="primary" size="small" onClick={handleLogin}>
+              登录
+            </Button>
+          )}
         </div>
       </div>
     </Header>

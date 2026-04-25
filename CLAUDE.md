@@ -90,6 +90,27 @@ npm run lint:stylelint
 - `heart.ts` - 心形动画
 - `fallen-leaves.ts` - 落叶效果
 
+### 用户认证和头像功能
+头部头像组件 (`src/layouts/header/LayoutHeader.tsx`) 提供以下功能：
+- **登录状态检测**：通过检查 `ACCESS_TOKEN` 存储值判断用户是否登录
+- **动态头像显示**：
+  - 从 `CURRENT_USER` 存储获取用户数据（包含 `avatar` 和 `nickname` 字段）
+  - 使用 `getImgUrl` 函数（`src/utils/files.ts`）处理头像URL，确保完整路径
+  - 头像加载失败时自动回退到默认头像 `head_sculpture.jpg`
+- **下拉菜单**：
+  - "个人介绍"：触发 `AuthorIntroSlide` 组件从左侧滑出
+  - "退出登录"：删除 `ACCESS_TOKEN`、`CURRENT_USER`、`USER_CONFIG` 存储值并刷新页面
+- **登录按钮**：用户未登录时显示登录按钮，点击跳转到 `https://www.yangruirui.top/manage`
+
+个人介绍组件 (`src/components/common/AuthorIntro/`) 优化：
+- 根据 `CURRENT_USER` 数据动态显示用户昵称
+- 使用用户自定义头像，支持头像加载失败处理
+
+存储相关常量定义在 `src/constants/storage-name.ts`：
+- `ACCESS_TOKEN` - 用户认证令牌
+- `CURRENT_USER` - 当前用户信息（包含 avatar、nickname 等字段）
+- `USER_CONFIG` - 用户配置信息
+
 ## 开发规范
 - 使用 TypeScript strict 模式
 - 优先使用 interface 而非 type

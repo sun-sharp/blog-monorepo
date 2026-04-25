@@ -10,6 +10,7 @@
     "build": "tsc && vite build --mode prod",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,js,jsx,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:ts": "npx tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm install"
   },
