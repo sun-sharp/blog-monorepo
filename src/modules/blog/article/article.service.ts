@@ -27,15 +27,16 @@ export class ArticleService {
   constructor(@InjectModel(Article.name, blogDatabaseName) private readonly articleModel: Model<Article>) {}
 
   /**
-   * @description: 条件并分页获取不加密文章列表
+   * @description: 条件并分页获取文章列表（支持可选认证）
    * @param {PageArticleDto} body
+   * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
    * @return {Promise<IResponse>}
    */
-  public findPage(body: PageArticleDto): Promise<IResponse> {
+  public findPage(body: PageArticleDto, user?: User | null): Promise<IResponse> {
     return (
-      Promise.resolve(body)
+      Promise.resolve({ body, user })
         // 分页查询
-        .then(async (body) => {
+        .then(async ({ body, user }) => {
           const { size, current, keywords, categoryVal } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<Article> = keywords
@@ -44,7 +45,10 @@ export class ArticleService {
           if (categoryVal) {
             findData.categoryVal = categoryVal;
           }
-          findData.isPrivate = false;
+          // 如果没有用户登录，只查询不加密的文章
+          if (!user) {
+            findData.isPrivate = false;
+          }
           const total = await this.articleModel.find(findData).count();
           const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
           const list: ApiArticleItem[] = findArr.map((m) => ({
@@ -58,6 +62,8 @@ export class ArticleService {
             authorNickname: m.authorNickname,
             categoryVal: m.categoryVal,
             createTime: nowDateFun(m.createTime),
+            // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）
+            ...(user && { isPrivate: m.isPrivate }),
           }));
           return {
             code: ApiCode.SUCCESS,
@@ -67,7 +73,7 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`条件并分页获取不加密文章列表 失败! ${err}`);
+          logger.error(`条件并分页获取文章列表 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '查询失败！',

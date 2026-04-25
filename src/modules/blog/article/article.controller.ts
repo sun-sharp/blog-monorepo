@@ -2,6 +2,7 @@ import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Para
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from 'src/jwt/optional-jwt-auth.guard';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
@@ -18,8 +19,12 @@ export class ArticleController {
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取文章列表' })
-  findPage(@Body() pageArticleDto: PageArticleDto) {
-    return this.articleService.findPage(pageArticleDto);
+  @UseGuards(OptionalJwtAuthGuard)
+  findPage(@Request() req: any, @Body() pageArticleDto: PageArticleDto) {
+    // 如果有用户信息，则查询全部文章（包括加密和不加密）
+    // 如果没有用户信息，则只查询不加密的文章
+    const user = req.user || null;
+    return this.articleService.findPage(pageArticleDto, user);
   }
 
   @Post('find_all_page')
