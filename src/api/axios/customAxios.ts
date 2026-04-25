@@ -1,8 +1,9 @@
-import { ResultEnum, VITE_API_URL_PREFIX } from '@/constants';
+import { ResultEnum, VITE_API_URL_PREFIX, VITE_AUTHORIZATION_HEAD } from '@/constants';
 import { checkStatus } from './checkStatus';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
-import { formatRequestDate, isEmpty, isString, joinTimestamp } from '@/utils';
+import { formatRequestDate, isEmpty, isString, joinTimestamp, storage } from '@/utils';
+import { ACCESS_TOKEN } from '@/constants/storage-name';
 
 const urlPrefix = VITE_API_URL_PREFIX || '';
 
@@ -110,6 +111,13 @@ export class CustomAxios {
     // 请求之前处理config
     const conf: any = Object.assign({}, config);
     const { apiUrl, joinPrefix, formatDate, joinTime = true } = this.requestOptions;
+    const tokenHead = VITE_AUTHORIZATION_HEAD;
+    const accessToken = storage.get(ACCESS_TOKEN);
+    const completeToken = tokenHead ? `${tokenHead}${accessToken}` : accessToken;
+    if (completeToken) {
+      // jwt token
+      conf.headers.Authorization = completeToken;
+    }
 
     // 添加接口前缀
     if (joinPrefix) {

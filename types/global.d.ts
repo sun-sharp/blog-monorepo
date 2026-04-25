@@ -18,6 +18,8 @@ declare global {
     VITE_APP_SHORT_NAME: string;
     //图片前缀地址
     VITE_IMG_URL?: string;
+    // token前缀
+    VITE_AUTHORIZATION_HEAD?: string;
     /* vite运行部署配置 */
     // 端口
     VITE_PORT: number;
