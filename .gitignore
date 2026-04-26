@@ -4,6 +4,4 @@ dist
 dist-ssr
 manage
 *.local
-*-lock.json
-package-lock.json
 *.log
