@@ -34,7 +34,7 @@ const pathResolve = (dir: string): string => {
  * @return {ViteEnv}
  */
 const wrapperEnv = (envConf: Recordable): ViteEnv => {
-  const ret = {};
+  const ret: Record<string, any> = {};
 
   for (const envName of Object.keys(envConf)) {
     let realName = envConf[envName].replace(/\\n/g, '\n');
@@ -142,7 +142,8 @@ export default defineConfig(({ command, mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "./src/styles/variable.scss";', // 添加公共样式
+          additionalData: '@use "@/styles/variable.scss" as *;', // 添加公共样式
+          api: 'modern-compiler',
         },
       },
     },

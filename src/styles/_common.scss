@@ -1,3 +1,5 @@
+@use '@/styles/variable.scss' as *;
+
 @mixin base-padding-margin($maxVal) {
   @for $i from 0 to $maxVal {
     .p-#{$i} {
