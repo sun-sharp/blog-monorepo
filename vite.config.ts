@@ -168,9 +168,9 @@ export default defineConfig(({ command, mode }) => {
           drop_console: VITE_DROP_CONSOLE,
         },
       },
-      minify: 'terser',
+      minify: 'esbuild',
       brotliSize: false,
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 3000,
     },
   };
 });

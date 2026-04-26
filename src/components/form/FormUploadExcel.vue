@@ -52,10 +52,6 @@
           .upload-card-item-info::before {
             opacity: 1;
           }
-
-          &-info::before {
-            opacity: 1;
-          }
         }
 
         &-info {
