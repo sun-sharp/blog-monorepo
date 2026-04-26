@@ -33,7 +33,7 @@
               <mi-captcha width="384" :logo="logo" @success="onAuthCode" />
             </div>
           </n-form-item> -->
-          <n-form-item class="default-color">
+          <!-- <n-form-item class="default-color">
             <div class="flex justify-between">
               <div class="flex-initial">
                 <n-checkbox v-model:checked="autoLogin">自动登录</n-checkbox>
@@ -42,11 +42,11 @@
                 <a href="javascript:">忘记密码</a>
               </div>
             </div>
-          </n-form-item>
+          </n-form-item> -->
           <n-form-item>
             <n-button type="primary" size="large" :loading="loading" :disabled="loading" block @click="handleSubmit">登录</n-button>
           </n-form-item>
-          <n-form-item class="default-color">
+          <!-- <n-form-item class="default-color">
             <div class="flex view-account-other">
               <div class="flex-initial">
                 <span>其它登录方式</span>
@@ -69,7 +69,7 @@
                 <a href="javascript:">注册账号</a>
               </div>
             </div>
-          </n-form-item>
+          </n-form-item> -->
         </n-form>
       </div>
     </div>
@@ -83,7 +83,12 @@
   import { useUserStore } from '@/store';
   import { FormItemRule, MessageReactive, useMessage } from 'naive-ui';
   import logo from '@/assets/images/common/logo.png';
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@/utils';
+  import {
+    PersonOutline,
+    LockClosedOutline,
+    // , LogoGithub, LogoFacebook
+    isMobile,
+  } from '@/utils';
   import { APP_ENV_CONFIG, RESULT_ENUM } from '@/constant';
   import LayoutFooter from '@/layout/components/LayoutFooter.vue';
 
@@ -92,7 +97,7 @@
   const formRef = ref();
   const message = useMessage();
   const loading = ref(false);
-  const autoLogin = ref(true);
+  // const autoLogin = ref(true);
 
   const formInline = reactive({
     username: '',
@@ -136,8 +141,13 @@
           messageReactive = null;
         }
         if (code === RESULT_ENUM.SUCCESS) {
-          const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           message.success('登录成功！');
+          if (isMobile()) {
+            const path = window.location.pathname.replace('/manage', '') || '/';
+            window.location.href = window.location.origin + path;
+            return;
+          }
+          const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           router.replace(toPath).then(() => {
             if (route.name == 'login') {
               router.replace('/');
@@ -209,7 +219,7 @@
 
   @media (width < 768px) {
     .view-account {
-      padding: 0 16px;
+      padding: 0;
       background-image: none;
     }
 
@@ -223,20 +233,23 @@
     }
 
     .view-account-top-logo {
-      font-size: 22px;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 26px;
     }
 
     .view-account-top-logo img {
-      width: 28px;
+      width: 48px;
     }
 
     .view-account-top-desc {
-      font-size: 12px;
+      font-size: 15px;
       line-height: 1.4;
     }
 
     .view-account-form {
       width: 100%;
+      padding: 0 16px;
     }
 
     .view-account-form :deep(.n-form-item) {

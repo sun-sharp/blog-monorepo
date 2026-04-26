@@ -144,3 +144,16 @@ export const isHttpUrl = (val: string): boolean => {
   if (!val) return false;
   return /http(s)?:/.test(val);
 };
+
+/**
+ * @description: 是否为移动端设备（基于原生属性判断）
+ * @return {boolean}
+ */
+export const isMobile = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+  const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+  const isMobileByUA = mobileRegex.test(userAgent.toLowerCase());
+  const isMobileByTouch = navigator.maxTouchPoints > 0 && window.innerWidth < 1024;
+  return isMobileByUA || isMobileByTouch;
+};
