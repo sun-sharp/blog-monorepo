@@ -54,8 +54,7 @@
           type="date"
           clearable
           :is-date-disabled="disabledStartDate"
-          value-format="yyyy-MM-dd"
-        />
+          value-format="yyyy-MM-dd" />
       </n-form-item>
       <n-form-item label="结束日期" path="endDate">
         <n-date-picker
@@ -64,8 +63,7 @@
           type="date"
           :is-date-disabled="disabledEndDate"
           clearable
-          value-format="yyyy-MM-dd"
-        />
+          value-format="yyyy-MM-dd" />
       </n-form-item>
       <n-form-item label="开始时间" path="startTime">
         <n-time-picker
@@ -75,8 +73,7 @@
           :seconds="[0]"
           format="HH:mm a"
           value-format="HH:mm:ss"
-          clearable
-        />
+          clearable />
       </n-form-item>
       <n-form-item label="结束时间" path="endTime">
         <n-time-picker
@@ -88,8 +85,7 @@
           :is-hour-disabled="endTimeIsHourDisabled"
           :is-minute-disabled="endTimeIsMinuteDisabled"
           format="hh:mm a"
-          value-format="HH:mm:ss"
-        />
+          value-format="HH:mm:ss" />
       </n-form-item>
       <n-form-item label="标题" path="title">
         <n-input v-model:value="modelForm.title" placeholder="请输入标题" clearable :max-length="100" />

@@ -16,8 +16,7 @@
       :show-reset-button="false"
       :show-advanced-button="false"
       :schemas="searchSchemas"
-      @submit="searchSubmit"
-    />
+      @submit="searchSubmit" />
     <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">

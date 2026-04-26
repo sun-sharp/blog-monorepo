@@ -46,8 +46,7 @@
                 class="tabs-card-scroll-item"
                 :class="{ 'active-item': activeKey === element.path }"
                 @click.stop="goPage(element)"
-                @contextmenu="handleContextMenu($event, element)"
-              >
+                @contextmenu="handleContextMenu($event, element)">
                 <span>{{ element.meta.title }}</span>
                 <n-icon v-if="element.path !== baseHome" size="14" @click.stop="closeTabItem(element)">
                   <CloseOutlined />
@@ -73,8 +72,7 @@
         placement="bottom-start"
         :options="TabsMenuOptions"
         @clickoutside="onClickOutside"
-        @select="closeHandleSelect"
-      />
+        @select="closeHandleSelect" />
     </div>
   </div>
 </template>

@@ -60,8 +60,7 @@
                             size="18"
                             :color="element.fixed === 'left' ? getAppThemeColor : undefined"
                             class="cursor-pointer"
-                            @click="fixedColumn(element, 'left')"
-                          >
+                            @click="fixedColumn(element, 'left')">
                             <VerticalRightOutlined />
                           </n-icon>
                         </template>
@@ -74,8 +73,7 @@
                             size="18"
                             :color="element.fixed === 'right' ? getAppThemeColor : undefined"
                             class="cursor-pointer"
-                            @click="fixedColumn(element, 'right')"
-                          >
+                            @click="fixedColumn(element, 'right')">
                             <VerticalLeftOutlined />
                           </n-icon>
                         </template>

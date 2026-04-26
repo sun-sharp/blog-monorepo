@@ -8,7 +8,7 @@
         <n-input v-model:value="modelForm.username" placeholder="请输入账号名" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <form-upload-image v-if="hasUploadImage" v-model:imageList="modelForm.avatar" :max="1" source="user_avatar" />
+        <form-upload-image v-if="hasUploadImage" v-model:image-list="modelForm.avatar" :max="1" source="user_avatar" />
       </n-form-item>
       <div>
         <n-space>

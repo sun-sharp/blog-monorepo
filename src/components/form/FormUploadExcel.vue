@@ -18,8 +18,7 @@
     :max="max"
     :multiple="multiple"
     :custom-request="customRequest"
-    list-type="image"
-  >
+    list-type="image">
     <n-button :type="buttonType">{{ buttonText }}</n-button>
   </n-upload>
 </template>

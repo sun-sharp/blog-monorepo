@@ -33,8 +33,7 @@
       :show-reset-button="false"
       :schemas="searchSchemas"
       @submit="searchSubmit"
-      @unfold="searchUnfold"
-    />
+      @unfold="searchUnfold" />
     <basic-table ref="actionRef" is-card-surround :columns="columns" :request="loadDataTable" :row-key="tableRowKey">
       <template #tableTitle>
         <n-space>

@@ -189,6 +189,5 @@
     @onUploadImg="onUploadImg"
     @onHtmlChanged="onHtmlChanged"
     @onBlur="onBlur"
-    @onFocus="onFocus"
-  />
+    @onFocus="onFocus" />
 </template>

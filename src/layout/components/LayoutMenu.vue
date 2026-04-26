@@ -20,6 +20,5 @@
     :expanded-keys="openKeys"
     :value="selectedKeys"
     @update:value="clickMenuItem"
-    @update:expanded-keys="menuExpanded"
-  />
+    @update:expanded-keys="menuExpanded" />
 </template>

@@ -45,8 +45,7 @@
           :default-expanded-keys="['0']"
           clearable
           label-field="title"
-          key-field="menuId"
-        />
+          key-field="menuId" />
       </n-form-item>
       <n-form-item v-if="[OUTSIDE_THE_CHAIN_VALUE].includes(modelForm.menuType)" label="外链的链接" path="name">
         <n-input v-model:value="modelForm.name" placeholder="请输入外链的链接" />

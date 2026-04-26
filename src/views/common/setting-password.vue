@@ -97,8 +97,7 @@
           }"
           type="password"
           show-password-on="click"
-          placeholder="请输入密码"
-        />
+          placeholder="请输入密码" />
       </n-form-item>
       <n-form-item label="修改密码" path="updatePassword">
         <n-input
@@ -108,8 +107,7 @@
           }"
           type="password"
           show-password-on="click"
-          placeholder="请输入密码"
-        />
+          placeholder="请输入密码" />
       </n-form-item>
       <n-form-item label="确认密码" path="confirmPassword">
         <n-input
@@ -117,8 +115,7 @@
           :disabled="!modelForm.updatePassword"
           type="password"
           show-password-on="click"
-          placeholder="请再次输入密码"
-        />
+          placeholder="请再次输入密码" />
       </n-form-item>
       <div>
         <n-space>

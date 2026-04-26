@@ -119,8 +119,7 @@
           class="dot-item"
           :data-side="item.side"
           :style="{ ...item }"
-          @mousedown="onDotMousedown($event, item)"
-        >
+          @mousedown="onDotMousedown($event, item)">
           <slot name="resize" v-bind="{ side: item.side }">
             <div class="dot-item-handle"></div>
           </slot>

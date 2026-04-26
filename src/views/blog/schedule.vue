@@ -16,8 +16,7 @@
       :show-reset-button="false"
       :show-advanced-button="false"
       :schemas="searchSchemas"
-      @submit="searchSubmit"
-    />
+      @submit="searchSubmit" />
     <basic-table
       ref="actionRef"
       is-card-surround
@@ -26,8 +25,7 @@
       :row-key="tableRowKey"
       :scroll-x="1090"
       has-selection
-      @update:checked-row-keys="tableCheckedRowKeys"
-    >
+      @update:checked-row-keys="tableCheckedRowKeys">
       <template #tableTitle>
         <n-space>
           <n-button type="primary" @click="addUpdateModelRef.init()">

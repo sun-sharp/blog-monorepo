@@ -173,8 +173,7 @@
                 :chart-data="inflowMoneyData"
                 :custom-cfg="inflowMoneyCustomCfg"
                 x-field="name"
-                y-field="money"
-              ></single-column-chart>
+                y-field="money"></single-column-chart>
               <n-empty v-else class="w-full h-full justify-center" description="无流入数据"></n-empty>
             </div>
           </div>
@@ -188,8 +187,7 @@
                 :chart-data="outflowMoneyData"
                 :custom-cfg="outflowMoneyCustomCfg"
                 x-field="name"
-                y-field="money"
-              ></single-column-chart>
+                y-field="money"></single-column-chart>
               <n-empty v-else class="w-full h-full justify-center" description="无流出数据"></n-empty>
             </div>
           </div>

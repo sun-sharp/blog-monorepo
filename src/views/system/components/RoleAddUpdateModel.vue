@@ -50,8 +50,7 @@
           :data="menuData"
           :default-expand-all="false"
           :default-checked-keys="defaultMenuChecked"
-          @update:checked-keys="updateMenuChecked"
-        />
+          @update:checked-keys="updateMenuChecked" />
       </n-form-item>
       <n-form-item v-if="modelForm.roleType === 2 && apiAllLoading" label="接口权限" path="apiPermission">
         <n-tree
@@ -63,8 +62,7 @@
           :data="apiAllData"
           :default-expand-all="false"
           :default-checked-keys="defaultApiChecked"
-          @update:checked-keys="updateApiChecked"
-        />
+          @update:checked-keys="updateApiChecked" />
       </n-form-item>
     </n-form>
 

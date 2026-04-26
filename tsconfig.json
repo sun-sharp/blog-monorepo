@@ -19,7 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    
+    "skipDefaultLibCheck": true,
+    "ignoreDeprecations": "6.0",
+
     /* 链接 url */
     "outDir": "./",
 		"baseUrl": ".",

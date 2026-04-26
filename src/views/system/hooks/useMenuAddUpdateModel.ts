@@ -2,7 +2,7 @@ import { MAIN_DIRECTORY_VALUE, PAGE_ENUM, menuTypeObj } from '@/constant';
 import { constantHtmlIcon } from '@/utils';
 import { ExtractPropTypes, VNode, computed, nextTick, reactive, ref, unref, watch } from 'vue';
 import { ApiLevelMenuItem, ApiMenuSaveData } from '/#/api/menu';
-import { FormItemRule, FormRules, MenuOption } from 'naive-ui';
+import { FormItemRule, FormRules } from 'naive-ui';
 import { menuApi } from '@/api';
 import { useRoute, useRouter } from 'vue-router';
 import { useRouteStore } from '@/store';
@@ -133,7 +133,17 @@ export const useMenuAddUpdateModel = (props: ExtractPropTypes<typeof MenuAddUpda
   );
 
   // 图标
-  const iconOptions = ref<MenuOption[]>([]);
+  interface IconOption {
+    label: any;
+    value: string;
+    style: {
+      display: string;
+      alignItems: string;
+      justifyContent: string;
+      fontSize: string;
+    };
+  }
+  const iconOptions = ref<IconOption[]>([]);
   iconOptions.value = Object.keys(constantHtmlIcon).map((key) => ({
     label: constantHtmlIcon[key],
     value: key,

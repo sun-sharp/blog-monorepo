@@ -86,8 +86,7 @@
       :value-format="format"
       type="daterange"
       clearable
-      @update:formatted-value="datePickerChange($event)"
-    />
+      @update:formatted-value="datePickerChange($event)" />
   </div>
 </template>
 

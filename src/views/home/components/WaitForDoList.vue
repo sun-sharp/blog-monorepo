@@ -175,8 +175,7 @@
                   panel
                   :actions="['clear', 'now', 'confirm']"
                   type="datetime"
-                  @confirm="setDeadline()"
-                />
+                  @confirm="setDeadline()" />
               </div>
             </n-popover>
           </template>
@@ -197,8 +196,7 @@
                     :checked="element.state === 2"
                     size="small"
                     @update:checked="itemUpdateCheck($event, element)"
-                    @click.stop
-                  />
+                    @click.stop />
                   <div :class="['item-info', { finish: element.state === 2 }]">
                     <div class="item-text">{{ element.title }}</div>
                     <div class="item-remark">{{ element.remark }}</div>

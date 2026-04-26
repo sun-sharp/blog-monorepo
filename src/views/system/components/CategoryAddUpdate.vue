@@ -34,8 +34,7 @@
           style="width: 100%"
           :disabled="!!modelForm.valueStr"
           placeholder="请输入全局类型标识"
-          @update:value="valueInput"
-        />
+          @update:value="valueInput" />
       </n-form-item>
       <n-form-item ref="modelFromValueStrRef" label="全局类型标识（字符串类型）" path="valueStr">
         <n-input v-model:value="modelForm.valueStr" :disabled="!!modelForm.value" placeholder="请输入全局类型标识（字符串类型）" @input="valueStrInput" />

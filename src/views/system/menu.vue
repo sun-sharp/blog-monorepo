@@ -19,8 +19,7 @@
       :show-reset-button="false"
       :show-advanced-button="false"
       :schemas="searchSchemas"
-      @submit="searchSubmit"
-    />
+      @submit="searchSubmit" />
     <table-toolbar v-model:size="tableSize" :has-column-setting="false" @reload="reload">
       <template #tableTitle>
         <n-button type="primary" @click="addUpdateModelRef.init()">
@@ -39,8 +38,7 @@
       :loading="tableLoading"
       :columns="columns"
       :data="tableData"
-      :row-key="rowKey"
-    />
+      :row-key="rowKey" />
     <menu-add-update-model ref="addUpdateModelRef" :table-data="tableData" />
   </n-card>
 </template>

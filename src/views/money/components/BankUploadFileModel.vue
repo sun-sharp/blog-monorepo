@@ -33,8 +33,7 @@
           :action="uploadAction"
           button-type="primary"
           :show-remove-button="false"
-          @uploadChange="excelUploadChange"
-        />
+          @uploadChange="excelUploadChange" />
       </template>
     </table-all>
     <template #action>

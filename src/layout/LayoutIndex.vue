@@ -36,8 +36,7 @@
       :collapsed="collapsed"
       :native-scrollbar="false"
       @collapse="collapsed = true"
-      @expand="collapsed = false"
-    >
+      @expand="collapsed = false">
       <n-config-provider :theme-overrides="siderThemeOverrides">
         <layout-logo class="layout-sider__logo" :collapsed="collapsed" />
         <layout-menu v-model:collapsed="collapsed" class="layout-sider__menu" :inverted="false" />

@@ -145,8 +145,7 @@
               :checked="waitDet.state === 2"
               size="small"
               @update:checked="itemUpdateCheck"
-              @click.stop
-            />
+              @click.stop />
           </template>
         </n-input>
         <div class="cont-item cont-item--bottom-border mt-5">
@@ -172,8 +171,7 @@
                   panel
                   :actions="['clear', 'now', 'confirm']"
                   type="datetime"
-                  @confirm="setDeadline()"
-                />
+                  @confirm="setDeadline()" />
               </div>
             </n-popover>
           </div>
@@ -195,8 +193,7 @@
               maxRows: 5,
             }"
             placeholder="添加备注"
-            @update:value="inputUpdateChange"
-          />
+            @update:value="inputUpdateChange" />
         </div>
       </div>
     </n-drawer-content>

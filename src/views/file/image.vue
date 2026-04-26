@@ -18,8 +18,7 @@
       :show-reset-button="false"
       :show-advanced-button="false"
       :schemas="searchSchemas"
-      @submit="searchSubmit"
-    />
+      @submit="searchSubmit" />
     <basic-table ref="actionRef" :columns="columns" :request="loadDataTable" :row-key="tableRowKey" :scroll-x="1090">
       <template #tableTitle>
         <n-button class="mr-10" type="success" @click="imageOnlyPublicModelRef.init()">处理只有图片文件的数据</n-button>

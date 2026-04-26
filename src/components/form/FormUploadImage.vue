@@ -17,8 +17,7 @@
     :disabled="disabled"
     :max="max"
     :custom-request="customRequest"
-    :default-file-list="imageList"
-  >
+    :default-file-list="imageList">
     上传图片
   </n-upload>
 

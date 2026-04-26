@@ -31,8 +31,7 @@
       height: `${contHeight}px`,
     }"
     class="transform-html"
-    :bordered="false"
-  >
+    :bordered="false">
     <template #header>
       <n-button v-if="showMarkdown" text @click="closeMarkdownBtn()">
         <n-icon><LeftOutlined /></n-icon>
@@ -49,8 +48,7 @@
       :autofocus="true"
       :show-html-to-md="true"
       :indent-with-tab="true"
-      :tab-size="2"
-    />
+      :tab-size="2" />
     <div v-show="showMarkdown" class="transform-html__preview">
       <html-to-markdown v-model:markdown-text="codeMarkdownText" :html-text="codeHtmlText" class="flex-1" />
       <md-editor-preview :markdown-text="codeMarkdownText" class="ml-10 flex-1" />

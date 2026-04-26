@@ -27,8 +27,7 @@
             }"
             maxlength="300"
             show-count
-            @keydown.enter.prevent
-          />
+            @keydown.enter.prevent />
         </n-form-item>
         <n-form-item path="categoryVal" label="文章分类">
           <n-select v-model:value="modelForm.categoryVal" placeholder="请选择文章分类" filterable :options="categoryOptions" />
@@ -39,8 +38,7 @@
               v-model:markdown-text="modelForm.markdownContent"
               v-model:html-text="modelForm.htmlContent"
               v-model:css-text="modelForm.cssContent"
-              image-source="article_content"
-            />
+              image-source="article_content" />
             <!-- <code-mirror-input
               :model-value="codeHtmlText"
               :language-type="'html'"

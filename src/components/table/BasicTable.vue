@@ -35,7 +35,6 @@
       :pagination="pagination"
       @update:page="updatePage"
       @update:page-size="updatePageSize"
-      @update:checked-row-keys="updateCheckedRowKeys"
-    />
+      @update:checked-row-keys="updateCheckedRowKeys" />
   </div>
 </template>

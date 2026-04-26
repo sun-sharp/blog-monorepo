@@ -41,8 +41,7 @@
                   v-for="item in schema.componentProps ? schema.componentProps.options : []"
                   :key="item.value"
                   :value="item.value"
-                  :label="item.label"
-                />
+                  :label="item.label" />
               </n-space>
             </n-checkbox-group>
           </template>
@@ -63,16 +62,14 @@
             :is="schema.component"
             v-if="['NDatePicker', 'NTimePicker'].includes(schema.component)"
             v-model:formatted-value="formModel[schema.field]"
-            :class="{ isFull: schema.isFull != false && isFull }"
-          />
+            :class="{ isFull: schema.isFull != false && isFull }" />
           <!--动态渲染表单组件-->
           <component
             v-bind="getComponentProps(schema)"
             :is="schema.component"
             v-else
             v-model:value="formModel[schema.field]"
-            :class="{ isFull: schema.isFull != false && isFull }"
-          />
+            :class="{ isFull: schema.isFull != false && isFull }" />
           <!--组件后面的内容-->
           <template v-if="schema.suffix">
             <slot :name="schema.suffix" :model="formModel" :field="schema.field" :value="formModel[schema.field]"></slot>

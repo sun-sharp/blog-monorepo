@@ -72,8 +72,7 @@
               backgroundColor: '#000',
               color: '#fff',
               padding: '5px',
-            }"
-          >
+            }">
             <template #trigger>
               <div style="height: 100%">{{ formatScheduleItem(year, month, date).time }}</div>
             </template>

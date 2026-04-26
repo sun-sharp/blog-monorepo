@@ -207,7 +207,63 @@
     }
   }
 
-  @media (width >= 768px) {
+  @media (width < 768px) {
+    .view-account {
+      padding: 0 16px;
+      background-image: none;
+    }
+
+    .view-account-container {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .view-account-top {
+      padding: 20px 0 12px;
+    }
+
+    .view-account-top-logo {
+      font-size: 22px;
+    }
+
+    .view-account-top-logo img {
+      width: 28px;
+    }
+
+    .view-account-top-desc {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .view-account-form {
+      width: 100%;
+    }
+
+    .view-account-form :deep(.n-form-item) {
+      margin-bottom: 16px;
+    }
+
+    .view-account-form :deep(.n-input) {
+      font-size: 14px;
+    }
+
+    .view-account-form :deep(.n-button) {
+      height: 44px;
+      font-size: 16px;
+    }
+
+    .view-account-other {
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .view-account-other > div {
+      margin: 4px 8px;
+    }
+  }
+
+  @media (width >=768px) {
     .view-account {
       background-image: url('@/assets/images/login/login.svg');
       background-repeat: no-repeat;

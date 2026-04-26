@@ -16,7 +16,7 @@
         <n-input v-model:value="modelForm.nickname" :disabled="!!modelId" placeholder="请输入昵称" />
       </n-form-item>
       <n-form-item label="头像" path="avatar">
-        <form-upload-image v-model:imageList="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
+        <form-upload-image v-model:image-list="modelForm.avatar" :disabled="!!modelId" :max="1" source="user_avatar" />
       </n-form-item>
       <n-form-item label="用户名" path="username">
         <n-input v-model:value="modelForm.username" :disabled="!!modelId" placeholder="请输入用户名" />
@@ -32,8 +32,7 @@
           }"
           type="password"
           show-password-on="click"
-          placeholder="请输入密码"
-        />
+          placeholder="请输入密码" />
       </n-form-item>
       <n-form-item v-if="!modelId" label="确认密码" path="verifyPassword">
         <n-input
@@ -41,8 +40,7 @@
           :disabled="!modelForm.password"
           type="password"
           show-password-on="click"
-          placeholder="请再次输入密码"
-        />
+          placeholder="请再次输入密码" />
       </n-form-item>
     </n-form>
 
