@@ -143,8 +143,7 @@
         if (code === RESULT_ENUM.SUCCESS) {
           message.success('登录成功！');
           if (isMobile()) {
-            const path = window.location.pathname.replace('/manage', '') || '/';
-            window.location.href = window.location.origin + path;
+            window.location.href = window.location.origin;
             return;
           }
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
