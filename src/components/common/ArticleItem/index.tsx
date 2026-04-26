@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
 import { IArticleItemProps } from '/#/components/common';
-import { IArticleItem } from '/#/views/home';
+import { ApiArticleItem } from '/#/api/blog/article';
 
 const ArticleItem: React.FC<IArticleItemProps> = ({ data }) => {
   const navigate = useNavigate();
   return (
     <ul className="article-cont">
-      {data.map((item: IArticleItem) => {
+      {data.map((item: ApiArticleItem) => {
         const linkTo = `/articleDetails/${item.articleId}`;
         return (
           <li key={item.articleId} className="article-item">
@@ -20,10 +20,10 @@ const ArticleItem: React.FC<IArticleItemProps> = ({ data }) => {
                 {item.title}
               </div>
               <div className="item-author">
-                <span className="lm">
-                  {/* <i className="icon-tag2" /> */}
+                {/* <span className="lm">
+                  <i className="icon-tag2" />
                   {item.categoryName}
-                </span>
+                </span> */}
                 <span className="time">
                   {/* <i className="icon-time1" /> */}
                   {item.createTime}

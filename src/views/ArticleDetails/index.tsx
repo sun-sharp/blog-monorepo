@@ -1,7 +1,6 @@
 import { articleAPi } from '@/api';
 import './index.scss';
 import { useCallback, useEffect, useState } from 'react';
-import { IArticleItem } from '/#/views/home';
 import { useParams } from 'react-router-dom';
 import { MdCatalog, MdPreview } from 'md-editor-rt';
 import 'md-editor-rt/lib/preview.css';
@@ -9,12 +8,13 @@ import AuthorIntro from '@/components/common/AuthorIntro';
 import AuthorIntroSlide from '@/components/common/AuthorIntroSlide';
 import CatalogSlide from '@/components/common/CatalogSlide';
 import { MenuOutlined } from '@ant-design/icons';
+import { ApiArticleItem } from '/#/api/blog/article';
 
 const ArticleDetails: React.FC = () => {
   const { articleId } = useParams();
   const [editorId] = useState('article-details-only');
   const [scrollElement] = useState(document.documentElement);
-  const [det, setDet] = useState<IArticleItem>({});
+  const [det, setDet] = useState<ApiArticleItem>({} as ApiArticleItem);
   const [showCatalog, setShowCatalog] = useState(false);
 
   // 查询文章详情

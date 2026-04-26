@@ -1,11 +1,8 @@
 export interface IAuthorIntroProp {
   backgroundColor: string;
-  user?: {
-    avatar?: string;
-    nickname?: string;
-  };
+  user?: ApiUserInfo;
 }
 
 export interface IArticleItemProps {
-  data: IArticleItem[];
+  data: ApiArticleItem[];
 }

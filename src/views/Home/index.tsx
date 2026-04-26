@@ -5,9 +5,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { articleAPi } from '@/api';
 import ArticleItem from '@/components/common/ArticleItem';
 import { Pagination, PaginationProps } from 'antd';
+import { ApiArticleItem } from '/#/api/blog/article';
 
 const Home: React.FC = () => {
-  const [articleData, setArticleData] = useState([]);
+  const [articleData, setArticleData] = useState<ApiArticleItem[]>([]);
   const [pageCurrent, setPageCurrent] = useState(1);
   const [pageSize] = useState(10);
   const [pageTotal, setPageTotal] = useState(0);

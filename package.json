@@ -7,7 +7,7 @@
     "dev": "vite --mode dev",
     "dev:prod": "vite --mode prod-local",
     "dev:debug": "vite --mode dev --debug",
-    "build": "tsc && vite build --mode prod",
+    "build": "set NODE_OPTIONS=--no-deprecation && tsc && vite build --mode prod",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,js,jsx,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:ts": "npx tsc --noEmit",
