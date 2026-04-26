@@ -71,9 +71,13 @@ export class ArticleController {
 
   @Get('details')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '获取不加密文章详情' })
-  findDetails(@Query('articleId') articleId: string) {
-    return this.articleService.findDetails(articleId);
+  @ApiOperation({ summary: '获取文章详情（支持可选认证）' })
+  @UseGuards(OptionalJwtAuthGuard)
+  findDetails(@Request() req: any, @Query('articleId') articleId: string) {
+    // 如果有用户信息，则查询全部文章的详情，不限制（包括加密和不加密）
+    // 如果没有用户信息，则只查询不加密的文章，有限制
+    const user = req.user || null;
+    return this.articleService.findDetails(articleId, user);
   }
 
   @Get('all_details')

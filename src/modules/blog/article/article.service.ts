@@ -255,14 +255,21 @@ export class ArticleService {
   }
 
   /**
-   * @description: 获取不加密文章详情
+   * @description: 获取文章详情（支持可选认证）
+   * @param {string} articleId 文章ID
+   * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
    * @return {Promise<IResponse>}
    */
-  public findDetails(articleId: string): Promise<IResponse> {
+  public findDetails(articleId: string, user?: User | null): Promise<IResponse> {
     return (
-      Promise.resolve(articleId)
-        .then(async (articleId) => {
-          const find = await this.articleModel.findOne({ _id: articleId, isPrivate: false }).lean();
+      Promise.resolve({ articleId, user })
+        .then(async ({ articleId, user }) => {
+          const findData: FilterQuery<Article> = { _id: articleId };
+          // 如果没有用户登录，只查询不加密的文章
+          if (!user) {
+            findData.isPrivate = false;
+          }
+          const find = await this.articleModel.findOne(findData).lean();
           if (!find) {
             throw '获取文章详情失败';
           }
@@ -277,6 +284,8 @@ export class ArticleService {
             authorNickname: find.authorNickname,
             categoryVal: find.categoryVal,
             createTime: nowDateFun(find.createTime),
+            // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）
+            ...(user && { isPrivate: find.isPrivate }),
           };
           return {
             code: ApiCode.SUCCESS,
@@ -286,7 +295,7 @@ export class ArticleService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`获取不加密文章详情 失败! ${err}`);
+          logger.error(`获取文章详情 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '查询失败！',
