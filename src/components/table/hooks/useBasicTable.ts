@@ -60,7 +60,7 @@ export const BasicTableProps = {
   },
   // 分页属性
   pagination: {
-    type: Object as PropType<PaginationProps | Boolean>,
+    type: Object as PropType<PaginationProps | boolean>,
   },
   // 每行内操作
   actionColumn: {

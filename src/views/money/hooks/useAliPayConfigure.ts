@@ -166,7 +166,7 @@ export const useAliPayConfigure = () => {
       align: 'center',
       fixed: 'right',
       render(row: any) {
-        return !!row.aliPayId
+        return row.aliPayId
           ? h(
               NButton,
               {

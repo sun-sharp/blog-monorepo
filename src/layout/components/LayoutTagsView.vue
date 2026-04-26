@@ -98,7 +98,7 @@
         flex-grow: 1;
         flex-shrink: 1;
         overflow: hidden;
-        -webkit-box-flex: 1;
+        flex-grow: 1;
 
         .tabs-card-prev,
         .tabs-card-next {

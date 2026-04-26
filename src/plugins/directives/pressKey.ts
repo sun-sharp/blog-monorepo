@@ -6,7 +6,7 @@ import type { ObjectDirective } from 'vue';
  * @param {Function} funVal 执行的函数
  */
 interface IObj {
-  arg: String;
+  arg: string;
   ctrl: boolean;
   alt: boolean;
   shift: boolean;

@@ -170,7 +170,7 @@ export const useBillUploadConfigure = () => {
       align: 'center',
       fixed: 'right',
       render(row) {
-        return !!row.billUploadId
+        return row.billUploadId
           ? [
               h(
                 NButton,

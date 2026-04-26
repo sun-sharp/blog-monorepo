@@ -1,9 +1,8 @@
 <script lang="ts" setup>
   import { onActivated, onMounted, ref } from 'vue';
   import { useMessage } from 'naive-ui';
-  import { addDays } from 'date-fns/esm';
+  import { addDays, format } from 'date-fns';
   import { scheduleAPi } from '@/api';
-  import { format } from 'date-fns';
   import { ScheduleDailyItem } from '/#/views/schedule';
 
   const message = useMessage();

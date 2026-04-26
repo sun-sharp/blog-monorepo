@@ -163,7 +163,7 @@ export const useBankConfigure = () => {
       align: 'center',
       fixed: 'right',
       render(row) {
-        return !!row.bankId
+        return row.bankId
           ? [
               h(
                 NButton,

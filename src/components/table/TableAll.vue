@@ -16,7 +16,6 @@
     columns: {
       type: [Array] as PropType<BasicColumn[]>,
       default: () => [],
-      required: true,
     },
     // 最大高度
     maxHeight: {

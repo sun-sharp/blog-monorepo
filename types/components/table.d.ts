@@ -116,6 +116,8 @@ export type PaginationProps = {
   showQuickJumper?: boolean;
   // 每页条数， 可自定义
   pageSizes?: number[];
+  // 前缀
+  prefix?: (info: { startIndex: number; endIndex: number; page: number; pageSize: number; pageCount: number; itemCount: number | undefined }) => string;
 };
 
 /**

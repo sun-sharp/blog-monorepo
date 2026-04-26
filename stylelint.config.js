@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2024-02-28 19:51:28
+ * @LastEditTime: 2026-04-27 01:29:59
  * @Description: stylelint验证代码
  *
  * stylelint ---- 主依赖
@@ -10,22 +10,16 @@
  * stylelint-no-unsupported-browser-features ---- 禁止您所针对的浏览器不支持的 CSS。
  *
  *
- warning "stylelint-config-standard-scss > stylelint-config-recommended-scss > postcss-scss@4.0.6" has unmet peer dependency "postcss@^8.4.19".
- warning " > stylelint-config-standard-vue@1.0.0" has unmet peer dependency "postcss-html@^1.0.0".
- warning "stylelint-config-standard-vue > stylelint-config-html@1.1.0" has unmet peer dependency "postcss-html@^1.0.0".
- warning "stylelint-config-standard-vue > stylelint-config-recommended-vue@1.4.0" has unmet peer dependency "postcss-html@^1.0.0"
- * 
  * 自定义语法
  * postcss ---- 用于postcss-html和postcss-scss的支持
- * postcss-scss ---- 解析<style lang=“scss”>下的scss样式
+ * postcss-scss ---- 解析<style lang="scss">下的scss样式
  * postcss-html ---- 解析<style>类 vue、html 文件标签中的样式
  */
 
-module.exports = {
-  root: true,
+export default {
   extends: [
     'stylelint-config-rational-order',
-    'stylelint-config-standard-scss', //
+    'stylelint-config-standard-scss',
     'stylelint-config-standard-vue/scss',
   ],
   plugins: ['stylelint-no-unsupported-browser-features'],

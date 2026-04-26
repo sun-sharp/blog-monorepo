@@ -14,7 +14,7 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
     if (!unref(show) || (isBoolean(pagination) && !pagination)) {
       return false;
     }
-    return {
+    const basePagination: PaginationProps = {
       page: unref(configRef)[PAGE_FIELD] || 1,
       pageSize: unref(configRef)[SIZE_FIELD] || DEFAULT_PAGESIZE,
       pageSizes: PAGE_SIZES,
@@ -23,8 +23,11 @@ export function usePagination(props: ExtractPropTypes<typeof BasicTableProps>) {
       pageCount: unref(configRef)[PAGE_COUNT_FIELD],
       itemCount: unref(configRef)[TOTAL_FIELD],
       prefix: (info: PaginationInfo) => `共 ${info.itemCount} 项`,
-      ...(isBoolean(pagination) ? {} : pagination),
     };
+    if (isBoolean(pagination)) {
+      return basePagination;
+    }
+    return { ...basePagination, ...(pagination as PaginationProps) };
   });
 
   // 设置分页

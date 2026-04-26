@@ -158,7 +158,7 @@ export const useWeChatConfigure = () => {
       align: 'center',
       fixed: 'right',
       render(row) {
-        return !!row.weChatId
+        return row.weChatId
           ? h(
               NButton,
               {
