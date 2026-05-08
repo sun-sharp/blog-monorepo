@@ -1,4 +1,5 @@
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
+import { KeepAlive } from 'react-activation';
 import BaseLayout from '@/layouts/BaseLayout';
 import Home from '@/views/Home';
 import ErrorLayout from '@/layouts/ErrorLayout';
@@ -16,7 +17,7 @@ const routers: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <KeepAlive name="Home"><Home /></KeepAlive>,
       },
       {
         path: '/classify',

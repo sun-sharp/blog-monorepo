@@ -9,6 +9,7 @@
 
 .layout-header {
   position: relative;
+  z-index: 9999;
   width: 100vw;
   height: $header-height;
   line-height: normal;

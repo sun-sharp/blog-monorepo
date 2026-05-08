@@ -28,6 +28,7 @@ const Home: React.FC = () => {
   // 分页
   const onPageChange: PaginationProps['onChange'] = (page) => {
     setPageCurrent(page);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {

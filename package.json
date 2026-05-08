@@ -23,6 +23,7 @@
     "date-fns": "^4.1.0",
     "md-editor-rt": "^5.2.0",
     "react": "^18.3.1",
+    "react-activation": "^0.13.4",
     "react-dom": "^18.3.1",
     "react-redux": "^9.2.0",
     "react-router": "^7.5.0",
