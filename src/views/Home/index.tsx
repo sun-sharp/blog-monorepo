@@ -22,13 +22,13 @@ const Home: React.FC = () => {
       .then((res) => {
         setArticleData(res.list);
         setPageTotal(res.total);
+        window.scrollTo(0, 0);
       });
   }, [pageCurrent, pageSize]);
 
   // 分页
   const onPageChange: PaginationProps['onChange'] = (page) => {
     setPageCurrent(page);
-    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
