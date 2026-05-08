@@ -55,8 +55,10 @@
     position: sticky;
     top: 74px;
     width: 100%;
+    max-height: calc(100vh - 74px - 80px);
     margin-top: 30px;
     padding: 10px 20px 20px;
+    overflow-y: auto;
     box-shadow: 0 0 4px $card-box-shadow;
 
     &--title {
