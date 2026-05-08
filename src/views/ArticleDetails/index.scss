@@ -6,6 +6,8 @@
 
   /* 文章内容 */
   &-cont {
+    position: relative;
+    z-index: 5;
     flex: 1;
     width: 0;
     background-color: transparent;

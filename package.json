@@ -9,7 +9,7 @@
     "dev:debug": "vite --mode dev --debug",
     "build": "set NODE_OPTIONS=--no-deprecation && tsc && vite build --mode prod",
     "preview": "vite preview",
-    "lint": "eslint src types *.ts *.js *.cjs --report-unused-disable-directives --max-warnings 0 && npx tsc --noEmit",
+    "lint": "eslint src types *.ts *.js *.cjs --fix --report-unused-disable-directives --max-warnings 0 && npx tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm install"
   },

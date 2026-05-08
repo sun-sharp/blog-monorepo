@@ -16,6 +16,7 @@ const ArticleDetails: React.FC = () => {
   const [scrollElement] = useState(document.documentElement);
   const [det, setDet] = useState<ApiArticleItem>({} as ApiArticleItem);
   const [showCatalog, setShowCatalog] = useState(false);
+  const hasCatalog = det.markdownContent && /^#{1,6}\s/m.test(det.markdownContent);
 
   // 查询文章详情
   const loadArticleDetails = useCallback(() => {
@@ -56,7 +57,7 @@ const ArticleDetails: React.FC = () => {
           <div className="article-detail-slider__author">
             <AuthorIntro backgroundColor="rgba(255, 255, 255, 0.4)" />
           </div>
-          {det.markdownContent ? (
+          {hasCatalog ? (
             <div className="article-detail-catalog">
               <p className="article-detail-catalog--title">文章目录</p>
               <MdCatalog editorId={editorId} scrollElement={scrollElement} />
@@ -68,12 +69,16 @@ const ArticleDetails: React.FC = () => {
       </div>
 
       {/* 移动端目录按钮 - 下移60px */}
-      <button className="article-detail-catalog-btn" style={{ top: '70px' }} onClick={() => setShowCatalog(true)}>
-        <MenuOutlined style={{ fontSize: '20px' }} />
-      </button>
+      {hasCatalog && (
+        <button className="article-detail-catalog-btn" style={{ top: '70px' }} onClick={() => setShowCatalog(true)}>
+          <MenuOutlined style={{ fontSize: '20px' }} />
+        </button>
+      )}
 
       {/* 移动端目录弹窗 */}
-      {showCatalog && <CatalogSlide editorId={editorId} scrollElement={scrollElement} visible={showCatalog} onClose={() => setShowCatalog(false)} />}
+      {showCatalog && hasCatalog && (
+        <CatalogSlide editorId={editorId} scrollElement={scrollElement} visible={showCatalog} onClose={() => setShowCatalog(false)} />
+      )}
     </div>
   );
 };
