@@ -61,7 +61,7 @@ export interface ApiWaitForDoUpdateStateData extends ApiWaitForDoId {
 /**
  * @description: 修改待办的排序参数
  */
-export interface ApiWaitForDoUpdateSortData extends ApiWaitForDoId {}
+export type ApiWaitForDoUpdateSortData = ApiWaitForDoId;
 
 /**
  * @description: 修改待办的名称，备注，截止时间参数

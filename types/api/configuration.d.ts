@@ -66,4 +66,4 @@ export interface ApiConfiguration {
 /**
  * @description: 配置信息
  */
-export interface ApiConfigInfo extends Omit<ApiConfiguration, 'userId'> {}
+export type ApiConfigInfo = Omit<ApiConfiguration, 'userId'>;

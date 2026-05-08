@@ -17,7 +17,11 @@ const routers: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <KeepAlive name="Home"><Home /></KeepAlive>,
+        element: (
+          <KeepAlive name="Home">
+            <Home />
+          </KeepAlive>
+        ),
       },
       {
         path: '/classify',

@@ -44,7 +44,7 @@ const wrapperEnv = (envConf: Recordable): ViteEnv => {
     if (envName === 'VITE_PROXY') {
       try {
         realName = JSON.parse(realName);
-      } catch (error) {
+      } catch {
         /* empty */
       }
     }
@@ -145,8 +145,7 @@ export default defineConfig(({ command, mode }) => {
       }),
       // vite-plugin-pwa - PWA 支持
       VitePWA({
-        registerType: 'manual',
-        injectRegister: 'manual',
+        injectRegister: false,
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
         manifest: {
           name: VITE_APP_TITLE,

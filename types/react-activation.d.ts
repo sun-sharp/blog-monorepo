@@ -1,5 +1,5 @@
 declare module 'react-activation' {
-  import { ComponentType, ReactNode, Component } from 'react';
+  import { ReactNode, Component } from 'react';
 
   interface KeepAliveProps {
     name?: string;
