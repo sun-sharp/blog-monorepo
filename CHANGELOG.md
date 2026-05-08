@@ -1,5 +1,9 @@
 # CHANGELOG bow-xxx
 
+## 2.3.2
+- 去掉登录后头像悬浮的名称说明
+- 调整 z-index 值优化组件层级关系
+
 ## 2.3.1
 - 整合 lint 和 lint:ts 命令，统一验证 src、types 和根目录 ts/js/cjs 文件
 - 更新 lint-staged 配置，改用 eslint --fix 直接处理暂存文件
