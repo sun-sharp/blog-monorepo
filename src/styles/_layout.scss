@@ -9,7 +9,6 @@
 
 .layout-header {
   position: relative;
-  z-index: 9999;
   width: 100vw;
   height: $header-height;
   line-height: normal;
@@ -19,7 +18,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 200;
+    z-index: 2000;
     display: flex;
     align-items: center;
     justify-content: space-between;

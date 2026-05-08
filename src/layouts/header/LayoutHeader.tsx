@@ -134,17 +134,15 @@ const LayoutHeader: React.FC<IHeaderProp> = ({ hide }) => {
         <div className="header-right">
           {isLoggedIn ? (
             <Dropdown menu={{ items: dropdownItems }} placement="bottomRight" arrow>
-              <Tooltip title={currentUser?.nickname || '用户'}>
-                <Avatar
-                  className="header-avatar"
-                  src={avatarSrc}
-                  size={33}
-                  onError={() => {
-                    // 头像加载失败时使用默认头像
-                    return false; // 阻止Antd Avatar的默认错误处理
-                  }}
-                />
-              </Tooltip>
+              <Avatar
+                className="header-avatar"
+                src={avatarSrc}
+                size={33}
+                onError={() => {
+                  // 头像加载失败时使用默认头像
+                  return false; // 阻止Antd Avatar的默认错误处理
+                }}
+              />
             </Dropdown>
           ) : (
             <Button type="primary" size="small" onClick={handleLogin}>
