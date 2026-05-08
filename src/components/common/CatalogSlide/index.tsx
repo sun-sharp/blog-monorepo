@@ -18,9 +18,7 @@ const CatalogSlide: React.FC<CatalogSlideProps> = ({ editorId, scrollElement, vi
 
   return (
     <>
-      {isVisible && (
-        <div className="catalog-slide-mask" onClick={onClose} />
-      )}
+      {isVisible && <div className="catalog-slide-mask" onClick={onClose} />}
       <div className={`catalog-slide-container ${visible ? 'active' : ''}`}>
         <div className="catalog-slide-content">
           <MdCatalog editorId={editorId} scrollElement={scrollElement} />

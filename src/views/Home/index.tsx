@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import AuthorIntro from '@/components/common/AuthorIntro';
 import './index.scss';
 import { useCallback, useEffect, useState } from 'react';
@@ -34,6 +33,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     loadArticle();
   }, [loadArticle]);
+
   return (
     <div className="home">
       <div className="home-main">

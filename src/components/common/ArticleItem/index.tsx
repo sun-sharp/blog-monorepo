@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import './index.scss';
 import { IArticleItemProps } from '/#/components/common';
 import { ApiArticleItem } from '/#/api/blog/article';
+import LockIcon from '@/components/icon/LockIcon';
 
 const ArticleItem: React.FC<IArticleItemProps> = ({ data }) => {
   const navigate = useNavigate();
@@ -11,6 +12,11 @@ const ArticleItem: React.FC<IArticleItemProps> = ({ data }) => {
         const linkTo = `/articleDetails/${item.articleId}`;
         return (
           <li key={item.articleId} className="article-item">
+            {item.isPrivate && (
+              <div className="item-private-icon">
+                <LockIcon />
+              </div>
+            )}
             <div className="item-cont">
               <div
                 className="item-cont--title"
