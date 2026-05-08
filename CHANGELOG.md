@@ -1,5 +1,10 @@
 # CHANGELOG bow-xxx
 
+## 2.3.1
+- 整合 lint 和 lint:ts 命令，统一验证 src、types 和根目录 ts/js/cjs 文件
+- 更新 lint-staged 配置，改用 eslint --fix 直接处理暂存文件
+- 分页切换时，数据刷新成功后才滚动到顶部
+
 ## 2.3.0
 - 添加CLAUDE.md文件，用AI来方便开发
 - 更新 react18 的最新的环境配置
