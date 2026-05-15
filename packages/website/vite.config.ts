@@ -98,8 +98,24 @@ export default defineConfig(({ command, mode }) => {
           replacement: pathResolve('src') + '/',
         },
         {
+          find: /\/#\/api\//,
+          replacement: pathResolve('../shared/types/api') + '/',
+        },
+        {
+          find: /\/#\/models\//,
+          replacement: pathResolve('../shared/types/models') + '/',
+        },
+        {
+          find: /\/#\/react\//,
+          replacement: pathResolve('../shared/types/react') + '/',
+        },
+        {
+          find: /\/#\/common\//,
+          replacement: pathResolve('../shared/types/common') + '/',
+        },
+        {
           find: /\/#\//,
-          replacement: pathResolve('../shared/types/website') + '/',
+          replacement: pathResolve('../shared/types/react') + '/',
         },
       ],
       dedupe: ['react', 'react-dom'],

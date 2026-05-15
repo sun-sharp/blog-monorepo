@@ -25,12 +25,16 @@
     /* Path */
     "baseUrl": ".",
     "paths": {
-      "/#/*": ["../shared/types/website/*"],
+      "/#/api/*": ["../shared/types/api/*"],
+      "/#/models/*": ["../shared/types/models/*"],
+      "/#/react/*": ["../shared/types/react/*"],
+      "/#/common/*": ["../shared/types/common/*"],
+      "/#/*": ["../shared/types/react/*"],
       "@/*": ["src/*"]
     },
     "forceConsistentCasingInFileNames": true,
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "../shared/types/website/**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "../shared/types/api/**/*.d.ts", "../shared/types/models/**/*.d.ts", "../shared/types/react/**/*.d.ts", "../shared/types/common/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

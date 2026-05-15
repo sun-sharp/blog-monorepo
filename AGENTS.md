@@ -31,12 +31,18 @@ cd packages/node-server && npm run start:dev
 ## 路径别名（所有项目统一）
 
 - `@/*` → `src/*`
-- `/#/*` → `packages/shared/types/{project-name}/*`
+- `/#/api/*` → `packages/shared/types/api/*` (共享 API 类型)
+- `/#/models/*` → `packages/shared/types/models/*` (数据库模型)
+- `/#/common/*` → `packages/shared/types/common/*` (共享基础类型)
 
-各项目自动映射到对应的 types 目录：
-- admin-web → `packages/shared/types/admin-web/`
-- website → `packages/shared/types/website/`
-- node-server → `packages/shared/types/node-server/`
+各项目特有的类型目录：
+- admin-web: `/#/vue/*` → `packages/shared/types/vue/*`
+- website: `/#/react/*` → `packages/shared/types/react/*`
+
+默认路径 `/#/*` 映射到各项目特有类型：
+- admin-web → `packages/shared/types/vue/`
+- website → `packages/shared/types/react/`
+- node-server → `packages/shared/types/models/`
 
 ## 关键注意事项
 

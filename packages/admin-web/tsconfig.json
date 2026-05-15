@@ -27,15 +27,21 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"],
-			"/#/*": ["../shared/types/admin-web/*"]
+			"/#/api/*": ["../shared/types/api/*"],
+			"/#/models/*": ["../shared/types/models/*"],
+			"/#/vue/*": ["../shared/types/vue/*"],
+			"/#/common/*": ["../shared/types/common/*"],
+			"/#/*": ["../shared/types/vue/*"]
 		}
 	},
 	"include": [
 		"src/**/*.ts",
 		"src/**/*.d.ts",
 		"src/**/*.vue",
-		"../shared/types/admin-web/**/*.d.ts",
-		"../shared/types/admin-web/**/*.ts",
+		"../shared/types/api/**/*.d.ts",
+		"../shared/types/models/**/*.d.ts",
+		"../shared/types/vue/**/*.d.ts",
+		"../shared/types/common/**/*.d.ts",
 		"build/**/*.ts",
 		"build/**/*.d.ts",
 		"mock/**/*.ts"

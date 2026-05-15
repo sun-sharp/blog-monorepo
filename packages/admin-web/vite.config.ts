@@ -95,8 +95,24 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: [
         {
+          find: /\/#\/api\//,
+          replacement: pathResolve('../shared/types/api') + '/',
+        },
+        {
+          find: /\/#\/models\//,
+          replacement: pathResolve('../shared/types/models') + '/',
+        },
+        {
+          find: /\/#\/vue\//,
+          replacement: pathResolve('../shared/types/vue') + '/',
+        },
+        {
+          find: /\/#\/common\//,
+          replacement: pathResolve('../shared/types/common') + '/',
+        },
+        {
           find: /\/#\//,
-          replacement: pathResolve('../shared/types/admin-web') + '/',
+          replacement: pathResolve('../shared/types/vue') + '/',
         },
         {
           find: '@',
