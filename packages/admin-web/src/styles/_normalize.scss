@@ -1,0 +1,118 @@
+@use '@/styles/variable.scss' as *;
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-color: currentcolor;
+  border-style: solid;
+  border-width: 0;
+}
+
+#app,
+body,
+html {
+  height: 100%;
+}
+
+body {
+  color: $font-color;
+  font-size: 14px;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '\5FAE\8F6F\96C5\9ED1', Arial, sans-serif;
+  line-height: 1.5;
+  background-color: $background-color;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: $theme-color;
+  text-decoration: none;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+a:active,
+a:hover {
+  text-decoration: none;
+  outline: 0;
+}
+
+a:hover {
+  color: $theme-color;
+}
+
+a:active {
+  color: $theme-color;
+}
+
+/* 滚动条凹槽的颜色，还可以设置边框属性 */
+*::-webkit-scrollbar-track-piece {
+  background-color: $scrollbar-track-piece-back-color;
+  border-radius: 2em;
+}
+
+/* 滚动条的宽度 */
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+/* 滚动条的设置 */
+*::-webkit-scrollbar-thumb {
+  background-color: $scrollbar-thumb-back-color;
+  background-clip: padding-box;
+  border-radius: 2em;
+}
+
+/* 滚动条鼠标移上去 */
+*::-webkit-scrollbar-thumb:hover {
+  background-color: $scrollbar-thumb-hover-back-color;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  border-style: solid;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

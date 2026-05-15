@@ -1,0 +1,253 @@
+import { h, unref, computed, ref, onMounted } from 'vue';
+import { imageApi } from '@/api';
+import { NButton, NImage, NPopconfirm } from 'naive-ui';
+import { CStrOption } from '/#/config';
+import { getImageSourceData, useApiType } from '@/hooks';
+import { BasicColumn, TablePaginationParams } from '/#/components/table';
+import { ApiImageItem, ApiImageSearchParams } from '/#/api/image';
+import { FormSchema } from '/#/components/form';
+
+export const useImageConfigure = () => {
+  // 处理只有图片文件的数据
+  const imageOnlyPublicModelRef = ref<Component>();
+
+  // 查询未使用的图片
+  const imageNotUseModelRef = ref<Component>();
+
+  const { getImageSourceOption } = useApiType();
+
+  /**
+   * 表格
+   *  */
+  const actionRef = ref<Component>();
+  // 获取接口数据
+  const searchParams = ref<ApiImageSearchParams>({});
+  const loadDataTable = async (pageParams: TablePaginationParams) => {
+    return await imageApi.getPage({ ...searchParams.value, ...pageParams });
+  };
+  // 刷新数据
+  const reloadTable = () => {
+    actionRef.value.reload();
+  };
+  // 配置
+  const tableRowKey = (row: ApiImageItem): string => row.imageId;
+
+  // 查询配置
+  const searchSchemas = computed<FormSchema[]>(() => [
+    {
+      field: 'name',
+      component: 'NInput',
+      label: '图片名称',
+      componentProps: {
+        placeholder: '请输入图片名称',
+      },
+    },
+    {
+      field: 'source',
+      component: 'NSelect',
+      label: '图片来源',
+      componentProps: {
+        defaultValue: '',
+        clearable: false,
+        placeholder: '请选择图片名称',
+        options: [{ value: '', label: '全部' }].concat(unref(getImageSourceOption)),
+      },
+    },
+  ]);
+
+  // 删除图片和数据
+  const removePublicAndData = (row: Recordable) => {
+    imageApi.removePublicAndData(row.imageId).then(() => {
+      reloadTable();
+    });
+  };
+  // 删除没有图片文件的数据
+  const removeData = (row: Recordable) => {
+    imageApi.removeData(row.imageId).then(() => {
+      reloadTable();
+    });
+  };
+  // 表格字段配置
+  const columns = computed<BasicColumn<ApiImageItem>[]>(() => [
+    {
+      title: '图片名称',
+      key: 'name',
+      align: 'center',
+    },
+    {
+      title: '图片展示',
+      key: 'url',
+      align: 'center',
+      width: 100,
+      render(row) {
+        return h(NImage, {
+          src: row.url,
+          alt: '图片文件不存在',
+        });
+      },
+    },
+    {
+      title: '图片全称',
+      key: 'fileName',
+      align: 'center',
+    },
+    {
+      title: '图片类型',
+      key: 'imageType',
+      align: 'center',
+    },
+    {
+      title: '图片来源',
+      key: 'source',
+      align: 'center',
+      render(row) {
+        const find = unref(getImageSourceOption).find((f: CStrOption) => f.value === row.source);
+        return find ? find.label : `*${row.source || ''}`;
+      },
+    },
+    {
+      title: '上传时间',
+      key: 'uploadTime',
+      align: 'center',
+    },
+    {
+      width: 220,
+      title: '操作',
+      key: 'action',
+      align: 'center',
+      fixed: 'right',
+      render(row) {
+        return row.imageId
+          ? [
+              row.exists
+                ? h(
+                    NPopconfirm,
+                    {
+                      negativeText: null,
+                      onPositiveClick: removePublicAndData.bind(null, row),
+                    },
+                    {
+                      trigger: () =>
+                        h(
+                          NButton,
+                          {
+                            class: 'mh-3',
+                            text: true,
+                            type: 'error',
+                          },
+                          {
+                            default: () => '删除图片和数据',
+                          }
+                        ),
+                      default: () => '是否确定删除',
+                    }
+                  )
+                : '',
+              !row.exists
+                ? h(
+                    NPopconfirm,
+                    {
+                      negativeText: null,
+                      onPositiveClick: removeData.bind(null, row),
+                    },
+                    {
+                      trigger: () =>
+                        h(
+                          NButton,
+                          {
+                            class: 'mh-3',
+                            type: 'error',
+                            text: true,
+                          },
+                          {
+                            default: () => '删除数据',
+                          }
+                        ),
+                      default: () => '是否确定删除',
+                    }
+                  )
+                : '',
+            ]
+          : '';
+      },
+    },
+  ]);
+
+  /**
+   * 表格按钮操作配置
+   *  */
+
+  // const actionColumn = reactive({
+  //   width: 200,
+  //   title: '操作',
+  //   key: 'action',
+  //   align: 'center',
+  //   fixed: 'right',
+  //   render(row: Recordable) {
+  //     return h(TableAction as any, {
+  //       style: 'button',
+  //       actions: [
+  //         {
+  //           label: '删除图片和数据',
+  //           type: 'error',
+  //           onClick: removePublicAndData.bind(null, row),
+  //           ifShow: () => {
+  //             return row.exists;
+  //           },
+  //         },
+  //         {
+  //           label: '删除数据',
+  //           type: 'error',
+  //           onClick: removeData.bind(null, row),
+  //           ifShow: () => {
+  //             return !row.exists;
+  //           },
+  //         },
+  //       ],
+  //       // 更多
+  //       /* dropDownActions: [
+  //         {
+  //           label: '启用',
+  //           key: 'enabled',
+  //           // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+  //           ifShow: () => {
+  //             return true;
+  //           },
+  //         },
+  //         {
+  //           label: '禁用',
+  //           key: 'disabled',
+  //           ifShow: () => {
+  //             return true;
+  //           },
+  //         },
+  //       ],
+  //       select: (key) => {
+  //         message.info(`您点击了，${key} 按钮`);
+  //       }, */
+  //     });
+  //   },
+  // });
+
+  // 数据查询
+  const searchSubmit = (values: ApiImageSearchParams) => {
+    searchParams.value = values;
+    reloadTable();
+  };
+
+  onMounted(() => {
+    getImageSourceData();
+  });
+
+  return {
+    imageOnlyPublicModelRef,
+    imageNotUseModelRef,
+    searchSchemas,
+    actionRef,
+    columns,
+    searchSubmit,
+    loadDataTable,
+    tableRowKey,
+    reloadTable,
+  };
+};
