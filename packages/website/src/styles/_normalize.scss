@@ -1,0 +1,69 @@
+@use './variable' as *;
+
+:root {
+  font-weight: 400;
+  font-size: 16px;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  box-sizing: border-box;
+  max-width: 100vw;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+*::-webkit-scrollbar {
+  width: $scrollbar-width;
+  height: 1px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: $theme-color;
+  background-image: linear-gradient(
+    45deg,
+    hsl(0deg 0% 100% / 50%) 25%,
+    transparent 0,
+    transparent 50%,
+    hsl(0deg 0% 100% / 50%) 0,
+    hsl(0deg 0% 100% / 50%) 75%,
+    transparent 0,
+    transparent
+  );
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ededed;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgb(0 0 0 / 20%);
+}
+
+ul,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a {
+  color: $theme-color;
+  text-decoration: none;
+}

@@ -1,0 +1,6 @@
+/* 在 1220px 或更小的屏幕上，从四列变为两列 */
+@media (width <= 1220px) {
+  .layout-main {
+    padding: 10px 20px 0;
+  }
+}

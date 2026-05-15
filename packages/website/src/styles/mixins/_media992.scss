@@ -1,0 +1,16 @@
+/* 在 992px 或更小的屏幕上，从四列变为两列 */
+@media (width <= 992px) {
+  .layout-header {
+    &-container .head-logo {
+      display: none;
+    }
+
+    &-container .header-right {
+      padding-right: 20px;
+
+      .header-avatar {
+        display: flex;
+      }
+    }
+  }
+}
