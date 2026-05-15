@@ -96,7 +96,7 @@ export default defineConfig(({ command, mode }) => {
       alias: [
         {
           find: /\/#\//,
-          replacement: pathResolve('types') + '/',
+          replacement: pathResolve('../shared/types/admin-web') + '/',
         },
         {
           find: '@',

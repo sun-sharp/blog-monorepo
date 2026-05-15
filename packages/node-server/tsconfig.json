@@ -16,17 +16,17 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  },
-  "paths": {
-    "@/*": "src/*",
-    "/#/*": "types/*"
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/*": ["src/*"],
+      "/#/*": ["../shared/types/node-server/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
-    "types/**/*.d.ts",
-    "types/**/*.ts"
+    "../shared/types/node-server/**/*.d.ts",
+    "../shared/types/node-server/**/*.ts"
   ],
   "exclude": [
     "node_modules",

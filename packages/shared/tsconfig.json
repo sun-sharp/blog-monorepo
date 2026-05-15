@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@admin-web/*": ["types/admin-web/*"],
+      "@website/*": ["types/website/*"],
+      "@node-server/*": ["types/node-server/*"]
+    }
+  },
+  "include": [
+    "types/**/*.ts",
+    "types/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}

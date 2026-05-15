@@ -99,7 +99,7 @@ export default defineConfig(({ command, mode }) => {
         },
         {
           find: /\/#\//,
-          replacement: pathResolve('types') + '/',
+          replacement: pathResolve('../shared/types/website') + '/',
         },
       ],
       dedupe: ['react', 'react-dom'],

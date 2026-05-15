@@ -27,15 +27,15 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"],
-			"/#/*": ["types/*"]
+			"/#/*": ["../shared/types/admin-web/*"]
 		}
 	},
 	"include": [
 		"src/**/*.ts",
 		"src/**/*.d.ts",
 		"src/**/*.vue",
-		"types/**/*.d.ts",
-		"types/**/*.ts",
+		"../shared/types/admin-web/**/*.d.ts",
+		"../shared/types/admin-web/**/*.ts",
 		"build/**/*.ts",
 		"build/**/*.d.ts",
 		"mock/**/*.ts"

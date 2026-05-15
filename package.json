@@ -1,0 +1,22 @@
+{
+  "name": "blog-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:website": "npm run dev --workspace=packages/website",
+    "dev:admin": "npm run dev --workspace=packages/admin-web",
+    "dev:server": "npm run start:dev --workspace=packages/node-server",
+    "build:website": "npm run build --workspace=packages/website",
+    "build:admin": "npm run build --workspace=packages/admin-web",
+    "build:server": "npm run build --workspace=packages/node-server",
+    "build:all": "npm run build:website && npm run build:admin && npm run build:server",
+    "lint:website": "npm run lint --workspace=packages/website",
+    "lint:admin": "npm run lint --workspace=packages/admin-web",
+    "lint:server": "npm run lint --workspace=packages/node-server",
+    "typecheck:shared": "npm run typecheck --workspace=packages/shared",
+    "typecheck:all": "npm run typecheck:shared && npm run lint:website && npm run lint:admin && npm run lint:server"
+  }
+}
