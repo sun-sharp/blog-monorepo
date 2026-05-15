@@ -1,0 +1,12 @@
+
+*.sh
+*.md
+*.woff
+*.ttf
+.vscode
+.idea
+dist
+dist_dev
+dist_prod
+node_modules
+documentation

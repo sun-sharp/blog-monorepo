@@ -1,0 +1,9 @@
+# compiled output
+/node_modules/**
+/dist/**
+/dist_dev/**
+/dist_prod/**
+/node_modules/**
+/documentation/**
+.vscode/**
+.idea/**
