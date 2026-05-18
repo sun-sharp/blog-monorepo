@@ -31,8 +31,9 @@ export const formatRequestDate = (params: Recordable) => {
       if (value) {
         try {
           params[key] = isString(value) ? value.trim() : value;
-        } catch (error: any) {
-          throw new Error(error);
+        } catch (error: unknown) {
+          console.error('Failed to trim value:', error);
+          throw error;
         }
       }
     }
@@ -54,15 +55,12 @@ export const formatRequestDate = (params: Recordable) => {
  */
 export const setObjToUrlParams = (baseUrl: string, obj: { [x: string]: string }): string => {
   let parameters = '';
-  let url = '';
   for (const key in obj) {
     parameters += key + '=' + encodeURIComponent(obj[key]) + '&';
   }
   parameters = parameters.replace(/&$/, '');
   if (/\?$/.test(baseUrl)) {
-    url = baseUrl + parameters;
-  } else {
-    url = baseUrl.replace(/\/?$/, '?') + parameters;
+    return baseUrl + parameters;
   }
-  return url;
+  return baseUrl.replace(/\/?$/, '?') + parameters;
 };

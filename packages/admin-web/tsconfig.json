@@ -1,11 +1,14 @@
 {
-	"compilerOptions": {
-		"target": "ES2020",
+  "compilerOptions": {
+    "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "skipLibCheck": true,
-
     /* Bundler模式 */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -13,7 +16,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": false,
@@ -21,32 +23,51 @@
     "noFallthroughCasesInSwitch": true,
     "skipDefaultLibCheck": true,
     "ignoreDeprecations": "6.0",
-
     /* 链接 url */
     "outDir": "./",
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["src/*"],
-			"/#/api/*": ["../shared/types/api/*"],
-			"/#/models/*": ["../shared/types/models/*"],
-			"/#/vue/*": ["../shared/types/vue/*"],
-			"/#/common/*": ["../shared/types/common/*"],
-			"/#/*": ["../shared/types/vue/*"]
-		}
-	},
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.d.ts",
-		"src/**/*.vue",
-		"../shared/types/api/**/*.d.ts",
-		"../shared/types/models/**/*.d.ts",
-		"../shared/types/vue/**/*.d.ts",
-		"../shared/types/common/**/*.d.ts",
-		"build/**/*.ts",
-		"build/**/*.d.ts",
-		"mock/**/*.ts"
-	],
-	"exclude": ["node_modules", "manage", "dist", "**/*.js"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "/#/api/*": [
+        "../shared/types/api/*"
+      ],
+      "/#/models/*": [
+        "../shared/types/models/*"
+      ],
+      "/#/vue/*": [
+        "../shared/types/vue/*"
+      ],
+      "/#/common/*": [
+        "../shared/types/common/*"
+      ],
+      "/#/*": [
+        "../shared/types/vue/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "../shared/types/api/**/*.d.ts",
+    "../shared/types/models/**/*.d.ts",
+    "../shared/types/vue/**/*.d.ts",
+    "../shared/types/common/**/*.d.ts",
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+    "mock/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "manage",
+    "dist",
+    "**/*.js"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }
-

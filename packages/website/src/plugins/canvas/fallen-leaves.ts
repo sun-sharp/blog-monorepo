@@ -622,7 +622,7 @@ export const fallenLeavesAnimation = () => {
     //particles
     const PI2 = Math.PI * 2.0;
     const tmpV3 = Vector3.create(0, 0, 0);
-    let tmp_v = 0;
+    let tmp_v;
     const symmetryRand = function () {
       return Math.random() * 2.0 - 1.0;
     };

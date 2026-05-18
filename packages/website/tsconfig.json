@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     "ignoreDeprecations": "6.0",
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -15,26 +20,51 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
     /* Path */
     "baseUrl": ".",
     "paths": {
-      "/#/api/*": ["../shared/types/api/*"],
-      "/#/models/*": ["../shared/types/models/*"],
-      "/#/react/*": ["../shared/types/react/*"],
-      "/#/common/*": ["../shared/types/common/*"],
-      "/#/*": ["../shared/types/react/*"],
-      "@/*": ["src/*"]
+      "/#/api/*": [
+        "../shared/types/api/*"
+      ],
+      "/#/models/*": [
+        "../shared/types/models/*"
+      ],
+      "/#/react/*": [
+        "../shared/types/react/*"
+      ],
+      "/#/common/*": [
+        "../shared/types/common/*"
+      ],
+      "/#/*": [
+        "../shared/types/react/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
     },
     "forceConsistentCasingInFileNames": true,
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "../shared/types/api/**/*.d.ts", "../shared/types/models/**/*.d.ts", "../shared/types/react/**/*.d.ts", "../shared/types/common/**/*.d.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "../shared/types/api/**/*.d.ts",
+    "../shared/types/models/**/*.d.ts",
+    "../shared/types/react/**/*.d.ts",
+    "../shared/types/common/**/*.d.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }
