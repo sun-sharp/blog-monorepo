@@ -4,7 +4,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { IResponse } from 'types/common';
+import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { BillUpload } from 'src/schemas/blog/money/bill-upload.schema';
 import { CreateBillUploadDto } from './dto/create-bill-upload.dto';

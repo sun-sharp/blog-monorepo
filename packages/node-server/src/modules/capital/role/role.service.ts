@@ -19,8 +19,8 @@ import {
   ApiSwaggerJsonMode,
   ApiSwaggerJsonPathsUrlMethod,
   ApiSwaggerJsonResult,
-} from 'types/capital/role';
-import { IResponse } from 'types/common';
+} from '/#/models/capital/role';
+import { IResponse } from '/#/common/common';
 
 const customConfig = useCustomConfig();
 const { capitalDatabaseName } = customConfig;

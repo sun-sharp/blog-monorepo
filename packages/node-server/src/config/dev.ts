@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { storeDirStr } from 'src/common/constant/config';
 import { createStoreDir } from 'src/common/fs-mkdir';
-import { DatabaseConfig, GlobalEnvConfig } from 'types/config';
+import { DatabaseConfig, GlobalEnvConfig } from '/#/models/config';
 
 // 获取数据库配置文件信息
 createStoreDir();

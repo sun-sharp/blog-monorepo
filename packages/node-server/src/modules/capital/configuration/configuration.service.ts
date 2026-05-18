@@ -6,8 +6,8 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { Configuration } from 'src/schemas/capital/configuration.schema';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
-import { ApiConfiguration } from 'types/capital/configuration';
-import { IResponse } from 'types/common';
+import { ApiConfiguration } from '/#/models/capital/configuration';
+import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 

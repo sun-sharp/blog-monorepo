@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "configurations": [
     {
-      "name": "run dev",
+      "name": "node_server_dev",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -15,14 +15,14 @@
       },
       "runtimeArgs": [
         "run",
-        "start:dev_watch_debug"
+        "start:dev:watch:server"
       ],
       "console": "integratedTerminal",
       "restart": true,
       "autoAttachChildProcesses": true
     },
     {
-      "name": "run prod",
+      "name": "node_server_prod",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -32,7 +32,7 @@
       },
       "runtimeArgs": [
         "run",
-        "start:prod_watch_debug"
+        "start:prod:watch:server"
       ],
       "console": "integratedTerminal",
       "restart": true,

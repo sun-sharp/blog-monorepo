@@ -1,3 +1,8 @@
 node_modules
 
 **/package-lock.json
+
+# 后端密码账号数据
+packages/api_store_dir/
+packages/api_static_dir/
+packages/api_dev_static_dir/

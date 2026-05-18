@@ -7,8 +7,14 @@
   ],
   "scripts": {
     "dev:website": "npm run dev --workspace=packages/website",
+    "dev:prod:website": "npm run dev:prod --workspace=packages/website",
     "dev:admin": "npm run dev --workspace=packages/admin-web",
-    "dev:server": "npm run start:dev --workspace=packages/node-server",
+    "dev:text:admin": "npm run dev:text --workspace=packages/admin-web",
+    "dev:prod:admin": "npm run dev:prod --workspace=packages/admin-web",
+    "start:dev:server": "npm run start:dev --workspace=packages/node-server",
+    "start:dev:watch:server": "npm run start:dev_watch_debug --workspace=packages/node-server",
+    "start:prod:server": "npm run start:prod --workspace=packages/node-server",
+    "start:prod:watch:server": "npm run start:prod_watch_debug --workspace=packages/node-server",
     "build:website": "npm run build --workspace=packages/website",
     "build:admin": "npm run build --workspace=packages/admin-web",
     "build:server": "npm run build --workspace=packages/node-server",
@@ -16,7 +22,12 @@
     "lint:website": "npm run lint --workspace=packages/website",
     "lint:admin": "npm run lint --workspace=packages/admin-web",
     "lint:server": "npm run lint --workspace=packages/node-server",
-    "typecheck:shared": "npm run typecheck --workspace=packages/shared",
-    "typecheck:all": "npm run typecheck:shared && npm run lint:website && npm run lint:admin && npm run lint:server"
+    "lint:stylelint:website": "npm run lint:stylelint --workspace=packages/website",
+    "lint:stylelint:admin": "npm run lint:stylelint --workspace=packages/admin-web",
+    "reinstall:website": "npm run reinstall --workspace=packages/website",
+    "reinstall:admin": "npm run reinstall --workspace=packages/admin-web",
+    "reinstall:server": "npm run reinstall --workspace=packages/node-server",
+    "reinstall:all": "npm run reinstall:website && npm run reinstall:admin && npm run reinstall:server",
+    "typecheck:shared": "npm run typecheck --workspace=packages/shared"
   }
 }

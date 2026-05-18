@@ -7,7 +7,7 @@ import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
 import { Request } from 'express';
-import { UploadedImage } from 'types/capital/image';
+import { UploadedImage } from '/#/models/capital/image';
 
 @Controller('image')
 @ApiTags('图片')

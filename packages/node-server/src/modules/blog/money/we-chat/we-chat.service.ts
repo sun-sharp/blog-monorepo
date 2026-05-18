@@ -10,8 +10,8 @@ import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto'
 import { PageWeChatDto } from './dto/page-we-chat.dto';
 import { UpdateWeChatDto } from './dto/update-we-chat.dto';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
-import { ApiWeChatItem, ApiWeChatUpload } from 'types/blog/money/we-chat';
-import { IResponse } from 'types/common';
+import { ApiWeChatItem, ApiWeChatUpload } from '/#/models/blog/money/we-chat';
+import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
 import { isDateFormat, nowDateFun } from 'src/common/date';

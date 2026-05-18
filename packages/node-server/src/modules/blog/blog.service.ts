@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { logger } from 'src/common/journal';
-import { IResponse } from 'types/common';
 import { ArticleService } from './article/article.service';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { MoneyService } from './money/money.service';
 import { createStoreDir } from 'src/common/fs-mkdir';
 import { storeDirStr } from 'src/common/constant/config';
 import { useCustomConfig } from 'src/config';
+import { IResponse } from '/#/common/common';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;

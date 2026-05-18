@@ -10,10 +10,10 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
-import { ApiImageItem, ApiImage, UploadedImage } from 'types/capital/image';
+import { ApiImageItem, ApiImage, UploadedImage } from '/#/models/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
-import { IResponse } from 'types/common';
+import { IResponse } from '/#/common/common';
 
 const customConfig = useCustomConfig();
 const { capitalDatabaseName, fileAccessPath, staticDirPosition, staticDirName } = customConfig;

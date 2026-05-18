@@ -1,4 +1,4 @@
-import { GlobalEnvConfig } from 'types/config';
+import { GlobalEnvConfig } from '/#/models/config';
 import devConfig from './dev';
 import prodConfig from './prod';
 import * as dotenv from 'dotenv';

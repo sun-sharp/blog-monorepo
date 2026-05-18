@@ -6,8 +6,8 @@ import { Menu } from 'src/schemas/capital/menu.schema';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { menuFindAllDto } from './dto/menu-find-all-dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
-import { ApiMenuItem } from 'types/capital/menu';
-import { IResponse } from 'types/common';
+import { ApiMenuItem } from '/#/models/capital/menu';
+import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 

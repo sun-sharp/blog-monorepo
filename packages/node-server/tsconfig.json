@@ -9,7 +9,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "ignoreDeprecations": "6.0",
+    "resolveJsonModule": true,
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -21,8 +21,7 @@
     "paths": {
       "@/*": ["src/*"],
       "/#/models/*": ["../shared/types/models/*"],
-      "/#/common/*": ["../shared/types/common/*"],
-      "/#/*": ["../shared/types/models/*"]
+      "/#/common/*": ["../shared/types/common/*"]
     }
   },
   "include": [

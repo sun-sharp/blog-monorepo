@@ -13,8 +13,8 @@ import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { RoleService } from '../role/role.service';
-import { ApiUserInfo, ApiUserItem } from 'types/capital/user';
-import { IResponse } from 'types/common';
+import { ApiUserInfo, ApiUserItem } from '/#/models/capital/user';
+import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
 
