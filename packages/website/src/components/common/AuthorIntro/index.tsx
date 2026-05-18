@@ -1,6 +1,6 @@
 import { Avatar } from 'antd';
 import './index.scss';
-import { IAuthorIntroProp } from '/#/components/common';
+import { IAuthorIntroProp } from '/#/react/components/common';
 import headSculptureImage from '@/assets/head_sculpture.jpg';
 import { VITE_APP_SHORT_NAME } from '@/constants';
 import { storage } from '@/utils';

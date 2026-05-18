@@ -26,7 +26,7 @@ export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
     }
   }
 
-  handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
+  handleRequest(err: any, user: any) {
     // 对于可选认证，无论是否有错误或用户，都允许访问
     // 如果有错误或没有用户，返回null（表示未登录）
     if (err || !user) {

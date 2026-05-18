@@ -1,6 +1,6 @@
 import { AxiosBlog } from '@/api/axios';
-import { PaginateParams } from '/#/axios';
-import { TablePaginationResult } from '/#/components/table';
+import { PaginateParams } from '/#/common/axios';
+import { TablePaginationResult } from '/#/react/components/table';
 import { ApiArticleItem } from '/#/api/blog/article';
 
 const basic = '/article';

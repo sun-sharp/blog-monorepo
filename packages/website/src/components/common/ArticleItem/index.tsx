@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
-import { IArticleItemProps } from '/#/components/common';
+import { IArticleItemProps } from '/#/react/components/common';
 import { ApiArticleItem } from '/#/api/blog/article';
 import LockIcon from '@/components/icon/LockIcon';
 
