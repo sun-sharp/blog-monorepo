@@ -9,6 +9,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
+    "ignoreDeprecations": "6.0",
     "resolveJsonModule": true,
     "baseUrl": "./",
     "incremental": true,
