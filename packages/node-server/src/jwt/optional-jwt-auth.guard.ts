@@ -20,7 +20,7 @@ export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
     // 使用try-catch包装，防止验证失败时抛出异常
     try {
       return super.canActivate(context);
-    } catch (err) {
+    } catch {
       // 如果JWT验证失败，仍然允许访问（作为未登录用户）
       return true;
     }

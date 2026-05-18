@@ -47,7 +47,9 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
         if (typeof cellVal === 'string' && cellVal.search(reg) > 0) {
           cellVal = cellVal.replace(reg, '');
         }
-        cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
+        if (cellHandler[cellNumber]) {
+          cellHandler[cellNumber](target, cellVal);
+        }
       });
       if (typeof targetHandler === 'function') targetHandler(target);
       result.push(target);
@@ -76,7 +78,9 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
         if (typeof cellVal === 'string' && cellVal.search(reg) > 0) {
           cellVal = cellVal.replace(reg, '');
         }
-        cellHandler[cellNumber] && cellHandler[cellNumber](target, cellVal);
+        if (cellHandler[cellNumber]) {
+          cellHandler[cellNumber](target, cellVal);
+        }
       });
       if (typeof targetHandler === 'function') targetHandler(target);
       result.push(target);
