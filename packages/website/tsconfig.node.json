@@ -7,5 +7,5 @@
     "allowSyntheticDefaultImports": true,
     "ignoreDeprecations": "6.0"
   },
-  "include": ["vite.config.ts", "types/global.d.ts", "package.json"]
+  "include": ["vite.config.ts", "../shared/types/react/global.d.ts", "package.json"]
 }
