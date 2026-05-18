@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 import { useApiTypeStore } from '@/store';
 import { arrEnumToObj } from '@/utils';
-import { CNumOption, CStrOption } from '/#/config';
+import { CNumOption, CStrOption } from '/#/common/config';
 
 export const useApiType = () => {
   const apiTypeStore = useApiTypeStore();

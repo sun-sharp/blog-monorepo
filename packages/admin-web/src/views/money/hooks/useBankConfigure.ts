@@ -3,7 +3,7 @@ import { computed, h, onMounted, ref, unref } from 'vue';
 import { FormSchema } from '/#/components/form';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { ApiBankItem, ApiBankSearchParams } from '/#/api/bank';
-import { CNumOption } from '/#/config';
+import { CNumOption } from '/#/common/config';
 import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { NButton, NPopconfirm } from 'naive-ui';
 import { bankApi } from '@/api';

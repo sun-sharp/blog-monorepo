@@ -5,7 +5,7 @@ import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { FormSchema } from '/#/components/form';
 import { ApiAliPayItem, ApiAliPaySearchParams } from '/#/api/ali-pay';
-import { CNumOption } from '/#/config';
+import { CNumOption } from '/#/common/config';
 import { BalanceDateRangeType } from '/#/views/money';
 import { ApiStartEndTimeParams } from '/#/api/common';
 import { NButton } from 'naive-ui';

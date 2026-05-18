@@ -5,7 +5,7 @@ import { useApiType } from '@/hooks';
 import { BasicColumn } from '/#/components/table';
 import { NImage } from 'naive-ui';
 import { getImgUrl } from '@/utils';
-import { CStrOption } from '/#/config';
+import { CStrOption } from '/#/common/config';
 
 // 查询未使用的图片弹窗
 export const useImageNotUseModel = (emit: (event: 'refresh', ...args: any[]) => void) => {

@@ -2,7 +2,7 @@ import { useApiType } from '@/hooks';
 import { computed, h, ref, unref } from 'vue';
 import { BasicColumn } from '/#/components/table';
 import { ApiBankBase, ApiBankBatchSaveItem } from '/#/api/bank';
-import { CNumOption } from '/#/config';
+import { CNumOption } from '/#/common/config';
 import { inflowOrOutflowOption, voucherTypeMap } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';
 import { bankApi } from '@/api';

@@ -5,10 +5,10 @@ import { ApiWeChatItem, ApiWeChatSearchParams } from '/#/api/we-chat';
 import { weChatApi } from '@/api';
 import { FormSchema } from '/#/components/form';
 import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
-import { CNumOption } from '/#/config';
 import { BalanceDateRangeType } from '/#/views/money';
 import { ApiStartEndTimeParams } from '/#/api/common';
 import { NButton } from 'naive-ui';
+import { CNumOption } from '/#/common/config';
 
 // 微信账单
 export const useWeChatConfigure = () => {

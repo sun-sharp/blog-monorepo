@@ -4,7 +4,7 @@ import { useApiType } from '@/hooks';
 import { ApiBankItem } from '/#/api/bank';
 import { FormItemRule } from 'naive-ui';
 import { bankApi } from '@/api';
-import { CNumOption } from '/#/config';
+import { CNumOption } from '/#/common/config';
 
 const modelFields = {
   tradeTime: '',

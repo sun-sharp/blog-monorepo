@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import at from 'await-to-js';
 import { categoryApi } from '@/api';
-import { CNumOption, CStrOption } from '/#/config';
+import { CNumOption, CStrOption } from '/#/common/config';
 import { categoryTypeEnum } from '@/constant';
 
 export type IApiTypeState = {

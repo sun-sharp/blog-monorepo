@@ -5,7 +5,7 @@ import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { articleAPi } from '@/api';
 import { FormSchema } from '/#/components/form';
 import { NButton, NPopconfirm, useMessage } from 'naive-ui';
-import { CNumOption } from '/#/config';
+import { CNumOption } from '/#/common/config';
 
 // 文章管理
 export const useArticleConfigure = () => {
