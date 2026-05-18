@@ -1,6 +1,6 @@
 /*
  * @Author: YangRuiRui
- * @LastEditTime: 2023-12-05 13:49:56
+ * @LastEditTime: 2026-05-16 09:14:25
  * @Description: 项目配置
  */
 
@@ -10,8 +10,8 @@ import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
 import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
 import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
 import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
-import { CTypeOption } from '/#/config';
 import { ThemeCommonVars } from 'naive-ui';
+import { CTypeOption } from '/#/common/config';
 
 // 默认layout的高度和宽度
 export const defaultLayoutSize = {

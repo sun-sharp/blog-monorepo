@@ -1,9 +1,9 @@
 import { nextTick, reactive, ref } from 'vue';
 import { UserItemForm } from '/#/api/user';
 import { FormItemRule } from 'naive-ui';
-import { CStrOption } from '/#/config';
 import { getImgUrl } from '@/utils';
 import { capitalApi, roleApi, userApi } from '@/api';
+import { CStrOption } from '/#/common/config';
 
 // 用户管理 新建/修改 传参
 // export const UserAddUpdateModelProps = {};

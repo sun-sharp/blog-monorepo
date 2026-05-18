@@ -1,10 +1,10 @@
 import { useUserStoreWidthOut } from '@/store';
 import axios, { AxiosHeaderValue, AxiosInstance, AxiosResponse, HeadersDefaults } from 'axios';
-import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/axios';
 import { formatRequestDate, isEmpty, isString, joinTimestamp } from '@/utils';
 import { RESULT_ENUM } from '@/constant';
 import { checkStatus } from './checkStatus';
 import { VNodeChild } from 'vue';
+import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/common/axios';
 
 const win: WindowConfig = window;
 

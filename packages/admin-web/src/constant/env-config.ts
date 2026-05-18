@@ -1,5 +1,4 @@
-// 环境变量
-import type { GlobConfig } from '/#/config';
+import { GlobConfig } from '/#/common/config';
 
 export const getAppEnvConfig = (): Readonly<GlobConfig> => {
   const ENV = import.meta.env as unknown as ViteEnv;
