@@ -11,7 +11,7 @@ import {
 } from '@/api';
 import { UserState } from '/#/store';
 import { ApiCapitalLoginData, ApiCapitalLoginResult } from '/#/api/capital';
-import { ApiUserInfo } from '/#/api/user';
+import { ApiUserInfo } from '/#/api/capital/user';
 import { ApiResponse } from '/#/api/common';
 import { ApiConfigInfo } from '/#/api/configuration';
 

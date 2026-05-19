@@ -2,7 +2,7 @@ import { toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { RouteState } from '/#/store';
-import { ApiUserInfo } from '/#/api/user';
+import { ApiUserInfo } from '/#/api/capital/user';
 import { capitalApi } from '@/api';
 import at from 'await-to-js';
 import { constantRouterIcon, formatTrendsMenus, isHttpUrl, routerScreen } from '@/utils';

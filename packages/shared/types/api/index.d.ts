@@ -8,7 +8,7 @@ export * from './image';
 export * from './capital/menu';
 export * from './money';
 export * from './role';
-export * from './user';
+export * from './capital/user';
 export * from './wait-for-do';
 export * from './we-chat';
 export * from './blog/article';

@@ -1,5 +1,5 @@
 import { nextTick, reactive, ref } from 'vue';
-import { UserItemForm } from '/#/api/user';
+import { UserItemForm } from '/#/api/capital/user';
 import { FormItemRule } from 'naive-ui';
 import { getImgUrl } from '@/utils';
 import { capitalApi, roleApi, userApi } from '@/api';

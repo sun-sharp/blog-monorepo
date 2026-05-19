@@ -26,7 +26,7 @@
   import { useUserStore } from '@/store';
   import { getImgUrl } from '@/utils';
   import { userApi } from '@/api';
-  import { UserUpdateUserInfoForm } from '/#/api/user';
+  import { UserUpdateUserInfoForm } from '/#/api/capital/user';
 
   const modelFromRef = ref();
   const message = useMessage();

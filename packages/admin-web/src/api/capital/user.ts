@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiUserInfo, ApiUserItem, ApiUserPageData, ApiUserUpdateRoleCodeData, ApiUserUpdateUserInfoData, UserUpdateUserPassword } from '/#/api/user';
+import { ApiUserInfo, ApiUserItem, ApiUserPageData, ApiUserUpdateRoleCodeData, ApiUserUpdateUserInfoData, UserUpdateUserPassword } from '/#/api/capital/user';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/user';

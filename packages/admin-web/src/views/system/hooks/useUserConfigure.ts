@@ -4,7 +4,7 @@ import { capitalApi, userApi } from '@/api';
 import { NAvatar, NButton, NPopconfirm } from 'naive-ui';
 import { getImgUrl } from '@/utils';
 import { FormSchema } from '/#/components/form';
-import { ApiUserItem, ApiUserSearchParams } from '/#/api/user';
+import { ApiUserItem, ApiUserSearchParams } from '/#/api/capital/user';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 
 export const useUserConfigure = () => {
