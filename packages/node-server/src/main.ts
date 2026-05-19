@@ -53,7 +53,7 @@ const desc = `我的测试博客API \n\n swagger的JSON文件：/${fileAccessPat
       }
       return app;
     })
-    // 配置 public 文件夹为静态目录，以达到可直接访问下面文件的目的
+    // 配置 rootDir 文件夹为静态目录，以达到可直接访问下面文件的目的
     .then((app) => {
       const rootDir = join(__dirname, `../${staticDirPosition}`);
       app.use(`/${fileAccessPath}`, express.static(join(rootDir, staticDirName)));
