@@ -16,7 +16,7 @@ import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { setAuthorSlideVisible } from '@/store/modules/common';
 import { storage } from '@/utils';
-import { ACCESS_TOKEN, CURRENT_USER, USER_CONFIG } from '@/constants/storage-name';
+import { ACCESS_TOKEN, CURRENT_USER, USER_CONFIG } from '@/constants';
 import { getImgUrl } from '@shared/utils/files';
 
 // 用户数据类型定义

@@ -2,9 +2,8 @@ import { Avatar } from 'antd';
 import './index.scss';
 import { IAuthorIntroProp } from '/#/react/components/common';
 import headSculptureImage from '@/assets/head_sculpture.jpg';
-import { VITE_APP_SHORT_NAME } from '@/constants';
+import { VITE_APP_SHORT_NAME, CURRENT_USER } from '@/constants';
 import { storage } from '@/utils';
-import { CURRENT_USER } from '@/constants/storage-name';
 import { useEffect, useState } from 'react';
 import { getImgUrl } from '@shared/utils/files';
 

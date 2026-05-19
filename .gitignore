@@ -2,6 +2,9 @@ node_modules
 
 **/package-lock.json
 
+# TypeScript 构建缓存（可重新生成）
+*.tsbuildinfo
+
 # 后端密码账号数据
 packages/api_store_dir/
 packages/api_static_dir/

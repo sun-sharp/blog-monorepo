@@ -1,9 +1,8 @@
-import { ResultEnum, VITE_API_URL_PREFIX, VITE_AUTHORIZATION_HEAD } from '@/constants';
+import { ResultEnum, VITE_API_URL_PREFIX, VITE_AUTHORIZATION_HEAD, ACCESS_TOKEN } from '@/constants';
 import { checkStatus } from './checkStatus';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { CreateAxiosOptions, CustomAxiosConfig, CustomAxiosRequest, RequestOptions, ResponseOptions } from '/#/common/axios';
 import { formatRequestDate, isEmpty, isString, joinTimestamp, storage } from '@/utils';
-import { ACCESS_TOKEN } from '@/constants/storage-name';
 
 const urlPrefix = VITE_API_URL_PREFIX || '';
 

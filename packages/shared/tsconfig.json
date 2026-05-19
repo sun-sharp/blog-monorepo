@@ -11,6 +11,7 @@
     "noEmit": false,
     "emitDeclarationOnly": true,
     "declaration": true,
+    "declarationDir": "./types",
     "declarationMap": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
@@ -29,5 +30,5 @@
     "index.d.ts",
     "src/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "types/src"]
 }

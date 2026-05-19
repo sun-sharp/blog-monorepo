@@ -1,4 +1,4 @@
-export * from './storage-name';
+export * from '@shared/constants/storage-name';
 export * from './http-const';
 export * from './page-const';
 export * from './env-config';

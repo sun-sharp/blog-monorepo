@@ -5,7 +5,7 @@ import { setAuthorSlideVisible } from '@/store/modules/common';
 import AuthorIntro from '../AuthorIntro';
 import './index.scss';
 import { storage } from '@/utils';
-import { CURRENT_USER } from '@/constants/storage-name';
+import { CURRENT_USER } from '@/constants';
 
 const AuthorIntroSlide: React.FC = () => {
   const dispatch = useDispatch();
