@@ -2,7 +2,7 @@ import { h, ref } from 'vue';
 import { roleTypeObj } from '@/constant';
 import { roleApi } from '@/api';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
-import { ApiRoleItem, ApiRoleSearchParams } from '/#/api/role';
+import { ApiRoleItem, ApiRoleSearchParams } from '/#/api/capital/role';
 import { NButton, NPopconfirm } from 'naive-ui';
 import { FormSchema } from '/#/components/form';
 

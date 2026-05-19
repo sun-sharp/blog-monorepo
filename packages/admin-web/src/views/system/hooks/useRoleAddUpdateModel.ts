@@ -1,7 +1,7 @@
 import { nextTick, reactive, ref } from 'vue';
 import { RoleItemForm, RoleItemFormRules } from '/#/views/role';
 import { menuApi, roleApi } from '@/api';
-import { ApiSwaggerJsonResult } from '/#/api/role';
+import { ApiSwaggerJsonResult } from '/#/api/capital/role';
 import { levelMenu } from '@/utils';
 
 // 默认表单

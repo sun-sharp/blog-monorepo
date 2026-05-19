@@ -7,7 +7,7 @@ export * from './configuration';
 export * from './image';
 export * from './capital/menu';
 export * from './money';
-export * from './role';
+export * from './capital/role';
 export * from './capital/user';
 export * from './wait-for-do';
 export * from './we-chat';

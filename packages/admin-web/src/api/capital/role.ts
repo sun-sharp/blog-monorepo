@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiRoleItem, ApiRolePageData, ApiRoleSaveData, ApiRoleUpdateData, ApiSwaggerJsonAllAssociateResult } from '/#/api/role';
+import { ApiRoleItem, ApiRolePageData, ApiRoleSaveData, ApiRoleUpdateData, ApiSwaggerJsonAllAssociateResult } from '/#/api/capital/role';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/role';

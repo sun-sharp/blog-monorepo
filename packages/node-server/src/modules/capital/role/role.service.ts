@@ -19,7 +19,7 @@ import {
   ApiSwaggerJsonMode,
   ApiSwaggerJsonPathsUrlMethod,
   ApiSwaggerJsonResult,
-} from '/#/models/capital/role';
+} from '/#/api/capital/role';
 import { IResponse } from '/#/common/common';
 
 const customConfig = useCustomConfig();
