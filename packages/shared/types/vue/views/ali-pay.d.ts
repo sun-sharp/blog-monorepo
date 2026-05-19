@@ -1,10 +1,15 @@
 import { FormItemRule } from 'naive-ui';
-import { ApiAliPayBase, ApiAliPayCreate } from '/#/api/ali-pay';
 
 /**
  * @description:  支付宝账单 编辑表单 输入参数
  */
-export interface AliPayItemForm extends ApiAliPayBase, ApiAliPayCreate {
+export interface AliPayItemForm {
+  tradeTime: string;
+  tradeType: string;
+  tradeOtherPerson: string;
+  tradeOtherPersonRemarks: string;
+  productDescription: string;
+  incomeOrPay: string;
   moneyAmount: number | null;
   otherCost: number | null;
   inflowOrOutflow: number | null;
@@ -12,6 +17,10 @@ export interface AliPayItemForm extends ApiAliPayBase, ApiAliPayCreate {
   billMethod: number | null;
   balance?: number;
   balanceBaby?: number;
+  paymentMethod: string;
+  oppositeAccount: string;
+  explain: string;
+  place: string;
 }
 
 /**

@@ -1,0 +1,27 @@
+export declare const is: (val: unknown, type: string) => boolean;
+export declare const isFunction: (val: unknown) => boolean;
+export declare const isDef: <T = unknown>(val?: T) => val is T;
+export declare const isUnDef: <T = unknown>(val?: T) => val is T;
+export declare const isObject: (val: unknown) => val is Record<any, any>;
+export declare function isDate(val: unknown): boolean;
+export declare const isDateFormat: (time: string) => boolean;
+export declare function isNumber(val: unknown): boolean;
+export declare function isAsyncFunction(val: unknown): boolean;
+export declare function isPromise(val: any): boolean;
+export declare function isString(val: unknown): val is string;
+export declare function isBoolean(val: unknown): boolean;
+export declare function isArray(val: unknown): boolean;
+export declare const isClient: () => boolean;
+export declare const isWindow: (val: unknown) => boolean;
+export declare const isElement: (val: any) => boolean;
+export declare const isServer: boolean;
+export declare const isImageDom: (o: Element) => boolean;
+export declare const isNull: (val: unknown) => val is null;
+export declare const isNullAndUnDef: (val: unknown) => boolean;
+export declare const isNullOrUnDef: (val: unknown) => boolean;
+export declare const isEmpty: (val: unknown) => boolean;
+export declare const isHttpUrl: (val: string) => boolean;
+export declare const isMobile: () => boolean;
+export declare const isJsonString: (str: string) => boolean;
+export declare const isNumberString: (str: string) => boolean;
+//# sourceMappingURL=is.d.ts.map

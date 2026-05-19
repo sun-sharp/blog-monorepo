@@ -1,13 +1,24 @@
 import { FormItemRule } from 'naive-ui';
-import { ApiBankBase, ApiBankCreate } from '/#/api/bank';
 
 /**
  * @description:  银行账单 编辑表单 输入参数
  */
-export interface BankItemForm extends ApiBankBase, ApiBankCreate {
-  inflowOrOutflow: number | null;
+export interface BankItemForm {
+  tradeTime: string;
+  tradeType: string;
   bankType: number | null;
   voucherType: number | null;
+  voucherNo: string;
+  tradeOtherPerson: string;
+  tradeOtherPersonAccount: string;
+  tradeOtherPersonRemarks: string;
+  incomeOrPay: string;
+  moneyAmount: number;
+  balance: number;
+  otherCost: number;
+  explain: string;
+  place: string;
+  inflowOrOutflow: number | null;
   bankBillType: number | null;
 }
 

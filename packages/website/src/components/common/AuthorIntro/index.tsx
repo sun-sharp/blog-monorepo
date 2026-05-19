@@ -6,7 +6,7 @@ import { VITE_APP_SHORT_NAME } from '@/constants';
 import { storage } from '@/utils';
 import { CURRENT_USER } from '@/constants/storage-name';
 import { useEffect, useState } from 'react';
-import { getImgUrl } from '@/utils/files';
+import { getImgUrl } from '/#/utils/files';
 
 // 用户数据类型
 interface CurrentUser {

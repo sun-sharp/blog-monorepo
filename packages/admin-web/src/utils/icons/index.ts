@@ -2,7 +2,7 @@ import { h } from 'vue';
 import { NIcon } from 'naive-ui';
 import * as Antd from './antd';
 import * as Ionicons5 from './ionicons5';
-import { IconsType, RenderIconType } from '/#/utils/icon';
+import { IconsType, RenderIconType } from '/#/vue/utils/icon';
 
 export * from './antd';
 export * from './ionicons5';

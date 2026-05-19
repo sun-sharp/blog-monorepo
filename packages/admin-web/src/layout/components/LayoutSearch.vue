@@ -5,7 +5,7 @@
   import { useRouter } from 'vue-router';
   import { useSearch } from '@/hooks';
   import { APP_ENV_CONFIG, OUTSIDE_THE_CHAIN_VALUE, menuTagTypeNameObj, menuTypeObj } from '@/constant';
-  import { ApiMenuItem } from '/#/api/menu';
+  import { ViewsMenu } from '/#/vue/views/menu';
 
   const router = useRouter();
 
@@ -28,7 +28,7 @@
   });
 
   // 点击跳转页面
-  const toNestRouter = (item: ApiMenuItem) => {
+  const toNestRouter = (item: ViewsMenu) => {
     if (item.menuType === OUTSIDE_THE_CHAIN_VALUE) {
       window.open(item.name);
     } else {

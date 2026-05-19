@@ -8,11 +8,13 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noEmit": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
     "declaration": true,
     "declarationMap": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "composite": true,
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
@@ -24,7 +26,8 @@
   "include": [
     "types/**/*.ts",
     "types/**/*.d.ts",
-    "index.d.ts"
+    "index.d.ts",
+    "src/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

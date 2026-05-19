@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { constantAntdHtmlIcon, constantIonicons5HtmlIcon } from '@/utils';
   import { computed, ref } from 'vue';
-  import { UtilsIconOptions } from '/#/utils/icon';
+  import { UtilsIconOptions } from '/#/vue/utils/icon';
 
   // const columnNum = ref(3);
 
