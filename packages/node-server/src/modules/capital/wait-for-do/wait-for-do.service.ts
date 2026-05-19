@@ -10,7 +10,7 @@ import { UpdateWaitForDoStateDto } from './dto/update-wait-for-do-state.dto';
 import { UpdateWaitForDoSortDto } from './dto/update-wait-for-do-sort.dto';
 import { UpdateWaitForDoDto } from './dto/update-wait-for-do.dto';
 import { IResponse } from '/#/common/common';
-import { ApiWaitForDoItem, ApiWaitForDoUpdateStateData } from '/#/models/capital/wait-for-do';
+import { ApiWaitForDoItem, ApiWaitForDoUpdateStateData } from '/#/api/capital/wait-for-do';
 import { useCustomConfig } from 'src/config';
 
 const customConfig = useCustomConfig();

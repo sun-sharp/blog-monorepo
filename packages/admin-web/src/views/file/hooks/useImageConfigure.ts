@@ -4,7 +4,7 @@ import { NButton, NImage, NPopconfirm } from 'naive-ui';
 import { CStrOption } from '/#/common/config';
 import { getImageSourceData, useApiType } from '@/hooks';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
-import { ApiImageItem, ApiImageSearchParams } from '/#/api/image';
+import { ApiImageItem, ApiImageSearchParams } from '/#/api/capital/image';
 import { FormSchema } from '/#/components/form';
 
 export const useImageConfigure = () => {

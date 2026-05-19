@@ -13,7 +13,7 @@ import { UserState } from '/#/store';
 import { ApiCapitalLoginData, ApiCapitalLoginResult } from '/#/api/capital';
 import { ApiUserInfo } from '/#/api/capital/user';
 import { ApiResponse } from '/#/api/common';
-import { ApiConfigInfo } from '/#/api/configuration';
+import { ApiConfigInfo } from '/#/api/capital/configuration';
 
 // 默认用户信息
 const defaultUserInfo: ApiUserInfo = {

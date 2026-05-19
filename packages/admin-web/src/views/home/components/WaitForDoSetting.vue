@@ -4,7 +4,7 @@
   import { waitForDoApi } from '@/api';
   import { useDebounceFn } from '@vueuse/core';
   import { format } from 'date-fns';
-  import { ApiWaitForDoItem } from '/#/api/wait-for-do';
+  import { ApiWaitForDoItem } from '/#/api/capital/wait-for-do';
 
   defineProps({
     title: {

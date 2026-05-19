@@ -11,7 +11,7 @@ import { ConfigurationService } from './configuration/configuration.service';
 import { CreateUserDto } from './user/dto/create-user.dto';
 import { CreateConfigurationDto } from './configuration/dto/create-configuration.dto';
 import { IResponse } from '/#/common/common';
-import { ApiCapitalLoginResult } from '/#/models/capital';
+import { ApiCapitalLoginResult } from '/#/api/capital';
 import { ApiMenuItem } from '/#/api/capital/menu';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { WaitForDoService } from './wait-for-do/wait-for-do.service';

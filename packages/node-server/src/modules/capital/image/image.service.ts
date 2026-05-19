@@ -10,7 +10,7 @@ import { UserService } from 'src/modules/capital/user/user.service';
 import { Image } from 'src/schemas/capital/image.schema';
 import { PageImageDto } from './dto/page-image.dto';
 import { RemoveDataAllImageDto, RemovePublicAllImageDto, RemovePublicAndDataAllImageDto } from './dto/remove-all-image.dto';
-import { ApiImageItem, ApiImage, UploadedImage } from '/#/models/capital/image';
+import { ApiImageItem, ApiImage, UploadedImage } from '/#/api/capital/image';
 import { ArticleService } from 'src/modules/blog/article/article.service';
 import { useCustomConfig } from 'src/config';
 import { IResponse } from '/#/common/common';
@@ -51,7 +51,7 @@ export class ImageService {
             url: `/${imageReadDir}/${filename}`,
             uploadTime: new Date(),
             source: source,
-          } as ApiImage;
+          } as unknown as ApiImage;
         })
         .then(async (body) => {
           const saveItem = await this.imageModel.create(body);

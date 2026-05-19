@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiCategoryFindPageData, ApiCategoryItem, ApiCategorySaveData, ApiCategoryUpdateData } from '/#/api/category';
+import { ApiCategoryFindPageData, ApiCategoryItem, ApiCategorySaveData, ApiCategoryUpdateData } from '/#/api/capital/category';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/category';

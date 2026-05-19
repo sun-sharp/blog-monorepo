@@ -1,7 +1,7 @@
 import { useSetting } from '@/hooks';
 import { useUserStore } from '@/store';
 import { ExtractPropTypes, computed, nextTick, reactive, ref, toRefs, unref } from 'vue';
-import { ApiAppTheme, ApiConfigInfo } from '/#/api/configuration';
+import { ApiAppTheme, ApiConfigInfo } from '/#/api/capital/configuration';
 
 // LayoutHeaderSetting传参
 export const LayoutHeaderSettingProps = {

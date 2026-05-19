@@ -1,6 +1,6 @@
 import { imageApi } from '@/api';
 import { computed, h, ref, unref } from 'vue';
-import { ApiImageItem } from '/#/api/image';
+import { ApiImageItem } from '/#/api/capital/image';
 import { useApiType } from '@/hooks';
 import { BasicColumn } from '/#/components/table';
 import { NImage } from 'naive-ui';

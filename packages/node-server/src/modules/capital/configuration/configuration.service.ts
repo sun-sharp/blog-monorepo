@@ -6,7 +6,7 @@ import { ApiCode } from 'src/common/enums/api-code.enum';
 import { Configuration } from 'src/schemas/capital/configuration.schema';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
-import { ApiConfiguration } from '/#/models/capital/configuration';
+import { ApiAnimate, ApiAppTheme, ApiConfiguration } from '/#/api/capital/configuration';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
@@ -97,7 +97,7 @@ export class ConfigurationService {
           const result: ApiConfiguration = {
             userId: config.userId,
             // 系统主题
-            appTheme: config.appTheme,
+            appTheme: config.appTheme as ApiAppTheme,
             // 系统主题色
             appThemeColor: config.appThemeColor,
             // 导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
@@ -125,7 +125,7 @@ export class ConfigurationService {
             // 页面跳转动画
             hasPageAnimate: config.hasPageAnimate,
             // 页面跳转动画类型
-            pageAnimateType: config.pageAnimateType,
+            pageAnimateType: config.pageAnimateType as ApiAnimate,
           };
           return {
             code: ApiCode.SUCCESS,

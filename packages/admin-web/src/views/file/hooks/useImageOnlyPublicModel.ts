@@ -2,7 +2,7 @@ import { imageApi } from '@/api';
 import { getImgUrl } from '@/utils';
 import { NImage } from 'naive-ui';
 import { h, ref } from 'vue';
-import { ReadImageItem } from '/#/api/image';
+import { ReadImageItem } from '/#/api/capital/image';
 import { BasicColumn } from '/#/components/table';
 
 // 处理只有图片文件的数据 弹窗

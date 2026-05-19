@@ -2,7 +2,7 @@ import { computed, h, ref } from 'vue';
 import { FormSchema } from '/#/components/form';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { categoryApi } from '@/api';
-import { ApiCategoryItem, ApiCategorySearchParams } from '/#/api/category';
+import { ApiCategoryItem, ApiCategorySearchParams } from '/#/api/capital/category';
 import { NButton } from 'naive-ui';
 import { useApiTypeStore } from '@/store';
 import { categoryTypeOption } from '@/constant';

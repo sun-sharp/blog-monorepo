@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useUserStore } from '@/store';
-import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
+import { ApiAnimate, ApiAppTheme } from '/#/api/capital/configuration';
 import { defaultLayoutSize } from '@/constant';
 
 // 项目配置

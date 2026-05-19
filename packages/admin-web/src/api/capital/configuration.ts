@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiConfigInfo, ApiConfiguration } from '/#/api/configuration';
+import { ApiConfigInfo, ApiConfiguration } from '/#/api/capital/configuration';
 
 const basic = '/configuration';
 

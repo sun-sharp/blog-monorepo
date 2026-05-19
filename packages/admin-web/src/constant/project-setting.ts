@@ -9,7 +9,7 @@ import navThemeDarkImage from '@/assets/images/setting/nav-theme-dark.svg';
 // import navHorizontalMixImage from '@/assets/images/setting/nav-horizontal-mix.svg';
 import navThemeLightImage from '@/assets/images/setting/nav-theme-light.svg';
 import headerThemeDarkImage from '@/assets/images/setting/header-theme-dark.svg';
-import { ApiAnimate, ApiAppTheme } from '/#/api/configuration';
+import { ApiAnimate, ApiAppTheme } from '/#/api/capital/configuration';
 import { ThemeCommonVars } from 'naive-ui';
 import { CTypeOption } from '/#/common/config';
 

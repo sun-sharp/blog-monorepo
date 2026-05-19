@@ -1,5 +1,11 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiWaitForDoItem, ApiWaitForDoSaveData, ApiWaitForDoUpdateData, ApiWaitForDoUpdateSortData, ApiWaitForDoUpdateStateData } from '/#/api/wait-for-do';
+import {
+  ApiWaitForDoItem,
+  ApiWaitForDoSaveData,
+  ApiWaitForDoUpdateData,
+  ApiWaitForDoUpdateSortData,
+  ApiWaitForDoUpdateStateData,
+} from '/#/api/capital/wait-for-do';
 
 const basic = '/wait-for-do';
 

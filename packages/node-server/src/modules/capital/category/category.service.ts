@@ -7,7 +7,7 @@ import { Category } from 'src/schemas/capital/category.schema';
 import { PageCategoryDto } from './dto/page-category.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { ApiCategoryItem } from '/#/models/capital/category';
+import { ApiCategoryItem } from '/#/api/capital/category';
 import { IResponse } from '/#/common/common';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { useCustomConfig } from 'src/config';

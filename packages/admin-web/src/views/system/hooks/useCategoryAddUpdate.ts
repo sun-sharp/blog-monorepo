@@ -1,7 +1,7 @@
 import { computed, nextTick, reactive, ref, unref } from 'vue';
 import { CategoryItemForm, CategoryItemFormRules } from '/#/views/category';
 import { FormItemRule } from 'naive-ui';
-import { ApiCategoryItem, ApiCategorySaveData } from '/#/api/category';
+import { ApiCategoryItem, ApiCategorySaveData } from '/#/api/capital/category';
 import { categoryApi } from '@/api';
 import { useApiTypeStore } from '@/store';
 

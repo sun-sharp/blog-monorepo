@@ -26,6 +26,8 @@ export interface ApiWaitForDo {
   isRemove: boolean;
   // 用户id
   userId: string;
+  // 完成时间
+  completionTime?: string;
 }
 
 /**
@@ -39,13 +41,10 @@ export interface ApiWaitForDoItem extends ApiWaitForDo, ApiWaitForDoId {}
 export interface ApiWaitForDoSaveData {
   // 标题
   title: string;
-
   // 分类
   classify: number;
-
   // 截止时间
   deadline: string;
-
   // 状态
   state: number;
 }
@@ -56,6 +55,10 @@ export interface ApiWaitForDoSaveData {
 export interface ApiWaitForDoUpdateStateData extends ApiWaitForDoId {
   // 状态
   state: number;
+  // 完成时间
+  completionTime?: Date;
+  // 取消完成时间
+  $unset?: { completionTime: '' };
 }
 
 /**
@@ -69,10 +72,8 @@ export type ApiWaitForDoUpdateSortData = ApiWaitForDoId;
 export interface ApiWaitForDoUpdateData extends ApiWaitForDoId {
   // 标题
   title?: string;
-
   // 截止时间
   deadline?: string;
-
   // 备注
   remark?: string;
 }

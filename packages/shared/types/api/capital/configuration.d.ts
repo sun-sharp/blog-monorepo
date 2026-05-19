@@ -14,7 +14,7 @@ export type ApiConfNavMode = 'vertical' | 'horizontal' | 'horizontal-mix';
 export type ApiAppTheme = 'light' | 'dark';
 
 /**
- * @description: 系统主题
+ * @description: 页面跳转动画类型
  * zoom-fade 渐变
  * zoom-out 闪现
  * fade 消退
@@ -64,6 +64,6 @@ export interface ApiConfiguration {
 }
 
 /**
- * @description: 配置信息
+ * @description: 配置信息（不含用户id）
  */
 export type ApiConfigInfo = Omit<ApiConfiguration, 'userId'>;

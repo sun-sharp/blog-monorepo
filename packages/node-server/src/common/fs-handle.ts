@@ -1,6 +1,6 @@
 import { PathLike, readdir, readFile, existsSync, unlink } from 'node:fs';
 import { useCustomConfig } from 'src/config';
-import { ReadImageItem } from '/#/models/capital/image';
+import { ReadImageItem } from '/#/api/capital/image';
 
 const customConfig = useCustomConfig();
 const { fileAccessPath } = customConfig;

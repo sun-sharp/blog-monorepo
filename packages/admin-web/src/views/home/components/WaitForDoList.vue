@@ -6,7 +6,7 @@
   import Draggable from 'vuedraggable';
   import WaitForDoSetting from './WaitForDoSetting.vue';
   import { format } from 'date-fns';
-  import { ApiWaitForDoItem } from '/#/api/wait-for-do';
+  import { ApiWaitForDoItem } from '/#/api/capital/wait-for-do';
 
   const waitForDoSettingRef = ref();
 

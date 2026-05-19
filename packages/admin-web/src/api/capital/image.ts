@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiImageItem, ApiImagePageData, ReadImageItem } from '/#/api/image';
+import { ApiImageItem, ApiImagePageData, ReadImageItem } from '/#/api/capital/image';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/image';
