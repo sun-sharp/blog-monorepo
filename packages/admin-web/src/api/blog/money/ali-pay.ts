@@ -3,7 +3,7 @@ import { ApiAliPayBatchSaveData, ApiAliPayFindPageData, ApiAliPayItem, ApiAliPay
 import { TablePaginationResult } from '/#/components/table';
 import { ApiStartEndTimeParams } from '/#/api/common';
 
-const basic = '/money/ali-pay/';
+const basic = '/money/ali-pay';
 
 /**
  * @description: 支付宝账单列表
