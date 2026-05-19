@@ -1,7 +1,7 @@
 import { MAIN_DIRECTORY_VALUE, PAGE_ENUM, menuTypeObj } from '@/constant';
 import { constantHtmlIcon } from '@/utils';
 import { ExtractPropTypes, VNode, computed, nextTick, reactive, ref, unref, watch } from 'vue';
-import { ApiLevelMenuItem, ApiMenuSaveData } from '/#/api/menu';
+import { ApiLevelMenuItem, ApiMenuSaveData } from '/#/api/capital/menu';
 import { FormItemRule, FormRules } from 'naive-ui';
 import { menuApi } from '@/api';
 import { useRoute, useRouter } from 'vue-router';

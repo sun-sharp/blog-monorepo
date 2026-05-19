@@ -12,7 +12,7 @@ import { CreateUserDto } from './user/dto/create-user.dto';
 import { CreateConfigurationDto } from './configuration/dto/create-configuration.dto';
 import { IResponse } from '/#/common/common';
 import { ApiCapitalLoginResult } from '/#/models/capital';
-import { ApiMenuItem } from '/#/models/capital/menu';
+import { ApiMenuItem } from '/#/api/capital/menu';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { WaitForDoService } from './wait-for-do/wait-for-do.service';
 import { ImageService } from './image/image.service';

@@ -5,7 +5,7 @@ export * from './category';
 export * from './common';
 export * from './configuration';
 export * from './image';
-export * from './menu';
+export * from './capital/menu';
 export * from './money';
 export * from './role';
 export * from './user';

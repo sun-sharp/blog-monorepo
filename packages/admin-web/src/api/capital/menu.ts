@@ -1,5 +1,5 @@
 import { AxiosCapital } from '@/api/axios';
-import { ApiMenuItem, ApiMenuSaveData, ApiMenuUpdateData } from '/#/api/menu';
+import { ApiMenuItem, ApiMenuSaveData, ApiMenuUpdateData } from '/#/api/capital/menu';
 
 const basic = '/menu';
 

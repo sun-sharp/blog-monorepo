@@ -1,6 +1,6 @@
 import { IframeComponent, Layout } from '@/router/router-component';
 import { constantRouterIcon } from './icons';
-import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem, ApiMenuItem } from '/#/api/capital/menu';
 import { AppRouteRecordRaw } from '/#/router';
 import { EMBEDDED_VALUE, MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';

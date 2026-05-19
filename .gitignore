@@ -1,6 +1,6 @@
 node_modules
 
-**/package-lock.json
+package-lock.json
 
 # TypeScript 构建缓存（可重新生成）
 *.tsbuildinfo

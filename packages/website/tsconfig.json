@@ -60,10 +60,7 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "../shared/types/api/**/*.d.ts",
-    "../shared/types/models/**/*.d.ts",
-    "../shared/types/react/**/*.d.ts",
-    "../shared/types/common/**/*.d.ts"
+    "../shared/types/**/*.d.ts"
   ],
   "references": [
     {

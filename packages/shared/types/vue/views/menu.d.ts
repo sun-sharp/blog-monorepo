@@ -1,4 +1,4 @@
-import { ApiMenuItem } from '/#/api/menu';
+import { ApiMenuItem } from '/#/api/capital/menu';
 
 /**
  * @description: 用户的数据字段

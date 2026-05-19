@@ -1,7 +1,7 @@
 import { AxiosCapital } from '@/api/axios';
 import { ApiCapitalLoginData, ApiCapitalLoginResult, ApiCapitalSignUpData } from '/#/api/capital';
 import { ApiResponse } from '/#/api/common';
-import { ApiMenuItem } from '/#/api/menu';
+import { ApiMenuItem } from '/#/api/capital/menu';
 
 const basic = '';
 

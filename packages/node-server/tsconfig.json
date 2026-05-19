@@ -21,17 +21,14 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"],
-      "/#/models/*": ["../shared/types/models/*"],
-      "/#/common/*": ["../shared/types/common/*"]
+      "/#/*": ["../shared/types/*"]
     }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
-    "../shared/types/models/**/*.d.ts",
-    "../shared/types/models/**/*.ts",
-    "../shared/types/common/**/*.d.ts",
-    "../shared/types/common/**/*.ts"
+    "../shared/types/**/*.d.ts",
+    "../shared/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

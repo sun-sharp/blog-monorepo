@@ -7,7 +7,7 @@ import { capitalApi } from '@/api';
 import at from 'await-to-js';
 import { constantRouterIcon, formatTrendsMenus, isHttpUrl, routerScreen } from '@/utils';
 import { AppRouteRecordRaw } from '/#/router';
-import { ApiLevelMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem } from '/#/api/capital/menu';
 import { ViewsMenu } from '/#/views/menu';
 // import { PageRoute } from '@/router/base';
 

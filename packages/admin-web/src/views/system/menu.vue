@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { useMenuConfigure } from './hooks/useMenuConfigure';
-  import { ApiLevelMenuItem } from '/#/api/menu';
+  import { ApiLevelMenuItem } from '/#/api/capital/menu';
   import FormSearch from '@/components/form/FormSearch.vue';
   import MenuAddUpdateModel from './components/MenuAddUpdateModel.vue';
   import TableToolbar from '@/components/table/TableToolbar.vue';

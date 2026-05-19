@@ -3,7 +3,7 @@ import { constantHtmlIcon, levelMenu } from '@/utils';
 import { DataTableColumns, NButton, NPopconfirm, NTag } from 'naive-ui';
 import { MAIN_DIRECTORY_VALUE, menuTagTypeNameObj, menuTypeObj } from '@/constant';
 import { menuApi } from '@/api';
-import { ApiLevelMenuItem } from '/#/api/menu';
+import { ApiLevelMenuItem } from '/#/api/capital/menu';
 import { FormSchema } from '/#/components/form';
 import { TableSizeType } from '/#/components/table';
 import at from 'await-to-js';

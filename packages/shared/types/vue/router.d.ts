@@ -1,6 +1,6 @@
 import type { RouteRecordRaw, RouteMeta } from 'vue-router';
 import { RouteLocationNormalized } from 'vue-router';
-import { ApiMenu, ApiMenuId } from '/#/api/menu';
+import { ApiMenu, ApiMenuId } from '/#/api/capital/menu';
 
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'children'> {
   path: string;
