@@ -43,8 +43,8 @@
       "/#/*": [
         "../shared/types/react/*"
       ],
-      "/#/utils/*": [
-        "../shared/src/utils/*"
+      "@shared/*": [
+        "../shared/src/*"
       ],
       "@/*": [
         "src/*"

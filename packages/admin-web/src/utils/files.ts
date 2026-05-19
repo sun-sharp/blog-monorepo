@@ -1,6 +1,6 @@
 import { APP_ENV_CONFIG } from '@/constant';
 
-export { getImgUrl } from '/#/utils/files';
+export { getImgUrl } from '@shared/utils/files';
 
 // 上传图片接口路径
 export const getUploadImageAction = (): string => {

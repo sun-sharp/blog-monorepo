@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux';
 import { setAuthorSlideVisible } from '@/store/modules/common';
 import { storage } from '@/utils';
 import { ACCESS_TOKEN, CURRENT_USER, USER_CONFIG } from '@/constants/storage-name';
-import { getImgUrl } from '/#/utils/files';
+import { getImgUrl } from '@shared/utils/files';
 
 // 用户数据类型定义
 interface CurrentUser {

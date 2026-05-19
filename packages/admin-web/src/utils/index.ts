@@ -1,4 +1,4 @@
-export * from '/#/utils/index';
+export * from '@shared/utils/index';
 export * from './icons';
 export * from './color';
 export * from './menu';

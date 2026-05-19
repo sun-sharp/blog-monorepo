@@ -98,6 +98,10 @@ export default defineConfig(({ command, mode }) => {
           replacement: pathResolve('src') + '/',
         },
         {
+          find: '@shared',
+          replacement: pathResolve('../shared/src') + '/',
+        },
+        {
           find: /\/#\/api\//,
           replacement: pathResolve('../shared/types/api') + '/',
         },

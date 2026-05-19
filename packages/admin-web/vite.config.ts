@@ -118,6 +118,10 @@ export default defineConfig(({ command, mode }) => {
           find: '@',
           replacement: pathResolve('src') + '/',
         },
+        {
+          find: '@shared',
+          replacement: pathResolve('../shared/src') + '/',
+        },
       ],
       dedupe: ['vue'],
     },

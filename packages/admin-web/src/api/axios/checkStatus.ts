@@ -1,6 +1,6 @@
 import { PAGE_ENUM } from '@/constant';
 import router from '@/router';
-import { storage } from '/#/utils/storage';
+import { storage } from '@shared/utils/storage';
 
 export const checkStatus = (status: number, msg: string, messageFun: Function): void => {
   switch (status) {

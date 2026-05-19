@@ -42,8 +42,8 @@
       "/#/*": [
         "../shared/types/vue/*"
       ],
-      "/#/utils/*": [
-        "../shared/src/utils/*"
+      "@shared/*": [
+        "../shared/src/*"
       ]
     }
   },
@@ -55,6 +55,8 @@
     "../shared/types/models/**/*.d.ts",
     "../shared/types/vue/**/*.d.ts",
     "../shared/types/common/**/*.d.ts",
+    "../shared/src/**/*.ts",
+    "../shared/src/**/*.d.ts",
     "build/**/*.ts",
     "build/**/*.d.ts",
     "mock/**/*.ts"
