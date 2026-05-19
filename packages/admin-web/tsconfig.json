@@ -27,6 +27,9 @@
       "@/*": [
         "src/*"
       ],
+      "@shared/*": [
+        "../shared/src/*"
+      ],
       "/#/api/*": [
         "../shared/types/api/*"
       ],
@@ -41,9 +44,6 @@
       ],
       "/#/*": [
         "../shared/types/vue/*"
-      ],
-      "@shared/*": [
-        "../shared/src/*"
       ]
     }
   },
