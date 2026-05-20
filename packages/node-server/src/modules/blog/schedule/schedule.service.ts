@@ -6,7 +6,7 @@ import { useCustomConfig } from 'src/config';
 import { IResponse } from '/#/common/common';
 import { PageScheduleDto } from './dto/page-schedule.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
-import { ApiSchedule, ApiScheduleItem } from '/#/models/blog/schedule';
+import { ApiSchedule, ApiScheduleItem } from '/#/api/blog/schedule';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { logger } from 'src/common/journal';
 import { User } from 'src/schemas/capital/user.schema';

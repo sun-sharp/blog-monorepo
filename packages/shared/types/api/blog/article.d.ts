@@ -1,4 +1,4 @@
-import { ApiPaginateParams } from './common';
+import { ApiPaginateParams } from '../common';
 
 /**
  * @description: 全局类型查询传参

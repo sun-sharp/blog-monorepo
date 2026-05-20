@@ -10,7 +10,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
-import { ApiArticleItem } from '/#/models/blog/article';
+import { ApiArticleItem } from '/#/api/blog/article';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
