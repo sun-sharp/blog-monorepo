@@ -10,7 +10,7 @@ import { CreateBankBatchDto } from './dto/create-bank.dto';
 import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
-import { ApiBank, ApiBankItem, ApiBankUpload } from '/#/models/blog/money/bank';
+import { ApiBank, ApiBankItem, ApiBankUpload } from '/#/api/blog/money/bank';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';

@@ -1,7 +1,7 @@
 import { getBillMethodData, getBillTypeData, useApiType } from '@/hooks';
 import { computed, h, onMounted, ref, unref } from 'vue';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
-import { ApiWeChatItem, ApiWeChatSearchParams } from '/#/api/we-chat';
+import { ApiWeChatItem, ApiWeChatSearchParams } from '/#/api/blog/money/we-chat';
 import { weChatApi } from '@/api';
 import { FormSchema } from '/#/components/form';
 import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';

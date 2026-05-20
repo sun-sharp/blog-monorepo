@@ -1,7 +1,7 @@
 import { computed, nextTick, reactive, ref, unref } from 'vue';
 import { BankFormRules, BankItemForm } from '/#/views/bank';
 import { useApiType } from '@/hooks';
-import { ApiBankItem } from '/#/api/bank';
+import { ApiBankItem } from '/#/api/blog/money/bank';
 import { FormItemRule } from 'naive-ui';
 import { bankApi } from '@/api';
 import { CNumOption } from '/#/common/config';

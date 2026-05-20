@@ -1,5 +1,5 @@
 import { computed, h, ref, unref } from 'vue';
-import { ApiWeChatBase, ApiWeChatBatchSaveItem } from '/#/api/we-chat';
+import { ApiWeChatBase, ApiWeChatBatchSaveItem } from '/#/api/blog/money/we-chat';
 import { useApiType } from '@/hooks';
 import { BasicColumn } from '/#/components/table';
 import { inflowOrOutflowOption } from '@/constant';

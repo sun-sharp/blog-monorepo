@@ -2,7 +2,7 @@ import { aliPayApi } from '@/api';
 import { useApiType } from '@/hooks';
 import { getUploadAliPayAction } from '@/utils';
 import { computed, h, ref, unref } from 'vue';
-import { ApiAliPayBase, ApiAliPayBatchSaveItem } from '/#/api/ali-pay';
+import { ApiAliPayBase, ApiAliPayBatchSaveItem } from '/#/api/blog/money/ali-pay';
 import { BasicColumn } from '/#/components/table';
 import { inflowOrOutflowOption } from '@/constant';
 import { NRadio, NSelect, NSpace, SelectOption } from 'naive-ui';

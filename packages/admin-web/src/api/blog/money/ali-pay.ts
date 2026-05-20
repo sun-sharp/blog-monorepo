@@ -1,5 +1,5 @@
 import { AxiosBlog } from '@/api/axios';
-import { ApiAliPayBatchSaveData, ApiAliPayFindPageData, ApiAliPayItem, ApiAliPayUpdateData } from '/#/api/ali-pay';
+import { ApiAliPayBatchSaveData, ApiAliPayFindPageData, ApiAliPayItem, ApiAliPayUpdateData } from '/#/api/blog/money/ali-pay';
 import { TablePaginationResult } from '/#/components/table';
 import { ApiStartEndTimeParams } from '/#/api/common';
 

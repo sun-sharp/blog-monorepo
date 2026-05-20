@@ -9,7 +9,7 @@ import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
 import { CreateAliPayBatchDto, CreateAliPayDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
-import { ApiAliPayItem, ApiAliPayUpload } from '/#/models/blog/money/ali-pay';
+import { ApiAliPayItem, ApiAliPayUpload } from '/#/api/blog/money/ali-pay';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';

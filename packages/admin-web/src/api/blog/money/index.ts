@@ -1,5 +1,5 @@
 import { AxiosBlog } from '@/api/axios';
-import { ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from '/#/api/money';
+import { ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from '/#/api/blog/money';
 import { ApiStartEndTimeParams } from '/#/api/common';
 
 const basic = '/money';

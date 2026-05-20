@@ -1,5 +1,5 @@
 import { AxiosBlog } from '@/api/axios';
-import { ApiWeChatBatchSaveData, ApiWeChatFindPageData, ApiWeChatItem, ApiWeChatUpdateData } from '/#/api/we-chat';
+import { ApiWeChatBatchSaveData, ApiWeChatFindPageData, ApiWeChatItem, ApiWeChatUpdateData } from '/#/api/blog/money/we-chat';
 import { TablePaginationResult } from '/#/components/table';
 import { ApiStartEndTimeParams } from '/#/api/common';
 

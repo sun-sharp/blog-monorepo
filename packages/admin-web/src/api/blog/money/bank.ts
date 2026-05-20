@@ -1,6 +1,6 @@
 import { AxiosBlog } from '@/api/axios';
 import { TablePaginationResult } from '/#/components/table';
-import { ApiBankBatchSaveData, ApiBankFindPageData, ApiBankItem, ApiBankUpdateData } from '/#/api/bank';
+import { ApiBankBatchSaveData, ApiBankFindPageData, ApiBankItem, ApiBankUpdateData } from '/#/api/blog/money/bank';
 
 const basic = '/money/bank';
 

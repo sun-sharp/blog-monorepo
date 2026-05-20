@@ -4,7 +4,7 @@
   import InnerPieChart from '@/components/charts/InnerPieChart.vue';
   import SingleColumnChart from '@/components/charts/SingleColumnChart.vue';
   import { lastMonthFormatRange } from '@/utils';
-  import { ApiBankFlowResult, ApiMoneyBalanceResult } from '/#/api/money';
+  import { ApiBankFlowResult, ApiMoneyBalanceResult } from '/#/api/blog/money';
   import { ApiStartEndTimeParams } from '/#/api/common';
   import MoneyTimeTypeSelect from './components/MoneyTimeTypeSelect.vue';
 
