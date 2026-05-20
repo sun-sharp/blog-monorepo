@@ -102,32 +102,6 @@
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
-  "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#018d71",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
-    "list": [
-      {
-        "pagePath": "pages/home/index",
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/home-active.png",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/dashboard/index",
-        "iconPath": "static/tabbar/dashboard.png",
-        "selectedIconPath": "static/tabbar/dashboard-active.png",
-        "text": "仪表盘"
-      },
-      {
-        "pagePath": "pages/setting/index",
-        "iconPath": "static/tabbar/setting.png",
-        "selectedIconPath": "static/tabbar/setting-active.png",
-        "text": "设置"
-      }
-    ]
-  },
   "easycom": {
     "autoscan": true,
     "custom": {

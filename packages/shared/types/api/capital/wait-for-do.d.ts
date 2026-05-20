@@ -52,7 +52,7 @@ export interface ApiWaitForDoSaveData {
 /**
  * @description: 修改待办的状态参数
  */
-export interface ApiWaitForDoUpdateStateData extends ApiWaitForDoId {
+export interface ApiWaitForDoUpdateStateData {
   // 状态
   state: number;
   // 完成时间
@@ -60,6 +60,11 @@ export interface ApiWaitForDoUpdateStateData extends ApiWaitForDoId {
   // 取消完成时间
   $unset?: { completionTime: '' };
 }
+
+/**
+ * @description: 修改待办的状态参数
+ */
+export interface ApiWaitForDoUpdateStateHasIdData extends ApiWaitForDoId, ApiWaitForDoUpdateStateData {}
 
 /**
  * @description: 修改待办的排序参数

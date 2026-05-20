@@ -1,6 +1,6 @@
 import { useUserStore } from '@/store';
 import { RESULT_ENUM, PAGE_ENUM } from '@/constant';
-import { formatRequestDate, isEmpty, isString, joinTimestamp } from '@shared/utils';
+import { formatRequestDate, isEmpty, isString, joinTimestamp } from '../../utils';
 import type { CreateRequestOptions, CustomRequestConfig, RequestOptions, ResponseOptions } from './types';
 
 const showToast = (title: string, icon: 'success' | 'error' | 'none' = 'none') => {
@@ -104,7 +104,7 @@ export class CustomRequest {
 
     return {
       url,
-      method: config.method || 'GET',
+      method: (config.method || 'GET') as any,
       data,
       header: headers,
       timeout: this.options.timeout || 60 * 1000,

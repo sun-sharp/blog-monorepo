@@ -2,33 +2,31 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
+    "moduleResolution": "node",
+    "strict": false,
     "jsx": "preserve",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "noEmit": true,
-    "ignoreDeprecations": "6.0",
+    "noEmit": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./*"],
       "@shared/*": ["../shared/src/*"],
       "/#/*": ["../shared/types/*"]
     },
     "types": ["@dcloudio/types"]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.tsx",
+    "**/*.vue",
     "../shared/types/**/*.d.ts",
     "../shared/src/**/*.ts",
     "../shared/src/**/*.d.ts"
   ],
-  "exclude": ["node_modules", "dist", "unpackage"],
-  "references": [{ "path": "../shared" }]
+  "exclude": ["node_modules", "dist", "unpackage"]
 }

@@ -13,7 +13,7 @@ import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { RoleService } from '../role/role.service';
-import { ApiUserInfo, ApiUserItem } from '/#/api/capital/user';
+import { ApiUserInfo, ApiUserItem, ApiUserNoPasswordItem } from '/#/api/capital/user';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
@@ -217,7 +217,7 @@ export class UserService {
           if (username) findData.username = { $regex: username };
           const total = await this.userModel.find(findData).count();
           const findArr = await this.userModel.find(findData).limit(limit).skip(skip);
-          const list: ApiUserItem[] = findArr.map((m) => ({
+          const list: ApiUserNoPasswordItem[] = findArr.map((m) => ({
             userId: m.id,
             roleCode: m.roleCode,
             loginDate: nowDateFun(m.loginDate),

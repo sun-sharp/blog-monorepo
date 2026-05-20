@@ -4,7 +4,7 @@ import {
   ApiWaitForDoSaveData,
   ApiWaitForDoUpdateData,
   ApiWaitForDoUpdateSortData,
-  ApiWaitForDoUpdateStateData,
+  ApiWaitForDoUpdateStateHasIdData,
 } from '/#/api/capital/wait-for-do';
 
 const basic = '/wait-for-do';
@@ -28,7 +28,7 @@ export const classifyAll = (classify: number, state: number): Promise<ApiWaitFor
   });
 };
 
-export const updateState = (data: ApiWaitForDoUpdateStateData): Promise<undefined> => {
+export const updateState = (data: ApiWaitForDoUpdateStateHasIdData): Promise<undefined> => {
   return RequestCapital.request({
     url: `${basic}/update_state`,
     method: 'PUT',

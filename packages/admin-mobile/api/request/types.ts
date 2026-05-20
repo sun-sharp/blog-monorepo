@@ -24,7 +24,7 @@ export interface CreateRequestOptions {
 
 export interface CustomRequestConfig {
   url: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   data?: any;
   params?: any;
   headers?: Record<string, string>;

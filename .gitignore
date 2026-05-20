@@ -9,3 +9,4 @@ package-lock.json
 packages/api_store_dir/
 packages/api_static_dir/
 packages/api_dev_static_dir/
+session-**.md

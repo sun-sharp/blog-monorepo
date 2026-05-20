@@ -35,6 +35,11 @@ export interface ApiUserInfo extends Omit<ApiUser, 'password'>, ApiUserId {
 }
 
 /**
+ * @description: 用户的列表每项（没有密码）
+ */
+export interface ApiUserNoPasswordItem extends Omit<ApiUser, 'password'>, ApiUserId {}
+
+/**
  * @description: 用户的列表每项
  */
 export interface ApiUserItem extends ApiUser, ApiUserId {}

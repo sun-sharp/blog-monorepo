@@ -74,9 +74,13 @@ vite.config.ts 已配置自动注入，无需手动导入：
 ```
 
 ### 环境变量
-- `.env.dev` - 开发环境
+- `.env` - 公共基础变量
+- `.env.development` - 本地开发（HBuilderX 运行时自动加载）
+- `.env.dev` - 远程开发API（CLI: `--mode dev`）
+- `.env.production` - 生产环境（HBuilderX 发行时自动加载）
+
+admin-web 专用：
 - `.env.dev-local` - 本地开发
-- `.env.prod` - 生产环境
 - `.env.prod-local` - 本地生产测试
 
 ### API 代理配置

@@ -327,6 +327,7 @@ export class ArticleService {
             authorNickname: find.authorNickname,
             categoryVal: find.categoryVal,
             createTime: nowDateFun(find.createTime),
+            isPrivate: false,
           };
           return {
             code: ApiCode.SUCCESS,
