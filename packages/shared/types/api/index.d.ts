@@ -7,6 +7,7 @@ export * from './capital/role';
 export * from './capital/user';
 export * from './capital/wait-for-do';
 export * from './common';
+export * from './config';
 export * from './blog/article';
 export * from './blog/bill-upload';
 export * from './blog/money';

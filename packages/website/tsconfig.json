@@ -31,9 +31,6 @@
       "/#/api/*": [
         "../shared/types/api/*"
       ],
-      "/#/models/*": [
-        "../shared/types/models/*"
-      ],
       "/#/react/*": [
         "../shared/types/react/*"
       ],

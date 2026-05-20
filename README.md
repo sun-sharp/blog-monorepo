@@ -79,8 +79,8 @@ npm run typecheck:all   # 所有项目类型检查
 |------|----------|
 | `@/*` | `src/*` |
 | `/#/api/*` | `packages/shared/types/api/*` |
-| `/#/models/*` | `packages/shared/types/models/*` |
 | `/#/common/*` | `packages/shared/types/common/*` |
+| `@shared/*` | `packages/shared/src/*` |
 
 各项目特有类型目录：
 
@@ -88,7 +88,7 @@ npm run typecheck:all   # 所有项目类型检查
 |------|------|----------|
 | admin-web | `/#/vue/*` | `packages/shared/types/vue/*` |
 | website | `/#/react/*` | `packages/shared/types/react/*` |
-| node-server | `/#/*` (默认) | `packages/shared/types/models/*` |
+| node-server | `/#/*` (默认) | `packages/shared/types/*` |
 
 ## 环境变量
 
@@ -141,11 +141,21 @@ vite.config.ts 已配置自动注入，无需手动导入：
 
 `packages/shared/` 目录用于存放跨项目共享代码：
 
+### 类型定义 (`types/`)
+
 - `types/api/` - API 相关类型定义
-- `types/models/` - 数据库模型类型定义
+  - `api/capital/` - 管理后台相关类型（menu、user、role、category 等）
+  - `api/blog/` - 博客相关类型（article、schedule、money 等）
+  - `api/common/` - 公共 API 类型
+  - `api/config.d.ts` - 配置类型
 - `types/common/` - 公共基础类型
 - `types/vue/` - Vue 项目专用类型
 - `types/react/` - React 项目专用类型
+
+### 共享源码 (`src/`)
+
+- `src/utils/` - 共享工具函数（is、storage、axios、files 等）
+- `src/constants/` - 共享常量（storage-name、http-enum 等）
 
 ## License
 

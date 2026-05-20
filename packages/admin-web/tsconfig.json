@@ -33,9 +33,6 @@
       "/#/api/*": [
         "../shared/types/api/*"
       ],
-      "/#/models/*": [
-        "../shared/types/models/*"
-      ],
       "/#/vue/*": [
         "../shared/types/vue/*"
       ],

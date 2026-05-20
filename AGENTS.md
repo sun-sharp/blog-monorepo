@@ -32,8 +32,8 @@ cd packages/node-server && npm run start:dev
 
 - `@/*` → `src/*`
 - `/#/api/*` → `packages/shared/types/api/*` (共享 API 类型)
-- `/#/models/*` → `packages/shared/types/models/*` (数据库模型)
 - `/#/common/*` → `packages/shared/types/common/*` (共享基础类型)
+- `@shared/*` → `packages/shared/src/*` (共享源码)
 
 各项目特有的类型目录：
 - admin-web: `/#/vue/*` → `packages/shared/types/vue/*`
@@ -42,7 +42,7 @@ cd packages/node-server && npm run start:dev
 默认路径 `/#/*` 映射到各项目特有类型：
 - admin-web → `packages/shared/types/vue/`
 - website → `packages/shared/types/react/`
-- node-server → `packages/shared/types/models/`
+- node-server → `packages/shared/types/`
 
 ## 关键注意事项
 
@@ -94,4 +94,20 @@ npm run lint --workspace=packages/node-server
 
 ## 共享代码
 
-`packages/shared/` 目录用于存放跨项目共享代码。
+`packages/shared/` 目录用于存放跨项目共享代码：
+
+### 类型定义 (`types/`)
+
+- `types/api/` - API 相关类型定义
+  - `capital/` - 管理后台相关类型
+  - `blog/` - 博客相关类型
+  - `common/` - 公共 API 类型
+  - `config.d.ts` - 配置类型
+- `types/common/` - 公共基础类型
+- `types/vue/` - Vue 项目专用类型
+- `types/react/` - React 项目专用类型
+
+### 共享源码 (`src/`)
+
+- `src/utils/` - 共享工具函数
+- `src/constants/` - 共享常量
