@@ -2,8 +2,9 @@
 
 ## 项目结构
 
-Monorepo 包含 3 个独立项目：
+Monorepo 包含 4 个独立项目：
 - `packages/admin-web` - Vue 3 管理后台 (Naive UI)
+- `packages/admin-mobile` - uni-app 移动端管理后台 (uView Pro)
 - `packages/website` - React 18 博客网站 (Ant Design)
 - `packages/node-server` - NestJS 后端 API (MongoDB)
 
@@ -13,18 +14,23 @@ Monorepo 包含 3 个独立项目：
 # 根目录快捷命令
 npm run dev:website    # website 开发服务器 (端口 9222)
 npm run dev:admin      # admin-web 开发服务器 (端口 8222，使用 dev-local 模式)
+npm run dev:mobile     # admin-mobile H5 开发服务器 (端口 7222)
+npm run dev:mobile:mp-weixin  # admin-mobile 微信小程序开发
 npm run dev:server     # node-server 开发模式 (端口 3000)
 
 # 或进入各自目录运行
 cd packages/website && npm run dev
 cd packages/admin-web && npm run dev        # 默认 dev-local 模式
 cd packages/admin-web && npm run dev:text   # dev 模式
+cd packages/admin-mobile && npm run dev:h5  # H5 模式
+cd packages/admin-mobile && npm run dev:mp-weixin  # 微信小程序模式
 cd packages/node-server && npm run start:dev
 ```
 
 ## 构建输出目录
 
 - admin-web → `manage/`
+- admin-mobile → `unpackage/`
 - website → `home/`
 - node-server → `dist/`
 
@@ -37,10 +43,12 @@ cd packages/node-server && npm run start:dev
 
 各项目特有的类型目录：
 - admin-web: `/#/vue/*` → `packages/shared/types/vue/*`
+- admin-mobile: `/#/uni/*` → `packages/shared/types/uni/*`
 - website: `/#/react/*` → `packages/shared/types/react/*`
 
 默认路径 `/#/*` 映射到各项目特有类型：
 - admin-web → `packages/shared/types/vue/`
+- admin-mobile → `packages/shared/types/uni/`
 - website → `packages/shared/types/react/`
 - node-server → `packages/shared/types/`
 
@@ -89,6 +97,7 @@ website 默认代理到 `http://127.0.0.1:3000`
 # 各项目独立 lint
 npm run lint --workspace=packages/website
 npm run lint --workspace=packages/admin-web
+npm run lint --workspace=packages/admin-mobile
 npm run lint --workspace=packages/node-server
 ```
 
@@ -106,8 +115,9 @@ npm run lint --workspace=packages/node-server
 - `types/common/` - 公共基础类型
 - `types/vue/` - Vue 项目专用类型
 - `types/react/` - React 项目专用类型
+- `types/uni/` - uni-app 项目专用类型
 
 ### 共享源码 (`src/`)
 
-- `src/utils/` - 共享工具函数
-- `src/constants/` - 共享常量
+- `src/utils/` - 共享工具函数 (is, storage, axios, files, array, string, time, color)
+- `src/constants/` - 共享常量 (storage-name, http-enum, api-type, page-const, table-const)

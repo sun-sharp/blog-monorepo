@@ -5,7 +5,7 @@ import { AppRouteRecordRaw } from '/#/router';
 import { EMBEDDED_VALUE, MAIN_DIRECTORY_VALUE, MENU_VALUE, PAGE_ENUM } from '@/constant';
 import { NaiveMenuOption } from '/#/plugins/naive';
 import { cloneDeep } from 'lodash-es';
-import { toUnderscoreCase } from './string';
+import { toUnderscoreCase } from '@shared/utils/string';
 import { PageRoute } from '@/router/base';
 
 /**
