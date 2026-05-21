@@ -1,0 +1,13 @@
+export declare const nearlyMonthFormatRange: (formatStr: string) => [string, string];
+export declare const lastHalfYearFormatRange: (formatStr: string) => [string, string];
+export declare const lastMonthFormatRange: (formatStr: string) => [string, string];
+export declare const lastYearFormatRange: (formatStr: string) => [string, string];
+export declare const thisYearFormatRange: (formatStr: string) => [string, string];
+export declare const firstHalfYearFormatRange: (formatStr: string) => [string, string];
+export declare const secondHalfYearFormatRange: (formatStr: string) => [string, string];
+export declare const nearlyYearFormatRange: (formatStr: string) => [string, string];
+export declare const certainYearAllDays: (year: number) => number;
+export declare const certainDateSpendDays: (defaultDate: Date) => number;
+export declare const judgeRangeToFormatTime: (time: string, formatStr?: string) => string;
+export declare const judgeRangeToFormatFutureTime: (time: string, formatStr?: string) => string;
+//# sourceMappingURL=time.d.ts.map

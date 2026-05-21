@@ -31,9 +31,7 @@ npm run typecheck
 
 | 别名 | 解析为 | 用途 |
 |------|--------|------|
-| `@/*` | `src/*` | 项目源码（尚未创建 src/） |
 | `/#/*` | `packages/shared/types/*` | 解析到 `shared/types/`，对类型就只有这个 |
-| `@shared/*` | `packages/shared/src/*` | 共享源码（utils, constants） |
 
 ## uni-app 特有约定
 

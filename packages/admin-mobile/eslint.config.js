@@ -22,6 +22,7 @@ export default [
       '.local/**',
       'index.html',
       '**/*.js',
+      'uni_modules/**',
     ],
   },
   js.configs.recommended,

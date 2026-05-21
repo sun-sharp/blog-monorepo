@@ -1,0 +1,29 @@
+export declare const PAGE_ENUM: {
+    LOGIN_PATH: string;
+    LOGIN_NAME: string;
+    LOGIN_TITLE: string;
+    HOME_PATH: string;
+    HOME_NAME: string;
+    HOME_TITLE: string;
+    HOME_ICON: string;
+    PAGE_PATH: string;
+    PAGE_NAME: string;
+    ERROR_PAGE_NAME: string;
+    ERROR_PAGE_TITLE: string;
+    ERROR_CHILD_PAGE_NAME: string;
+    REDIRECT_PATH: string;
+    REDIRECT_NAME: string;
+    REDIRECT_PAGE_NAME: string;
+    REDIRECT_PAGE_TITLE: string;
+    REDIRECT_CHILD_PAGE_NAME: string;
+    SETTING_PATH: string;
+    SETTING_NAME: string;
+    SETTING_TITLE: string;
+    SETTING_ACCOUNT_PATH: string;
+    SETTING_ACCOUNT_NAME: string;
+    SETTING_ACCOUNT_TITLE: string;
+    SETTING_PASSWORD_PATH: string;
+    SETTING_PASSWORD_NAME: string;
+    SETTING_PASSWORD_TITLE: string;
+};
+//# sourceMappingURL=page-const.d.ts.map
