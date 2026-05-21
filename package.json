@@ -3,7 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
-    "packages/*"
+    "packages/website",
+    "packages/admin-web",
+    "packages/node-server",
+    "packages/shared"
   ],
   "scripts": {
     "dev:website": "npm run dev --workspace=packages/website",
