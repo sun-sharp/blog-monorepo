@@ -1,0 +1,10 @@
+{
+  "name": "admin-mobile",
+  "private": true,
+  "version": "1.0.0",
+  "devDependencies": {
+    "vue": "^3.5.33",
+    "@dcloudio/types": "^3.4.8",
+    "typescript": "^6.0.3"
+  }
+}

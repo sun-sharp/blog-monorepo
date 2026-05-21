@@ -6,7 +6,8 @@
     "packages/website",
     "packages/admin-web",
     "packages/node-server",
-    "packages/shared"
+    "packages/shared",
+    "packages/admin-mobile"
   ],
   "scripts": {
     "dev:website": "npm run dev --workspace=packages/website",
