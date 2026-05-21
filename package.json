@@ -25,15 +25,17 @@
     "build:all": "npm run build:website && npm run build:admin && npm run build:server",
     "lint:website": "npm run lint --workspace=packages/website",
     "lint:admin": "npm run lint --workspace=packages/admin-web",
+    "lint:mobile": "npm run lint --workspace=packages/admin-mobile",
     "lint:server": "npm run lint --workspace=packages/node-server",
-    "lint:all": "npm run lint:website && npm run lint:admin && npm run lint:server",
+    "lint:all": "npm run lint:website && npm run lint:admin && npm run lint:server && npm run lint:mobile",
     "lint:stylelint:website": "npm run lint:stylelint --workspace=packages/website",
     "lint:stylelint:admin": "npm run lint:stylelint --workspace=packages/admin-web",
     "lint:stylelint:all": "npm run lint:stylelint:website && npm run lint:stylelint:admin",
-    "reinstall:website": "npm run reinstall --workspace=packages/website",
-    "reinstall:admin": "npm run reinstall --workspace=packages/admin-web",
-    "reinstall:server": "npm run reinstall --workspace=packages/node-server",
-    "reinstall:all": "npm run reinstall:website && npm run reinstall:admin && npm run reinstall:server",
+    "rm_node_modules:website": "npm run rm_node_modules --workspace=packages/website",
+    "rm_node_modules:admin": "npm run rm_node_modules --workspace=packages/admin-web",
+    "rm_node_modules:server": "npm run rm_node_modules --workspace=packages/node-server",
+    "rm_node_modules:mobile": "npm run rm_node_modules --workspace=packages/admin-mobile",
+    "rm_node_modules:all": "rimraf yarn.lock && rimraf pnpm-lock.yaml && rimraf package-lock.json && rimraf node_modules && npm run rm_node_modules:website && npm run rm_node_modules:admin && npm run rm_node_modules:server && npm run rm_node_modules:mobile",
     "typecheck:shared": "npm run typecheck --workspace=packages/shared"
   }
 }
