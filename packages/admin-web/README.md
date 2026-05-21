@@ -32,7 +32,7 @@ npm run lint
 npm run preview
 # 执行 stylelint 格式化
 npm run lint:stylelint
-# 重新安装依赖 该命令会先删除 node_modules、yarn.lock、package.lock.json，后再进行依赖重新安装（安装速度会明显变慢）
+# 重新安装依赖 该命令会先删除 node_modules、yarn.lock、package-lock.json，后再进行依赖重新安装（安装速度会明显变慢）
 npm run reinstall
 ```
 

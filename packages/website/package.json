@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "lint": "eslint src *.ts *.js *.cjs --fix --report-unused-disable-directives --max-warnings 0 && npx tsc --noEmit",
     "lint:stylelint": "stylelint --fix \"**/*.{less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
-    "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm install"
+    "rm_node_modules": "rimraf yarn.lock && rimraf pnpm-lock.yaml && rimraf package-lock.json && rimraf node_modules"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.1",
