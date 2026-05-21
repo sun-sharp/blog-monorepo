@@ -18,6 +18,17 @@ const CAPITAL_API_URL = import.meta.env.VITE_CAPITAL_API_URL || '/capital-api';
 const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '/blog-api';
 const AUTHORIZATION_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
 
+function isH5Platform(): boolean {
+  try {
+    return uni.getSystemInfoSync().uniPlatform === 'web';
+  } catch {
+    return false;
+  }
+}
+
+const CAPITAL_BASE = isH5Platform() ? CAPITAL_API_URL : `${BASE_URL}/capital`;
+const BLOG_BASE = isH5Platform() ? BLOG_API_URL : `${BASE_URL}/blog`;
+
 function buildUrl(config: RequestConfig): string {
   let url = config.url;
   const baseUrl = config.baseUrl || BASE_URL;
@@ -66,11 +77,11 @@ function request<T = any>(config: RequestConfig): Promise<T> {
           if (isTransform && responseData.code !== undefined) {
             if (responseData.code === ResultEnum.SUCCESS) {
               if (config.isShowSuccessMessage && responseData.message) {
-                uni.showToast({ title: responseData.message, icon: 'success' });
+                uni.showToast({ title: String(responseData.message), icon: 'success' });
               }
               resolve(responseData.result as T);
             } else {
-              const errorMsg = responseData.message || '请求失败';
+              const errorMsg = typeof responseData.message === 'string' ? responseData.message : '请求失败';
               uni.showToast({ title: errorMsg, icon: 'none' });
               reject(new Error(errorMsg));
             }
@@ -102,7 +113,7 @@ export function createRequest(baseUrl: string) {
   };
 }
 
-export const capitalRequest = createRequest(`${BASE_URL}${CAPITAL_API_URL}`);
-export const blogRequest = createRequest(`${BASE_URL}${BLOG_API_URL}`);
+export const capitalRequest = createRequest(CAPITAL_BASE);
+export const blogRequest = createRequest(BLOG_BASE);
 
 export default request;
