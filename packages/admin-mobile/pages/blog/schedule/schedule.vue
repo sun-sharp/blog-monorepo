@@ -1,16 +1,24 @@
 <template>
-  <view>
+  <view class="schedule-page">
     <list-page ref="listPageRef" :api-fn="scheduleAPi.getFindPage" search-placeholder="搜索日程" search-key="keywords" show-fab @fabClick="goToAdd">
       <template #default="{ list }">
-        <u-cell-group>
+        <view class="schedule-list">
           <u-swipe-action v-for="item in list" :key="item.scheduleId" :options="swipeOptions" @click="onSwipeClick($event, item)">
-            <u-cell-item :title="item.title" :label="`${item.startDate} ~ ${item.endDate}`" @click="goToEdit(item.scheduleId)">
-              <template #value>
-                <text class="schedule-time">{{ item.startTime }}-{{ item.endTime }}</text>
-              </template>
-            </u-cell-item>
+            <view class="schedule-item card" @click="goToEdit(item.scheduleId)">
+              <view class="schedule-item-header">
+                <text class="schedule-item-title">{{ item.title }}</text>
+              </view>
+              <view class="schedule-item-time">
+                <u-icon name="calendar" size="24" color="#007aff" />
+                <text class="schedule-item-date">{{ item.startDate }} ~ {{ item.endDate }}</text>
+              </view>
+              <view v-if="item.startTime || item.endTime" class="schedule-item-time">
+                <u-icon name="clock" size="24" color="#f0ad4e" />
+                <text class="schedule-item-date">{{ item.startTime }} - {{ item.endTime }}</text>
+              </view>
+            </view>
           </u-swipe-action>
-        </u-cell-group>
+        </view>
       </template>
     </list-page>
   </view>
@@ -62,7 +70,37 @@
 </script>
 
 <style lang="scss" scoped>
-  .schedule-time {
+  .schedule-page {
+    background-color: $uni-bg-color-grey;
+  }
+
+  .schedule-list {
+    padding: 0 10rpx;
+  }
+
+  .schedule-item {
+    margin-bottom: 16rpx;
+  }
+
+  .schedule-item-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .schedule-item-title {
+    font-size: $uni-font-size-lg;
+    font-weight: bold;
+    flex: 1;
+  }
+
+  .schedule-item-time {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    margin-top: 12rpx;
+  }
+
+  .schedule-item-date {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
   }

@@ -8,53 +8,64 @@
       </view>
     </view>
 
-    <view class="mine-section">
-      <text class="mine-section-title">个人</text>
-      <u-cell-group>
+    <view class="mine-section card">
+      <view class="mine-section-header">
+        <u-icon name="account" size="28" color="#007aff" />
+        <text class="mine-section-title">个人</text>
+      </view>
+      <u-cell-group :border="false">
         <u-cell-item title="账号设置" icon="account" @click="navigateTo('/pages/setting/account/account')" />
         <u-cell-item title="修改密码" icon="lock" @click="navigateTo('/pages/setting/password/password')" />
-        <u-cell-item title="仪表盘" icon="grid" @click="navigateTo('/pages/dashboard/workplace')" />
       </u-cell-group>
     </view>
 
-    <view class="mine-section">
-      <text class="mine-section-title">博客</text>
-      <u-cell-group>
-        <u-cell-item title="文章管理" icon="file-text" @click="navigateTo('/pages/blog/article/article')" />
+    <view class="mine-section card">
+      <view class="mine-section-header">
+        <u-icon name="file-text" size="28" color="#4cd964" />
+        <text class="mine-section-title">博客</text>
+      </view>
+      <u-cell-group :border="false">
         <u-cell-item title="日程管理" icon="calendar" @click="navigateTo('/pages/blog/schedule/schedule')" />
       </u-cell-group>
     </view>
 
-    <view class="mine-section">
-      <text class="mine-section-title">财务管理</text>
-      <u-cell-group>
-        <u-cell-item title="银行账单" icon="list" @click="navigateTo('/pages/money/bank/bank')" />
-        <u-cell-item title="支付宝账单" icon="list" @click="navigateTo('/pages/money/ali-pay/ali-pay')" />
-        <u-cell-item title="微信账单" icon="list" @click="navigateTo('/pages/money/we-chat/we-chat')" />
-        <u-cell-item title="上传规则" icon="setting" @click="navigateTo('/pages/money/bill-upload/bill-upload')" />
-        <u-cell-item title="财务汇总" icon="pie-chart" @click="navigateTo('/pages/money/amount-summary/amount-summary')" />
+    <view class="mine-section card">
+      <view class="mine-section-header">
+        <u-icon name="red-packet" size="28" color="#f0ad4e" />
+        <text class="mine-section-title">财务</text>
+      </view>
+      <u-cell-group :border="false">
+        <u-cell-item title="上传规则" icon="setting" @click="navigateTo('/pages/finance/bill-upload/bill-upload')" />
+        <u-cell-item title="财务汇总" icon="pie-chart" @click="navigateTo('/pages/finance/summary/summary')" />
+        <u-cell-item title="导入账单" icon="upload" @click="navigateTo('/pages/finance/upload/upload')" />
       </u-cell-group>
     </view>
 
-    <view class="mine-section">
-      <text class="mine-section-title">文件</text>
-      <u-cell-group>
+    <view class="mine-section card">
+      <view class="mine-section-header">
+        <u-icon name="image" size="28" color="#a18cd1" />
+        <text class="mine-section-title">文件</text>
+      </view>
+      <u-cell-group :border="false">
         <u-cell-item title="图片管理" icon="image" @click="navigateTo('/pages/file/image/image')" />
+        <u-cell-item title="上传图片" icon="camera" @click="navigateTo('/pages/file/upload/upload')" />
       </u-cell-group>
     </view>
 
-    <view class="mine-section">
-      <text class="mine-section-title">系统管理</text>
-      <u-cell-group>
+    <view class="mine-section card">
+      <view class="mine-section-header">
+        <u-icon name="manage" size="28" color="#dd524d" />
+        <text class="mine-section-title">系统管理</text>
+      </view>
+      <u-cell-group :border="false">
         <u-cell-item title="用户管理" icon="account" @click="navigateTo('/pages/system/user/user')" />
         <u-cell-item title="角色管理" icon="manage" @click="navigateTo('/pages/system/role/role')" />
-        <u-cell-item title="菜单管理" icon="menu" @click="navigateTo('/pages/system/menu/menu')" />
         <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
       </u-cell-group>
     </view>
 
     <view class="mine-logout">
-      <u-button type="error" plain @click="handleLogout">退出登录</u-button>
+      <u-button type="error" plain shape="circle" @click="handleLogout">退出登录</u-button>
     </view>
   </view>
 </template>
@@ -62,6 +73,8 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { useUserStore } from '../../store';
+
+  defineProps<{ active: boolean }>();
 
   const userStore = useUserStore();
   const userInfo = computed(() => userStore.getUserInfo);
@@ -87,17 +100,14 @@
 <style lang="scss" scoped>
   .mine-page {
     padding: 20rpx;
-    padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+    padding-bottom: 20rpx;
   }
 
   .mine-header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 30rpx;
-    background-color: $uni-bg-color;
-    border-radius: $uni-border-radius-lg;
-    margin-bottom: 20rpx;
+    background: linear-gradient(135deg, #e8f4fd, #f0f7ff);
   }
 
   .mine-header-info {
@@ -119,17 +129,24 @@
   }
 
   .mine-section {
-    margin-bottom: 20rpx;
+    margin-bottom: 16rpx;
+    padding: 0 !important;
+  }
+
+  .mine-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    padding: 20rpx 24rpx 8rpx;
   }
 
   .mine-section-title {
-    font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
-    padding: 16rpx 10rpx 8rpx;
+    font-size: $uni-font-size-base;
+    font-weight: bold;
   }
 
   .mine-logout {
-    margin-top: 40rpx;
+    margin-top: 30rpx;
     padding: 0 10rpx;
   }
 </style>

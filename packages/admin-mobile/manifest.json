@@ -73,25 +73,25 @@
         "devServer": {
             "port": 7444,
             "proxy": {
-                "/capital-api": {
+                "/capital": {
                     "target": "http://127.0.0.1:3000",
                     "changeOrigin": true,
                     "pathRewrite": {
-                        "^/capital-api": "/capital"
+                        "^/capital": "/capital"
                     }
                 },
-                "/blog-api": {
+                "/blog": {
                     "target": "http://127.0.0.1:3000",
                     "changeOrigin": true,
                     "pathRewrite": {
-                        "^/blog-api": "/blog"
+                        "^/blog": "/blog"
                     }
                 }
             }
         },
         "router": {
-            "base": "/h5",
-            "mode": "hash"
+            "base": "/h5/",
+            "mode": "history"
         }
     }
 }

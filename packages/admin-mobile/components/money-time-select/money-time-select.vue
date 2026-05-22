@@ -1,58 +1,73 @@
 <template>
-  <u-popup :show="show" mode="bottom" @close="handleClose">
-    <view class="money-time-select">
-      <view class="money-time-select-header">
-        <text class="money-time-select-title">选择时间范围</text>
-        <u-icon name="close" @click="handleClose" />
+  <u-popup v-model="popupShow" mode="bottom" round="20" @close="handleClose">
+    <view class="time-select">
+      <view class="time-select-header">
+        <text class="time-select-title">选择时间范围</text>
+        <u-icon name="close" size="40" @click="handleClose" />
       </view>
-      <u-subsection :list="quickOptions" :current="quickIndex" @change="handleQuickChange" />
-      <view v-if="quickIndex === 3" class="money-time-select-custom">
-        <u-form :model="form" label-position="top">
-          <u-form-item label="开始时间">
-            <u-input v-model="form.startTime" placeholder="请选择开始时间" readonly @click="showStartPicker = true" />
-          </u-form-item>
-          <u-form-item label="结束时间">
-            <u-input v-model="form.endTime" placeholder="请选择结束时间" readonly @click="showEndPicker = true" />
-          </u-form-item>
-        </u-form>
+      <view class="time-select-quick">
+        <view
+          v-for="(item, index) in quickOptions"
+          :key="index"
+          :class="['time-select-quick-item', quickIndex === index && 'time-select-quick-active']"
+          @click="onQuickSelect(index)">
+          <text :class="['time-select-quick-text', quickIndex === index && 'time-select-quick-text-active']">{{ item.label }}</text>
+        </view>
       </view>
-      <u-calendar :show="showStartPicker" mode="date" @confirm="onStartConfirm" @close="showStartPicker = false" />
-      <u-calendar :show="showEndPicker" mode="date" @confirm="onEndConfirm" @close="showEndPicker = false" />
-      <view class="money-time-select-footer">
-        <u-button type="primary" :disabled="quickIndex === 3 && (!form.startTime || !form.endTime)" @click="handleConfirm">确定</u-button>
+      <view v-if="quickIndex === 4" class="time-select-custom">
+        <view class="time-select-field" @click="openStartPicker">
+          <text class="time-select-field-label">开始时间</text>
+          <view class="time-select-field-value">
+            <text :class="form.startTime ? 'time-select-date' : 'time-select-placeholder'">{{ form.startTime || '请选择' }}</text>
+            <u-icon name="arrow-right" size="28" color="#ccc" />
+          </view>
+        </view>
+        <view class="time-select-field" @click="openEndPicker">
+          <text class="time-select-field-label">结束时间</text>
+          <view class="time-select-field-value">
+            <text :class="form.endTime ? 'time-select-date' : 'time-select-placeholder'">{{ form.endTime || '请选择' }}</text>
+            <u-icon name="arrow-right" size="28" color="#ccc" />
+          </view>
+        </view>
       </view>
+      <u-button type="primary" shape="circle" :disabled="quickIndex === 4 && (!form.startTime || !form.endTime)" @click="handleConfirm">确定</u-button>
     </view>
   </u-popup>
+  <u-picker v-model="showStartPicker" mode="time" :params="pickerParams" :default-time="form.startTime || today" @confirm="onStartConfirm" />
+  <u-picker v-model="showEndPicker" mode="time" :params="pickerParams" :default-time="form.endTime || today" @confirm="onEndConfirm" />
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
+  import { ref, reactive, computed } from 'vue';
 
-  defineProps<{
-    show: boolean;
-  }>();
-
+  const props = defineProps<{ show: boolean }>();
   const emit = defineEmits(['update:show', 'confirm']);
 
-  const quickOptions = ['近7天', '近30天', '近90天', '自定义'];
+  const quickOptions = [
+    { label: '近7天', days: 7 },
+    { label: '近30天', days: 30 },
+    { label: '近90天', days: 90 },
+    { label: '近1年', days: 365 },
+    { label: '自定义', days: 0 },
+  ];
+
   const quickIndex = ref(0);
   const showStartPicker = ref(false);
   const showEndPicker = ref(false);
 
-  const form = reactive({
-    startTime: '',
-    endTime: '',
+  const form = reactive({ startTime: '', endTime: '' });
+
+  const pickerParams = { year: true, month: true, day: true, hour: false, minute: false, second: false, timestamp: false };
+
+  const popupShow = computed({
+    get: () => props.show,
+    set: (val: boolean) => emit('update:show', val),
   });
 
-  function getDateRange(days: number) {
-    const end = new Date();
-    const start = new Date();
-    start.setTime(start.getTime() - days * 24 * 60 * 60 * 1000);
-    return {
-      startTime: formatDate(start),
-      endTime: formatDate(end),
-    };
-  }
+  const today = computed(() => {
+    const d = new Date();
+    return formatDate(d);
+  });
 
   function formatDate(date: Date): string {
     const y = date.getFullYear();
@@ -61,37 +76,46 @@
     return `${y}-${m}-${d}`;
   }
 
-  function handleQuickChange(index: number) {
+  function getDateRange(days: number) {
+    const end = new Date();
+    const start = new Date();
+    start.setTime(start.getTime() - days * 24 * 60 * 60 * 1000);
+    return { startTime: formatDate(start), endTime: formatDate(end) };
+  }
+
+  function onQuickSelect(index: number) {
     quickIndex.value = index;
+    if (index < 4) {
+      const range = getDateRange(quickOptions[index].days);
+      form.startTime = range.startTime;
+      form.endTime = range.endTime;
+    }
+  }
+
+  function openStartPicker() {
+    showStartPicker.value = true;
+  }
+
+  function openEndPicker() {
+    showEndPicker.value = true;
   }
 
   function onStartConfirm(e: any) {
-    form.startTime = e[0];
+    form.startTime = `${e.year}-${e.month}-${e.day}`;
     showStartPicker.value = false;
   }
 
   function onEndConfirm(e: any) {
-    form.endTime = e[0];
+    form.endTime = `${e.year}-${e.month}-${e.day}`;
     showEndPicker.value = false;
   }
 
   function handleConfirm() {
     let result: { startTime: string; endTime: string };
-    switch (quickIndex.value) {
-      case 0:
-        result = getDateRange(7);
-        break;
-      case 1:
-        result = getDateRange(30);
-        break;
-      case 2:
-        result = getDateRange(90);
-        break;
-      case 3:
-        result = { startTime: form.startTime, endTime: form.endTime };
-        break;
-      default:
-        result = getDateRange(7);
+    if (quickIndex.value === 4) {
+      result = { startTime: form.startTime, endTime: form.endTime };
+    } else {
+      result = getDateRange(quickOptions[quickIndex.value].days);
     }
     emit('confirm', result);
     handleClose();
@@ -103,28 +127,82 @@
 </script>
 
 <style lang="scss" scoped>
-  .money-time-select {
+  .time-select {
     padding: 30rpx;
     padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
   }
 
-  .money-time-select-header {
+  .time-select-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30rpx;
   }
 
-  .money-time-select-title {
+  .time-select-title {
     font-size: $uni-font-size-lg;
     font-weight: bold;
   }
 
-  .money-time-select-custom {
-    margin-top: 30rpx;
+  .time-select-quick {
+    display: flex;
+    gap: 16rpx;
+    margin-bottom: 30rpx;
   }
 
-  .money-time-select-footer {
-    margin-top: 30rpx;
+  .time-select-quick-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12rpx 0;
+    border-radius: 12rpx;
+    background-color: #f5f5f5;
+  }
+
+  .time-select-quick-active {
+    background-color: #007aff;
+  }
+
+  .time-select-quick-text {
+    font-size: $uni-font-size-sm;
+    color: #666;
+  }
+
+  .time-select-quick-text-active {
+    color: #fff;
+  }
+
+  .time-select-custom {
+    margin-bottom: 30rpx;
+  }
+
+  .time-select-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #eee;
+  }
+
+  .time-select-field-label {
+    font-size: $uni-font-size-base;
+    color: #333;
+  }
+
+  .time-select-field-value {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+  }
+
+  .time-select-date {
+    font-size: $uni-font-size-base;
+    color: #333;
+  }
+
+  .time-select-placeholder {
+    font-size: $uni-font-size-base;
+    color: #ccc;
   }
 </style>

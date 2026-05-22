@@ -1,19 +1,25 @@
 <template>
   <view class="login-page">
-    <view class="login-header">
-      <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
-      <text class="login-title">{{ appTitle }}</text>
-    </view>
-    <view class="login-form">
-      <u-form ref="formRef" :model="form" :rules="rules">
-        <u-form-item prop="username">
-          <u-input v-model="form.username" placeholder="请输入用户名" prefix-icon="account" :prefix-icon-style="{ color: '#999' }" />
-        </u-form-item>
-        <u-form-item prop="password">
-          <u-input v-model="form.password" type="password" placeholder="请输入密码" prefix-icon="lock" :prefix-icon-style="{ color: '#999' }" />
-        </u-form-item>
-      </u-form>
-      <u-button type="primary" :loading="loading" class="login-btn" @click="handleLogin">登录</u-button>
+    <view class="login-bg" />
+    <view class="login-content">
+      <view class="login-header">
+        <view class="login-logo-wrap">
+          <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
+        </view>
+        <text class="login-title">{{ appTitle }}</text>
+        <text class="login-subtitle">欢迎回来，请登录你的账号</text>
+      </view>
+      <view class="login-form card">
+        <u-form ref="formRef" :model="form" :rules="rules">
+          <u-form-item prop="username">
+            <u-input v-model="form.username" placeholder="请输入用户名" prefix-icon="account" :prefix-icon-style="{ color: '#999' }" shape="round" />
+          </u-form-item>
+          <u-form-item prop="password">
+            <u-input v-model="form.password" type="password" placeholder="请输入密码" prefix-icon="lock" :prefix-icon-style="{ color: '#999' }" shape="round" />
+          </u-form-item>
+        </u-form>
+        <u-button type="primary" :loading="loading" shape="circle" class="login-btn" @click="handleLogin">登 录</u-button>
+      </view>
     </view>
   </view>
 </template>
@@ -48,7 +54,7 @@
       const res = await userStore.login(form);
       if (res.code === 0) {
         uni.showToast({ title: '登录成功', icon: 'success' });
-        uni.reLaunch({ url: '/pages/home/home' });
+        uni.reLaunch({ url: '/pages/main/main' });
       } else {
         uni.showToast({ title: res.message || '登录失败', icon: 'none' });
       }
@@ -61,34 +67,69 @@
 <style lang="scss" scoped>
   .login-page {
     min-height: 100vh;
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 60rpx;
-    background-color: $uni-bg-color;
+  }
+
+  .login-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60vh;
+    background: linear-gradient(135deg, #667eea, #007aff);
+    border-radius: 0 0 60rpx 60rpx;
+  }
+
+  .login-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100rpx 60rpx 0;
   }
 
   .login-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 80rpx;
+    margin-bottom: 60rpx;
+  }
+
+  .login-logo-wrap {
+    width: 140rpx;
+    height: 140rpx;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20rpx;
   }
 
   .login-logo {
-    width: 160rpx;
-    height: 160rpx;
-    margin-bottom: 30rpx;
+    width: 100rpx;
+    height: 100rpx;
   }
 
   .login-title {
-    font-size: 40rpx;
+    font-size: 44rpx;
     font-weight: bold;
-    color: $uni-text-color;
+    color: #fff;
+    margin-top: 24rpx;
+  }
+
+  .login-subtitle {
+    font-size: $uni-font-size-base;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 12rpx;
   }
 
   .login-form {
     width: 100%;
+    padding: 40rpx;
   }
 
   .login-btn {

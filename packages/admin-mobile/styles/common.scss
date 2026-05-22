@@ -12,7 +12,8 @@ page {
   background-color: $uni-bg-color;
   border-radius: $uni-border-radius-lg;
   padding: 24rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 }
 
 .flex-row {
@@ -62,4 +63,9 @@ page {
   background-color: $uni-bg-color;
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
   z-index: 99;
+}
+
+.section-title {
+  font-size: $uni-font-size-lg;
+  font-weight: bold;
 }

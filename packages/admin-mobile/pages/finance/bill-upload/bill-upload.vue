@@ -54,11 +54,11 @@
   ];
 
   function goToAdd() {
-    uni.navigateTo({ url: '/pages/money/bill-upload-edit/bill-upload-edit' });
+    uni.navigateTo({ url: '/pages/finance/bill-upload-edit/bill-upload-edit' });
   }
 
   function goToEdit(billUploadId: string) {
-    uni.navigateTo({ url: `/pages/money/bill-upload-edit/bill-upload-edit?id=${billUploadId}` });
+    uni.navigateTo({ url: `/pages/finance/bill-upload-edit/bill-upload-edit?id=${billUploadId}` });
   }
 
   function onSwipeClick(event: any, item: ApiBillUploadItem) {

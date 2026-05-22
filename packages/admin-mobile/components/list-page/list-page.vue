@@ -1,7 +1,17 @@
 <template>
-  <view>
-    <u-search v-if="showSearch" v-model="keyword" :placeholder="searchPlaceholder" @search="handleSearch" @custom="handleSearch" @clear="handleClear" />
-    <u-dropdown v-if="dropdownItems.length > 0">
+  <view class="list-page">
+    <view v-if="showSearch" class="list-page-search">
+      <u-search
+        v-model="keyword"
+        :placeholder="searchPlaceholder"
+        shape="round"
+        :show-action="true"
+        action-text="搜索"
+        @search="handleSearch"
+        @custom="handleSearch"
+        @clear="handleClear" />
+    </view>
+    <u-dropdown v-if="dropdownItems.length > 0" class="list-page-dropdown">
       <u-dropdown-item
         v-for="(item, index) in dropdownItems"
         :key="index"
@@ -10,19 +20,32 @@
         :options="item.options"
         @change="handleDropdownChange" />
     </u-dropdown>
-    <view class="list-page-content">
+    <scroll-view
+      scroll-y
+      class="list-page-scroll"
+      :refresher-enabled="true"
+      :refresher-triggered="isRefreshing"
+      refresher-default-style="none"
+      @refresherrefresh="onPullDownRefresh"
+      @scrolltolower="onReachBottom">
+      <template #refresher>
+        <view class="list-page-refresher">
+          <u-loading v-if="isRefreshing" mode="circle" size="40" />
+          <text class="list-page-refresher-text">{{ isRefreshing ? '刷新中...' : '下拉刷新' }}</text>
+        </view>
+      </template>
       <view v-if="loading && list.length === 0" class="list-page-loading">
-        <u-loading mode="circle" />
+        <u-loading mode="circle" size="60" />
         <text class="list-page-loading-text">加载中...</text>
       </view>
       <view v-else-if="!loading && list.length === 0" class="list-page-empty">
-        <u-empty mode="data" text="暂无数据" />
+        <u-empty mode="data" text="暂无数据" icon-size="160" />
       </view>
-      <view v-else>
+      <view v-else class="list-page-content">
         <slot :list="list" />
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
-    </view>
+    </scroll-view>
     <u-fab v-if="showFab" icon="plus" @click="$emit('fabClick')" />
   </view>
 </template>
@@ -62,6 +85,7 @@
   const keyword = ref('');
   const list = ref<any[]>([]);
   const loading = ref(false);
+  const isRefreshing = ref(false);
   const current = ref(1);
   const total = ref(0);
 
@@ -103,11 +127,24 @@
       console.error(e);
     } finally {
       loading.value = false;
+      isRefreshing.value = false;
     }
   }
 
   function loadMore() {
     if (list.value.length < total.value) {
+      current.value++;
+      loadData();
+    }
+  }
+
+  function onPullDownRefresh() {
+    isRefreshing.value = true;
+    loadData(true);
+  }
+
+  function onReachBottom() {
+    if (!loading.value && list.value.length < total.value) {
       current.value++;
       loadData();
     }
@@ -139,6 +176,39 @@
 </script>
 
 <style lang="scss" scoped>
+  .list-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100rpx);
+  }
+
+  .list-page-search {
+    padding: 16rpx 24rpx 0;
+    background-color: $uni-bg-color;
+  }
+
+  .list-page-dropdown {
+    background-color: $uni-bg-color;
+  }
+
+  .list-page-scroll {
+    flex: 1;
+    height: 0;
+  }
+
+  .list-page-refresher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20rpx 0;
+    gap: 12rpx;
+  }
+
+  .list-page-refresher-text {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+  }
+
   .list-page-content {
     padding: 0 20rpx;
   }

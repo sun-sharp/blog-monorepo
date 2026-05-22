@@ -1,6 +1,7 @@
 import { getToken } from './auth';
 import { ResultEnum } from '../../shared/src/constants/http-enum';
 import { ApiResponse } from '/#/api/common';
+import { loading } from './loading';
 
 interface RequestConfig {
   url: string;
@@ -11,6 +12,8 @@ interface RequestConfig {
   baseUrl?: string;
   isTransformResponse?: boolean;
   isShowSuccessMessage?: boolean;
+  showLoading?: boolean;
+  loadingText?: string;
 }
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || '';
@@ -52,6 +55,11 @@ function buildUrl(config: RequestConfig): string {
 }
 
 function request<T = any>(config: RequestConfig): Promise<T> {
+  const needLoading = config.showLoading !== false;
+  if (needLoading) {
+    loading.show(config.loadingText);
+  }
+
   return new Promise((resolve, reject) => {
     const token = getToken();
     const header: Record<string, string> = {
@@ -104,7 +112,11 @@ function request<T = any>(config: RequestConfig): Promise<T> {
         reject(err);
       },
     });
-  });
+  }).finally(() => {
+    if (needLoading) {
+      return loading.hide();
+    }
+  }) as Promise<T>;
 }
 
 export function createRequest(baseUrl: string) {

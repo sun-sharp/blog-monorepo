@@ -73,6 +73,7 @@ export const useUserStore = defineStore({
         if (code === ResultEnum.SUCCESS && result) {
           storage.set(ACCESS_TOKEN, result.token);
           this.setToken(result.token);
+          await this.GetInfo();
         }
         return resp;
       } catch (err: any) {
