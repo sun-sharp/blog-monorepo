@@ -1,5 +1,7 @@
 import * as ExcelJS from 'exceljs';
 import { PassThrough } from 'stream';
+import * as jschardet from 'jschardet';
+import * as iconv from 'iconv-lite';
 import { getTimeStamp } from './date';
 
 interface excelCsvHandleBufferObj {
@@ -27,10 +29,13 @@ interface excelXlsxHandleBufferObj {
  * @return {Promise<any[]>}
  */
 export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promise<any[]> => {
-  const { buffer, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
+  let { buffer } = obj;
+  const detected = jschardet.detect(buffer);
+  if (detected.encoding && detected.encoding.toLowerCase() !== 'utf-8' && iconv.encodingExists(detected.encoding)) {
+    buffer = Buffer.from(iconv.decode(buffer, detected.encoding), 'utf-8');
+  }
   const result = [];
   const workbook = new ExcelJS.Workbook();
-  // 将buffer 转化为stream流
   const passThrough = new PassThrough();
   const streams: any = passThrough.end(buffer);
   const worksheet = await workbook.csv.read(streams);
