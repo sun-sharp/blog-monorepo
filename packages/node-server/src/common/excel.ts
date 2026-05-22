@@ -29,7 +29,7 @@ interface excelXlsxHandleBufferObj {
  * @return {Promise<any[]>}
  */
 export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promise<any[]> => {
-  let { buffer } = obj;
+  let { buffer, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
   const detected = jschardet.detect(buffer);
   if (detected.encoding && detected.encoding.toLowerCase() !== 'utf-8' && iconv.encodingExists(detected.encoding)) {
     buffer = Buffer.from(iconv.decode(buffer, detected.encoding), 'utf-8');
