@@ -21,6 +21,12 @@
       }
     },
     {
+      "path": "pages/blog/article-detail/article-detail",
+      "style": {
+        "navigationBarTitleText": "文章详情"
+      }
+    },
+    {
       "path": "pages/blog/schedule/schedule",
       "style": {
         "navigationBarTitleText": "日程管理"

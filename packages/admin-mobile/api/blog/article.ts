@@ -23,3 +23,7 @@ export const update = (data: ApiArticleUpdateData): Promise<undefined> => {
 export const batchUpdatePrivate = (data: ApiBatchUpdatePrivateArticleData): Promise<undefined> => {
   return blogRequest({ url: `${basic}/batch_update_private`, method: 'PUT', data, isShowSuccessMessage: true });
 };
+
+export const getDetails = (articleId: string): Promise<ApiArticleItem> => {
+  return blogRequest({ url: `${basic}/details`, method: 'GET', data: { articleId } });
+};

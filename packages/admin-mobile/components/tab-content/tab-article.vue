@@ -63,35 +63,33 @@
         <u-empty mode="data" text="暂无文章" icon-size="160" />
       </view>
       <view v-else class="article-list">
-        <u-swipe-action v-for="item in list" :key="item.articleId" :options="swipeOptions" @click="onSwipeClick($event, item)">
-          <view class="article-item card" @click="goToEdit(item.articleId)">
-            <view class="article-item-main">
-              <view class="article-item-icon" :class="item.isPrivate ? 'article-item-icon-private' : 'article-item-icon-public'">
-                <u-icon :name="item.isPrivate ? 'lock' : 'file-text'" size="32" color="#fff" />
-              </view>
-              <view class="article-item-content">
-                <view class="article-item-header">
-                  <text class="article-item-title">{{ item.title }}</text>
-                  <u-tag v-if="item.isPrivate" text="加密" type="warning" size="mini" plain />
-                </view>
-                <text v-if="item.brief" class="article-item-brief">{{ item.brief }}</text>
-                <view class="article-item-footer">
-                  <view class="article-item-meta">
-                    <u-icon name="calendar" size="22" color="#999" />
-                    <text class="article-item-time">{{ item.createTime?.slice(0, 10) }}</text>
-                  </view>
-                  <view class="article-item-meta">
-                    <u-icon name="account" size="22" color="#999" />
-                    <text class="article-item-author">{{ item.authorNickname || '未知作者' }}</text>
-                  </view>
-                </view>
-              </view>
+        <view v-for="item in list" :key="item.articleId" class="article-item card" @click="goToDetail(item.articleId)">
+          <view class="article-item-main">
+            <view class="article-item-icon" :class="item.isPrivate ? 'article-item-icon-private' : 'article-item-icon-public'">
+              <u-icon :name="item.isPrivate ? 'lock' : 'file-text'" size="32" color="#fff" />
             </view>
-            <view v-if="item.categoryVal" class="article-item-tags">
-              <u-tag :text="getCategoryLabel(item.categoryVal)" type="primary" size="mini" plain />
+            <view class="article-item-content">
+              <view class="article-item-header">
+                <text class="article-item-title">{{ item.title }}</text>
+                <u-tag v-if="item.isPrivate" text="加密" type="warning" size="mini" plain />
+              </view>
+              <text v-if="item.brief" class="article-item-brief">{{ item.brief }}</text>
+              <view class="article-item-footer">
+                <view class="article-item-meta">
+                  <u-icon name="calendar" size="22" color="#999" />
+                  <text class="article-item-time">{{ item.createTime?.slice(0, 10) }}</text>
+                </view>
+                <view class="article-item-meta">
+                  <u-icon name="account" size="22" color="#999" />
+                  <text class="article-item-author">{{ item.authorNickname || '未知作者' }}</text>
+                </view>
+              </view>
             </view>
           </view>
-        </u-swipe-action>
+          <view v-if="item.categoryVal" class="article-item-tags">
+            <u-tag :text="getCategoryLabel(item.categoryVal)" type="primary" size="mini" plain />
+          </view>
+        </view>
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
@@ -156,11 +154,6 @@
     if (list.value.length >= total.value && total.value > 0) return 'nomore';
     return 'loadmore';
   });
-
-  const swipeOptions = [
-    { text: '编辑', style: { backgroundColor: '#007aff' } },
-    { text: '删除', style: { backgroundColor: '#dd524d' } },
-  ];
 
   function getCategoryLabel(categoryVal: number | string) {
     const item = articleCategoryOption.value.find((opt) => opt.value === categoryVal);
@@ -248,26 +241,8 @@
     uni.navigateTo({ url: '/pages/blog/article-edit/article-edit' });
   }
 
-  function goToEdit(articleId: string) {
-    uni.navigateTo({ url: `/pages/blog/article-edit/article-edit?id=${articleId}` });
-  }
-
-  function onSwipeClick(event: any, item: ApiArticleItem) {
-    const index = event.index;
-    if (index === 0) {
-      goToEdit(item.articleId);
-    } else if (index === 1) {
-      uni.showModal({
-        title: '确认删除',
-        content: `确定删除文章「${item.title}」？`,
-        success: async (res) => {
-          if (res.confirm) {
-            await articleAPi.remove(item.articleId);
-            loadData(true);
-          }
-        },
-      });
-    }
+  function goToDetail(articleId: string) {
+    uni.navigateTo({ url: `/pages/blog/article-detail/article-detail?id=${articleId}` });
   }
 
   onMounted(() => {

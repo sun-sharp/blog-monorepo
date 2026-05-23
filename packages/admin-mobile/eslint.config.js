@@ -131,6 +131,7 @@ export default [
       'vue/multi-word-component-names': 'off',
       'vue/no-setup-props-destructure': 'off',
       'vue/no-v-html': 'off',
+      'vue/no-v-text-v-html-on-component': 'off',
       'prettier/prettier': 'error',
       ...prettierConfig.rules,
     },
