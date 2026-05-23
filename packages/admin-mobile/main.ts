@@ -1,5 +1,5 @@
 import App from './App.vue';
-import { createSSRApp, h } from 'vue';
+import { createSSRApp } from 'vue';
 import { createPinia } from 'pinia';
 import GlobalLoading from './components/global-loading/global-loading.vue';
 

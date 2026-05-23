@@ -96,9 +96,7 @@
       </view>
     </scroll-view>
 
-    <view class="article-fab-group">
-      <u-fab icon="plus" @click="goToAdd" />
-    </view>
+    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @click="goToAdd" />
 
     <u-picker
       v-model="showCategoryPicker"
@@ -128,7 +126,7 @@
   const total = ref(0);
   const showFilter = ref(false);
   const showCategoryPicker = ref(false);
-  const currentCategory = ref('');
+  const currentCategory = ref<number | string>('');
   const currentStatus = ref(0);
   const inited = ref(false);
 
@@ -164,7 +162,7 @@
     { text: '删除', style: { backgroundColor: '#dd524d' } },
   ];
 
-  function getCategoryLabel(categoryVal: string) {
+  function getCategoryLabel(categoryVal: number | string) {
     const item = articleCategoryOption.value.find((opt) => opt.value === categoryVal);
     return item?.label || categoryVal;
   }
@@ -242,7 +240,7 @@
 
   function onCategoryConfirm(e: any) {
     const index = Array.isArray(e) ? e[0] : e;
-    currentCategory.value = categoryPickerOptions.value[index]?.value || '';
+    currentCategory.value = categoryPickerOptions.value[index]?.value ?? '';
     loadData(true);
   }
 
@@ -492,10 +490,16 @@
     border-top: 1rpx solid #f0f0f0;
   }
 
-  .article-fab-group {
-    position: fixed;
-    right: 30rpx;
-    bottom: 200rpx;
-    z-index: 100;
+  :deep(.u-fab-trigger-btn) {
+    width: 88rpx !important;
+    height: 88rpx !important;
+    border-radius: 88rpx !important;
+    box-shadow:
+      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
+      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
+
+    &::after {
+      border-radius: 88rpx !important;
+    }
   }
 </style>

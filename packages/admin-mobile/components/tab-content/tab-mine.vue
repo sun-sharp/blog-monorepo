@@ -1,5 +1,5 @@
 <template>
-  <view class="mine-page">
+  <scroll-view scroll-y class="mine-page">
     <view class="mine-header card">
       <u-avatar :src="userInfo.avatar || '/static/logo.png'" size="100" />
       <view class="mine-header-info">
@@ -67,7 +67,7 @@
     <view class="mine-logout">
       <u-button type="error" plain shape="circle" @click="handleLogout">退出登录</u-button>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 <script lang="ts" setup>
@@ -99,8 +99,10 @@
 
 <style lang="scss" scoped>
   .mine-page {
+    height: 100%;
     padding: 20rpx;
     padding-bottom: 20rpx;
+    box-sizing: border-box;
   }
 
   .mine-header {

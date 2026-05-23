@@ -1,15 +1,10 @@
 <template>
-  <u-loading-popup
-    v-model="visible"
-    :text="text"
-    mode="circle"
-    color="#fff"
-    size="80" />
+  <u-loading-popup v-model="visible" :text="text" mode="circle" color="#fff" size="80" />
 </template>
 
 <script lang="ts" setup>
   import { ref, onMounted, onUnmounted } from 'vue';
-  import { loading } from '@/utils/loading';
+  import { loading } from '../../utils/loading';
 
   const visible = ref(false);
   const text = ref('加载中...');

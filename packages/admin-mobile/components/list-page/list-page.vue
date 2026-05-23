@@ -46,7 +46,7 @@
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
-    <u-fab v-if="showFab" icon="plus" @click="$emit('fabClick')" />
+    <u-fab v-if="showFab" icon="plus" position="right-bottom" :gap="{ right: 30, bottom: 30 }" @click="$emit('fabClick')" />
   </view>
 </template>
 
@@ -226,5 +226,18 @@
     margin-top: 20rpx;
     color: $uni-text-color-grey;
     font-size: $uni-font-size-sm;
+  }
+
+  :deep(.u-fab-trigger-btn) {
+    width: 88rpx !important;
+    height: 88rpx !important;
+    border-radius: 88rpx !important;
+    box-shadow:
+      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
+      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
+
+    &::after {
+      border-radius: 88rpx !important;
+    }
   }
 </style>

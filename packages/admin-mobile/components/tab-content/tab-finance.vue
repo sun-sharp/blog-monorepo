@@ -113,9 +113,7 @@
       </view>
     </scroll-view>
 
-    <view class="finance-fab-group">
-      <u-fab icon="plus" @click="showFabMenu = !showFabMenu" />
-    </view>
+    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @click="showFabMenu = !showFabMenu" />
     <u-popup :show="showFabMenu" mode="bottom" @close="showFabMenu = false">
       <view class="finance-fab-popup">
         <view class="finance-fab-popup-header">
@@ -557,12 +555,7 @@
     color: $uni-text-color-grey;
     font-size: $uni-font-size-sm;
   }
-  .finance-fab-group {
-    position: fixed;
-    right: 30rpx;
-    bottom: 200rpx;
-    z-index: 100;
-  }
+
   .finance-fab-popup {
     padding: 30rpx;
     padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
@@ -580,5 +573,18 @@
   .finance-fab-label {
     font-size: $uni-font-size-sm;
     margin-top: 8rpx;
+  }
+
+  :deep(.u-fab-trigger-btn) {
+    width: 88rpx !important;
+    height: 88rpx !important;
+    border-radius: 88rpx !important;
+    box-shadow:
+      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
+      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
+
+    &::after {
+      border-radius: 88rpx !important;
+    }
   }
 </style>

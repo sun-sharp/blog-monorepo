@@ -43,9 +43,7 @@
       <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
     </scroll-view>
 
-    <view class="image-fab">
-      <u-fab icon="plus" @click="goToUpload" />
-    </view>
+    <u-fab icon="plus" position="right-bottom" :gap="{ right: 30, bottom: 30 }" @click="goToUpload" />
   </view>
 </template>
 
@@ -256,10 +254,16 @@
     padding-top: 200rpx;
   }
 
-  .image-fab {
-    position: fixed;
-    right: 30rpx;
-    bottom: 200rpx;
-    z-index: 100;
+  :deep(.u-fab-trigger-btn) {
+    width: 88rpx !important;
+    height: 88rpx !important;
+    border-radius: 88rpx !important;
+    box-shadow:
+      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
+      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
+
+    &::after {
+      border-radius: 88rpx !important;
+    }
   }
 </style>

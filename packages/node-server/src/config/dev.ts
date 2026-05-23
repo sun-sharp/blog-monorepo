@@ -12,7 +12,7 @@ const database: DatabaseConfig = JSON.parse(buffer);
 
 const glob: Readonly<GlobalEnvConfig> = {
   ...database,
-  port: 3002,
+  port: 3000,
   fileAccessPath: 'api_dev_file',
   staticDirPosition: '../',
   staticDirName: 'api_dev_static_dir',
