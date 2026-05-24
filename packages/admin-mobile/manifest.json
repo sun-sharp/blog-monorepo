@@ -1,7 +1,7 @@
 {
-    "name" : "admin-mobile",
+    "name" : "阳之锐",
     "appid" : "__UNI__F1AA1F1",
-    "description" : "",
+    "description" : "个人使用",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -100,22 +100,22 @@
             "deviceTypes" : [ "phone", "tablet" ],
             "signingConfigs" : {
                 "default" : {
-                    "certpath" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.cer",
+                    "certpath" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1779631157006.cer",
                     "keyAlias" : "debugKey",
                     "keyPassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303",
-                    "profile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776789766246.p7b",
+                    "profile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1779631157006.p7b",
                     "signAlg" : "SHA256withECDSA",
                     "storeFile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.p12",
                     "storePassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303"
                 },
                 "release" : {
-                    "certpath" : "E:/program/Front/blog/鸿蒙发布打包/admin_blog.cer",
-                    "keyAlias" : "blog_app",
-                    "keyPassword" : "0000001DFDA147BD1F31AA64C8A8A911C4E1677FACA7E3A6F3B150CB43931E04D4179BBC6228555470F928F5AD",
-                    "profile" : "E:/program/Front/blog/鸿蒙发布打包/admin_blogRelease.p7b",
+                    "certpath" : "sun_sharp_t.cer",
+                    "keyAlias" : "sun_sharp_b",
+                    "keyPassword" : "0000001D6B2B7968846A583CC68A7678B519A49D4244AEEF273779013966C01998EAA3FB1D9F596F0AFF54D9B8",
+                    "profile" : "sun_sharp_tDebug.p7b",
                     "signAlg" : "SHA256withECDSA",
-                    "storeFile" : "E:/program/Front/hm/密钥/admin_blog.p12",
-                    "storePassword" : "0000001D5FC442C0137B676186B7D5A118515540D4B41F77D5D09FF1C725B740C177CAED288EE4A02311AA0528"
+                    "storeFile" : "sun_sharp.p12",
+                    "storePassword" : "0000001D5981AD075441B67E8C8B5B8857E54C08622C043D5BE821D15948F38C0835330DCA605A674B322F745D"
                 }
             },
             "targetSdkVersion" : "5.0.1(13)",
@@ -123,6 +123,13 @@
             "modules" : {
                 "uni-share" : {},
                 "uni-map" : {}
+            },
+            "splashScreens" : {
+                "startWindowIcon" : "static/yangzhirui-1024.png"
+            },
+            "icons" : {
+                "foreground" : "static/yangzhirui-1024.png",
+                "background" : "static/yangzhirui-1024.png"
             }
         }
     }
