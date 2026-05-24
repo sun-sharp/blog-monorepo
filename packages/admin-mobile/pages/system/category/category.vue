@@ -28,23 +28,17 @@
       class="category-list-scroll"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="none"
+      refresher-default-style="black"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
-      <template #refresher>
-        <view class="category-refresher">
-          <u-loading v-if="isRefreshing" mode="circle" size="40" />
-          <text class="category-refresher-text">{{ isRefreshing ? '刷新中...' : '下拉刷新' }}</text>
-        </view>
-      </template>
       <view v-if="loading && list.length === 0" class="category-loading">
         <u-loading mode="circle" size="60" />
         <text class="category-loading-text">加载中...</text>
       </view>
-      <view v-else-if="!loading && list.length === 0" class="category-empty">
+      <view v-if="!loading && list.length === 0" class="category-empty">
         <u-empty mode="data" text="暂无分类" icon-size="160" />
       </view>
-      <view v-else class="category-list">
+      <view v-if="list.length > 0" class="category-list">
         <view v-for="item in list" :key="item.categoryId" class="category-item card" @click="goToEdit(item.categoryId)" @longpress="onLongPress(item)">
           <view class="category-item-left">
             <view class="category-item-icon" :style="{ background: getCategoryColor(item.type) }">

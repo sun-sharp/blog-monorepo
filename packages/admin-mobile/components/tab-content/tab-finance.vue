@@ -71,23 +71,17 @@
       class="finance-list-scroll"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="none"
+      refresher-default-style="black"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
-      <template #refresher>
-        <view class="finance-refresher">
-          <u-loading v-if="isRefreshing" mode="circle" size="40" />
-          <text class="finance-refresher-text">{{ isRefreshing ? '刷新中...' : '下拉刷新' }}</text>
-        </view>
-      </template>
       <view v-if="loading && list.length === 0" class="finance-loading">
         <u-loading mode="circle" size="60" />
         <text class="finance-loading-text">加载中...</text>
       </view>
-      <view v-else-if="!loading && list.length === 0" class="finance-empty">
+      <view v-if="!loading && list.length === 0" class="finance-empty">
         <u-empty mode="data" text="暂无账单" icon-size="160" />
       </view>
-      <view v-else class="finance-list">
+      <view v-if="list.length > 0" class="finance-list">
         <template v-for="(group, date) in groupedByDate" :key="date">
           <view class="finance-date-header">
             <text class="finance-date-text">{{ date }}</text>
@@ -113,7 +107,13 @@
       </view>
     </scroll-view>
 
-    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @trigger="showFabMenu = !showFabMenu" />
+    <u-fab
+      icon="plus"
+      :size="88"
+      btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
+      position="right-bottom"
+      :gap="{ right: 60, bottom: 150 }"
+      @trigger="showFabMenu = !showFabMenu" />
     <u-popup :model-value="showFabMenu" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFabMenu = false">
       <view class="finance-fab-popup">
         <view class="finance-fab-popup-header">
@@ -638,19 +638,6 @@
           }
         }
       }
-    }
-  }
-
-  :deep(.u-fab-trigger-btn) {
-    width: 88rpx !important;
-    height: 88rpx !important;
-    border-radius: 88rpx !important;
-    box-shadow:
-      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
-      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
-
-    &::after {
-      border-radius: 88rpx !important;
     }
   }
 </style>

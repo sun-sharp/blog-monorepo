@@ -47,7 +47,7 @@
       title="选择处理类型"
       @confirm="
         (e: any) => {
-          form.handleType = e[0]?.value ?? '';
+          form.handleType = String(e[0]?.value ?? '');
         }
       " />
     <u-select
@@ -97,7 +97,7 @@
   const form = reactive({
     billUploadType: 1,
     billJudgeKey: '',
-    handleType: '' as string | number,
+    handleType: '' as string,
     inflowOrOutflow: 0,
     billType: 0,
     billMethod: 0,

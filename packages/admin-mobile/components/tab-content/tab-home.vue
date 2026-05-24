@@ -68,11 +68,14 @@
         </view>
       </view>
       <view class="home-todo-add">
-        <u-input v-model="newTodoTitle" placeholder="添加新待办，回车提交" clearable shape="round" :custom-style="{ background: '#f5f5f5' }" @confirm="addTodo">
-          <template #suffix>
-            <u-button type="primary" size="mini" shape="circle" @click="addTodo">添加</u-button>
-          </template>
-        </u-input>
+        <u-input
+          v-model="newTodoTitle"
+          placeholder="添加新待办，回车提交"
+          clearable
+          shape="round"
+          :custom-style="{ background: '#f5f5f5' }"
+          @confirm="addTodo" />
+        <u-button type="primary" size="mini" shape="circle" class="home-todo-add-btn" @click="addTodo">添加</u-button>
       </view>
     </view>
   </view>
@@ -309,8 +312,15 @@
   }
 
   .home-todo-add {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
     margin-top: 20rpx;
     padding-top: 20rpx;
     border-top: 1rpx solid $uni-border-color;
+  }
+
+  .home-todo-add-btn {
+    flex-shrink: 0;
   }
 </style>

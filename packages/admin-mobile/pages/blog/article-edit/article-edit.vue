@@ -1,70 +1,71 @@
 <template>
   <view class="article-edit-page">
     <scroll-view scroll-y class="article-edit-scroll">
-    <view class="article-edit-card">
-      <view class="article-edit-section-header">
-        <u-icon name="file-text" size="36rpx" color="#007aff" />
-        <text class="article-edit-section-title">基本信息</text>
-      </view>
-      <view class="article-edit-form">
-        <view class="article-edit-field">
-          <text class="article-edit-label">标题</text>
-          <u-input v-model="form.title" placeholder="请输入文章标题" border clearable />
+      <view class="article-edit-card">
+        <view class="article-edit-section-header">
+          <u-icon name="file-text" size="36rpx" color="#007aff" />
+          <text class="article-edit-section-title">基本信息</text>
         </view>
-        <view class="article-edit-field">
-          <text class="article-edit-label">简介</text>
-          <u-textarea v-model="form.brief" placeholder="用一段话简短介绍这篇文章..." :maxlength="300" count auto-height />
-        </view>
-      </view>
-    </view>
-
-    <view class="article-edit-card">
-      <view class="article-edit-section-header">
-        <u-icon name="setting" size="36rpx" color="#007aff" />
-        <text class="article-edit-section-title">文章设置</text>
-      </view>
-      <view class="article-edit-form">
-        <view class="article-edit-field article-edit-field-row" @click="showCategory = true">
-          <text class="article-edit-label">分类</text>
-          <view class="article-edit-field-value">
-            <text :class="{ 'article-edit-placeholder': !categoryLabel }">
-              {{ categoryLabel || '请选择分类' }}
-            </text>
-            <u-icon name="arrow-right" size="32rpx" color="#c0c4cc" />
+        <view class="article-edit-form">
+          <view class="article-edit-field">
+            <text class="article-edit-label">标题</text>
+            <u-input v-model="form.title" placeholder="请输入文章标题" border clearable />
           </view>
-        </view>
-        <view class="article-edit-field article-edit-field-row">
-          <text class="article-edit-label">加密</text>
-          <view class="article-edit-field-value">
-            <text v-if="form.isPrivate" class="article-edit-tip">开启后仅自己可见</text>
-            <u-switch v-model="form.isPrivate" active-color="#f0ad4e" />
+          <view class="article-edit-field">
+            <text class="article-edit-label">简介</text>
+            <u-textarea v-model="form.brief" placeholder="用一段话简短介绍这篇文章..." :maxlength="300" count auto-height />
           </view>
         </view>
       </view>
-    </view>
 
-    <view class="article-edit-card">
-      <view class="article-edit-section-header">
-        <u-icon name="edit-pen" size="36rpx" color="#007aff" />
-        <text class="article-edit-section-title">文章内容</text>
-      </view>
-      <view class="article-edit-form">
-        <view class="article-edit-field">
-          <u-textarea v-model="form.markdownContent" placeholder="在这里书写 Markdown 内容..." :height="400" count auto-height />
+      <view class="article-edit-card">
+        <view class="article-edit-section-header">
+          <u-icon name="setting" size="36rpx" color="#007aff" />
+          <text class="article-edit-section-title">文章设置</text>
+        </view>
+        <view class="article-edit-form">
+          <view class="article-edit-field article-edit-field-row" @click="showCategory = true">
+            <text class="article-edit-label">分类</text>
+            <view class="article-edit-field-value">
+              <text :class="{ 'article-edit-placeholder': !categoryLabel }">
+                {{ categoryLabel || '请选择分类' }}
+              </text>
+              <u-icon name="arrow-right" size="32rpx" color="#c0c4cc" />
+            </view>
+          </view>
+          <view class="article-edit-field article-edit-field-row">
+            <text class="article-edit-label">加密</text>
+            <view class="article-edit-field-value">
+              <text v-if="form.isPrivate" class="article-edit-tip">开启后仅自己可见</text>
+              <u-switch v-model="form.isPrivate" active-color="#f0ad4e" />
+            </view>
+          </view>
         </view>
       </view>
-    </view>
 
-    <view class="article-edit-footer">
-      <view class="article-edit-save-btn" @click="handleSave">
-        <u-loading v-if="loading" mode="circle" size="32rpx" color="#fff" />
-        <u-icon v-else name="checkmark-circle" size="36rpx" color="#fff" />
-        <text class="article-edit-save-text">{{ loading ? '保存中...' : '保存文章' }}</text>
+      <view class="article-edit-card">
+        <view class="article-edit-section-header">
+          <u-icon name="edit-pen" size="36rpx" color="#007aff" />
+          <text class="article-edit-section-title">文章内容</text>
+        </view>
+        <view class="article-edit-form">
+          <view class="article-edit-field">
+            <u-textarea v-model="form.markdownContent" placeholder="在这里书写 Markdown 内容..." :height="400" count auto-height />
+          </view>
+        </view>
       </view>
-    </view>
 
-    <u-picker v-model="showCategory" :default-selector="categoryDefault" :range="categoryRange" range-key="label" @confirm="onCategoryConfirm" />
+      <view class="article-edit-footer">
+        <view class="article-edit-save-btn" @click="handleSave">
+          <u-loading v-if="loading" mode="circle" size="32rpx" color="#fff" />
+          <u-icon v-else name="checkmark-circle" size="36rpx" color="#fff" />
+          <text class="article-edit-save-text">{{ loading ? '保存中...' : '保存文章' }}</text>
+        </view>
+      </view>
+
+      <u-picker v-model="showCategory" :default-selector="categoryDefault" :range="categoryRange" range-key="label" @confirm="onCategoryConfirm" />
     </scroll-view>
+  </view>
 </template>
 
 <script lang="ts" setup>

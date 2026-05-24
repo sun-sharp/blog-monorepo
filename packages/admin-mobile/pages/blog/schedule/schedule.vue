@@ -1,37 +1,37 @@
 <template>
   <view class="schedule-page">
     <list-page ref="listPageRef" :api-fn="scheduleAPi.getFindPage" search-placeholder="搜索日程" search-key="keywords" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <view class="schedule-list">
-          <u-swipe-action v-for="item in list" :key="item.scheduleId" :options="swipeOptions" @click="onSwipeClick($event, item)">
-            <view class="schedule-item card" @click="goToEdit(item.scheduleId)">
-              <view class="schedule-item-header">
-                <text class="schedule-item-title">{{ item.title }}</text>
-              </view>
-              <view class="schedule-item-time">
-                <u-icon name="calendar" size="24" color="#007aff" />
-                <text class="schedule-item-date">{{ item.startDate }} ~ {{ item.endDate }}</text>
-              </view>
-              <view v-if="item.startTime || item.endTime" class="schedule-item-time">
-                <u-icon name="clock" size="24" color="#f0ad4e" />
-                <text class="schedule-item-date">{{ item.startTime }} - {{ item.endTime }}</text>
-              </view>
+      <view class="schedule-list">
+        <u-swipe-action v-for="item in list" :key="item.scheduleId" :options="swipeOptions" @click="onSwipeClick($event, item)">
+          <view class="schedule-item card" @click="goToEdit(item.scheduleId)">
+            <view class="schedule-item-header">
+              <text class="schedule-item-title">{{ item.title }}</text>
             </view>
-          </u-swipe-action>
-        </view>
-      </template>
+            <view class="schedule-item-time">
+              <u-icon name="calendar" size="24" color="#007aff" />
+              <text class="schedule-item-date">{{ item.startDate }} ~ {{ item.endDate }}</text>
+            </view>
+            <view v-if="item.startTime || item.endTime" class="schedule-item-time">
+              <u-icon name="clock" size="24" color="#f0ad4e" />
+              <text class="schedule-item-date">{{ item.startTime }} - {{ item.endTime }}</text>
+            </view>
+          </view>
+        </u-swipe-action>
+      </view>
     </list-page>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, inject } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { scheduleAPi } from '../../../api';
   import type { ApiScheduleItem } from '/#/api/blog/schedule';
   import ListPage from '../../../components/list-page/list-page.vue';
+  import { listPageListKey } from '../../../components/list-page/list-page-key';
 
   const listPageRef = ref();
+  const list = inject(listPageListKey, ref([]));
 
   const swipeOptions = [
     { text: '编辑', style: { backgroundColor: '#007aff' } },

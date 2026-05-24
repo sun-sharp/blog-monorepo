@@ -1,34 +1,32 @@
 <template>
   <view>
     <list-page ref="listPageRef" :api-fn="billUploadApi.getPage" :show-search="false" :dropdown-items="dropdownItems" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <u-cell-group>
-          <u-swipe-action v-for="item in list" :key="item.billUploadId" :options="swipeOptions" @click="onSwipeClick($event, item)">
-            <u-cell-item
-              :title="billUploadTypeMap[item.billUploadType] || '未知类型'"
-              :label="`${handleTypeMap[item.handleType] || item.handleType} · ${item.billJudgeKey}`"
-              @click="goToEdit(item.billUploadId)">
-              <template #value>
-                <u-tag :text="item.judgeWay" type="info" size="mini" plain />
-              </template>
-            </u-cell-item>
-          </u-swipe-action>
-        </u-cell-group>
-      </template>
+      <u-cell-group>
+        <u-swipe-action v-for="item in list" :key="item.billUploadId" :options="swipeOptions" @click="onSwipeClick($event, item)">
+          <u-cell-item
+            :title="billUploadTypeMap[item.billUploadType] || '未知类型'"
+            :label="`${handleTypeMap[item.handleType] || item.handleType} · ${item.billJudgeKey}`"
+            @click="goToEdit(item.billUploadId)">
+            <u-tag :text="item.judgeWay" type="info" size="mini" plain />
+          </u-cell-item>
+        </u-swipe-action>
+      </u-cell-group>
     </list-page>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, inject } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { billUploadApi } from '../../../api';
   import { billUploadTypeOption, handleTypeOption, judgeWayOption } from '../../../../shared/src/constants/api-type';
   import type { ApiBillUploadItem } from '/#/api/blog/bill-upload';
   import { arrEnumToObj } from '../../../../shared/src/utils/array';
   import ListPage from '../../../components/list-page/list-page.vue';
+  import { listPageListKey } from '../../../components/list-page/list-page-key';
 
   const listPageRef = ref();
+  const list = inject(listPageListKey, ref([]));
 
   const billUploadTypeMap = arrEnumToObj(billUploadTypeOption);
   const handleTypeMap = arrEnumToObj(handleTypeOption);

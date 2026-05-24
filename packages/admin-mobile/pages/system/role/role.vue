@@ -1,36 +1,36 @@
 <template>
   <view class="role-page">
     <list-page ref="listPageRef" :api-fn="roleApi.getPage" search-placeholder="搜索角色" search-key="name" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <view v-for="item in list" :key="item.roleId" class="role-item card" @click="goToEdit(item.roleId)" @longpress="onLongPress(item)">
-          <view class="role-item-left">
-            <view class="role-item-icon">
-              <u-icon name="account" size="32" color="#fff" />
-            </view>
-            <view class="role-item-info">
-              <text class="role-item-name">{{ item.name }}</text>
-              <text class="role-item-code">{{ item.roleCode }}</text>
-            </view>
+      <view v-for="item in list" :key="item.roleId" class="role-item card" @click="goToEdit(item.roleId)" @longpress="onLongPress(item)">
+        <view class="role-item-left">
+          <view class="role-item-icon">
+            <u-icon name="account" size="32" color="#fff" />
           </view>
-          <view class="role-item-right">
-            <u-tag :text="roleTypeObj[item.roleType] || '未知'" type="info" size="mini" plain />
-            <u-icon name="arrow-right" size="28" color="#ccc" />
+          <view class="role-item-info">
+            <text class="role-item-name">{{ item.name }}</text>
+            <text class="role-item-code">{{ item.roleCode }}</text>
           </view>
         </view>
-      </template>
+        <view class="role-item-right">
+          <u-tag :text="roleTypeObj[item.roleType] || '未知'" type="info" size="mini" plain />
+          <u-icon name="arrow-right" size="28" color="#ccc" />
+        </view>
+      </view>
     </list-page>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, inject } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { roleApi } from '../../../api';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
   import type { ApiRoleItem } from '/#/api/capital/role';
   import ListPage from '../../../components/list-page/list-page.vue';
+  import { listPageListKey } from '../../../components/list-page/list-page-key';
 
   const listPageRef = ref();
+  const list = inject(listPageListKey, ref([]));
 
   const roleTypeObj: Record<number, string> = {};
   roleTypeOption.forEach((item) => {

@@ -25,33 +25,35 @@
       class="list-page-scroll"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="none"
+      refresher-default-style="black"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
-      <template #refresher>
-        <view class="list-page-refresher">
-          <u-loading v-if="isRefreshing" mode="circle" size="40" />
-          <text class="list-page-refresher-text">{{ isRefreshing ? '刷新中...' : '下拉刷新' }}</text>
-        </view>
-      </template>
       <view v-if="loading && list.length === 0" class="list-page-loading">
         <u-loading mode="circle" size="60" />
         <text class="list-page-loading-text">加载中...</text>
       </view>
-      <view v-else-if="!loading && list.length === 0" class="list-page-empty">
+      <view v-if="!loading && list.length === 0" class="list-page-empty">
         <u-empty mode="data" text="暂无数据" icon-size="160" />
       </view>
-      <view v-else class="list-page-content">
-        <slot :list="list" />
+      <view v-if="list.length > 0" class="list-page-content">
+        <slot />
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
-    <u-fab v-if="showFab" icon="plus" position="right-bottom" :gap="{ right: 30, bottom: 30 }" @trigger="$emit('fabClick')" />
+    <u-fab
+      v-if="showFab"
+      icon="plus"
+      :size="88"
+      btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
+      position="right-bottom"
+      :gap="{ right: 30, bottom: 30 }"
+      @trigger="$emit('fabClick')" />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, computed, onMounted, provide } from 'vue';
+  import { listPageListKey } from './list-page-key';
 
   interface DropdownItem {
     title: string;
@@ -84,6 +86,7 @@
 
   const keyword = ref('');
   const list = ref<any[]>([]);
+  provide(listPageListKey, list);
   const loading = ref(false);
   const isRefreshing = ref(false);
   const current = ref(1);
@@ -226,18 +229,5 @@
     margin-top: 20rpx;
     color: $uni-text-color-grey;
     font-size: $uni-font-size-sm;
-  }
-
-  :deep(.u-fab-trigger-btn) {
-    width: 88rpx !important;
-    height: 88rpx !important;
-    border-radius: 88rpx !important;
-    box-shadow:
-      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
-      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
-
-    &::after {
-      border-radius: 88rpx !important;
-    }
   }
 </style>

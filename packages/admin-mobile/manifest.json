@@ -1,28 +1,28 @@
 {
-    "name": "admin-mobile",
-    "appid": "__UNI__F1AA1F1",
-    "description": "",
-    "versionName": "1.0.0",
-    "versionCode": "100",
-    "transformPx": false,
+    "name" : "admin-mobile",
+    "appid" : "__UNI__F1AA1F1",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
     /* 5+App特有相关 */
-    "app-plus": {
-        "usingComponents": true,
-        "nvueStyleCompiler": "uni-app",
-        "compilerVersion": 3,
-        "splashscreen": {
-            "alwaysShowBeforeRender": true,
-            "waiting": true,
-            "autoclose": true,
-            "delay": 0
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
         },
         /* 模块配置 */
-        "modules": {},
+        "modules" : {},
         /* 应用发布信息 */
-        "distribute": {
+        "distribute" : {
             /* android打包配置 */
-            "android": {
-                "permissions": [
+            "android" : {
+                "permissions" : [
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
@@ -41,57 +41,80 @@
                 ]
             },
             /* ios打包配置 */
-            "ios": {},
+            "ios" : {},
             /* SDK配置 */
-            "sdkConfigs": {}
+            "sdkConfigs" : {}
         }
     },
     /* 快应用特有相关 */
-    "quickapp": {},
+    "quickapp" : {},
     /* 小程序特有相关 */
-    "mp-weixin": {
-        "appid": "",
-        "setting": {
-            "urlCheck": false
+    "mp-weixin" : {
+        "appid" : "wxf229a8ab8f892027",
+        "setting" : {
+            "urlCheck" : false
         },
-        "usingComponents": true
+        "usingComponents" : true
     },
-    "mp-alipay": {
-        "usingComponents": true
+    "mp-alipay" : {
+        "usingComponents" : true
     },
-    "mp-baidu": {
-        "usingComponents": true
+    "mp-baidu" : {
+        "usingComponents" : true
     },
-    "mp-toutiao": {
-        "usingComponents": true
+    "mp-toutiao" : {
+        "usingComponents" : true
     },
-    "uniStatistics": {
-        "enable": false
+    "uniStatistics" : {
+        "enable" : false
     },
-    "vueVersion": "3",
-    "h5": {
-        "devServer": {
-            "port": 7444,
-            "proxy": {
-                "/capital": {
-                    "target": "http://127.0.0.1:3000",
-                    "changeOrigin": true,
-                    "pathRewrite": {
-                        "^/capital": "/capital"
+    "vueVersion" : "3",
+    "h5" : {
+        "devServer" : {
+            "port" : 7444,
+            "proxy" : {
+                "/capital" : {
+                    "target" : "http://127.0.0.1:3000",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/capital" : "/capital"
                     }
                 },
-                "/blog": {
-                    "target": "http://127.0.0.1:3000",
-                    "changeOrigin": true,
-                    "pathRewrite": {
-                        "^/blog": "/blog"
+                "/blog" : {
+                    "target" : "http://127.0.0.1:3000",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/blog" : "/blog"
                     }
                 }
             }
         },
-        "router": {
-            "base": "/h5/",
-            "mode": "history"
+        "router" : {
+            "base" : "/h5/",
+            "mode" : "history"
+        }
+    },
+    "app-harmony" : {
+        "distribute" : {
+            "bundleName" : "sun.sharp.huawei",
+            "deviceTypes" : [ "phone", "tablet" ],
+            "signingConfigs" : {
+                "default" : {
+                    "certpath" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.cer",
+                    "keyAlias" : "debugKey",
+                    "keyPassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303",
+                    "profile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776789766246.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.p12",
+                    "storePassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303"
+                }
+            },
+            "targetSdkVersion" : "5.0.1(13)",
+            "compatibleSdkVersion" : "5.0.1(13)",
+            "modules" : {
+                "uni-share" : {},
+                "uni-map" : {}
+            }
         }
     }
 }

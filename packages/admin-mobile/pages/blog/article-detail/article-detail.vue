@@ -153,6 +153,9 @@
     });
 
     html = html.replace(/<table/gi, '<table class="md-table"');
+    html = html.replace(/<th\b/gi, '<th class="md-th"');
+    html = html.replace(/<td\b/gi, '<td class="md-td"');
+    html = html.replace(/<tr\b/gi, '<tr class="md-tr"');
     html = html.replace(/<pre/gi, '<pre class="md-pre"');
     html = html.replace(/<code/gi, '<code class="md-code"');
     html = html.replace(/<img([^>]*)>/gi, (_match, attrs) => {
@@ -418,8 +421,8 @@
     font-size: 24rpx;
     margin: 16rpx 0;
 
-    th,
-    td {
+    .md-th,
+    .md-td {
       border: 1rpx solid #e5e5e5;
       padding: 12rpx 16rpx;
       text-align: left;
@@ -427,12 +430,12 @@
       min-width: 60rpx;
     }
 
-    th {
+    .md-th {
       background-color: #f5f7fa;
       font-weight: bold;
     }
 
-    tr:nth-child(even) {
+    .md-tr:nth-child(even) {
       background-color: #fafafa;
     }
   }

@@ -42,6 +42,13 @@ export const FabProps = {
     },
     /** 菜单出现的方向 */
     direction: { type: String as PropType<FabDirection>, default: 'top' },
+    /** 按钮尺寸，单位 rpx */
+    size: { type: Number, default: 112 },
+    /** 按钮自定义样式，会追加到按钮行内样式中 */
+    btnCustomStyle: {
+        type: [String, Object] as PropType<string | Record<string, any>>,
+        default: () => ({})
+    },
     /** 按钮自定义层级 */
     zIndex: { type: Number, default: 99 }
 };

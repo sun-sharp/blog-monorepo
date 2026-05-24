@@ -1,33 +1,33 @@
 <template>
   <view class="user-page">
     <list-page ref="listPageRef" :api-fn="userApi.getPage" search-placeholder="搜索昵称/用户名" :search-key="searchKey" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <view v-for="item in list" :key="item.userId" class="user-item card" @click="goToEdit(item.userId)" @longpress="onLongPress(item)">
-          <view class="user-item-left">
-            <u-avatar :src="item.avatar" size="76" />
-            <view class="user-item-info">
-              <text class="user-item-name">{{ item.nickname || item.username }}</text>
-              <text class="user-item-username">@{{ item.username }}</text>
-            </view>
-          </view>
-          <view class="user-item-right">
-            <u-tag :text="item.roleCode" type="primary" size="mini" plain />
-            <u-icon name="arrow-right" size="28" color="#ccc" />
+      <view v-for="item in list" :key="item.userId" class="user-item card" @click="goToEdit(item.userId)" @longpress="onLongPress(item)">
+        <view class="user-item-left">
+          <u-avatar :src="item.avatar" size="76" />
+          <view class="user-item-info">
+            <text class="user-item-name">{{ item.nickname || item.username }}</text>
+            <text class="user-item-username">@{{ item.username }}</text>
           </view>
         </view>
-      </template>
+        <view class="user-item-right">
+          <u-tag :text="item.roleCode" type="primary" size="mini" plain />
+          <u-icon name="arrow-right" size="28" color="#ccc" />
+        </view>
+      </view>
     </list-page>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, inject } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { userApi } from '../../../api';
   import type { ApiUserItem } from '/#/api/capital/user';
   import ListPage from '../../../components/list-page/list-page.vue';
+  import { listPageListKey } from '../../../components/list-page/list-page-key';
 
   const listPageRef = ref();
+  const list = inject(listPageListKey, ref([]));
   const searchKey = 'nickname';
 
   function goToAdd() {

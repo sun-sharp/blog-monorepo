@@ -46,23 +46,17 @@
       class="article-list-scroll"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="none"
+      refresher-default-style="black"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
-      <template #refresher>
-        <view class="article-refresher">
-          <u-loading v-if="isRefreshing" mode="circle" size="40" />
-          <text class="article-refresher-text">{{ isRefreshing ? '刷新中...' : '下拉刷新' }}</text>
-        </view>
-      </template>
       <view v-if="loading && list.length === 0" class="article-loading">
         <u-loading mode="circle" size="60" />
         <text class="article-loading-text">加载中...</text>
       </view>
-      <view v-else-if="!loading && list.length === 0" class="article-empty">
+      <view v-if="!loading && list.length === 0" class="article-empty">
         <u-empty mode="data" text="暂无文章" icon-size="160" />
       </view>
-      <view v-else class="article-list">
+      <view v-if="list.length > 0" class="article-list">
         <view v-for="item in list" :key="item.articleId" class="article-item card" @click="goToDetail(item.articleId)">
           <view class="article-item-main">
             <view class="article-item-icon" :class="item.isPrivate ? 'article-item-icon-private' : 'article-item-icon-public'">
@@ -94,7 +88,13 @@
       </view>
     </scroll-view>
 
-    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @trigger="goToAdd" />
+    <u-fab
+      icon="plus"
+      :size="88"
+      btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
+      position="right-bottom"
+      :gap="{ right: 60, bottom: 150 }"
+      @trigger="goToAdd" />
 
     <u-picker
       v-model="showCategoryPicker"
@@ -463,18 +463,5 @@
     margin-top: 16rpx;
     padding-top: 16rpx;
     border-top: 1rpx solid #f0f0f0;
-  }
-
-  :deep(.u-fab-trigger-btn) {
-    width: 88rpx !important;
-    height: 88rpx !important;
-    border-radius: 88rpx !important;
-    box-shadow:
-      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
-      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
-
-    &::after {
-      border-radius: 88rpx !important;
-    }
   }
 </style>

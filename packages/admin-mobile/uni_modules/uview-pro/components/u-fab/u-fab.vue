@@ -11,13 +11,13 @@
             <slot name="trigger">
                 <u-button
                     custom-class="u-fab-trigger-btn"
-                    custom-style="width:112rpx;height:112rpx;border-radius:112rpx;"
+                    :custom-style="btnStyle"
                     :type="type"
                     :disabled="disabled"
                     :throttle-time="0"
                     @click="handleBtnClick"
                 >
-                    <u-icon :name="expansion ? 'close' : 'plus'" size="36rpx"></u-icon>
+                    <u-icon :name="expansion ? 'close' : 'plus'" :size="Math.round(size * 0.32) + 'rpx'"></u-icon>
                 </u-button>
             </slot>
         </view>
@@ -74,6 +74,12 @@ const btnInfo = ref({
 const start = reactive({
     x: 0,
     y: 0
+});
+
+const btnStyle = computed(() => {
+    const base = `width:${props.size}rpx;height:${props.size}rpx;border-radius:${props.size}rpx;`;
+    if (typeof props.btnCustomStyle === 'string') return base + props.btnCustomStyle;
+    return Object.assign({ width: `${props.size}rpx`, height: `${props.size}rpx`, borderRadius: `${props.size}rpx` }, props.btnCustomStyle);
 });
 
 // 计算悬浮按钮样式
@@ -297,12 +303,8 @@ defineExpose({
 
     .u-fab-trigger {
         :deep(.u-fab-trigger-btn) {
-            width: 112rpx;
-            height: 112rpx;
-            border-radius: 112rpx;
-
             &::after {
-                border-radius: 112rpx;
+                border-radius: inherit;
             }
         }
     }

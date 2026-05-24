@@ -12,23 +12,17 @@
       class="image-list-scroll"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="none"
+      refresher-default-style="black"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
-      <template #refresher>
-        <view class="image-refresher">
-          <u-loading v-if="isRefreshing" mode="circle" size="40" />
-          <text class="image-refresher-text">{{ isRefreshing ? '刷新中...' : '下拉刷新' }}</text>
-        </view>
-      </template>
       <view v-if="loading && list.length === 0" class="image-loading">
         <u-loading mode="circle" size="60" />
         <text class="image-loading-text">加载中...</text>
       </view>
-      <view v-else-if="!loading && list.length === 0" class="image-empty">
+      <view v-if="!loading && list.length === 0" class="image-empty">
         <u-empty mode="data" text="暂无图片" icon-size="160" />
       </view>
-      <view v-else class="image-grid">
+      <view v-if="list.length > 0" class="image-grid">
         <view v-for="item in list" :key="item.imageId" class="image-grid-item">
           <u-swipe-action :options="swipeOptions" @click="onSwipeClick($event, item)">
             <view class="image-card">
