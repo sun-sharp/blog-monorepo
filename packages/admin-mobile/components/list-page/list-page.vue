@@ -86,6 +86,7 @@
 
   const keyword = ref('');
   const list = ref<any[]>([]);
+  provide(listPageListKey, list);
   const loading = ref(false);
   const isRefreshing = ref(false);
   const current = ref(1);
@@ -174,7 +175,6 @@
     loadData(true);
   });
 
-  provide(listPageListKey, list);
   defineExpose({ refresh, list });
 </script>
 
