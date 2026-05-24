@@ -36,7 +36,7 @@
         <u-empty mode="data" text="暂无数据" icon-size="160" />
       </view>
       <view v-if="list.length > 0" class="list-page-content">
-        <slot />
+        <slot :list="list" />
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
@@ -52,8 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, onMounted, provide } from 'vue';
-  import { listPageListKey } from './list-page-key';
+  import { ref, computed, onMounted } from 'vue';
 
   interface DropdownItem {
     title: string;
@@ -86,7 +85,6 @@
 
   const keyword = ref('');
   const list = ref<any[]>([]);
-  provide(listPageListKey, list);
   const loading = ref(false);
   const isRefreshing = ref(false);
   const current = ref(1);

@@ -7,7 +7,9 @@ export function getCustomNavHeight(): number {
     if (menuButton && menuButton.bottom && menuButton.top) {
       return menuButton.bottom + (menuButton.top - statusBarHeight);
     }
-  } catch {}
+  } catch {
+    /* empty */
+  }
 
   return statusBarHeight;
 }

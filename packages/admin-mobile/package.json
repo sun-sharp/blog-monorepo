@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "lint": "eslint *.d.ts *.ts *.vue \"{pages,components,utils,api,hooks,store}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",
-    "typecheck": "vue-tsc --noEmit",
     "rm_node_modules": "rimraf yarn.lock && rimraf pnpm-lock.yaml && rimraf package-lock.json && rimraf node_modules"
   },
   "devDependencies": {
