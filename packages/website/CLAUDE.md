@@ -96,7 +96,7 @@ npm run lint:stylelint
 - **动态头像显示**：
   - 从 `CURRENT_USER` 存储获取用户数据（包含 `avatar` 和 `nickname` 字段）
   - 使用 `getImgUrl` 函数（`src/utils/files.ts`）处理头像URL，确保完整路径
-  - 头像加载失败时自动回退到默认头像 `head_sculpture.jpg`
+  - 头像加载失败时自动回退到默认头像 `default-avatar.png`
 - **下拉菜单**：
   - "个人介绍"：触发 `AuthorIntroSlide` 组件从左侧滑出
   - "退出登录"：删除 `ACCESS_TOKEN`、`CURRENT_USER`、`USER_CONFIG` 存储值并刷新页面

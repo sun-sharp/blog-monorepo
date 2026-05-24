@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import './index.scss';
-import headSculpture from '@/assets/head_sculpture.jpg';
+import headSculpture from '@/assets/default-avatar.png';
 import { useEffect } from 'react';
 import { fallenLeavesAnimation } from '@/plugins/canvas/fallen-leaves';
 

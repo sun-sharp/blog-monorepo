@@ -9,7 +9,7 @@ import type { MenuProps } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { Link, useLocation } from 'react-router-dom';
 import logoImage from '@/assets/logo.png';
-import headSculptureImage from '@/assets/head_sculpture.jpg';
+import headSculptureImage from '@/assets/default-avatar.png';
 import { IHeadMenuArr, IHeaderProp } from '/#/layouts/header';
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
