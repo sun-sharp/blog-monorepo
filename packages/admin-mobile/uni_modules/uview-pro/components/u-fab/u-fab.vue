@@ -194,9 +194,8 @@ function handleBtnClick() {
     if (slots?.default) {
         expansion.value = !expansion.value;
         if (expansion.value) direction.value = calcDirection();
-    } else {
-        emit('trigger');
     }
+    emit('trigger');
 }
 
 // 计算方向

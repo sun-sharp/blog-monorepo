@@ -1,59 +1,61 @@
 <template>
   <view class="upload-page">
-    <view class="upload-section card">
-      <text class="upload-section-title">导入账单</text>
-      <text class="upload-section-desc">选择账单类型并上传对应的账单文件</text>
-    </view>
+    <scroll-view scroll-y class="upload-scroll">
+      <view class="upload-section card">
+        <text class="upload-section-title">导入账单</text>
+        <text class="upload-section-desc">选择账单类型并上传对应的账单文件</text>
+      </view>
 
-    <view class="upload-types card">
-      <u-radio-group v-model="uploadType" placement="column">
-        <view v-for="item in uploadTypeOptions" :key="item.value" class="upload-type-item" @click="uploadType = item.value">
-          <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
-          <text class="upload-type-desc">{{ item.desc }}</text>
+      <view class="upload-types card">
+        <u-radio-group v-model="uploadType" placement="column">
+          <view v-for="item in uploadTypeOptions" :key="item.value" class="upload-type-item" @click="uploadType = item.value">
+            <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
+            <text class="upload-type-desc">{{ item.desc }}</text>
+          </view>
+        </u-radio-group>
+      </view>
+
+      <view class="upload-action card">
+        <u-button type="primary" icon="file-text" @click="chooseFile">选择文件</u-button>
+        <text class="upload-tip">支持 CSV、Excel 格式文件</text>
+      </view>
+
+      <view v-if="selectedFile" class="upload-file card">
+        <view class="upload-file-info">
+          <u-icon name="file-text" size="40" color="#007aff" />
+          <view class="upload-file-detail">
+            <text class="upload-file-name">{{ selectedFile }}</text>
+            <text class="upload-file-size">已选择文件</text>
+          </view>
+          <u-icon name="close" color="#999" @click="selectedFile = ''" />
         </view>
-      </u-radio-group>
-    </view>
+      </view>
 
-    <view class="upload-action card">
-      <u-button type="primary" icon="folder" @click="chooseFile">选择文件</u-button>
-      <text class="upload-tip">支持 CSV、Excel 格式文件</text>
-    </view>
+      <view v-if="uploading" class="upload-progress card">
+        <u-line-progress :percentage="uploadProgress" active-color="#007aff" />
+        <text class="upload-progress-text">上传中 {{ uploadProgress }}%</text>
+      </view>
 
-    <view v-if="selectedFile" class="upload-file card">
-      <view class="upload-file-info">
-        <u-icon name="file-text" size="40" color="#007aff" />
-        <view class="upload-file-detail">
-          <text class="upload-file-name">{{ selectedFile }}</text>
-          <text class="upload-file-size">已选择文件</text>
+      <view class="upload-submit">
+        <u-button type="primary" :loading="uploading" :disabled="!selectedFile" @click="handleUpload">开始导入</u-button>
+      </view>
+
+      <view class="upload-help card">
+        <text class="upload-help-title">使用说明</text>
+        <view class="upload-help-item">
+          <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+          <text class="upload-help-text">微信账单：导出CSV文件后上传</text>
         </view>
-        <u-icon name="close" color="#999" @click="selectedFile = ''" />
+        <view class="upload-help-item">
+          <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+          <text class="upload-help-text">支付宝账单：导出CSV文件后上传</text>
+        </view>
+        <view class="upload-help-item">
+          <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+          <text class="upload-help-text">银行账单：导出Excel文件后上传</text>
+        </view>
       </view>
-    </view>
-
-    <view v-if="uploading" class="upload-progress card">
-      <u-line-progress :percentage="uploadProgress" active-color="#007aff" />
-      <text class="upload-progress-text">上传中 {{ uploadProgress }}%</text>
-    </view>
-
-    <view class="upload-submit">
-      <u-button type="primary" :loading="uploading" :disabled="!selectedFile" @click="handleUpload">开始导入</u-button>
-    </view>
-
-    <view class="upload-help card">
-      <text class="upload-help-title">使用说明</text>
-      <view class="upload-help-item">
-        <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-        <text class="upload-help-text">微信账单：导出CSV文件后上传</text>
-      </view>
-      <view class="upload-help-item">
-        <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-        <text class="upload-help-text">支付宝账单：导出CSV文件后上传</text>
-      </view>
-      <view class="upload-help-item">
-        <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-        <text class="upload-help-text">银行账单：导出Excel文件后上传</text>
-      </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -119,6 +121,15 @@
 
 <style lang="scss" scoped>
   .upload-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $uni-bg-color-grey;
+  }
+
+  .upload-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   }

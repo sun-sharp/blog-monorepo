@@ -14,4 +14,11 @@
   @import './styles/common.scss';
 
   @import '@/uni_modules/uview-pro/index.scss';
+
+  /* #ifdef H5 */
+  uni-page-body {
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+  /* #endif */
 </style>

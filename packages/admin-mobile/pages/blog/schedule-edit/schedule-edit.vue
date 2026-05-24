@@ -1,25 +1,27 @@
 <template>
   <view class="schedule-edit-page">
-    <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-      <u-form-item label="标题" prop="title">
-        <u-input v-model="form.title" placeholder="请输入日程标题" />
-      </u-form-item>
-      <u-form-item label="内容" prop="content">
-        <u-textarea v-model="form.content" placeholder="请输入日程内容" />
-      </u-form-item>
-      <u-form-item label="开始日期" prop="startDate">
-        <u-input v-model="form.startDate" placeholder="请选择开始日期" readonly @click="showStartCalendar = true" />
-      </u-form-item>
-      <u-form-item label="结束日期" prop="endDate">
-        <u-input v-model="form.endDate" placeholder="请选择结束日期" readonly @click="showEndCalendar = true" />
-      </u-form-item>
-      <u-form-item label="开始时间" prop="startTime">
-        <u-input v-model="form.startTime" placeholder="请选择开始时间" readonly @click="showStartTime = true" />
-      </u-form-item>
-      <u-form-item label="结束时间" prop="endTime">
-        <u-input v-model="form.endTime" placeholder="请选择结束时间" readonly @click="showEndTime = true" />
-      </u-form-item>
-    </u-form>
+    <scroll-view scroll-y class="schedule-edit-scroll">
+      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+        <u-form-item label="标题" prop="title">
+          <u-input v-model="form.title" placeholder="请输入日程标题" />
+        </u-form-item>
+        <u-form-item label="内容" prop="content">
+          <u-textarea v-model="form.content" placeholder="请输入日程内容" />
+        </u-form-item>
+        <u-form-item label="开始日期" prop="startDate">
+          <u-input v-model="form.startDate" placeholder="请选择开始日期" readonly @click="showStartCalendar = true" />
+        </u-form-item>
+        <u-form-item label="结束日期" prop="endDate">
+          <u-input v-model="form.endDate" placeholder="请选择结束日期" readonly @click="showEndCalendar = true" />
+        </u-form-item>
+        <u-form-item label="开始时间" prop="startTime">
+          <u-input v-model="form.startTime" placeholder="请选择开始时间" readonly @click="showStartTime = true" />
+        </u-form-item>
+        <u-form-item label="结束时间" prop="endTime">
+          <u-input v-model="form.endTime" placeholder="请选择结束时间" readonly @click="showEndTime = true" />
+        </u-form-item>
+      </u-form>
+    </scroll-view>
 
     <u-calendar :show="showStartCalendar" mode="date" @confirm="onStartConfirm" @close="showStartCalendar = false" />
     <u-calendar :show="showEndCalendar" mode="date" @confirm="onEndConfirm" @close="showEndCalendar = false" />
@@ -106,13 +108,23 @@
     if (options?.id) {
       editId.value = options.id;
       uni.setNavigationBarTitle({ title: '编辑日程' });
+    } else {
+      uni.setNavigationBarTitle({ title: '新建日程' });
     }
   });
 </script>
 
 <style lang="scss" scoped>
   .schedule-edit-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: $uni-bg-color-grey;
+  }
+
+  .schedule-edit-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
-    padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
   }
 </style>

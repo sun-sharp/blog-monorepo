@@ -36,30 +36,29 @@
       </view>
       <u-cell-group :border="false">
         <u-cell-item title="上传规则" icon="setting" @click="navigateTo('/pages/finance/bill-upload/bill-upload')" />
-        <u-cell-item title="财务汇总" icon="pie-chart" @click="navigateTo('/pages/finance/summary/summary')" />
-        <u-cell-item title="导入账单" icon="upload" @click="navigateTo('/pages/finance/upload/upload')" />
+        <u-cell-item title="财务汇总" icon="grid" @click="navigateTo('/pages/finance/summary/summary')" />
+        <u-cell-item title="导入账单" icon="download" @click="navigateTo('/pages/finance/upload/upload')" />
       </u-cell-group>
     </view>
 
     <view class="mine-section card">
       <view class="mine-section-header">
-        <u-icon name="image" size="28" color="#a18cd1" />
+        <u-icon name="photo" size="28" color="#a18cd1" />
         <text class="mine-section-title">文件</text>
       </view>
       <u-cell-group :border="false">
-        <u-cell-item title="图片管理" icon="image" @click="navigateTo('/pages/file/image/image')" />
-        <u-cell-item title="上传图片" icon="camera" @click="navigateTo('/pages/file/upload/upload')" />
+        <u-cell-item title="图片管理" icon="photo" @click="navigateTo('/pages/file/image/image')" />
       </u-cell-group>
     </view>
 
     <view class="mine-section card">
       <view class="mine-section-header">
-        <u-icon name="manage" size="28" color="#dd524d" />
+        <u-icon name="setting" size="28" color="#dd524d" />
         <text class="mine-section-title">系统管理</text>
       </view>
       <u-cell-group :border="false">
         <u-cell-item title="用户管理" icon="account" @click="navigateTo('/pages/system/user/user')" />
-        <u-cell-item title="角色管理" icon="manage" @click="navigateTo('/pages/system/role/role')" />
+        <u-cell-item title="角色管理" icon="account-fill" @click="navigateTo('/pages/system/role/role')" />
         <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
       </u-cell-group>
     </view>

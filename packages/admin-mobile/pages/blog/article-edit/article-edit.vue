@@ -1,5 +1,6 @@
 <template>
   <view class="article-edit-page">
+    <scroll-view scroll-y class="article-edit-scroll">
     <view class="article-edit-card">
       <view class="article-edit-section-header">
         <u-icon name="file-text" size="36rpx" color="#007aff" />
@@ -8,7 +9,7 @@
       <view class="article-edit-form">
         <view class="article-edit-field">
           <text class="article-edit-label">标题</text>
-          <u-input v-model="form.title" placeholder="请输入文章标题" border="bottom" clearable />
+          <u-input v-model="form.title" placeholder="请输入文章标题" border clearable />
         </view>
         <view class="article-edit-field">
           <text class="article-edit-label">简介</text>
@@ -63,7 +64,7 @@
     </view>
 
     <u-picker v-model="showCategory" :default-selector="categoryDefault" :range="categoryRange" range-key="label" @confirm="onCategoryConfirm" />
-  </view>
+    </scroll-view>
 </template>
 
 <script lang="ts" setup>
@@ -177,16 +178,24 @@
       editId.value = options.id;
       uni.setNavigationBarTitle({ title: '编辑文章' });
       loadArticle(options.id);
+    } else {
+      uni.setNavigationBarTitle({ title: '新建文章' });
     }
   });
 </script>
 
 <style lang="scss" scoped>
   .article-edit-page {
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     background-color: $uni-bg-color-grey;
+  }
+
+  .article-edit-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
-    padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
   }
 
   .article-edit-card {

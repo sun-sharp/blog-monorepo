@@ -1,87 +1,89 @@
 <template>
   <view class="summary-page">
-    <view class="summary-section card">
-      <view class="section-header">
-        <u-icon name="wallet" size="36" color="#007aff" />
-        <text class="section-title">余额概览</text>
-      </view>
-      <view v-if="balanceList.length > 0" class="summary-balance-grid">
-        <view v-for="item in balanceList" :key="item.name" class="summary-balance-item">
-          <text class="summary-balance-label">{{ item.name }}</text>
-          <text class="summary-balance-value money-inflow">¥{{ item.value }}</text>
+    <scroll-view scroll-y class="summary-scroll">
+      <view class="summary-section card">
+        <view class="section-header">
+          <u-icon name="red-packet" size="36" color="#007aff" />
+          <text class="section-title">余额概览</text>
         </view>
+        <view v-if="balanceList.length > 0" class="summary-balance-grid">
+          <view v-for="item in balanceList" :key="item.name" class="summary-balance-item">
+            <text class="summary-balance-label">{{ item.name }}</text>
+            <text class="summary-balance-value money-inflow">¥{{ item.value }}</text>
+          </view>
+        </view>
+        <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
       </view>
-      <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
-    </view>
 
-    <view class="summary-section card">
-      <view class="section-header flex-between">
-        <view class="flex-row">
-          <u-icon name="list" size="36" color="#f0ad4e" />
-          <text class="section-title">银行流水</text>
+      <view class="summary-section card">
+        <view class="section-header flex-between">
+          <view class="flex-row">
+            <u-icon name="list" size="36" color="#f0ad4e" />
+            <text class="section-title">银行流水</text>
+          </view>
+          <u-button size="mini" type="primary" plain @click="showBankTimeSelect = true">选择时间</u-button>
         </view>
-        <u-button size="mini" type="primary" plain @click="showBankTimeSelect = true">选择时间</u-button>
-      </view>
-      <view v-if="bankFlowList.length > 0" class="summary-flow-list">
-        <view v-for="item in bankFlowList" :key="item.name" class="summary-flow-item">
-          <view class="summary-flow-header">
-            <text class="summary-flow-name">{{ item.name }}</text>
-          </view>
-          <view class="summary-flow-detail">
-            <text class="summary-flow-label">起: ¥{{ item.startBalance }}</text>
-            <text class="summary-flow-label">终: ¥{{ item.endBalance }}</text>
-          </view>
-          <view class="summary-flow-money">
-            <text class="money-inflow">+¥{{ item.inflowMoneyAmount }}</text>
-            <text class="money-outflow">-¥{{ item.outflowMoneyAmount }}</text>
+        <view v-if="bankFlowList.length > 0" class="summary-flow-list">
+          <view v-for="item in bankFlowList" :key="item.name" class="summary-flow-item">
+            <view class="summary-flow-header">
+              <text class="summary-flow-name">{{ item.name }}</text>
+            </view>
+            <view class="summary-flow-detail">
+              <text class="summary-flow-label">起: ¥{{ item.startBalance }}</text>
+              <text class="summary-flow-label">终: ¥{{ item.endBalance }}</text>
+            </view>
+            <view class="summary-flow-money">
+              <text class="money-inflow">+¥{{ item.inflowMoneyAmount }}</text>
+              <text class="money-outflow">-¥{{ item.outflowMoneyAmount }}</text>
+            </view>
           </view>
         </view>
+        <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
       </view>
-      <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
-    </view>
 
-    <view class="summary-section card">
-      <view class="section-header flex-between">
-        <view class="flex-row">
-          <u-icon name="pie-chart" size="36" color="#dd524d" />
-          <text class="section-title">收支统计</text>
+      <view class="summary-section card">
+        <view class="section-header flex-between">
+          <view class="flex-row">
+            <u-icon name="grid" size="36" color="#dd524d" />
+            <text class="section-title">收支统计</text>
+          </view>
+          <u-button size="mini" type="primary" plain @click="showFlowTimeSelect = true">选择时间</u-button>
         </view>
-        <u-button size="mini" type="primary" plain @click="showFlowTimeSelect = true">选择时间</u-button>
+        <template v-if="flowData">
+          <view class="summary-flow-summary">
+            <view class="summary-flow-summary-item">
+              <text class="summary-flow-summary-label">流入总计</text>
+              <text class="money-inflow summary-flow-summary-value">¥{{ flowData.inflowSumTotal }}</text>
+            </view>
+            <view class="summary-flow-summary-item">
+              <text class="summary-flow-summary-label">流出总计</text>
+              <text class="money-outflow summary-flow-summary-value">¥{{ flowData.outflowSumTotal }}</text>
+            </view>
+          </view>
+          <view v-if="flowData.inflowChart.length > 0" class="summary-chart-section">
+            <text class="summary-chart-title">流入分布</text>
+            <view v-for="item in flowData.inflowChart" :key="'in-' + item.name" class="summary-chart-item">
+              <text class="summary-chart-name">{{ item.name }}</text>
+              <view class="summary-chart-bar-wrap">
+                <view class="summary-chart-bar summary-chart-bar-in" :style="{ width: getBarWidth(item.money, flowData.inflowSumTotal) }" />
+              </view>
+              <text class="money-inflow summary-chart-val">+¥{{ item.money }}</text>
+            </view>
+          </view>
+          <view v-if="flowData.outflowChart.length > 0" class="summary-chart-section">
+            <text class="summary-chart-title">流出分布</text>
+            <view v-for="item in flowData.outflowChart" :key="'out-' + item.name" class="summary-chart-item">
+              <text class="summary-chart-name">{{ item.name }}</text>
+              <view class="summary-chart-bar-wrap">
+                <view class="summary-chart-bar summary-chart-bar-out" :style="{ width: getBarWidth(item.money, flowData.outflowSumTotal) }" />
+              </view>
+              <text class="money-outflow summary-chart-val">-¥{{ item.money }}</text>
+            </view>
+          </view>
+        </template>
+        <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
       </view>
-      <template v-if="flowData">
-        <view class="summary-flow-summary">
-          <view class="summary-flow-summary-item">
-            <text class="summary-flow-summary-label">流入总计</text>
-            <text class="money-inflow summary-flow-summary-value">¥{{ flowData.inflowSumTotal }}</text>
-          </view>
-          <view class="summary-flow-summary-item">
-            <text class="summary-flow-summary-label">流出总计</text>
-            <text class="money-outflow summary-flow-summary-value">¥{{ flowData.outflowSumTotal }}</text>
-          </view>
-        </view>
-        <view v-if="flowData.inflowChart.length > 0" class="summary-chart-section">
-          <text class="summary-chart-title">流入分布</text>
-          <view v-for="item in flowData.inflowChart" :key="'in-' + item.name" class="summary-chart-item">
-            <text class="summary-chart-name">{{ item.name }}</text>
-            <view class="summary-chart-bar-wrap">
-              <view class="summary-chart-bar summary-chart-bar-in" :style="{ width: getBarWidth(item.money, flowData.inflowSumTotal) }" />
-            </view>
-            <text class="money-inflow summary-chart-val">+¥{{ item.money }}</text>
-          </view>
-        </view>
-        <view v-if="flowData.outflowChart.length > 0" class="summary-chart-section">
-          <text class="summary-chart-title">流出分布</text>
-          <view v-for="item in flowData.outflowChart" :key="'out-' + item.name" class="summary-chart-item">
-            <text class="summary-chart-name">{{ item.name }}</text>
-            <view class="summary-chart-bar-wrap">
-              <view class="summary-chart-bar summary-chart-bar-out" :style="{ width: getBarWidth(item.money, flowData.outflowSumTotal) }" />
-            </view>
-            <text class="money-outflow summary-chart-val">-¥{{ item.money }}</text>
-          </view>
-        </view>
-      </template>
-      <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
-    </view>
+    </scroll-view>
 
     <money-time-select v-model:show="showBankTimeSelect" @confirm="onBankTimeConfirm" />
     <money-time-select v-model:show="showFlowTimeSelect" @confirm="onFlowTimeConfirm" />
@@ -161,6 +163,15 @@
 
 <style lang="scss" scoped>
   .summary-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $uni-bg-color-grey;
+  }
+
+  .summary-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   }

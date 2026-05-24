@@ -1,26 +1,34 @@
 <template>
   <view class="login-page">
     <view class="login-bg" />
-    <view class="login-content">
-      <view class="login-header">
-        <view class="login-logo-wrap">
-          <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
+    <scroll-view scroll-y class="login-scroll">
+      <view class="login-content">
+        <view class="login-header">
+          <view class="login-logo-wrap">
+            <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
+          </view>
+          <text class="login-title">{{ appTitle }}</text>
+          <text class="login-subtitle">欢迎回来，请登录你的账号</text>
         </view>
-        <text class="login-title">{{ appTitle }}</text>
-        <text class="login-subtitle">欢迎回来，请登录你的账号</text>
+        <view class="login-form card">
+          <u-form ref="formRef" :model="form" :rules="rules">
+            <u-form-item prop="username">
+              <u-input v-model="form.username" placeholder="请输入用户名" prefix-icon="account" :prefix-icon-style="{ color: '#999' }" shape="round" />
+            </u-form-item>
+            <u-form-item prop="password">
+              <u-input
+                v-model="form.password"
+                type="password"
+                placeholder="请输入密码"
+                prefix-icon="lock"
+                :prefix-icon-style="{ color: '#999' }"
+                shape="round" />
+            </u-form-item>
+          </u-form>
+          <u-button type="primary" :loading="loading" shape="circle" class="login-btn" @click="handleLogin">登 录</u-button>
+        </view>
       </view>
-      <view class="login-form card">
-        <u-form ref="formRef" :model="form" :rules="rules">
-          <u-form-item prop="username">
-            <u-input v-model="form.username" placeholder="请输入用户名" prefix-icon="account" :prefix-icon-style="{ color: '#999' }" shape="round" />
-          </u-form-item>
-          <u-form-item prop="password">
-            <u-input v-model="form.password" type="password" placeholder="请输入密码" prefix-icon="lock" :prefix-icon-style="{ color: '#999' }" shape="round" />
-          </u-form-item>
-        </u-form>
-        <u-button type="primary" :loading="loading" shape="circle" class="login-btn" @click="handleLogin">登 录</u-button>
-      </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -66,10 +74,8 @@
 
 <style lang="scss" scoped>
   .login-page {
-    min-height: 100vh;
     position: relative;
-    display: flex;
-    flex-direction: column;
+    height: 100vh;
   }
 
   .login-bg {
@@ -82,9 +88,13 @@
     border-radius: 0 0 60rpx 60rpx;
   }
 
-  .login-content {
+  .login-scroll {
     position: relative;
     z-index: 1;
+    height: 100%;
+  }
+
+  .login-content {
     display: flex;
     flex-direction: column;
     align-items: center;

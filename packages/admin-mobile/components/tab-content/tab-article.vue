@@ -94,7 +94,7 @@
       </view>
     </scroll-view>
 
-    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @click="goToAdd" />
+    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @trigger="goToAdd" />
 
     <u-picker
       v-model="showCategoryPicker"

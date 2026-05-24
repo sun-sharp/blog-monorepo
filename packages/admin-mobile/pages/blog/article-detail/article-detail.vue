@@ -4,28 +4,30 @@
       <u-loading mode="circle" size="60" />
     </view>
     <template v-else-if="article">
-      <view class="article-detail-body">
-        <view class="article-detail-header card">
-          <text class="article-detail-title">{{ article.title }}</text>
-          <view class="article-detail-meta">
-            <view class="article-detail-meta-item">
-              <u-icon name="calendar" size="22" color="#999" />
-              <text class="article-detail-meta-text">{{ article.createTime?.slice(0, 10) }}</text>
+      <scroll-view scroll-y class="article-detail-scroll">
+        <view class="article-detail-body">
+          <view class="article-detail-header card">
+            <text class="article-detail-title">{{ article.title }}</text>
+            <view class="article-detail-meta">
+              <view class="article-detail-meta-item">
+                <u-icon name="calendar" size="22" color="#999" />
+                <text class="article-detail-meta-text">{{ article.createTime?.slice(0, 10) }}</text>
+              </view>
+              <view class="article-detail-meta-item">
+                <u-icon name="account" size="22" color="#999" />
+                <text class="article-detail-meta-text">{{ article.authorNickname || '未知作者' }}</text>
+              </view>
+              <u-tag v-if="article.isPrivate" text="加密" type="warning" size="mini" plain />
+              <u-tag v-if="categoryLabel" :text="categoryLabel" type="primary" size="mini" plain />
             </view>
-            <view class="article-detail-meta-item">
-              <u-icon name="account" size="22" color="#999" />
-              <text class="article-detail-meta-text">{{ article.authorNickname || '未知作者' }}</text>
-            </view>
-            <u-tag v-if="article.isPrivate" text="加密" type="warning" size="mini" plain />
-            <u-tag v-if="categoryLabel" :text="categoryLabel" type="primary" size="mini" plain />
+            <text v-if="article.brief" class="article-detail-brief">{{ article.brief }}</text>
           </view>
-          <text v-if="article.brief" class="article-detail-brief">{{ article.brief }}</text>
-        </view>
 
-        <view ref="contentRef" class="article-detail-content card">
-          <view class="article-detail-html" v-html="processedContent" />
+          <view ref="contentRef" class="article-detail-content card">
+            <view class="article-detail-html" v-html="processedContent" />
+          </view>
         </view>
-      </view>
+      </scroll-view>
 
       <view v-if="headings.length > 1" class="article-detail-toc-fab" @click="showTocPopup = true">
         <u-icon name="list" size="28rpx" color="#fff" />
@@ -225,8 +227,15 @@
 
 <style lang="scss" scoped>
   .article-detail {
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     background-color: $uni-bg-color-grey;
+  }
+
+  .article-detail-scroll {
+    flex: 1;
+    height: 0;
   }
 
   .article-detail-body {
@@ -342,23 +351,18 @@
   .article-detail-toc-indent-1 {
     padding-left: 0;
   }
-
   .article-detail-toc-indent-2 {
     padding-left: 28rpx;
   }
-
   .article-detail-toc-indent-3 {
     padding-left: 56rpx;
   }
-
   .article-detail-toc-indent-4 {
     padding-left: 84rpx;
   }
-
   .article-detail-toc-indent-5 {
     padding-left: 112rpx;
   }
-
   .article-detail-toc-indent-6 {
     padding-left: 140rpx;
   }
@@ -398,9 +402,6 @@
   .article-detail-action-text {
     font-size: $uni-font-size-base;
     color: #007aff;
-  }
-
-  .article-detail-action-btn-danger {
   }
 
   .article-detail-action-text-danger {

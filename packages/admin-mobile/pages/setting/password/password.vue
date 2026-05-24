@@ -1,19 +1,21 @@
 <template>
   <view class="password-page">
-    <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-      <u-form-item label="用户名">
-        <u-input v-model="form.username" disabled />
-      </u-form-item>
-      <u-form-item label="当前密码" prop="password">
-        <u-input v-model="form.password" type="password" placeholder="请输入当前密码" />
-      </u-form-item>
-      <u-form-item label="新密码" prop="updatePassword">
-        <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" />
-      </u-form-item>
-      <u-form-item label="确认新密码" prop="confirmPassword">
-        <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" />
-      </u-form-item>
-    </u-form>
+    <scroll-view scroll-y class="password-scroll">
+      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+        <u-form-item label="用户名">
+          <u-input v-model="form.username" disabled />
+        </u-form-item>
+        <u-form-item label="当前密码" prop="password">
+          <u-input v-model="form.password" type="password" placeholder="请输入当前密码" />
+        </u-form-item>
+        <u-form-item label="新密码" prop="updatePassword">
+          <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" />
+        </u-form-item>
+        <u-form-item label="确认新密码" prop="confirmPassword">
+          <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" />
+        </u-form-item>
+      </u-form>
+    </scroll-view>
 
     <view class="fixed-bottom-btn">
       <u-button type="primary" :loading="loading" @click="handleSave">修改密码</u-button>
@@ -76,7 +78,15 @@
 
 <style lang="scss" scoped>
   .password-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: $uni-bg-color-grey;
+  }
+
+  .password-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
-    padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
   }
 </style>

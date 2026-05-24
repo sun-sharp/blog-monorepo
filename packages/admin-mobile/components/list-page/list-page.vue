@@ -46,7 +46,7 @@
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
-    <u-fab v-if="showFab" icon="plus" position="right-bottom" :gap="{ right: 30, bottom: 30 }" @click="$emit('fabClick')" />
+    <u-fab v-if="showFab" icon="plus" position="right-bottom" :gap="{ right: 30, bottom: 30 }" @trigger="$emit('fabClick')" />
   </view>
 </template>
 
@@ -179,7 +179,7 @@
   .list-page {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 100rpx);
+    height: 100%;
   }
 
   .list-page-search {

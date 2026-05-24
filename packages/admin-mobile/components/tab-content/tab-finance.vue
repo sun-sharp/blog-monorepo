@@ -113,27 +113,37 @@
       </view>
     </scroll-view>
 
-    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @click="showFabMenu = !showFabMenu" />
-    <u-popup :show="showFabMenu" mode="bottom" @close="showFabMenu = false">
+    <u-fab icon="plus" position="right-bottom" :gap="{ right: 60, bottom: 150 }" @trigger="showFabMenu = !showFabMenu" />
+    <u-popup :model-value="showFabMenu" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFabMenu = false">
       <view class="finance-fab-popup">
         <view class="finance-fab-popup-header">
           <text class="finance-fab-popup-title">快捷操作</text>
-          <u-icon name="close" @click="showFabMenu = false" />
+          <view class="finance-fab-popup-close" @click="showFabMenu = false">
+            <u-icon name="close" size="36" color="#999" />
+          </view>
         </view>
-        <u-grid :col="3">
-          <u-grid-item @click="onFabAction('upload')">
-            <u-icon name="upload" size="48" color="#007aff" />
-            <text class="finance-fab-label">导入账单</text>
-          </u-grid-item>
-          <u-grid-item @click="onFabAction('image')">
-            <u-icon name="image" size="48" color="#4cd964" />
-            <text class="finance-fab-label">图片上传</text>
-          </u-grid-item>
-          <u-grid-item @click="onFabAction('summary')">
-            <u-icon name="pie-chart" size="48" color="#f0ad4e" />
-            <text class="finance-fab-label">财务汇总</text>
-          </u-grid-item>
-        </u-grid>
+        <view class="finance-fab-popup-body">
+          <view class="finance-fab-action-item" @click="onFabAction('upload')">
+            <view class="finance-fab-action-icon" style="background-color: #e8f4fd">
+              <u-icon name="download" size="40" color="#007aff" />
+            </view>
+            <view class="finance-fab-action-content">
+              <text class="finance-fab-action-label">导入账单</text>
+              <text class="finance-fab-action-desc">上传银行/支付宝/微信账单</text>
+            </view>
+            <u-icon name="arrow-right" size="32" color="#ccc" />
+          </view>
+          <view class="finance-fab-action-item" @click="onFabAction('summary')">
+            <view class="finance-fab-action-icon" style="background-color: #fef5e0">
+              <u-icon name="grid" size="40" color="#f0ad4e" />
+            </view>
+            <view class="finance-fab-action-content">
+              <text class="finance-fab-action-label">财务汇总</text>
+              <text class="finance-fab-action-desc">查看收支统计与图表分析</text>
+            </view>
+            <u-icon name="arrow-right" size="32" color="#ccc" />
+          </view>
+        </view>
       </view>
     </u-popup>
 
@@ -211,7 +221,7 @@
   }
 
   function getSourceIcon(source: string) {
-    const map: Record<string, string> = { bank: 'grid', aliPay: 'alipay-circle-fill', weChat: 'weixin-fill' };
+    const map: Record<string, string> = { bank: 'grid', aliPay: 'grid', weChat: 'weixin-fill' };
     return map[source] || 'list';
   }
 
@@ -348,9 +358,6 @@
     switch (action) {
       case 'upload':
         uni.navigateTo({ url: '/pages/finance/upload/upload' });
-        break;
-      case 'image':
-        uni.navigateTo({ url: '/pages/file/upload/upload' });
         break;
       case 'summary':
         uni.navigateTo({ url: '/pages/finance/summary/summary' });
@@ -557,22 +564,81 @@
   }
 
   .finance-fab-popup {
-    padding: 30rpx;
-    padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
-  }
-  .finance-fab-popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30rpx;
-  }
-  .finance-fab-popup-title {
-    font-size: $uni-font-size-lg;
-    font-weight: bold;
-  }
-  .finance-fab-label {
-    font-size: $uni-font-size-sm;
-    margin-top: 8rpx;
+    padding: 0;
+
+    .finance-fab-popup-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 36rpx 30rpx 24rpx;
+      border-bottom: 1rpx solid #f0f0f0;
+
+      .finance-fab-popup-title {
+        font-size: 32rpx;
+        font-weight: 600;
+        color: $uni-text-color;
+      }
+
+      .finance-fab-popup-close {
+        position: absolute;
+        right: 24rpx;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 56rpx;
+        height: 56rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: #f5f5f5;
+      }
+    }
+
+    .finance-fab-popup-body {
+      padding: 12rpx 0;
+      padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
+
+      .finance-fab-action-item {
+        display: flex;
+        align-items: center;
+        padding: 28rpx 30rpx;
+        gap: 24rpx;
+
+        &:active {
+          background-color: #f8f8f8;
+        }
+
+        .finance-fab-action-icon {
+          width: 80rpx;
+          height: 80rpx;
+          border-radius: 20rpx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .finance-fab-action-content {
+          flex: 1;
+          min-width: 0;
+
+          .finance-fab-action-label {
+            font-size: 30rpx;
+            font-weight: 500;
+            color: $uni-text-color;
+            display: block;
+          }
+
+          .finance-fab-action-desc {
+            font-size: 24rpx;
+            color: $uni-text-color-placeholder;
+            margin-top: 6rpx;
+            display: block;
+          }
+        }
+      }
+    }
   }
 
   :deep(.u-fab-trigger-btn) {

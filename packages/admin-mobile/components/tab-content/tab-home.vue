@@ -13,7 +13,7 @@
 
     <view class="home-quick-nav card">
       <text class="home-section-title">快捷功能</text>
-      <u-grid :col="4" :border="false">
+      <u-grid :col="3" :border="false">
         <u-grid-item @click="navigateTo('/pages/blog/schedule/schedule')">
           <view class="nav-icon-wrap nav-icon-green">
             <u-icon name="calendar" size="40" color="#fff" />
@@ -22,19 +22,13 @@
         </u-grid-item>
         <u-grid-item @click="navigateTo('/pages/finance/upload/upload')">
           <view class="nav-icon-wrap nav-icon-orange">
-            <u-icon name="upload" size="40" color="#fff" />
+            <u-icon name="download" size="40" color="#fff" />
           </view>
           <text class="nav-label">导入</text>
         </u-grid-item>
-        <u-grid-item @click="navigateTo('/pages/file/upload/upload')">
-          <view class="nav-icon-wrap nav-icon-purple">
-            <u-icon name="camera" size="40" color="#fff" />
-          </view>
-          <text class="nav-label">图片</text>
-        </u-grid-item>
         <u-grid-item @click="navigateTo('/pages/finance/summary/summary')">
           <view class="nav-icon-wrap nav-icon-blue">
-            <u-icon name="pie-chart" size="40" color="#fff" />
+            <u-icon name="grid" size="40" color="#fff" />
           </view>
           <text class="nav-label">汇总</text>
         </u-grid-item>
@@ -253,10 +247,6 @@
 
   .nav-icon-orange {
     background: linear-gradient(135deg, #fa709a, #fee140);
-  }
-
-  .nav-icon-purple {
-    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
   }
 
   .nav-label {

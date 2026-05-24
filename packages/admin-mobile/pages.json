@@ -81,12 +81,6 @@
       }
     },
     {
-      "path": "pages/file/upload/upload",
-      "style": {
-        "navigationBarTitleText": "上传图片"
-      }
-    },
-    {
       "path": "pages/system/user/user",
       "style": {
         "navigationBarTitleText": "用户管理"

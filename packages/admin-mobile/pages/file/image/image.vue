@@ -23,6 +23,7 @@
       </template>
       <view v-if="loading && list.length === 0" class="image-loading">
         <u-loading mode="circle" size="60" />
+        <text class="image-loading-text">加载中...</text>
       </view>
       <view v-else-if="!loading && list.length === 0" class="image-empty">
         <u-empty mode="data" text="暂无图片" icon-size="160" />
@@ -42,8 +43,6 @@
       </view>
       <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
     </scroll-view>
-
-    <u-fab icon="plus" position="right-bottom" :gap="{ right: 30, bottom: 30 }" @click="goToUpload" />
   </view>
 </template>
 
@@ -164,10 +163,6 @@
     }
   }
 
-  function goToUpload() {
-    uni.navigateTo({ url: '/pages/file/upload/upload' });
-  }
-
   onMounted(() => {
     apiTypeStore.getImageSource();
     loadData(true);
@@ -182,7 +177,7 @@
   .image-page {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     background-color: $uni-bg-color-grey;
   }
 
@@ -250,20 +245,15 @@
   .image-loading,
   .image-empty {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     padding-top: 200rpx;
   }
 
-  :deep(.u-fab-trigger-btn) {
-    width: 88rpx !important;
-    height: 88rpx !important;
-    border-radius: 88rpx !important;
-    box-shadow:
-      0 8rpx 24rpx rgba(0, 122, 255, 0.25),
-      0 2rpx 8rpx rgba(0, 0, 0, 0.08) !important;
-
-    &::after {
-      border-radius: 88rpx !important;
-    }
+  .image-loading-text {
+    margin-top: 20rpx;
+    color: $uni-text-color-grey;
+    font-size: $uni-font-size-sm;
   }
 </style>

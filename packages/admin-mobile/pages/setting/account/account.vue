@@ -1,16 +1,18 @@
 <template>
   <view class="account-page">
-    <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-      <u-form-item label="头像">
-        <u-avatar :src="form.avatar || '/static/logo.png'" size="80" @click="chooseAvatar" />
-      </u-form-item>
-      <u-form-item label="昵称" prop="nickname">
-        <u-input v-model="form.nickname" placeholder="请输入昵称" />
-      </u-form-item>
-      <u-form-item label="用户名" prop="username">
-        <u-input v-model="form.username" placeholder="请输入用户名" />
-      </u-form-item>
-    </u-form>
+    <scroll-view scroll-y class="account-scroll">
+      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+        <u-form-item label="头像">
+          <u-avatar :src="form.avatar || '/static/logo.png'" size="80" @click="chooseAvatar" />
+        </u-form-item>
+        <u-form-item label="昵称" prop="nickname">
+          <u-input v-model="form.nickname" placeholder="请输入昵称" />
+        </u-form-item>
+        <u-form-item label="用户名" prop="username">
+          <u-input v-model="form.username" placeholder="请输入用户名" />
+        </u-form-item>
+      </u-form>
+    </scroll-view>
 
     <view class="fixed-bottom-btn">
       <u-button type="primary" :loading="loading" @click="handleSave">保存</u-button>
@@ -78,7 +80,15 @@
 
 <style lang="scss" scoped>
   .account-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: $uni-bg-color-grey;
+  }
+
+  .account-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
-    padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
   }
 </style>

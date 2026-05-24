@@ -1,38 +1,40 @@
 <template>
   <view class="bill-detail-page">
-    <view class="bill-detail-header card">
-      <view class="bill-detail-amount-row">
-        <text :class="bill.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="bill-detail-amount">
-          {{ bill.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ bill.moneyAmount || '0.00' }}
-        </text>
-        <u-tag :text="sourceLabel" type="primary" size="mini" plain />
+    <scroll-view scroll-y class="bill-detail-scroll">
+      <view class="bill-detail-header card">
+        <view class="bill-detail-amount-row">
+          <text :class="bill.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="bill-detail-amount">
+            {{ bill.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ bill.moneyAmount || '0.00' }}
+          </text>
+          <u-tag :text="sourceLabel" type="primary" size="mini" plain />
+        </view>
+        <text class="bill-detail-time">{{ bill.tradeTime || '' }}</text>
       </view>
-      <text class="bill-detail-time">{{ bill.tradeTime || '' }}</text>
-    </view>
 
-    <view class="bill-detail-info card">
-      <u-cell-group>
-        <u-cell-item title="交易对方" :value="bill.tradeOtherPerson || '--'" />
-        <u-cell-item title="对方备注" :value="bill.tradeOtherPersonRemarks || '--'" />
-        <u-cell-item title="收/支" :value="bill.incomeOrPay || '--'" />
-        <u-cell-item title="交易类型" :value="bill.tradeType || '--'" />
-        <u-cell-item title="说明" :value="bill.explain || '--'" />
-        <u-cell-item title="使用地点" :value="bill.place || '--'" />
-        <u-cell-item v-if="bill.balance !== undefined" title="余额" :value="`¥${bill.balance}`" />
-        <u-cell-item v-if="bill.otherCost !== undefined" title="其它费用" :value="`¥${bill.otherCost}`" />
-        <u-cell-item v-if="source === 'weChat'" title="商品" :value="(bill as any).goods || '--'" />
-        <u-cell-item v-if="source === 'weChat'" title="支付方式" :value="(bill as any).paymentMethod || '--'" />
-        <u-cell-item v-if="source === 'weChat'" title="当前状态" :value="(bill as any).currentStatus || '--'" />
-        <u-cell-item v-if="source === 'aliPay'" title="商品说明" :value="(bill as any).productDescription || '--'" />
-        <u-cell-item v-if="source === 'aliPay'" title="收/付款方式" :value="(bill as any).paymentMethod || '--'" />
-        <u-cell-item v-if="source === 'bank'" title="银行类型" :value="bankTypeLabel" />
-        <u-cell-item v-if="source === 'bank'" title="凭证号码" :value="(bill as any).voucherNo || '--'" />
-      </u-cell-group>
-    </view>
+      <view class="bill-detail-info card">
+        <u-cell-group>
+          <u-cell-item title="交易对方" :value="bill.tradeOtherPerson || '--'" />
+          <u-cell-item title="对方备注" :value="bill.tradeOtherPersonRemarks || '--'" />
+          <u-cell-item title="收/支" :value="bill.incomeOrPay || '--'" />
+          <u-cell-item title="交易类型" :value="bill.tradeType || '--'" />
+          <u-cell-item title="说明" :value="bill.explain || '--'" />
+          <u-cell-item title="使用地点" :value="bill.place || '--'" />
+          <u-cell-item v-if="bill.balance !== undefined" title="余额" :value="`¥${bill.balance}`" />
+          <u-cell-item v-if="bill.otherCost !== undefined" title="其它费用" :value="`¥${bill.otherCost}`" />
+          <u-cell-item v-if="source === 'weChat'" title="商品" :value="(bill as any).goods || '--'" />
+          <u-cell-item v-if="source === 'weChat'" title="支付方式" :value="(bill as any).paymentMethod || '--'" />
+          <u-cell-item v-if="source === 'weChat'" title="当前状态" :value="(bill as any).currentStatus || '--'" />
+          <u-cell-item v-if="source === 'aliPay'" title="商品说明" :value="(bill as any).productDescription || '--'" />
+          <u-cell-item v-if="source === 'aliPay'" title="收/付款方式" :value="(bill as any).paymentMethod || '--'" />
+          <u-cell-item v-if="source === 'bank'" title="银行类型" :value="bankTypeLabel" />
+          <u-cell-item v-if="source === 'bank'" title="凭证号码" :value="(bill as any).voucherNo || '--'" />
+        </u-cell-group>
+      </view>
 
-    <view class="bill-detail-actions">
-      <u-button type="primary" plain icon="edit-pen" @click="goToEdit">编辑</u-button>
-    </view>
+      <view class="bill-detail-actions">
+        <u-button type="primary" plain icon="edit-pen" @click="goToEdit">编辑</u-button>
+      </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -91,6 +93,15 @@
 
 <style lang="scss" scoped>
   .bill-detail-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: $uni-bg-color-grey;
+  }
+
+  .bill-detail-scroll {
+    flex: 1;
+    height: 0;
     padding: 20rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   }
