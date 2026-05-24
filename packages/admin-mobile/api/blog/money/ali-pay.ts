@@ -1,5 +1,5 @@
 import { blogRequest } from '../../../utils/request';
-import type { ApiAliPayFindPageData, ApiAliPayItem, ApiAliPayUpdateData } from '/#/api/blog/money/ali-pay';
+import type { ApiAliPayFindPageData, ApiAliPayItem, ApiAliPayUpdateData, ApiAliPayBatchSaveData } from '/#/api/blog/money/ali-pay';
 import type { TablePaginationResult } from '/#/components/table';
 import type { ApiStartEndTimeParams } from '/#/api/common';
 
@@ -19,4 +19,8 @@ export const updateBalance = (params: ApiStartEndTimeParams): Promise<undefined>
 
 export const updateBalanceBaby = (params: ApiStartEndTimeParams): Promise<undefined> => {
   return blogRequest({ url: `${basic}/update_balance_baby`, method: 'PUT', params });
+};
+
+export const batchSave = (data: ApiAliPayBatchSaveData): Promise<undefined> => {
+  return blogRequest({ url: `${basic}/batch-save`, method: 'POST', data });
 };

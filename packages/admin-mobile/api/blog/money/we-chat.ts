@@ -1,5 +1,5 @@
 import { blogRequest } from '../../../utils/request';
-import type { ApiWeChatFindPageData, ApiWeChatItem, ApiWeChatUpdateData } from '/#/api/blog/money/we-chat';
+import type { ApiWeChatFindPageData, ApiWeChatItem, ApiWeChatUpdateData, ApiWeChatBatchSaveData } from '/#/api/blog/money/we-chat';
 import type { TablePaginationResult } from '/#/components/table';
 import type { ApiStartEndTimeParams } from '/#/api/common';
 
@@ -15,4 +15,8 @@ export const update = (data: ApiWeChatUpdateData): Promise<undefined> => {
 
 export const updateBalance = (params: ApiStartEndTimeParams): Promise<undefined> => {
   return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', params });
+};
+
+export const batchSave = (data: ApiWeChatBatchSaveData): Promise<undefined> => {
+  return blogRequest({ url: `${basic}/batch-save`, method: 'POST', data });
 };

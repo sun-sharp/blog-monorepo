@@ -1,5 +1,5 @@
 import { blogRequest } from '../../../utils/request';
-import type { ApiBankFindPageData, ApiBankItem, ApiBankUpdateData } from '/#/api/blog/money/bank';
+import type { ApiBankFindPageData, ApiBankItem, ApiBankUpdateData, ApiBankBatchSaveData } from '/#/api/blog/money/bank';
 import type { TablePaginationResult } from '/#/components/table';
 
 const basic = '/money/bank';
@@ -14,4 +14,8 @@ export const update = (data: ApiBankUpdateData): Promise<undefined> => {
 
 export const remove = (bankId: string): Promise<undefined> => {
   return blogRequest({ url: `${basic}/remove/${bankId}`, method: 'DELETE' });
+};
+
+export const batchSave = (data: ApiBankBatchSaveData): Promise<undefined> => {
+  return blogRequest({ url: `${basic}/batch-save`, method: 'POST', data });
 };

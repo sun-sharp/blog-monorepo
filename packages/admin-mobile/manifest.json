@@ -109,10 +109,10 @@
                     "storePassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303"
                 },
                 "release" : {
-                    "certpath" : "sun_sharp_t.cer",
+                    "certpath" : "sun_sharp_f.cer",
                     "keyAlias" : "sun_sharp_b",
                     "keyPassword" : "0000001D6B2B7968846A583CC68A7678B519A49D4244AEEF273779013966C01998EAA3FB1D9F596F0AFF54D9B8",
-                    "profile" : "sun_sharp_tDebug.p7b",
+                    "profile" : "sun_sharp_zfRelease.p7b",
                     "signAlg" : "SHA256withECDSA",
                     "storeFile" : "sun_sharp.p12",
                     "storePassword" : "0000001D5981AD075441B67E8C8B5B8857E54C08622C043D5BE821D15948F38C0835330DCA605A674B322F745D"
