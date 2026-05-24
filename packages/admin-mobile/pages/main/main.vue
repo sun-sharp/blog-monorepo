@@ -50,6 +50,7 @@
     flex-direction: column;
     height: 100vh;
     background-color: $uni-bg-color-grey;
+    padding-top: env(safe-area-inset-top);
   }
 
   .main-content {
@@ -61,7 +62,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    height: 100rpx;
+    min-height: 120rpx;
     background-color: #ffffff;
     border-top: 1rpx solid #e5e5e5;
     padding-bottom: env(safe-area-inset-bottom);
@@ -74,7 +75,7 @@
     align-items: center;
     justify-content: center;
     flex: 1;
-    padding: 8rpx 0;
+    padding: 10rpx 0 6rpx;
   }
 
   .custom-tabbar__text {

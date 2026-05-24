@@ -98,7 +98,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 100rpx 60rpx 0;
+    padding: calc(env(safe-area-inset-top) + 100rpx) 60rpx 0;
   }
 
   .login-header {
