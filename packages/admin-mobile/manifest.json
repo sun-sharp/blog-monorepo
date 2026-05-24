@@ -107,6 +107,15 @@
                     "signAlg" : "SHA256withECDSA",
                     "storeFile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.p12",
                     "storePassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303"
+                },
+                "release" : {
+                    "certpath" : "E:/program/Front/blog/鸿蒙发布打包/admin_blog.cer",
+                    "keyAlias" : "blog_app",
+                    "keyPassword" : "0000001DFDA147BD1F31AA64C8A8A911C4E1677FACA7E3A6F3B150CB43931E04D4179BBC6228555470F928F5AD",
+                    "profile" : "E:/program/Front/blog/鸿蒙发布打包/admin_blogRelease.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "E:/program/Front/hm/密钥/admin_blog.p12",
+                    "storePassword" : "0000001D5FC442C0137B676186B7D5A118515540D4B41F77D5D09FF1C725B740C177CAED288EE4A02311AA0528"
                 }
             },
             "targetSdkVersion" : "5.0.1(13)",
