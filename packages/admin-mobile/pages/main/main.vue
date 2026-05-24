@@ -1,5 +1,5 @@
 <template>
-  <view class="main-page">
+  <view class="main-page" :style="{ paddingTop: customNavHeight + 'px' }">
     <view class="main-content">
       <tab-home v-show="currentTab === 0" :active="currentTab === 0" />
       <tab-article v-show="currentTab === 1" :active="currentTab === 1" />
@@ -26,8 +26,10 @@
   import TabArticle from '../../components/tab-content/tab-article.vue';
   import TabFinance from '../../components/tab-content/tab-finance.vue';
   import TabMine from '../../components/tab-content/tab-mine.vue';
+  import { getCustomNavHeight } from '../../utils/custom-nav';
 
   const currentTab = ref(0);
+  const customNavHeight = getCustomNavHeight();
 
   const activeColor = '#007aff';
   const inactiveColor = '#333333';
@@ -50,7 +52,6 @@
     flex-direction: column;
     height: 100vh;
     background-color: $uni-bg-color-grey;
-    padding-top: env(safe-area-inset-top);
   }
 
   .main-content {

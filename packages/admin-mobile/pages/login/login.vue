@@ -2,7 +2,7 @@
   <view class="login-page">
     <view class="login-bg" />
     <scroll-view scroll-y class="login-scroll">
-      <view class="login-content">
+      <view class="login-content" :style="{ paddingTop: `calc(${customNavHeight}px + 100rpx)` }">
         <view class="login-header">
           <view class="login-logo-wrap">
             <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
@@ -35,7 +35,9 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
   import { useUserStore } from '../../store';
+  import { getCustomNavHeight } from '../../utils/custom-nav';
 
+  const customNavHeight = getCustomNavHeight();
   const appTitle = import.meta.env.VITE_APP_TITLE || '管理后台';
   const userStore = useUserStore();
   const formRef = ref();
@@ -98,7 +100,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: calc(env(safe-area-inset-top) + 100rpx) 60rpx 0;
+    padding-left: 60rpx;
+    padding-right: 60rpx;
+    padding-bottom: 0;
   }
 
   .login-header {
