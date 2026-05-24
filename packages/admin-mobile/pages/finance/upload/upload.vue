@@ -817,9 +817,5 @@
     padding: 20rpx 30rpx calc(20rpx + env(safe-area-inset-bottom));
     background-color: #fff;
     border-top: 1rpx solid $uni-border-color;
-
-    > * {
-      flex: 1;
-    }
   }
 </style>
