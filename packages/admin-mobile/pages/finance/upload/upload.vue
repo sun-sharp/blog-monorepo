@@ -472,13 +472,13 @@
         excelUploadTotal.value = rawData.length;
         tableData.value = rawData.slice(0, 50).map((item: any) => {
           const row = { ...item };
-          row.inflowOrOutflow = undefined;
+          row.inflowOrOutflow = item.inflowOrOutflow || undefined;
           if (uploadType.value !== 3) {
-            row.billMethod = undefined;
-            row.billType = undefined;
+            row.billMethod = item.billMethod || undefined;
+            row.billType = item.billType || undefined;
           } else {
-            row.bankBillType = undefined;
-            row.bankType = undefined;
+            row.bankBillType = item.bankBillType || undefined;
+            row.bankType = item.bankType || undefined;
           }
           return row;
         });
@@ -559,6 +559,9 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    /* #ifdef H5 */
+    height: 100%;
+    /* #endif */
     background-color: $uni-bg-color-grey;
   }
 
