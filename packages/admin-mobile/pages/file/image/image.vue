@@ -26,7 +26,7 @@
         <view v-for="item in list" :key="item.imageId" class="image-grid-item">
           <u-swipe-action :options="swipeOptions" @click="onSwipeClick($event, item)">
             <view class="image-card">
-              <u-image :src="item.url" width="100%" height="200rpx" mode="aspectFill" :fade="true" @click="previewImage(item.url)" />
+              <u-image :src="getImgUrl(item.url)" width="100%" height="200rpx" mode="aspectFill" :fade="true" @click="previewImage(getImgUrl(item.url))" />
               <view class="image-card-info">
                 <text class="image-card-name text-ellipsis">{{ item.name }}</text>
                 <text class="image-card-meta">{{ item.imageType }} · {{ item.uploadTime?.slice(0, 10) }}</text>
@@ -46,6 +46,7 @@
   import { imageApi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
   import type { ApiImageItem } from '/#/api/capital/image';
+  import { getImgUrl } from '../../../../shared/src/utils/files';
 
   const apiTypeStore = useApiTypeStore();
   const searchKeyword = ref('');

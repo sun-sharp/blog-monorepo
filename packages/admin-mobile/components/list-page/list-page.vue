@@ -11,15 +11,17 @@
         @custom="handleSearch"
         @clear="handleClear" />
     </view>
-    <u-dropdown v-if="dropdownItems.length > 0" class="list-page-dropdown">
-      <u-dropdown-item
-        v-for="(item, index) in dropdownItems"
-        :key="index"
-        v-model="item.value"
-        :title="item.title"
-        :options="item.options"
-        @change="handleDropdownChange" />
-    </u-dropdown>
+    <view style="padding-bottom: 10rpx">
+      <u-dropdown v-if="dropdownItems.length > 0" class="list-page-dropdown">
+        <u-dropdown-item
+          v-for="(item, index) in dropdownItems"
+          :key="index"
+          v-model="item.value"
+          :title="item.title"
+          :options="item.options"
+          @change="handleDropdownChange" />
+      </u-dropdown>
+    </view>
     <scroll-view
       scroll-y
       class="list-page-scroll"

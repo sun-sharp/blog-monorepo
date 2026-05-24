@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view style="height: 100%">
     <list-page ref="listPageRef" :api-fn="billUploadApi.getPage" :show-search="false" :dropdown-items="dropdownItems" show-fab @fabClick="goToAdd">
       <template #default="{ list }">
         <u-cell-group>
