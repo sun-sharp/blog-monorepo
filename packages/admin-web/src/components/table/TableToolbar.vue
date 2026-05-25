@@ -2,7 +2,7 @@
   import { QuestionCircleOutlined, ColumnHeightOutlined, ReloadOutlined } from '@/utils/icons';
   import TableColumnSetting from './TableColumnSetting.vue';
   import { TableToolbarProps, useTableToolbar } from './hooks/useTableToolbar';
-  import { densityOptions } from '@/constant';
+  import { densityOptions } from '@shared/constants/table-const';
 
   const props = defineProps(TableToolbarProps);
 

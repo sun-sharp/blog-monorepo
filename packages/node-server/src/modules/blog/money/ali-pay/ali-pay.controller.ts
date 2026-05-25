@@ -7,8 +7,8 @@ import { AliPayService } from './ali-pay.service';
 import { CreateAliPayBatchDto } from './dto/create-ali-pay.dto';
 import { PageAliPayDto } from './dto/page-ali-pay.dto';
 import { UpdateAliPayDto } from './dto/update-ali-pay.dto';
-import { UploadAliPayDto } from './dto/upload-we-chat.dto';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
+import { UploadAliPayDto } from './dto/upload-ali-pay.dto';
 
 @Controller('ali-pay')
 @ApiTags('支付宝')
@@ -19,14 +19,12 @@ export class AliPayController {
 
   @ApiOperation({ summary: '支付宝账单导入' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: UploadAliPayDto,
-  })
+  @ApiBody({ type: UploadAliPayDto })
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  upload(@UploadedFile() file: UploadAliPayDto) {
-    return this.aliPayService.upload(file);
+  upload(@UploadedFile() file: UploadAliPayDto, @Body() body: UploadAliPayDto) {
+    return this.aliPayService.upload(file, body.startNum, body.endNum);
   }
 
   @Post('batch-save')
