@@ -415,7 +415,7 @@
   function getUploadUrl(): string {
     const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
     const BASE_URL = import.meta.env.VITE_BASE_URL || '';
-    const base = isH5Platform() ? BLOG_API_URL : `${BASE_URL}/${BLOG_API_URL}`;
+    const base = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
     const paths: Record<number, string> = {
       1: '/money/we-chat/upload',
       2: '/money/ali-pay/upload',
