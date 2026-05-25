@@ -14,7 +14,7 @@ export const save = (data: ApiWaitForDoSaveData): Promise<undefined> => {
 };
 
 export const classifyAll = (classify: number, state: number): Promise<ApiWaitForDoItem[]> => {
-  return capitalRequest({ url: `${basic}/classify_all`, method: 'GET', params: { classify, state } });
+  return capitalRequest({ url: `${basic}/classify_all`, method: 'GET', data: { classify, state } });
 };
 
 export const updateState = (data: ApiWaitForDoUpdateStateHasIdData): Promise<undefined> => {

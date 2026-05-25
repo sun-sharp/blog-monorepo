@@ -5,7 +5,7 @@ import type { TablePaginationResult } from '/#/components/table';
 const basic = '/category';
 
 export const certainTypeAll = (type: string): Promise<ApiCategoryItem[]> => {
-  return capitalRequest({ url: `${basic}/certain_type_all`, method: 'GET', params: { type } });
+  return capitalRequest({ url: `${basic}/certain_type_all`, method: 'GET', data: { type } });
 };
 
 export const getPage = (data: ApiCategoryFindPageData): Promise<TablePaginationResult<ApiCategoryItem[]>> => {

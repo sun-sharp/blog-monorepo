@@ -13,8 +13,8 @@ export const update = (data: ApiWeChatUpdateData): Promise<undefined> => {
   return blogRequest({ url: `${basic}/update`, method: 'PUT', data });
 };
 
-export const updateBalance = (params: ApiStartEndTimeParams): Promise<undefined> => {
-  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', params });
+export const updateBalance = (data: ApiStartEndTimeParams): Promise<undefined> => {
+  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', data });
 };
 
 export const batchSave = (data: ApiWeChatBatchSaveData): Promise<undefined> => {
