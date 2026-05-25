@@ -80,7 +80,7 @@
       searchPlaceholder: '请输入搜索关键词',
       searchKey: 'keywords',
       dropdownItems: () => [],
-      showFab: false,
+      showFab: true,
       pageSize: 10,
     }
   );
@@ -97,10 +97,6 @@
   const scrollTopOffset = ref(0);
 
   const scrollStyle = computed(() => {
-    const offset = scrollTopOffset.value;
-    if (offset > 0) {
-      return { height: `calc(100vh - ${offset}px)` };
-    }
     return {};
   });
 
