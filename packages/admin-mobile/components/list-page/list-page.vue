@@ -25,6 +25,7 @@
     <scroll-view
       scroll-y
       class="list-page-scroll"
+      :style="scrollStyle"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
       refresher-default-style="black"
@@ -46,6 +47,7 @@
       v-if="showFab"
       icon="plus"
       :size="88"
+      :z-index="9999"
       btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
       position="right-bottom"
       :gap="{ right: 30, bottom: 30 }"
@@ -91,6 +93,16 @@
   const isRefreshing = ref(false);
   const current = ref(1);
   const total = ref(0);
+
+  const scrollTopOffset = ref(0);
+
+  const scrollStyle = computed(() => {
+    const offset = scrollTopOffset.value;
+    if (offset > 0) {
+      return { height: `calc(100vh - ${offset}px)` };
+    }
+    return {};
+  });
 
   const loadMoreStatus = computed(() => {
     if (loading.value) return 'loading';
@@ -167,11 +179,26 @@
     loadData(true);
   }
 
+  function calcScrollHeight() {
+    try {
+      const sysInfo = uni.getSystemInfoSync();
+      const statusBarHeight = sysInfo.statusBarHeight || 0;
+      const navBarHeight = 44;
+      const searchHeight = props.showSearch ? 44 : 0;
+      const dropdownHeight = props.dropdownItems.length > 0 ? 44 : 0;
+      const extraPadding = 10;
+      scrollTopOffset.value = statusBarHeight + navBarHeight + searchHeight + dropdownHeight + extraPadding;
+    } catch {
+      scrollTopOffset.value = 0;
+    }
+  }
+
   function refresh() {
     loadData(true);
   }
 
   onMounted(() => {
+    calcScrollHeight();
     loadData(true);
   });
 
@@ -182,7 +209,10 @@
   .list-page {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    /* #ifdef H5 */
     height: 100%;
+    /* #endif */
   }
 
   .list-page-search {

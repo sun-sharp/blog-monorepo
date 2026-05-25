@@ -26,6 +26,7 @@
     <scroll-view
       scroll-y
       class="category-list-scroll"
+      :style="scrollStyle"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
       refresher-default-style="black"
@@ -65,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
@@ -82,6 +83,15 @@
   const pageSize = 10;
   const currentType = ref('');
   const showTypeSelect = ref(false);
+
+  const scrollTopOffset = ref(0);
+  const scrollStyle = computed(() => {
+    const offset = scrollTopOffset.value;
+    if (offset > 0) {
+      return { height: `calc(100vh - ${offset}px)` };
+    }
+    return {};
+  });
 
   const typeSelectOptions = [{ label: '全部类型', value: '' }, ...categoryTypeOption];
 
@@ -210,6 +220,22 @@
     });
   }
 
+  function calcScrollHeight() {
+    try {
+      const sysInfo = uni.getSystemInfoSync();
+      const statusBarHeight = sysInfo.statusBarHeight || 0;
+      const navBarHeight = 44;
+      const toolbarHeight = 60;
+      scrollTopOffset.value = statusBarHeight + navBarHeight + toolbarHeight;
+    } catch {
+      scrollTopOffset.value = 0;
+    }
+  }
+
+  onMounted(() => {
+    calcScrollHeight();
+  });
+
   onShow(() => {
     loadData(true);
   });
@@ -219,7 +245,10 @@
   .category-page {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    /* #ifdef H5 */
     height: 100%;
+    /* #endif */
     background-color: $uni-bg-color-grey;
   }
 

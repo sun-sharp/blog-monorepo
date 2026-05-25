@@ -69,6 +69,7 @@
     <scroll-view
       scroll-y
       class="finance-list-scroll"
+      :style="scrollStyle"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
       refresher-default-style="black"
@@ -184,6 +185,15 @@
   const inflowTotal = ref('0.00');
   const outflowTotal = ref('0.00');
   const inited = ref(false);
+
+  const scrollTopOffset = ref(0);
+  const scrollStyle = computed(() => {
+    const offset = scrollTopOffset.value;
+    if (offset > 0) {
+      return { height: `calc(100vh - ${offset}px)` };
+    }
+    return {};
+  });
 
   const sourceOptions = ['全部', '银行', '支付宝', '微信'];
   const flowOptions = ['全部', '收入', '支出'];
@@ -365,7 +375,21 @@
     }
   }
 
+  function calcScrollHeight() {
+    try {
+      const sysInfo = uni.getSystemInfoSync();
+      const statusBarHeight = sysInfo.statusBarHeight || 0;
+      const navBarHeight = 44;
+      const headerHeight = 200;
+      const tabBarHeight = 50;
+      scrollTopOffset.value = statusBarHeight + navBarHeight + headerHeight + tabBarHeight;
+    } catch {
+      scrollTopOffset.value = 0;
+    }
+  }
+
   onMounted(() => {
+    calcScrollHeight();
     loadAllBills();
     inited.value = true;
   });

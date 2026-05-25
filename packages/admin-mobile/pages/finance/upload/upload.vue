@@ -2,7 +2,7 @@
   <view class="upload-page">
     <!-- ====== 上传界面 ====== -->
     <template v-if="step === 'upload'">
-      <scroll-view scroll-y class="upload-scroll">
+      <scroll-view scroll-y class="upload-scroll" :style="scrollStyle">
         <view class="upload-section card">
           <text class="upload-section-title">导入账单</text>
           <text class="upload-section-desc">选择账单类型并上传对应的账单文件</text>
@@ -67,7 +67,7 @@
         <text class="import-header-count">{{ tableData.length }} / {{ excelUploadTotal }} 条</text>
       </view>
 
-      <scroll-view scroll-y class="import-scroll">
+      <scroll-view scroll-y class="import-scroll" :style="scrollStyle">
         <view v-for="(item, idx) in tableData" :key="idx" :class="['import-card', isRowIncomplete(idx) ? 'import-card-incomplete' : '']">
           <view class="import-card-header">
             <text class="import-card-index">#{{ idx + 1 }}</text>
@@ -254,17 +254,18 @@
       </view>
     </template>
 
-    <!-- 共用选择器 -->
-    <u-select v-model="selectVisible" :list="selectList" :title="selectTitle" @confirm="onSelectConfirm" />
+    <!-- 共用搜索选择器 -->
+    <searchable-select v-model="selectVisible" :title="selectTitle" :list="selectList" :current-value="selectCurrentValue" @confirm="onSelectConfirm" />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { weChatApi, aliPayApi, bankApi } from '../../../api';
   import { useUserStore, useApiTypeStore } from '../../../store';
   import { voucherTypeOption } from '../../../../shared/src/constants/api-type';
+  import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
 
   const userStore = useUserStore();
   const apiTypeStore = useApiTypeStore();
@@ -288,6 +289,20 @@
   const selectList = ref<{ label: string; value: number }[]>([]);
   const selectTitle = ref('');
 
+  const scrollTopOffset = ref(0);
+  const scrollStyle = computed(() => {
+    const offset = scrollTopOffset.value;
+    if (offset > 0) {
+      return {};
+    }
+    return {};
+  });
+
+  const selectCurrentValue = computed(() => {
+    if (selectIndex.value < 0 || !selectField.value) return undefined;
+    return (tableData.value[selectIndex.value] as any)?.[selectField.value];
+  });
+
   const uploadTypeOptions = [
     { value: 1, label: '微信账单', desc: '微信支付导出的账单文件' },
     { value: 2, label: '支付宝账单', desc: '支付宝导出的账单文件' },
@@ -310,9 +325,25 @@
   });
 
   // ---- 初始化 ----
+  onMounted(() => {
+    calcScrollHeight();
+  });
+
   onLoad(async () => {
     await Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod(), apiTypeStore.getBankType()]);
   });
+
+  function calcScrollHeight() {
+    try {
+      const sysInfo = uni.getSystemInfoSync();
+      const statusBarHeight = sysInfo.statusBarHeight || 0;
+      const navBarHeight = 44;
+      const footerHeight = 60;
+      scrollTopOffset.value = statusBarHeight + navBarHeight + footerHeight;
+    } catch {
+      scrollTopOffset.value = 0;
+    }
+  }
 
   // ---- 标签解析 ----
   function getLabel(field: string, value: number | undefined): string {
@@ -510,10 +541,11 @@
     selectVisible.value = true;
   }
 
-  function onSelectConfirm(e: any) {
+  function onSelectConfirm(item: { label: string; value: number | string }) {
     if (selectIndex.value >= 0 && selectField.value) {
-      (tableData.value[selectIndex.value] as any)[selectField.value] = e[0]?.value;
+      (tableData.value[selectIndex.value] as any)[selectField.value] = item.value;
     }
+    selectVisible.value = false;
   }
 
   // ---- 行状态 ----

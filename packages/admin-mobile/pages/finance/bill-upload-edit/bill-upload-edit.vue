@@ -1,6 +1,6 @@
 <template>
   <view class="bill-upload-edit-page">
-    <scroll-view scroll-y class="bill-upload-edit-scroll">
+    <scroll-view scroll-y class="bill-upload-edit-scroll" :style="scrollStyle">
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <u-form-item label="账单导入类型" prop="billUploadType">
           <view class="bill-upload-edit-select" @click="showBillUploadTypeSelect = true">
@@ -32,40 +32,44 @@
       </u-form>
     </scroll-view>
 
-    <u-select
+    <searchable-select
       v-model="showBillUploadTypeSelect"
-      :list="billUploadTypeList"
       title="选择导入类型"
+      :list="billUploadTypeList"
+      :current-value="form.billUploadType"
       @confirm="
-        (e: any) => {
-          form.billUploadType = e[0]?.value ?? 1;
+        (item) => {
+          form.billUploadType = Number(item.value);
         }
       " />
-    <u-select
+    <searchable-select
       v-model="showHandleTypeSelect"
-      :list="handleTypeList"
       title="选择处理类型"
+      :list="handleTypeList"
+      :current-value="form.handleType"
       @confirm="
-        (e: any) => {
-          form.handleType = String(e[0]?.value ?? '');
+        (item) => {
+          form.handleType = String(item.value);
         }
       " />
-    <u-select
+    <searchable-select
       v-model="showInflowSelect"
-      :list="inflowOrOutflowList"
       title="选择流入/流出"
+      :list="inflowOrOutflowList"
+      :current-value="form.inflowOrOutflow"
       @confirm="
-        (e: any) => {
-          form.inflowOrOutflow = e[0]?.value ?? 0;
+        (item) => {
+          form.inflowOrOutflow = Number(item.value);
         }
       " />
-    <u-select
+    <searchable-select
       v-model="showJudgeWaySelect"
-      :list="judgeWayList"
       title="选择判断方式"
+      :list="judgeWayList"
+      :current-value="form.judgeWay"
       @confirm="
-        (e: any) => {
-          form.judgeWay = e[0]?.value ?? 'indexOf';
+        (item) => {
+          form.judgeWay = String(item.value);
         }
       " />
 
@@ -76,10 +80,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive, computed } from 'vue';
+  import { ref, reactive, computed, onMounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { billUploadApi } from '../../../api';
   import { billUploadTypeOption, handleTypeOption, inflowOrOutflowOption, judgeWayOption } from '../../../../shared/src/constants/api-type';
+  import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
 
   const formRef = ref();
   const loading = ref(false);
@@ -104,6 +109,15 @@
     priorityWeight: 0,
     judgeWay: 'indexOf' as string,
     judgeVal: [] as string[],
+  });
+
+  const scrollTopOffset = ref(0);
+  const scrollStyle = computed(() => {
+    const offset = scrollTopOffset.value;
+    if (offset > 0) {
+      return { height: `calc(100vh - ${offset}px)` };
+    }
+    return {};
   });
 
   const billUploadTypeLabel = computed(() => billUploadTypeList.find((r) => r.value === form.billUploadType)?.label || '');
@@ -139,6 +153,22 @@
     }
   }
 
+  function calcScrollHeight() {
+    try {
+      const sysInfo = uni.getSystemInfoSync();
+      const statusBarHeight = sysInfo.statusBarHeight || 0;
+      const navBarHeight = 44;
+      const bottomBtnHeight = 50;
+      scrollTopOffset.value = statusBarHeight + navBarHeight + bottomBtnHeight;
+    } catch {
+      scrollTopOffset.value = 0;
+    }
+  }
+
+  onMounted(() => {
+    calcScrollHeight();
+  });
+
   onLoad((options) => {
     if (options?.id) {
       editId.value = options.id;
@@ -154,6 +184,9 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    /* #ifdef H5 */
+    height: 100%;
+    /* #endif */
     background-color: $uni-bg-color-grey;
   }
 

@@ -10,6 +10,7 @@
     <scroll-view
       scroll-y
       class="image-list-scroll"
+      :style="scrollStyle"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
       refresher-default-style="black"
@@ -58,6 +59,15 @@
   const pageSize = 20;
   const currentSourceFilter = ref(0);
 
+  const scrollTopOffset = ref(0);
+  const scrollStyle = computed(() => {
+    const offset = scrollTopOffset.value;
+    if (offset > 0) {
+      return { height: `calc(100vh - ${offset}px)` };
+    }
+    return {};
+  });
+
   const imageSourceOption = computed(() => apiTypeStore.getImageSourceOption);
 
   const sourceFilterOptions = computed(() => {
@@ -69,6 +79,14 @@
     if (list.value.length >= total.value && total.value > 0) return 'nomore';
     return 'loadmore';
   });
+
+  async function loadSourceOptions() {
+    try {
+      await apiTypeStore.getImageSource();
+    } catch {
+      // fallback, options may be empty
+    }
+  }
 
   async function loadData(isRefresh = false) {
     if (loading.value) return;
@@ -158,8 +176,21 @@
     }
   }
 
+  function calcScrollHeight() {
+    try {
+      const sysInfo = uni.getSystemInfoSync();
+      const statusBarHeight = sysInfo.statusBarHeight || 0;
+      const navBarHeight = 44;
+      const headerHeight = 130;
+      scrollTopOffset.value = statusBarHeight + navBarHeight + headerHeight;
+    } catch {
+      scrollTopOffset.value = 0;
+    }
+  }
+
   onMounted(() => {
-    apiTypeStore.getImageSource();
+    calcScrollHeight();
+    loadSourceOptions();
     loadData(true);
   });
 
@@ -172,7 +203,10 @@
   .image-page {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    /* #ifdef H5 */
     height: 100%;
+    /* #endif */
     background-color: $uni-bg-color-grey;
   }
 
