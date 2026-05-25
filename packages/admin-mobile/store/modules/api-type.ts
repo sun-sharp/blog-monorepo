@@ -22,7 +22,7 @@ export type IApiTypeState = {
 };
 
 export const useApiTypeStore = defineStore({
-  id: 'app-type',
+  id: 'app-apiType',
   state: (): IApiTypeState => ({
     billTypeOption: [],
     bankTypeOption: [],
@@ -98,8 +98,7 @@ export const useApiTypeStore = defineStore({
       }
     },
     async getArticleCategory(bool: boolean = false) {
-      console.log('获取文章分类, bool:', bool);
-      // if (!bool && this.articleCategoryOption.length > 0) return;
+      if (!bool && this.articleCategoryOption.length > 0) return;
       try {
         const resp = await categoryApi.certainTypeAll(categoryTypeEnum.blogArticleCategory);
         this.articleCategoryOption = resp.map((m) => ({ label: m.label, value: m.value || 0 }));
