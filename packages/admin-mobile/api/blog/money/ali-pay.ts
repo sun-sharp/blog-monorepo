@@ -13,12 +13,12 @@ export const update = (data: ApiAliPayUpdateData): Promise<undefined> => {
   return blogRequest({ url: `${basic}/update`, method: 'PUT', data });
 };
 
-export const updateBalance = (params: ApiStartEndTimeParams): Promise<undefined> => {
-  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', params });
+export const updateBalance = (data: ApiStartEndTimeParams): Promise<undefined> => {
+  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', data });
 };
 
-export const updateBalanceBaby = (params: ApiStartEndTimeParams): Promise<undefined> => {
-  return blogRequest({ url: `${basic}/update_balance_baby`, method: 'PUT', params });
+export const updateBalanceBaby = (data: ApiStartEndTimeParams): Promise<undefined> => {
+  return blogRequest({ url: `${basic}/update_balance_baby`, method: 'PUT', data });
 };
 
 export const batchSave = (data: ApiAliPayBatchSaveData): Promise<undefined> => {
