@@ -109,7 +109,7 @@ export class WaitForDoService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`获取某种类型，状态的所有待办失败！ ${err}`);
+          logger.error(`获取某种类型，状态的所有待办失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '查询失败！',

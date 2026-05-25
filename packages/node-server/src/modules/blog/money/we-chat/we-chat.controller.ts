@@ -19,14 +19,12 @@ export class WeChatController {
 
   @ApiOperation({ summary: '微信账单导入' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: UploadWeChatDto,
-  })
+  @ApiBody({ type: UploadWeChatDto })
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  upload(@UploadedFile() file: UploadWeChatDto) {
-    return this.weChatService.upload(file);
+  upload(@UploadedFile() file: UploadWeChatDto, @Body() body: UploadWeChatDto) {
+    return this.weChatService.upload(file, body.startNum, body.endNum);
   }
 
   @Post('save')

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { weChatExcelCellHandle } from 'src/common/constant/excel';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { excelCsvHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
+import { excelCsvHandleBuffer, excelXlsxHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
 import { CreateWeChatBatchDto, CreateWeChatDto } from './dto/create-we-chat.dto';
@@ -18,6 +18,7 @@ import { isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
+import * as path from 'path';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -30,25 +31,54 @@ export class WeChatService {
   ) {}
 
   /**
-   * @description: 微信账单导入
-   * @param {any} file
+   * @description: 微信账单导入（根据文件类型调用不同解析函数）
+   * @param {any} file           上传的文件对象
+   * @param {number} startNum   数据起始行号，默认 19（微信账单）
+   * @param {number} endNum     结束行号（含），不传则到末尾
    * @return {Promise<IResponse>}
    */
-  public upload(file: any): Promise<IResponse> {
+  public upload(file: any, startNum: number = 19, endNum?: number): Promise<IResponse> {
+    // ---------- 判断文件类型 ----------
+    const ext = path.extname(file.originalname).toLowerCase();
+    const mime = file.mimetype;
+    let fileType: 'csv' | 'xlsx' | 'unknown' = 'unknown';
+
+    if (ext === '.csv' || mime === 'text/csv') {
+      fileType = 'csv';
+    } else if (ext === '.xlsx' || mime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      fileType = 'xlsx';
+    } else {
+      return Promise.reject('不支持的文件格式，请上传 CSV 或 XLSX 文件');
+    }
+
+    // ---------- 定义解析函数调用映射 ----------
+    const parseFile = async (): Promise<ApiWeChatUpload[]> => {
+      if (fileType === 'csv') {
+        return await excelCsvHandleBuffer({
+          buffer: file.buffer,
+          startNum,
+          endNum: endNum ?? 0, // 保持兼容你现有函数中“忽略末尾行数”的语义，如需改为结束行号请按方案B调整工具函数
+          cellHandler: weChatExcelCellHandle,
+        });
+      } else {
+        return await excelXlsxHandleBuffer({
+          buffer: file.buffer,
+          sheetName: 'Sheet1', // 根据实际 sheet 名调整
+          startNum,
+          endNum: endNum ?? 0,
+          cellHandler: weChatExcelCellHandle,
+        });
+      }
+    };
+    // ---------- 3. 导入流程 ----------
     return (
-      Promise.resolve({ file })
-        // 导入数据处理
-        .then(async ({ file }) => {
-          const { buffer } = file; // file为前端上传的excel
-          // 微信的菜单处理
-          const list: ApiWeChatUpload[] = await excelCsvHandleBuffer({
-            buffer: buffer,
-            startNum: 19,
-            cellHandler: weChatExcelCellHandle,
-          });
+      Promise.resolve()
+        .then(async () => {
+          const list = await parseFile();
           if (!list) throw '导入的数据失败！';
           // 判断验证数据是有问题
           const listFilter = list.filter((f) => typeof f.moneyAmount !== 'number' || !isDateFormat(f.tradeTime));
+
           if (listFilter.length > 0) throw `时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
           if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同交易时间的数据
@@ -56,9 +86,7 @@ export class WeChatService {
           const result: ApiWeChatUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['moneyAmount', 'goods']);
           if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据按照交易时间排序
-          result.sort(function (a, b) {
-            return b.tradeTime > a.tradeTime ? -1 : 1;
-          });
+          result.sort((a, b) => (b.tradeTime > a.tradeTime ? -1 : 1));
           return result;
         })
         // 对数据进行批量处理
@@ -104,19 +132,12 @@ export class WeChatService {
             return formatBillUploadItem(m);
           });
           logger.log(`微信账单导入${result.length}个`);
-          return {
-            code: ApiCode.SUCCESS,
-            result,
-            message: '导入成功！',
-          };
+          return { code: ApiCode.SUCCESS, result, message: '导入成功！' };
         })
         // 返回错误
         .catch((err) => {
           logger.error(`微信账单导入失败! ${err}`);
-          return {
-            code: ApiCode.ERROR,
-            message: err || '导入失败！',
-          };
+          return { code: ApiCode.ERROR, message: err || '导入失败！' };
         })
     );
   }

@@ -63,6 +63,11 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
   return result;
 };
 
+/**
+ * @description: 处理导入的xlsx文件
+ * @param {excelXlsxHandleBufferObj} obj
+ * @return {Promise<any[]>}
+ */
 export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Promise<any[]> => {
   const { sheetName, startNum, endNum = 0, cellHandler = {}, targetHandler, otherObj = {} } = obj;
   const buffer = obj.buffer as any;

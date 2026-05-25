@@ -1,4 +1,5 @@
 import { nowDateFun } from '../date';
+import { safeString } from '../string';
 
 // 处理导入字符串
 const formatExcelStr = (str: any): string => {
@@ -31,7 +32,7 @@ export const weChatExcelCellHandle = {
     tar['incomeOrPay'] = formatExcelStr(val);
   }, // 收/支
   6: (tar: any, val: any) => {
-    const money = val.replace(/[¥￥,]/g, '');
+    const money = safeString(val).replace(/[¥￥,]/g, '');
     tar['moneyAmount'] = formatExcelNum(money);
   }, // 金额(元)
   7: (tar: any, val: any) => {
