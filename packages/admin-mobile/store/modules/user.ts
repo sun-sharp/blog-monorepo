@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import { storage } from '../../utils/storage';
 import { ACCESS_TOKEN, CURRENT_USER, USER_CONFIG } from '../../../shared/src/constants/storage-name';
 import { ResultEnum } from '../../../shared/src/constants/http-enum';
@@ -36,74 +37,92 @@ const defaultConfigInfo: ApiConfigInfo = {
   pageAnimateType: 'zoom-fade',
 };
 
-export const useUserStore = defineStore({
-  id: 'app-user',
-  state: () => ({
-    token: storage.get(ACCESS_TOKEN, ''),
-    info: storage.get(CURRENT_USER, defaultUserInfo) as ApiUserInfo,
-    configInfo: storage.get(USER_CONFIG, defaultConfigInfo) as ApiConfigInfo,
-  }),
-  getters: {
-    getToken(): string {
-      return this.token;
-    },
-    getUserInfo(): ApiUserInfo {
-      return this.info;
-    },
-    getConfigInfo(): ApiConfigInfo {
-      return this.configInfo;
-    },
-  },
-  actions: {
-    setToken(token: string) {
-      this.token = token;
-    },
-    setUserInfo(info: ApiUserInfo) {
-      storage.set(CURRENT_USER, info);
-      this.info = info;
-    },
-    setConfigInfo(configInfo: ApiConfigInfo) {
-      storage.set(USER_CONFIG, configInfo);
-      this.configInfo = configInfo;
-    },
-    async login(loginForm: ApiCapitalLoginData): Promise<ApiResponse<ApiCapitalLoginResult>> {
-      try {
-        const resp = await capitalApi.login(loginForm);
-        const { result, code } = resp;
-        if (code === ResultEnum.SUCCESS && result) {
-          storage.set(ACCESS_TOKEN, result.token);
-          this.setToken(result.token);
-          await this.GetInfo();
-        }
-        return resp;
-      } catch (err: any) {
-        return { code: ResultEnum.ERROR as number, message: err.message || '登录失败' };
+export const useUserStore = defineStore('app-user', () => {
+  // ========== State (用 ref 保持响应性) ==========
+  const token = ref(storage.get(ACCESS_TOKEN, ''));
+  const info = ref<ApiUserInfo>(storage.get(CURRENT_USER, defaultUserInfo));
+  const configInfo = ref<ApiConfigInfo>(storage.get(USER_CONFIG, defaultConfigInfo));
+
+  // ========== Getters (用 computed 替代，解决鸿蒙端更新问题) ==========
+  const getToken = computed(() => token.value);
+  const getUserInfo = computed(() => info.value);
+  const getConfigInfo = computed(() => configInfo.value);
+
+  // ========== Actions ==========
+  function setToken(newToken: string) {
+    token.value = newToken;
+  }
+
+  function setUserInfo(newInfo: ApiUserInfo) {
+    storage.set(CURRENT_USER, newInfo);
+    info.value = newInfo;
+  }
+
+  function setConfigInfo(newConfig: ApiConfigInfo) {
+    storage.set(USER_CONFIG, newConfig);
+    configInfo.value = newConfig;
+  }
+
+  async function login(loginForm: ApiCapitalLoginData): Promise<ApiResponse<ApiCapitalLoginResult>> {
+    try {
+      const resp = await capitalApi.login(loginForm);
+      const { result, code } = resp;
+      if (code === ResultEnum.SUCCESS && result) {
+        storage.set(ACCESS_TOKEN, result.token);
+        setToken(result.token);
+        await GetInfo();
       }
-    },
-    async GetInfo(): Promise<ApiUserInfo | undefined> {
-      try {
-        const resp = await userApi.getUserInfo();
-        this.setUserInfo(resp);
-        return resp;
-      } catch {
-        return undefined;
-      }
-    },
-    async GetConfigInfo() {
-      try {
-        const resp = await configurationApi.getConfigInfo();
-        this.setConfigInfo(resp);
-      } catch {
-        return;
-      }
-    },
-    logout() {
-      this.setToken('');
-      storage.remove(ACCESS_TOKEN);
-      this.setUserInfo(defaultUserInfo);
-      storage.remove(CURRENT_USER);
-      this.setConfigInfo(defaultConfigInfo);
-      storage.remove(USER_CONFIG);
-    },
-  },
+      return resp;
+    } catch (err: any) {
+      return { code: ResultEnum.ERROR as number, message: err.message || '登录失败' };
+    }
+  }
+
+  async function GetInfo(): Promise<ApiUserInfo | undefined> {
+    try {
+      const resp = await userApi.getUserInfo();
+      setUserInfo(resp);
+      return resp;
+    } catch {
+      return undefined;
+    }
+  }
+
+  async function GetConfigInfo() {
+    try {
+      const resp = await configurationApi.getConfigInfo();
+      setConfigInfo(resp);
+    } catch {
+      return;
+    }
+  }
+
+  function logout() {
+    setToken('');
+    storage.remove(ACCESS_TOKEN);
+    setUserInfo(defaultUserInfo);
+    storage.remove(CURRENT_USER);
+    setConfigInfo(defaultConfigInfo);
+    storage.remove(USER_CONFIG);
+  }
+
+  // ========== 暴露所有内容 ==========
+  return {
+    // state
+    token,
+    info,
+    configInfo,
+    // getters (computed)
+    getToken,
+    getUserInfo,
+    getConfigInfo,
+    // actions
+    setToken,
+    setUserInfo,
+    setConfigInfo,
+    login,
+    GetInfo,
+    GetConfigInfo,
+    logout,
+  };
 });

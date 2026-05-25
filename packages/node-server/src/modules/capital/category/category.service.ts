@@ -85,6 +85,7 @@ export class CategoryService {
             value: m.value,
             label: m.label,
           }));
+          logger.log(`获取${type}的所有配置成功！`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -93,7 +94,7 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`获取某种类型的所有配置失败！ ${err}`);
+          logger.error(`获取某种类型的所有配置失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '查询失败！',
@@ -147,6 +148,7 @@ export class CategoryService {
               label: m.label,
             };
           });
+          logger.log(`条件并分页获取全局类型列表成功！`);
           return {
             code: ApiCode.SUCCESS,
             result: { current, list, size, total },

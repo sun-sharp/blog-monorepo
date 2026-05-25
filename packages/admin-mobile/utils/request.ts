@@ -29,8 +29,8 @@ function isH5Platform(): boolean {
   }
 }
 
-const CAPITAL_BASE = isH5Platform() ? CAPITAL_API_URL : `${BASE_URL}/${CAPITAL_API_URL}`;
-const BLOG_BASE = isH5Platform() ? BLOG_API_URL : `${BASE_URL}/${BLOG_API_URL}`;
+const CAPITAL_BASE = isH5Platform() ? CAPITAL_API_URL : `${BASE_URL}${CAPITAL_API_URL}`;
+const BLOG_BASE = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
 
 function buildUrl(config: RequestConfig): string {
   let url = config.url;

@@ -330,7 +330,8 @@
   });
 
   onLoad(async () => {
-    await Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod(), apiTypeStore.getBankType()]);
+    console.log('Upload page onLoad');
+    await Promise.all([apiTypeStore.getBillType(true), apiTypeStore.getBillMethod(true), apiTypeStore.getBankType(true)]);
   });
 
   function calcScrollHeight() {
@@ -350,11 +351,11 @@
     if (value === undefined || value === null || value === 0) return '';
     let options: { label: string; value: number }[] = [];
     if (field === 'billType' || field === 'bankBillType') {
-      options = apiTypeStore.getBillTypeOption;
+      options = apiTypeStore.getBillTypeOption.value || [];
     } else if (field === 'billMethod') {
-      options = apiTypeStore.getBillMethodOption;
+      options = apiTypeStore.getBillMethodOption.value || [];
     } else if (field === 'bankType') {
-      options = apiTypeStore.getBankTypeOption;
+      options = apiTypeStore.getBankTypeOption.value || [];
     }
     return options.find((o) => o.value === value)?.label || '';
   }
@@ -415,7 +416,7 @@
   function getUploadUrl(): string {
     const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
     const BASE_URL = import.meta.env.VITE_BASE_URL || '';
-    const base = isH5Platform() ? BLOG_API_URL : `${BASE_URL}/${BLOG_API_URL}`;
+    const base = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
     const paths: Record<number, string> = {
       1: '/money/we-chat/upload',
       2: '/money/ali-pay/upload',
@@ -529,15 +530,16 @@
     selectIndex.value = index;
     selectField.value = field;
     if (field === 'billType' || field === 'bankBillType') {
-      selectList.value = apiTypeStore.getBillTypeOption.map((o) => ({ label: o.label, value: o.value }));
+      selectList.value = apiTypeStore.getBillTypeOption.value || [];
       selectTitle.value = '选择账单类型';
     } else if (field === 'billMethod') {
-      selectList.value = apiTypeStore.getBillMethodOption.map((o) => ({ label: o.label, value: o.value }));
+      selectList.value = apiTypeStore.getBillMethodOption.value || [];
       selectTitle.value = '选择账单方式';
     } else if (field === 'bankType') {
-      selectList.value = apiTypeStore.getBankTypeOption.map((o) => ({ label: o.label, value: o.value }));
+      selectList.value = apiTypeStore.getBankTypeOption.value || [];
       selectTitle.value = '选择银行类型';
     }
+    console.log('openSelect options:', JSON.stringify(selectList.value));
     selectVisible.value = true;
   }
 
