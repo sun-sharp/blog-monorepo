@@ -1,5 +1,5 @@
 {
-  "name": "blog-manage-web",
+  "name": "admin-web",
   "version": "2.5.3",
   "type": "module",
   "scripts": {
@@ -78,7 +78,7 @@
   "keywords": [
     "vue",
     "naive-ui",
-    "blog-manage-web",
+    "admin-web",
     "vue3",
     "ts",
     "tsx",

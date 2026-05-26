@@ -1,4 +1,4 @@
-# blog-official-website
+# website
 
 ## 介绍
 
@@ -8,19 +8,11 @@
 
 - node 版本 24.14.0
 
-- 获取项目代码
-
-```bash
-git clone https://github.com/sun-sharp/blog-official-website.git
-
-# 提交检出均不转换
-git config --global core.autocrlf false
-```
 
 - 安装依赖
 
 ```bash
-cd blog-official-website
+cd website
 npm install
 ```
 

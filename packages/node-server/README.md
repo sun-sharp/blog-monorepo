@@ -1,4 +1,4 @@
-#alone-blog-api
+#node-server
 
 ## 简介
 
@@ -42,10 +42,10 @@ $ yarn compodoc
 
 ```bash
 $ git init
-$ git remote add origin git@github.com:sun-sharp/alone-blog-api.git
+$ git remote add origin git@github.com:sun-sharp/node-server.git
 $ git pull origin main
 # or
-$ git clone git@github.com:sun-sharp/alone-blog-api.git
+$ git clone git@github.com:sun-sharp/node-server.git
 ```
 
 ### 部署dev环境

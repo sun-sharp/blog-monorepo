@@ -1,6 +1,9 @@
-# Changelog
+# Changelog bm-xxx
 
 All notable changes to this project will be documented in this file.
+
+## 1.0.0
+- 创建admin-mobile移动端
 
 ## [Unreleased]
 
@@ -84,3 +87,4 @@ All notable changes to this project will be documented in this file.
 
 - [admin-web/CHANGELOG.md](./packages/admin-web/CHANGELOG.md)
 - [website/CHANGELOG.md](./packages/website/CHANGELOG.md)
+- [node-server/CHANGELOG.md](./packages/node-server/CHANGELOG.md)

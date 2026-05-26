@@ -1,4 +1,4 @@
-# blog-manage-web
+# admin-web
 
 ## 介绍
 
@@ -6,16 +6,10 @@
 
 ## 安装使用
 
-- 获取项目代码
-
-```bash
-git clone https://github.com/sun-sharp/blog-manage-web.git
-```
-
 - 安装依赖
 
 ```bash
-cd blog-manage-web
+cd admin-web
 npm install
 ```
 
