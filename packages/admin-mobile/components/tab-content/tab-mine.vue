@@ -2,7 +2,7 @@
   <scroll-view scroll-y class="mine-page">
     <view class="mine-header card">
       <view class="mine-user" @click="goToAccount">
-        <u-avatar :src="userInfo.avatar || '/static/logo.png'" size="88" />
+        <u-avatar :src="getImgUrl(userInfo.avatar) || '/static/logo.png'" size="88" />
         <view class="mine-user-info">
           <text class="mine-user-name">{{ userInfo.nickname || '未登录' }}</text>
           <text class="mine-user-role">{{ userInfo.roleName || '' }}</text>
@@ -75,6 +75,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { useUserStore } from '../../store';
+  import { getImgUrl } from '../../../shared/src/utils/files';
 
   defineProps<{ active: boolean }>();
 

@@ -1,18 +1,18 @@
 <template>
   <view class="password-page">
     <scroll-view scroll-y class="password-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+      <u-form ref="formRef" :model="form" :rules="rules" label-position="top" class="password-form">
         <u-form-item label="用户名">
-          <u-input v-model="form.username" disabled />
+          <u-input v-model="form.username" disabled border />
         </u-form-item>
         <u-form-item label="当前密码" prop="password">
-          <u-input v-model="form.password" type="password" placeholder="请输入当前密码" />
+          <u-input v-model="form.password" type="password" placeholder="请输入当前密码" border />
         </u-form-item>
         <u-form-item label="新密码" prop="updatePassword">
-          <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" />
+          <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" border />
         </u-form-item>
         <u-form-item label="确认新密码" prop="confirmPassword">
-          <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" />
+          <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" border />
         </u-form-item>
       </u-form>
     </scroll-view>
@@ -86,7 +86,15 @@
 
   .password-scroll {
     flex: 1;
+    width: 100%;
     height: 0;
+    padding: 20rpx;
+    box-sizing: border-box;
+  }
+
+  .password-form {
+    background-color: $uni-bg-color;
+    border-radius: 12rpx;
     padding: 20rpx;
   }
 </style>
