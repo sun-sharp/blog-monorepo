@@ -25,8 +25,8 @@ export class WaitForDoController {
   @Get('classify_all')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '查询某种类型，状态的所有待办' })
-  classifyAll(@Query('classify') classify: number, @Query('state') state: number) {
-    return this.waitForDoService.classifyAll(classify, state);
+  classifyAll(@Query('state') state: string, @Query('classify') classify?: string) {
+    return this.waitForDoService.classifyAll(state, classify);
   }
 
   @Put('update_state')

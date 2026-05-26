@@ -1,10 +1,13 @@
 <template>
   <scroll-view scroll-y class="mine-page">
     <view class="mine-header card">
-      <u-avatar :src="userInfo.avatar || '/static/logo.png'" size="100" />
-      <view class="mine-header-info">
-        <text class="mine-header-name">{{ userInfo.nickname || '未登录' }}</text>
-        <text class="mine-header-role">{{ userInfo.roleName || '' }}</text>
+      <view class="mine-user" @click="goToAccount">
+        <u-avatar :src="userInfo.avatar || '/static/logo.png'" size="88" />
+        <view class="mine-user-info">
+          <text class="mine-user-name">{{ userInfo.nickname || '未登录' }}</text>
+          <text class="mine-user-role">{{ userInfo.roleName || '' }}</text>
+        </view>
+        <u-icon name="arrow-right" color="#999" size="32" />
       </view>
     </view>
 
@@ -77,6 +80,9 @@
 
   const userStore = useUserStore();
   const userInfo = computed(() => userStore.getUserInfo);
+  function goToAccount() {
+    uni.navigateTo({ url: '/pages/setting/account/account' });
+  }
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
@@ -99,31 +105,30 @@
 <style lang="scss" scoped>
   .mine-page {
     height: 100%;
-    padding: 20rpx;
+    padding: 0 20rpx;
     padding-bottom: 20rpx;
     box-sizing: border-box;
   }
 
-  .mine-header {
+  .mine-user {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: linear-gradient(135deg, #e8f4fd, #f0f7ff);
   }
 
-  .mine-header-info {
+  .mine-user-info {
     flex: 1;
     margin-left: 24rpx;
     display: flex;
     flex-direction: column;
   }
 
-  .mine-header-name {
+  .mine-user-name {
     font-size: $uni-font-size-lg;
     font-weight: bold;
   }
 
-  .mine-header-role {
+  .mine-user-role {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-top: 6rpx;

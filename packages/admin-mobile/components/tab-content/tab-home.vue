@@ -1,16 +1,5 @@
 <template>
-  <view class="home-page">
-    <view class="home-header card">
-      <view class="home-user" @click="goToAccount">
-        <u-avatar :src="userInfo.avatar || '/static/logo.png'" size="88" />
-        <view class="home-user-info">
-          <text class="home-user-name">{{ userInfo.nickname || '未登录' }}</text>
-          <text class="home-user-role">{{ userInfo.roleName || '' }}</text>
-        </view>
-        <u-icon name="arrow-right" color="#999" size="32" />
-      </view>
-    </view>
-
+  <scroll-view scroll-y class="home-page">
     <view class="home-quick-nav card">
       <text class="home-section-title">快捷功能</text>
       <u-grid :col="3" :border="false">
@@ -50,7 +39,17 @@
           @change="onTodoStateChange" />
       </view>
       <view v-if="waitForDoClassifyOption.length > 0" class="home-todo-tabs">
-        <u-tabs :list="classifyTabs" :current="currentClassify" :scrollable="true" active-color="#007aff" @click="onClassifyClick" />
+        <u-tabs :list="classifyTabs" :current="currentClassify" :scrollable="true" active-color="#007aff" @change="onClassifyClick" />
+      </view>
+      <view class="home-todo-add">
+        <u-input
+          v-model="newTodoTitle"
+          placeholder="添加新待办，回车提交"
+          clearable
+          shape="round"
+          :custom-style="{ background: '#f5f5f5' }"
+          @confirm="addTodo" />
+        <u-button type="primary" size="mini" shape="circle" class="home-todo-add-btn" @click="addTodo">添加</u-button>
       </view>
       <view v-if="todoLoading" class="home-todo-center">
         <u-loading mode="circle" />
@@ -67,18 +66,8 @@
           </view>
         </view>
       </view>
-      <view class="home-todo-add">
-        <u-input
-          v-model="newTodoTitle"
-          placeholder="添加新待办，回车提交"
-          clearable
-          shape="round"
-          :custom-style="{ background: '#f5f5f5' }"
-          @confirm="addTodo" />
-        <u-button type="primary" size="mini" shape="circle" class="home-todo-add-btn" @click="addTodo">添加</u-button>
-      </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 <script lang="ts" setup>
@@ -111,7 +100,7 @@
     todoLoading.value = true;
     try {
       const classify = currentClassify.value === 0 ? undefined : waitForDoClassifyOption.value[currentClassify.value - 1]?.value;
-      const res = await waitForDoApi.classifyAll(classify as any, todoState.value);
+      const res = await waitForDoApi.classifyAll(todoState.value, classify);
       todoList.value = res || [];
     } catch {
       todoList.value = [];
@@ -125,8 +114,8 @@
     loadTodoList();
   }
 
-  function onClassifyClick(item: any) {
-    currentClassify.value = item.index;
+  function onClassifyClick(index: number) {
+    currentClassify.value = index;
     loadTodoList();
   }
 
@@ -166,9 +155,9 @@
     }
   }
 
-  function goToAccount() {
-    uni.navigateTo({ url: '/pages/setting/account/account' });
-  }
+  // function goToAccount() {
+  //   uni.navigateTo({ url: '/pages/setting/account/account' });
+  // }
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
@@ -192,32 +181,10 @@
 
 <style lang="scss" scoped>
   .home-page {
-    padding: 20rpx;
+    height: 100%;
+    padding: 0 20rpx;
     padding-bottom: 20rpx;
-  }
-
-  .home-user {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .home-user-info {
-    flex: 1;
-    margin-left: 24rpx;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .home-user-name {
-    font-size: $uni-font-size-lg;
-    font-weight: bold;
-  }
-
-  .home-user-role {
-    font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
-    margin-top: 6rpx;
+    box-sizing: border-box;
   }
 
   .home-section-title {
@@ -275,8 +242,8 @@
   }
 
   .home-todo-list {
-    max-height: 600rpx;
-    overflow-y: auto;
+    // max-height: 450rpx;
+    // overflow-y: auto;
   }
 
   .home-todo-item {

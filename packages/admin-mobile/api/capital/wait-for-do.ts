@@ -13,8 +13,12 @@ export const save = (data: ApiWaitForDoSaveData): Promise<undefined> => {
   return capitalRequest({ url: `${basic}/save`, method: 'POST', data, isShowSuccessMessage: true });
 };
 
-export const classifyAll = (classify: number, state: number): Promise<ApiWaitForDoItem[]> => {
-  return capitalRequest({ url: `${basic}/classify_all`, method: 'GET', data: { classify, state } });
+export const classifyAll = (state: number, classify?: number): Promise<ApiWaitForDoItem[]> => {
+  const data: any = { state };
+  if (classify) {
+    data.classify = classify;
+  }
+  return capitalRequest({ url: `${basic}/classify_all`, method: 'GET', data });
 };
 
 export const updateState = (data: ApiWaitForDoUpdateStateHasIdData): Promise<undefined> => {

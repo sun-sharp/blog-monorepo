@@ -411,7 +411,7 @@
   }
 
   .finance-header {
-    margin: 20rpx 20rpx 0;
+    margin: 0 20rpx 0;
   }
   .finance-summary-row {
     display: flex;

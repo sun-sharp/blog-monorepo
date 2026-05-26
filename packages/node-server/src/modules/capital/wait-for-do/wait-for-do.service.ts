@@ -75,16 +75,20 @@ export class WaitForDoService {
 
   /**
    * @description: 某种类型，状态的所有待办
-   * @param {number} classify
-   * @param {number} state
+   * @param {string} state
+   * @param {string} classify
    * @return {Promise<IResponse>}
    */
-  public classifyAll(classify: number, state: number): Promise<IResponse> {
+  public classifyAll(state: string, classify?: string): Promise<IResponse> {
     return (
-      Promise.resolve({ classify, state })
+      Promise.resolve()
         // 查询
-        .then(async ({ classify, state }) => {
-          const findArr = await this.findByClassify(classify, state);
+        .then(async () => {
+          const findData: any = { state, isRemove: false };
+          if (classify) {
+            findData.classify = classify;
+          }
+          const findArr = await this.waitForDoModel.find(findData).sort({ sort: -1 });
           const result = findArr.map((m) => {
             const item: ApiWaitForDoItem = {
               waitForDoId: m.id,
@@ -101,6 +105,7 @@ export class WaitForDoService {
             }
             return item;
           });
+          logger.log(`获取某种类型，状态的所有待办 成功！`);
           return {
             code: ApiCode.SUCCESS,
             result,
@@ -120,20 +125,21 @@ export class WaitForDoService {
 
   /**
    * @description: 获取某个类型，状态，没有删除的全部待办列表
-   * @param {number} classify
-   * @param {number} state
+   * @param {string} classify
+   * @param {string} state
    * @return {Promise<WaitForDo[]>}
    */
-  public findByClassify(classify: number, state: number): Promise<WaitForDo[]> {
+  public findByClassify(classify: string, state: string): Promise<WaitForDo[]> {
     return (
-      Promise.resolve({ classify, state })
+      Promise.resolve()
         // 查询
-        .then(async ({ classify, state }) => {
+        .then(async () => {
+          logger.log(`获取某个类型，状态，没有删除的全部待办列表 成功！`);
           return await this.waitForDoModel.find({ classify, state, isRemove: false }).sort({ sort: -1 });
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`获取某个类型，状态，没有删除的全部待办列表 失败！ ${err}`);
+          logger.error(`获取某个类型，状态，没有删除的全部待办列表 失败！ ${err}`);
           return err;
         })
     );
