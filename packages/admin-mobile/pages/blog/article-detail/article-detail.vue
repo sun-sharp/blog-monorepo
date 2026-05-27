@@ -34,7 +34,7 @@
 
           <!-- #ifndef H5 -->
           <view class="article-detail-content card">
-            <mp-html ref="mpHtmlRef" :content="processedHtml" @imgtap="onMpHtmlImgTap" />
+            <mp-html ref="mpHtmlRef" :content="processedHtml" @imgtap="onMpHtmlImgTap" @ready="onMpHtmlReady" />
           </view>
           <!-- #endif -->
         </view>
@@ -110,10 +110,14 @@
   const articleId = ref('');
   const showTocPopup = ref(false);
   const scrollTopValue = ref(0);
-  const activeHeadingId = ref(''); // 当前活动标题 id（用于目录高亮）
+  const activeHeadingId = ref('');
+  const currentScrollTop = ref(0); // 记录 scroll-view 当前滚动位置
 
   const scrollViewRef = ref<any>(null);
   const mpHtmlRef = ref<any>(null);
+
+  // 预计算标题位置（仅非 H5 端使用）
+  const headingPositions = ref<number[]>([]);
 
   // #ifdef H5
   const vditorPreviewRef = ref<HTMLDivElement>();
@@ -163,13 +167,11 @@
     if (!html || html === '暂无内容') return '暂无内容';
 
     let headingIdx = 0;
-    // 强制替换所有标题标签，添加 id
     html = html.replace(/<h([1-6])([^>]*)>/gi, (_, level, attrs) => {
       const cleanedAttrs = attrs.replace(/\s+id\s*=\s*["'][^"']*["']/gi, '');
       return `<h${level}${cleanedAttrs} id="heading-${headingIdx++}">`;
     });
 
-    // 表格、代码等增强样式
     html = html.replace(/<table/gi, '<table class="md-table"');
     html = html.replace(/<th\b/gi, '<th class="md-th"');
     html = html.replace(/<td\b/gi, '<td class="md-td"');
@@ -177,7 +179,6 @@
     html = html.replace(/<pre/gi, '<pre class="md-pre"');
     html = html.replace(/<code/gi, '<code class="md-code"');
 
-    // 图片自适应
     html = html.replace(/<img([^>]*)>/gi, (match, attrs) => {
       const srcMatch = attrs.match(/\ssrc\s*=\s*["']([^"']+)["']/i);
       if (!srcMatch) return match;
@@ -205,6 +206,28 @@
     const { src } = e.detail;
     const urls = extractImgUrls(rawContent.value);
     uni.previewImage({ current: src, urls });
+  }
+
+  // 预计算标题位置（解决鸿蒙等端 id 选择器可能失效的问题）
+  function updateHeadingPositions() {
+    const query = uni.createSelectorQuery().in(mpHtmlRef.value);
+    // 用标签选择器查询所有标题，避免依赖 id
+    query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
+    query.exec((res: any) => {
+      const rects = res[0] as UniApp.NodeInfo[];
+      if (rects && rects.length > 0) {
+        // 初始时 scrollTop 为 0，所以 rect.top 就是标题相对于内容顶部的偏移
+        headingPositions.value = rects.map((r) => r.top || 0);
+      } else {
+        // 如果 selectAll 也失败，则无法跳转，但仍避免崩溃
+        console.warn('updateHeadingPositions: 未能获取到标题节点');
+      }
+    });
+  }
+
+  function onMpHtmlReady() {
+    // mp-html 渲染完成，计算所有标题的位置
+    updateHeadingPositions();
   }
   // #endif
 
@@ -255,37 +278,41 @@
   }
   // #endif
 
-  // ==================== 目录点击跳转（查询 scroll-view 内部滚动位置） ====================
-  async function onTocClick(id: string) {
+  // ==================== 目录点击跳转 ====================
+  function onTocClick(id: string) {
     showTocPopup.value = false;
-    await nextTick();
 
-    // 等待渲染完成
-    setTimeout(() => {
-      let query;
-      // #ifdef H5
-      query = uni.createSelectorQuery();
-      // #endif
-      // #ifndef H5
-      query = uni.createSelectorQuery().in(mpHtmlRef.value);
-      // #endif
+    // #ifdef H5
+    // H5 端：使用查询方式
+    nextTick(() => {
+      setTimeout(() => {
+        const query = uni.createSelectorQuery();
+        query.select(`#${id}`).boundingClientRect();
+        query.exec((res: any) => {
+          if (res[0]) {
+            const targetTop = res[0].top;
+            scrollTopValue.value = currentScrollTop.value + targetTop - 80;
+          } else {
+            console.warn(`H5 目录跳转失败：未找到节点 #${id}`);
+          }
+        });
+      }, 300);
+    });
+    // #endif
 
-      query.select(`#${id}`).boundingClientRect();
-      // 关键：查询 scroll-view 自身的滚动偏移，而非页面视口
-      (query.select('.article-detail-scroll') as any).scrollOffset();
-      query.exec((res: any) => {
-        if (res[0] && res[1]) {
-          const targetTop = res[0].top;
-          const currentScroll = res[1].scrollTop;
-          scrollTopValue.value = currentScroll + targetTop - 80; // 80 为顶部留白
-        } else {
-          console.warn(`目录跳转失败：未找到节点 #${id}`);
-        }
-      });
-    }, 300);
+    // #ifndef H5
+    // 非 H5 端：使用预计算的位置，无需再次查询
+    const idx = headings.value.findIndex((h) => h.id === id);
+    if (idx !== -1 && headingPositions.value.length > idx) {
+      const targetPos = headingPositions.value[idx];
+      scrollTopValue.value = targetPos - 80; // 预计算的位置已经是相对于内容顶部的偏移
+    } else {
+      console.warn(`目录跳转失败：未找到标题 ${id} 的位置信息`);
+    }
+    // #endif
   }
 
-  // ==================== 滚动监听：更新当前活动标题（目录高亮 + 自动定位） ====================
+  // ==================== 滚动监听：更新当前活动标题 ====================
   function throttle(fn: Function, delay: number) {
     let timer: any = null;
     return function (this: any, ...args: any[]) {
@@ -298,20 +325,35 @@
   }
 
   const updateActiveHeading = throttle(async () => {
-    const query = uni.createSelectorQuery();
+    let query;
+    // #ifdef H5
+    query = uni.createSelectorQuery();
     headings.value.forEach((h) => {
       query.select(`#${h.id}`).boundingClientRect();
     });
-    query.exec((rects: any) => {
+    // #endif
+    // #ifndef H5
+    // 非 H5 端：用 selectAll 查询所有标题，取它们的 top，然后匹配当前滚动位置
+    query = uni.createSelectorQuery().in(mpHtmlRef.value);
+    query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
+    // #endif
+
+    query.exec((res: any) => {
+      let rects;
+      // #ifdef H5
+      rects = res;
+      // #endif
+      // #ifndef H5
+      rects = res[0] || [];
+      // #endif
+
       let activeId = '';
-      // 找到第一个 top > 0 的标题（即刚进入视口顶部的标题）
       for (let i = 0; i < rects.length; i++) {
         if (rects[i] && rects[i].top > 0) {
           activeId = headings.value[i]?.id || '';
           break;
         }
       }
-      // 如果所有标题都在顶部以上，取最后一个
       if (!activeId && rects.length > 0) {
         activeId = headings.value[rects.length - 1]?.id || '';
       }
@@ -321,13 +363,17 @@
     });
   }, 200);
 
-  function onArticleScroll() {
+  function onArticleScroll(e: any) {
+    currentScrollTop.value = e.detail.scrollTop;
     updateActiveHeading();
   }
 
   // ==================== 加载文章 ====================
   async function loadArticle(id: string) {
     loading.value = true;
+    // 重置位置缓存
+    headingPositions.value = [];
+
     try {
       const res = await articleAPi.getDetails(id);
       article.value = res || null;
