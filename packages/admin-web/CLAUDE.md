@@ -1,4 +1,4 @@
-# blog-manage-web - 博客管理后台
+# admin-web - 博客管理后台
 
 这是一个基于 Vue 3 + TypeScript + Vite 的博客管理后台系统，使用 Naive UI 作为组件库。
 
@@ -22,7 +22,7 @@
 ## 项目结构
 
 ```
-blog-manage-web/
+admin-web/
 ├── src/
 │   ├── api/                    # API 接口
 │   │   ├── axios/             # Axios 配置和拦截器

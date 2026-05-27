@@ -1,8 +1,8 @@
-# CLAUDE.md - alone-blog-api 项目文档
+# CLAUDE.md - node-server 项目文档
 
 ## 项目概述
 
-alone-blog-api 是一个基于 NestJS 开发的个人博客和财务管理 API 系统。项目提供了完整的博客管理功能和智能的账单导入分析系统，支持微信、支付宝和多家银行的账单导入、分类和分析。
+node-server 是一个基于 NestJS 开发的个人博客和财务管理 API 系统。项目提供了完整的博客管理功能和智能的账单导入分析系统，支持微信、支付宝和多家银行的账单导入、分类和分析。
 
 **核心功能**：
 - 博客管理系统：文章、分类、图片管理
@@ -96,8 +96,8 @@ types/                      # 全局类型定义
 
 1. **克隆项目**
    ```bash
-   git clone git@github.com:sun-sharp/alone-blog-api.git
-   cd alone-blog-api
+   git clone git@github.com:sun-sharp/node-server.git
+   cd node-server
    ```
 
 2. **安装依赖**
