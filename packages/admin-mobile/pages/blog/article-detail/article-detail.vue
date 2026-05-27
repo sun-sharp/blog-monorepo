@@ -4,7 +4,7 @@
       <u-loading mode="circle" size="60" />
     </view>
     <template v-else-if="article">
-      <scroll-view scroll-y class="article-detail-scroll" :scroll-into-view="scrollIntoViewId" scroll-with-animation>
+      <scroll-view ref="scrollViewRef" scroll-y class="article-detail-scroll" :scroll-top="scrollTopValue" scroll-with-animation>
         <view class="article-detail-body">
           <!-- 头部信息 -->
           <view class="article-detail-header card">
@@ -31,8 +31,7 @@
 
           <!-- #ifndef H5 -->
           <view class="article-detail-content card">
-            <!-- 依赖 easycom -->
-            <mp-html :content="processedHtml" @imgtap="onMpHtmlImgTap" />
+            <mp-html ref="mpHtmlRef" :content="processedHtml" @imgtap="onMpHtmlImgTap" />
           </view>
           <!-- #endif -->
         </view>
@@ -82,60 +81,56 @@
   import { useApiTypeStore } from '../../../store';
   import type { ApiArticleItem } from '/#/api/blog/article';
 
-  // 类型定义
   interface Heading {
     id: string;
     text: string;
     level: number;
   }
 
-  // 条件导入：H5 端使用 Vditor
   // #ifdef H5
   import Vditor from 'vditor';
   import 'vditor/dist/index.css';
   // #endif
 
-  // ==================== 响应式数据 ====================
   const apiTypeStore = useApiTypeStore();
   const article = ref<ApiArticleItem | null>(null);
   const loading = ref(true);
   const articleId = ref('');
   const showTocPopup = ref(false);
+  const scrollTopValue = ref(0);
 
-  // Vditor 预览容器（仅 H5）
+  const scrollViewRef = ref<any>(null);
+  const mpHtmlRef = ref<any>(null);
+
   // #ifdef H5
   const vditorPreviewRef = ref<HTMLDivElement>();
   // #endif
 
-  // ==================== 计算属性 ====================
-  // 分类标签
   const categoryLabel = computed(() => {
     if (!article.value?.categoryVal) return '';
     const opt = apiTypeStore.getArticleCategoryOption.find((item) => item.value === article.value!.categoryVal);
     return opt?.label || '';
   });
 
-  // 原始内容（HTML 或 Markdown）
   const rawContent = computed(() => article.value?.htmlContent || article.value?.markdownContent || '');
 
-  // 提取图片 URL（公用）
   function extractImgUrls(html: string): string[] {
     const result: string[] = [];
     const regex = /<img[^>]+src=["']([^"']+)["']/gi;
-    let match: RegExpExecArray | null;
+    let match;
     while ((match = regex.exec(html)) !== null) {
       result.push(match[1]);
     }
     return result;
   }
 
-  // ==================== 目录提取（平台通用） ====================
+  // ==================== 目录提取：统一使用 heading-0, heading-1... ====================
   const headings = computed<Heading[]>(() => {
     if (!article.value) return [];
     const html = rawContent.value;
     const result: Heading[] = [];
-    const regex = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/gi;
-    let match: RegExpExecArray | null;
+    const regex = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/gi; // 不关心属性，直接提取文本
+    let match;
     let idx = 0;
     while ((match = regex.exec(html)) !== null) {
       const level = parseInt(match[1]);
@@ -147,34 +142,21 @@
     return result;
   });
 
-  const scrollIntoViewId = ref('');
-
-  // 目录点击跳转
-  function onTocClick(id: string) {
-    showTocPopup.value = false;
-    // 设置滚动目标 id
-    scrollIntoViewId.value = id;
-    // 等待滚动完成后清除 id，以便下次点击同一个 id 还能再次滚动
-    setTimeout(() => {
-      scrollIntoViewId.value = '';
-    }, 500);
-  }
-
-  // ==================== 非 H5 端：mp-html 渲染 ====================
+  // ==================== 非 H5 端：强制覆盖标题 id 为 heading-0... ====================
   // #ifndef H5
-  // 增强 HTML 样式（表格、代码块、图片自适应等）
   const processedHtml = computed(() => {
     let html = rawContent.value;
     if (!html || html === '暂无内容') return '暂无内容';
 
-    // 给标题添加 id（用于目录跳转）
-    let idx = 0;
+    let headingIdx = 0;
+    // 强制替换所有 h1~h6 的开始标签，重新设置 id
     html = html.replace(/<h([1-6])([^>]*)>/gi, (_, level, attrs) => {
-      const id = `heading-${idx++}`;
-      return `<h${level}${attrs} id="${id}">`;
+      // 移除已有的 id 属性（避免重复）
+      const cleanedAttrs = attrs.replace(/\s+id\s*=\s*["'][^"']*["']/gi, '');
+      return `<h${level}${cleanedAttrs} id="heading-${headingIdx++}">`;
     });
 
-    // 表格样式增强
+    // 表格、代码、图片等增强（保持不变）
     html = html.replace(/<table/gi, '<table class="md-table"');
     html = html.replace(/<th\b/gi, '<th class="md-th"');
     html = html.replace(/<td\b/gi, '<td class="md-td"');
@@ -182,12 +164,9 @@
     html = html.replace(/<pre/gi, '<pre class="md-pre"');
     html = html.replace(/<code/gi, '<code class="md-code"');
 
-    // 图片自适应 + 添加点击预览标记（mp-html 默认支持预览，但需要传递 urls）
     html = html.replace(/<img([^>]*)>/gi, (match, attrs) => {
-      // 提取 src
       const srcMatch = attrs.match(/\ssrc\s*=\s*["']([^"']+)["']/i);
       if (!srcMatch) return match;
-      // 移除可能的宽高属性，添加 style
       let cleaned = attrs
         .replace(/\s+width\s*=\s*["'][^"']*["']/gi, '')
         .replace(/\s+width\s*=\s*\d+/gi, '')
@@ -204,13 +183,10 @@
       return `<img class="md-img"${cleaned} />`;
     });
 
-    // blockquote 样式
     html = html.replace(/<blockquote/gi, '<blockquote class="md-blockquote"');
-
     return html;
   });
 
-  // mp-html 图片点击事件
   function onMpHtmlImgTap(e: any) {
     const { src } = e.detail;
     const urls = extractImgUrls(rawContent.value);
@@ -218,7 +194,7 @@
   }
   // #endif
 
-  // ==================== H5 端：Vditor 预览渲染 ====================
+  // ==================== H5 端：Vditor 预览，强制重设标题 id ====================
   // #ifdef H5
   async function renderWithVditor() {
     if (!vditorPreviewRef.value) return;
@@ -228,31 +204,26 @@
       return;
     }
 
-    // 使用 Vditor 的预览方法，它会自动渲染 Markdown 或 HTML
-    // 注意：Vditor.preview 是静态方法，不需要实例
     Vditor.preview(vditorPreviewRef.value, content, {
-      mode: 'light', // 添加 mode 属性，可选 'light' 或 'dark'
+      mode: 'light',
       theme: { current: 'light' },
       hljs: {},
       after: () => {
+        // 强制重设所有标题 id，与目录提取一致
+        forceHeadingIds();
         attachImagePreview();
-        addHeadingIds();
       },
     });
   }
 
-  // 为 Vditor 渲染后的标题添加 id，以便目录跳转
-  function addHeadingIds() {
+  function forceHeadingIds() {
     if (!vditorPreviewRef.value) return;
-    const headings = vditorPreviewRef.value.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    headings.forEach((el, idx) => {
-      if (!el.id) {
-        el.id = `heading-${idx}`;
-      }
+    const headingNodes = vditorPreviewRef.value.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headingNodes.forEach((el, idx) => {
+      el.id = `heading-${idx}`;
     });
   }
 
-  // 绑定图片点击预览事件
   function attachImagePreview() {
     if (!vditorPreviewRef.value) return;
     const imgs = vditorPreviewRef.value.querySelectorAll('img');
@@ -271,6 +242,35 @@
   }
   // #endif
 
+  // ==================== 目录跳转（纯英文 id，无障碍） ====================
+  async function onTocClick(id: string) {
+    showTocPopup.value = false;
+    await nextTick();
+
+    setTimeout(() => {
+      let query;
+      // #ifdef H5
+      query = uni.createSelectorQuery();
+      // #endif
+      // #ifndef H5
+      query = uni.createSelectorQuery().in(mpHtmlRef.value);
+      // #endif
+
+      query.select(`#${id}`).boundingClientRect();
+      // 查询 scroll-view 的滚动位置，而非页面视口
+      (query.select('.article-detail-scroll') as any).scrollOffset();
+      query.exec((res: any) => {
+        if (res[0] && res[1]) {
+          const targetTop = res[0].top;
+          const currentScroll = res[1].scrollTop;
+          scrollTopValue.value = currentScroll + targetTop - 80;
+        } else {
+          console.warn(`目录跳转失败：未找到节点 #${id}`);
+        }
+      });
+    }, 300);
+  }
+
   // ==================== 加载文章 ====================
   async function loadArticle(id: string) {
     loading.value = true;
@@ -283,18 +283,14 @@
       loading.value = false;
       await nextTick();
 
-      // 渲染内容
       // #ifdef H5
       if (article.value) {
         await renderWithVditor();
       }
       // #endif
-
-      // 非 H5 端 mp-html 会自动渲染，无需额外处理
     }
   }
 
-  // ==================== 操作函数 ====================
   function goToEdit() {
     uni.navigateTo({ url: `/pages/blog/article-edit/article-edit?id=${articleId.value}` });
   }
@@ -313,8 +309,7 @@
     });
   }
 
-  // ==================== 生命周期 ====================
-  onLoad(async (options) => {
+  onLoad(async (options: any) => {
     await apiTypeStore.getArticleCategory();
     if (options?.id) {
       articleId.value = options.id;
@@ -323,7 +318,6 @@
   });
 
   onUnmounted(() => {
-    // H5 端清理 Vditor 预览容器（避免内存泄漏）
     // #ifdef H5
     if (vditorPreviewRef.value) {
       vditorPreviewRef.value.innerHTML = '';
@@ -528,8 +522,41 @@
 </style>
 
 <style lang="scss">
-  // ========== 全局样式（供 mp-html 和 Vditor 共用） ==========
-  // 表格样式
+  // 全局样式（代码块美化、表格、图片等）
+  .md-pre {
+    display: block;
+    width: 100% !important;
+    overflow-x: auto;
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 12rpx;
+    padding: 24rpx;
+    margin: 20rpx 0;
+    font-size: 24rpx;
+    line-height: 1.6;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 12rpx;
+      margin-bottom: 16rpx;
+      background:
+        radial-gradient(circle at 8rpx 50%, #ccc 1.5rpx, transparent 2rpx), radial-gradient(circle at 24rpx 50%, #ccc 1.5rpx, transparent 2rpx),
+        radial-gradient(circle at 40rpx 50%, #ccc 1.5rpx, transparent 2rpx);
+    }
+  }
+
+  .md-code {
+    font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
+    color: #24292e;
+    white-space: pre;
+    word-break: normal;
+    word-wrap: normal;
+  }
+
   .md-table {
     display: block;
     width: 100% !important;
@@ -557,27 +584,6 @@
     }
   }
 
-  // 代码块样式
-  .md-pre {
-    display: block;
-    width: 100% !important;
-    overflow-x: auto;
-    background-color: #f6f8fa;
-    border-radius: 8rpx;
-    padding: 20rpx;
-    margin: 16rpx 0;
-    font-size: 24rpx;
-    line-height: 1.6;
-    -webkit-overflow-scrolling: touch;
-    box-sizing: border-box;
-  }
-
-  .md-code {
-    font-size: 24rpx;
-    word-break: break-all;
-  }
-
-  // 图片样式
   .md-img {
     max-width: 100% !important;
     height: auto !important;
@@ -588,7 +594,6 @@
     box-sizing: border-box;
   }
 
-  // 引用块样式
   .md-blockquote {
     margin: 16rpx 0;
     padding: 16rpx 24rpx;
