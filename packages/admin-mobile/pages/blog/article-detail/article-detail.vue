@@ -4,7 +4,7 @@
       <u-loading mode="circle" size="60" />
     </view>
     <template v-else-if="article">
-      <scroll-view scroll-y class="article-detail-scroll">
+      <scroll-view scroll-y class="article-detail-scroll" :scroll-into-view="scrollIntoViewId" scroll-with-animation>
         <view class="article-detail-body">
           <!-- 头部信息 -->
           <view class="article-detail-header card">
@@ -31,6 +31,7 @@
 
           <!-- #ifndef H5 -->
           <view class="article-detail-content card">
+            <!-- 依赖 easycom -->
             <mp-html :content="processedHtml" @imgtap="onMpHtmlImgTap" />
           </view>
           <!-- #endif -->
@@ -94,11 +95,6 @@
   import 'vditor/dist/index.css';
   // #endif
 
-  // 非 H5 端使用 mp-html
-  // #ifndef H5
-  import mpHtml from 'mp-html/dist/uni-app/components/mp-html/mp-html.vue';
-  // #endif
-
   // ==================== 响应式数据 ====================
   const apiTypeStore = useApiTypeStore();
   const article = ref<ApiArticleItem | null>(null);
@@ -151,13 +147,17 @@
     return result;
   });
 
+  const scrollIntoViewId = ref('');
+
   // 目录点击跳转
   function onTocClick(id: string) {
     showTocPopup.value = false;
-    // H5 端和小程序端都能用 uni.pageScrollTo
+    // 设置滚动目标 id
+    scrollIntoViewId.value = id;
+    // 等待滚动完成后清除 id，以便下次点击同一个 id 还能再次滚动
     setTimeout(() => {
-      uni.pageScrollTo({ selector: `#${id}`, duration: 300 });
-    }, 300);
+      scrollIntoViewId.value = '';
+    }, 500);
   }
 
   // ==================== 非 H5 端：mp-html 渲染 ====================
