@@ -41,7 +41,7 @@
       </scroll-view>
 
       <!-- 悬浮目录按钮 -->
-      <view v-if="headings.length > 1" class="article-detail-toc-fab" @click="showTocPopup = true">
+      <view v-if="headings.length > 1" class="article-detail-toc-fab" @click="openTocPopup">
         <u-icon name="list" size="28" color="#fff" />
       </view>
 
@@ -51,7 +51,7 @@
           <view class="article-detail-toc-popup-header">
             <text class="article-detail-toc-popup-title">目录导航</text>
           </view>
-          <scroll-view scroll-y class="article-detail-toc-popup-body" :scroll-into-view="'toc-' + activeHeadingId" scroll-with-animation>
+          <scroll-view scroll-y class="article-detail-toc-popup-body" :scroll-into-view="scrollIntoViewId" scroll-with-animation>
             <view
               v-for="(h, i) in headings"
               :id="'toc-' + h.id"
@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, nextTick, onUnmounted } from 'vue';
+  import { ref, computed, nextTick, onUnmounted, watch } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { articleAPi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
@@ -112,6 +112,7 @@
   const scrollTopValue = ref(0);
   const activeHeadingId = ref('');
   const currentScrollTop = ref(0); // 记录 scroll-view 当前滚动位置
+  const scrollIntoViewId = ref(''); // 用于目录内部滚动定位
 
   const scrollViewRef = ref<any>(null);
   const mpHtmlRef = ref<any>(null);
@@ -208,25 +209,21 @@
     uni.previewImage({ current: src, urls });
   }
 
-  // 预计算标题位置（解决鸿蒙等端 id 选择器可能失效的问题）
+  // 预计算标题位置
   function updateHeadingPositions() {
     const query = uni.createSelectorQuery().in(mpHtmlRef.value);
-    // 用标签选择器查询所有标题，避免依赖 id
     query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
     query.exec((res: any) => {
       const rects = res[0] as UniApp.NodeInfo[];
       if (rects && rects.length > 0) {
-        // 初始时 scrollTop 为 0，所以 rect.top 就是标题相对于内容顶部的偏移
         headingPositions.value = rects.map((r) => r.top || 0);
       } else {
-        // 如果 selectAll 也失败，则无法跳转，但仍避免崩溃
         console.warn('updateHeadingPositions: 未能获取到标题节点');
       }
     });
   }
 
   function onMpHtmlReady() {
-    // mp-html 渲染完成，计算所有标题的位置
     updateHeadingPositions();
   }
   // #endif
@@ -278,12 +275,34 @@
   }
   // #endif
 
+  // ==================== 目录内部定位控制 ====================
+  // 强制刷新 scroll-into-view（先清空再赋值）
+  async function forceTocScroll() {
+    if (!activeHeadingId.value) return;
+    const target = 'toc-' + activeHeadingId.value;
+    scrollIntoViewId.value = ''; // 清空
+    await nextTick();
+    scrollIntoViewId.value = target; // 重新赋值
+  }
+
+  // 打开目录弹窗时自动定位当前高亮项
+  function openTocPopup() {
+    showTocPopup.value = true;
+    forceTocScroll();
+  }
+
+  // 监听 showTocPopup 关闭后清理（可选）
+  watch(showTocPopup, (val) => {
+    if (!val) {
+      scrollIntoViewId.value = '';
+    }
+  });
+
   // ==================== 目录点击跳转 ====================
   function onTocClick(id: string) {
     showTocPopup.value = false;
 
     // #ifdef H5
-    // H5 端：使用查询方式
     nextTick(() => {
       setTimeout(() => {
         const query = uni.createSelectorQuery();
@@ -301,14 +320,26 @@
     // #endif
 
     // #ifndef H5
-    // 非 H5 端：使用预计算的位置，无需再次查询
     const idx = headings.value.findIndex((h) => h.id === id);
-    if (idx !== -1 && headingPositions.value.length > idx) {
+    if (idx === -1) return;
+
+    if (headingPositions.value.length > idx) {
       const targetPos = headingPositions.value[idx];
-      scrollTopValue.value = targetPos - 80; // 预计算的位置已经是相对于内容顶部的偏移
-    } else {
-      console.warn(`目录跳转失败：未找到标题 ${id} 的位置信息`);
+      scrollTopValue.value = targetPos - 80;
+      return;
     }
+
+    const query = uni.createSelectorQuery().in(mpHtmlRef.value);
+    query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
+    query.exec((res: any) => {
+      const rects = res[0] as UniApp.NodeInfo[];
+      if (rects && rects.length > idx) {
+        const targetTop = rects[idx].top || 0;
+        scrollTopValue.value = currentScrollTop.value + targetTop - 80;
+      } else {
+        console.warn(`目录跳转失败：未找到第 ${idx} 个标题，rects:`, rects);
+      }
+    });
     // #endif
   }
 
@@ -333,7 +364,6 @@
     });
     // #endif
     // #ifndef H5
-    // 非 H5 端：用 selectAll 查询所有标题，取它们的 top，然后匹配当前滚动位置
     query = uni.createSelectorQuery().in(mpHtmlRef.value);
     query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
     // #endif
@@ -359,6 +389,10 @@
       }
       if (activeId !== activeHeadingId.value) {
         activeHeadingId.value = activeId;
+        // 非 H5 端同时强制目录滚动
+        // #ifndef H5
+        forceTocScroll();
+        // #endif
       }
     });
   }, 200);
@@ -371,7 +405,6 @@
   // ==================== 加载文章 ====================
   async function loadArticle(id: string) {
     loading.value = true;
-    // 重置位置缓存
     headingPositions.value = [];
 
     try {
