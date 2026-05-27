@@ -19,6 +19,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "skipDefaultLibCheck": true,
+    "noImplicitAny": false,
     "ignoreDeprecations": "6.0",
     "outDir": "./",
     "baseUrl": ".",
