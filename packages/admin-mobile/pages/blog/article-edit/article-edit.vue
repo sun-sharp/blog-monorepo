@@ -1,6 +1,7 @@
 <template>
   <view class="article-edit-page">
     <scroll-view scroll-y class="article-edit-scroll">
+      <!-- 基本信息 -->
       <view class="article-edit-card">
         <view class="article-edit-section-header">
           <u-icon name="file-text" size="36rpx" color="#007aff" />
@@ -18,6 +19,7 @@
         </view>
       </view>
 
+      <!-- 文章设置 -->
       <view class="article-edit-card">
         <view class="article-edit-section-header">
           <u-icon name="setting" size="36rpx" color="#007aff" />
@@ -43,18 +45,9 @@
         </view>
       </view>
 
-      <view class="article-edit-card">
-        <view class="article-edit-section-header">
-          <u-icon name="edit-pen" size="36rpx" color="#007aff" />
-          <text class="article-edit-section-title">文章内容</text>
-        </view>
-        <view class="article-edit-form">
-          <view class="article-edit-field">
-            <u-textarea v-model="form.markdownContent" placeholder="在这里书写 Markdown 内容..." :height="400" count auto-height />
-          </view>
-        </view>
-      </view>
+      <!-- 文章内容编辑区域已移除，保存时将保持原有内容不变 -->
 
+      <!-- 保存按钮 -->
       <view class="article-edit-footer">
         <view class="article-edit-save-btn" @click="handleSave">
           <u-loading v-if="loading" mode="circle" size="32rpx" color="#fff" />
@@ -85,6 +78,7 @@
     categoryVal: null as number | null,
     isPrivate: false,
     markdownContent: '',
+    htmlContent: '', // 新增字段，保存原始的 HTML 内容
     cssContent: '',
   });
 
@@ -124,10 +118,7 @@
       uni.showToast({ title: '请选择文章分类', icon: 'none' });
       return false;
     }
-    if (!form.markdownContent.trim()) {
-      uni.showToast({ title: '请输入文章内容', icon: 'none' });
-      return false;
-    }
+    // 不再校验内容，因为内容不可编辑
     return true;
   }
 
@@ -140,6 +131,7 @@
         form.categoryVal = article.categoryVal;
         form.isPrivate = article.isPrivate;
         form.markdownContent = article.markdownContent;
+        form.htmlContent = article.htmlContent || ''; // 保存原始的 htmlContent
         form.cssContent = article.cssContent;
       }
     } catch (e) {
@@ -156,9 +148,9 @@
         title: form.title.trim(),
         brief: form.brief.trim(),
         categoryVal: form.categoryVal as number,
-        markdownContent: form.markdownContent,
-        htmlContent: form.markdownContent,
-        cssContent: form.cssContent,
+        markdownContent: form.markdownContent, // 原样保存
+        htmlContent: form.htmlContent, // 原样保存（不重新生成）
+        cssContent: form.cssContent, // 原样保存
         isPrivate: form.isPrivate,
       };
       if (editId.value) {

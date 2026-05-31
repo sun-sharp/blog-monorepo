@@ -7,9 +7,9 @@
 
     <!-- 文章内容 -->
     <template v-else-if="article">
-      <scroll-view ref="scrollViewRef" scroll-y class="article-detail-scroll" :scroll-top="scrollTopValue" scroll-with-animation @scroll="onArticleScroll">
+      <!-- #ifdef H5 -->
+      <view ref="scrollViewRef" class="article-detail-scroll" @scroll="onArticleScroll">
         <view class="article-detail-body">
-          <!-- 头部信息 -->
           <view class="article-detail-header card">
             <text class="article-detail-title">{{ article.title }}</text>
             <view class="article-detail-meta">
@@ -27,18 +27,44 @@
             <text v-if="article.brief" class="article-detail-brief">{{ article.brief }}</text>
           </view>
 
-          <!-- 内容区：条件编译 -->
-          <!-- #ifdef H5 -->
-          <div ref="vditorPreviewRef" class="article-detail-content card vditor-preview-wrapper"></div>
-          <!-- #endif -->
+          <view class="article-detail-content card" v-html="processedHtml"></view>
+        </view>
+      </view>
+      <!-- #endif -->
 
-          <!-- #ifndef H5 -->
-          <view class="article-detail-content card">
-            <mp-html ref="mpHtmlRef" :content="processedHtml" @imgtap="onMpHtmlImgTap" @ready="onMpHtmlReady" />
+      <!-- #ifndef H5 -->
+      <scroll-view ref="scrollViewRef" scroll-y class="article-detail-scroll" :scroll-top="scrollTopValue" scroll-with-animation @scroll="onArticleScroll">
+        <view class="article-detail-body">
+          <view class="article-detail-header card">
+            <text class="article-detail-title">{{ article.title }}</text>
+            <view class="article-detail-meta">
+              <view class="article-detail-meta-item">
+                <u-icon name="calendar" size="22" color="#999" />
+                <text class="article-detail-meta-text">{{ article.createTime?.slice(0, 10) }}</text>
+              </view>
+              <view class="article-detail-meta-item">
+                <u-icon name="account" size="22" color="#999" />
+                <text class="article-detail-meta-text">{{ article.authorNickname || '未知作者' }}</text>
+              </view>
+              <u-tag v-if="article.isPrivate" text="加密" type="warning" size="mini" plain />
+              <u-tag v-if="categoryLabel" :text="categoryLabel" type="primary" size="mini" plain />
+            </view>
+            <text v-if="article.brief" class="article-detail-brief">{{ article.brief }}</text>
           </view>
-          <!-- #endif -->
+
+          <view class="article-detail-content card">
+            <mp-html
+              v-if="article.htmlContent || article.markdownContent"
+              ref="mpHtmlRef"
+              :content="processedHtml"
+              :css="mergedCss"
+              @imgtap="onMpHtmlImgTap"
+              @ready="onMpHtmlReady" />
+            <text v-else class="article-detail-empty-content">暂无内容</text>
+          </view>
         </view>
       </scroll-view>
+      <!-- #endif -->
 
       <!-- 悬浮目录按钮 -->
       <view v-if="headings.length > 1" class="article-detail-toc-fab" @click="openTocPopup">
@@ -64,7 +90,6 @@
         </view>
       </u-popup>
 
-      <!-- 底部操作栏 -->
       <view class="article-detail-footer">
         <view class="article-detail-action-btn" @click="goToEdit">
           <u-icon name="edit-pen" size="30" color="#007aff" />
@@ -77,7 +102,6 @@
       </view>
     </template>
 
-    <!-- 空状态 -->
     <view v-else class="article-detail-empty">
       <u-empty mode="data" text="文章不存在" />
     </view>
@@ -85,11 +109,35 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, nextTick, onUnmounted, watch } from 'vue';
+  import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { articleAPi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
   import type { ApiArticleItem } from '/#/api/blog/article';
+  // 移除 marked 导入，避免鸿蒙兼容问题
+
+  // ---------- highlight.js 主题样式（GitHub 精简版）----------
+  const HLJS_CSS = `
+.hljs { display: block; overflow-x: auto; padding: 0.5em; color: #333; background: #f8f8f8; }
+.hljs-comment, .hljs-quote { color: #998; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-subst { color: #333; font-weight: bold; }
+.hljs-number, .hljs-literal, .hljs-variable, .hljs-template-variable, .hljs-tag .hljs-attr { color: #008080; }
+.hljs-string, .hljs-doctag { color: #d14; }
+.hljs-title, .hljs-section, .hljs-selector-id { color: #900; font-weight: bold; }
+.hljs-subst { font-weight: normal; }
+.hljs-type, .hljs-class .hljs-title { color: #458; font-weight: bold; }
+.hljs-tag, .hljs-name, .hljs-attribute { color: #000080; font-weight: normal; }
+.hljs-regexp, .hljs-link { color: #009926; }
+.hljs-symbol, .hljs-bullet { color: #990073; }
+.hljs-built_in, .hljs-builtin-name { color: #0086b3; }
+.hljs-meta { color: #999; font-weight: bold; }
+.hljs-deletion { background: #fdd; }
+.hljs-addition { background: #dfd; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
+pre code, .code-block { white-space: pre !important; }
+.md-editor { height: 100%; }
+`;
 
   interface Heading {
     id: string;
@@ -97,13 +145,6 @@
     level: number;
   }
 
-  // 条件导入：H5 端使用 Vditor
-  // #ifdef H5
-  import Vditor from 'vditor';
-  import 'vditor/dist/index.css';
-  // #endif
-
-  // ==================== 响应式数据 ====================
   const apiTypeStore = useApiTypeStore();
   const article = ref<ApiArticleItem | null>(null);
   const loading = ref(true);
@@ -111,60 +152,39 @@
   const showTocPopup = ref(false);
   const scrollTopValue = ref(0);
   const activeHeadingId = ref('');
-  const currentScrollTop = ref(0); // 记录 scroll-view 当前滚动位置
-  const scrollIntoViewId = ref(''); // 用于目录内部滚动定位
-
+  const currentScrollTop = ref(0);
+  const scrollIntoViewId = ref('');
   const scrollViewRef = ref<any>(null);
+  // #ifndef H5
   const mpHtmlRef = ref<any>(null);
-
-  // 预计算标题位置（仅非 H5 端使用）
+  // #endif
   const headingPositions = ref<number[]>([]);
 
-  // #ifdef H5
-  const vditorPreviewRef = ref<HTMLDivElement>();
-  // #endif
+  const STYLE_TAG_ID = 'article-detail-custom-style';
 
-  // ==================== 计算属性 ====================
   const categoryLabel = computed(() => {
     if (!article.value?.categoryVal) return '';
     const opt = apiTypeStore.getArticleCategoryOption.find((item) => item.value === article.value!.categoryVal);
     return opt?.label || '';
   });
 
-  const rawContent = computed(() => article.value?.htmlContent || article.value?.markdownContent || '');
-
-  function extractImgUrls(html: string): string[] {
-    const result: string[] = [];
-    const regex = /<img[^>]+src=["']([^"']+)["']/gi;
-    let match;
-    while ((match = regex.exec(html)) !== null) {
-      result.push(match[1]);
-    }
-    return result;
+  // 简单的 Markdown 转纯文本（仅处理换行，用于降级展示）
+  function simpleMarkdownToText(md: string): string {
+    return md.replace(/<[^>]*>/g, '').replace(/\n/g, '<br/>');
   }
 
-  // ==================== 目录提取（统一使用 heading-0, heading-1...） ====================
-  const headings = computed<Heading[]>(() => {
-    if (!article.value) return [];
-    const html = rawContent.value;
-    const result: Heading[] = [];
-    const regex = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/gi;
-    let match;
-    let idx = 0;
-    while ((match = regex.exec(html)) !== null) {
-      const level = parseInt(match[1]);
-      const text = match[2].replace(/<[^>]+>/g, '').trim();
-      if (text) {
-        result.push({ id: `heading-${idx++}`, text, level });
-      }
+  const rawHtml = computed(() => {
+    if (!article.value) return '';
+    if (article.value.htmlContent) return article.value.htmlContent;
+    if (article.value.markdownContent) {
+      // 不引入 marked，简单转成带换行的文本
+      return `<pre>${simpleMarkdownToText(article.value.markdownContent)}</pre>`;
     }
-    return result;
+    return '';
   });
 
-  // ==================== 非 H5 端：mp-html 渲染，强制设置 heading id ====================
-  // #ifndef H5
   const processedHtml = computed(() => {
-    let html = rawContent.value;
+    let html = rawHtml.value;
     if (!html || html === '暂无内容') return '暂无内容';
 
     let headingIdx = 0;
@@ -173,177 +193,182 @@
       return `<h${level}${cleanedAttrs} id="heading-${headingIdx++}">`;
     });
 
-    html = html.replace(/<table/gi, '<table class="md-table"');
-    html = html.replace(/<th\b/gi, '<th class="md-th"');
-    html = html.replace(/<td\b/gi, '<td class="md-td"');
-    html = html.replace(/<tr\b/gi, '<tr class="md-tr"');
-    html = html.replace(/<pre/gi, '<pre class="md-pre"');
-    html = html.replace(/<code/gi, '<code class="md-code"');
-
-    html = html.replace(/<img([^>]*)>/gi, (match, attrs) => {
-      const srcMatch = attrs.match(/\ssrc\s*=\s*["']([^"']+)["']/i);
-      if (!srcMatch) return match;
-      let cleaned = attrs
-        .replace(/\s+width\s*=\s*["'][^"']*["']/gi, '')
-        .replace(/\s+width\s*=\s*\d+/gi, '')
-        .replace(/\s+height\s*=\s*["'][^"']*["']/gi, '')
-        .replace(/\s+height\s*=\s*\d+/gi, '');
-      const baseStyle = 'max-width:100%!important;height:auto!important;box-sizing:border-box';
-      const styleMatch = cleaned.match(/style\s*=\s*"([^"]*)"/i);
-      if (styleMatch) {
-        const existing = styleMatch[1].replace(/\bwidth\s*:\s*[^;]+[;"]?/gi, '').trim();
-        cleaned = cleaned.replace(/style\s*=\s*"[^"]*"/i, `style="${baseStyle};${existing}"`);
-      } else {
-        cleaned = ` style="${baseStyle}" ${cleaned}`;
-      }
-      return `<img class="md-img"${cleaned} />`;
-    });
-
-    html = html.replace(/<blockquote/gi, '<blockquote class="md-blockquote"');
-    return html;
+    return `<div class="md-editor"><div class="md-editor-preview"><article class="default-theme">${html}</article></div></div>`;
   });
 
-  function onMpHtmlImgTap(e: any) {
-    const { src } = e.detail;
-    const urls = extractImgUrls(rawContent.value);
-    uni.previewImage({ current: src, urls });
+  const mergedCss = computed(() => (article.value?.cssContent || '') + HLJS_CSS);
+
+  const headings = computed<Heading[]>(() => {
+    if (!article.value) return [];
+    const html = rawHtml.value;
+    const result: Heading[] = [];
+    const regex = /<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/gi;
+    let match;
+    let idx = 0;
+    while ((match = regex.exec(html)) !== null) {
+      const level = parseInt(match[1]);
+      const text = match[2].replace(/<[^>]+>/g, '').trim();
+      if (text) result.push({ id: `heading-${idx++}`, text, level });
+    }
+    return result;
+  });
+
+  function extractImgUrls(html: string): string[] {
+    const result: string[] = [];
+    const regex = /<img[^>]+src=["']([^"']+)["']/gi;
+    let match;
+    while ((match = regex.exec(html)) !== null) result.push(match[1]);
+    return result;
   }
 
-  // 预计算标题位置
+  // #ifdef H5
+  function bindImageClick() {
+    const container = document.querySelector('.article-detail-content');
+    if (container) {
+      container.addEventListener('click', (e: Event) => {
+        const target = e.target as HTMLElement;
+        if (target.tagName === 'IMG') {
+          const src = target.getAttribute('src');
+          if (src) uni.previewImage({ current: src, urls: extractImgUrls(rawHtml.value) });
+        }
+      });
+    }
+  }
+  // #endif
+
+  // #ifndef H5
+  function onMpHtmlImgTap(e: any) {
+    uni.previewImage({ current: e.detail.src, urls: extractImgUrls(rawHtml.value) });
+  }
+  // #endif
+
   function updateHeadingPositions() {
+    // #ifdef H5
+    const headingElements = document.querySelectorAll(
+      '.article-detail-content h1, .article-detail-content h2, .article-detail-content h3, .article-detail-content h4, .article-detail-content h5, .article-detail-content h6'
+    );
+    const container = document.querySelector('.article-detail-scroll');
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      const scrollTop = container.scrollTop || 0;
+      headingPositions.value = Array.from(headingElements).map((h) => {
+        const rect = h.getBoundingClientRect();
+        return rect.top - containerRect.top + scrollTop;
+      });
+    }
+    // #endif
+
+    // #ifndef H5
     const query = uni.createSelectorQuery().in(mpHtmlRef.value);
     query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
     query.exec((res: any) => {
       const rects = res[0] as UniApp.NodeInfo[];
       if (rects && rects.length > 0) {
         headingPositions.value = rects.map((r) => r.top || 0);
-      } else {
-        console.warn('updateHeadingPositions: 未能获取到标题节点');
       }
     });
+    // #endif
   }
 
+  // #ifndef H5
   function onMpHtmlReady() {
     updateHeadingPositions();
   }
   // #endif
 
-  // ==================== H5 端：Vditor 预览，强制设置 heading id ====================
-  // #ifdef H5
-  async function renderWithVditor() {
-    if (!vditorPreviewRef.value) return;
-    const content = rawContent.value;
-    if (!content || content === '暂无内容') {
-      vditorPreviewRef.value.innerHTML = '<p>暂无内容</p>';
-      return;
-    }
-
-    Vditor.preview(vditorPreviewRef.value, content, {
-      mode: 'light',
-      theme: { current: 'light' },
-      hljs: {},
-      after: () => {
-        forceHeadingIds();
-        attachImagePreview();
-      },
-    });
-  }
-
-  function forceHeadingIds() {
-    if (!vditorPreviewRef.value) return;
-    const headingNodes = vditorPreviewRef.value.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    headingNodes.forEach((el, idx) => {
-      el.id = `heading-${idx}`;
-    });
-  }
-
-  function attachImagePreview() {
-    if (!vditorPreviewRef.value) return;
-    const imgs = vditorPreviewRef.value.querySelectorAll('img');
-    imgs.forEach((img) => {
-      img.removeEventListener('click', handleImageClick);
-      img.addEventListener('click', handleImageClick);
-    });
-  }
-
-  function handleImageClick(e: Event) {
-    const img = e.currentTarget as HTMLImageElement;
-    const src = img.getAttribute('src');
-    if (!src) return;
-    const urls = extractImgUrls(rawContent.value);
-    uni.previewImage({ current: src, urls });
-  }
-  // #endif
-
-  // ==================== 目录内部定位控制 ====================
-  // 强制刷新 scroll-into-view（先清空再赋值）
   async function forceTocScroll() {
     if (!activeHeadingId.value) return;
     const target = 'toc-' + activeHeadingId.value;
-    scrollIntoViewId.value = ''; // 清空
+    scrollIntoViewId.value = '';
     await nextTick();
-    scrollIntoViewId.value = target; // 重新赋值
+    scrollIntoViewId.value = target;
   }
 
-  // 打开目录弹窗时自动定位当前高亮项
   function openTocPopup() {
     showTocPopup.value = true;
     forceTocScroll();
   }
 
-  // 监听 showTocPopup 关闭后清理（可选）
   watch(showTocPopup, (val) => {
-    if (!val) {
-      scrollIntoViewId.value = '';
-    }
+    if (!val) scrollIntoViewId.value = '';
   });
 
-  // ==================== 目录点击跳转 ====================
   function onTocClick(id: string) {
     showTocPopup.value = false;
 
     // #ifdef H5
-    nextTick(() => {
-      setTimeout(() => {
-        const query = uni.createSelectorQuery();
-        query.select(`#${id}`).boundingClientRect();
-        query.exec((res: any) => {
-          if (res[0]) {
-            const targetTop = res[0].top;
-            scrollTopValue.value = currentScrollTop.value + targetTop - 80;
-          } else {
-            console.warn(`H5 目录跳转失败：未找到节点 #${id}`);
-          }
-        });
-      }, 300);
-    });
+    const target = document.getElementById(id);
+    const container = document.querySelector('.article-detail-scroll');
+    if (target && container) {
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const scrollTop = targetRect.top - containerRect.top + container.scrollTop - 80;
+      container.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
+    }
     // #endif
 
     // #ifndef H5
     const idx = headings.value.findIndex((h) => h.id === id);
     if (idx === -1) return;
-
+    let targetScrollTop = 0;
     if (headingPositions.value.length > idx) {
-      const targetPos = headingPositions.value[idx];
-      scrollTopValue.value = targetPos - 80;
-      return;
+      targetScrollTop = headingPositions.value[idx] - 80;
     }
-
-    const query = uni.createSelectorQuery().in(mpHtmlRef.value);
-    query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
-    query.exec((res: any) => {
-      const rects = res[0] as UniApp.NodeInfo[];
-      if (rects && rects.length > idx) {
-        const targetTop = rects[idx].top || 0;
-        scrollTopValue.value = currentScrollTop.value + targetTop - 80;
-      } else {
-        console.warn(`目录跳转失败：未找到第 ${idx} 个标题，rects:`, rects);
-      }
-    });
+    scrollTopValue.value = targetScrollTop;
     // #endif
   }
 
-  // ==================== 滚动监听：更新当前活动标题 ====================
+  const updateActiveHeading = throttle(() => {
+    // #ifdef H5
+    const headingElements = document.querySelectorAll(
+      '.article-detail-content h1, .article-detail-content h2, .article-detail-content h3, .article-detail-content h4, .article-detail-content h5, .article-detail-content h6'
+    );
+    let activeId = '';
+    for (let i = 0; i < headingElements.length; i++) {
+      if (headingElements[i].getBoundingClientRect().top > 0) {
+        activeId = `heading-${i}`;
+        break;
+      }
+    }
+    if (!activeId && headingElements.length > 0) activeId = `heading-${headingElements.length - 1}`;
+    if (activeId !== activeHeadingId.value) {
+      activeHeadingId.value = activeId;
+      forceTocScroll();
+    }
+    // #endif
+
+    // #ifndef H5
+    const query = uni.createSelectorQuery().in(mpHtmlRef.value);
+    query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
+    query.exec((res: any) => {
+      const rects = res[0] as any[];
+      if (!rects || rects.length === 0) return;
+      let activeId = '';
+      for (let i = 0; i < rects.length; i++) {
+        if (rects[i] && rects[i].top > 0) {
+          activeId = headings.value[i]?.id || '';
+          break;
+        }
+      }
+      if (!activeId && rects.length > 0) activeId = headings.value[rects.length - 1]?.id || '';
+      if (activeId !== activeHeadingId.value) {
+        activeHeadingId.value = activeId;
+        forceTocScroll();
+      }
+    });
+    // #endif
+  }, 200);
+
+  function onArticleScroll(e: any) {
+    // #ifdef H5
+    currentScrollTop.value = e.target.scrollTop;
+    // #endif
+    // #ifndef H5
+    currentScrollTop.value = e.detail.scrollTop;
+    // #endif
+    updateActiveHeading();
+  }
+
   function throttle(fn: Function, delay: number) {
     let timer: any = null;
     return function (this: any, ...args: any[]) {
@@ -355,54 +380,20 @@
     };
   }
 
-  const updateActiveHeading = throttle(async () => {
-    let query;
-    // #ifdef H5
-    query = uni.createSelectorQuery();
-    headings.value.forEach((h) => {
-      query.select(`#${h.id}`).boundingClientRect();
-    });
-    // #endif
-    // #ifndef H5
-    query = uni.createSelectorQuery().in(mpHtmlRef.value);
-    query.selectAll('h1,h2,h3,h4,h5,h6').boundingClientRect();
-    // #endif
-
-    query.exec((res: any) => {
-      let rects;
-      // #ifdef H5
-      rects = res;
-      // #endif
-      // #ifndef H5
-      rects = res[0] || [];
-      // #endif
-
-      let activeId = '';
-      for (let i = 0; i < rects.length; i++) {
-        if (rects[i] && rects[i].top > 0) {
-          activeId = headings.value[i]?.id || '';
-          break;
-        }
-      }
-      if (!activeId && rects.length > 0) {
-        activeId = headings.value[rects.length - 1]?.id || '';
-      }
-      if (activeId !== activeHeadingId.value) {
-        activeHeadingId.value = activeId;
-        // 非 H5 端同时强制目录滚动
-        // #ifndef H5
-        forceTocScroll();
-        // #endif
-      }
-    });
-  }, 200);
-
-  function onArticleScroll(e: any) {
-    currentScrollTop.value = e.detail.scrollTop;
-    updateActiveHeading();
+  // #ifdef H5
+  function injectStyle(css: string) {
+    removeStyle();
+    const style = document.createElement('style');
+    style.id = STYLE_TAG_ID;
+    style.textContent = css;
+    document.head.appendChild(style);
   }
 
-  // ==================== 加载文章 ====================
+  function removeStyle() {
+    document.getElementById(STYLE_TAG_ID)?.remove();
+  }
+  // #endif
+
   async function loadArticle(id: string) {
     loading.value = true;
     headingPositions.value = [];
@@ -410,21 +401,27 @@
     try {
       const res = await articleAPi.getDetails(id);
       article.value = res || null;
+      console.log('文章加载成功', article.value?.title);
     } catch (e) {
-      console.error(e);
+      console.error('文章加载失败', e);
+      article.value = null;
     } finally {
       loading.value = false;
+
       await nextTick();
 
       // #ifdef H5
       if (article.value) {
-        await renderWithVditor();
+        injectStyle((article.value.cssContent || '') + HLJS_CSS);
+        setTimeout(() => {
+          bindImageClick();
+          updateHeadingPositions();
+        }, 200);
       }
       // #endif
     }
   }
 
-  // ==================== 操作函数 ====================
   function goToEdit() {
     uni.navigateTo({ url: `/pages/blog/article-edit/article-edit?id=${articleId.value}` });
   }
@@ -443,26 +440,30 @@
     });
   }
 
-  // ==================== 生命周期 ====================
-  onLoad(async (options: any) => {
-    await apiTypeStore.getArticleCategory();
-    if (options?.id) {
-      articleId.value = options.id;
-      loadArticle(options.id);
-    }
+  onMounted(() => {
+    console.log('文章详情页 mounted');
   });
 
   onUnmounted(() => {
     // #ifdef H5
-    if (vditorPreviewRef.value) {
-      vditorPreviewRef.value.innerHTML = '';
-    }
+    removeStyle();
     // #endif
+  });
+
+  onLoad(async (options: any) => {
+    console.log('onLoad 参数:', options);
+    await apiTypeStore.getArticleCategory();
+    if (options?.id) {
+      articleId.value = options.id;
+      loadArticle(options.id);
+    } else {
+      console.warn('缺少文章ID');
+      loading.value = false;
+    }
   });
 </script>
 
 <style lang="scss" scoped>
-  // ========== 页面布局 ==========
   .article-detail {
     display: flex;
     flex-direction: column;
@@ -473,11 +474,20 @@
   .article-detail-scroll {
     flex: 1;
     height: 0;
+    // #ifdef H5
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    // #endif
   }
 
   .article-detail-body {
     padding: 20rpx;
-    padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+    // #ifdef H5
+    padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
+    // #endif
+    // #ifndef H5
+    padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+    // #endif
   }
 
   .article-detail-loading,
@@ -487,7 +497,6 @@
     padding-top: 200rpx;
   }
 
-  // ========== 头部卡片 ==========
   .article-detail-header {
     padding: 30rpx;
   }
@@ -528,7 +537,6 @@
     border-top: 1rpx solid #f0f0f0;
   }
 
-  // ========== 内容卡片 ==========
   .article-detail-content {
     margin-top: 20rpx;
     padding: 30rpx;
@@ -537,17 +545,6 @@
     overflow: hidden;
   }
 
-  // Vditor 预览容器样式调整（H5）
-  .vditor-preview-wrapper {
-    :deep(.vditor-reset) {
-      padding: 0 !important;
-      background: transparent !important;
-      font-size: inherit;
-      line-height: inherit;
-    }
-  }
-
-  // ========== 悬浮目录按钮 ==========
   .article-detail-toc-fab {
     position: fixed;
     right: 30rpx;
@@ -563,7 +560,6 @@
     z-index: 99;
   }
 
-  // ========== 目录弹窗 ==========
   .article-detail-toc-popup {
     padding: 30rpx;
     height: 100%;
@@ -629,7 +625,6 @@
     line-height: 1.5;
   }
 
-  // ========== 底部操作栏 ==========
   .article-detail-footer {
     position: fixed;
     left: 0;
@@ -663,90 +658,5 @@
 
   .article-detail-action-text-danger {
     color: #dd524d;
-  }
-</style>
-
-<style lang="scss">
-  // ========== 全局样式：纯 CSS 代码块美化（无 JS 高亮） ==========
-  .md-pre {
-    display: block;
-    width: 100% !important;
-    overflow-x: auto;
-    background: #f6f8fa;
-    border: 1px solid #e1e4e8;
-    border-radius: 12rpx;
-    padding: 24rpx;
-    margin: 20rpx 0;
-    font-size: 24rpx;
-    line-height: 1.6;
-    box-sizing: border-box;
-    -webkit-overflow-scrolling: touch;
-    position: relative;
-
-    &::before {
-      content: '';
-      display: block;
-      height: 12rpx;
-      margin-bottom: 16rpx;
-      background:
-        radial-gradient(circle at 8rpx 50%, #ccc 1.5rpx, transparent 2rpx), radial-gradient(circle at 24rpx 50%, #ccc 1.5rpx, transparent 2rpx),
-        radial-gradient(circle at 40rpx 50%, #ccc 1.5rpx, transparent 2rpx);
-    }
-  }
-
-  .md-code {
-    font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
-    color: #24292e;
-    white-space: pre;
-    word-break: normal;
-    word-wrap: normal;
-  }
-
-  // 表格样式
-  .md-table {
-    display: block;
-    width: 100% !important;
-    border-collapse: collapse;
-    overflow-x: auto;
-    font-size: 24rpx;
-    margin: 16rpx 0;
-
-    .md-th,
-    .md-td {
-      border: 1rpx solid #e5e5e5;
-      padding: 12rpx 16rpx;
-      text-align: left;
-      word-break: break-word;
-      min-width: 60rpx;
-    }
-
-    .md-th {
-      background-color: #f5f7fa;
-      font-weight: bold;
-    }
-
-    .md-tr:nth-child(even) {
-      background-color: #fafafa;
-    }
-  }
-
-  // 图片样式
-  .md-img {
-    max-width: 100% !important;
-    height: auto !important;
-    display: block;
-    margin: 16rpx 0;
-    border-radius: 8rpx;
-    cursor: pointer;
-    box-sizing: border-box;
-  }
-
-  // 引用块样式
-  .md-blockquote {
-    margin: 16rpx 0;
-    padding: 16rpx 24rpx;
-    border-left: 6rpx solid #007aff;
-    background-color: #f0f7ff;
-    color: #555;
   }
 </style>

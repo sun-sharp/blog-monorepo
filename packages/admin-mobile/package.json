@@ -21,8 +21,5 @@
     "vue": "^3.5.33",
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.7"
-  },
-  "dependencies": {
-    "vditor": "^3.11.2"
   }
 }
