@@ -187,8 +187,10 @@
 
   .article-edit-scroll {
     flex: 1;
+    width: 100%;
     height: 0;
     padding: 20rpx;
+    box-sizing: border-box;
   }
 
   .article-edit-card {

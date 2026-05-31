@@ -114,10 +114,10 @@
   import { articleAPi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
   import type { ApiArticleItem } from '/#/api/blog/article';
-  // 移除 marked 导入，避免鸿蒙兼容问题
 
-  // ---------- highlight.js 主题样式（GitHub 精简版）----------
+  // ---------- 强化样式：彻底解决代码块横向滚动问题 ----------
   const HLJS_CSS = `
+/* 高亮样式 */
 .hljs { display: block; overflow-x: auto; padding: 0.5em; color: #333; background: #f8f8f8; }
 .hljs-comment, .hljs-quote { color: #998; font-style: italic; }
 .hljs-keyword, .hljs-selector-tag, .hljs-subst { color: #333; font-weight: bold; }
@@ -135,7 +135,64 @@
 .hljs-addition { background: #dfd; }
 .hljs-emphasis { font-style: italic; }
 .hljs-strong { font-weight: bold; }
-pre code, .code-block { white-space: pre !important; }
+
+/* 禁止全局横向滚动（覆盖所有父容器） */
+.article-detail,
+.article-detail-scroll,
+.article-detail-content,
+page,
+view,
+.mp-html,
+.rich-text,
+.article-detail-scroll > view {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 代码块内部横向滚动（强力覆盖 mp-html 内部所有可能的结构） */
+pre,
+code,
+pre code,
+.hljs,
+.code-block,
+.mp-html pre,
+.mp-html code,
+.mp-html pre code,
+.article-detail-content pre,
+.article-detail-content code,
+.article-detail-content pre code {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  white-space: pre !important;
+  word-break: normal !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+/* 针对行内代码不滚动（仅块级代码滚动） */
+code:not(pre code) {
+  overflow-x: visible !important;
+  white-space: normal !important;
+}
+
+/* 表格处理 */
+table {
+  display: block !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-width: 100% !important;
+}
+table td, table th {
+  white-space: nowrap;
+}
+
+/* 图片自适应 */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
 .md-editor { height: 100%; }
 `;
 
@@ -469,25 +526,27 @@ pre code, .code-block { white-space: pre !important; }
     flex-direction: column;
     height: 100vh;
     background-color: $uni-bg-color-grey;
+    overflow-x: hidden; /* 根容器禁止横向滚动 */
   }
 
   .article-detail-scroll {
     flex: 1;
     height: 0;
-    // #ifdef H5
+    overflow-x: hidden !important; /* 强制禁止横向滚动 */
+    /* #ifdef H5 */
     overflow-y: auto;
     scroll-behavior: smooth;
-    // #endif
+    /* #endif */
   }
 
   .article-detail-body {
     padding: 20rpx;
-    // #ifdef H5
+    /* #ifdef H5 */
     padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
-    // #endif
-    // #ifndef H5
+    /* #endif */
+    /* #ifndef H5 */
     padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
-    // #endif
+    /* #endif */
   }
 
   .article-detail-loading,
@@ -542,7 +601,9 @@ pre code, .code-block { white-space: pre !important; }
     padding: 30rpx;
     line-height: 1.8;
     font-size: $uni-font-size-base;
-    overflow: hidden;
+    overflow-x: hidden !important; /* 强制禁止横向滚动 */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .article-detail-toc-fab {
