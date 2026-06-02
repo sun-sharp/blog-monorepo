@@ -1,16 +1,18 @@
-import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsDateString, IsOptional } from 'class-validator';
 
 export class StatisticsStartEndTimeDto {
-  @Prop()
   @ApiProperty({
-    description: '开始时间',
+    description: '开始时间（ISO格式）',
   })
+  @IsOptional()
+  @IsDateString()
   startTime: string;
 
-  @Prop()
   @ApiProperty({
-    description: '结束时间',
+    description: '结束时间（ISO格式）',
   })
+  @IsOptional()
+  @IsDateString()
   endTime: string;
 }
