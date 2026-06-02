@@ -56,7 +56,14 @@
         </view>
       </view>
 
-      <u-picker v-model="showCategory" :default-selector="categoryDefault" :range="categoryRange" range-key="label" @confirm="onCategoryConfirm" />
+      <u-picker
+        v-model="showCategory"
+        mode="selector"
+        :default-selector="categoryDefault"
+        :preserve-selection="false"
+        :range="categoryRange"
+        range-key="label"
+        @confirm="onCategoryConfirm" />
     </scroll-view>
   </view>
 </template>
@@ -101,8 +108,10 @@
     return opt?.label || '';
   });
 
-  function onCategoryConfirm(e: { value: { label: string; value: number }[] }) {
-    form.categoryVal = e.value[0]?.value ?? null;
+  function onCategoryConfirm(e: Array<number>) {
+    // console.log('选择了分类：', JSON.stringify(e));
+    const idx = e[0];
+    form.categoryVal = typeof idx === 'number' ? categoryRange.value[idx].value : null;
   }
 
   function validate(): boolean {
@@ -159,7 +168,11 @@
         await articleAPi.save(data);
       }
       uni.showToast({ title: '保存成功', icon: 'success' });
-      setTimeout(() => uni.navigateBack(), 500);
+      setTimeout(() => {
+        uni.$emit('detailUpdated'); // 通知详情页更新数据
+        uni.$emit('listUpdated'); // 通知列表页更新数据
+        uni.navigateBack();
+      }, 500);
     } finally {
       loading.value = false;
     }

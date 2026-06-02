@@ -110,7 +110,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onUnload } from '@dcloudio/uni-app';
   import { articleAPi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
   import type { ApiArticleItem } from '/#/api/blog/article';
@@ -458,7 +458,6 @@ img {
     try {
       const res = await articleAPi.getDetails(id);
       article.value = res || null;
-      console.log('文章加载成功', article.value?.title);
     } catch (e) {
       console.error('文章加载失败', e);
       article.value = null;
@@ -497,9 +496,9 @@ img {
     });
   }
 
-  onMounted(() => {
-    console.log('文章详情页 mounted');
-  });
+  // onMounted(() => {
+  //   console.log('文章详情页 mounted');
+  // });
 
   onUnmounted(() => {
     // #ifdef H5
@@ -517,6 +516,13 @@ img {
       console.warn('缺少文章ID');
       loading.value = false;
     }
+    uni.$on('detailUpdated', () => {
+      loadArticle(articleId.value);
+    });
+  });
+
+  onUnload(() => {
+    uni.$off('detailUpdated');
   });
 </script>
 

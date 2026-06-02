@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, onMounted } from 'vue';
+  import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
   import { articleAPi } from '../../api';
   import { useApiTypeStore } from '../../store';
   import type { ApiArticleItem } from '/#/api/blog/article';
@@ -249,6 +249,13 @@
     apiTypeStore.getArticleCategory();
     loadData(true);
     inited.value = true;
+    uni.$on('listUpdated', () => {
+      loadData(true);
+    });
+  });
+
+  onUnmounted(() => {
+    uni.$off('listUpdated');
   });
 
   watch(
