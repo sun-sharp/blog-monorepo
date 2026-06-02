@@ -46,6 +46,10 @@ export class BillUpload extends Document {
   // 优先权重
   @Prop()
   priorityWeight: number;
+
+  // 代码
+  @Prop()
+  code: string;
 }
 
 export const BillUploadSchema = SchemaFactory.createForClass(BillUpload);
