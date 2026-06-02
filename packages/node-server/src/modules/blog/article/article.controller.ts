@@ -29,11 +29,11 @@ export class ArticleController {
 
   @Post('find_all_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '条件并分页获取文章列表' })
+  @ApiOperation({ summary: 'jwt认证的条件并分页获取文章列表' })
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
-  findAllPage(@Body() pageArticleDto: AllPageArticleDto) {
-    return this.articleService.findAllPage(pageArticleDto);
+  findAllPage(@Body() pageArticleDto: AllPageArticleDto, @Request() req) {
+    return this.articleService.findAllPage(pageArticleDto, req.user);
   }
 
   @Post('save')

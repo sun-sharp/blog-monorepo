@@ -87,24 +87,67 @@ export class ArticleService {
    * @param {PageArticleDto} body
    * @return {Promise<IResponse>}
    */
-  public findAllPage(body: AllPageArticleDto): Promise<IResponse> {
+  public findAllPage(body: AllPageArticleDto, user?: User): Promise<IResponse> {
     return (
-      Promise.resolve(body)
+      Promise.resolve()
         // 分页查询
-        .then(async (body) => {
+        .then(async () => {
           const { size, current, keywords, categoryVal, isPrivate } = body;
           const { limit, skip } = PaginateHandle(size, current);
-          const findData: FilterQuery<Article> = keywords
-            ? { $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }] }
-            : {};
+          const userId = user?._id?.toString(); // 统一转为字符串，确保与 authorId 类型匹配
+          const isManage = user?.roleCode === 'manager'; // 是否管理员角色
+
+          // 收集所有查询条件
+          const conditions: FilterQuery<Article>[] = [];
+          // 关键字条件
+          if (keywords) {
+            conditions.push({
+              $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }],
+            });
+          }
+          // 分类条件
           if (categoryVal) {
-            findData.categoryVal = categoryVal;
+            conditions.push({ categoryVal });
           }
+          // ---------- 核心：权限条件 ----------
           if (typeof isPrivate === 'boolean') {
-            findData.isPrivate = isPrivate;
+            if (isPrivate) {
+              // 明确要查私密文章 → 只能看自己的
+              if (!userId) {
+                // 未登录 → 直接返回空结果，避免无效查询
+                return {
+                  code: ApiCode.SUCCESS,
+                  result: { current, list: [], size, total: 0 },
+                  message: '查询成功！',
+                };
+              }
+              if (isManage) {
+                // 管理员 → 可以看所有私密文章
+                conditions.push({ isPrivate: true });
+              } else {
+                conditions.push({ isPrivate: true, authorId: userId });
+              }
+            } else {
+              // 明确要查公开文章 → 不加作者限制
+              conditions.push({ isPrivate: false });
+            }
+          } else {
+            // 未指定 isPrivate → 返回所有公开文章 + 当前用户自己的私密文章
+            if (userId) {
+              if (!isManage) {
+                conditions.push({
+                  $or: [{ isPrivate: false }, { isPrivate: true, authorId: userId }],
+                });
+              }
+            } else {
+              // 未登录只能看公开文章
+              conditions.push({ isPrivate: false });
+            }
           }
-          const total = await this.articleModel.find(findData).count();
+          const findData = conditions.length > 0 ? { $and: conditions } : {};
+          const total = await this.articleModel.find(findData).countDocuments(); // countDocuments 更规范
           const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
+
           const list: ApiArticleItem[] = findArr.map((m) => ({
             articleId: m._id,
             title: m.title,
@@ -129,7 +172,7 @@ export class ArticleService {
           logger.error(`条件并分页获取文章列表 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '查询失败！',
+            message: JSON.stringify(err) || '查询失败！',
           };
         })
     );
@@ -223,7 +266,7 @@ export class ArticleService {
           logger.error(`修改文章 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '修改失败！',
+            message: JSON.stringify(err) || '修改失败！',
           };
         })
     );
@@ -248,7 +291,7 @@ export class ArticleService {
           logger.error(`删除文章 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '删除失败！',
+            message: JSON.stringify(err) || '删除失败！',
           };
         })
     );
