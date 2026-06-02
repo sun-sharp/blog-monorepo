@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue';
+  import { ref, computed, nextTick, watch, onUnmounted } from 'vue';
   import { onLoad, onUnload } from '@dcloudio/uni-app';
   import { articleAPi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
@@ -490,7 +490,10 @@ img {
         if (res.confirm) {
           await articleAPi.remove(articleId.value);
           uni.showToast({ title: '删除成功', icon: 'success' });
-          setTimeout(() => uni.navigateBack(), 500);
+          setTimeout(() => {
+            uni.$emit('listUpdated'); // 通知列表页更新数据
+            uni.navigateBack();
+          }, 500);
         }
       },
     });
