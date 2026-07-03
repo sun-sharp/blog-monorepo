@@ -19,9 +19,7 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@admin-web/*": ["types/admin-web/*"],
-      "@website/*": ["types/website/*"],
-      "@node-server/*": ["types/node-server/*"]
+      "/#/*": ["types/*"]
     }
   },
   "include": [

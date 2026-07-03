@@ -10,6 +10,7 @@ import { BillUpload } from 'src/schemas/blog/money/bill-upload.schema';
 import { CreateBillUploadDto } from './dto/create-bill-upload.dto';
 import { PageBillUploadDto } from './dto/page-bill-upload.dto';
 import { UpdateBillUploadDto } from './dto/update-bill-upload.dto';
+import { ApiBillUploadItem } from '/#/api/blog/bill-upload';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -85,7 +86,7 @@ export class BillUploadService {
           if (handleType) findData.handleType = handleType;
           const total = await this.billUploadModel.find(findData).count();
           const findArr = await this.billUploadModel.find(findData).limit(limit).skip(skip).sort({ billUploadType: 1, handleType: -1, priorityWeight: -1 });
-          const list = (findArr || []).map((m) => {
+          const list: ApiBillUploadItem[] = (findArr || []).map((m) => {
             return {
               billUploadId: m.id,
               billUploadType: m.billUploadType,
@@ -93,6 +94,7 @@ export class BillUploadService {
               inflowOrOutflow: m.inflowOrOutflow,
               billType: m.billType,
               billMethod: m.billMethod,
+              code: m.code,
             };
           });
           return {

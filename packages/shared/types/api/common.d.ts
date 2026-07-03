@@ -28,3 +28,9 @@ export interface ApiStartEndTimeParams {
   // 结束时间
   endTime: string;
 }
+
+// ============ 字段配置类型 ============
+export interface FieldConfig {
+  label: string;
+  type: 'string' | 'number' | 'date';
+}

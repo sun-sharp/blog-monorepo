@@ -5,7 +5,7 @@ import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { billUploadApi } from '@/api';
 import { getBillTypeData, getBillMethodData, useApiType } from '@/hooks';
 import { NButton, NPopconfirm } from 'naive-ui';
-import { billUploadTypeMap, handleTypeMap, billUploadTypeOption, inflowOrOutflowMap, judgeWayOption, handleTypeOption } from '@/constant';
+import { billUploadTypeMap, handleTypeMap, billUploadTypeOption, inflowOrOutflowMap, handleTypeOption } from '@/constant';
 
 // 微信账单
 export const useBillUploadConfigure = () => {
@@ -88,17 +88,17 @@ export const useBillUploadConfigure = () => {
         },
       });
     }
-    arr.push({
-      field: 'judgeWay',
-      component: 'NSelect',
-      label: '账单导入方式',
-      labelWidth: 110,
-      componentProps: {
-        filterable: true,
-        placeholder: '请选择账单导入方式',
-        options: unref(judgeWayOption),
-      },
-    });
+    // arr.push({
+    //   field: 'judgeWay',
+    //   component: 'NSelect',
+    //   label: '账单导入方式',
+    //   labelWidth: 110,
+    //   componentProps: {
+    //     filterable: true,
+    //     placeholder: '请选择账单导入方式',
+    //     options: unref(judgeWayOption),
+    //   },
+    // });
     return arr;
   });
 
@@ -154,15 +154,29 @@ export const useBillUploadConfigure = () => {
       },
     },
     {
-      title: '账单导入字段',
-      key: 'billJudgeKey',
+      title: '代码',
+      key: 'code',
       align: 'center',
+      ellipsis: {
+        tooltip: {
+          style: {
+            maxWidth: '600px',
+            // 还可以添加其他样式，如背景色、字体大小等
+          },
+          placement: 'top', // 其他配置仍然有效
+        },
+      },
     },
-    {
-      title: '账单导入方式',
-      key: 'judgeWay',
-      align: 'center',
-    },
+    // {
+    //   title: '账单导入字段',
+    //   key: 'billJudgeKey',
+    //   align: 'center',
+    // },
+    // {
+    //   title: '账单导入方式',
+    //   key: 'judgeWay',
+    //   align: 'center',
+    // },
     {
       width: 150,
       title: '操作',

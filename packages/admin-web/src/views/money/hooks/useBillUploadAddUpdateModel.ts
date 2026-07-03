@@ -12,18 +12,15 @@ import {
   weChatBillJudgeOptions,
   weChatBillUploadType,
 } from '@/constant';
+import { weChatUploadFields } from '@shared/constants/api/we-chat-fields';
 
-const modelFields = {
+const modelFields: BillUploadItemForm = {
   billUploadType: null,
   billType: null,
-  billJudgeKey: null,
-  judgeVal: [],
-  judgeWay: null,
-  judgeInputVal: null,
   handleType: null,
   inflowOrOutflow: null,
   billMethod: null,
-  priorityWeight: 0,
+  code: null,
 };
 
 // 修改、创建银行导入 弹窗
@@ -66,16 +63,21 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
       trigger: ['blur', 'change'],
       message: `请选择账单类型`,
     },
-    billJudgeKey: {
+    code: {
       required: true,
       trigger: ['blur', 'input'],
-      message: `请输入标识`,
+      message: `请输入代码`,
     },
-    judgeWay: {
-      required: true,
-      trigger: ['blur', 'input'],
-      message: `请输入标识`,
-    },
+    // billJudgeKey: {
+    //   required: true,
+    //   trigger: ['blur', 'input'],
+    //   message: `请输入标识`,
+    // },
+    // judgeWay: {
+    //   required: true,
+    //   trigger: ['blur', 'input'],
+    //   message: `请输入标识`,
+    // },
   });
 
   // 获取账单类型
@@ -108,7 +110,7 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
   // 重置
   const resetFields = () => {
     Object.assign(modelForm, modelFields);
-    modelForm.judgeVal = [];
+    // modelForm.judgeVal = [];
     nextTick(() => {
       modelFromRef.value.restoreValidation();
     });
@@ -116,15 +118,15 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
 
   // 取值新增
   const judgeInputAdd = () => {
-    if (modelForm.judgeInputVal) {
-      modelForm.judgeVal.push(modelForm.judgeInputVal);
-      modelForm.judgeInputVal = null;
-    }
+    // if (modelForm.judgeInputVal) {
+    //   modelForm.judgeVal.push(modelForm.judgeInputVal);
+    //   modelForm.judgeInputVal = null;
+    // }
   };
 
   // 取值删除
-  const judgeValRemove = (idx: number) => {
-    modelForm.judgeVal.splice(idx, 1);
+  const judgeValRemove = () => {
+    // modelForm.judgeVal.splice(idx, 1);
   };
 
   // 提交
@@ -135,11 +137,7 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
       if (!errors) {
         const params: ApiBillUploadSaveData = {
           billUploadType: modelForm.billUploadType || 0,
-          billJudgeKey: modelForm.billJudgeKey || '',
           handleType: modelForm.handleType || '',
-          judgeVal: modelForm.judgeVal || [],
-          judgeWay: modelForm.judgeWay || '',
-          priorityWeight: modelForm.priorityWeight,
         };
         if (modelForm.handleType === 'inflowOrOutflow' && modelForm.inflowOrOutflow) {
           params.inflowOrOutflow = modelForm.inflowOrOutflow;
@@ -160,6 +158,21 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
     });
   };
 
+  const codeTooltipContent = computed(() => {
+    let content = `<p>代码用于判断账单导入的类型</p>
+                  <p>isAssignment必须在开头，并且为boolean类型。</p>
+                  <p>item为账单的一条数据，其中的字段为：</p>`;
+    if (modelForm.billUploadType === weChatBillUploadType) {
+      content = content + weChatUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
+    }
+    //  else if (modelForm.billUploadType === aliPayBillUploadType) {
+    //   content = content + aliPayUploadFields.map((m) => `<p>${m.key}: ${m.label}</p>`).join('');
+    // } else if (modelForm.billUploadType === bankBillUploadType) {
+    //   content = content + bankUploadFields.map((m) => `<p>${m.key}: ${m.label}</p>`).join('');
+    // }
+    return content;
+  });
+
   return {
     modelTitle,
     showModal,
@@ -171,6 +184,7 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
     billTypeOption: getBillTypeOption,
     billMethodOption: getBillMethodOption,
     billJudgeKeyOptions,
+    codeTooltipContent,
     init,
     judgeInputAdd,
     judgeValRemove,

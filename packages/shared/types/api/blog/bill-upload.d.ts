@@ -25,37 +25,42 @@ export interface ApiBillUploadId {
   billUploadId: string;
 }
 
-/**
- * @description: 账单导入的数据字段
- */
-export interface ApiBillUpload {
-  // 账单导入类型
+// 基础字段映射
+export interface BillUploadFields {
+// 账单导入类型
   billUploadType: number;
-
-  // 账单判断字段
-  billJudgeKey: string;
 
   // 需处理类型
   handleType: string;
 
   // 流入/流出
-  inflowOrOutflow?: number;
+  inflowOrOutflow: number;
 
   // 账单类型
-  billType?: number;
+  billType: number;
 
   // 账单方式
-  billMethod?: number;
+  billMethod: number;
 
-  // 优先权重
-  priorityWeight: number;
-
-  // 判断方式
-  judgeWay: string;
-
-  // 判断取值
-  judgeVal: Array<string>;
+  // 代码
+  code: string;
 }
+
+// 必需的API键
+export type RequiredApiKeys = 'billUploadType' | 'handleType';
+
+// 可选的API键
+export type OptionalApiKeys = Exclude<keyof BillUploadFields, RequiredApiKeys>;
+
+/**
+ * @description: 账单导入的数据字段
+ * API 接口：必填字段直接使用类型，可选字段添加 ? 修饰
+ */
+export type ApiBillUpload = {
+  [K in RequiredApiKeys]: BillUploadFields[K];
+} & {
+  [K in OptionalApiKeys]?: BillUploadFields[K];
+};
 
 /**
  * @description: 创建账单导入参数
