@@ -17,10 +17,7 @@
     billTypeOption,
     billMethodOption,
     codeTooltipContent,
-    // billJudgeKeyOptions,
     init,
-    // judgeInputAdd,
-    // judgeValRemove,
     confirmForm,
   } = useBillUploadAddUpdateModel(emit);
 
@@ -75,68 +72,6 @@
           clearable
           placeholder="请选择账单方式"></n-select>
       </n-form-item>
-      <!-- <n-form-item label="账单导入字段" path="billJudgeKey">
-        <n-select
-          v-model:value="modelForm.billJudgeKey"
-          :options="billJudgeKeyOptions"
-          :virtual-scroll="false"
-          filterable
-          clearable
-          placeholder="请选择账单导入字段"></n-select>
-      </n-form-item>
-      <n-form-item label="账单导入方式" path="judgeWay">
-        <n-select
-          v-model:value="modelForm.judgeWay"
-          :options="judgeWayOption"
-          :virtual-scroll="false"
-          filterable
-          clearable
-          placeholder="请选择账单导入方式"></n-select>
-      </n-form-item> -->
-      <!-- <n-form-item label="优先权重" path="priorityWeight">
-        <n-input-number v-model:value="modelForm.priorityWeight" class="w-full" />
-      </n-form-item> -->
-      <!-- <n-form-item label="新增的取值" path="judgeInputVal">
-        <n-input v-model:value="modelForm.judgeInputVal" placeholder="请输入新增的取值" />
-        <n-icon
-          :class="['ml-20', { 'cursor-pointer': modelForm.judgeInputVal }]"
-          :color="modelForm.judgeInputVal ? appThemeColor : '#aaa'"
-          @click="judgeInputAdd()">
-          <PlusCircleOutlined />
-        </n-icon>
-      </n-form-item>
-      <n-form-item v-if="modelForm.judgeVal.length > 0" label="取值" path="judgeVal">
-        <div class="flex fw-w">
-          <div v-for="(val, idx) in modelForm.judgeVal" :key="val" class="flex ai-c mv-5">
-            <span class="mr-10" :style="`color: ${appThemeColor}`">{{ val }}</span>
-            <n-icon class="cursor-pointer mr-20" color="#d03050" @click="judgeValRemove(idx)">
-              <TrashOutline />
-            </n-icon>
-          </div>
-        </div>
-      </n-form-item> -->
-      <!-- <n-form-item label="其它费用">
-        <n-input-number v-model:value="modelForm.otherCost">
-          <template #prefix>￥</template>
-        </n-input-number>
-      </n-form-item>
-      <n-form-item label="流入/流出" path="inflowOrOutflow">
-        <n-radio-group v-model:value="modelForm.inflowOrOutflow" name="radiogroup">
-          <n-space>
-            <n-radio v-for="item in inflowOrOutflowOption" :key="item.value" :value="item.value">
-              {{ item.label }}
-            </n-radio>
-          </n-space>
-        </n-radio-group>
-      </n-form-item>
-      
-      <n-form-item label="使用地点" path="place">
-        <n-input v-model:value="modelForm.place" type="textarea" :rows="2" placeholder="请输入使用地点" />
-      </n-form-item>
-
-      <n-form-item label="银行账单类型" path="bankBillType">
-        <n-select v-model:value="modelForm.bankBillType" filterable :options="billTypeOption" placeholder="请选择银行账单类型" />
-      </n-form-item> -->
       <n-form-item path="code">
         <!-- 自定义标签内容 -->
         <template #label>

@@ -88,17 +88,6 @@ export const useBillUploadConfigure = () => {
         },
       });
     }
-    // arr.push({
-    //   field: 'judgeWay',
-    //   component: 'NSelect',
-    //   label: '账单导入方式',
-    //   labelWidth: 110,
-    //   componentProps: {
-    //     filterable: true,
-    //     placeholder: '请选择账单导入方式',
-    //     options: unref(judgeWayOption),
-    //   },
-    // });
     return arr;
   });
 
@@ -167,16 +156,6 @@ export const useBillUploadConfigure = () => {
         },
       },
     },
-    // {
-    //   title: '账单导入字段',
-    //   key: 'billJudgeKey',
-    //   align: 'center',
-    // },
-    // {
-    //   title: '账单导入方式',
-    //   key: 'judgeWay',
-    //   align: 'center',
-    // },
     {
       width: 150,
       title: '操作',

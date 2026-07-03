@@ -13,6 +13,8 @@ import {
   weChatBillUploadType,
 } from '@/constant';
 import { weChatUploadFields } from '@shared/constants/api/we-chat-fields';
+import { aliPayUploadFields } from '@shared/constants/api/ali-pay-fields';
+import { bankUploadFields } from '@shared/constants/api/bank-fields';
 
 const modelFields: BillUploadItemForm = {
   billUploadType: null,
@@ -68,16 +70,6 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
       trigger: ['blur', 'input'],
       message: `请输入代码`,
     },
-    // billJudgeKey: {
-    //   required: true,
-    //   trigger: ['blur', 'input'],
-    //   message: `请输入标识`,
-    // },
-    // judgeWay: {
-    //   required: true,
-    //   trigger: ['blur', 'input'],
-    //   message: `请输入标识`,
-    // },
   });
 
   // 获取账单类型
@@ -110,23 +102,9 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
   // 重置
   const resetFields = () => {
     Object.assign(modelForm, modelFields);
-    // modelForm.judgeVal = [];
     nextTick(() => {
       modelFromRef.value.restoreValidation();
     });
-  };
-
-  // 取值新增
-  const judgeInputAdd = () => {
-    // if (modelForm.judgeInputVal) {
-    //   modelForm.judgeVal.push(modelForm.judgeInputVal);
-    //   modelForm.judgeInputVal = null;
-    // }
-  };
-
-  // 取值删除
-  const judgeValRemove = () => {
-    // modelForm.judgeVal.splice(idx, 1);
   };
 
   // 提交
@@ -138,6 +116,7 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
         const params: ApiBillUploadSaveData = {
           billUploadType: modelForm.billUploadType || 0,
           handleType: modelForm.handleType || '',
+          code: modelForm.code || '',
         };
         if (modelForm.handleType === 'inflowOrOutflow' && modelForm.inflowOrOutflow) {
           params.inflowOrOutflow = modelForm.inflowOrOutflow;
@@ -164,12 +143,11 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
                   <p>item为账单的一条数据，其中的字段为：</p>`;
     if (modelForm.billUploadType === weChatBillUploadType) {
       content = content + weChatUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
+    } else if (modelForm.billUploadType === aliPayBillUploadType) {
+      content = content + aliPayUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
+    } else if (modelForm.billUploadType === bankBillUploadType) {
+      content = content + bankUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
     }
-    //  else if (modelForm.billUploadType === aliPayBillUploadType) {
-    //   content = content + aliPayUploadFields.map((m) => `<p>${m.key}: ${m.label}</p>`).join('');
-    // } else if (modelForm.billUploadType === bankBillUploadType) {
-    //   content = content + bankUploadFields.map((m) => `<p>${m.key}: ${m.label}</p>`).join('');
-    // }
     return content;
   });
 
@@ -186,8 +164,6 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
     billJudgeKeyOptions,
     codeTooltipContent,
     init,
-    judgeInputAdd,
-    judgeValRemove,
     confirmForm,
   };
 };

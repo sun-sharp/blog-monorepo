@@ -1,37 +1,8 @@
 import { ApiPaginateParams } from '../../common';
 import { ApiUserId } from '../capital/user';
 
-/**
- * @description: 支付宝账单查询传参
- */
-export type ApiAliPaySearchParams = {
-  // 交易对方
-  tradeOtherPerson?: string;
-  // 流入/流出
-  inflowOrOutflow?: number;
-  // 账单类型
-  billType?: number;
-  // 账单方式
-  billMethod?: number;
-};
-
-/**
- * @description: 条件并分页获取支付宝账单列表参数
- */
-export type ApiAliPayFindPageData = ApiPaginateParams & ApiAliPaySearchParams;
-
-/**
- * @description: 支付宝账单的id
- */
-export interface ApiAliPayId {
-  // 支付宝账单id
-  aliPayId: string;
-}
-
-/**
- * @description: 支付宝账单基础数据字段
- */
-export interface ApiAliPayBase {
+/** 支付宝账单基础交易字段（对应 ApiAliPayBase） */
+export interface AliPayBaseFields {
   // 交易时间
   tradeTime: string;
   // 交易类型
@@ -58,12 +29,8 @@ export interface ApiAliPayBase {
   place: string;
 }
 
-/**
- * @description: 支付宝账单创建数据字段
- */
-export interface ApiAliPayCreate {
-  // 用户id
-  userId: string;
+/** 支付宝账单创建/系统字段（不含 userId） */
+export interface AliPayCreateFields {
   // 流入/流出
   inflowOrOutflow: number;
   // 账单类型
@@ -76,72 +43,61 @@ export interface ApiAliPayCreate {
   balanceBaby: number;
 }
 
-/**
- * @description: 支付宝账单数据字段
- */
-export interface ApiAliPay extends ApiAliPayBase, ApiAliPayCreate {}
-
-/**
- * @description: 支付宝账单的列表每项
- */
-export interface ApiAliPayItem extends ApiAliPayBase, ApiAliPayCreate, ApiAliPayId {}
-
-/**
- * @description: 支付宝账单批量创建项
- */
-export type ApiAliPayBatchSaveItem = ApiAliPayBase & Partial<ApiAliPayCreate>;
-
-/**
- * @description: 修改支付宝账单参数
- */
-export interface ApiAliPayUpdateData extends ApiAliPayId {
-  // 交易对方备注
-  tradeOtherPersonRemarks?: string;
-  // 流入/流出
-  inflowOrOutflow: number;
-  // 账单说明
-  explain?: string;
-  // 使用地点
-  place?: string;
-  // 账单方式
-  billMethod: number;
-  // 账单类型
-  billType: number;
+/** 支付宝账单 ID */
+export interface ApiAliPayId {
+  aliPayId: string;
 }
 
-/**
- * @description: 批量创建支付宝账单参数
- */
+/** 支付宝账单基础数据字段 */
+export type ApiAliPayBase = AliPayBaseFields;
+
+/** 支付宝账单创建数据字段（关联用户ID） */
+export type ApiAliPayCreate = AliPayCreateFields & ApiUserId;
+
+/** 支付宝账单完整数据 */
+export type ApiAliPay = ApiAliPayBase & ApiAliPayCreate;
+
+/** 支付宝账单列表项（含ID） */
+export type ApiAliPayItem = ApiAliPayBase & ApiAliPayCreate & ApiAliPayId;
+
+/** 支付宝账单批量创建项（基础字段 + 部分创建字段可选） */
+export type ApiAliPayBatchSaveItem = AliPayBaseFields &
+  Partial<AliPayCreateFields>;
+
+/** 批量创建参数 */
 export type ApiAliPayBatchSaveData = {
   batches: ApiAliPayBatchSaveItem[];
 };
 
-/**
- * @description: 支付宝账单导入数据
- */
-export interface ApiAliPayUpload {
-  // 交易时间
-  tradeTime: string;
-  // 交易类型
-  tradeType: string;
-  // 交易对方
-  tradeOtherPerson: string;
-  // 对方账号
-  oppositeAccount: string;
-  // 商品说明
-  productDescription: string;
-  // 收/支
-  incomeOrPay: string;
-  // 金额(元)
-  moneyAmount: number;
-  // 收/付款方式
-  paymentMethod: string;
-  // 交易状态
-  tradeStatus: string;
-  // 账单方式
-  billMethod: number;
-  // 流入/流出
-  inflowOrOutflow: number;
-  // 账单类型
-  billType: number;
-}
+/** 修改支付宝账单参数 */
+export type ApiAliPayUpdateData = ApiAliPayId &
+  Partial<
+    Pick<AliPayBaseFields, 'tradeOtherPersonRemarks' | 'explain' | 'place'>
+  > &
+  Pick<AliPayCreateFields, 'inflowOrOutflow' | 'billMethod' | 'billType'>;
+
+/** 支付宝账单导入数据（从基础字段和创建字段中选取，并额外包含 tradeStatus） */
+export type ApiAliPayUpload = Pick<
+  AliPayBaseFields,
+  | 'tradeTime'
+  | 'tradeType'
+  | 'tradeOtherPerson'
+  | 'oppositeAccount'
+  | 'productDescription'
+  | 'incomeOrPay'
+  | 'moneyAmount'
+  | 'paymentMethod'
+> &
+  Pick<AliPayCreateFields, 'billMethod' | 'inflowOrOutflow' | 'billType'> & {
+    // 交易状态（仅在导入数据中存在）
+    tradeStatus: string;
+  };
+
+/** 支付宝账单查询参数（部分字段可选） */
+export type ApiAliPaySearchParams = Partial<
+  Pick<AliPayCreateFields, 'inflowOrOutflow' | 'billType' | 'billMethod'> &
+    Pick<AliPayBaseFields, 'tradeOtherPerson'>
+>;
+
+/** 分页查询参数 */
+export type ApiAliPayFindPageData = ApiPaginateParams & ApiAliPaySearchParams;

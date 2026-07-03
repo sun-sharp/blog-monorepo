@@ -1,21 +1,4 @@
-/**
- * @description: 账单导入列表查询传参
- */
-export type ApiBillUploadSearchParams = {
-  // 账单导入类型
-  billUploadType?: number;
-
-  // 需处理类型
-  handleType?: string;
-
-  // 判断方式
-  judgeWay?: string;
-};
-
-/**
- * @description: 条件并分页获取账单导入列表参数
- */
-export type ApiBillUploadFindPageData = ApiPaginateParams & ApiBillUploadSearchParams;
+import { ApiPaginateParams } from '/#/api/common';
 
 /**
  * @description: 账单导入的id
@@ -47,7 +30,7 @@ export interface BillUploadFields {
 }
 
 // 必需的API键
-export type RequiredApiKeys = 'billUploadType' | 'handleType';
+export type RequiredApiKeys = 'billUploadType' | 'handleType' | 'code';
 
 // 可选的API键
 export type OptionalApiKeys = Exclude<keyof BillUploadFields, RequiredApiKeys>;
@@ -70,9 +53,21 @@ export type ApiBillUploadSaveData = ApiBillUpload;
 /**
  * @description: 修改账单导入参数
  */
-export interface ApiBillUploadUpdateData extends ApiBillUploadSaveData, ApiBillUploadId {}
+export type ApiBillUploadUpdateData = ApiBillUploadSaveData & ApiBillUploadId;
 
 /**
  * @description: 账单导入的列表每项
  */
-export interface ApiBillUploadItem extends ApiBillUpload, ApiBillUploadId {}
+export type ApiBillUploadItem = ApiBillUpload & ApiBillUploadId;
+
+
+/**
+ * @description: 账单导入列表查询传参
+ */
+
+export type ApiBillUploadSearchParams = Partial<Pick<BillUploadFields, 'billUploadType' | 'handleType'>>;
+
+/**
+ * @description: 条件并分页获取账单导入列表参数
+ */
+export type ApiBillUploadFindPageData = ApiPaginateParams & ApiBillUploadSearchParams;

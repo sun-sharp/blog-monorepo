@@ -1,9 +1,5 @@
 import { ApiWeChatUpload, WeChatBaseFields, WeChatCreateFields } from "/#/api/blog/money/we-chat";
-
-interface FieldConfig {
-  label: string;
-  type: 'string' | 'number' | 'date';
-}
+import { FieldConfig } from "/#/api/common";
 
 export const weChatBaseFieldsMap: Record<keyof WeChatBaseFields, FieldConfig> = {
   tradeTime: { label: '交易时间', type: 'string' },
