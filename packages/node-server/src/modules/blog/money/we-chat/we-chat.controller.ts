@@ -24,7 +24,7 @@ export class WeChatController {
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
   upload(@UploadedFile() file: UploadWeChatDto, @Body() body: UploadWeChatDto) {
-    return this.weChatService.upload(file, body.startNum, body.endNum);
+    return this.weChatService.upload(file, body.startNum, body.endNum, body.size);
   }
 
   @Post('save')

@@ -19,6 +19,7 @@ import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import * as path from 'path';
+import { runCode } from '@/common/string';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -37,7 +38,7 @@ export class WeChatService {
    * @param {number} endNum     结束行号（含），不传则到末尾
    * @return {Promise<IResponse>}
    */
-  public upload(file: any, startNum: number = 19, endNum?: number): Promise<IResponse> {
+  public upload(file: any, startNum: number = 19, endNum?: number, size: number = 50): Promise<IResponse> {
     // ---------- 判断文件类型 ----------
     const ext = path.extname(file.originalname).toLowerCase();
     const mime = file.mimetype;
@@ -91,6 +92,8 @@ export class WeChatService {
         })
         // 对数据进行批量处理
         .then(async (list) => {
+          const total = list.length;
+          const listSlice = list.slice(0, size);
           const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.weChat);
           // 处理每项数据
           const formatBillUploadItem = (m: ApiWeChatUpload) => {
@@ -98,12 +101,8 @@ export class WeChatService {
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
               // 判断是否赋值
-              let isAssignment = false;
-              if (f.judgeWay === 'includes') {
-                isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
-              } else if (f.judgeWay === 'indexOf') {
-                isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
-              }
+              const runResult = runCode(f.code, { item, isAssignment: false });
+              const isAssignment = runResult.isAssignment;
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {
                   // 存在则不再次赋值
@@ -128,11 +127,18 @@ export class WeChatService {
             }
             return item;
           };
-          const result = list.map((m) => {
+          const result = listSlice.map((m) => {
             return formatBillUploadItem(m);
           });
-          logger.log(`微信账单导入${result.length}个`);
-          return { code: ApiCode.SUCCESS, result, message: '导入成功！' };
+          logger.log(`微信账单导入${total}个`);
+          return {
+            code: ApiCode.SUCCESS,
+            result: {
+              total,
+              list: result,
+            },
+            message: '导入成功！',
+          };
         })
         // 返回错误
         .catch((err) => {

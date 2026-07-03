@@ -10,11 +10,6 @@ export class PageBillUploadDto extends PaginateDto {
   @ApiProperty({
     description: '账单导入方式',
   })
-  readonly judgeWay: string = '';
-
-  @ApiProperty({
-    description: '账单导入方式',
-  })
   readonly billMethod: string = '';
 
   @ApiProperty({

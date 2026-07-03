@@ -425,7 +425,7 @@
   }
 
   // ---- 上传逻辑 ----
-  function uploadH5(): Promise<any[]> {
+  function uploadH5(): Promise<{ list: any[]; total: number }> {
     return new Promise((resolve, reject) => {
       if (!selectedFile.value) {
         reject(new Error('未选择文件'));
@@ -446,7 +446,7 @@
       xhr.onload = () => {
         try {
           const res = JSON.parse(xhr.responseText);
-          if (res.code === 0 && Array.isArray(res.result)) {
+          if (res.code === 0) {
             resolve(res.result);
           } else {
             reject(new Error(res.message || '上传失败'));
@@ -460,7 +460,7 @@
     });
   }
 
-  function uploadNative(): Promise<any[]> {
+  function uploadNative(): Promise<{ list: any[]; total: number }> {
     return new Promise((resolve, reject) => {
       if (!selectedFilePath.value) {
         reject(new Error('未选择文件'));
@@ -476,7 +476,7 @@
         success: (res) => {
           try {
             const resp = JSON.parse(res.data);
-            if (resp.code === 0 && Array.isArray(resp.result)) {
+            if (resp.code === 0) {
               resolve(resp.result);
             } else {
               reject(new Error(resp.message || '上传失败'));
@@ -499,9 +499,9 @@
     uploadProgress.value = 0;
     try {
       const rawData = isH5Platform() ? await uploadH5() : await uploadNative();
-      if (Array.isArray(rawData) && rawData.length > 0) {
-        excelUploadTotal.value = rawData.length;
-        tableData.value = rawData.slice(0, 50).map((item: any) => {
+      if (Array.isArray(rawData.list) && rawData.list.length > 0) {
+        excelUploadTotal.value = rawData.total || rawData.list.length;
+        tableData.value = rawData.list.map((item: any) => {
           const row = { ...item };
           row.inflowOrOutflow = item.inflowOrOutflow || undefined;
           if (uploadType.value !== 3) {

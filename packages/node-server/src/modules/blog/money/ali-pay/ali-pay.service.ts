@@ -97,11 +97,11 @@ export class AliPayService {
               const f = billUploadList[i];
               // 判断是否赋值
               let isAssignment = false;
-              if (f.judgeWay === 'includes') {
-                isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
-              } else if (f.judgeWay === 'indexOf') {
-                isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
-              }
+              // if (f.judgeWay === 'includes') {
+              //   isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
+              // } else if (f.judgeWay === 'indexOf') {
+              //   isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
+              // }
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {
                   // 存在则不再次赋值

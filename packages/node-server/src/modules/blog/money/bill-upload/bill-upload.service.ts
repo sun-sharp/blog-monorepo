@@ -34,8 +34,6 @@ export class BillUploadService {
             billMethod: body.billMethod,
             billUploadType: body.billUploadType,
             handleType: body.handleType,
-            billJudgeKey: body.billJudgeKey,
-            judgeWay: body.judgeWay,
           });
           if (find.length > 0) {
             throw '请切换类型，并重新保存';
@@ -46,14 +44,10 @@ export class BillUploadService {
         .then(async (body) => {
           const createData = {
             billUploadType: body.billUploadType,
-            billJudgeKey: body.billJudgeKey,
-            judgeVal: body.judgeVal,
-            judgeWay: body.judgeWay,
             handleType: body.handleType,
             inflowOrOutflow: body.inflowOrOutflow,
             billType: body.billType,
             billMethod: body.billMethod,
-            priorityWeight: body.priorityWeight || 0,
           };
           await this.billUploadModel.create(createData);
           return {
@@ -82,11 +76,10 @@ export class BillUploadService {
       Promise.resolve(pageBillUploadDto)
         // 查询
         .then(async (body) => {
-          const { size, current, billUploadType, judgeWay, billMethod, handleType, billType } = body;
+          const { size, current, billUploadType, billMethod, handleType, billType } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<BillUpload> = {};
           if (billUploadType) findData.billUploadType = billUploadType;
-          if (judgeWay) findData.judgeWay = judgeWay;
           if (billMethod) findData.billMethod = billMethod;
           if (billType) findData.billType = billType;
           if (handleType) findData.handleType = handleType;
@@ -96,14 +89,10 @@ export class BillUploadService {
             return {
               billUploadId: m.id,
               billUploadType: m.billUploadType,
-              billJudgeKey: m.billJudgeKey,
-              judgeVal: m.judgeVal,
-              judgeWay: m.judgeWay,
               handleType: m.handleType,
               inflowOrOutflow: m.inflowOrOutflow,
               billType: m.billType,
               billMethod: m.billMethod,
-              priorityWeight: m.priorityWeight,
             };
           });
           return {
@@ -135,14 +124,10 @@ export class BillUploadService {
           const { billUploadId } = body;
           const updateData = {
             billUploadType: body.billUploadType,
-            billJudgeKey: body.billJudgeKey,
-            judgeVal: body.judgeVal,
-            judgeWay: body.judgeWay,
             handleType: body.handleType,
             inflowOrOutflow: body.inflowOrOutflow,
             billType: body.billType,
             billMethod: body.billMethod,
-            priorityWeight: body.priorityWeight || 0,
           };
           await this.billUploadModel.updateOne({ _id: billUploadId }, updateData);
           return {

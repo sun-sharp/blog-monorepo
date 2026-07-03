@@ -15,10 +15,6 @@ export class BillUpload extends Document {
   @Prop()
   billUploadType: number;
 
-  // 账单判断字段
-  @Prop()
-  billJudgeKey: string;
-
   // 需处理类型
   @Prop()
   handleType: string;
@@ -34,18 +30,6 @@ export class BillUpload extends Document {
   // 账单方式
   @Prop()
   billMethod: number;
-
-  // 判断方式
-  @Prop()
-  judgeWay: string;
-
-  // 判断取值
-  @Prop()
-  judgeVal: Array<string>;
-
-  // 优先权重
-  @Prop()
-  priorityWeight: number;
 
   // 代码
   @Prop()
