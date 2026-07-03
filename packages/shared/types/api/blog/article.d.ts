@@ -1,21 +1,38 @@
 import { ApiPaginateParams } from '../common';
 
-/**
- * @description: 全局类型查询传参
- */
-export type ApiArticleSearchParams = {
-  // 关键字
-  keywords?: string;
-  // 文章分类
-  categoryVal?: number;
-  // 是否加密
-  isPrivate?: boolean | number;
-};
+// ==================== 基础字段分组 ====================
 
 /**
- * @description: 条件并分页获取全局类型列表参数
+ * @description: 文章保存/基础字段（不含ID、作者、时间）
  */
-export type ApiArticleFindPageData = ApiPaginateParams & ApiArticleSearchParams;
+export interface ArticleBaseFields {
+  // 文章的标题
+  title: string;
+  // 文章的简介
+  brief: string;
+  // 文章的类型标识
+  categoryVal: number;
+  // 文章的html内容
+  htmlContent: string;
+  // 文章的markdown内容
+  markdownContent: string;
+  // 文章的css内容
+  cssContent: string;
+  // 是否加密
+  isPrivate: boolean;
+}
+
+/**
+ * @description: 文章扩展字段（作者信息、创建时间）
+ */
+export interface ArticleExtraFields {
+  // 文章的作者
+  authorId: string;
+  // 文章的作者昵称
+  authorNickname: string;
+  // 文章的创建时间
+  createTime: string;
+}
 
 /**
  * @description: 文章的id
@@ -25,63 +42,51 @@ export interface ApiArticleId {
   articleId: string;
 }
 
-/**
- * @description:  文章保存参数
- */
-export interface ApiArticleSaveData {
-  // 文章的标题
-  title: string;
-
-  // 文章的简介
-  brief: string;
-
-  // 文章的类型标识
-  categoryVal: number;
-
-  // 文章的html内容
-  htmlContent: string;
-
-  // 文章的markdown内容
-  markdownContent: string;
-
-  // 文章的css内容
-  cssContent: string;
-
-  // 是否加密
-  isPrivate: boolean;
-}
+// ==================== 导出业务类型 ====================
 
 /**
- * @description: 文章数据字段
+ * @description: 文章保存参数
  */
-export interface ApiArticle extends ApiArticleSaveData {
-  // 文章的作者
-  authorId: string;
+export type ApiArticleSaveData = ArticleBaseFields;
 
-  // 文章的作者昵称
-  authorNickname: string;
-
-  // 文章的创建时间
-  createTime: string;
-}
+/**
+ * @description: 文章数据字段（含作者和时间）
+ */
+export type ApiArticle = ArticleBaseFields & ArticleExtraFields;
 
 /**
  * @description: 文章的列表每项
  */
-export interface ApiArticleItem extends ApiArticle, ApiArticleId {}
+export type ApiArticleItem = ApiArticle & ApiArticleId;
 
 /**
- * @description:  文章保存参数
+ * @description: 文章更新参数
  */
-export type ApiArticleUpdateData = ApiArticleSaveData & ApiArticleId;
+export type ApiArticleUpdateData = ArticleBaseFields & ApiArticleId;
 
 /**
- * @description:  根据id批量修改文章加密参数
+ * @description: 全局类型查询传参（全部可选）
+ */
+export type ApiArticleSearchParams = Partial<{
+  // 关键字
+  keywords: string;
+  // 文章分类
+  categoryVal: number;
+  // 是否加密（查询时允许 boolean 或 0/1）
+  isPrivate: boolean | number;
+}>;
+
+/**
+ * @description: 条件并分页获取全局类型列表参数
+ */
+export type ApiArticleFindPageData = ApiPaginateParams & ApiArticleSearchParams;
+
+/**
+ * @description: 根据id批量修改文章加密参数
  */
 export type ApiBatchUpdatePrivateArticleData = {
   // 文章id数组
   articleIdArr: string[];
-
   // 是否加密
   isPrivate: boolean;
 };
