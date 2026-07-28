@@ -1,18 +1,33 @@
 <template>
-  <view style="height: 100%">
-    <list-page ref="listPageRef" :api-fn="billUploadApi.getPage" :show-search="false" :dropdown-items="dropdownItems" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <u-cell-group>
-          <u-swipe-action v-for="item in list" :key="item.billUploadId" :options="swipeOptions" @click="onSwipeClick($event, item)">
-            <u-cell-item :title="String(billUploadTypeMap[item.billUploadType] || '未知类型')" :label="buildLabel(item)" @click="goToEdit(item.billUploadId)">
-              <view class="bill-upload-tags">
-                <u-tag v-if="item.inflowOrOutflow" :text="String(inflowOrOutflowMap[item.inflowOrOutflow] || '')" type="success" size="mini" plain />
-                <u-tag v-if="item.billType" :text="getBillTypeLabel(item.billType)" type="warning" size="mini" plain />
-                <u-tag v-if="item.billMethod" :text="getBillMethodLabel(item.billMethod)" type="primary" size="mini" plain />
-              </view>
-            </u-cell-item>
-          </u-swipe-action>
-        </u-cell-group>
+  <view class="bill-upload-page">
+    <list-page
+      ref="listPageRef"
+      :api-fn="billUploadApi.getPage"
+      :show-search="false"
+      :dropdown-items="dropdownItems"
+      show-fab
+      @fabClick="goToAdd"
+      @itemLongpress="onLongPress">
+      <template #default="{ list, longpress }">
+        <view v-for="item in list" :key="item.billUploadId" class="bill-upload-item card" @click="goToEdit(item.billUploadId)" @longpress="longpress(item)">
+          <view class="bill-upload-item-left">
+            <view class="bill-upload-item-icon" :style="{ background: getIconColor(item.billUploadType) }">
+              <u-icon name="download" size="32" color="#fff" />
+            </view>
+            <view class="bill-upload-item-info">
+              <text class="bill-upload-item-title">{{ billUploadTypeMap[item.billUploadType] || '未知类型' }}</text>
+              <text class="bill-upload-item-desc">{{ buildLabel(item) }}</text>
+            </view>
+          </view>
+          <view class="bill-upload-item-right">
+            <view class="bill-upload-item-tags">
+              <u-tag v-if="item.inflowOrOutflow" :text="String(inflowOrOutflowMap[item.inflowOrOutflow] || '')" type="success" size="mini" plain />
+              <u-tag v-if="item.billType" :text="getBillTypeLabel(item.billType)" type="warning" size="mini" plain />
+              <u-tag v-if="item.billMethod" :text="getBillMethodLabel(item.billMethod)" type="primary" size="mini" plain />
+            </view>
+            <u-icon name="arrow-right" size="28" color="#ccc" />
+          </view>
+        </view>
       </template>
     </list-page>
   </view>
@@ -50,11 +65,6 @@
     },
   ];
 
-  const swipeOptions = [
-    { text: '编辑', style: { backgroundColor: '#007aff' } },
-    { text: '删除', style: { backgroundColor: '#dd524d' } },
-  ];
-
   const billTypeLabel = computed(() => {
     const map = new Map<number, string>();
     apiTypeStore.getBillTypeOption.forEach((o) => map.set(o.value, o.label));
@@ -86,6 +96,23 @@
     return parts.join(' · ');
   }
 
+  const iconColorMap: Record<number, string> = {};
+  const colorPool = [
+    'linear-gradient(135deg, #4facfe, #007aff)',
+    'linear-gradient(135deg, #43e97b, #38f9d7)',
+    'linear-gradient(135deg, #fa709a, #fee140)',
+    'linear-gradient(135deg, #a18cd1, #fbc2eb)',
+    'linear-gradient(135deg, #fccb90, #d57eeb)',
+    'linear-gradient(135deg, #f093fb, #f5576c)',
+  ];
+
+  function getIconColor(type: number) {
+    if (!iconColorMap[type]) {
+      iconColorMap[type] = colorPool[Object.keys(iconColorMap).length % colorPool.length];
+    }
+    return iconColorMap[type];
+  }
+
   function goToAdd() {
     uni.navigateTo({ url: '/pages/finance/bill-upload-edit/bill-upload-edit' });
   }
@@ -94,22 +121,17 @@
     uni.navigateTo({ url: `/pages/finance/bill-upload-edit/bill-upload-edit?id=${billUploadId}` });
   }
 
-  function onSwipeClick(event: any, item: ApiBillUploadItem) {
-    const index = event.index;
-    if (index === 0) {
-      goToEdit(item.billUploadId);
-    } else if (index === 1) {
-      uni.showModal({
-        title: '确认删除',
-        content: '确定删除该上传规则？',
-        success: async (res) => {
-          if (res.confirm) {
-            await billUploadApi.remove(item.billUploadId);
-            listPageRef.value?.refresh();
-          }
-        },
-      });
-    }
+  function onLongPress(item: ApiBillUploadItem) {
+    uni.showModal({
+      title: '确认删除',
+      content: '确定删除该上传规则？',
+      success: async (res) => {
+        if (res.confirm) {
+          await billUploadApi.remove(item.billUploadId);
+          listPageRef.value?.refresh();
+        }
+      },
+    });
   }
 
   onMounted(() => {
@@ -122,10 +144,81 @@
 </script>
 
 <style lang="scss" scoped>
-  .bill-upload-tags {
+  .bill-upload-page {
+    height: 100vh;
+    overflow: hidden;
+    /* #ifdef H5 */
+    height: 100%;
+    /* #endif */
+    background-color: $uni-bg-color-grey;
+  }
+
+  .bill-upload-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24rpx;
+    margin-bottom: 16rpx;
+
+    &:active {
+      opacity: 0.85;
+    }
+  }
+
+  .bill-upload-item-left {
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .bill-upload-item-icon {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .bill-upload-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .bill-upload-item-title {
+    font-size: $uni-font-size-lg;
+    font-weight: 500;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bill-upload-item-desc {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+    margin-top: 6rpx;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bill-upload-item-right {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    flex-shrink: 0;
+  }
+
+  .bill-upload-item-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8rpx;
     justify-content: flex-end;
+    max-width: 200rpx;
   }
 </style>
