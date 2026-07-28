@@ -27,3 +27,12 @@ npm run rm_node_modules
 
 ### 升级uview-pro插件时
 - u-fab: 新增 size/btnCustomStyle props，通过行内样式控制按钮尺寸，解决小程序端 :deep CSS 穿透无效问题
+
+
+## 鸿蒙安装
+
+路径：D:\program\hm\DevEco Studio\sdk\default\openharmony\toolchains>
+先卸载手机端的软件
+```bash
+hdc install E:\program\Front\blog\blog-monorepo\packages\admin-mobile\unpackage\dist\build\app-harmony\entry\build\release\outputs\default\entry-default-signed.hap
+```

@@ -1,8 +1,15 @@
 <template>
   <view class="user-page">
-    <list-page ref="listPageRef" :api-fn="userApi.getPage" search-placeholder="搜索昵称/用户名" :search-key="searchKey" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <view v-for="item in list" :key="item.userId" class="user-item card" @click="goToEdit(item.userId)" @longpress="onLongPress(item)">
+    <list-page
+      ref="listPageRef"
+      :api-fn="userApi.getPage"
+      search-placeholder="搜索昵称/用户名"
+      :search-key="searchKey"
+      show-fab
+      @fabClick="goToAdd"
+      @itemLongpress="onLongPress">
+      <template #default="{ list, longpress }">
+        <view v-for="item in list" :key="item.userId" class="user-item card" @click="goToEdit(item.userId)" @longpress="longpress(item)">
           <view class="user-item-left">
             <u-avatar :src="item.avatar" size="76" />
             <view class="user-item-info">
@@ -57,6 +64,14 @@
 </script>
 
 <style lang="scss" scoped>
+  .user-page {
+    height: 100vh;
+    overflow: hidden;
+    /* #ifdef H5 */
+    height: 100%;
+    /* #endif */
+  }
+
   .user-item {
     display: flex;
     align-items: center;

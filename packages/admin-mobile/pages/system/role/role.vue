@@ -1,8 +1,15 @@
 <template>
   <view class="role-page">
-    <list-page ref="listPageRef" :api-fn="roleApi.getPage" search-placeholder="搜索角色" search-key="name" show-fab @fabClick="goToAdd">
-      <template #default="{ list }">
-        <view v-for="item in list" :key="item.roleId" class="role-item card" @click="goToEdit(item.roleId)" @longpress="onLongPress(item)">
+    <list-page
+      ref="listPageRef"
+      :api-fn="roleApi.getPage"
+      search-placeholder="搜索角色"
+      search-key="name"
+      show-fab
+      @fabClick="goToAdd"
+      @itemLongpress="onLongPress">
+      <template #default="{ list, longpress }">
+        <view v-for="item in list" :key="item.roleId" class="role-item card" @click="goToEdit(item.roleId)" @longpress="longpress(item)">
           <view class="role-item-left">
             <view class="role-item-icon">
               <u-icon name="account" size="32" color="#fff" />
@@ -64,6 +71,14 @@
 </script>
 
 <style lang="scss" scoped>
+  .role-page {
+    height: 100vh;
+    overflow: hidden;
+    /* #ifdef H5 */
+    height: 100%;
+    /* #endif */
+  }
+
   .role-item {
     display: flex;
     align-items: center;

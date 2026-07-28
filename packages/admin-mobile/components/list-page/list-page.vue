@@ -29,8 +29,10 @@
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
       refresher-default-style="black"
+      :scroll-with-animation="false"
       @refresherrefresh="onPullDownRefresh"
-      @scrolltolower="onReachBottom">
+      @scrolltolower="onReachBottom"
+      @scroll="onScroll">
       <view v-if="loading && list.length === 0" class="list-page-loading">
         <u-loading mode="circle" size="60" />
         <text class="list-page-loading-text">加载中...</text>
@@ -39,7 +41,7 @@
         <u-empty mode="data" text="暂无数据" icon-size="160" />
       </view>
       <view v-if="list.length > 0" class="list-page-content">
-        <slot :list="list" />
+        <slot :list="list" :longpress="onLongPress" />
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
@@ -85,7 +87,7 @@
     }
   );
 
-  const emit = defineEmits(['fabClick', 'loaded', 'searchSubmit']);
+  const emit = defineEmits(['fabClick', 'loaded', 'searchSubmit', 'itemLongpress']);
 
   const keyword = ref('');
   const list = ref<any[]>([]);
@@ -99,6 +101,22 @@
   const scrollStyle = computed(() => {
     return {};
   });
+
+  let lastScrollTime = 0;
+  let lastScrollTop = 0;
+
+  function onScroll(e: any) {
+    const scrollTop = e.detail?.scrollTop ?? 0;
+    if (Math.abs(scrollTop - lastScrollTop) > 1) {
+      lastScrollTime = Date.now();
+    }
+    lastScrollTop = scrollTop;
+  }
+
+  function onLongPress(item: any) {
+    if (Date.now() - lastScrollTime < 350) return;
+    emit('itemLongpress', item);
+  }
 
   const loadMoreStatus = computed(() => {
     if (loading.value) return 'loading';
@@ -206,13 +224,14 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
   }
 
   .list-page-search {
-    padding: 16rpx 24rpx 0;
+    padding: 16rpx 24rpx 12rpx;
     background-color: $uni-bg-color;
   }
 
