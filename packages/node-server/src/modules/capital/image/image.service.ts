@@ -272,8 +272,8 @@ export class ImageService {
           const findData: FilterQuery<Image> = {};
           if (name) findData.name = { $regex: name };
           if (source) findData.source = source;
-          const total = await this.imageModel.find().count();
-          const list = await this.imageModel.find().limit(limit).skip(skip).sort({ uploadTime: -1 });
+          const total = await this.imageModel.find(findData).count();
+          const list = await this.imageModel.find(findData).limit(limit).skip(skip).sort({ uploadTime: -1 });
           logger.log(`条件并分页获取图片数据列表 ${total}个`);
           return {
             code: ApiCode.SUCCESS,

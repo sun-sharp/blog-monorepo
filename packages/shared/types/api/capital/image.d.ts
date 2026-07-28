@@ -67,7 +67,7 @@ export type ApiImageSearchParams = {
   // 图片名称
   name?: string;
   // 来源
-  source?: number;
+  source?: string;
 };
 
 /**

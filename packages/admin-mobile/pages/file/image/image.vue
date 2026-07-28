@@ -25,15 +25,16 @@
       </view>
       <view v-if="list.length > 0" class="image-grid">
         <view v-for="item in list" :key="item.imageId" class="image-grid-item">
-          <u-swipe-action :options="swipeOptions" @click="onSwipeClick($event, item)">
-            <view class="image-card">
-              <u-image :src="getImgUrl(item.url)" width="100%" height="200rpx" mode="aspectFill" :fade="true" @click="previewImage(getImgUrl(item.url))" />
-              <view class="image-card-info">
-                <text class="image-card-name text-ellipsis">{{ item.name }}</text>
+          <view class="image-card" @longpress="onLongPress(item)">
+            <u-image :src="getImgUrl(item.url)" width="100%" height="200rpx" mode="aspectFill" :fade="true" @click="previewImage(getImgUrl(item.url))" />
+            <view class="image-card-info">
+              <text class="image-card-name text-ellipsis">{{ item.name }}</text>
+              <view class="image-card-meta-row">
+                <u-tag v-if="item.source" :text="getSourceLabel(item.source)" size="mini" type="primary" plain />
                 <text class="image-card-meta">{{ item.imageType }} · {{ item.uploadTime?.slice(0, 10) }}</text>
               </view>
             </view>
-          </u-swipe-action>
+          </view>
         </view>
       </view>
       <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
@@ -86,6 +87,18 @@
     } catch {
       // fallback, options may be empty
     }
+  }
+
+  const sourceMap = computed(() => {
+    const map: Record<string, string> = {};
+    imageSourceOption.value.forEach((o) => {
+      map[o.value] = o.label;
+    });
+    return map;
+  });
+
+  function getSourceLabel(source: string): string {
+    return sourceMap.value[source] || source;
   }
 
   async function loadData(isRefresh = false) {
@@ -151,29 +164,25 @@
   }
 
   function previewImage(url: string) {
-    const urls = list.value.map((item) => item.url).filter(Boolean);
+    const urls = list.value.map((item) => getImgUrl(item.url)).filter(Boolean);
     uni.previewImage({ current: url, urls });
   }
 
-  const swipeOptions = [{ text: '删除', style: { backgroundColor: '#dd524d' } }];
-
-  function onSwipeClick(event: any, item: ApiImageItem) {
-    if (event.index === 0) {
-      uni.showModal({
-        title: '确认删除',
-        content: item.exists ? '将删除图片文件和数据' : '仅删除数据记录',
-        success: async (res) => {
-          if (res.confirm) {
-            if (item.exists) {
-              await imageApi.removePublicAndData(item.imageId);
-            } else {
-              await imageApi.removeData(item.imageId);
-            }
-            loadData(true);
+  function onLongPress(item: ApiImageItem) {
+    uni.showModal({
+      title: '确认删除',
+      content: item.exists ? '将删除图片文件和数据' : '仅删除数据记录',
+      success: async (res) => {
+        if (res.confirm) {
+          if (item.exists) {
+            await imageApi.removePublicAndData(item.imageId);
+          } else {
+            await imageApi.removeData(item.imageId);
           }
-        },
-      });
-    }
+          loadData(true);
+        }
+      },
+    });
   }
 
   function calcScrollHeight() {
@@ -204,6 +213,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
@@ -253,6 +263,10 @@
     border-radius: $uni-border-radius-lg;
     overflow: hidden;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+
+    &:active {
+      opacity: 0.85;
+    }
   }
 
   .image-card-info {
@@ -264,11 +278,17 @@
     display: block;
   }
 
+  .image-card-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    margin-top: 8rpx;
+    flex-wrap: wrap;
+  }
+
   .image-card-meta {
     font-size: 20rpx;
     color: $uni-text-color-grey;
-    display: block;
-    margin-top: 4rpx;
   }
 
   .image-loading,
