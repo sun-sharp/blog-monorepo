@@ -1,5 +1,9 @@
 # CHANGELOG bow-xxx
 
+## 3.0.0 (2026-7-31)
+- 统一 website 类型导入路径到 `/#/common/*` 和 `/#/react/*`
+- 移除 website lint 命令中不存在的 `types` 目录参数
+
 ## 2.3.3
 - 详情页目录为空时隐藏 PC 端目录卡片和移动端目录按钮及弹窗
 - 详情页目录卡片在滚动时置顶悬浮（sticky top: 74px）
