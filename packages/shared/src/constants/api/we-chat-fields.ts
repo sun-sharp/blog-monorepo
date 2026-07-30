@@ -2,26 +2,26 @@ import { ApiWeChatUpload, WeChatBaseFields, WeChatCreateFields } from "/#/api/bl
 import { FieldConfig } from "/#/api/common";
 
 export const weChatBaseFieldsMap: Record<keyof WeChatBaseFields, FieldConfig> = {
-  tradeTime: { label: '交易时间', type: 'string' },
-  tradeType: { label: '交易类型', type: 'string' },
-  tradeOtherPerson: { label: '交易对方', type: 'string' },
-  tradeOtherPersonRemarks: { label: '交易对方备注', type: 'string' },
-  goods: { label: '商品', type: 'string' },
-  incomeOrPay: { label: '收/支', type: 'string' },
-  moneyAmount: { label: '金额(元)', type: 'number' },
-  otherCost: { label: '其它费用', type: 'number' },
-  paymentMethod: { label: '支付方式', type: 'string' },
-  currentStatus: { label: '当前状态', type: 'string' },
-  remarks: { label: '备注', type: 'string' },
-  explain: { label: '账单说明', type: 'string' },
-  place: { label: '使用地点', type: 'string' },
+  tradeTime: { label: '交易时间', type: 'string' }, // 账单交易发生的时间，格式如 "2024-01-15 10:30:00"
+  tradeType: { label: '交易类型', type: 'string' }, // 交易的类别，如"微信红包"、"转账"等
+  tradeOtherPerson: { label: '交易对方', type: 'string' }, // 交易对方的昵称或姓名
+  tradeOtherPersonRemarks: { label: '交易对方备注', type: 'string' }, // 对交易对方的备注名
+  goods: { label: '商品', type: 'string' }, // 交易涉及的商品名称或描述
+  incomeOrPay: { label: '收/支', type: 'string' }, // 收入或支出标识，值为"收入"或"支出"
+  moneyAmount: { label: '金额(元)', type: 'number' }, // 交易金额，单位为元
+  otherCost: { label: '其它费用', type: 'number' }, // 其它附加费用
+  paymentMethod: { label: '支付方式', type: 'string' }, // 支付使用的渠道，如"零钱"、"招商银行(0000)"等
+  currentStatus: { label: '当前状态', type: 'string' }, // 交易的当前状态，如"已完成"、"已退款"等
+  remarks: { label: '备注', type: 'string' }, // 交易备注信息
+  explain: { label: '账单说明', type: 'string' }, // 账单的详细说明
+  place: { label: '使用地点', type: 'string' }, // 交易发生的地点
 };
 
 export const weChatCreateFieldsMap: Record<keyof WeChatCreateFields, FieldConfig> = {
-  inflowOrOutflow: { label: '流入/流出', type: 'number' },
-  billType: { label: '账单类型', type: 'number' },
-  billMethod: { label: '账单方式', type: 'number' },
-  balance: { label: '余额', type: 'number' },
+  inflowOrOutflow: { label: '流入/流出', type: 'number' }, // 1=流入, 2=流出，用于统一标识资金流向
+  billType: { label: '账单类型', type: 'number' }, // 系统定义的账单分类，如"餐饮"、"交通"等
+  billMethod: { label: '账单方式', type: 'number' }, // 系统定义的支付方式分类，如"微信零钱"、"银行卡"等
+  balance: { label: '余额', type: 'number' }, // 交易后的账户余额
 };
 
 // ============ 3. 最终导入字段映射（基于 ApiWeChatUpload） ============

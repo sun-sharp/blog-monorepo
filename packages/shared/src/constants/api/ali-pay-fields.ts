@@ -2,26 +2,26 @@ import { AliPayBaseFields, AliPayCreateFields, ApiAliPayUpload } from "/#/api/bl
 import { FieldConfig } from "/#/api/common";
 
 export const aliPayBaseFieldsMap: Record<keyof AliPayBaseFields, FieldConfig> = {
-  tradeTime: { label: '交易时间', type: 'string' },
-  tradeType: { label: '交易类型', type: 'string' },
-  tradeOtherPerson: { label: '交易对方', type: 'string' },
-  tradeOtherPersonRemarks: { label: '交易对方备注', type: 'string' },
-  productDescription: { label: '商品说明', type: 'string' },
-  incomeOrPay: { label: '收/支', type: 'string' },
-  moneyAmount: { label: '金额(元)', type: 'number' },
-  otherCost: { label: '其它费用', type: 'number' },
-  paymentMethod: { label: '收/付款方式', type: 'string' },
-  oppositeAccount: { label: '对方账号', type: 'string' },
-  explain: { label: '账单说明', type: 'string' },
-  place: { label: '使用地点', type: 'string' },
+  tradeTime: { label: '交易时间', type: 'string' }, // 账单交易发生的时间
+  tradeType: { label: '交易类型', type: 'string' }, // 交易的类别，如"转账"、"消费"等
+  tradeOtherPerson: { label: '交易对方', type: 'string' }, // 交易对方的名称
+  tradeOtherPersonRemarks: { label: '交易对方备注', type: 'string' }, // 对交易对方的备注名
+  productDescription: { label: '商品说明', type: 'string' }, // 交易涉及的商品说明
+  incomeOrPay: { label: '收/支', type: 'string' }, // 收入或支出标识，值为"收入"或"支出"
+  moneyAmount: { label: '金额(元)', type: 'number' }, // 交易金额，单位为元
+  otherCost: { label: '其它费用', type: 'number' }, // 其它附加费用
+  paymentMethod: { label: '收/付款方式', type: 'string' }, // 收款或付款的渠道，如"余额宝"、"花呗"等
+  oppositeAccount: { label: '对方账号', type: 'string' }, // 交易对方的账号
+  explain: { label: '账单说明', type: 'string' }, // 账单的详细说明
+  place: { label: '使用地点', type: 'string' }, // 交易发生的地点
 };
 
 export const aliPayCreateFieldsMap: Record<keyof AliPayCreateFields, FieldConfig> = {
-  inflowOrOutflow: { label: '流入/流出', type: 'number' },
-  billType: { label: '账单类型', type: 'number' },
-  billMethod: { label: '账单方式', type: 'number' },
-  balance: { label: '余额', type: 'number' },
-  balanceBaby: { label: '余额宝', type: 'number' },
+  inflowOrOutflow: { label: '流入/流出', type: 'number' }, // 1=流入, 2=流出，用于统一标识资金流向
+  billType: { label: '账单类型', type: 'number' }, // 系统定义的账单分类
+  billMethod: { label: '账单方式', type: 'number' }, // 系统定义的支付方式分类
+  balance: { label: '余额', type: 'number' }, // 交易后的账户余额
+  balanceBaby: { label: '余额宝', type: 'number' }, // 交易后的余额宝余额
 };
 
 // ============ 3. 最终导入字段映射（基于 ApiAliPayUpload） ============

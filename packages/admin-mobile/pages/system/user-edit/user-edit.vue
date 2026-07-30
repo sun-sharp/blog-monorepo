@@ -151,18 +151,23 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
+    /* #ifdef H5 */
+    height: 100%;
+    /* #endif */
     background-color: $uni-bg-color-grey;
   }
 
   .user-edit-scroll {
     flex: 1;
     height: 0;
-    padding: 20rpx;
+    padding: 20rpx 20rpx 0;
+    box-sizing: border-box;
   }
 
   .user-edit-card {
-    padding: 30rpx;
-    margin-bottom: 20rpx;
+    padding: 24rpx;
+    margin-bottom: 16rpx;
   }
 
   .user-edit-section-title {
@@ -177,10 +182,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 70rpx;
-    padding: 0 20rpx;
+    height: 72rpx;
+    padding: 0 24rpx;
     background-color: #f5f5f5;
-    border-radius: 8rpx;
+    border-radius: 12rpx;
   }
 
   .user-edit-select-value {

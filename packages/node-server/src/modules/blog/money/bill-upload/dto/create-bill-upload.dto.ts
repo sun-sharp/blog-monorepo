@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateBillUploadDto {
   @ApiProperty({
@@ -29,4 +29,10 @@ export class CreateBillUploadDto {
     description: '账单方式',
   })
   billMethod: number;
+
+  @ApiProperty({
+    description: '代码',
+  })
+  @IsString({ message: '代码必须是字符串' })
+  code: string;
 }

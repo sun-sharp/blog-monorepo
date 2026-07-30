@@ -139,14 +139,14 @@ export const useBillUploadAddUpdateModel = (emit: (event: 'refresh', ...args: an
 
   const codeTooltipContent = computed(() => {
     let content = `<p>代码用于判断账单导入的类型</p>
-                  <p>isAssignment必须在开头，并且为boolean类型。</p>
-                  <p>item为账单的一条数据，其中的字段为：</p>`;
+                  <p>isAssignment 必须在开头，并且为 boolean 类型。</p>
+                  <p>item 为账单的一条数据，其中的字段为：</p>`;
     if (modelForm.billUploadType === weChatBillUploadType) {
-      content = content + weChatUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
+      content = content + weChatUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}（${m.type}）</p>`).join('');
     } else if (modelForm.billUploadType === aliPayBillUploadType) {
-      content = content + aliPayUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
+      content = content + aliPayUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}（${m.type}）</p>`).join('');
     } else if (modelForm.billUploadType === bankBillUploadType) {
-      content = content + bankUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}</p>`).join('');
+      content = content + bankUploadFields.map((m) => `<p style="color: #ff5b5b;">${m.key}: ${m.label}（${m.type}）</p>`).join('');
     }
     return content;
   });

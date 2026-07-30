@@ -49,6 +49,7 @@ export class BillUploadService {
             inflowOrOutflow: body.inflowOrOutflow,
             billType: body.billType,
             billMethod: body.billMethod,
+            code: body.code,
           };
           await this.billUploadModel.create(createData);
           return {
@@ -164,6 +165,7 @@ export class BillUploadService {
             inflowOrOutflow: body.inflowOrOutflow,
             billType: body.billType,
             billMethod: body.billMethod,
+            code: body.code,
           };
           await this.billUploadModel.updateOne({ _id: billUploadId }, updateData);
           return {

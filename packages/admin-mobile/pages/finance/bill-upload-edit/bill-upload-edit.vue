@@ -1,46 +1,50 @@
 <template>
-  <view class="bill-upload-edit-page">
-    <scroll-view scroll-y class="bill-upload-edit-scroll" :style="scrollStyle">
+  <view class="edit-page">
+    <scroll-view scroll-y class="edit-scroll">
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <u-form-item label="账单导入类型" prop="billUploadType">
-          <view class="bill-upload-edit-select" @click="showBillUploadTypeSelect = true">
-            <text class="bill-upload-edit-select-value">{{ billUploadTypeLabel || '请选择' }}</text>
-            <u-icon name="arrow-right" size="28" color="#999" />
-          </view>
-        </u-form-item>
-        <u-form-item label="需处理类型" prop="handleType">
-          <view class="bill-upload-edit-select" @click="showHandleTypeSelect = true">
-            <text class="bill-upload-edit-select-value">{{ handleTypeLabel || '请选择' }}</text>
-            <u-icon name="arrow-right" size="28" color="#999" />
-          </view>
-        </u-form-item>
-        <u-form-item v-if="form.handleType === 'inflowOrOutflow'" label="流入/流出" prop="inflowOrOutflow">
-          <view class="bill-upload-edit-select" @click="showInflowSelect = true">
-            <text class="bill-upload-edit-select-value">{{ inflowLabel || '请选择' }}</text>
-            <u-icon name="arrow-right" size="28" color="#999" />
-          </view>
-        </u-form-item>
-        <u-form-item v-else-if="form.handleType === 'billType'" label="账单类型" prop="billType">
-          <view class="bill-upload-edit-select" @click="showBillTypeSelect = true">
-            <text class="bill-upload-edit-select-value">{{ billTypeLabel || '请选择' }}</text>
-            <u-icon name="arrow-right" size="28" color="#999" />
-          </view>
-        </u-form-item>
-        <u-form-item v-else-if="form.handleType === 'billMethod'" label="账单方式" prop="billMethod">
-          <view class="bill-upload-edit-select" @click="showBillMethodSelect = true">
-            <text class="bill-upload-edit-select-value">{{ billMethodLabel || '请选择' }}</text>
-            <u-icon name="arrow-right" size="28" color="#999" />
-          </view>
-        </u-form-item>
-        <u-form-item label="代码" prop="code">
-          <view class="bill-upload-edit-code-label">
-            <text>代码</text>
-            <view class="bill-upload-edit-info" @click="showCodeHelp = true">
-              <u-icon name="info-circle" size="28" color="#f0a020" />
+        <view class="edit-card card">
+          <u-form-item label="账单导入类型" prop="billUploadType">
+            <view class="edit-select" @click="showBillUploadTypeSelect = true">
+              <text :class="form.billUploadType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billUploadTypeLabel || '请选择' }}</text>
+              <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
+          </u-form-item>
+          <u-form-item label="需处理类型" prop="handleType">
+            <view class="edit-select" @click="showHandleTypeSelect = true">
+              <text :class="form.handleType ? 'edit-select-value' : 'edit-select-placeholder'">{{ handleTypeLabel || '请选择' }}</text>
+              <u-icon name="arrow-right" size="28" color="#bbb" />
+            </view>
+          </u-form-item>
+          <u-form-item v-if="form.handleType === 'inflowOrOutflow'" label="流入/流出" prop="inflowOrOutflow">
+            <view class="edit-select" @click="showInflowSelect = true">
+              <text :class="form.inflowOrOutflow ? 'edit-select-value' : 'edit-select-placeholder'">{{ inflowLabel || '请选择' }}</text>
+              <u-icon name="arrow-right" size="28" color="#bbb" />
+            </view>
+          </u-form-item>
+          <u-form-item v-else-if="form.handleType === 'billType'" label="账单类型" prop="billType">
+            <view class="edit-select" @click="showBillTypeSelect = true">
+              <text :class="form.billType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billTypeLabel || '请选择' }}</text>
+              <u-icon name="arrow-right" size="28" color="#bbb" />
+            </view>
+          </u-form-item>
+          <u-form-item v-else-if="form.handleType === 'billMethod'" label="账单方式" prop="billMethod">
+            <view class="edit-select" @click="showBillMethodSelect = true">
+              <text :class="form.billMethod ? 'edit-select-value' : 'edit-select-placeholder'">{{ billMethodLabel || '请选择' }}</text>
+              <u-icon name="arrow-right" size="28" color="#bbb" />
+            </view>
+          </u-form-item>
+        </view>
+
+        <view class="edit-card card">
+          <view class="code-header">
+            <text class="code-title">代码</text>
+            <text class="code-tip">isAssignment 开头，boolean 类型，item 为账单数据</text>
+          </view>
+          <view v-if="codeFields.length > 0" class="code-fields">
+            <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
           </view>
           <u-textarea v-model="form.code" placeholder="请输入代码" :auto-height="true" :maxlength="-1" />
-        </u-form-item>
+        </view>
       </u-form>
     </scroll-view>
 
@@ -95,28 +99,8 @@
         }
       " />
 
-    <u-popup v-model="showCodeHelp" mode="bottom" length="60%" :border-radius="24" :safe-area-inset-bottom="true">
-      <view class="bill-upload-edit-help">
-        <view class="bill-upload-edit-help-header">
-          <text class="bill-upload-edit-help-title">代码说明</text>
-          <view class="bill-upload-edit-help-close" @click="showCodeHelp = false">
-            <u-icon name="close" size="36" color="#999" />
-          </view>
-        </view>
-        <scroll-view scroll-y class="bill-upload-edit-help-body">
-          <text class="bill-upload-edit-help-text">代码用于判断账单导入的类型</text>
-          <text class="bill-upload-edit-help-text">isAssignment必须在开头，并且为boolean类型。</text>
-          <text class="bill-upload-edit-help-text">item为账单的一条数据，其中的字段为：</text>
-          <view v-for="field in codeFields" :key="field.key" class="bill-upload-edit-help-field">
-            <text class="bill-upload-edit-help-field-key">{{ field.key }}</text>
-            <text class="bill-upload-edit-help-field-label">: {{ field.label }}</text>
-          </view>
-        </scroll-view>
-      </view>
-    </u-popup>
-
     <view class="fixed-bottom-btn">
-      <u-button type="primary" :loading="loading" @click="handleSave">保存</u-button>
+      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
     </view>
   </view>
 </template>
@@ -141,7 +125,6 @@
   const showInflowSelect = ref(false);
   const showBillTypeSelect = ref(false);
   const showBillMethodSelect = ref(false);
-  const showCodeHelp = ref(false);
   const apiTypeStore = useApiTypeStore();
 
   const billUploadTypeList = billUploadTypeOption.map((item) => ({ label: item.label, value: item.value }));
@@ -160,15 +143,6 @@
     code: '' as string,
   });
 
-  const scrollTopOffset = ref(0);
-  const scrollStyle = computed(() => {
-    const offset = scrollTopOffset.value;
-    if (offset > 0) {
-      return { height: `calc(100vh - ${offset}px)` };
-    }
-    return {};
-  });
-
   const billUploadTypeLabel = computed(() => billUploadTypeList.find((r) => r.value === form.billUploadType)?.label || '');
   const handleTypeLabel = computed(() => handleTypeList.find((r) => r.value === form.handleType)?.label || '');
   const inflowLabel = computed(() => inflowOrOutflowList.find((r) => r.value === form.inflowOrOutflow)?.label || '');
@@ -176,13 +150,9 @@
   const billMethodLabel = computed(() => billMethodSelectList.value.find((r) => r.value === form.billMethod)?.label || '');
 
   const codeFields = computed(() => {
-    if (form.billUploadType === weChatBillUploadType) {
-      return weChatUploadFields;
-    } else if (form.billUploadType === aliPayBillUploadType) {
-      return aliPayUploadFields;
-    } else if (form.billUploadType === bankBillUploadType) {
-      return bankUploadFields;
-    }
+    if (form.billUploadType === weChatBillUploadType) return weChatUploadFields;
+    if (form.billUploadType === aliPayBillUploadType) return aliPayUploadFields;
+    if (form.billUploadType === bankBillUploadType) return bankUploadFields;
     return [];
   });
 
@@ -226,7 +196,6 @@
       uni.showToast({ title: '请选择账单方式', icon: 'none' });
       return;
     }
-
     loading.value = true;
     try {
       const data: any = {
@@ -234,15 +203,9 @@
         handleType: form.handleType || '',
         code: form.code || '',
       };
-      if (form.handleType === 'inflowOrOutflow' && form.inflowOrOutflow) {
-        data.inflowOrOutflow = form.inflowOrOutflow;
-      }
-      if (form.handleType === 'billType' && form.billType) {
-        data.billType = form.billType;
-      }
-      if (form.handleType === 'billMethod' && form.billMethod) {
-        data.billMethod = form.billMethod;
-      }
+      if (form.handleType === 'inflowOrOutflow' && form.inflowOrOutflow) data.inflowOrOutflow = form.inflowOrOutflow;
+      if (form.handleType === 'billType' && form.billType) data.billType = form.billType;
+      if (form.handleType === 'billMethod' && form.billMethod) data.billMethod = form.billMethod;
       if (editId.value) {
         await billUploadApi.update({ ...data, billUploadId: editId.value });
       } else {
@@ -255,20 +218,7 @@
     }
   }
 
-  function calcScrollHeight() {
-    try {
-      const sysInfo = uni.getSystemInfoSync();
-      const statusBarHeight = sysInfo.statusBarHeight || 0;
-      const navBarHeight = 44;
-      const bottomBtnHeight = 50;
-      scrollTopOffset.value = statusBarHeight + navBarHeight + bottomBtnHeight;
-    } catch {
-      scrollTopOffset.value = 0;
-    }
-  }
-
   onMounted(() => {
-    calcScrollHeight();
     Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod()]);
   });
 
@@ -284,111 +234,80 @@
 </script>
 
 <style lang="scss" scoped>
-  .bill-upload-edit-page {
+  .edit-page {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
   }
 
-  .bill-upload-edit-scroll {
+  .edit-scroll {
     flex: 1;
     height: 0;
-    padding: 20rpx;
+    padding: 20rpx 20rpx 0;
+    box-sizing: border-box;
   }
 
-  .bill-upload-edit-select {
+  .edit-card {
+    padding: 24rpx;
+    margin-bottom: 16rpx;
+  }
+
+  .edit-select {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 70rpx;
-    padding: 0 20rpx;
+    height: 72rpx;
+    padding: 0 24rpx;
     background-color: #f5f5f5;
-    border-radius: 8rpx;
+    border-radius: 12rpx;
   }
 
-  .bill-upload-edit-select-value {
+  .edit-select-value {
     font-size: $uni-font-size-base;
     color: $uni-text-color;
   }
 
-  .bill-upload-edit-code-label {
+  .edit-select-placeholder {
+    font-size: $uni-font-size-base;
+    color: $uni-text-color-placeholder;
+  }
+
+  .code-header {
     display: flex;
-    align-items: center;
-    gap: 8rpx;
-    margin-bottom: 8rpx;
-  }
-
-  .bill-upload-edit-info {
-    display: flex;
-    align-items: center;
-  }
-
-  .bill-upload-edit-help {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: #fff;
-    border-radius: 24rpx 24rpx 0 0;
-    overflow: hidden;
-  }
-
-  .bill-upload-edit-help-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    padding: 32rpx 30rpx 16rpx;
-  }
-
-  .bill-upload-edit-help-title {
-    font-size: 32rpx;
-    font-weight: 600;
-    color: $uni-text-color;
-  }
-
-  .bill-upload-edit-help-close {
-    position: absolute;
-    right: 24rpx;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 56rpx;
-    height: 56rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: #f5f5f5;
-  }
-
-  .bill-upload-edit-help-body {
-    flex: 1;
-    height: 0;
-    padding: 0 30rpx 30rpx;
-  }
-
-  .bill-upload-edit-help-text {
-    display: block;
-    font-size: 28rpx;
-    color: $uni-text-color;
+    align-items: baseline;
+    gap: 12rpx;
     margin-bottom: 12rpx;
   }
 
-  .bill-upload-edit-help-field {
-    display: flex;
-    margin-bottom: 8rpx;
-  }
-
-  .bill-upload-edit-help-field-key {
-    font-size: 28rpx;
-    color: #ff5b5b;
-  }
-
-  .bill-upload-edit-help-field-label {
-    font-size: 28rpx;
+  .code-title {
+    font-size: $uni-font-size-base;
+    font-weight: 600;
     color: $uni-text-color;
+    flex-shrink: 0;
+  }
+
+  .code-tip {
+    font-size: 22rpx;
+    color: $uni-text-color-grey;
+  }
+
+  .code-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8rpx 16rpx;
+    margin-bottom: 16rpx;
+    padding: 16rpx;
+    background-color: #fafafa;
+    border-radius: 12rpx;
+  }
+
+  .code-field-item {
+    font-size: 22rpx;
+    color: #e74c3c;
   }
 </style>
