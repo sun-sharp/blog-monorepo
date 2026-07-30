@@ -40,6 +40,12 @@ export class UserController {
     return this.userService.findOneById(req.user._id);
   }
 
+  @Get(':userId')
+  @ApiOperation({ summary: '获取用户详情' })
+  findOne(@Param('userId') userId: string) {
+    return this.userService.findOneByUserIdDetail(userId);
+  }
+
   @Put('update_role_code')
   @ApiOperation({ summary: '修改用户权限' })
   updateUserRole(@Body() body: UpdateRoleCodeUserDto) {

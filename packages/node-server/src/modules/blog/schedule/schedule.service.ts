@@ -106,6 +106,37 @@ export class ScheduleService {
   }
 
   /**
+   * @description: 根据scheduleId查找日程详情
+   * @param {string} id
+   * @return {Promise<IResponse>}
+   */
+  public findOneByScheduleId(id: string): Promise<IResponse> {
+    return Promise.resolve(id)
+      .then(async (id) => {
+        const m = await this.scheduleModel.findOne({ _id: id }).lean();
+        if (!m) throw '日程不存在';
+        const { _id, ...rest } = m;
+        const result: ApiScheduleItem = {
+          ...rest,
+          scheduleId: _id,
+          nickName: '',
+        } as ApiScheduleItem;
+        return {
+          code: ApiCode.SUCCESS,
+          result,
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        logger.error(`根据scheduleId查找日程详情 失败! ${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err || '查询失败！',
+        };
+      });
+  }
+
+  /**
    * @description: 修改日程
    * @param {UpdateScheduleDto} body
    * @return {Promise<IResponse>}

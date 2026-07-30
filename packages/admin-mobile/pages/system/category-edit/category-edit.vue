@@ -43,7 +43,6 @@
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
-  import type { ApiCategoryItem } from '/#/api/capital/category';
 
   const formRef = ref();
   const loading = ref(false);
@@ -76,8 +75,7 @@
 
   async function loadCategory(categoryId: string) {
     try {
-      const res = await categoryApi.getPage({ current: 1, size: 1 });
-      const category = res.list?.find((c: ApiCategoryItem) => c.categoryId === categoryId);
+      const category = await categoryApi.getOne(categoryId);
       if (category) {
         form.type = category.type;
         form.label = category.label;

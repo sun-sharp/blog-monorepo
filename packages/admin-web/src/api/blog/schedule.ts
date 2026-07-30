@@ -20,6 +20,17 @@ export const getFindPage = (data: ApiScheduleFindPageData): Promise<TablePaginat
 };
 
 /**
+ * @description 获取日程详情
+ * @param id
+ */
+export const getOne = (id: string): Promise<ApiScheduleItem> => {
+  return AxiosBlog.request({
+    url: `${basic}/one/${id}`,
+    method: 'GET',
+  });
+};
+
+/**
  * @description 删除
  * @param id
  */

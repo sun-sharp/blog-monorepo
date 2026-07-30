@@ -115,6 +115,40 @@ export class BillUploadService {
   }
 
   /**
+   * @description: 根据billUploadId查找账单导入详情
+   * @param {string} billUploadId
+   * @return {Promise<IResponse>}
+   */
+  public findOneByBillUploadId(billUploadId: string): Promise<IResponse> {
+    return Promise.resolve(billUploadId)
+      .then(async (billUploadId) => {
+        const m = await this.billUploadModel.findOne({ _id: billUploadId });
+        if (!m) throw '账单导入不存在';
+        const result: ApiBillUploadItem = {
+          billUploadId: m.id,
+          billUploadType: m.billUploadType,
+          handleType: m.handleType,
+          inflowOrOutflow: m.inflowOrOutflow,
+          billType: m.billType,
+          billMethod: m.billMethod,
+          code: m.code,
+        };
+        return {
+          code: ApiCode.SUCCESS,
+          result,
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        logger.error(`根据billUploadId查找账单导入详情 失败！${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err || '查询失败！',
+        };
+      });
+  }
+
+  /**
    * @description: 修改账单导入
    * @param {UpdateBillUploadDto} updateBillUploadDto
    * @return {Promise<IResponse>}

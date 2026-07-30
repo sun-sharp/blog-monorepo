@@ -18,6 +18,18 @@ export const getPage = (data: ApiBillUploadFindPageData): Promise<TablePaginatio
 };
 
 /**
+ * @description: 获取账单导入详情
+ * @param {string} billUploadId
+ * @returns {Promise<ApiBillUploadItem>}
+ */
+export const getOne = (billUploadId: string): Promise<ApiBillUploadItem> => {
+  return AxiosBlog.request({
+    url: `${basic}/one/${billUploadId}`,
+    method: 'GET',
+  });
+};
+
+/**
  * @description 创建全局类型
  * @param {ApiBillUploadSaveData} data
  * @returns {Promise<undefined>}

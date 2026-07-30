@@ -46,4 +46,10 @@ export class ScheduleController {
   daily(@Request() req: any, @Query() query: StatisticsStartEndTimeDto) {
     return this.scheduleService.daily(req.user._id, query);
   }
+
+  @Get('one/:id')
+  @ApiOperation({ summary: '获取日程详情' })
+  findOne(@Param('id') id: string) {
+    return this.scheduleService.findOneByScheduleId(id);
+  }
 }

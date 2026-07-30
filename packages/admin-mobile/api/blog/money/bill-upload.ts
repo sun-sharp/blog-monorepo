@@ -8,6 +8,10 @@ export const getPage = (data: ApiBillUploadFindPageData): Promise<TablePaginatio
   return blogRequest({ url: `${basic}/find_page`, method: 'POST', data });
 };
 
+export const getOne = (billUploadId: string): Promise<ApiBillUploadItem> => {
+  return blogRequest({ url: `${basic}/one/${billUploadId}`, method: 'GET' });
+};
+
 export const save = (data: ApiBillUploadSaveData): Promise<undefined> => {
   return blogRequest({ url: `${basic}/save`, method: 'POST', data, isShowSuccessMessage: true });
 };

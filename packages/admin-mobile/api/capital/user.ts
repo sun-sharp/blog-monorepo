@@ -19,6 +19,10 @@ export const getPage = (data: ApiUserPageData): Promise<TablePaginationResult<Ap
   return capitalRequest({ url: `${basic}/find_page`, method: 'POST', data });
 };
 
+export const getOne = (userId: string): Promise<ApiUserItem> => {
+  return capitalRequest({ url: `${basic}/${userId}`, method: 'GET' });
+};
+
 export const updateRoleCode = (data: ApiUserUpdateRoleCodeData): Promise<undefined> => {
   return capitalRequest({ url: `${basic}/update_role_code`, method: 'PUT', data, isShowSuccessMessage: true });
 };

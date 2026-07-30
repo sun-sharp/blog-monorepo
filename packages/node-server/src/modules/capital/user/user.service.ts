@@ -160,6 +160,35 @@ export class UserService {
   }
 
   /**
+   * @description: 运用_id查找用户详情
+   * @param {string} userId
+   * @return {Promise<IResponse>}
+   */
+  public findOneByUserIdDetail(userId: string): Promise<IResponse> {
+    return Promise.resolve(userId)
+      .then(async (userId) => {
+        const { _id, ...user } = await this.userModel.findOne({ _id: userId }).lean();
+        const result: ApiUserItem = {
+          ...user,
+          userId: _id,
+          loginDate: nowDateFun(user.loginDate),
+        };
+        return {
+          code: ApiCode.SUCCESS,
+          result,
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        logger.error(`运用_id查找用户详情 失败！ ${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err || '查询失败！',
+        };
+      });
+  }
+
+  /**
    * @description: 运用_id查找用户信息
    * @param {string} userId
    * @return {Promise<User>}

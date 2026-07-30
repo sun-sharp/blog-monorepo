@@ -8,6 +8,10 @@ export const getFindPage = (data: ApiScheduleFindPageData): Promise<TablePaginat
   return blogRequest({ url: `${basic}/find_page`, method: 'POST', data });
 };
 
+export const getOne = (id: string): Promise<ApiScheduleItem> => {
+  return blogRequest({ url: `${basic}/one/${id}`, method: 'GET' });
+};
+
 export const remove = (id: string): Promise<undefined> => {
   return blogRequest({ url: `${basic}/${id}`, method: 'DELETE', isShowSuccessMessage: true });
 };

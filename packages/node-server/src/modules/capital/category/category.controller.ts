@@ -21,6 +21,12 @@ export class CategoryController {
     return this.categoryService.certainTypeAll(query.type);
   }
 
+  @Get('one/:categoryId')
+  @ApiOperation({ summary: '获取全局类型详情' })
+  findOne(@Param('categoryId') categoryId: string) {
+    return this.categoryService.findOneByCategoryId(categoryId);
+  }
+
   @Post('find_page')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取全局类型列表' })

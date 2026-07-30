@@ -33,6 +33,18 @@ export const getPage = (data: ApiCategoryFindPageData): Promise<TablePaginationR
 };
 
 /**
+ * @description: 获取全局类型详情
+ * @param {string} categoryId
+ * @return {Promise<ApiCategoryItem>}
+ */
+export const getOne = (categoryId: string): Promise<ApiCategoryItem> => {
+  return AxiosCapital.request({
+    url: `${basic}/one/${categoryId}`,
+    method: 'GET',
+  });
+};
+
+/**
  * @description 创建全局类型
  * @param {ApiCategorySaveData} data
  * @returns {Promise<undefined>}

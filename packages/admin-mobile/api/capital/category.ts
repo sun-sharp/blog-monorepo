@@ -12,6 +12,10 @@ export const getPage = (data: ApiCategoryFindPageData): Promise<TablePaginationR
   return capitalRequest({ url: `${basic}/find_page`, method: 'POST', data });
 };
 
+export const getOne = (categoryId: string): Promise<ApiCategoryItem> => {
+  return capitalRequest({ url: `${basic}/one/${categoryId}`, method: 'GET' });
+};
+
 export const save = (data: ApiCategorySaveData): Promise<undefined> => {
   return capitalRequest({ url: `${basic}/save`, method: 'POST', data, isShowSuccessMessage: true });
 };

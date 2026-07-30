@@ -12,6 +12,10 @@ export function getAll(): Promise<ApiRoleItem[]> {
   return capitalRequest({ url: `${basic}/all`, method: 'GET' });
 }
 
+export function getOne(roleId: string): Promise<ApiRoleItem> {
+  return capitalRequest({ url: `${basic}/one/${roleId}`, method: 'GET' });
+}
+
 export const save = (data: ApiRoleSaveData): Promise<undefined> => {
   return capitalRequest({ url: `${basic}/save`, method: 'POST', data, isShowSuccessMessage: true });
 };

@@ -48,7 +48,6 @@
   import { ref, reactive, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { userApi, roleApi, capitalApi } from '../../../api';
-  import type { ApiUserItem } from '/#/api/capital/user';
 
   const formRef = ref();
   const loading = ref(false);
@@ -93,8 +92,7 @@
 
   async function loadUser(userId: string) {
     try {
-      const res = await userApi.getPage({ current: 1, size: 1 });
-      const user = res.list?.find((u: ApiUserItem) => u.userId === userId);
+      const user = await userApi.getOne(userId);
       if (user) {
         form.nickname = user.nickname;
         form.username = user.username;

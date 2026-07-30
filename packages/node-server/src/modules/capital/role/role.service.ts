@@ -211,6 +211,39 @@ export class RoleService {
   }
 
   /**
+   * @description: 根据roleId查找权限详情
+   * @param {string} roleId
+   * @return {Promise<IResponse>}
+   */
+  public findOneByRoleId(roleId: string): Promise<IResponse> {
+    return Promise.resolve(roleId)
+      .then(async (roleId) => {
+        const m = await this.roleModel.findOne({ _id: roleId });
+        if (!m) throw '权限不存在';
+        const result: ApiRoleItem = {
+          roleId: m.id,
+          name: m.name,
+          roleCode: m.roleCode,
+          roleType: m.roleType,
+          menuPermission: m.menuPermission,
+          apiPermission: m.apiPermission,
+        };
+        return {
+          code: ApiCode.SUCCESS,
+          result,
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        logger.error(`根据roleId查找权限详情 失败！${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err || '查询失败！',
+        };
+      });
+  }
+
+  /**
    * @description: 获取全部swagger-api.json数据
    * @return {Promise<ApiSwaggerJson>}
    */

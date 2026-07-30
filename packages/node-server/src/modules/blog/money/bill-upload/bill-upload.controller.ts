@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { BillUploadService } from './bill-upload.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -19,6 +19,12 @@ export class BillUploadController {
   @ApiOperation({ summary: '条件并分页获取账单导入列表' })
   findPage(@Body() pageBillUploadDto: PageBillUploadDto) {
     return this.billUploadService.findPage(pageBillUploadDto);
+  }
+
+  @Get('one/:billUploadId')
+  @ApiOperation({ summary: '获取账单导入详情' })
+  findOne(@Param('billUploadId') billUploadId: string) {
+    return this.billUploadService.findOneByBillUploadId(billUploadId);
   }
 
   @Post('save')

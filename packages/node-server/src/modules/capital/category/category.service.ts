@@ -123,6 +123,38 @@ export class CategoryService {
   }
 
   /**
+   * @description: 根据categoryId查找全局类型详情
+   * @param {string} categoryId
+   * @return {Promise<IResponse>}
+   */
+  public findOneByCategoryId(categoryId: string): Promise<IResponse> {
+    return Promise.resolve(categoryId)
+      .then(async (categoryId) => {
+        const m = await this.categoryModel.findOne({ _id: categoryId });
+        if (!m) throw '全局类型不存在';
+        const result: ApiCategoryItem = {
+          categoryId: m.id,
+          type: m.type,
+          valueStr: m.valueStr,
+          value: m.value,
+          label: m.label,
+        };
+        return {
+          code: ApiCode.SUCCESS,
+          result,
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        logger.error(`根据categoryId查找全局类型详情 失败！${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err || '查询失败！',
+        };
+      });
+  }
+
+  /**
    * @description: 条件并分页获取全局类型列表
    * @param {PageCategoryDto} pageCategoryDto
    * @return {Promise<IResponse>}

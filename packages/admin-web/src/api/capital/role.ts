@@ -27,6 +27,17 @@ export function getAll(): Promise<ApiRoleItem[]> {
 }
 
 /**
+ * @description 获取权限详情
+ * @param roleId
+ */
+export function getOne(roleId: string): Promise<ApiRoleItem> {
+  return AxiosCapital.request({
+    url: `${basic}/one/${roleId}`,
+    method: 'GET',
+  });
+}
+
+/**
  * @description 新增角色
  * @param data
  */

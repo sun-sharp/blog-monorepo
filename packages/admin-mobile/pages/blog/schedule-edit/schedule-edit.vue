@@ -83,6 +83,22 @@
     showEndTime.value = false;
   }
 
+  async function loadDetail(id: string) {
+    try {
+      const item = await scheduleAPi.getOne(id);
+      if (item) {
+        form.title = item.title || '';
+        form.content = item.content || '';
+        form.startDate = item.startDate || '';
+        form.endDate = item.endDate || '';
+        form.startTime = item.startTime || '';
+        form.endTime = item.endTime || '';
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   async function handleSave() {
     try {
       await formRef.value?.validate();
@@ -108,6 +124,7 @@
     if (options?.id) {
       editId.value = options.id;
       uni.setNavigationBarTitle({ title: '编辑日程' });
+      loadDetail(options.id);
     } else {
       uni.setNavigationBarTitle({ title: '新建日程' });
     }

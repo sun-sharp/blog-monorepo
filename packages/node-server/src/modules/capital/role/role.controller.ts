@@ -27,6 +27,12 @@ export class RoleController {
     return this.roleService.findAll();
   }
 
+  @Get('one/:roleId')
+  @ApiOperation({ summary: '获取权限详情' })
+  findOne(@Param('roleId') roleId: string) {
+    return this.roleService.findOneByRoleId(roleId);
+  }
+
   @Post('save')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '新增权限' })

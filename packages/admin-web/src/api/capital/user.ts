@@ -29,6 +29,18 @@ export const getPage = (data: ApiUserPageData): Promise<TablePaginationResult<Ap
 };
 
 /**
+ * @description: 获取用户详情
+ * @param {string} userId
+ * @return {Promise<ApiUserItem>}
+ */
+export const getOne = (userId: string): Promise<ApiUserItem> => {
+  return AxiosCapital.request({
+    url: `${basic}/${userId}`,
+    method: 'GET',
+  });
+};
+
+/**
  * @description: 修改用户角色
  * @param {ApiUserUpdateRoleCodeData} data
  * @return {Promise<undefined>}

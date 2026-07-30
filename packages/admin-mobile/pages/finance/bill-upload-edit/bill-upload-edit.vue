@@ -131,7 +131,6 @@
   import { aliPayUploadFields } from '../../../../shared/src/constants/api/ali-pay-fields';
   import { bankUploadFields } from '../../../../shared/src/constants/api/bank-fields';
   import { useApiTypeStore } from '../../../store';
-  import type { ApiBillUploadItem } from '/#/api/blog/bill-upload';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
 
   const formRef = ref();
@@ -195,8 +194,7 @@
 
   async function loadDetail(id: string) {
     try {
-      const res = await billUploadApi.getPage({ current: 1, size: 1 });
-      const item = res.list?.find((r: ApiBillUploadItem) => r.billUploadId === id);
+      const item = await billUploadApi.getOne(id);
       if (item) {
         form.billUploadType = item.billUploadType ?? null;
         form.handleType = item.handleType ?? '';

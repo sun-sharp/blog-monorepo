@@ -35,7 +35,6 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { roleApi } from '../../../api';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
-  import type { ApiRoleItem } from '/#/api/capital/role';
 
   const formRef = ref();
   const loading = ref(false);
@@ -69,8 +68,7 @@
 
   async function loadRole(roleId: string) {
     try {
-      const res = await roleApi.getPage({ current: 1, size: 1 });
-      const role = res.list?.find((r: ApiRoleItem) => r.roleId === roleId);
+      const role = await roleApi.getOne(roleId);
       if (role) {
         form.name = role.name;
         form.roleCode = role.roleCode;
