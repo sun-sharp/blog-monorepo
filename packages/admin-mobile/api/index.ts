@@ -11,6 +11,7 @@ export * as articleAPi from './blog/article';
 export * as scheduleAPi from './blog/schedule';
 
 export * as moneyApi from './blog/money/index';
+export * as aggregateBillApi from './blog/money/aggregate';
 export * as weChatApi from './blog/money/we-chat';
 export * as aliPayApi from './blog/money/ali-pay';
 export * as bankApi from './blog/money/bank';

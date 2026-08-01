@@ -87,7 +87,7 @@
           <view class="finance-date-header">
             <text class="finance-date-text">{{ date }}</text>
           </view>
-          <view v-for="item in group" :key="item.id" class="finance-bill-item card" @click="goToDetail(item)">
+          <view v-for="item in group" :key="`${item.source}_${item.billId}`" class="finance-bill-item card" @click="goToDetail(item)">
             <view class="finance-bill-left">
               <view :class="['finance-bill-icon', item.inflowOrOutflow === 1 ? 'finance-bill-icon-in' : 'finance-bill-icon-out']">
                 <u-icon :name="getSourceIcon(item.source)" size="32" color="#fff" />
@@ -154,28 +154,19 @@
 
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue';
-  import { bankApi, weChatApi, aliPayApi } from '../../api';
+  import { aggregateBillApi } from '../../api';
+  import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
 
   const props = defineProps<{ active: boolean }>();
 
-  interface BillItem {
-    id: string;
-    source: string;
-    tradeTime: string;
-    tradeOtherPerson: string;
-    explain: string;
-    moneyAmount: number;
-    inflowOrOutflow: number;
-    balance?: number;
-    rawItem: any;
-  }
-
   const keyword = ref('');
-  const list = ref<BillItem[]>([]);
+  const list = ref<ApiAggregateBillItem[]>([]);
   const loading = ref(false);
   const isRefreshing = ref(false);
   const total = ref(0);
+  const currentPage = ref(1);
+  const pageSize = 20;
   const currentSource = ref(0);
   const currentFlow = ref(0);
   const showTimeSelect = ref(false);
@@ -198,6 +189,8 @@
   const sourceOptions = ['全部', '银行', '支付宝', '微信'];
   const flowOptions = ['全部', '收入', '支出'];
 
+  const sourceValueMap: (undefined | 'bank' | 'aliPay' | 'weChat')[] = [undefined, 'bank', 'aliPay', 'weChat'];
+
   const timeLabel = computed(() => {
     if (!timeRange.value) return '';
     return `${timeRange.value.startTime} ~ ${timeRange.value.endTime}`;
@@ -210,13 +203,13 @@
   });
 
   const groupedByDate = computed(() => {
-    const groups: Record<string, BillItem[]> = {};
+    const groups: Record<string, ApiAggregateBillItem[]> = {};
     list.value.forEach((item) => {
       const date = item.tradeTime?.slice(0, 10) || '未知日期';
       if (!groups[date]) groups[date] = [];
       groups[date].push(item);
     });
-    const sorted: Record<string, BillItem[]> = {};
+    const sorted: Record<string, ApiAggregateBillItem[]> = {};
     Object.keys(groups)
       .sort((a, b) => b.localeCompare(a))
       .forEach((key) => {
@@ -235,85 +228,41 @@
     return map[source] || 'list';
   }
 
-  async function loadAllBills() {
+  async function loadData(isRefresh = false) {
+    if (loading.value) return;
+    if (isRefresh) {
+      currentPage.value = 1;
+      list.value = [];
+    }
     loading.value = true;
     try {
-      const promises: Promise<any>[] = [];
-      const sourceIdx = currentSource.value;
-      const flowVal = currentFlow.value === 0 ? undefined : currentFlow.value;
-      const inflowOrOutflow = flowVal === 1 ? 1 : flowVal === 2 ? 2 : undefined;
-      const searchParams: any = { current: 1, size: 200 };
-      if (keyword.value) searchParams.tradeOtherPerson = keyword.value;
-      if (inflowOrOutflow !== undefined) searchParams.inflowOrOutflow = inflowOrOutflow;
-
-      if (sourceIdx === 0 || sourceIdx === 1) {
-        promises.push(
-          bankApi.getPage(searchParams).then((res) =>
-            (res.list || []).map((item: any) => ({
-              id: `bank_${item.bankId}`,
-              source: 'bank',
-              tradeTime: item.tradeTime,
-              tradeOtherPerson: item.tradeOtherPerson,
-              explain: item.explain,
-              moneyAmount: item.moneyAmount,
-              inflowOrOutflow: item.inflowOrOutflow,
-              balance: item.balance,
-              rawItem: item,
-            }))
-          )
-        );
-      }
-      if (sourceIdx === 0 || sourceIdx === 2) {
-        promises.push(
-          aliPayApi.getPage(searchParams).then((res) =>
-            (res.list || []).map((item: any) => ({
-              id: `aliPay_${item.aliPayId}`,
-              source: 'aliPay',
-              tradeTime: item.tradeTime,
-              tradeOtherPerson: item.tradeOtherPerson,
-              explain: item.explain,
-              moneyAmount: item.moneyAmount,
-              inflowOrOutflow: item.inflowOrOutflow,
-              balance: item.balance,
-              rawItem: item,
-            }))
-          )
-        );
-      }
-      if (sourceIdx === 0 || sourceIdx === 3) {
-        promises.push(
-          weChatApi.getPage(searchParams).then((res) =>
-            (res.list || []).map((item: any) => ({
-              id: `weChat_${item.weChatId}`,
-              source: 'weChat',
-              tradeTime: item.tradeTime,
-              tradeOtherPerson: item.tradeOtherPerson,
-              explain: item.explain,
-              moneyAmount: item.moneyAmount,
-              inflowOrOutflow: item.inflowOrOutflow,
-              balance: item.balance,
-              rawItem: item,
-            }))
-          )
-        );
-      }
-
-      const results = await Promise.all(promises);
-      let allBills: BillItem[] = results.flat();
-
+      const params: any = {
+        current: currentPage.value,
+        size: pageSize,
+      };
+      if (keyword.value) params.tradeOtherPerson = keyword.value;
+      const flowVal = currentFlow.value;
+      if (flowVal === 1) params.inflowOrOutflow = 1;
+      else if (flowVal === 2) params.inflowOrOutflow = 2;
+      const sourceVal = sourceValueMap[currentSource.value];
+      if (sourceVal) params.source = sourceVal;
       if (timeRange.value) {
-        allBills = allBills.filter((item) => {
-          const date = item.tradeTime?.slice(0, 10);
-          return date && date >= timeRange.value!.startTime && date <= timeRange.value!.endTime;
-        });
+        params.startTime = timeRange.value.startTime;
+        params.endTime = timeRange.value.endTime;
       }
 
-      allBills.sort((a, b) => b.tradeTime?.localeCompare(a.tradeTime || '') || 0);
-      list.value = allBills;
-      total.value = allBills.length;
+      const res = await aggregateBillApi.findAggregatePage(params);
+      const newList = res.list || [];
+      if (isRefresh) {
+        list.value = newList;
+      } else {
+        list.value = [...list.value, ...newList];
+      }
+      total.value = res.total || 0;
 
-      const inflow = allBills.filter((b) => b.inflowOrOutflow === 1).reduce((sum, b) => sum + (b.moneyAmount || 0), 0);
-      const outflow = allBills.filter((b) => b.inflowOrOutflow === 2).reduce((sum, b) => sum + (b.moneyAmount || 0), 0);
+      // 计算当前页的流入流出总额（用于展示）
+      const inflow = list.value.filter((b) => b.inflowOrOutflow === 1).reduce((sum, b) => sum + (b.moneyAmount || 0), 0);
+      const outflow = list.value.filter((b) => b.inflowOrOutflow === 2).reduce((sum, b) => sum + (b.moneyAmount || 0), 0);
       inflowTotal.value = inflow.toFixed(2);
       outflowTotal.value = outflow.toFixed(2);
     } catch (e) {
@@ -324,43 +273,48 @@
     }
   }
 
-  function loadMore() {}
+  function loadMore() {
+    if (list.value.length < total.value) {
+      currentPage.value++;
+      loadData();
+    }
+  }
   function onPullDownRefresh() {
     isRefreshing.value = true;
-    loadAllBills();
+    loadData(true);
   }
-  function onReachBottom() {}
+  function onReachBottom() {
+    if (!loading.value && list.value.length < total.value) {
+      currentPage.value++;
+      loadData();
+    }
+  }
   function handleSearch() {
-    loadAllBills();
+    loadData(true);
   }
   function handleClear() {
     keyword.value = '';
-    loadAllBills();
+    loadData(true);
   }
   function onSourceChange(index: number) {
     currentSource.value = index;
-    loadAllBills();
+    loadData(true);
   }
   function onFlowChange(index: number) {
     currentFlow.value = index;
-    loadAllBills();
+    loadData(true);
   }
   function onTimeConfirm(params: { startTime: string; endTime: string }) {
     timeRange.value = params;
-    loadAllBills();
+    loadData(true);
   }
   function clearTimeRange() {
     timeRange.value = null;
-    loadAllBills();
+    loadData(true);
   }
 
-  function goToDetail(item: BillItem) {
-    const sourcePageMap: Record<string, string> = {
-      bank: `/pages/finance/bill-detail/bill-detail?source=bank&id=${item.rawItem.bankId}`,
-      aliPay: `/pages/finance/bill-detail/bill-detail?source=aliPay&id=${item.rawItem.aliPayId}`,
-      weChat: `/pages/finance/bill-detail/bill-detail?source=weChat&id=${item.rawItem.weChatId}`,
-    };
-    uni.navigateTo({ url: sourcePageMap[item.source] || '' });
+  function goToDetail(item: ApiAggregateBillItem) {
+    uni.navigateTo({ url: `/pages/finance/bill-detail/bill-detail?source=${item.source}&id=${item.billId}` });
   }
 
   function onFabAction(action: string) {
@@ -390,14 +344,14 @@
 
   onMounted(() => {
     calcScrollHeight();
-    loadAllBills();
+    loadData(true);
     inited.value = true;
   });
 
   watch(
     () => props.active,
     (val) => {
-      if (val && inited.value) loadAllBills();
+      if (val && inited.value) loadData(true);
     }
   );
 </script>

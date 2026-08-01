@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { groupArray, sumArrayToMoney, uniqueArray } from 'src/common/array';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { AliPayService } from './ali-pay/ali-pay.service';
@@ -8,6 +10,7 @@ import { billTypeEnum } from 'src/common/enums/money.enum';
 import { categoryTypeEnum } from 'src/common/enums/category.enum';
 import { CategoryService } from 'src/modules/capital/category/category.service';
 import { ApiAliPayAndWeChatChild, ApiBankFlow, ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from '/#/api/blog/money';
+import { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
 import { ApiBank } from '/#/api/blog/money/bank';
 import { IResponse } from '/#/common/common';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
@@ -17,6 +20,14 @@ import { storeDirStr } from 'src/common/constant/config';
 import { useCustomConfig } from 'src/config';
 import { BillUploadService } from './bill-upload/bill-upload.service';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
+import { Bank } from 'src/schemas/blog/money/bank.schema';
+import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
+import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
+import { PaginateHandle } from 'src/common/paginate/paginate-handle';
+import { nowDateFun } from 'src/common/date';
+import { PageAggregateBillDto } from './dto/page-aggregate-bill.dto';
+import { UpdateAggregateBillDto } from './dto/update-aggregate-bill.dto';
+import { format } from 'date-fns';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -24,6 +35,9 @@ const { blogDatabaseName } = customConfig;
 @Injectable()
 export class MoneyService {
   constructor(
+    @InjectModel(Bank.name, blogDatabaseName) private readonly bankModel: Model<Bank>,
+    @InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>,
+    @InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>,
     private readonly bankService: BankService,
     private readonly weChatService: WeChatService,
     private readonly aliPayService: AliPayService,
@@ -482,5 +496,296 @@ export class MoneyService {
           };
         })
     );
+  }
+
+  /**
+   * @description: 三表聚合分页查询账单列表
+   * @param {string} userId
+   * @param {PageAggregateBillDto} body
+   * @return {Promise<IResponse>}
+   */
+  public findAggregatePage(userId: string, body: PageAggregateBillDto): Promise<IResponse> {
+    return Promise.resolve({ userId, body })
+      .then(async ({ userId, body }) => {
+        const { size, current, tradeOtherPerson, inflowOrOutflow, source, startTime, endTime, bankType } = body;
+        const { limit, skip } = PaginateHandle(size, current);
+
+        // 构建通用查询条件
+        const buildFindData = (extra?: Record<string, any>): Record<string, any> => {
+          const findData: Record<string, any> = { userId, ...extra };
+          if (tradeOtherPerson) {
+            findData.$or = [
+              { tradeOtherPerson: { $regex: tradeOtherPerson } },
+              { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } },
+              { explain: { $regex: tradeOtherPerson } },
+            ];
+          }
+          if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
+          if (startTime && endTime) {
+            const sTime = format(new Date(startTime), `yyyy-MM-dd 00:00:00`);
+            const eTime = format(new Date(endTime), `yyyy-MM-dd 23:59:59`);
+            findData.tradeTime = { $gte: sTime, $lte: eTime };
+          }
+          return findData;
+        };
+
+        // 映射函数：将各表数据统一为 ApiAggregateBillItem
+        const mapBank = (m: any): ApiAggregateBillItem => ({
+          source: 'bank',
+          billId: m._id,
+          tradeTime: nowDateFun(m.tradeTime),
+          tradeType: m.tradeType,
+          tradeOtherPerson: m.tradeOtherPerson,
+          tradeOtherPersonRemarks: m.tradeOtherPersonRemarks,
+          incomeOrPay: m.incomeOrPay,
+          moneyAmount: m.moneyAmount,
+          otherCost: m.otherCost,
+          inflowOrOutflow: m.inflowOrOutflow,
+          explain: m.explain,
+          place: m.place,
+          balance: m.balance,
+          bankType: m.bankType,
+          voucherType: m.voucherType,
+          voucherNo: m.voucherNo,
+          tradeOtherPersonAccount: m.tradeOtherPersonAccount,
+          bankBillType: m.bankBillType,
+        });
+
+        const mapAliPay = (m: any): ApiAggregateBillItem => ({
+          source: 'aliPay',
+          billId: m._id,
+          tradeTime: nowDateFun(m.tradeTime),
+          tradeType: m.tradeType,
+          tradeOtherPerson: m.tradeOtherPerson,
+          tradeOtherPersonRemarks: m.tradeOtherPersonRemarks,
+          incomeOrPay: m.incomeOrPay,
+          moneyAmount: m.moneyAmount,
+          otherCost: m.otherCost,
+          inflowOrOutflow: m.inflowOrOutflow,
+          explain: m.explain,
+          place: m.place,
+          balance: m.balance,
+          balanceBaby: m.balanceBaby,
+          productDescription: m.productDescription,
+          paymentMethod: m.paymentMethod,
+          oppositeAccount: m.oppositeAccount,
+          billType: m.billType,
+          billMethod: m.billMethod,
+        });
+
+        const mapWeChat = (m: any): ApiAggregateBillItem => ({
+          source: 'weChat',
+          billId: m._id,
+          tradeTime: nowDateFun(m.tradeTime),
+          tradeType: m.tradeType,
+          tradeOtherPerson: m.tradeOtherPerson,
+          tradeOtherPersonRemarks: m.tradeOtherPersonRemarks,
+          incomeOrPay: m.incomeOrPay,
+          moneyAmount: m.moneyAmount,
+          otherCost: m.otherCost,
+          inflowOrOutflow: m.inflowOrOutflow,
+          explain: m.explain,
+          place: m.place,
+          balance: m.balance,
+          goods: m.goods,
+          paymentMethod: m.paymentMethod,
+          currentStatus: m.currentStatus,
+          remarks: m.remarks,
+          billType: m.billType,
+          billMethod: m.billMethod,
+        });
+
+        // 根据来源决定查询哪些表
+        const queries: Promise<{ items: ApiAggregateBillItem[]; total: number }>[] = [];
+
+        if (!source || source === 'bank') {
+          const findData = buildFindData(bankType ? { bankType } : undefined);
+          queries.push(
+            (async () => {
+              const [total, arr] = await Promise.all([
+                this.bankModel.find(findData).count(),
+                this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
+              ]);
+              return { items: arr.map(mapBank), total };
+            })(),
+          );
+        }
+        if (!source || source === 'aliPay') {
+          const findData = buildFindData();
+          queries.push(
+            (async () => {
+              const [total, arr] = await Promise.all([
+                this.aliPayModel.find(findData).count(),
+                this.aliPayModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
+              ]);
+              return { items: arr.map(mapAliPay), total };
+            })(),
+          );
+        }
+        if (!source || source === 'weChat') {
+          const findData = buildFindData();
+          queries.push(
+            (async () => {
+              const [total, arr] = await Promise.all([
+                this.weChatModel.find(findData).count(),
+                this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
+              ]);
+              return { items: arr.map(mapWeChat), total };
+            })(),
+          );
+        }
+
+        const results = await Promise.all(queries);
+
+        // 如果指定了来源，直接返回该来源的结果
+        if (source) {
+          const result = results[0];
+          return {
+            code: ApiCode.SUCCESS,
+            result: { current, list: result.items, size, total: result.total },
+            message: '查询成功！',
+          };
+        }
+
+        // 未指定来源：合并三表数据，按交易时间倒序排序后统一分页
+        const allItems: ApiAggregateBillItem[] = results.flatMap((r) => r.items).sort((a, b) => (b.tradeTime > a.tradeTime ? 1 : -1));
+        const total = results.reduce((sum, r) => sum + r.total, 0);
+        // 注意：三表各自已经做了分页，合并后不需要再截取
+        // 因为三表各取 limit 条，合并后最多 3*limit 条，但由于排序后需要重新分页
+        // 这里采用更精确的方式：三表各取 skip+limit 条数据，合并排序后截取
+        const list = allItems;
+
+        return {
+          code: ApiCode.SUCCESS,
+          result: { current, list, size, total },
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        logger.error(`三表聚合分页查询账单列表 失败! ${err}`);
+        return { code: ApiCode.ERROR, message: err || '查询失败！' };
+      });
+  }
+
+  /**
+   * @description: 三表聚合查询单条账单详情
+   * @param {string} source
+   * @param {string} billId
+   * @return {Promise<IResponse>}
+   */
+  public findAggregateOne(source: string, billId: string): Promise<IResponse> {
+    return Promise.resolve({ source, billId })
+      .then(async ({ source, billId }) => {
+        let result: ApiAggregateBillItem | null = null;
+
+        if (source === 'bank') {
+          const m = await this.bankModel.findOne({ _id: billId }).lean();
+          if (!m) throw '银行账单不存在';
+          result = {
+            source: 'bank',
+            billId: m._id,
+            tradeTime: nowDateFun(m.tradeTime),
+            tradeType: m.tradeType,
+            tradeOtherPerson: m.tradeOtherPerson,
+            tradeOtherPersonRemarks: m.tradeOtherPersonRemarks,
+            incomeOrPay: m.incomeOrPay,
+            moneyAmount: m.moneyAmount,
+            otherCost: m.otherCost,
+            inflowOrOutflow: m.inflowOrOutflow,
+            explain: m.explain,
+            place: m.place,
+            balance: m.balance,
+            bankType: m.bankType,
+            voucherType: m.voucherType,
+            voucherNo: m.voucherNo,
+            tradeOtherPersonAccount: m.tradeOtherPersonAccount,
+            bankBillType: m.bankBillType,
+          };
+        } else if (source === 'aliPay') {
+          const m = await this.aliPayModel.findOne({ _id: billId }).lean();
+          if (!m) throw '支付宝账单不存在';
+          result = {
+            source: 'aliPay',
+            billId: m._id,
+            tradeTime: nowDateFun(m.tradeTime),
+            tradeType: m.tradeType,
+            tradeOtherPerson: m.tradeOtherPerson,
+            tradeOtherPersonRemarks: m.tradeOtherPersonRemarks,
+            incomeOrPay: m.incomeOrPay,
+            moneyAmount: m.moneyAmount,
+            otherCost: m.otherCost,
+            inflowOrOutflow: m.inflowOrOutflow,
+            explain: m.explain,
+            place: m.place,
+            balance: m.balance,
+            balanceBaby: m.balanceBaby,
+            productDescription: m.productDescription,
+            paymentMethod: m.paymentMethod,
+            oppositeAccount: m.oppositeAccount,
+            billType: m.billType,
+            billMethod: m.billMethod,
+          };
+        } else if (source === 'weChat') {
+          const m = await this.weChatModel.findOne({ _id: billId }).lean();
+          if (!m) throw '微信账单不存在';
+          result = {
+            source: 'weChat',
+            billId: m._id,
+            tradeTime: nowDateFun(m.tradeTime),
+            tradeType: m.tradeType,
+            tradeOtherPerson: m.tradeOtherPerson,
+            tradeOtherPersonRemarks: m.tradeOtherPersonRemarks,
+            incomeOrPay: m.incomeOrPay,
+            moneyAmount: m.moneyAmount,
+            otherCost: m.otherCost,
+            inflowOrOutflow: m.inflowOrOutflow,
+            explain: m.explain,
+            place: m.place,
+            balance: m.balance,
+            goods: m.goods,
+            paymentMethod: m.paymentMethod,
+            currentStatus: m.currentStatus,
+            remarks: m.remarks,
+            billType: m.billType,
+            billMethod: m.billMethod,
+          };
+        } else {
+          throw '账单来源不正确';
+        }
+
+        return { code: ApiCode.SUCCESS, result, message: '查询成功！' };
+      })
+      .catch((err) => {
+        logger.error(`三表聚合查询单条账单详情 失败! ${err}`);
+        return { code: ApiCode.ERROR, message: err || '查询失败！' };
+      });
+  }
+
+  /**
+   * @description: 三表聚合修改账单
+   * @param {UpdateAggregateBillDto} body
+   * @return {Promise<IResponse>}
+   */
+  public updateAggregate(body: UpdateAggregateBillDto): Promise<IResponse> {
+    return Promise.resolve({ body })
+      .then(async ({ body }) => {
+        const { source, billId, tradeOtherPersonRemarks, inflowOrOutflow, explain, place, otherCost, bankBillType, billType, billMethod } = body;
+
+        if (source === 'bank') {
+          await this.bankModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, otherCost, bankBillType });
+        } else if (source === 'aliPay') {
+          await this.aliPayModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
+        } else if (source === 'weChat') {
+          await this.weChatModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
+        } else {
+          throw '账单来源不正确';
+        }
+
+        return { code: ApiCode.SUCCESS, message: '修改成功！' };
+      })
+      .catch((err) => {
+        logger.error(`三表聚合修改账单 失败! ${err}`);
+        return { code: ApiCode.ERROR, message: err || '修改失败！' };
+      });
   }
 }

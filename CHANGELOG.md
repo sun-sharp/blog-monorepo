@@ -1,6 +1,7 @@
 # Changelog bm-xxx
 
-All notable changes to this project will be documented in this file.
+## 2.1.0 (2026-8-1)
+- 移动端和后端分别修改
 
 ## 2.0.0
 - Monorepo 项目结构重构
