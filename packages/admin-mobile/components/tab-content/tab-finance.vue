@@ -224,7 +224,7 @@
   }
 
   function getSourceIcon(source: string) {
-    const map: Record<string, string> = { bank: 'grid', aliPay: 'grid', weChat: 'weixin-fill' };
+    const map: Record<string, string> = { bank: 'red-packet', aliPay: 'zhifubao', weChat: 'weixin-fill' };
     return map[source] || 'list';
   }
 

@@ -18,6 +18,7 @@ import { isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
+import { runCode } from '@/common/string';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -83,12 +84,9 @@ export class BankService {
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
               // 判断是否赋值
-              let isAssignment = false;
-              // if (f.judgeWay === 'includes') {
-              //   isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
-              // } else if (f.judgeWay === 'indexOf') {
-              //   isAssignment = isAssignment || !!f.judgeVal.find((fi) => typeof m[f.billJudgeKey] === 'string' && m[f.billJudgeKey].indexOf(fi) !== -1);
-              // }
+              // 判断是否赋值
+              const runResult = runCode(f.code, { item, isAssignment: false });
+              const isAssignment = runResult.isAssignment;
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {
                   // 存在则不再次赋值

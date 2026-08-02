@@ -19,6 +19,7 @@ import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 import * as path from 'path';
+import { runCode } from '@/common/string';
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
@@ -96,12 +97,9 @@ export class AliPayService {
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
               // 判断是否赋值
-              let isAssignment = false;
-              // if (f.judgeWay === 'includes') {
-              //   isAssignment = isAssignment || f.judgeVal.includes(m[f.billJudgeKey]);
-              // } else if (f.judgeWay === 'indexOf') {
-              //   isAssignment = isAssignment || !!f.judgeVal.find((fi) => m[f.billJudgeKey].indexOf(fi) !== -1);
-              // }
+              // 判断是否赋值
+              const runResult = runCode(f.code, { item, isAssignment: false });
+              const isAssignment = runResult.isAssignment;
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {
                   // 存在则不再次赋值
@@ -166,7 +164,7 @@ export class AliPayService {
         })
         // 返回错误
         .catch((err) => {
-          logger.error(`支付宝账单导入 失败! ${err}`);
+          logger.error(`支付宝账单保存 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '添加失败！',

@@ -12,7 +12,7 @@
         <view v-for="item in list" :key="item.billUploadId" class="bill-upload-item card" @click="goToEdit(item.billUploadId)" @longpress="longpress(item)">
           <view class="bill-upload-item-left">
             <view class="bill-upload-item-icon" :style="{ background: getIconColor(item.billUploadType) }">
-              <u-icon name="download" size="32" color="#fff" />
+              <u-icon :name="getUploadTypeIcon(item.billUploadType)" size="32" color="#fff" />
             </view>
             <view class="bill-upload-item-info">
               <text class="bill-upload-item-title">{{ billUploadTypeMap[item.billUploadType] || '未知类型' }}</text>
@@ -111,6 +111,16 @@
       iconColorMap[type] = colorPool[Object.keys(iconColorMap).length % colorPool.length];
     }
     return iconColorMap[type];
+  }
+
+  const uploadTypeIconMap: Record<number, string> = {};
+  const uploadTypeIconPool = ['weixin-fill', 'zhifubao', 'red-packet'];
+
+  function getUploadTypeIcon(type: number) {
+    if (!uploadTypeIconMap[type]) {
+      uploadTypeIconMap[type] = uploadTypeIconPool[Object.keys(uploadTypeIconMap).length % uploadTypeIconPool.length];
+    }
+    return uploadTypeIconMap[type];
   }
 
   function goToAdd() {
