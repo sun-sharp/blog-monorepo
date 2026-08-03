@@ -94,12 +94,15 @@
               </view>
               <view class="finance-bill-info">
                 <text class="finance-bill-title">{{ item.tradeOtherPerson || item.explain || '--' }}</text>
-                <text class="finance-bill-sub">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 16) || '' }}</text>
+                <view class="finance-bill-sub-row">
+                  <text class="finance-bill-sub">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 16) || '' }}</text>
+                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
+                </view>
               </view>
             </view>
             <view class="finance-bill-right">
               <text :class="item.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="finance-bill-amount">
-                {{ item.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ item.moneyAmount }}
+                {{ item.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ formatMoney(item.moneyAmount) }}
               </text>
             </view>
           </view>
@@ -144,17 +147,48 @@
             </view>
             <u-icon name="arrow-right" size="32" color="#ccc" />
           </view>
+          <view class="finance-fab-action-item" @click="onFabAction('weChatBalance')">
+            <view class="finance-fab-action-icon" style="background-color: #e8faf0">
+              <u-icon name="weixin-fill" size="40" color="#07c160" />
+            </view>
+            <view class="finance-fab-action-content">
+              <text class="finance-fab-action-label">处理零钱余额</text>
+              <text class="finance-fab-action-desc">按时间范围处理微信零钱余额</text>
+            </view>
+            <u-icon name="arrow-right" size="32" color="#ccc" />
+          </view>
+          <view class="finance-fab-action-item" @click="onFabAction('aliPayBalance')">
+            <view class="finance-fab-action-icon" style="background-color: #e8f4fd">
+              <u-icon name="zhifubao" size="40" color="#1677ff" />
+            </view>
+            <view class="finance-fab-action-content">
+              <text class="finance-fab-action-label">处理支付宝余额</text>
+              <text class="finance-fab-action-desc">按时间范围处理支付宝余额</text>
+            </view>
+            <u-icon name="arrow-right" size="32" color="#ccc" />
+          </view>
+          <view class="finance-fab-action-item" @click="onFabAction('aliPayBalanceBaby')">
+            <view class="finance-fab-action-icon" style="background-color: #fff3e0">
+              <u-icon name="rmb-circle" size="40" color="#ff9900" />
+            </view>
+            <view class="finance-fab-action-content">
+              <text class="finance-fab-action-label">处理余额宝</text>
+              <text class="finance-fab-action-desc">按时间范围处理支付宝余额宝</text>
+            </view>
+            <u-icon name="arrow-right" size="32" color="#ccc" />
+          </view>
         </view>
       </view>
     </u-popup>
 
     <money-time-select v-model:show="showTimeSelect" @confirm="onTimeConfirm" />
+    <money-time-select v-model:show="showBalanceTimeSelect" @confirm="onBalanceTimeConfirm" />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue';
-  import { aggregateBillApi } from '../../api';
+  import { aggregateBillApi, weChatApi, aliPayApi } from '../../api';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
 
@@ -172,6 +206,9 @@
   const showTimeSelect = ref(false);
   const showFabMenu = ref(false);
   const showFilter = ref(false);
+  const showBalanceTimeSelect = ref(false);
+  const balanceAction = ref('');
+  const balanceLoading = ref(false);
   const timeRange = ref<{ startTime: string; endTime: string } | null>(null);
   const inflowTotal = ref('0.00');
   const outflowTotal = ref('0.00');
@@ -313,6 +350,23 @@
     loadData(true);
   }
 
+  function formatMoney(val: number | undefined | null): string {
+    if (val === undefined || val === null) return '0.00';
+    return Number(val).toFixed(2);
+  }
+
+  function getBalanceValue(item: ApiAggregateBillItem): number | undefined | null {
+    if (item.source === 'bank') return item.balance;
+    if (item.source === 'weChat') return item.balance;
+    if (item.source === 'aliPay') return item.balance;
+    return undefined;
+  }
+
+  function getBalanceLabel(item: ApiAggregateBillItem): boolean {
+    const val = getBalanceValue(item);
+    return val !== undefined && val !== null;
+  }
+
   function goToDetail(item: ApiAggregateBillItem) {
     uni.navigateTo({ url: `/pages/finance/bill-detail/bill-detail?source=${item.source}&id=${item.billId}` });
   }
@@ -326,6 +380,37 @@
       case 'summary':
         uni.navigateTo({ url: '/pages/finance/summary/summary' });
         break;
+      case 'weChatBalance':
+      case 'aliPayBalance':
+      case 'aliPayBalanceBaby':
+        balanceAction.value = action;
+        showBalanceTimeSelect.value = true;
+        break;
+    }
+  }
+
+  async function onBalanceTimeConfirm(params: { startTime: string; endTime: string }) {
+    const apiParams = {
+      startTime: params.startTime ? `${params.startTime} 00:00:00` : '',
+      endTime: params.endTime ? `${params.endTime} 23:59:59` : '',
+    };
+    balanceLoading.value = true;
+    uni.showLoading({ title: '处理中...' });
+    try {
+      if (balanceAction.value === 'weChatBalance') {
+        await weChatApi.updateBalance(apiParams);
+      } else if (balanceAction.value === 'aliPayBalance') {
+        await aliPayApi.updateBalance(apiParams);
+      } else if (balanceAction.value === 'aliPayBalanceBaby') {
+        await aliPayApi.updateBalanceBaby(apiParams);
+      }
+      uni.showToast({ title: '处理成功', icon: 'success' });
+      loadData(true);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      balanceLoading.value = false;
+      uni.hideLoading();
     }
   }
 
@@ -518,6 +603,18 @@
     color: $uni-text-color-grey;
     margin-top: 4rpx;
     display: block;
+  }
+  .finance-bill-sub-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4rpx;
+    gap: 12rpx;
+  }
+  .finance-bill-balance {
+    font-size: 22rpx;
+    color: $uni-text-color-grey;
+    flex-shrink: 0;
   }
   .finance-bill-right {
     flex-shrink: 0;

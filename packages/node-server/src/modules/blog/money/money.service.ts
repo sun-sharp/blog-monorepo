@@ -511,22 +511,22 @@ export class MoneyService {
         const { limit, skip } = PaginateHandle(size, current);
 
         // 构建通用查询条件
-        const buildFindData = (extra?: Record<string, any>): Record<string, any> => {
-          const findData: Record<string, any> = { userId, ...extra };
+        const buildMatch = (extra?: Record<string, any>): Record<string, any> => {
+          const match: Record<string, any> = { userId: userId.toString(), ...extra };
           if (tradeOtherPerson) {
-            findData.$or = [
+            match.$or = [
               { tradeOtherPerson: { $regex: tradeOtherPerson } },
               { tradeOtherPersonRemarks: { $regex: tradeOtherPerson } },
               { explain: { $regex: tradeOtherPerson } },
             ];
           }
-          if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
+          if (inflowOrOutflow) match.inflowOrOutflow = inflowOrOutflow;
           if (startTime && endTime) {
             const sTime = format(new Date(startTime), `yyyy-MM-dd 00:00:00`);
             const eTime = format(new Date(endTime), `yyyy-MM-dd 23:59:59`);
-            findData.tradeTime = { $gte: sTime, $lte: eTime };
+            match.tradeTime = { $gte: new Date(sTime), $lte: new Date(eTime) };
           }
-          return findData;
+          return match;
         };
 
         // 映射函数：将各表数据统一为 ApiAggregateBillItem
@@ -595,65 +595,62 @@ export class MoneyService {
           billMethod: m.billMethod,
         });
 
-        // 根据来源决定查询哪些表
-        const queries: Promise<{ items: ApiAggregateBillItem[]; total: number }>[] = [];
+        const mapperMap: Record<string, (m: any) => ApiAggregateBillItem> = {
+          bank: mapBank,
+          aliPay: mapAliPay,
+          weChat: mapWeChat,
+        };
+        const modelMap: Record<string, Model<any>> = {
+          bank: this.bankModel,
+          aliPay: this.aliPayModel,
+          weChat: this.weChatModel,
+        };
 
-        if (!source || source === 'bank') {
-          const findData = buildFindData(bankType ? { bankType } : undefined);
-          queries.push(
-            (async () => {
-              const [total, arr] = await Promise.all([
-                this.bankModel.find(findData).count(),
-                this.bankModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
-              ]);
-              return { items: arr.map(mapBank), total };
-            })(),
-          );
-        }
-        if (!source || source === 'aliPay') {
-          const findData = buildFindData();
-          queries.push(
-            (async () => {
-              const [total, arr] = await Promise.all([
-                this.aliPayModel.find(findData).count(),
-                this.aliPayModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
-              ]);
-              return { items: arr.map(mapAliPay), total };
-            })(),
-          );
-        }
-        if (!source || source === 'weChat') {
-          const findData = buildFindData();
-          queries.push(
-            (async () => {
-              const [total, arr] = await Promise.all([
-                this.weChatModel.find(findData).count(),
-                this.weChatModel.find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
-              ]);
-              return { items: arr.map(mapWeChat), total };
-            })(),
-          );
-        }
-
-        const results = await Promise.all(queries);
-
-        // 如果指定了来源，直接返回该来源的结果
+        // 指定来源：单表分页查询
         if (source) {
-          const result = results[0];
+          const extra = source === 'bank' && bankType ? { bankType } : undefined;
+          const findData = buildMatch(extra);
+          const [total, arr] = await Promise.all([
+            modelMap[source].find(findData).count(),
+            modelMap[source].find(findData).sort({ tradeTime: -1 }).limit(limit).skip(skip).lean(),
+          ]);
           return {
             code: ApiCode.SUCCESS,
-            result: { current, list: result.items, size, total: result.total },
+            result: { current, list: arr.map(mapperMap[source]), size, total },
             message: '查询成功！',
           };
         }
 
-        // 未指定来源：合并三表数据，按交易时间倒序排序后统一分页
-        const allItems: ApiAggregateBillItem[] = results.flatMap((r) => r.items).sort((a, b) => (b.tradeTime > a.tradeTime ? 1 : -1));
-        const total = results.reduce((sum, r) => sum + r.total, 0);
-        // 注意：三表各自已经做了分页，合并后不需要再截取
-        // 因为三表各取 limit 条，合并后最多 3*limit 条，但由于排序后需要重新分页
-        // 这里采用更精确的方式：三表各取 skip+limit 条数据，合并排序后截取
-        const list = allItems;
+        // 全部来源：使用 $unionWith 在数据库端聚合三表，统一排序分页
+        const sources = ['bank', 'aliPay', 'weChat'] as const;
+        const pipeline: any[] = [];
+
+        sources.forEach((src, idx) => {
+          const matchStage = buildMatch(src === 'bank' && bankType ? { bankType } : undefined);
+          if (idx === 0) {
+            pipeline.push({ $match: matchStage });
+          } else {
+            pipeline.push({ $unionWith: { coll: modelMap[src].collection.name, pipeline: [{ $match: matchStage }] } });
+          }
+        });
+
+        pipeline.push({ $sort: { tradeTime: -1 } });
+        pipeline.push({
+          $facet: {
+            metadata: [{ $count: 'total' }],
+            data: [{ $skip: skip }, { $limit: limit }],
+          },
+        });
+
+        const aggResult = await this.bankModel.aggregate(pipeline).exec();
+        const facetData = aggResult[0] || { metadata: [], data: [] };
+        const total = facetData.metadata[0]?.total || 0;
+        const rawList: any[] = facetData.data || [];
+        const list: ApiAggregateBillItem[] = rawList.map((m) => {
+          if (m.bankType !== undefined || m.voucherType !== undefined) return mapBank(m);
+          if (m.balanceBaby !== undefined || m.productDescription !== undefined) return mapAliPay(m);
+          return mapWeChat(m);
+        });
 
         return {
           code: ApiCode.SUCCESS,
