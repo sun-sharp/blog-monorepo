@@ -1,7 +1,16 @@
 # Changelog bm-xxx
 
+## 2.1.2 (2026-8-1)
+- 三表聚合分页查询参数修改（aggregate.d.ts）
+
 ## 2.1.0 (2026-8-1)
 - 移动端和后端分别修改
+- 添加三表聚合账单类型定义（aggregate.d.ts）
+  - ApiAggregateBillItem 聚合账单列表项
+  - ApiAggregateBillDetail 聚合账单详情
+  - ApiAggregateBillFindPageData 聚合分页查询参数
+  - ApiAggregateBillUpdateData 聚合修改参数
+
 
 ## 2.0.0
 - Monorepo 项目结构重构
