@@ -453,12 +453,25 @@
   });
 
   function clearFilterTag(field: string) {
-    if (field === 'source') { appliedSource.value = 0; currentSource.value = 0; }
-    else if (field === 'flow') { appliedFlow.value = 0; currentFlow.value = 0; }
-    else if (field === 'billType') { appliedBillType.value = undefined; filterBillType.value = undefined; }
-    else if (field === 'billMethod') { appliedBillMethod.value = undefined; filterBillMethod.value = undefined; }
-    else if (field === 'bankType') { appliedBankType.value = undefined; filterBankType.value = undefined; }
-    else if (field === 'bankBillType') { appliedBankBillType.value = undefined; filterBankBillType.value = undefined; }
+    if (field === 'source') {
+      appliedSource.value = 0;
+      currentSource.value = 0;
+    } else if (field === 'flow') {
+      appliedFlow.value = 0;
+      currentFlow.value = 0;
+    } else if (field === 'billType') {
+      appliedBillType.value = undefined;
+      filterBillType.value = undefined;
+    } else if (field === 'billMethod') {
+      appliedBillMethod.value = undefined;
+      filterBillMethod.value = undefined;
+    } else if (field === 'bankType') {
+      appliedBankType.value = undefined;
+      filterBankType.value = undefined;
+    } else if (field === 'bankBillType') {
+      appliedBankBillType.value = undefined;
+      filterBankBillType.value = undefined;
+    }
     loadData(true);
   }
 

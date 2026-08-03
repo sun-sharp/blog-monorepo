@@ -14,3 +14,10 @@ declare module '@dcloudio/uni-app' {
   export const onShow: (callback: (options?: Record<string, any>) => void) => void;
   // 根据需要添加其他钩子...
 }
+
+// wx 小程序
+interface Wx {
+  chooseMessageFile: (options: any) => void;
+  // 可以按需添加其他方法
+}
+declare const wx: Wx;
