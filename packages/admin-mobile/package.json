@@ -1,7 +1,7 @@
 {
   "name": "admin-mobile",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "lint": "eslint *.d.ts *.ts *.vue \"{pages,components,utils,api,hooks,store}/**/*.{vue,ts,tsx}\" --fix && vue-tsc --noEmit",
