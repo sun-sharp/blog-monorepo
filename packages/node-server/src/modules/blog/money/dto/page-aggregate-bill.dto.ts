@@ -27,4 +27,16 @@ export class PageAggregateBillDto extends PaginateDto {
   @ApiProperty({ description: '银行类型', required: false })
   @IsOptional()
   bankType: number;
+
+  @ApiProperty({ description: '账单类型（微信/支付宝）', required: false })
+  @IsOptional()
+  billType: number;
+
+  @ApiProperty({ description: '账单方式（微信/支付宝）', required: false })
+  @IsOptional()
+  billMethod: number;
+
+  @ApiProperty({ description: '银行账单类型', required: false })
+  @IsOptional()
+  bankBillType: number;
 }

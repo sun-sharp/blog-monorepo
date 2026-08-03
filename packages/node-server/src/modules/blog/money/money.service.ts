@@ -507,7 +507,7 @@ export class MoneyService {
   public findAggregatePage(userId: string, body: PageAggregateBillDto): Promise<IResponse> {
     return Promise.resolve({ userId, body })
       .then(async ({ userId, body }) => {
-        const { size, current, tradeOtherPerson, inflowOrOutflow, source, startTime, endTime, bankType } = body;
+        const { size, current, tradeOtherPerson, inflowOrOutflow, source, startTime, endTime, bankType, billType, billMethod, bankBillType } = body;
         const { limit, skip } = PaginateHandle(size, current);
 
         // 构建通用查询条件
@@ -521,6 +521,9 @@ export class MoneyService {
             ];
           }
           if (inflowOrOutflow) match.inflowOrOutflow = inflowOrOutflow;
+          if (billType) match.billType = billType;
+          if (billMethod) match.billMethod = billMethod;
+          if (bankBillType) match.bankBillType = bankBillType;
           if (startTime && endTime) {
             const sTime = format(new Date(startTime), `yyyy-MM-dd 00:00:00`);
             const eTime = format(new Date(endTime), `yyyy-MM-dd 23:59:59`);

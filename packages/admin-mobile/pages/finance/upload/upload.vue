@@ -20,6 +20,19 @@
         <view class="upload-action card">
           <u-button type="primary" icon="file-text" @click="chooseFile">选择文件</u-button>
           <text class="upload-tip">支持 CSV、Excel 格式文件</text>
+          <!-- #ifdef MP-WEIXIN -->
+          <view class="upload-mp-guide">
+            <text class="upload-mp-guide-title">小程序文件导入步骤：</text>
+            <view class="upload-mp-guide-step">
+              <text class="upload-mp-guide-num">1</text>
+              <text class="upload-mp-guide-text">在微信中打开「文件传输助手」，将账单文件发送到聊天中</text>
+            </view>
+            <view class="upload-mp-guide-step">
+              <text class="upload-mp-guide-num">2</text>
+              <text class="upload-mp-guide-text">点击上方「选择文件」，从聊天记录中选取该文件</text>
+            </view>
+          </view>
+          <!-- #endif -->
         </view>
 
         <view v-if="selectedFileName" class="upload-file card">
@@ -371,6 +384,17 @@
     selectedFileName.value = '';
   }
 
+  const VALID_EXTS = ['.csv', '.xlsx', '.xls'];
+
+  function checkFileExt(name: string): boolean {
+    const ext = name.substring(name.lastIndexOf('.')).toLowerCase();
+    if (!VALID_EXTS.includes(ext)) {
+      uni.showToast({ title: '请选择 CSV 或 Excel 文件', icon: 'none' });
+      return false;
+    }
+    return true;
+  }
+
   function chooseFile() {
     // #ifdef H5
     const input = document.createElement('input');
@@ -378,7 +402,7 @@
     input.accept = '.csv,.xlsx,.xls';
     input.onchange = (e: any) => {
       const file = e.target?.files?.[0];
-      if (file) {
+      if (file && checkFileExt(file.name)) {
         selectedFile.value = file;
         selectedFileName.value = file.name;
       }
@@ -386,17 +410,45 @@
     input.click();
     // #endif
 
-    // #ifndef H5
+    // #ifdef MP-WEIXIN
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      success: (res) => {
+        if (res.tempFiles?.[0]) {
+          const temp = res.tempFiles[0] as any;
+          const name = temp.name || '';
+          if (checkFileExt(name)) {
+            selectedFilePath.value = temp.path || '';
+            selectedFileName.value = name;
+          }
+        }
+      },
+      fail: (err) => {
+        if (err.errMsg?.includes('cancel')) return;
+        uni.showToast({ title: '选择文件失败', icon: 'none' });
+      },
+    });
+    // #endif
+
+    // #ifndef H5 || MP-WEIXIN
     uni.chooseFile({
       count: 1,
-      extension: ['.csv', '.xlsx', '.xls'],
+      extension: VALID_EXTS,
       success: (res) => {
         const files = Array.isArray(res.tempFiles) ? res.tempFiles : [];
         if (files[0]) {
           const temp = files[0] as any;
-          selectedFilePath.value = temp.path || '';
-          selectedFileName.value = temp.name || '';
+          const name = temp.name || '';
+          if (checkFileExt(name)) {
+            selectedFilePath.value = temp.path || '';
+            selectedFileName.value = name;
+          }
         }
+      },
+      fail: (err) => {
+        if (err.errMsg?.includes('cancel')) return;
+        uni.showToast({ title: '选择文件失败', icon: 'none' });
       },
     });
     // #endif
@@ -652,6 +704,48 @@
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-top: 12rpx;
+  }
+
+  .upload-mp-guide {
+    margin-top: 20rpx;
+    padding: 20rpx;
+    background-color: #fff8e6;
+    border-radius: 12rpx;
+    width: 100%;
+  }
+
+  .upload-mp-guide-title {
+    font-size: $uni-font-size-sm;
+    font-weight: bold;
+    color: #ff9900;
+    display: block;
+    margin-bottom: 12rpx;
+  }
+
+  .upload-mp-guide-step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10rpx;
+  }
+
+  .upload-mp-guide-num {
+    width: 32rpx;
+    height: 32rpx;
+    line-height: 32rpx;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #ff9900;
+    color: #fff;
+    font-size: 22rpx;
+    flex-shrink: 0;
+    margin-right: 12rpx;
+  }
+
+  .upload-mp-guide-text {
+    font-size: 24rpx;
+    color: #666;
+    flex: 1;
+    line-height: 1.5;
   }
 
   .upload-file-info {

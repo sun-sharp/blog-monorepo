@@ -28,41 +28,21 @@
         <view class="finance-toolbar-btn" @click="showTimeSelect = true">
           <u-icon name="calendar" size="36" :color="timeLabel ? '#007aff' : '#666'" />
         </view>
-        <view class="finance-toolbar-btn" @click="showFilter = !showFilter">
-          <u-icon name="setting" size="36" :color="showFilter ? '#007aff' : '#666'" />
+        <view class="finance-toolbar-btn" @click="openFilterPopup">
+          <u-icon name="setting" size="36" :color="hasActiveFilter ? '#007aff' : '#666'" />
         </view>
       </view>
     </view>
 
-    <view v-if="showFilter || timeLabel" class="finance-filter">
+    <view v-if="timeLabel || hasActiveFilter" class="finance-filter">
       <view v-if="timeLabel" class="finance-filter-time-tag" @click="clearTimeRange">
         <u-icon name="calendar" size="24" color="#007aff" />
         <text class="finance-filter-time-text">{{ timeLabel }}</text>
         <u-icon name="close" size="24" color="#999" />
       </view>
-      <view v-if="showFilter" class="finance-filter-row">
-        <text class="finance-filter-label">来源</text>
-        <u-subsection
-          :list="sourceOptions"
-          :current="currentSource"
-          mode="button"
-          active-color="#007aff"
-          inactive-color="#666666"
-          bg-color="#f5f5f5"
-          size="mini"
-          @change="onSourceChange" />
-      </view>
-      <view v-if="showFilter" class="finance-filter-row">
-        <text class="finance-filter-label">收支</text>
-        <u-subsection
-          :list="flowOptions"
-          :current="currentFlow"
-          mode="button"
-          active-color="#007aff"
-          inactive-color="#666666"
-          bg-color="#f5f5f5"
-          size="mini"
-          @change="onFlowChange" />
+      <view v-for="tag in activeFilterTags" :key="tag.field" class="finance-filter-time-tag" @click="clearFilterTag(tag.field)">
+        <text class="finance-filter-time-text">{{ tag.label }}</text>
+        <u-icon name="close" size="24" color="#999" />
       </view>
     </view>
 
@@ -97,6 +77,10 @@
                 <view class="finance-bill-sub-row">
                   <text class="finance-bill-sub">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 16) || '' }}</text>
                   <text v-if="getBalanceLabel(item)" class="finance-bill-balance">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
+                </view>
+                <view v-if="item.source === 'aliPay' && (getBillTypeLabel(item) || getBillMethodLabel(item))" class="finance-bill-sub-row">
+                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
                 </view>
               </view>
             </view>
@@ -181,18 +165,117 @@
       </view>
     </u-popup>
 
+    <u-popup :model-value="showFilterPopup" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFilterPopup = false">
+      <view class="finance-filter-popup">
+        <view class="finance-filter-popup-header">
+          <text class="finance-filter-popup-title">筛选</text>
+          <view class="finance-filter-popup-close" @click="showFilterPopup = false">
+            <u-icon name="close" size="36" color="#999" />
+          </view>
+        </view>
+        <scroll-view scroll-y class="finance-filter-popup-body">
+          <view class="finance-filter-popup-row">
+            <text class="finance-filter-popup-label">来源</text>
+            <u-subsection
+              :list="sourceOptions"
+              :current="currentSource"
+              mode="button"
+              active-color="#007aff"
+              inactive-color="#666666"
+              bg-color="#f5f5f5"
+              size="mini"
+              @change="onSourceChange" />
+          </view>
+          <view class="finance-filter-popup-row">
+            <text class="finance-filter-popup-label">收支</text>
+            <u-subsection
+              :list="flowOptions"
+              :current="currentFlow"
+              mode="button"
+              active-color="#007aff"
+              inactive-color="#666666"
+              bg-color="#f5f5f5"
+              size="mini"
+              @change="onFlowChange" />
+          </view>
+          <view v-if="currentSource !== 1" class="finance-filter-popup-row">
+            <view class="finance-filter-popup-label-row">
+              <text class="finance-filter-popup-label">账单类型</text>
+              <u-icon v-if="filterBillType" name="close-circle-fill" size="28" color="#999" @click="filterBillType = undefined" />
+            </view>
+            <view class="finance-filter-popup-select" @click="openFilterSelect('billType')">
+              <text :class="['finance-filter-popup-select-value', !filterBillType && 'placeholder']">
+                {{ filterBillType ? getBillTypeOptionLabel(filterBillType) : '全部' }}
+              </text>
+              <u-icon name="arrow-right" size="24" color="#999" />
+            </view>
+          </view>
+          <view v-if="currentSource !== 1" class="finance-filter-popup-row">
+            <view class="finance-filter-popup-label-row">
+              <text class="finance-filter-popup-label">账单方式</text>
+              <u-icon v-if="filterBillMethod" name="close-circle-fill" size="28" color="#999" @click="filterBillMethod = undefined" />
+            </view>
+            <view class="finance-filter-popup-select" @click="openFilterSelect('billMethod')">
+              <text :class="['finance-filter-popup-select-value', !filterBillMethod && 'placeholder']">
+                {{ filterBillMethod ? getBillMethodOptionLabel(filterBillMethod) : '全部' }}
+              </text>
+              <u-icon name="arrow-right" size="24" color="#999" />
+            </view>
+          </view>
+          <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row">
+            <view class="finance-filter-popup-label-row">
+              <text class="finance-filter-popup-label">银行类型</text>
+              <u-icon v-if="filterBankType" name="close-circle-fill" size="28" color="#999" @click="filterBankType = undefined" />
+            </view>
+            <view class="finance-filter-popup-select" @click="openFilterSelect('bankType')">
+              <text :class="['finance-filter-popup-select-value', !filterBankType && 'placeholder']">
+                {{ filterBankType ? getBankTypeOptionLabel(filterBankType) : '全部' }}
+              </text>
+              <u-icon name="arrow-right" size="24" color="#999" />
+            </view>
+          </view>
+          <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row">
+            <view class="finance-filter-popup-label-row">
+              <text class="finance-filter-popup-label">银行账单类型</text>
+              <u-icon v-if="filterBankBillType" name="close-circle-fill" size="28" color="#999" @click="filterBankBillType = undefined" />
+            </view>
+            <view class="finance-filter-popup-select" @click="openFilterSelect('bankBillType')">
+              <text :class="['finance-filter-popup-select-value', !filterBankBillType && 'placeholder']">
+                {{ filterBankBillType ? getBillTypeOptionLabel(filterBankBillType) : '全部' }}
+              </text>
+              <u-icon name="arrow-right" size="24" color="#999" />
+            </view>
+          </view>
+        </scroll-view>
+        <view class="finance-filter-popup-footer">
+          <u-button @click="clearAllFilters">重置</u-button>
+          <u-button type="primary" @click="onFilterConfirm">确定</u-button>
+        </view>
+      </view>
+    </u-popup>
+
     <money-time-select v-model:show="showTimeSelect" @confirm="onTimeConfirm" />
     <money-time-select v-model:show="showBalanceTimeSelect" @confirm="onBalanceTimeConfirm" />
+    <searchable-select
+      v-model="filterSelectVisible"
+      :title="filterSelectTitle"
+      :list="filterSelectList"
+      :current-value="filterSelectCurrent"
+      @confirm="onFilterSelectConfirm" />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue';
   import { aggregateBillApi, weChatApi, aliPayApi } from '../../api';
+  import { useApiTypeStore } from '../../store';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
+  import SearchableSelect from '../searchable-select/searchable-select.vue';
 
   const props = defineProps<{ active: boolean }>();
+
+  const apiTypeStore = useApiTypeStore();
 
   const keyword = ref('');
   const list = ref<ApiAggregateBillItem[]>([]);
@@ -205,7 +288,7 @@
   const currentFlow = ref(0);
   const showTimeSelect = ref(false);
   const showFabMenu = ref(false);
-  const showFilter = ref(false);
+  const showFilterPopup = ref(false);
   const showBalanceTimeSelect = ref(false);
   const balanceAction = ref('');
   const balanceLoading = ref(false);
@@ -213,6 +296,21 @@
   const inflowTotal = ref('0.00');
   const outflowTotal = ref('0.00');
   const inited = ref(false);
+
+  const filterBillType = ref<number | undefined>(undefined);
+  const filterBillMethod = ref<number | undefined>(undefined);
+  const filterBankType = ref<number | undefined>(undefined);
+  const filterBankBillType = ref<number | undefined>(undefined);
+  const appliedBillType = ref<number | undefined>(undefined);
+  const appliedBillMethod = ref<number | undefined>(undefined);
+  const appliedBankType = ref<number | undefined>(undefined);
+  const appliedBankBillType = ref<number | undefined>(undefined);
+  const appliedSource = ref(0);
+  const appliedFlow = ref(0);
+  const filterSelectVisible = ref(false);
+  const filterSelectTitle = ref('');
+  const filterSelectList = ref<{ label: string; value: number | string }[]>([]);
+  const filterSelectField = ref('');
 
   const scrollTopOffset = ref(0);
   const scrollStyle = computed(() => {
@@ -265,6 +363,135 @@
     return map[source] || 'list';
   }
 
+  function getBillTypeLabel(item: ApiAggregateBillItem): string {
+    const found = apiTypeStore.getBillTypeOption.find((o) => o.value === item.billType);
+    return found ? found.label : '';
+  }
+
+  function getBillMethodLabel(item: ApiAggregateBillItem): string {
+    const found = apiTypeStore.getBillMethodOption.find((o) => o.value === item.billMethod);
+    return found ? found.label : '';
+  }
+
+  function getBillTypeOptionLabel(value: number): string {
+    return apiTypeStore.getBillTypeOption.find((o) => o.value === value)?.label || '';
+  }
+
+  function getBillMethodOptionLabel(value: number): string {
+    return apiTypeStore.getBillMethodOption.find((o) => o.value === value)?.label || '';
+  }
+
+  function getBankTypeOptionLabel(value: number): string {
+    return apiTypeStore.getBankTypeOption.find((o) => o.value === value)?.label || '';
+  }
+
+  const filterSelectCurrent = computed(() => {
+    const field = filterSelectField.value;
+    if (field === 'billType') return filterBillType.value;
+    if (field === 'billMethod') return filterBillMethod.value;
+    if (field === 'bankType') return filterBankType.value;
+    if (field === 'bankBillType') return filterBankBillType.value;
+    return undefined;
+  });
+
+  function openFilterSelect(field: 'billType' | 'billMethod' | 'bankType' | 'bankBillType') {
+    filterSelectField.value = field;
+    if (field === 'billType' || field === 'bankBillType') {
+      filterSelectList.value = apiTypeStore.getBillTypeOption;
+      filterSelectTitle.value = '选择账单类型';
+    } else if (field === 'billMethod') {
+      filterSelectList.value = apiTypeStore.getBillMethodOption;
+      filterSelectTitle.value = '选择账单方式';
+    } else if (field === 'bankType') {
+      filterSelectList.value = apiTypeStore.getBankTypeOption;
+      filterSelectTitle.value = '选择银行类型';
+    }
+    filterSelectVisible.value = true;
+  }
+
+  function onFilterSelectConfirm(item: { label: string; value: number | string }) {
+    const val = item.value as number;
+    const field = filterSelectField.value;
+    if (field === 'billType') filterBillType.value = val;
+    else if (field === 'billMethod') filterBillMethod.value = val;
+    else if (field === 'bankType') filterBankType.value = val;
+    else if (field === 'bankBillType') filterBankBillType.value = val;
+  }
+
+  const hasActiveFilter = computed(() => {
+    return !!(
+      appliedBillType.value ||
+      appliedBillMethod.value ||
+      appliedBankType.value ||
+      appliedBankBillType.value ||
+      appliedSource.value !== 0 ||
+      appliedFlow.value !== 0
+    );
+  });
+
+  const activeFilterTags = computed(() => {
+    const tags: { field: string; label: string }[] = [];
+    if (appliedSource.value !== 0) {
+      tags.push({ field: 'source', label: sourceOptions[appliedSource.value] });
+    }
+    if (appliedFlow.value !== 0) {
+      tags.push({ field: 'flow', label: flowOptions[appliedFlow.value] });
+    }
+    if (appliedBillType.value) {
+      tags.push({ field: 'billType', label: getBillTypeOptionLabel(appliedBillType.value) });
+    }
+    if (appliedBillMethod.value) {
+      tags.push({ field: 'billMethod', label: getBillMethodOptionLabel(appliedBillMethod.value) });
+    }
+    if (appliedBankType.value) {
+      tags.push({ field: 'bankType', label: getBankTypeOptionLabel(appliedBankType.value) });
+    }
+    if (appliedBankBillType.value) {
+      tags.push({ field: 'bankBillType', label: getBillTypeOptionLabel(appliedBankBillType.value) });
+    }
+    return tags;
+  });
+
+  function clearFilterTag(field: string) {
+    if (field === 'source') { appliedSource.value = 0; currentSource.value = 0; }
+    else if (field === 'flow') { appliedFlow.value = 0; currentFlow.value = 0; }
+    else if (field === 'billType') { appliedBillType.value = undefined; filterBillType.value = undefined; }
+    else if (field === 'billMethod') { appliedBillMethod.value = undefined; filterBillMethod.value = undefined; }
+    else if (field === 'bankType') { appliedBankType.value = undefined; filterBankType.value = undefined; }
+    else if (field === 'bankBillType') { appliedBankBillType.value = undefined; filterBankBillType.value = undefined; }
+    loadData(true);
+  }
+
+  function openFilterPopup() {
+    currentSource.value = appliedSource.value;
+    currentFlow.value = appliedFlow.value;
+    filterBillType.value = appliedBillType.value;
+    filterBillMethod.value = appliedBillMethod.value;
+    filterBankType.value = appliedBankType.value;
+    filterBankBillType.value = appliedBankBillType.value;
+    showFilterPopup.value = true;
+  }
+
+  function clearAllFilters() {
+    currentSource.value = 0;
+    currentFlow.value = 0;
+    filterBillType.value = undefined;
+    filterBillMethod.value = undefined;
+    filterBankType.value = undefined;
+    filterBankBillType.value = undefined;
+  }
+
+  function onFilterConfirm() {
+    showFilterPopup.value = false;
+    appliedSource.value = currentSource.value;
+    appliedFlow.value = currentFlow.value;
+    appliedBillType.value = filterBillType.value;
+    appliedBillMethod.value = filterBillMethod.value;
+    appliedBankType.value = filterBankType.value;
+    appliedBankBillType.value = filterBankBillType.value;
+    loadData(true);
+  }
+
   async function loadData(isRefresh = false) {
     if (loading.value) return;
     if (isRefresh) {
@@ -278,15 +505,19 @@
         size: pageSize,
       };
       if (keyword.value) params.tradeOtherPerson = keyword.value;
-      const flowVal = currentFlow.value;
+      const flowVal = appliedFlow.value;
       if (flowVal === 1) params.inflowOrOutflow = 1;
       else if (flowVal === 2) params.inflowOrOutflow = 2;
-      const sourceVal = sourceValueMap[currentSource.value];
+      const sourceVal = sourceValueMap[appliedSource.value];
       if (sourceVal) params.source = sourceVal;
       if (timeRange.value) {
         params.startTime = timeRange.value.startTime;
         params.endTime = timeRange.value.endTime;
       }
+      if (appliedBillType.value) params.billType = appliedBillType.value;
+      if (appliedBillMethod.value) params.billMethod = appliedBillMethod.value;
+      if (appliedBankType.value) params.bankType = appliedBankType.value;
+      if (appliedBankBillType.value) params.bankBillType = appliedBankBillType.value;
 
       const res = await aggregateBillApi.findAggregatePage(params);
       const newList = res.list || [];
@@ -335,11 +566,13 @@
   }
   function onSourceChange(index: number) {
     currentSource.value = index;
-    loadData(true);
+    filterBillType.value = undefined;
+    filterBillMethod.value = undefined;
+    filterBankType.value = undefined;
+    filterBankBillType.value = undefined;
   }
   function onFlowChange(index: number) {
     currentFlow.value = index;
-    loadData(true);
   }
   function onTimeConfirm(params: { startTime: string; endTime: string }) {
     timeRange.value = params;
@@ -427,8 +660,9 @@
     }
   }
 
-  onMounted(() => {
+  onMounted(async () => {
     calcScrollHeight();
+    await Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod(), apiTypeStore.getBankType()]);
     loadData(true);
     inited.value = true;
   });
@@ -499,10 +733,10 @@
 
   .finance-filter {
     margin: 12rpx 20rpx 0;
-    background-color: #ffffff;
-    border-radius: 16rpx;
-    padding: 20rpx 24rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    flex-wrap: wrap;
   }
 
   .finance-filter-time-tag {
@@ -512,7 +746,6 @@
     background-color: #e8f4fd;
     border-radius: 20rpx;
     padding: 8rpx 20rpx;
-    margin-bottom: 16rpx;
   }
 
   .finance-filter-time-text {
@@ -520,15 +753,95 @@
     color: #007aff;
   }
 
-  .finance-filter-row {
-    margin-bottom: 16rpx;
+  .finance-filter-popup {
+    display: flex;
+    flex-direction: column;
+    max-height: 70vh;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .finance-filter-label {
-    font-size: 24rpx;
-    color: #666;
+  .finance-filter-popup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 32rpx 30rpx 16rpx;
+  }
+
+  .finance-filter-popup-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: $uni-text-color;
+  }
+
+  .finance-filter-popup-close {
+    position: absolute;
+    right: 24rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56rpx;
+    height: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+  }
+
+  .finance-filter-popup-body {
+    flex: 1;
+    padding: 0 30rpx;
+    max-height: 50vh;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .finance-filter-popup-row {
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
+    overflow: hidden;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .finance-filter-popup-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 12rpx;
-    display: block;
+  }
+
+  .finance-filter-popup-label {
+    font-size: 26rpx;
+    color: #666;
+  }
+
+  .finance-filter-popup-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16rpx 20rpx;
+    background-color: #f5f5f5;
+    border-radius: 12rpx;
+  }
+
+  .finance-filter-popup-select-value {
+    font-size: 26rpx;
+    color: #333;
+    &.placeholder {
+      color: #999;
+    }
+  }
+
+  .finance-filter-popup-footer {
+    display: flex;
+    gap: 20rpx;
+    padding: 20rpx 30rpx;
+    padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+    border-top: 1rpx solid #f0f0f0;
   }
   .finance-list-scroll {
     flex: 1;
@@ -615,6 +928,13 @@
     font-size: 22rpx;
     color: $uni-text-color-grey;
     flex-shrink: 0;
+  }
+  .finance-bill-tag {
+    font-size: 20rpx;
+    color: #1677ff;
+    background-color: #e8f4fd;
+    padding: 2rpx 12rpx;
+    border-radius: 6rpx;
   }
   .finance-bill-right {
     flex-shrink: 0;

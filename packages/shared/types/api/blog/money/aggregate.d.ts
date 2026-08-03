@@ -75,6 +75,12 @@ export interface ApiAggregateBillFindPageData extends ApiPaginateParams {
   endTime?: string;
   // 银行类型（source=bank 时有效）
   bankType?: number;
+  // 账单类型（微信/支付宝）
+  billType?: number;
+  // 账单方式（微信/支付宝）
+  billMethod?: number;
+  // 银行账单类型（source=bank 时有效）
+  bankBillType?: number;
 }
 
 /**
