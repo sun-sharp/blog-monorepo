@@ -7,6 +7,10 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-www-4.0.1 (2026-8-4)
+- 修改www端运行报错
+- 添加www端h5端访问方式
+
 ## bm-ns-www-am-4.0.0 (2026-8-4)
 - 优化 移动端分页/输入框/悬浮按钮/余额处理 
   - 移动端列表分页改为每页20条
