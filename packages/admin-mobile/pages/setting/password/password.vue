@@ -6,13 +6,13 @@
           <u-input v-model="form.username" disabled border />
         </u-form-item>
         <u-form-item label="当前密码" prop="password">
-          <u-input v-model="form.password" type="password" placeholder="请输入当前密码" border />
+          <u-input v-model="form.password" type="password" placeholder="请输入当前密码" border :cursor-spacing="20" />
         </u-form-item>
         <u-form-item label="新密码" prop="updatePassword">
-          <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" border />
+          <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" border :cursor-spacing="20" />
         </u-form-item>
         <u-form-item label="确认新密码" prop="confirmPassword">
-          <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" border />
+          <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" border :cursor-spacing="20" />
         </u-form-item>
       </u-form>
     </scroll-view>

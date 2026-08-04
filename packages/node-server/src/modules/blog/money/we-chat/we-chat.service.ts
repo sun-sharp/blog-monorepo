@@ -393,19 +393,31 @@ export class WeChatService {
           const find = await this.findModelAll(userId, query.startTime, query.endTime);
           // 获取零钱的零钱(账单方式-微信零钱，账单类型-零钱充值)
           const filterArr = find.filter((f) => f.billMethod === 101 || f.billType === 601);
+          // 其余的清空余额字段
+          const restIds = find.filter((f) => f.billMethod !== 101 && f.billType !== 601).map((f) => f._id);
+          if (restIds.length > 0) {
+            await this.weChatModel.updateMany({ _id: { $in: restIds } }, { balance: null });
+          }
+          // 批量计算余额，避免循环中逐条查询
+          const bulkOps: any[] = [];
+          let prevBalance = 0;
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];
-            if (fI !== 0) {
-              const preId = filterArr[fI - 1]._id;
-              const findOne = await this.weChatModel.findOne({ _id: preId });
-              let balance = findOne.balance || 0;
-              if (fe.inflowOrOutflow === 1 || fe.billType === 601) {
-                balance = balance + fe.moneyAmount;
-              } else if (fe.inflowOrOutflow === 2) {
-                balance = balance - fe.moneyAmount;
-              }
-              await this.weChatModel.updateOne({ _id: fe._id }, { balance: Number(balance.toFixed(2)) });
+            if (fI === 0) {
+              prevBalance = fe.balance || 0;
+              continue;
             }
+            if (fe.inflowOrOutflow === 1 || fe.billType === 601) {
+              prevBalance = prevBalance + fe.moneyAmount;
+            } else if (fe.inflowOrOutflow === 2) {
+              prevBalance = prevBalance - fe.moneyAmount;
+            }
+            bulkOps.push({
+              updateOne: { filter: { _id: fe._id }, update: { balance: Number(prevBalance.toFixed(2)) } },
+            });
+          }
+          if (bulkOps.length > 0) {
+            await this.weChatModel.bulkWrite(bulkOps);
           }
           return {
             code: ApiCode.SUCCESS,

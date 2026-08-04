@@ -5,10 +5,10 @@
         <view class="user-edit-card card">
           <text class="user-edit-section-title">基本信息</text>
           <u-form-item label="昵称" prop="nickname">
-            <u-input v-model="form.nickname" placeholder="请输入昵称" :disabled="isEdit" />
+            <u-input v-model="form.nickname" placeholder="请输入昵称" :disabled="isEdit" :cursor-spacing="20" />
           </u-form-item>
           <u-form-item label="用户名" prop="username">
-            <u-input v-model="form.username" placeholder="请输入用户名" :disabled="isEdit" />
+            <u-input v-model="form.username" placeholder="请输入用户名" :disabled="isEdit" :cursor-spacing="20" />
           </u-form-item>
         </view>
 
@@ -27,10 +27,10 @@
         <view v-if="!isEdit" class="user-edit-card card">
           <text class="user-edit-section-title">密码设置</text>
           <u-form-item label="密码" prop="password">
-            <u-input v-model="form.password" type="password" placeholder="请输入密码" />
+            <u-input v-model="form.password" type="password" placeholder="请输入密码" :cursor-spacing="20" />
           </u-form-item>
           <u-form-item label="确认密码" prop="verifyPassword">
-            <u-input v-model="form.verifyPassword" type="password" placeholder="请再次输入密码" />
+            <u-input v-model="form.verifyPassword" type="password" placeholder="请再次输入密码" :cursor-spacing="20" />
           </u-form-item>
         </view>
       </u-form>

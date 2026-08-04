@@ -95,13 +95,9 @@
       </view>
     </scroll-view>
 
-    <u-fab
-      icon="plus"
-      :size="88"
-      btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
-      position="right-bottom"
-      :gap="{ right: 60, bottom: 150 }"
-      @trigger="showFabMenu = !showFabMenu" />
+    <view class="tab-finance-fab" @click="showFabMenu = !showFabMenu">
+      <u-icon name="plus" size="44" color="#fff" />
+    </view>
     <u-popup :model-value="showFabMenu" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFabMenu = false">
       <view class="finance-fab-popup">
         <view class="finance-fab-popup-header">
@@ -650,13 +646,15 @@
       } else if (balanceAction.value === 'aliPayBalanceBaby') {
         await aliPayApi.updateBalanceBaby(apiParams);
       }
+      uni.hideLoading();
       uni.showToast({ title: '处理成功', icon: 'success' });
       loadData(true);
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      uni.hideLoading();
+      const errMsg = e?.message || '处理失败';
+      uni.showToast({ title: errMsg, icon: 'none' });
     } finally {
       balanceLoading.value = false;
-      uni.hideLoading();
     }
   }
 
@@ -1046,6 +1044,25 @@
           }
         }
       }
+    }
+  }
+
+  .tab-finance-fab {
+    position: fixed;
+    right: 60rpx;
+    bottom: calc(140rpx + env(safe-area-inset-bottom));
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007aff, #0055d5);
+    box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.35), 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+
+    &:active {
+      transform: scale(0.9);
     }
   }
 </style>

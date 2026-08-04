@@ -13,7 +13,7 @@
             </view>
           </u-form-item>
           <u-form-item label="标签" prop="label">
-            <u-input v-model="form.label" placeholder="请输入标签" />
+            <u-input v-model="form.label" placeholder="请输入标签" :cursor-spacing="20" />
           </u-form-item>
         </view>
 
@@ -23,7 +23,7 @@
             <u-number-box v-model="form.value" :min="0" />
           </u-form-item>
           <u-form-item label="字符串值" prop="valueStr">
-            <u-input v-model="form.valueStr" placeholder="请输入字符串值" />
+            <u-input v-model="form.valueStr" placeholder="请输入字符串值" :cursor-spacing="20" />
           </u-form-item>
         </view>
       </u-form>

@@ -8,10 +8,10 @@
           </view>
         </u-form-item>
         <u-form-item label="昵称" prop="nickname">
-          <u-input v-model="form.nickname" placeholder="请输入昵称" border />
+          <u-input v-model="form.nickname" placeholder="请输入昵称" border :cursor-spacing="20" />
         </u-form-item>
         <u-form-item label="用户名" prop="username">
-          <u-input v-model="form.username" placeholder="请输入用户名" border />
+          <u-input v-model="form.username" placeholder="请输入用户名" border :cursor-spacing="20" />
         </u-form-item>
       </u-form>
     </scroll-view>

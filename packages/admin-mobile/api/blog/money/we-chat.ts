@@ -14,7 +14,7 @@ export const update = (data: ApiWeChatUpdateData): Promise<undefined> => {
 };
 
 export const updateBalance = (data: ApiStartEndTimeParams): Promise<undefined> => {
-  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', data });
+  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', data, timeout: 120000 });
 };
 
 export const batchSave = (data: ApiWeChatBatchSaveData): Promise<undefined> => {

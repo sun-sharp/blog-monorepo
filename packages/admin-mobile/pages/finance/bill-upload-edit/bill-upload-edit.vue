@@ -43,7 +43,7 @@
           <view v-if="codeFields.length > 0" class="code-fields">
             <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
           </view>
-          <u-textarea v-model="form.code" placeholder="请输入代码" :auto-height="true" :maxlength="-1" />
+          <u-textarea v-model="form.code" placeholder="请输入代码" :auto-height="true" :maxlength="-1" :cursor-spacing="20" />
         </view>
       </u-form>
     </scroll-view>

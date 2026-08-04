@@ -4,20 +4,23 @@
       "path": "pages/main/main",
       "style": {
         "navigationBarTitleText": "管理后台",
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "softinputMode": "adjustResize"
       }
     },
     {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录",
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "softinputMode": "adjustResize"
       }
     },
     {
       "path": "pages/blog/article-edit/article-edit",
       "style": {
-        "navigationBarTitleText": "文章编辑"
+        "navigationBarTitleText": "文章编辑",
+        "softinputMode": "adjustResize"
       }
     },
     {
@@ -35,7 +38,8 @@
     {
       "path": "pages/blog/schedule-edit/schedule-edit",
       "style": {
-        "navigationBarTitleText": "日程编辑"
+        "navigationBarTitleText": "日程编辑",
+        "softinputMode": "adjustResize"
       }
     },
     {
@@ -47,7 +51,8 @@
     {
       "path": "pages/finance/bill-edit/bill-edit",
       "style": {
-        "navigationBarTitleText": "编辑账单"
+        "navigationBarTitleText": "编辑账单",
+        "softinputMode": "adjustResize"
       }
     },
     {
@@ -65,7 +70,8 @@
     {
       "path": "pages/finance/bill-upload-edit/bill-upload-edit",
       "style": {
-        "navigationBarTitleText": "编辑上传规则"
+        "navigationBarTitleText": "编辑上传规则",
+        "softinputMode": "adjustResize"
       }
     },
     {
@@ -89,7 +95,8 @@
     {
       "path": "pages/system/user-edit/user-edit",
       "style": {
-        "navigationBarTitleText": "编辑用户"
+        "navigationBarTitleText": "编辑用户",
+        "softinputMode": "adjustResize"
       }
     },
     {
@@ -101,7 +108,8 @@
     {
       "path": "pages/system/role-edit/role-edit",
       "style": {
-        "navigationBarTitleText": "编辑角色"
+        "navigationBarTitleText": "编辑角色",
+        "softinputMode": "adjustResize"
       }
     },
     {
@@ -113,19 +121,22 @@
     {
       "path": "pages/system/category-edit/category-edit",
       "style": {
-        "navigationBarTitleText": "编辑分类"
+        "navigationBarTitleText": "编辑分类",
+        "softinputMode": "adjustResize"
       }
     },
     {
       "path": "pages/setting/account/account",
       "style": {
-        "navigationBarTitleText": "账号设置"
+        "navigationBarTitleText": "账号设置",
+        "softinputMode": "adjustResize"
       }
     },
     {
       "path": "pages/setting/password/password",
       "style": {
-        "navigationBarTitleText": "修改密码"
+        "navigationBarTitleText": "修改密码",
+        "softinputMode": "adjustResize"
       }
     }
   ],

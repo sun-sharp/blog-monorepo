@@ -45,15 +45,9 @@
         <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
       </view>
     </scroll-view>
-    <u-fab
-      v-if="showFab"
-      icon="plus"
-      :size="88"
-      :z-index="9999"
-      btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
-      position="right-bottom"
-      :gap="{ right: 30, bottom: 30 }"
-      @trigger="$emit('fabClick')" />
+    <view v-if="showFab" class="list-page-fab" @click="$emit('fabClick')">
+      <u-icon name="plus" size="44" color="#fff" />
+    </view>
   </view>
 </template>
 
@@ -83,7 +77,7 @@
       searchKey: 'keywords',
       dropdownItems: () => [],
       showFab: true,
-      pageSize: 10,
+      pageSize: 20,
     }
   );
 
@@ -224,7 +218,6 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: hidden;
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
@@ -274,5 +267,24 @@
     margin-top: 20rpx;
     color: $uni-text-color-grey;
     font-size: $uni-font-size-sm;
+  }
+
+  .list-page-fab {
+    position: fixed;
+    right: 30rpx;
+    bottom: 60rpx;
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007aff, #0055d5);
+    box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.35), 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+
+    &:active {
+      transform: scale(0.9);
+    }
   }
 </style>

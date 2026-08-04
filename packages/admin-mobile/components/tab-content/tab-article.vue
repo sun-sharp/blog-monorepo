@@ -88,13 +88,9 @@
       </view>
     </scroll-view>
 
-    <u-fab
-      icon="plus"
-      :size="88"
-      btn-custom-style="box-shadow:0 8rpx 24rpx rgba(0,122,255,0.25),0 2rpx 8rpx rgba(0,0,0,0.08);"
-      position="right-bottom"
-      :gap="{ right: 60, bottom: 150 }"
-      @trigger="goToAdd" />
+    <view class="tab-article-fab" @click="goToAdd">
+      <u-icon name="plus" size="44" color="#fff" />
+    </view>
 
     <u-picker
       v-model="showCategoryPicker"
@@ -128,7 +124,7 @@
   const currentStatus = ref(0);
   const inited = ref(false);
 
-  const pageSize = 10;
+  const pageSize = 20;
 
   const articleCategoryOption = computed(() => apiTypeStore.getArticleCategoryOption);
 
@@ -470,5 +466,24 @@
     margin-top: 16rpx;
     padding-top: 16rpx;
     border-top: 1rpx solid #f0f0f0;
+  }
+
+  .tab-article-fab {
+    position: fixed;
+    right: 60rpx;
+    bottom: calc(140rpx + env(safe-area-inset-bottom));
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007aff, #0055d5);
+    box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.35), 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+
+    &:active {
+      transform: scale(0.9);
+    }
   }
 </style>

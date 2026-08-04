@@ -14,11 +14,11 @@ export const update = (data: ApiAliPayUpdateData): Promise<undefined> => {
 };
 
 export const updateBalance = (data: ApiStartEndTimeParams): Promise<undefined> => {
-  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', data });
+  return blogRequest({ url: `${basic}/update_balance`, method: 'PUT', data, timeout: 120000 });
 };
 
 export const updateBalanceBaby = (data: ApiStartEndTimeParams): Promise<undefined> => {
-  return blogRequest({ url: `${basic}/update_balance_baby`, method: 'PUT', data });
+  return blogRequest({ url: `${basic}/update_balance_baby`, method: 'PUT', data, timeout: 120000 });
 };
 
 export const batchSave = (data: ApiAliPayBatchSaveData): Promise<undefined> => {

@@ -10,11 +10,11 @@
         <view class="article-edit-form">
           <view class="article-edit-field">
             <text class="article-edit-label">标题</text>
-            <u-input v-model="form.title" placeholder="请输入文章标题" border clearable />
+            <u-input v-model="form.title" placeholder="请输入文章标题" border clearable :cursor-spacing="20" />
           </view>
           <view class="article-edit-field">
             <text class="article-edit-label">简介</text>
-            <u-textarea v-model="form.brief" placeholder="用一段话简短介绍这篇文章..." :maxlength="300" count auto-height />
+            <u-textarea v-model="form.brief" placeholder="用一段话简短介绍这篇文章..." :maxlength="300" count auto-height :cursor-spacing="20" />
           </view>
         </view>
       </view>

@@ -4,10 +4,10 @@
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <view class="schedule-edit-card card">
           <u-form-item label="标题" prop="title">
-            <u-input v-model="form.title" placeholder="请输入日程标题" />
+            <u-input v-model="form.title" placeholder="请输入日程标题" :cursor-spacing="20" />
           </u-form-item>
           <u-form-item label="内容" prop="content">
-            <u-textarea v-model="form.content" placeholder="请输入日程内容" />
+            <u-textarea v-model="form.content" placeholder="请输入日程内容" :cursor-spacing="20" />
           </u-form-item>
         </view>
         <view class="schedule-edit-card card">

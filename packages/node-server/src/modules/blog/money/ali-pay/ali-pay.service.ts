@@ -367,19 +367,31 @@ export class AliPayService {
           const find = await this.findModelAll(userId, query.startTime, query.endTime);
           // 获取支付宝余额(账单方式-支付宝余额，账单类型-支付宝余额充值)
           const filterArr = find.filter((f) => f.billMethod === 111 || f.billType === 602);
+          // 其余的清空余额字段
+          const restIds = find.filter((f) => f.billMethod !== 111 && f.billType !== 602).map((f) => f._id);
+          if (restIds.length > 0) {
+            await this.aliPayModel.updateMany({ _id: { $in: restIds } }, { balance: null });
+          }
+          // 批量计算余额，避免循环中逐条查询
+          const bulkOps: any[] = [];
+          let prevBalance = 0;
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];
-            if (fI !== 0) {
-              const preId = filterArr[fI - 1]._id;
-              const findOne = await this.aliPayModel.findOne({ _id: preId });
-              let balance = findOne.balance || 0;
-              if (fe.inflowOrOutflow === 1 || fe.billType === 602) {
-                balance = balance + fe.moneyAmount;
-              } else if (fe.inflowOrOutflow === 2) {
-                balance = balance - fe.moneyAmount;
-              }
-              await this.aliPayModel.updateOne({ _id: fe._id }, { balance: Number(balance.toFixed(2)) });
+            if (fI === 0) {
+              prevBalance = fe.balance || 0;
+              continue;
             }
+            if (fe.inflowOrOutflow === 1 || fe.billType === 602) {
+              prevBalance = prevBalance + fe.moneyAmount;
+            } else if (fe.inflowOrOutflow === 2) {
+              prevBalance = prevBalance - fe.moneyAmount;
+            }
+            bulkOps.push({
+              updateOne: { filter: { _id: fe._id }, update: { balance: Number(prevBalance.toFixed(2)) } },
+            });
+          }
+          if (bulkOps.length > 0) {
+            await this.aliPayModel.bulkWrite(bulkOps);
           }
           return {
             code: ApiCode.SUCCESS,
@@ -408,21 +420,33 @@ export class AliPayService {
       Promise.resolve({ userId, query })
         .then(async ({ userId, query }) => {
           const find = await this.findModelAll(userId, query.startTime, query.endTime);
-          // 获取支付宝余额(账单方式-支付宝余额宝，账单类型-支付宝余额宝充值)
+          // 获取支付宝余额宝(账单方式-支付宝余额宝，账单类型-支付宝余额宝充值)
           const filterArr = find.filter((f) => f.billMethod === 112 || f.billType === 603);
+          // 其余的清空余额宝字段
+          const restIds = find.filter((f) => f.billMethod !== 112 && f.billType !== 603).map((f) => f._id);
+          if (restIds.length > 0) {
+            await this.aliPayModel.updateMany({ _id: { $in: restIds } }, { balanceBaby: null });
+          }
+          // 批量计算余额宝，避免循环中逐条查询
+          const bulkOps: any[] = [];
+          let prevBalance = 0;
           for (let fI = 0; fI < filterArr.length; fI++) {
             const fe = filterArr[fI];
-            if (fI !== 0) {
-              const preId = filterArr[fI - 1]._id;
-              const findOne = await this.aliPayModel.findOne({ _id: preId });
-              let balanceBaby = findOne.balanceBaby || 0;
-              if (fe.inflowOrOutflow === 1 || fe.billType === 603) {
-                balanceBaby = balanceBaby + fe.moneyAmount;
-              } else if (fe.inflowOrOutflow === 2) {
-                balanceBaby = balanceBaby - fe.moneyAmount;
-              }
-              await this.aliPayModel.updateOne({ _id: fe._id }, { balanceBaby: Number(balanceBaby.toFixed(2)) });
+            if (fI === 0) {
+              prevBalance = fe.balanceBaby || 0;
+              continue;
             }
+            if (fe.inflowOrOutflow === 1 || fe.billType === 603) {
+              prevBalance = prevBalance + fe.moneyAmount;
+            } else if (fe.inflowOrOutflow === 2) {
+              prevBalance = prevBalance - fe.moneyAmount;
+            }
+            bulkOps.push({
+              updateOne: { filter: { _id: fe._id }, update: { balanceBaby: Number(prevBalance.toFixed(2)) } },
+            });
+          }
+          if (bulkOps.length > 0) {
+            await this.aliPayModel.bulkWrite(bulkOps);
           }
           return {
             code: ApiCode.SUCCESS,

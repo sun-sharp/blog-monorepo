@@ -14,6 +14,7 @@ interface RequestConfig {
   isShowSuccessMessage?: boolean;
   showLoading?: boolean;
   loadingText?: string;
+  timeout?: number;
 }
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || '';
@@ -76,6 +77,7 @@ function request<T = any>(config: RequestConfig): Promise<T> {
       method: config.method || 'GET',
       data: config.data,
       header,
+      timeout: config.timeout || 30000,
       success: (res) => {
         const statusCode = res.statusCode;
         if (statusCode === 200) {
@@ -107,9 +109,15 @@ function request<T = any>(config: RequestConfig): Promise<T> {
           reject(new Error(`请求错误: ${statusCode}`));
         }
       },
-      fail: (err) => {
-        uni.showToast({ title: '网络请求失败', icon: 'none' });
-        reject(err);
+      fail: (err: any) => {
+        let errMsg = '网络请求失败';
+        if (err?.errMsg?.includes('timeout')) {
+          errMsg = '请求超时，请稍后重试';
+        } else if (err?.errMsg) {
+          errMsg = err.errMsg;
+        }
+        uni.showToast({ title: errMsg, icon: 'none' });
+        reject(new Error(errMsg));
       },
     });
   }).finally(() => {

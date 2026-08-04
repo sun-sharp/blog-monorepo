@@ -79,7 +79,7 @@
         <view class="bill-edit-card card">
           <text class="bill-edit-section-title">基本信息</text>
           <u-form-item label="交易对方备注" prop="tradeOtherPersonRemarks">
-            <u-input v-model="form.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" />
+            <u-input v-model="form.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" :cursor-spacing="20" />
           </u-form-item>
           <u-form-item label="流入/流出" prop="inflowOrOutflow">
             <view class="bill-edit-select" @click="showInflowSelect = true">
@@ -90,10 +90,10 @@
             </view>
           </u-form-item>
           <u-form-item label="说明" prop="explain">
-            <u-input v-model="form.explain" placeholder="请输入说明" />
+            <u-input v-model="form.explain" placeholder="请输入说明" :cursor-spacing="20" />
           </u-form-item>
           <u-form-item label="交易场所" prop="place">
-            <u-input v-model="form.place" placeholder="请输入交易场所" />
+            <u-input v-model="form.place" placeholder="请输入交易场所" :cursor-spacing="20" />
           </u-form-item>
         </view>
 

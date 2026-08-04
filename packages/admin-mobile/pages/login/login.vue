@@ -13,7 +13,7 @@
         <view class="login-form card">
           <u-form ref="formRef" :model="form" :rules="rules">
             <u-form-item prop="username">
-              <u-input v-model="form.username" placeholder="请输入用户名" prefix-icon="account" :prefix-icon-style="{ color: '#999' }" shape="round" />
+              <u-input v-model="form.username" placeholder="请输入用户名" prefix-icon="account" :prefix-icon-style="{ color: '#999' }" shape="round" :cursor-spacing="20" />
             </u-form-item>
             <u-form-item prop="password">
               <u-input
@@ -22,7 +22,8 @@
                 placeholder="请输入密码"
                 prefix-icon="lock"
                 :prefix-icon-style="{ color: '#999' }"
-                shape="round" />
+                shape="round"
+                :cursor-spacing="20" />
             </u-form-item>
           </u-form>
           <u-button type="primary" :loading="loading" shape="circle" class="login-btn" @click="handleLogin">登 录</u-button>

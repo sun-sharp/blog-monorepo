@@ -48,6 +48,7 @@
           clearable
           shape="round"
           :custom-style="{ background: '#f5f5f5' }"
+          :cursor-spacing="20"
           @confirm="addTodo" />
         <u-button type="primary" size="mini" shape="circle" class="home-todo-add-btn" @click="addTodo">添加</u-button>
       </view>
