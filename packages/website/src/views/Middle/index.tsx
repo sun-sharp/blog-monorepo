@@ -29,11 +29,14 @@ const Middle: React.FC = () => {
               <Link className="link" to={`/`}>
                 官网
               </Link>
-              {/*<Link className="link" to={`/project`}>*/}
-              {/*  项目*/}
-              {/*</Link>*/}
+              {/* <Link className="link" to={`/project`}>
+                项目
+              </Link> */}
               <a target="_blank" rel="noopener noreferrer" className="link" href={`http://www.yangruirui.top/manage`}>
                 后台管理系统
+              </a>
+              <a target="_blank" rel="noopener noreferrer" className="link" href={`http://www.yangruirui.top/h5`}>
+                移动端管理系统
               </a>
               <a target="_blank" rel="noopener noreferrer" className="link" href={`https://github.com/sun-sharp`}>
                 github

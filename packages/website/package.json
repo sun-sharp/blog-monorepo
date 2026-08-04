@@ -49,6 +49,7 @@
     "postcss-pxtorem": "^6.1.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.5.3",
+    "react-refresh": "^0.17.0",
     "sass": "^1.88.0",
     "stylelint": "^16.26.1",
     "stylelint-config-rational-order": "^0.1.2",
