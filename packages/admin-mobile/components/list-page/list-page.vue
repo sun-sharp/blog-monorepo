@@ -5,7 +5,7 @@
         v-model="keyword"
         :placeholder="searchPlaceholder"
         shape="round"
-        :show-action="true"
+        :show-action="false"
         action-text="搜索"
         @search="handleSearch"
         @custom="handleSearch"

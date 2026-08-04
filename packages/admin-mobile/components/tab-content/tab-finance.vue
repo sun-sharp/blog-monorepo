@@ -75,12 +75,21 @@
               <view class="finance-bill-info">
                 <text class="finance-bill-title">{{ item.tradeOtherPerson || item.explain || '--' }}</text>
                 <view class="finance-bill-sub-row">
-                  <text class="finance-bill-sub">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 16) || '' }}</text>
-                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
+                  <text class="finance-bill-sub">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 19) || '' }}</text>
                 </view>
-                <view v-if="item.source === 'aliPay' && (getBillTypeLabel(item) || getBillMethodLabel(item))" class="finance-bill-sub-row">
+                <view class="finance-bill-sub-row">
+                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
+                  <text v-if="getBalanceBabyLabel(item)" class="finance-bill-balance">余额宝 ¥{{ formatMoney(getBalanceBabyValue(item)) }}</text>
+                </view>
+                <view
+                  v-if="['aliPay', 'weChat'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item))"
+                  class="finance-bill-sub-tag-row">
                   <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
                   <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
+                </view>
+                <view v-if="['bank'].includes(item.source) && (getBillTypeLabel(item) || getBillBankTypeLabel(item))" class="finance-bill-sub-tag-row">
+                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getBillBankTypeLabel(item)" class="finance-bill-tag">{{ getBillBankTypeLabel(item) }}</text>
                 </view>
               </view>
             </view>
@@ -360,12 +369,17 @@
   }
 
   function getBillTypeLabel(item: ApiAggregateBillItem): string {
-    const found = apiTypeStore.getBillTypeOption.find((o) => o.value === item.billType);
+    const found = apiTypeStore.getBillTypeOption.find((o) => o.value === (item.billType || item.bankBillType));
     return found ? found.label : '';
   }
 
   function getBillMethodLabel(item: ApiAggregateBillItem): string {
     const found = apiTypeStore.getBillMethodOption.find((o) => o.value === item.billMethod);
+    return found ? found.label : '';
+  }
+
+  function getBillBankTypeLabel(item: ApiAggregateBillItem): string {
+    const found = apiTypeStore.getBankTypeOption.find((o) => o.value === item.bankType);
     return found ? found.label : '';
   }
 
@@ -606,6 +620,16 @@
 
   function getBalanceLabel(item: ApiAggregateBillItem): boolean {
     const val = getBalanceValue(item);
+    return val !== undefined && val !== null;
+  }
+
+  function getBalanceBabyValue(item: ApiAggregateBillItem): number | undefined | null {
+    if (item.source === 'aliPay') return item.balanceBaby;
+    return undefined;
+  }
+
+  function getBalanceBabyLabel(item: ApiAggregateBillItem): boolean {
+    const val = getBalanceBabyValue(item);
     return val !== undefined && val !== null;
   }
 
@@ -925,15 +949,18 @@
   .finance-bill-sub {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
-    margin-top: 4rpx;
     display: block;
   }
+  .finance-bill-sub-tag-row,
   .finance-bill-sub-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4rpx;
-    gap: 12rpx;
+    margin-top: 6rpx;
+  }
+
+  .finance-bill-sub-tag-row {
+    align-items: flex-start;
   }
   .finance-bill-balance {
     font-size: 22rpx;
@@ -946,6 +973,7 @@
     background-color: #e8f4fd;
     padding: 2rpx 12rpx;
     border-radius: 6rpx;
+    max-width: 240rpx;
   }
   .finance-bill-right {
     flex-shrink: 0;
