@@ -1,4 +1,22 @@
-# Changelog bm-xxx
+# Changelog
+
+- bm-xxx 表示只修改了主项目里的代码
+- bm-ns-xxx 表示修改了子项目node-server的代码
+- bm-www-xxx 表示修改了子项目website的代码
+- bm-aw-xxx 表示修改了子项目admin-web的代码
+- bm-am-xxx 表示修改了子项目admin-mobile的代码
+- bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
+
+## bm-ns-www-am-4.0.0 (2026-8-4)
+- 优化 移动端分页/输入框/悬浮按钮/余额处理 
+  - 移动端列表分页改为每页20条
+  - 表单页添加softinputMode解决键盘遮挡输入框
+  - 悬浮按钮改用纯CSS定位兼容各端
+  - 余额处理接口改用bulkWrite优化性能
+  - 请求层添加超时配置和错误提示
+- 修改 server 和 移动端的代码验证
+- 修改 website 打包问题
+- 修改 移动端 财务列表 展示
 
 ## 2.1.2 (2026-8-1)
 - 三表聚合分页查询参数修改（aggregate.d.ts）
