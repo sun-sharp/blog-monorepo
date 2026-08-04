@@ -277,7 +277,9 @@
     height: 96rpx;
     border-radius: 50%;
     background: linear-gradient(135deg, #007aff, #0055d5);
-    box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.35), 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 8rpx 24rpx rgba(0, 122, 255, 0.35),
+      0 2rpx 8rpx rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
