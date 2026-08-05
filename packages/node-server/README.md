@@ -116,6 +116,11 @@ pm2 restart ecosystem.config.js --update-env
 # npm install && pm2 list && pm2 reload ecosystem.config.js
 npm run update_pm2
 
+# pm2 暂停
+pm2 stop dev_nest
+# pm2 删除
+pm2 delete dev_nest
+
 ```
 
 ### 部署注意的问题
