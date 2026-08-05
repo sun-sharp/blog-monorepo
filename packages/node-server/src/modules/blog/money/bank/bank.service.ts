@@ -35,11 +35,11 @@ export class BankService {
    * @param {any} file
    * @return {Promise<IResponse>}
    */
-  public upload(file: any): Promise<IResponse> {
+  public upload(file: any, size: number = 50): Promise<IResponse> {
     return (
-      Promise.resolve({ file })
+      Promise.resolve()
         // 导入数据处理
-        .then(async ({ file }) => {
+        .then(async () => {
           const { buffer } = file; // file为前端上传的excel
           let list: ApiBankUpload[] = [];
           for (const itKey in bankExcelCellMap) {
@@ -77,6 +77,8 @@ export class BankService {
         })
         // 对数据进行批量处理
         .then(async (list) => {
+          const total = list.length;
+          const listSlice = list.slice(0, size);
           const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.bank);
           // 处理每项数据
           const formatBillUploadItem = (m: ApiBankUpload) => {
@@ -105,13 +107,16 @@ export class BankService {
             }
             return item;
           };
-          const result = list.map((m) => {
+          const result = listSlice.map((m) => {
             return formatBillUploadItem(m);
           });
-          logger.log(`银行账单导入${result.length}个`);
+          logger.log(`银行账单导入${total}个`);
           return {
             code: ApiCode.SUCCESS,
-            result,
+            result: {
+              total,
+              list: result,
+            },
             message: '导入成功！',
           };
         })
