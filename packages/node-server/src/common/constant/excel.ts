@@ -1,4 +1,4 @@
-import { nowDateFun } from '../date';
+import { formatUTCToLocalString, nowDateFun } from '../date';
 import { safeString } from '../string';
 
 // 处理导入字符串
@@ -15,9 +15,13 @@ const formatExcelNum = (val: any): number => {
 };
 
 // 微信账单key值重命名
-export const weChatExcelCellHandle = {
+export const weChatExcelCellHandle = (fileType: 'csv' | 'xlsx') => ({
   1: (tar: any, val: any) => {
-    tar['tradeTime'] = nowDateFun(val);
+    if (fileType === 'xlsx') {
+      tar['tradeTime'] = formatUTCToLocalString(val);
+    } else {
+      tar['tradeTime'] = nowDateFun(val);
+    }
   }, // 交易时间
   2: (tar: any, val: any) => {
     tar['tradeType'] = formatExcelStr(val);
@@ -44,7 +48,7 @@ export const weChatExcelCellHandle = {
   11: (tar: any, val: any) => {
     tar['remarks'] = formatExcelStr(val);
   }, // 备注
-};
+});
 
 // 支付宝账单key值重命名
 export const aliPayExcelCellHandle = {

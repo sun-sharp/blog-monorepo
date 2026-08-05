@@ -829,6 +829,7 @@
     flex: 1;
     height: 0;
     padding: 20rpx;
+    box-sizing: border-box;
   }
 
   .import-card {

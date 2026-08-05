@@ -60,7 +60,7 @@ export class WeChatService {
           buffer: file.buffer,
           startNum,
           endNum: endNum ?? 0, // 保持兼容你现有函数中“忽略末尾行数”的语义，如需改为结束行号请按方案B调整工具函数
-          cellHandler: weChatExcelCellHandle,
+          cellHandler: weChatExcelCellHandle(fileType),
         });
       } else {
         return await excelXlsxHandleBuffer({
@@ -68,7 +68,7 @@ export class WeChatService {
           sheetName: 'Sheet1', // 根据实际 sheet 名调整
           startNum,
           endNum: endNum ?? 0,
-          cellHandler: weChatExcelCellHandle,
+          cellHandler: weChatExcelCellHandle(fileType),
         });
       }
     };
@@ -167,7 +167,6 @@ export class WeChatService {
           await this.weChatModel.create({
             ...body,
             userId,
-            balance: 0,
           });
           return {
             code: ApiCode.SUCCESS,
