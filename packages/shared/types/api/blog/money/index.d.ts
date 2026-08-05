@@ -41,14 +41,27 @@ export interface ApiBankFlowResult extends ApiBankFlow {
   name: string;
 }
 
+export interface ApiBankVoucherBalance {
+  // 凭证号码
+  type: string;
+  // 凭证时间
+  time: string;
+  // 凭证余额
+  value: number;
+}
+
 /**
  * @description: 统计各个的方式的余额返回
  */
 export interface ApiMoneyBalanceResult {
   // 名称
   name: string;
+  // 时间
+  time: string;
   // 金额
   value: number;
+  // 凭证数组
+  voucher?: ApiBankVoucherBalance[];
 }
 
 /**

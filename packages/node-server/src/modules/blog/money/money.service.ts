@@ -9,7 +9,14 @@ import { WeChatService } from './we-chat/we-chat.service';
 import { billTypeEnum } from 'src/common/enums/money.enum';
 import { categoryTypeEnum } from 'src/common/enums/category.enum';
 import { CategoryService } from 'src/modules/capital/category/category.service';
-import { ApiAliPayAndWeChatChild, ApiBankFlow, ApiBankFlowResult, ApiInflowOrOutflowMoneyResult, ApiMoneyBalanceResult } from '/#/api/blog/money';
+import {
+  ApiAliPayAndWeChatChild,
+  ApiBankFlow,
+  ApiBankFlowResult,
+  ApiBankVoucherBalance,
+  ApiInflowOrOutflowMoneyResult,
+  ApiMoneyBalanceResult,
+} from '/#/api/blog/money';
 import { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
 import { ApiBank } from '/#/api/blog/money/bank';
 import { IResponse } from '/#/common/common';
@@ -192,9 +199,8 @@ export class MoneyService {
           const civilArr = bankModelAll.filter((f) => f.bankType === 4);
           // 招商银行
           const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
-          // 获取银行的余额
-          const bankBalanceFun = (balanceArr: ApiBank[]): number => {
-            let bankBalance = 0;
+          // 获取银行每个凭证下的余额
+          const bankVoucherBalanceFun = (balanceArr: ApiBank[]): ApiBankVoucherBalance[] => {
             // 判断数据是否为空
             if (balanceArr.length > 0) {
               // 判断凭证是否是一个
@@ -202,53 +208,102 @@ export class MoneyService {
               const voucherArrChildren = voucherArr.map((m) => {
                 const voucherTypeM = Number(m.split('--')[0]) || 0;
                 const voucherNoM = m.split('--')[1] || '';
-                let voucherBalance = 0;
+                let voucherMap: ApiBank;
                 const voucherBalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
                 if (voucherBalanceArr.length > 0) {
-                  voucherBalance = voucherBalanceArr[voucherBalanceArr.length - 1].balance;
+                  voucherMap = voucherBalanceArr[voucherBalanceArr.length - 1];
                 }
-                return voucherBalance;
+                return { type: voucherNoM.slice(-4), time: nowDateFun(voucherMap?.tradeTime || ''), value: voucherMap?.balance || 0 };
               });
-              bankBalance = sumArrayToMoney(voucherArrChildren);
+              return voucherArrChildren;
             }
-            return bankBalance;
+            return [];
           };
+          // 获取银行的余额
+          // const bankBalanceFun = (balanceArr: ApiBank[]): number => {
+          //   let bankBalance = 0;
+          //   // 判断数据是否为空
+          //   if (balanceArr.length > 0) {
+          //     // 判断凭证是否是一个
+          //     const voucherArr = uniqueArray(balanceArr.map((m) => `${m.voucherType}--${m.voucherNo}`));
+          //     const voucherArrChildren = voucherArr.map((m) => {
+          //       const voucherTypeM = Number(m.split('--')[0]) || 0;
+          //       const voucherNoM = m.split('--')[1] || '';
+          //       let voucherBalance = 0;
+          //       const voucherBalanceArr = balanceArr.filter((f) => f.voucherType === voucherTypeM && f.voucherNo === voucherNoM);
+          //       if (voucherBalanceArr.length > 0) {
+          //         voucherBalance = voucherBalanceArr[voucherBalanceArr.length - 1].balance;
+          //       }
+          //       return voucherBalance;
+          //     });
+          //     bankBalance = sumArrayToMoney(voucherArrChildren);
+          //   }
+          //   return bankBalance;
+          // };
           // 支付宝余额
           const aliPayBalance = await this.aliPayService.findLastOneBalance(userId, 'balance');
           // 支付宝余额宝
           const aliPayBalanceBaby = await this.aliPayService.findLastOneBalance(userId, 'balanceBaby');
+          //
+          const firstWeChat = weChat.length > 0 ? weChat[0] : { tradeTime: '', balance: 0 };
+          const firstAliPayBalance = aliPayBalance.length > 0 ? aliPayBalance[0] : { tradeTime: '', balance: 0 };
+          const firstAliPayBalanceBaby = aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0] : { tradeTime: '', balanceBaby: 0 };
+          // 获取银行每个凭证下的余额
+          const businessVoucherData = bankVoucherBalanceFun(businessArr);
+          const businessVoucherMap = businessVoucherData.length > 0 ? businessVoucherData[0] : { type: '', time: '', value: 0 };
+          const agricultureVoucherData = bankVoucherBalanceFun(agricultureArr);
+          const agricultureVoucherMap = agricultureVoucherData.length > 0 ? agricultureVoucherData[0] : { type: '', time: '', value: 0 };
+          const buildVoucherData = bankVoucherBalanceFun(buildArr);
+          const buildVoucherMap = buildVoucherData.length > 0 ? buildVoucherData[0] : { type: '', time: '', value: 0 };
+          const civilVoucherData = bankVoucherBalanceFun(civilArr);
+          const civilVoucherMap = civilVoucherData.length > 0 ? civilVoucherData[0] : { type: '', time: '', value: 0 };
+          const attractInvestmentVoucherData = bankVoucherBalanceFun(attractInvestmentArr);
+          const attractInvestmentVoucherMap = attractInvestmentVoucherData.length > 0 ? attractInvestmentVoucherData[0] : { type: '', time: '', value: 0 };
           const result: ApiMoneyBalanceResult[] = [
             {
               name: '微信零钱',
+              time: nowDateFun(firstWeChat.tradeTime),
               value: weChat.length > 0 ? weChat[0].balance : 0,
             },
             {
               name: '支付宝余额',
+              time: nowDateFun(firstAliPayBalance.tradeTime),
               value: aliPayBalance.length > 0 ? aliPayBalance[0].balance : 0,
             },
             {
               name: '支付宝余额宝',
+              time: nowDateFun(firstAliPayBalanceBaby.tradeTime),
               value: aliPayBalanceBaby.length > 0 ? aliPayBalanceBaby[0].balanceBaby : 0,
             },
             {
               name: '工商银行',
-              value: bankBalanceFun(businessArr),
+              time: businessVoucherMap.time,
+              value: sumArrayToMoney(businessVoucherData.map((m) => m.value)),
+              voucher: businessVoucherData,
             },
             {
               name: '农业银行',
-              value: bankBalanceFun(agricultureArr),
+              time: agricultureVoucherMap.time,
+              value: sumArrayToMoney(agricultureVoucherData.map((m) => m.value)),
+              voucher: agricultureVoucherData,
             },
             {
               name: '建设银行',
-              value: bankBalanceFun(buildArr),
+              time: buildVoucherMap.time,
+              value: sumArrayToMoney(buildVoucherData.map((m) => m.value)),
+              voucher: buildVoucherData,
             },
             {
               name: '民生银行',
-              value: bankBalanceFun(civilArr),
+              time: civilVoucherMap.time,
+              value: sumArrayToMoney(civilVoucherData.map((m) => m.value)),
+              voucher: civilVoucherData,
             },
             {
               name: '招商银行',
-              value: bankBalanceFun(attractInvestmentArr),
+              time: attractInvestmentVoucherMap.time,
+              value: sumArrayToMoney(attractInvestmentVoucherData.map((m) => m.value)),
+              voucher: attractInvestmentVoucherData,
             },
           ];
           return {

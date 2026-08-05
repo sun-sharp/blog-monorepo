@@ -262,7 +262,7 @@
       </scroll-view>
 
       <view class="import-footer">
-        <u-button @click="goBackToUpload">重新上传</u-button>
+        <u-button @click="goBackToUpload">重新导入</u-button>
         <u-button type="primary" :loading="saving" :disabled="saveDisabled" @click="handleSave">确认保存</u-button>
       </view>
     </template>
@@ -634,7 +634,7 @@
     step.value = 'upload';
     tableData.value = [];
     excelUploadTotal.value = 0;
-    clearFile();
+    // clearFile();
   }
 </script>
 

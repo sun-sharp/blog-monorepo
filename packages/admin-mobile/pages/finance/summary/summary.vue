@@ -8,8 +8,20 @@
         </view>
         <view v-if="balanceList.length > 0" class="summary-balance-grid">
           <view v-for="item in balanceList" :key="item.name" class="summary-balance-item">
-            <text class="summary-balance-label">{{ item.name }}</text>
-            <text class="summary-balance-value money-inflow">¥{{ item.value }}</text>
+            <view class="summary-balance-row">
+              <text class="summary-balance-label">{{ item.name }}</text>
+              <text class="summary-balance-time">{{ item.time }}</text>
+            </view>
+            <text class="summary-balance-value">¥{{ item.value }}</text>
+            <template v-if="item.voucher && item.voucher.length > 1">
+              <view v-for="vou in item.voucher" :key="vou.type" class="summary-voucher">
+                <view class="summary-voucher-row">
+                  <text class="summary-voucher-label">尾号(****{{ vou.type }})</text>
+                  <text class="summary-voucher-time">{{ vou.time }}</text>
+                </view>
+                <text class="summary-voucher-value">¥{{ vou.value }}</text>
+              </view>
+            </template>
           </view>
         </view>
         <u-empty v-else mode="data" text="暂无数据" icon-size="100" />
@@ -22,6 +34,13 @@
             <text class="section-title">银行流水</text>
           </view>
           <u-button size="mini" type="primary" plain @click="showBankTimeSelect = true">选择时间</u-button>
+        </view>
+        <view v-if="bankTimeLabel" class="summary-filter">
+          <view v-if="bankTimeLabel" class="summary-filter-time-tag" @click="clearBankTimeRange">
+            <u-icon name="calendar" size="24" color="#007aff" />
+            <text class="summary-filter-time-text">{{ bankTimeLabel }}</text>
+            <u-icon name="close" size="24" color="#999" />
+          </view>
         </view>
         <view v-if="bankFlowList.length > 0" class="summary-flow-list">
           <view v-for="item in bankFlowList" :key="item.name" class="summary-flow-item">
@@ -48,6 +67,13 @@
             <text class="section-title">收支统计</text>
           </view>
           <u-button size="mini" type="primary" plain @click="showFlowTimeSelect = true">选择时间</u-button>
+        </view>
+        <view v-if="flowTimeLabel" class="summary-filter">
+          <view v-if="flowTimeLabel" class="summary-filter-time-tag" @click="clearFlowTimeRange">
+            <u-icon name="calendar" size="24" color="#007aff" />
+            <text class="summary-filter-time-text">{{ flowTimeLabel }}</text>
+            <u-icon name="close" size="24" color="#999" />
+          </view>
         </view>
         <template v-if="flowData">
           <view class="summary-flow-summary">
@@ -91,7 +117,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { moneyApi } from '../../../api';
   import type { ApiMoneyBalanceResult, ApiBankFlowResult, ApiInflowOrOutflowMoneyResult } from '/#/api/blog/money';
   import type { ApiStartEndTimeParams } from '/#/api/common';
@@ -102,6 +128,20 @@
   const flowData = ref<ApiInflowOrOutflowMoneyResult | null>(null);
   const showBankTimeSelect = ref(false);
   const showFlowTimeSelect = ref(false);
+
+  const bankTimeRange = ref<{ startTime: string; endTime: string } | null>(null);
+
+  const bankTimeLabel = computed(() => {
+    if (!bankTimeRange.value) return '';
+    return `${bankTimeRange.value.startTime} ~ ${bankTimeRange.value.endTime}`;
+  });
+
+  const flowTimeRange = ref<{ startTime: string; endTime: string } | null>(null);
+
+  const flowTimeLabel = computed(() => {
+    if (!flowTimeRange.value) return '';
+    return `${flowTimeRange.value.startTime} ~ ${flowTimeRange.value.endTime}`;
+  });
 
   function getBarWidth(value: number, total: number): string {
     if (!total) return '0%';
@@ -117,6 +157,7 @@
   }
 
   async function loadBankFlow(params: ApiStartEndTimeParams) {
+    bankTimeRange.value = params;
     try {
       bankFlowList.value = await moneyApi.getStatisticsBankFlow(params);
     } catch {
@@ -125,6 +166,7 @@
   }
 
   async function loadFlowData(params: ApiStartEndTimeParams) {
+    flowTimeRange.value = params;
     try {
       flowData.value = await moneyApi.statisticsInflowOrOutflowMoney(params);
     } catch {
@@ -151,6 +193,18 @@
 
   async function onFlowTimeConfirm(params: ApiStartEndTimeParams) {
     await loadFlowData(params);
+  }
+
+  function clearBankTimeRange() {
+    const defaultRange = getDefaultTimeRange();
+    bankTimeRange.value = defaultRange;
+    loadBankFlow(defaultRange);
+  }
+
+  function clearFlowTimeRange() {
+    const defaultRange = getDefaultTimeRange();
+    flowTimeRange.value = defaultRange;
+    loadFlowData(defaultRange);
   }
 
   onMounted(async () => {
@@ -194,29 +248,88 @@
   }
 
   .summary-balance-grid {
-    display: flex;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-wrap: wrap;
     gap: 16rpx;
   }
 
+  .summary-voucher {
+    padding: 12rpx 0 0 0;
+  }
+
+  .summary-voucher-item,
   .summary-balance-item {
-    width: calc(50% - 8rpx);
+    // width: calc(50% - 8rpx);
     background-color: $uni-bg-color-grey;
     border-radius: $uni-border-radius-base;
     padding: 20rpx;
+    margin: 8rpx 0;
     display: flex;
     flex-direction: column;
   }
 
+  .summary-voucher-row,
+  .summary-balance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .summary-voucher-label,
   .summary-balance-label {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
   }
 
+  .summary-balance-label {
+    font-size: $uni-font-size-base;
+    font-weight: bold;
+  }
+
+  .summary-voucher-time,
+  .summary-balance-time {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+  }
+
+  .summary-balance-time {
+    font-size: $uni-font-size-base;
+    font-weight: bold;
+  }
+
+  .summary-voucher-value,
   .summary-balance-value {
     font-size: 32rpx;
     font-weight: bold;
     margin-top: 8rpx;
+    color: #4cd964;
+  }
+
+  .summary-voucher-value {
+    font-size: 28rpx;
+    color: #2e92c0;
+  }
+
+  .summary-filter {
+    margin: 12rpx 0;
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    flex-wrap: wrap;
+  }
+
+  .summary-filter-time-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8rpx;
+    background-color: #e8f4fd;
+    border-radius: 20rpx;
+    padding: 8rpx 20rpx;
+  }
+
+  .summary-filter-time-text {
+    font-size: 24rpx;
+    color: #007aff;
   }
 
   .summary-flow-list {
