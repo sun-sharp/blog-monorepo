@@ -248,7 +248,8 @@
   .edit-scroll {
     flex: 1;
     height: 0;
-    padding: 20rpx 20rpx 0;
+    padding: 20rpx 20rpx;
+    padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
     box-sizing: border-box;
   }
 
