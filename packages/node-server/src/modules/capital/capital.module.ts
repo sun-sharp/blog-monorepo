@@ -4,7 +4,7 @@ import { CapitalController } from './capital.controller';
 import { CapitalService } from './capital.service';
 import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModuleRegister } from 'src/jwt/jwt.constants';
+import { JwtAuthModule } from 'src/jwt/jwt.module';
 import { RoleModule } from './role/role.module';
 import { MenuModule } from './menu/menu.module';
 import { capitalMongooseModuleForRoot } from 'src/common/constant/mongoose';
@@ -17,7 +17,7 @@ import { WaitForDoModule } from './wait-for-do/wait-for-do.module';
   imports: [
     capitalMongooseModuleForRoot,
     PassportModule,
-    JwtModuleRegister,
+    JwtAuthModule,
     UserModule,
     RoleModule,
     MenuModule,

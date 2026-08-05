@@ -2,8 +2,9 @@ import { GlobalEnvConfig } from '/#/api/config';
 import devConfig from './dev';
 import prodConfig from './prod';
 import * as dotenv from 'dotenv';
+import { resolve } from 'node:path';
 
-dotenv.config();
+dotenv.config({ path: resolve(process.cwd(), '.env') });
 
 const configs = {
   dev: devConfig,

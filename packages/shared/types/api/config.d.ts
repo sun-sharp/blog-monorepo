@@ -28,4 +28,8 @@ export interface GlobalEnvConfig extends DatabaseConfig {
   capitalDatabaseName: string;
   // blog数据库名称
   blogDatabaseName: string;
+  // JWT 密钥
+  jwtSecret: string;
+  // JWT 过期时间
+  jwtExpiresIn: string;
 }

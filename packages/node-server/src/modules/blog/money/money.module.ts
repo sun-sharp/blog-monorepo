@@ -5,7 +5,7 @@ import { MoneyController } from './money.controller';
 import { WeChatModule } from './we-chat/we-chat.module';
 import { AliPayModule } from './ali-pay/ali-pay.module';
 import { BankModule } from './bank/bank.module';
-import { JwtModuleRegister } from 'src/jwt/jwt.constants';
+import { JwtAuthModule } from 'src/jwt/jwt.module';
 import { CategoryModule } from 'src/modules/capital/category/category.module';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
@@ -34,7 +34,7 @@ const AGGREGATE_MONGO_MODULE = MongooseModule.forFeature(
     AliPayModule,
     BankModule,
     BillUploadModule,
-    JwtModuleRegister,
+    JwtAuthModule,
     UserModule,
     CategoryModule,
     forwardRef(() => RoleModule),

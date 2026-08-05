@@ -5,15 +5,18 @@ import { AppService } from './app.service';
 import { CapitalModule } from './modules/capital/capital.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { useCustomConfig } from 'src/config';
+import { validateEnv } from 'src/config/env.validation';
 import { AppTasksModule } from './tasks/app.tasks.module';
 
 @Module({
   imports: [
-    CapitalModule,
     ConfigModule.forRoot({
-      isGlobal: true, // 作用于全局
-      load: [useCustomConfig], // 加载自定义配置项
+      isGlobal: true,
+      envFilePath: '.env',
+      validate: validateEnv,
+      load: [useCustomConfig],
     }),
+    CapitalModule,
     BlogModule,
     // 定时任务
     AppTasksModule,

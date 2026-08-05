@@ -19,6 +19,8 @@ const glob: Readonly<GlobalEnvConfig> = {
   imageRefixName: 'sharp_local_',
   capitalDatabaseName: 'dev_capital',
   blogDatabaseName: 'dev_blog',
+  jwtSecret: process.env.JWT_SECRET || '',
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || '1d',
 };
 
 export default glob as Readonly<GlobalEnvConfig>;
