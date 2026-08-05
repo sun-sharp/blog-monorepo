@@ -2,9 +2,10 @@ import { GlobalEnvConfig } from '/#/api/config';
 import * as dotenv from 'dotenv';
 import { resolve } from 'node:path';
 
-dotenv.config({ path: resolve(process.cwd(), '.env') });
+dotenv.config({ path: resolve(process.cwd(), '.env.dev') });
 
 const {
+  RUNNING_ENV,
   PORT,
   JWT_SECRET,
   JWT_EXPIRES_IN,
@@ -20,6 +21,8 @@ const {
   MONGODB_PASSWORD,
   MONGODB_QUERY,
 } = process.env;
+
+console.log(RUNNING_ENV, '运行环境');
 
 export const useCustomConfig = (): GlobalEnvConfig => ({
   port: Number(PORT) || 3000,

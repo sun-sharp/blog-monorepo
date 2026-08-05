@@ -35,9 +35,10 @@ export class AliPayService {
    * @param {any} file           上传的文件对象
    * @param {number} startNum   数据起始行号，默认 26（支付宝账单）
    * @param {number} endNum    数据结束行号（包含），不传则到末尾
+   * @param {number} size      每页数量，默认 50
    * @return {Promise<IResponse>}
    */
-  public upload(file: any, startNum: number = 26, endNum?: number): Promise<IResponse> {
+  public upload(file: any, startNum: number = 26, endNum?: number, size: number = 50): Promise<IResponse> {
     // ---------- 判断文件类型 ----------
     const ext = path.extname(file.originalname).toLowerCase();
     const mime = file.mimetype;
@@ -90,13 +91,14 @@ export class AliPayService {
         })
         // 对数据进行批量处理
         .then(async (list) => {
+          const total = list.length;
+          const listSlice = list.slice(0, size);
           const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.aliPay);
           // 处理每项数据
           const formatBillUploadItem = (m: ApiAliPayUpload) => {
             const item = { ...m };
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
-              // 判断是否赋值
               // 判断是否赋值
               const runResult = runCode(f.code, { item, isAssignment: false });
               const isAssignment = runResult.isAssignment;
@@ -124,11 +126,18 @@ export class AliPayService {
             }
             return item;
           };
-          const result = list.map((m) => {
+          const result = listSlice.map((m) => {
             return formatBillUploadItem(m);
           });
-          logger.log(`支付宝账单导入${result.length}个`);
-          return { code: ApiCode.SUCCESS, result, message: '导入成功！' };
+          logger.log(`支付宝账单导入${total}个`);
+          return {
+            code: ApiCode.SUCCESS,
+            result: {
+              total,
+              list: result,
+            },
+            message: '导入成功！',
+          };
         })
         // 返回错误
         .catch((err) => {

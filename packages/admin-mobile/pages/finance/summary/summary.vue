@@ -174,6 +174,7 @@
     height: 0;
     padding: 20rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+    box-sizing: border-box;
   }
 
   .summary-section {

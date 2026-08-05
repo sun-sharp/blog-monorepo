@@ -550,11 +550,10 @@
     uploading.value = true;
     uploadProgress.value = 0;
     try {
-      const rawList = isH5Platform() ? await uploadH5() : await uploadNative();
-      console.log('上传结果', JSON.stringify(rawList));
-      if (Array.isArray(rawList) && rawList.length > 0) {
-        excelUploadTotal.value = rawList.length;
-        tableData.value = rawList.slice(0, 50).map((item: any) => {
+      const rawData = isH5Platform() ? await uploadH5() : await uploadNative();
+      if (Array.isArray(rawData.list) && rawData.list.length > 0) {
+        excelUploadTotal.value = rawData.total || rawData.list.length;
+        tableData.value = rawData.list.map((item: any) => {
           const row = { ...item };
           row.inflowOrOutflow = item.inflowOrOutflow || undefined;
           if (uploadType.value !== 3) {
@@ -655,6 +654,7 @@
     height: 0;
     padding: 20rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+    box-sizing: border-box;
   }
 
   .upload-section {

@@ -36,6 +36,7 @@ export class WeChatService {
    * @param {any} file           上传的文件对象
    * @param {number} startNum   数据起始行号，默认 19（微信账单）
    * @param {number} endNum     结束行号（含），不传则到末尾
+   * @param {number} size       每页数量，默认 50
    * @return {Promise<IResponse>}
    */
   public upload(file: any, startNum: number = 19, endNum?: number, size: number = 50): Promise<IResponse> {
