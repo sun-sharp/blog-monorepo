@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "configurations": [
     {
-      "name": "node_server_dev",
+      "name": "node_server",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -15,24 +15,7 @@
       },
       "runtimeArgs": [
         "run",
-        "start:dev:watch:server"
-      ],
-      "console": "integratedTerminal",
-      "restart": true,
-      "autoAttachChildProcesses": true
-    },
-    {
-      "name": "node_server_prod",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "npm",
-      "windows": {
-        "runtimeExecutable": "npm.cmd"
-      },
-      "runtimeArgs": [
-        "run",
-        "start:prod:watch:server"
+        "start:watch:server"
       ],
       "console": "integratedTerminal",
       "restart": true,

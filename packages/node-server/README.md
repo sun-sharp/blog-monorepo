@@ -4,115 +4,117 @@
 
 运用 [nestjs](https://docs.nestjs.cn) 开发博客的接口
 
+## 拉取代码
+
+```bash
+git init
+git remote add origin git@github.com:sun-sharp/node-server.git
+git pull origin main
+# or
+git clone git@github.com:sun-sharp/node-server.git
+```
+
 ## 安装
 
 ```bash
-$ node v24.14.0
+node v24.14.0
 
 # npm i，yarn如果安装报错
-$ yarn
+yarn
 
-$ npm i -g @nestjs/cli
+npm i -g @nestjs/cli
 
-$ nest --help
+nest --help
 
 # 创建当前目录下的CRUD
-$ nest g res modules/blog/schedule
+nest g res modules/blog/schedule
 ```
 
 ## 运行
 
-```bash
-# 运行dev的内容
-$ yarn start:dev
+### 先创建根目录下的.env文件
 
-# 运行prod的内容
-$ yarn start:prod
+```bash
+# 运行
+npm run start
 ```
+
+- 或者打开vscode 运行node_server
 
 ## 生产接口文档
 
 ```bash
-$ yarn compodoc
+npm run compodoc
 ```
 
 ## 部署
 
-### 在服务器中拉取代码项目
-
+### 先运行打包
 ```bash
-$ git init
-$ git remote add origin git@github.com:sun-sharp/node-server.git
-$ git pull origin main
-# or
-$ git clone git@github.com:sun-sharp/node-server.git
+npm run build
 ```
 
-### 部署dev环境
+### 放到服务器并配置
 
+1. 创建目录
 ```bash
-# 清空本地的修改
-$ git reset --hard HEAD
+cd /www/wwwroot/nestApi
 
-# 先拉取全部远程分支和tag
-$ git fetch --prune
-
-# 切换到dev分支上
-$ git checkout dev
-
-# 拉取一下最新代码
-$ git pull origin dev
-
-# 查看当前分支
-$ git branch -a
-
-# 打包部署应用 dev_nest
-$ npm install
-$ pm2 stop dev_nest
-$ pm2 delete dev_nest
-$ npm run build
-$ pm2 list
-$ cross-env RUNNING_ENV=dev pm2 start --name dev_nest dist/main.js # 添加进程/应用 dev_nest
-# or
-$ npm run update_dev_pm2
+# 没有就创建目录
+mkdir /www/wwwroot/nestApi
 
 ```
-
-### 用main部署生产prod
-
-```bash
-# 在服务器中拉取代码项目
-$ git pull origin main
-
+2. 将dist里的数据放到nestApi目录下
+3. 在nestApi目录下运行 npm install 安装依赖
+4. 放入或创建ecosystem.config.js配置
+```js
+module.exports = {
+  apps: [
+    {
+      name: 'nest_dev', // 进程名称，用于 pm2 管理[reference:1]
+      script: 'src/main.js',  // 入口文件，NestJS 打包后是 main.js[reference:2]
+      cwd: '/www/wwwroot/nestApi',  // 【重要】必须修改为你的项目绝对路径[reference:3]
+      exec_mode: 'fork',  // 单进程模式
+      instances: 1, // 只启动一个实例
+      env: {
+        PORT: 3002, // 指定该进程监听 3002 端口
+        // 你可以在下面添加其他环境变量，如数据库连接字符串等
+      },
+    },
+    {
+      name: 'nest', // 进程名称，用于 pm2 管理[reference:1]
+      script: 'src/main.js',  // 入口文件，NestJS 打包后是 main.js[reference:2]
+      cwd: '/www/wwwroot/nestApi',  // 【重要】必须修改为你的项目绝对路径[reference:3]
+      exec_mode: 'fork',  // 单进程模式
+      instances: 1, // 只启动一个实例
+      env: {
+        PORT: 3000, // 指定该进程监听 3000 端口
+        // 可以为这个实例配置不同的环境变量，如连接不同的数据库
+      },
+    },
+  ],
+};
 ```
 
-### 用tag部署生产prod
+
+### 部署并运行
 
 ```bash
-# 清空本地的修改
-$ git reset --hard HEAD
+npm install # 安装插件
+pm2 list # 列出所有进程/应用
 
-# 先拉取全部远程分支和tag
-$ git fetch --prune
+# 第一次运行
+pm2 start ecosystem.config.js
 
-# 查看所有tag
-$ git tag -l -n
+# 如果没改配置文件里的 env，用这个（不停服，最安全）
+pm2 reload ecosystem.config.js
 
-# 切换到最新tag上
-$ git checkout aba-xxx
+# 如果改了 .env 或 ecosystem 里的环境变量，用这个（强制刷新变量）
+pm2 restart ecosystem.config.js --update-env
 
-# 查看当前分支
-$ git branch -a
-
-# 打包部署应用 nest
-$ npm install # 安装插件
-$ pm2 stop nest # 暂停进程/应用
-$ pm2 delete nest # 删除进程/应用
-$ npm run build # 打包
-$ pm2 list # 列出所有进程/应用
-$ cross-env RUNNING_ENV=prod pm2 start --name nest dist/main.js # 添加进程/应用 nest
 # or
-$ npm run update_prod_pm2
+# npm install && pm2 list && pm2 reload ecosystem.config.js
+npm run update_pm2
 
 ```
 
@@ -124,9 +126,9 @@ $ npm run update_prod_pm2
 2. 首先安装工具包以及安装chromium
 
 ```bash
-$ sudo yum install epel-release
+sudo yum install epel-release
 
-$ sudo yum install -y chromium
+sudo yum install -y chromium
 ```
 
 3. Puppeteer 导出的 pdf 会出现部分中文显示乱码
@@ -136,9 +138,9 @@ $ sudo yum install -y chromium
 
 ```bash
 # 查找文泉驿安装包
-$ sudo yum search wqy
+sudo yum search wqy
 
 # 安装文泉驿字体
-$ sudo yum install wqy-microhei-fonts.noarch -y
-$ sudo yum install wqy-unibit-fonts.noarch -y
+sudo yum install wqy-microhei-fonts.noarch -y
+sudo yum install wqy-unibit-fonts.noarch -y
 ```
