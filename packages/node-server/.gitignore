@@ -44,4 +44,6 @@ yarn.lock
 package-lock.json
 
 # env
+.env.dev
+.env.prod
 .env
