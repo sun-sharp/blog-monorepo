@@ -7,6 +7,16 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.0.2 (2026-8-5)
+- 修改 shared 的 GlobalEnvConfig
+- 移动端
+  - 调整登录页面导航样式，移除软键盘调整模式；优化财务页面滚动区域的底部填充
+  - 调整编辑页面滚动区域的底部填充样式
+- server 端
+ - 对 node-server 项目的安全性问题加强，git 代码里不加真实信息
+ - 重构配置管理，简化环境变量处理并更新.gitignore以包含环境文件
+
+
 ## bm-www-4.0.1 (2026-8-4)
 - 修改www端运行报错
 - 添加www端h5端访问方式
