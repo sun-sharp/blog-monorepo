@@ -7,6 +7,17 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.0.3 (2026-8-6)
+- server 端
+  - 重构 node-server 启动脚本，简化配置并统一命名
+  - 更新环境配置，修正后端基础地址并优化上传逻辑，增加分页参数
+  - 更新微信账单处理逻辑，支持根据文件类型格式化交易时间；添加 UTC 时间格式化函数及其注释
+  - 更新金融模块，调整银行余额统计逻辑，增加凭证余额接口
+  - 优化银行账单上传逻辑，增加分页参数并调整返回结果格式
+- 移动端
+  - 优化汇总页面、账单导入页面样式，增加 box-sizing 属性
+  - 调整银行余额统计逻辑
+
 ## bm-ns-am-4.0.2 (2026-8-5)
 - 修改 shared 的 GlobalEnvConfig
 - 移动端
