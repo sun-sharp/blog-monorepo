@@ -25,6 +25,13 @@ export class BackupController {
     return this.backupService.backupDatabase(dbName);
   }
 
+  @Post('collection/:dbName/:collection')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '二进制备份指定集合' })
+  backupCollection(@Param('dbName') dbName: string, @Param('collection') collection: string) {
+    return this.backupService.backupCollection(dbName, collection);
+  }
+
   @Get('list')
   @ApiOperation({ summary: '获取所有备份列表' })
   listBackups() {
@@ -43,6 +50,13 @@ export class BackupController {
   @ApiOperation({ summary: '从备份恢复指定数据库' })
   restoreDatabase(@Param('backupName') backupName: string, @Param('dbName') dbName: string) {
     return this.backupService.restoreDatabase(backupName, dbName);
+  }
+
+  @Post('restore/:backupName/:dbName/:collection')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '从备份恢复指定集合' })
+  restoreCollection(@Param('backupName') backupName: string, @Param('dbName') dbName: string, @Param('collection') collection: string) {
+    return this.backupService.restoreCollection(backupName, dbName, collection);
   }
 
   @Delete(':backupName')

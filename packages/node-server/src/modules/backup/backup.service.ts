@@ -32,12 +32,26 @@ function resolveBin(exe: string): string {
   return exe;
 }
 
+export interface BackupCollectionInfo {
+  name: string;
+  fileSize: number;
+}
+
+export interface BackupDatabaseInfo {
+  database: string;
+  fileSize: number;
+  collections: BackupCollectionInfo[];
+}
+
 export interface BackupFileInfo {
   fileName: string;
   fileSize: number;
   backupTime: string;
   database: string;
+  collections: string[];
 }
+
+const validDatabases = [capitalDatabaseName, blogDatabaseName];
 
 @Injectable()
 export class BackupService {
@@ -47,8 +61,22 @@ export class BackupService {
     this.backupDir = resolve(process.cwd(), storeDirStr, 'binary');
   }
 
-  private buildDumpArgs(dbName: string, outputPath: string): string[] {
+  private buildDumpArgs(dbName: string, outputPath: string, collection?: string): string[] {
     const args: string[] = [`--host=${mongodbHost}`, `--db=${dbName}`, `--out=${outputPath}`];
+    if (collection) {
+      args.push(`--collection=${collection}`);
+    }
+    if (mongodbAuth) {
+      args.push(`--username=${mongodbAuth.username}`, `--password=${mongodbAuth.password}`, `--authenticationDatabase=${authSource}`);
+    }
+    return args;
+  }
+
+  private buildRestoreArgs(dbName: string, inputPath: string, collection?: string): string[] {
+    const args: string[] = [`--host=${mongodbHost}`, `--db=${dbName}`, `--dir=${inputPath}`, `--drop`];
+    if (collection) {
+      args.push(`--collection=${collection}`);
+    }
     if (mongodbAuth) {
       args.push(`--username=${mongodbAuth.username}`, `--password=${mongodbAuth.password}`, `--authenticationDatabase=${authSource}`);
     }
@@ -65,35 +93,28 @@ export class BackupService {
     return binaryDir;
   }
 
-  /**
-   * @description: 执行mongodump二进制备份指定数据库
-   * @param {string} dbName
-   * @param {string} outputPath
-   * @return {Promise<void>}
-   */
-  private async execDump(dbName: string, outputPath: string): Promise<void> {
-    const args = this.buildDumpArgs(dbName, outputPath);
+  private async execDump(dbName: string, outputPath: string, collection?: string): Promise<void> {
+    const args = this.buildDumpArgs(dbName, outputPath, collection);
     const bin = resolveBin(dumpExe);
-    logger.log(`开始二进制备份数据库: ${dbName} -> ${outputPath}`);
+    const label = collection ? `${dbName}/${collection}` : dbName;
+    logger.log(`开始二进制备份: ${label} -> ${outputPath}`);
     await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100, shell: true, windowsHide: true });
-    logger.log(`二进制备份数据库成功: ${dbName}`);
+    logger.log(`二进制备份成功: ${label}`);
   }
 
-  /**
-   * @description: 执行mongorestore恢复指定数据库
-   * @param {string} dbName
-   * @param {string} inputPath
-   * @return {Promise<void>}
-   */
-  private async execRestore(dbName: string, inputPath: string): Promise<void> {
-    const args = [`--host=${mongodbHost}`, `--db=${dbName}`, `--dir=${inputPath}`, `--drop`];
-    if (mongodbAuth) {
-      args.push(`--username=${mongodbAuth.username}`, `--password=${mongodbAuth.password}`, `--authenticationDatabase=${authSource}`);
-    }
+  private async execRestore(dbName: string, inputPath: string, collection?: string): Promise<void> {
+    const args = this.buildRestoreArgs(dbName, inputPath, collection);
     const bin = resolveBin(restoreExe);
-    logger.log(`开始恢复数据库: ${dbName} <- ${inputPath}`);
+    const label = collection ? `${dbName}/${collection}` : dbName;
+    logger.log(`开始恢复: ${label} <- ${inputPath}`);
     await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100, shell: true, windowsHide: true });
-    logger.log(`恢复数据库成功: ${dbName}`);
+    logger.log(`恢复成功: ${label}`);
+  }
+
+  private validateDbName(dbName: string): void {
+    if (!validDatabases.includes(dbName)) {
+      throw `数据库名称无效，仅支持: ${validDatabases.join(', ')}`;
+    }
   }
 
   /**
@@ -134,9 +155,7 @@ export class BackupService {
   public backupDatabase(dbName: string): Promise<IResponse> {
     return Promise.resolve(dbName)
       .then(async (dbName) => {
-        if (dbName !== capitalDatabaseName && dbName !== blogDatabaseName) {
-          throw `数据库名称无效，仅支持: ${capitalDatabaseName}, ${blogDatabaseName}`;
-        }
+        this.validateDbName(dbName);
         const binaryDir = await this.ensureBackupDir();
         const timestamp = nowDateFun().replace(/[: ]/g, '-');
         const backupPath = join(binaryDir, `backup-${dbName}-${timestamp}`);
@@ -160,7 +179,39 @@ export class BackupService {
   }
 
   /**
-   * @description: 获取所有备份列表
+   * @description: 二进制备份单个集合
+   * @param {string} dbName
+   * @param {string} collection
+   * @return {Promise<IResponse>}
+   */
+  public backupCollection(dbName: string, collection: string): Promise<IResponse> {
+    return Promise.resolve({ dbName, collection })
+      .then(async ({ dbName, collection }) => {
+        this.validateDbName(dbName);
+        const binaryDir = await this.ensureBackupDir();
+        const timestamp = nowDateFun().replace(/[: ]/g, '-');
+        const backupPath = join(binaryDir, `backup-${dbName}-${collection}-${timestamp}`);
+        if (!existsSync(backupPath)) {
+          mkdirSync(backupPath, { recursive: true });
+        }
+        await this.execDump(dbName, backupPath, collection);
+        return {
+          code: ApiCode.SUCCESS,
+          result: { backupPath, timestamp },
+          message: `集合 ${dbName}/${collection} 二进制备份成功！`,
+        };
+      })
+      .catch((err) => {
+        logger.error(`二进制备份集合 ${dbName}/${collection} 失败! ${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err?.message || err || `集合 ${dbName}/${collection} 二进制备份失败！`,
+        };
+      });
+  }
+
+  /**
+   * @description: 获取所有备份列表（含集合信息）
    * @return {Promise<IResponse>}
    */
   public listBackups(): Promise<IResponse> {
@@ -173,22 +224,30 @@ export class BackupService {
           const entryPath = join(binaryDir, entry);
           const stat = statSync(entryPath);
           if (!stat.isDirectory()) continue;
-          const subEntries = readdirSync(entryPath);
-          for (const subEntry of subEntries) {
-            const subPath = join(entryPath, subEntry);
-            const subStat = statSync(subPath);
-            if (!subStat.isDirectory()) continue;
-            const files = readdirSync(subPath);
-            const totalSize = files.reduce((sum, file) => {
-              const filePath = join(subPath, file);
+          const dbEntries = readdirSync(entryPath);
+          for (const dbEntry of dbEntries) {
+            const dbPath = join(entryPath, dbEntry);
+            const dbStat = statSync(dbPath);
+            if (!dbStat.isDirectory()) continue;
+            const files = readdirSync(dbPath);
+            let totalSize = 0;
+            const collections: string[] = [];
+            for (const file of files) {
+              const filePath = join(dbPath, file);
               const fileStat = statSync(filePath);
-              return sum + (fileStat.isFile() ? fileStat.size : 0);
-            }, 0);
+              if (fileStat.isFile()) {
+                totalSize += fileStat.size;
+                if (file.endsWith('.bson')) {
+                  collections.push(file.replace(/\.bson$/, ''));
+                }
+              }
+            }
             backups.push({
               fileName: entry,
               fileSize: totalSize,
               backupTime: this.parseBackupTime(entry),
-              database: subEntry,
+              database: dbEntry,
+              collections,
             });
           }
         }
@@ -210,16 +269,14 @@ export class BackupService {
 
   /**
    * @description: 恢复数据库
-   * @param {string} backupName 备份目录名 (如 backup-2026-01-01-00-00-00)
-   * @param {string} dbName 要恢复的数据库名
+   * @param {string} backupName
+   * @param {string} dbName
    * @return {Promise<IResponse>}
    */
   public restoreDatabase(backupName: string, dbName: string): Promise<IResponse> {
     return Promise.resolve({ backupName, dbName })
       .then(async ({ backupName, dbName }) => {
-        if (dbName !== capitalDatabaseName && dbName !== blogDatabaseName) {
-          throw `数据库名称无效，仅支持: ${capitalDatabaseName}, ${blogDatabaseName}`;
-        }
+        this.validateDbName(dbName);
         const binaryDir = await this.ensureBackupDir();
         const backupPath = join(binaryDir, backupName, dbName);
         if (!existsSync(backupPath)) {
@@ -241,8 +298,39 @@ export class BackupService {
   }
 
   /**
+   * @description: 恢复单个集合
+   * @param {string} backupName
+   * @param {string} dbName
+   * @param {string} collection
+   * @return {Promise<IResponse>}
+   */
+  public restoreCollection(backupName: string, dbName: string, collection: string): Promise<IResponse> {
+    return Promise.resolve({ backupName, dbName, collection })
+      .then(async ({ backupName, dbName, collection }) => {
+        this.validateDbName(dbName);
+        const binaryDir = await this.ensureBackupDir();
+        const backupPath = join(binaryDir, backupName, dbName);
+        if (!existsSync(backupPath)) {
+          throw `备份文件不存在: ${backupName}/${dbName}`;
+        }
+        await this.execRestore(dbName, backupPath, collection);
+        return {
+          code: ApiCode.SUCCESS,
+          message: `集合 ${dbName}/${collection} 恢复成功！`,
+        };
+      })
+      .catch((err) => {
+        logger.error(`恢复集合 ${dbName}/${collection} 失败! ${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err?.message || err || `集合 ${dbName}/${collection} 恢复失败！`,
+        };
+      });
+  }
+
+  /**
    * @description: 恢复所有数据库
-   * @param {string} backupName 备份目录名
+   * @param {string} backupName
    * @return {Promise<IResponse>}
    */
   public restoreAll(backupName: string): Promise<IResponse> {
@@ -253,12 +341,10 @@ export class BackupService {
         if (!existsSync(backupPath)) {
           throw `备份目录不存在: ${backupName}`;
         }
-        const subEntries = readdirSync(backupPath).filter((entry) => {
-          return existsSync(join(backupPath, entry));
-        });
+        const subEntries = readdirSync(backupPath).filter((entry) => existsSync(join(backupPath, entry)));
         const restoredDatabases: string[] = [];
         for (const subEntry of subEntries) {
-          if (subEntry === capitalDatabaseName || subEntry === blogDatabaseName) {
+          if (validDatabases.includes(subEntry)) {
             await this.execRestore(subEntry, join(backupPath, subEntry));
             restoredDatabases.push(subEntry);
           }
@@ -308,11 +394,6 @@ export class BackupService {
       });
   }
 
-  /**
-   * @description: 从备份目录名解析备份时间
-   * @param {string} fileName
-   * @return {string}
-   */
   private parseBackupTime(fileName: string): string {
     const match = fileName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
     if (match) {

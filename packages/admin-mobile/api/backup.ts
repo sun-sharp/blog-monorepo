@@ -5,6 +5,7 @@ export interface BackupFileInfo {
   fileSize: number;
   backupTime: string;
   database: string;
+  collections: string[];
 }
 
 export interface BackupResult {
@@ -31,7 +32,16 @@ export const backupDatabase = (dbName: string): Promise<BackupResult> => {
   return backupRequest({
     url: `${basic}/database/${dbName}`,
     method: 'POST',
-    loadingText: '正在备份...',
+    loadingText: '正在备份数据库...',
+    timeout: 120000,
+  });
+};
+
+export const backupCollection = (dbName: string, collection: string): Promise<BackupResult> => {
+  return backupRequest({
+    url: `${basic}/collection/${dbName}/${collection}`,
+    method: 'POST',
+    loadingText: '正在备份集合...',
     timeout: 120000,
   });
 };
@@ -56,7 +66,16 @@ export const restoreDatabase = (backupName: string, dbName: string): Promise<und
   return backupRequest({
     url: `${basic}/restore/${backupName}/${dbName}`,
     method: 'POST',
-    loadingText: '正在恢复...',
+    loadingText: '正在恢复数据库...',
+    timeout: 120000,
+  });
+};
+
+export const restoreCollection = (backupName: string, dbName: string, collection: string): Promise<undefined> => {
+  return backupRequest({
+    url: `${basic}/restore/${backupName}/${dbName}/${collection}`,
+    method: 'POST',
+    loadingText: '正在恢复集合...',
     timeout: 120000,
   });
 };
