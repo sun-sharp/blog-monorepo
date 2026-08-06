@@ -14,12 +14,23 @@ import { IResponse } from '/#/common/common';
 const execFileAsync = promisify(execFile);
 
 const customConfig = useCustomConfig();
-const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery, capitalDatabaseName, blogDatabaseName } = customConfig;
+const { mongodbAccount, mongodbPassword, serverIp, databasePort, mongodbQuery, capitalDatabaseName, blogDatabaseName, mongodbBinPath } = customConfig;
 
 const mongodbHost = `${serverIp}:${databasePort}`;
 const mongodbAuth = mongodbAccount && mongodbPassword ? { username: mongodbAccount, password: mongodbPassword } : null;
 const authSourceMatch = mongodbQuery?.match(/authSource=([^&]+)/);
 const authSource = authSourceMatch ? authSourceMatch[1] : 'admin';
+
+const isWin = process.platform === 'win32';
+const dumpExe = isWin ? 'mongodump.exe' : 'mongodump';
+const restoreExe = isWin ? 'mongorestore.exe' : 'mongorestore';
+
+function resolveBin(exe: string): string {
+  if (mongodbBinPath) {
+    return resolve(mongodbBinPath, exe);
+  }
+  return exe;
+}
 
 export interface BackupFileInfo {
   fileName: string;
@@ -36,7 +47,7 @@ export class BackupService {
     this.backupDir = resolve(process.cwd(), storeDirStr, 'binary');
   }
 
-  private buildCommonArgs(command: 'dump' | 'restore', dbName: string, outputPath: string): string[] {
+  private buildDumpArgs(dbName: string, outputPath: string): string[] {
     const args: string[] = [`--host=${mongodbHost}`, `--db=${dbName}`, `--out=${outputPath}`];
     if (mongodbAuth) {
       args.push(`--username=${mongodbAuth.username}`, `--password=${mongodbAuth.password}`, `--authenticationDatabase=${authSource}`);
@@ -61,9 +72,10 @@ export class BackupService {
    * @return {Promise<void>}
    */
   private async execDump(dbName: string, outputPath: string): Promise<void> {
-    const args = this.buildCommonArgs('dump', dbName, outputPath);
+    const args = this.buildDumpArgs(dbName, outputPath);
+    const bin = resolveBin(dumpExe);
     logger.log(`开始二进制备份数据库: ${dbName} -> ${outputPath}`);
-    await execFileAsync('mongodump', args, { maxBuffer: 1024 * 1024 * 100 });
+    await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100 });
     logger.log(`二进制备份数据库成功: ${dbName}`);
   }
 
@@ -78,8 +90,9 @@ export class BackupService {
     if (mongodbAuth) {
       args.push(`--username=${mongodbAuth.username}`, `--password=${mongodbAuth.password}`, `--authenticationDatabase=${authSource}`);
     }
+    const bin = resolveBin(restoreExe);
     logger.log(`开始恢复数据库: ${dbName} <- ${inputPath}`);
-    await execFileAsync('mongorestore', args, { maxBuffer: 1024 * 1024 * 100 });
+    await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100 });
     logger.log(`恢复数据库成功: ${dbName}`);
   }
 

@@ -149,3 +149,25 @@ sudo yum search wqy
 sudo yum install wqy-microhei-fonts.noarch -y
 sudo yum install wqy-unibit-fonts.noarch -y
 ```
+
+##### 关于数据备份功能（MongoDB Database Tools）
+
+二进制备份/恢复依赖 `mongodump` 和 `mongorestore`，需安装 MongoDB Database Tools。
+
+1. 下载地址：https://www.mongodb.com/try/download/database-tools
+2. 解压后将 `bin` 目录路径配置到 `.env` 中的 `MONGODB_BIN_PATH`
+
+```bash
+# Windows 示例
+MONGODB_BIN_PATH=C:\Program Files\MongoDB\Tools\100\bin
+
+# Linux 示例
+MONGODB_BIN_PATH=/usr/local/mongodb-database-tools/bin
+```
+
+留空则从系统 PATH 查找。Linux 也可直接安装到系统路径：
+
+```bash
+# CentOS
+sudo yum install -y mongodb-database-tools
+```

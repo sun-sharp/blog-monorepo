@@ -32,4 +32,6 @@ export interface GlobalEnvConfig extends DatabaseConfig {
   jwtSecret: string;
   // JWT 过期时间
   jwtExpiresIn: string;
+  // MongoDB 工具路径（mongodump/mongorestore 所在目录）
+  mongodbBinPath: string;
 }

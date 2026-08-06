@@ -20,6 +20,7 @@ const {
   MONGODB_ACCOUNT,
   MONGODB_PASSWORD,
   MONGODB_QUERY,
+  MONGODB_BIN_PATH,
 } = process.env;
 
 console.log(RUNNING_ENV, '运行环境');
@@ -39,4 +40,5 @@ export const useCustomConfig = (): GlobalEnvConfig => ({
   mongodbAccount: MONGODB_ACCOUNT || 'xxxx',
   mongodbPassword: MONGODB_PASSWORD || 'xxxx',
   mongodbQuery: MONGODB_QUERY || '?xx=xx',
+  mongodbBinPath: MONGODB_BIN_PATH || '',
 });
