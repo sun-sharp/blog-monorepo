@@ -7,6 +7,12 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.1.0 (2026-8-6)
+- server 端
+  - 新增二进制备份恢复模块
+- 移动端
+  - 新增移动端数据备份页面
+
 ## bm-ns-am-4.0.3 (2026-8-6)
 - server 端
   - 重构 node-server 启动脚本，简化配置并统一命名
