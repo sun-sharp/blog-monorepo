@@ -75,7 +75,7 @@ export class BackupService {
     const args = this.buildDumpArgs(dbName, outputPath);
     const bin = resolveBin(dumpExe);
     logger.log(`开始二进制备份数据库: ${dbName} -> ${outputPath}`);
-    await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100 });
+    await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100, shell: true, windowsHide: true });
     logger.log(`二进制备份数据库成功: ${dbName}`);
   }
 
@@ -92,7 +92,7 @@ export class BackupService {
     }
     const bin = resolveBin(restoreExe);
     logger.log(`开始恢复数据库: ${dbName} <- ${inputPath}`);
-    await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100 });
+    await execFileAsync(bin, args, { maxBuffer: 1024 * 1024 * 100, shell: true, windowsHide: true });
     logger.log(`恢复数据库成功: ${dbName}`);
   }
 
