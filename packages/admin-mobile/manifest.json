@@ -86,6 +86,13 @@
                     "pathRewrite" : {
                         "^/blog" : "/blog"
                     }
+                },
+                "/backup" : {
+                    "target" : "http://127.0.0.1:3000",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/backup" : "/backup"
+                    }
                 }
             }
         },

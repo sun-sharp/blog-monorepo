@@ -20,6 +20,7 @@ interface RequestConfig {
 const BASE_URL = import.meta.env.VITE_BASE_URL || '';
 const CAPITAL_API_URL = import.meta.env.VITE_CAPITAL_API_URL || '';
 const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
+const BACKUP_API_URL = import.meta.env.VITE_BACKUP_API_URL || '';
 const AUTHORIZATION_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
 
 function isH5Platform(): boolean {
@@ -32,6 +33,7 @@ function isH5Platform(): boolean {
 
 const CAPITAL_BASE = isH5Platform() ? CAPITAL_API_URL : `${BASE_URL}${CAPITAL_API_URL}`;
 const BLOG_BASE = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
+const BACKUP_BASE = isH5Platform() ? BACKUP_API_URL : `${BASE_URL}${BACKUP_API_URL}`;
 
 function buildUrl(config: RequestConfig): string {
   let url = config.url;
@@ -135,5 +137,6 @@ export function createRequest(baseUrl: string) {
 
 export const capitalRequest = createRequest(CAPITAL_BASE);
 export const blogRequest = createRequest(BLOG_BASE);
+export const backupRequest = createRequest(BACKUP_BASE);
 
 export default request;

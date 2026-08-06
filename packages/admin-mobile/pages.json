@@ -125,6 +125,12 @@
       }
     },
     {
+      "path": "pages/system/backup/backup",
+      "style": {
+        "navigationBarTitleText": "数据备份"
+      }
+    },
+    {
       "path": "pages/setting/account/account",
       "style": {
         "navigationBarTitleText": "账号设置",

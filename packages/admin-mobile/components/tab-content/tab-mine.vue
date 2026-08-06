@@ -63,6 +63,7 @@
         <u-cell-item title="用户管理" icon="account" @click="navigateTo('/pages/system/user/user')" />
         <u-cell-item title="角色管理" icon="account-fill" @click="navigateTo('/pages/system/role/role')" />
         <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
+        <u-cell-item title="数据备份" icon="download" @click="navigateTo('/pages/system/backup/backup')" />
       </u-cell-group>
     </view>
 
