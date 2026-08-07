@@ -144,7 +144,7 @@ export class WeChatService {
         // 返回错误
         .catch((err) => {
           logger.error(`微信账单导入失败! ${err}`);
-          return { code: ApiCode.ERROR, message: err || '导入失败！' };
+          return { code: ApiCode.ERROR, message: `${err}` || '导入失败！' };
         })
     );
   }
@@ -178,7 +178,7 @@ export class WeChatService {
           logger.error(`新增微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '添加失败！',
+            message: `${err}` || '添加失败！',
           };
         })
     );
@@ -218,7 +218,7 @@ export class WeChatService {
           logger.error(`批量新增微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '添加失败！',
+            message: `${err}` || '添加失败！',
           };
         })
     );
@@ -304,7 +304,7 @@ export class WeChatService {
           logger.error(`条件并分页获取微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '查询失败！',
+            message: `${err}` || '查询失败！',
           };
         })
     );
@@ -374,7 +374,7 @@ export class WeChatService {
           logger.error(`修改微信账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '修改失败！',
+            message: `${err}` || '修改失败！',
           };
         })
     );
@@ -429,7 +429,7 @@ export class WeChatService {
           logger.error(`处理微信余额 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '处理失败！',
+            message: `${err}` || '处理失败！',
           };
         })
     );

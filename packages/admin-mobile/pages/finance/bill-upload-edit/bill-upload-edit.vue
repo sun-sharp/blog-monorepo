@@ -43,6 +43,9 @@
           <view v-if="codeFields.length > 0" class="code-fields">
             <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
           </view>
+          <view class="code-input-btns">
+            <text v-for="it in codeInputArray" :key="it" class="code-input-btn" @click="insertCode(it)">{{ it }}</text>
+          </view>
           <u-textarea v-model="form.code" placeholder="请输入代码" :auto-height="true" :maxlength="-1" :cursor-spacing="20" />
         </view>
       </u-form>
@@ -155,6 +158,25 @@
     if (form.billUploadType === bankBillUploadType) return bankUploadFields;
     return [];
   });
+
+  const codeInputArray = computed(() => {
+    return [
+      ...codeFields.value.map((item: { key: string }) => item.key),
+      'item',
+      'isAssignment',
+      'includes',
+      '.some((fi) => .indexOf(fi)!==-1)',
+      '===',
+      '!==',
+      '&&',
+      '||',
+      '!',
+    ];
+  });
+
+  function insertCode(code: string) {
+    form.code += code;
+  }
 
   const rules = {
     billUploadType: [{ required: true, message: '请选择账单导入类型', trigger: 'change' }],
@@ -310,5 +332,20 @@
   .code-field-item {
     font-size: 22rpx;
     color: #e74c3c;
+  }
+
+  .code-input-btns {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 16rpx;
+  }
+
+  .code-input-btn {
+    font-size: 26rpx;
+    margin: 6rpx;
+    background-color: $uni-color-primary;
+    color: $uni-text-color-inverse;
+    border-radius: 10rpx;
+    padding: 10rpx 20rpx;
   }
 </style>

@@ -176,7 +176,7 @@ export class AliPayService {
           logger.error(`支付宝账单保存 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '添加失败！',
+            message: `${err}` || '添加失败！',
           };
         })
     );
@@ -215,7 +215,7 @@ export class AliPayService {
           logger.error(`批量新增支付宝账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '添加失败！',
+            message: `${err}` || '添加失败！',
           };
         })
     );
@@ -301,7 +301,7 @@ export class AliPayService {
           logger.error(`条件并分页获取支付宝账单列表 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '查询失败！',
+            message: `${err}` || '查询失败！',
           };
         })
     );
@@ -357,7 +357,7 @@ export class AliPayService {
           logger.error(`修改支付宝账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '修改失败！',
+            message: `${err}` || '修改失败！',
           };
         })
     );
@@ -412,7 +412,7 @@ export class AliPayService {
           logger.error(`处理支付宝余额 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '处理失败！',
+            message: `${err}` || '处理失败！',
           };
         })
     );
@@ -467,7 +467,7 @@ export class AliPayService {
           logger.error(`处理支付宝余额宝 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '处理失败！',
+            message: `${err}` || '处理失败！',
           };
         })
     );

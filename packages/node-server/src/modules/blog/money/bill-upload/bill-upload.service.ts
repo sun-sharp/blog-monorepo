@@ -62,7 +62,7 @@ export class BillUploadService {
           logger.log(`新增账单导入失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '添加失败！',
+            message: `${err}` || '添加失败！',
           };
         })
     );
@@ -109,7 +109,7 @@ export class BillUploadService {
           logger.error(`条件并分页获取账单导入列表 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '查询失败！',
+            message: `${err}` || '查询失败！',
           };
         })
     );
@@ -144,7 +144,7 @@ export class BillUploadService {
         logger.error(`根据billUploadId查找账单导入详情 失败！${err}`);
         return {
           code: ApiCode.ERROR,
-          message: err || '查询失败！',
+          message: `${err}` || '查询失败！',
         };
       });
   }
@@ -178,7 +178,7 @@ export class BillUploadService {
           logger.error(`修改账单导入 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '修改失败！',
+            message: `${err}` || '修改失败！',
           };
         })
     );
@@ -204,7 +204,7 @@ export class BillUploadService {
           logger.error(`删除账单导入 失败！${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '删除失败！',
+            message: `${err}` || '删除失败！',
           };
         })
     );
@@ -244,6 +244,7 @@ export class BillUploadService {
         })
         // 返回错误
         .catch((err) => {
+          logger.error(`获取账单导入数据库信息 失败! ${err}`);
           return err;
         })
     );

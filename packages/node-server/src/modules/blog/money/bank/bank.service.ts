@@ -125,7 +125,7 @@ export class BankService {
           logger.error(`银行账单导入 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '导入失败！',
+            message: `${err}` || '导入失败！',
           };
         })
     );
@@ -164,7 +164,7 @@ export class BankService {
           logger.error(`批量新增银行账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '添加失败！',
+            message: `${err}` || '添加失败！',
           };
         })
     );
@@ -248,7 +248,7 @@ export class BankService {
           logger.error(`条件并分页获取银行账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '查询失败！',
+            message: `${err}` || '查询失败！',
           };
         })
     );
@@ -275,7 +275,7 @@ export class BankService {
           logger.error(`修改银行账单 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '修改失败！',
+            message: `${err}` || '修改失败！',
           };
         })
     );
@@ -328,7 +328,7 @@ export class BankService {
           logger.error(`批量删除银行账单的数据 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '删除失败！',
+            message: `${err}` || '删除失败！',
           };
         })
     );
@@ -354,7 +354,7 @@ export class BankService {
           logger.error(`删除银行账单的数据 失败! ${err}`);
           return {
             code: ApiCode.ERROR,
-            message: err || '删除失败！',
+            message: `${err}` || '删除失败！',
           };
         })
     );
