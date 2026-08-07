@@ -89,6 +89,7 @@ export class WeChatService {
           if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据按照交易时间排序
           result.sort((a, b) => (b.tradeTime > a.tradeTime ? -1 : 1));
+          logger.log(`微信账单 导入数据处理 成功！共 ${result.length} 个`);
           return result;
         })
         // 对数据进行批量处理
@@ -96,13 +97,22 @@ export class WeChatService {
           const total = list.length;
           const listSlice = list.slice(0, size);
           const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.weChat);
+          logger.log(`微信账单 查询账单导入配置 成功！共 ${billUploadList.length} 个`);
           // 处理每项数据
           const formatBillUploadItem = (m: ApiWeChatUpload) => {
             const item = { ...m };
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
+              // 提取 code 中所有 item.xxx 属性名并去重，判断是否都为字符串类型
+              const itemProps = [...new Set([...f.code.matchAll(/item\.(\w+)/g)].map((m) => m[1]))];
+              if (!itemProps.every((prop) => typeof item[prop] === 'string')) continue;
               // 判断是否赋值
-              const runResult = runCode(f.code, { item, isAssignment: false });
+              let runResult: any;
+              try {
+                runResult = runCode(f.code, { item, isAssignment: false });
+              } catch (err) {
+                throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, billMethod: ${f.billMethod}, item: ${JSON.stringify(item)}], 错误: ${err}`;
+              }
               const isAssignment = runResult.isAssignment;
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {

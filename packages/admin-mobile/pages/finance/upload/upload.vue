@@ -18,6 +18,10 @@
         </view>
 
         <view class="upload-action card">
+          <view v-if="uploadType === 3" class="upload-download" @click="handleDownloadBankFile">
+            <u-icon name="download" size="32" color="#007aff" />
+            <text class="upload-download-text">下载原文件</text>
+          </view>
           <u-button type="primary" icon="file-text" @click="chooseFile">选择文件</u-button>
           <text class="upload-tip">支持 CSV、XLSX、XLS 格式文件</text>
           <!-- #ifdef MP-WEIXIN -->
@@ -250,12 +254,11 @@
               </text>
               <u-icon name="arrow-right" size="28" color="#999" />
             </view>
-            <view class="import-card-select" @click="openSelect(idx, 'bankType')">
+            <view class="import-card-select">
               <text class="required">银行类型</text>
               <text :class="['import-card-select-value', !item.bankType && 'placeholder']">
                 {{ getLabel('bankType', item.bankType) || '请选择' }}
               </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
             </view>
           </template>
         </view>
@@ -674,6 +677,57 @@
     excelUploadTotal.value = 0;
     // clearFile();
   }
+
+  function handleDownloadBankFile() {
+    const downloadUrl = bankApi.getDownloadUrl();
+    const token = userStore.getToken;
+    const authHead = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
+
+    if (isH5Platform()) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', downloadUrl);
+      xhr.setRequestHeader('Authorization', authHead + token);
+      xhr.responseType = 'blob';
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const blob = new Blob([xhr.response], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const eLink = document.createElement('a');
+          eLink.download = '银行统一数据模版.xlsx';
+          eLink.style.display = 'none';
+          eLink.href = URL.createObjectURL(blob);
+          document.body.appendChild(eLink);
+          eLink.click();
+          URL.revokeObjectURL(eLink.href);
+          document.body.removeChild(eLink);
+        } else {
+          uni.showToast({ title: '下载失败', icon: 'none' });
+        }
+      };
+      xhr.onerror = () => uni.showToast({ title: '下载失败', icon: 'none' });
+      xhr.send();
+    } else {
+      uni.downloadFile({
+        url: downloadUrl,
+        method: 'POST',
+        header: { Authorization: authHead + token },
+        success: (res) => {
+          if (res.statusCode === 200) {
+            uni.openDocument({
+              filePath: res.tempFilePath,
+              fileType: 'xlsx',
+              showMenu: true,
+              fail: () => uni.showToast({ title: '打开文件失败', icon: 'none' }),
+            });
+          } else {
+            uni.showToast({ title: '下载失败', icon: 'none' });
+          }
+        },
+        fail: () => uni.showToast({ title: '下载失败', icon: 'none' }),
+      });
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -736,6 +790,18 @@
     flex-direction: column;
     align-items: center;
     padding: 30rpx 24rpx;
+  }
+
+  .upload-download {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20rpx;
+  }
+
+  .upload-download-text {
+    font-size: $uni-font-size-sm;
+    color: $uni-color-primary;
+    margin-left: 8rpx;
   }
 
   .upload-tip {

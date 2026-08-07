@@ -19,3 +19,17 @@ export const remove = (bankId: string): Promise<undefined> => {
 export const batchSave = (data: ApiBankBatchSaveData): Promise<undefined> => {
   return blogRequest({ url: `${basic}/batch-save`, method: 'POST', data });
 };
+
+export const getDownloadUrl = (): string => {
+  const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
+  const BASE_URL = import.meta.env.VITE_BASE_URL || '';
+  const platform = (() => {
+    try {
+      return uni.getSystemInfoSync().uniPlatform === 'web';
+    } catch {
+      return false;
+    }
+  })();
+  const base = platform ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
+  return `${base}/money/bank/download`;
+};

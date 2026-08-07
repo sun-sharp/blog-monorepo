@@ -15,8 +15,8 @@ const formatExcelNum = (val: any): number => {
 };
 
 const formatExcelFormula = (val: any): any => {
-  if (typeof val === 'object' && val.formula && val.result) {
-    return val.result;
+  if (typeof val === 'object' && val.formula) {
+    return val.result ? val.result : '';
   }
   return val;
 };

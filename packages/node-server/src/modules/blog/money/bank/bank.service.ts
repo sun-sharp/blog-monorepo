@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
+import { join } from 'path';
+import { existsSync, mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'fs';
+import { Response } from 'express';
 import { bankExcelCellMap } from 'src/common/constant/excel';
+import { storeDirStr } from 'src/common/constant/config';
 import { ApiCode } from 'src/common/enums/api-code.enum';
 import { excelXlsxHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
@@ -19,6 +23,10 @@ import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { runCode } from '@/common/string';
+
+const BANK_UPLOAD_FILE_NAME = '银行统一数据模版';
+const BANK_UPLOAD_FILE_ORIGINAL_NAME = `${BANK_UPLOAD_FILE_NAME}.xlsx`;
+const BANK_UPLOAD_DIR = join(storeDirStr, 'bank-upload');
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -40,6 +48,11 @@ export class BankService {
       Promise.resolve()
         // 导入数据处理
         .then(async () => {
+          const originalName = file.originalname ? decodeURIComponent(file.originalname) : '';
+          logger.log(`银行账单 上传文件名: ${originalName}`);
+          if (originalName !== BANK_UPLOAD_FILE_ORIGINAL_NAME) {
+            throw `上传的文件名称必须为「${BANK_UPLOAD_FILE_ORIGINAL_NAME}」！`;
+          }
           const { buffer } = file; // file为前端上传的excel
           let list: ApiBankUpload[] = [];
           for (const itKey in bankExcelCellMap) {
@@ -87,8 +100,19 @@ export class BankService {
             const item = { ...m };
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
+              // 提取 code 中所有 item.xxx 属性名并去重，判断是否都为字符串类型
+              const itemProps = [...new Set([...f.code.matchAll(/item\.(\w+)/g)].map((m) => m[1]))];
+              if (!itemProps.every((prop) => typeof item[prop] === 'string')) continue;
               // 判断是否赋值
-              const runResult = runCode(f.code, { item, isAssignment: false });
+              let runResult: any;
+              try {
+                runResult = runCode(f.code, { item, isAssignment: false });
+              } catch (err) {
+                // logger.error(
+                //   `银行账单规则执行失败! 规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, bankType: ${item.bankType}, tradeTime: ${item.tradeTime}, 错误: ${err}`,
+                // );
+                throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType},  item: ${JSON.stringify(item)}], 错误: ${err}`;
+              }
               const isAssignment = runResult.isAssignment;
               if (isAssignment) {
                 if (f.handleType === 'inflowOrOutflow') {
@@ -112,6 +136,12 @@ export class BankService {
             return formatBillUploadItem(m);
           });
           logger.log(`银行账单导入${total}个`);
+          // 保存文件到 api_store_dir/bank-upload/
+          if (!existsSync(BANK_UPLOAD_DIR)) mkdirSync(BANK_UPLOAD_DIR, { recursive: true });
+          const existingFiles = readdirSync(BANK_UPLOAD_DIR).filter((f) => f.startsWith(BANK_UPLOAD_FILE_NAME));
+          existingFiles.forEach((f) => unlinkSync(join(BANK_UPLOAD_DIR, f)));
+          writeFileSync(join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME), file.buffer);
+          logger.log(`报错文件保存成功！路径: ${join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME)}`);
           return {
             code: ApiCode.SUCCESS,
             result: {
@@ -130,6 +160,20 @@ export class BankService {
           };
         })
     );
+  }
+
+  /**
+   * @description: 下载银行账单模版文件
+   * @param {Response} res
+   * @return {IResponse | void}
+   */
+  public downloadFile(res: Response): IResponse | void {
+    const filePath = join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME);
+    if (!existsSync(filePath)) {
+      return { code: ApiCode.ERROR, message: '文件不存在！' };
+    }
+    res.setHeader('Content-Disposition', `attachment; filename="${BANK_UPLOAD_FILE_ORIGINAL_NAME}"`);
+    res.download(filePath);
   }
 
   /**

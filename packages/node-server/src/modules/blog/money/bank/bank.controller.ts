@@ -1,4 +1,4 @@
-import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put, Delete, Param } from '@nestjs/common';
+import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put, Delete, Param, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -9,6 +9,7 @@ import { PageBankDto } from './dto/page-bank.dto';
 import { batchRemoveDto } from './dto/remove-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 import { UploadBankDto } from './dto/upload-bank.dto';
+import { Response } from 'express';
 
 @Controller('bank')
 @ApiTags('银行')
@@ -53,6 +54,13 @@ export class BankController {
   @ApiOperation({ summary: '批量删除银行账单' })
   batchRemove(@Body() body: batchRemoveDto) {
     return this.bankService.batchRemove(body);
+  }
+
+  @Post('download')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '下载银行账单模版文件' })
+  downloadFile(@Res() res: Response) {
+    return this.bankService.downloadFile(res);
   }
 
   @Delete('remove/:bankId')
