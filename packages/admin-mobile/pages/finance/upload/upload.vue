@@ -678,39 +678,73 @@
     // clearFile();
   }
 
+  const downloadFile = (downloadUrl: string, authHead: string, token: string, fileName = '银行统一数据模版.xlsx') => {
+    const xhr = new XMLHttpRequest();
+    // 将 POST 改为 GET
+    xhr.open('GET', downloadUrl);
+    xhr.setRequestHeader('Authorization', authHead + token);
+    xhr.responseType = 'blob';
+    xhr.timeout = 60000; // 超时 60 秒
+
+    uni.showLoading({ title: '下载中...', mask: true });
+
+    xhr.onload = () => {
+      uni.hideLoading();
+      if (xhr.status === 200) {
+        const blob = new Blob([xhr.response], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        // 尝试从响应头获取文件名（后端可返回 Content-Disposition）
+        const disposition = xhr.getResponseHeader('Content-Disposition');
+        if (disposition && disposition.indexOf('filename=') !== -1) {
+          const match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+          if (match && match[1]) {
+            fileName = decodeURIComponent(match[1].replace(/['"]/g, ''));
+          }
+        }
+
+        const eLink = document.createElement('a');
+        eLink.download = fileName;
+        eLink.style.display = 'none';
+        eLink.href = URL.createObjectURL(blob);
+        document.body.appendChild(eLink);
+        eLink.click();
+        // 延迟释放 URL 确保下载触发
+        setTimeout(() => {
+          URL.revokeObjectURL(eLink.href);
+          document.body.removeChild(eLink);
+        }, 100);
+        uni.showToast({ title: '下载成功', icon: 'success' });
+      } else {
+        uni.showToast({ title: `下载失败（${xhr.status}）`, icon: 'none' });
+      }
+    };
+
+    xhr.onerror = () => {
+      uni.hideLoading();
+      uni.showToast({ title: '网络异常，下载失败', icon: 'none' });
+    };
+
+    xhr.ontimeout = () => {
+      uni.hideLoading();
+      uni.showToast({ title: '下载超时，请重试', icon: 'none' });
+      xhr.abort();
+    };
+
+    xhr.send(); // GET 请求无需传递数据
+  };
+
   function handleDownloadBankFile() {
     const downloadUrl = bankApi.getDownloadUrl();
     const token = userStore.getToken;
     const authHead = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
 
     if (isH5Platform()) {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', downloadUrl);
-      xhr.setRequestHeader('Authorization', authHead + token);
-      xhr.responseType = 'blob';
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          const blob = new Blob([xhr.response], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          });
-          const eLink = document.createElement('a');
-          eLink.download = '银行统一数据模版.xlsx';
-          eLink.style.display = 'none';
-          eLink.href = URL.createObjectURL(blob);
-          document.body.appendChild(eLink);
-          eLink.click();
-          URL.revokeObjectURL(eLink.href);
-          document.body.removeChild(eLink);
-        } else {
-          uni.showToast({ title: '下载失败', icon: 'none' });
-        }
-      };
-      xhr.onerror = () => uni.showToast({ title: '下载失败', icon: 'none' });
-      xhr.send();
+      downloadFile(downloadUrl, authHead, token);
     } else {
       uni.downloadFile({
         url: downloadUrl,
-        method: 'POST',
+        method: 'GET',
         header: { Authorization: authHead + token },
         success: (res) => {
           if (res.statusCode === 200) {

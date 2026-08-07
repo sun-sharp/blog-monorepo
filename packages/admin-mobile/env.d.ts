@@ -15,6 +15,10 @@ declare module '@dcloudio/uni-app' {
   // 根据需要添加其他钩子...
 }
 
+interface Uni {
+  env: any;
+}
+
 // wx 小程序
 interface Wx {
   chooseMessageFile: (options: any) => void;

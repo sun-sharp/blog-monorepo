@@ -167,13 +167,14 @@ export class BankService {
    * @param {Response} res
    * @return {IResponse | void}
    */
-  public downloadFile(res: Response): IResponse | void {
+  public downloadFile(res: Response): void {
     const filePath = join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME);
+    logger.log(`filePath: ${filePath}`);
     if (!existsSync(filePath)) {
-      return { code: ApiCode.ERROR, message: '文件不存在！' };
+      res.status(404).json({ code: ApiCode.ERROR, message: '文件不存在！' });
+      return;
     }
-    res.setHeader('Content-Disposition', `attachment; filename="${BANK_UPLOAD_FILE_ORIGINAL_NAME}"`);
-    res.download(filePath);
+    res.download(filePath, `${new Date().getTime()}.xlsx`); // 第二个参数指定下载文件名
   }
 
   /**
