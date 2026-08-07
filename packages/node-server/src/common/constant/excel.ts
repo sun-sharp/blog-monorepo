@@ -14,6 +14,13 @@ const formatExcelNum = (val: any): number => {
   return isNaN(Number(val)) ? 0 : Number(val);
 };
 
+const formatExcelFormula = (val: any): any => {
+  if (typeof val === 'object' && val.formula && val.result) {
+    return val.result;
+  }
+  return val;
+};
+
 // 微信账单key值重命名
 export const weChatExcelCellHandle = (fileType: 'csv' | 'xlsx') => ({
   1: (tar: any, val: any) => {
@@ -101,7 +108,8 @@ export const bankExcelCellMap = {
         tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 卡号
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        let tradeTime = formatExcelFormula(val);
+        tar['tradeTime'] = nowDateFun(tradeTime);
       }, // 交易日期
       8: (tar: any, val: any) => {
         tar['explain'] = formatExcelStr(val);
@@ -120,13 +128,13 @@ export const bankExcelCellMap = {
         tar['balance'] = formatExcelNum(val);
       }, // 余额
       12: (tar: any, val: any) => {
-        tar['tradeOtherPerson'] = formatExcelStr(val);
+        tar['tradeOtherPerson'] = formatExcelStr(formatExcelFormula(val));
       }, // 对方户名
       13: (tar: any, val: any) => {
-        tar['tradeOtherPersonAccount'] = formatExcelStr(val);
+        tar['tradeOtherPersonAccount'] = formatExcelStr(formatExcelFormula(val));
       }, // 对方账号
       14: (tar: any, val: any) => {
-        tar['tradeType'] = formatExcelStr(val);
+        tar['tradeType'] = formatExcelStr(formatExcelFormula(val));
       }, // 渠道
     },
   },
@@ -138,7 +146,7 @@ export const bankExcelCellMap = {
         tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 账号
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = nowDateFun(formatExcelFormula(val));
       }, // 交易时间
       3: (tar: any, val: any) => {
         tar['explain'] = formatExcelStr(val);
@@ -157,7 +165,7 @@ export const bankExcelCellMap = {
         tar['balance'] = formatExcelNum(val);
       }, // 余额
       6: (tar: any, val: any) => {
-        tar['tradeOtherPerson'] = formatExcelStr(val);
+        tar['tradeOtherPerson'] = formatExcelStr(formatExcelFormula(val));
       }, // 对⼿信息
       7: (tar: any, val: any) => {
         tar['tradeType'] = formatExcelStr(val);
@@ -175,7 +183,7 @@ export const bankExcelCellMap = {
         tar['explain'] = formatExcelStr(val);
       }, // 摘要
       5: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = nowDateFun(formatExcelFormula(val));
       }, // 交易日期
       6: (tar: any, val: any) => {
         if (typeof val !== 'number') {
@@ -188,7 +196,7 @@ export const bankExcelCellMap = {
         tar['moneyAmount'] = Math.abs(val);
       }, // 交易金额
       7: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(val);
+        tar['balance'] = formatExcelNum(formatExcelFormula(val));
       }, // 账户余额
       8: (tar: any, val: any) => {
         tar['place'] = formatExcelStr(val);
@@ -197,7 +205,7 @@ export const bankExcelCellMap = {
         tar['tradeType'] = formatExcelStr(val);
       }, // 附言
       10: (tar: any, val: any) => {
-        tar['tradeOtherPersonAccount'] = formatExcelStr(val);
+        tar['tradeOtherPersonAccount'] = formatExcelStr(formatExcelFormula(val));
       }, // 对方账号
       11: (tar: any, val: any) => {
         tar['tradeOtherPerson'] = formatExcelStr(val);
@@ -214,7 +222,7 @@ export const bankExcelCellMap = {
         tar['voucherNo'] = formatExcelStr(val);
       }, // 凭证号码
       3: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = nowDateFun(formatExcelFormula(val));
       }, // 交易时间
       4: (tar: any, val: any) => {
         tar['explain'] = formatExcelStr(val);
@@ -230,13 +238,13 @@ export const bankExcelCellMap = {
         tar['moneyAmount'] = Math.abs(val);
       }, // 交易金额
       6: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(val);
+        tar['balance'] = formatExcelNum(formatExcelFormula(val));
       }, // 账户余额
       8: (tar: any, val: any) => {
         tar['tradeType'] = formatExcelStr(val);
       }, // 交易渠道
       10: (tar: any, val: any) => {
-        tar['tradeOtherPerson'] = formatExcelStr(val);
+        tar['tradeOtherPerson'] = formatExcelStr(formatExcelFormula(val));
       }, // 对方户名/账号
       11: (tar: any, val: any) => {
         tar['tradeOtherPersonRemarks'] = formatExcelStr(val);
@@ -251,7 +259,7 @@ export const bankExcelCellMap = {
         tar['voucherType'] = 2; // 1 存折，2 储蓄卡，3 信用卡
       }, // 交易时间
       2: (tar: any, val: any) => {
-        tar['tradeTime'] = nowDateFun(val);
+        tar['tradeTime'] = nowDateFun(formatExcelFormula(val));
       }, // 交易时间
       3: (tar: any, val: any) => {
         if (typeof val !== 'number') {
@@ -264,7 +272,7 @@ export const bankExcelCellMap = {
         tar['moneyAmount'] = Math.abs(val);
       }, // 交易金额
       4: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(val);
+        tar['balance'] = formatExcelNum(formatExcelFormula(val));
       }, // 余额
       5: (tar: any, val: any) => {
         tar['tradeType'] = formatExcelStr(val);

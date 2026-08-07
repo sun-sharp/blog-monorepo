@@ -19,7 +19,7 @@
 
         <view class="upload-action card">
           <u-button type="primary" icon="file-text" @click="chooseFile">选择文件</u-button>
-          <text class="upload-tip">支持 CSV、Excel 格式文件</text>
+          <text class="upload-tip">支持 CSV、XLSX、XLS 格式文件</text>
           <!-- #ifdef MP-WEIXIN -->
           <view class="upload-mp-guide">
             <text class="upload-mp-guide-title">小程序文件导入步骤：</text>
@@ -47,8 +47,8 @@
         </view>
 
         <view v-if="uploading" class="upload-progress card">
-          <u-line-progress :percentage="uploadProgress" active-color="#007aff" />
-          <text class="upload-progress-text">上传中 {{ uploadProgress }}%</text>
+          <u-line-progress :percent="uploadProgress" active-color="#007aff" />
+          <text class="upload-progress-text">上传中 {{ Math.floor(uploadProgress) }}%</text>
         </view>
 
         <view class="upload-submit">
@@ -59,15 +59,15 @@
           <text class="upload-help-title">使用说明</text>
           <view class="upload-help-item">
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">微信账单：导出 CSV 文件后上传</text>
+            <text class="upload-help-text">微信账单：选择 CSV 或者 XLSX 文件后导入上传</text>
           </view>
           <view class="upload-help-item">
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">支付宝账单：导出 CSV 文件后上传</text>
+            <text class="upload-help-text">支付宝账单：选择 CSV 文件后导入上传</text>
           </view>
           <view class="upload-help-item">
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">银行账单：导出 Excel 文件后上传</text>
+            <text class="upload-help-text">银行账单：选择 XLSX 文件后导入上传</text>
           </view>
         </view>
       </scroll-view>
@@ -291,6 +291,8 @@
   const selectedFileName = ref('');
   const uploading = ref(false);
   const uploadProgress = ref(0);
+  const uploadTimeout = ref(false);
+  const uploadTimer = ref<ReturnType<typeof setTimeout> | null>(null);
 
   const tableData = ref<any[]>([]);
   const excelUploadTotal = ref(0);
@@ -389,7 +391,7 @@
   function checkFileExt(name: string): boolean {
     const ext = name.substring(name.lastIndexOf('.')).toLowerCase();
     if (!VALID_EXTS.includes(ext)) {
-      uni.showToast({ title: '请选择 CSV 或 Excel 文件', icon: 'none' });
+      uni.showToast({ title: '请选择 CSV 或 XLSX 或 XLS 文件', icon: 'none' });
       return false;
     }
     return true;
@@ -490,12 +492,14 @@
       const xhr = new XMLHttpRequest();
       xhr.open('POST', getUploadUrl());
       xhr.setRequestHeader('Authorization', authHead + token);
+      xhr.timeout = 300000;
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
           uploadProgress.value = Math.ceil((e.loaded / e.total) * 100);
         }
       };
       xhr.onload = () => {
+        clearUploadTimer();
         try {
           const res = JSON.parse(xhr.responseText);
           if (res.code === 0) {
@@ -507,7 +511,21 @@
           reject(new Error('解析响应失败'));
         }
       };
-      xhr.onerror = () => reject(new Error('网络错误'));
+      xhr.onerror = () => {
+        clearUploadTimer();
+        reject(new Error('网络错误'));
+      };
+      xhr.ontimeout = () => {
+        uploadTimeout.value = true;
+        reject(new Error('上传超时（5分钟）'));
+      };
+      uploadTimer.value = setTimeout(() => {
+        if (xhr.readyState !== XMLHttpRequest.DONE) {
+          xhr.abort();
+          uploadTimeout.value = true;
+          reject(new Error('上传超时（5分钟）'));
+        }
+      }, 300000);
       xhr.send(formData);
     });
   }
@@ -526,6 +544,7 @@
         name: 'file',
         header: { Authorization: authHead + token },
         success: (res) => {
+          clearUploadTimer();
           try {
             const resp = JSON.parse(res.data);
             if (resp.code === 0) {
@@ -537,20 +556,38 @@
             reject(new Error('解析响应失败'));
           }
         },
-        fail: (err) => reject(new Error(err.errMsg || '上传失败')),
+        fail: (err) => {
+          clearUploadTimer();
+          if (uploadTimeout.value) return;
+          reject(new Error(err.errMsg || '上传失败'));
+        },
       });
       task.onProgressUpdate((res) => {
         uploadProgress.value = res.progress;
       });
+      uploadTimer.value = setTimeout(() => {
+        uploadTimeout.value = true;
+        task.abort();
+        reject(new Error('上传超时（5分钟）'));
+      }, 300000);
     });
+  }
+
+  function clearUploadTimer() {
+    if (uploadTimer.value) {
+      clearTimeout(uploadTimer.value);
+      uploadTimer.value = null;
+    }
   }
 
   async function handleUpload() {
     if (!hasFile.value) return;
     uploading.value = true;
     uploadProgress.value = 0;
+    uploadTimeout.value = false;
     try {
       const rawData = isH5Platform() ? await uploadH5() : await uploadNative();
+      uploadProgress.value = 100;
       if (Array.isArray(rawData.list) && rawData.list.length > 0) {
         excelUploadTotal.value = rawData.total || rawData.list.length;
         tableData.value = rawData.list.map((item: any) => {
@@ -570,8 +607,9 @@
         uni.showToast({ title: '未解析到账单数据', icon: 'none' });
       }
     } catch (e: any) {
-      uni.showToast({ title: e.message || '上传失败', icon: 'error' });
+      uni.showToast({ title: e.message || '上传失败', icon: 'none', duration: 3000 });
     } finally {
+      clearUploadTimer();
       uploading.value = false;
     }
   }

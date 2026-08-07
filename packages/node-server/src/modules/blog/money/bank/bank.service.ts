@@ -52,18 +52,18 @@ export class BankService {
               otherObj: { bankType: Number(itKey) },
             });
             if (!excelArr) throw sheetName + '表导入的数据失败！';
+            // 判断验证数据是有问题
+            const listFilter = excelArr.filter(
+              (f) =>
+                typeof f.balance !== 'number' ||
+                typeof f.moneyAmount !== 'number' ||
+                typeof f.voucherType !== 'number' ||
+                !f.voucherNo ||
+                !isDateFormat(f.tradeTime),
+            );
+            if (listFilter.length > 0) throw `${sheetName} 表里的时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
             list = list.concat(excelArr);
           }
-          // 判断验证数据是有问题
-          const listFilter = list.filter(
-            (f) =>
-              typeof f.balance !== 'number' ||
-              typeof f.moneyAmount !== 'number' ||
-              typeof f.voucherType !== 'number' ||
-              !f.voucherNo ||
-              !isDateFormat(f.tradeTime),
-          );
-          if (listFilter.length > 0) throw `时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
           if (list.length === 0) throw '导入的数据为空！';
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
@@ -73,6 +73,7 @@ export class BankService {
           result.sort(function (a, b) {
             return b.tradeTime > a.tradeTime ? -1 : 1;
           });
+          logger.log(`银行账单 导入数据处理 成功！共 ${result.length} 个`);
           return result;
         })
         // 对数据进行批量处理
@@ -80,12 +81,12 @@ export class BankService {
           const total = list.length;
           const listSlice = list.slice(0, size);
           const billUploadList = await this.billUploadService.getDataByBillUploadType(billUploadTypeEnum.bank);
+          logger.log(`银行账单 查询账单导入配置 成功！共 ${billUploadList.length} 个`);
           // 处理每项数据
           const formatBillUploadItem = (m: ApiBankUpload) => {
             const item = { ...m };
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
-              // 判断是否赋值
               // 判断是否赋值
               const runResult = runCode(f.code, { item, isAssignment: false });
               const isAssignment = runResult.isAssignment;
