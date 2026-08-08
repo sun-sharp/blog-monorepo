@@ -70,6 +70,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { articleAPi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
@@ -169,8 +170,7 @@
       }
       uni.showToast({ title: '保存成功', icon: 'success' });
       setTimeout(() => {
-        uni.$emit('detailUpdated'); // 通知详情页更新数据
-        uni.$emit('listUpdated'); // 通知列表页更新数据
+        setRefreshFlag('article');
         uni.navigateBack();
       }, 500);
     } finally {

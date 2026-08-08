@@ -30,6 +30,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
+  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { userApi } from '../../../api';
   import type { ApiUserItem } from '/#/api/capital/user';
   import ListPage from '../../../components/list-page/list-page.vue';
@@ -59,7 +60,7 @@
   }
 
   onShow(() => {
-    listPageRef.value?.refresh();
+    if (consumeRefreshFlag('user')) listPageRef.value?.refresh();
   });
 </script>
 

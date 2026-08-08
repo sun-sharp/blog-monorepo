@@ -39,6 +39,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
@@ -103,6 +104,7 @@
       }
       apiTypeStore.againGetApiType(form.type);
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setRefreshFlag('category');
       setTimeout(() => uni.navigateBack(), 500);
     } finally {
       loading.value = false;

@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { roleApi } from '../../../api';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
@@ -94,6 +95,7 @@
         await roleApi.save(data);
       }
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setRefreshFlag('role');
       setTimeout(() => uni.navigateBack(), 500);
     } finally {
       loading.value = false;

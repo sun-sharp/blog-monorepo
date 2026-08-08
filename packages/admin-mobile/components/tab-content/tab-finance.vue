@@ -272,6 +272,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue';
+  import { consumeRefreshFlag } from '../../composables/useRefreshFlag';
   import { aggregateBillApi, weChatApi, aliPayApi } from '../../api';
   import { useApiTypeStore } from '../../store';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
@@ -705,7 +706,7 @@
   watch(
     () => props.active,
     (val) => {
-      if (val && inited.value) loadData(true);
+      if (val && inited.value && consumeRefreshFlag('bill')) loadData(true);
     }
   );
 </script>

@@ -36,6 +36,7 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
+  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { billUploadApi } from '../../../api';
   import { billUploadTypeOption, handleTypeOption, inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import type { ApiBillUploadItem } from '/#/api/blog/bill-upload';
@@ -149,7 +150,7 @@
   });
 
   onShow(() => {
-    listPageRef.value?.refresh();
+    if (consumeRefreshFlag('bill-upload')) listPageRef.value?.refresh();
   });
 </script>
 

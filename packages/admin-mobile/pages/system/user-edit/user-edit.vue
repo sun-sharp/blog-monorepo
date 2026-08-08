@@ -46,6 +46,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { userApi, roleApi, capitalApi } from '../../../api';
 
@@ -127,6 +128,7 @@
         });
       }
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setRefreshFlag('user');
       setTimeout(() => uni.navigateBack(), 500);
     } finally {
       loading.value = false;

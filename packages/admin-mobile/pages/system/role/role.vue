@@ -32,6 +32,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
+  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { roleApi } from '../../../api';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
   import type { ApiRoleItem } from '/#/api/capital/role';
@@ -66,7 +67,7 @@
   }
 
   onShow(() => {
-    listPageRef.value?.refresh();
+    if (consumeRefreshFlag('role')) listPageRef.value?.refresh();
   });
 </script>
 

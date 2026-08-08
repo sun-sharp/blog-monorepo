@@ -110,8 +110,9 @@
 
 <script lang="ts" setup>
   import { ref, computed, nextTick, watch, onUnmounted } from 'vue';
-  import { onLoad, onUnload } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { articleAPi } from '../../../api';
+  import { setRefreshFlag, consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
   import type { ApiArticleItem } from '/#/api/blog/article';
 
@@ -491,7 +492,7 @@ img {
           await articleAPi.remove(articleId.value);
           uni.showToast({ title: '删除成功', icon: 'success' });
           setTimeout(() => {
-            uni.$emit('listUpdated'); // 通知列表页更新数据
+            setRefreshFlag('article');
             uni.navigateBack();
           }, 500);
         }
@@ -519,13 +520,12 @@ img {
       console.warn('缺少文章ID');
       loading.value = false;
     }
-    uni.$on('detailUpdated', () => {
-      loadArticle(articleId.value);
-    });
   });
 
-  onUnload(() => {
-    uni.$off('detailUpdated');
+  onShow(() => {
+    if (articleId.value && consumeRefreshFlag('article')) {
+      loadArticle(articleId.value);
+    }
   });
 </script>
 

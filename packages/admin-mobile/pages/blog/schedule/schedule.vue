@@ -33,6 +33,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
+  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { scheduleAPi } from '../../../api';
   import type { ApiScheduleItem } from '/#/api/blog/schedule';
   import ListPage from '../../../components/list-page/list-page.vue';
@@ -61,7 +62,7 @@
   }
 
   onShow(() => {
-    listPageRef.value?.refresh();
+    if (consumeRefreshFlag('schedule')) listPageRef.value?.refresh();
   });
 </script>
 

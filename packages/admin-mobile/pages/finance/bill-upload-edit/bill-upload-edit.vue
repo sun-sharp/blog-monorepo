@@ -110,6 +110,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed, onMounted } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { billUploadApi } from '../../../api';
   import { billUploadTypeOption, handleTypeOption, inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
@@ -234,6 +235,7 @@
         await billUploadApi.save(data);
       }
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setRefreshFlag('bill-upload');
       setTimeout(() => uni.navigateBack(), 500);
     } finally {
       loading.value = false;

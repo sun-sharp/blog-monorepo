@@ -33,6 +33,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
+  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
@@ -100,7 +101,7 @@
   }
 
   onShow(() => {
-    listPageRef.value?.refresh();
+    if (consumeRefreshFlag('category')) listPageRef.value?.refresh();
   });
 </script>
 

@@ -52,6 +52,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { scheduleAPi } from '../../../api';
 
@@ -130,6 +131,7 @@
         await scheduleAPi.save(data);
       }
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setRefreshFlag('schedule');
       setTimeout(() => uni.navigateBack(), 500);
     } finally {
       loading.value = false;

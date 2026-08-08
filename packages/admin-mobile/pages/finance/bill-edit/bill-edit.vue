@@ -167,6 +167,7 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed, onMounted } from 'vue';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { aggregateBillApi } from '../../../api';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
@@ -264,6 +265,7 @@
       }
       await aggregateBillApi.updateAggregate(data);
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setRefreshFlag('bill');
       setTimeout(() => uni.navigateBack(), 500);
     } finally {
       loading.value = false;

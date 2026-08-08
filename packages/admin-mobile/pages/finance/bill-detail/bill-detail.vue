@@ -66,6 +66,7 @@
   import { ref, computed } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { aggregateBillApi } from '../../../api';
+  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
@@ -124,7 +125,7 @@
   });
 
   onShow(() => {
-    if (source.value && id.value) {
+    if (source.value && id.value && consumeRefreshFlag('bill')) {
       loadBill();
     }
   });
