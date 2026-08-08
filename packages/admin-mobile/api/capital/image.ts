@@ -42,15 +42,25 @@ export const upload = (filePath: string, source?: string): Promise<any> => {
   const AUTHORIZATION_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
   const token = uni.getStorageSync('ACCESS_TOKEN') || '';
 
+  const isH5 = (() => {
+    try {
+      return uni.getSystemInfoSync().uniPlatform === 'web';
+    } catch {
+      return false;
+    }
+  })();
+  const urlPrefix = isH5 ? CAPITAL_API_URL : `${BASE_URL}${CAPITAL_API_URL}`;
+  const header: Record<string, string> = {
+    Authorization: AUTHORIZATION_HEAD + token,
+  };
+  if (source) header['source'] = source;
+
   return new Promise((resolve, reject) => {
     uni.uploadFile({
-      url: `${BASE_URL}${CAPITAL_API_URL}${basic}/upload`,
+      url: `${urlPrefix}${basic}/upload`,
       filePath,
-      name: 'file',
-      header: {
-        Authorization: AUTHORIZATION_HEAD + token,
-      },
-      formData: source ? { source } : {},
+      name: 'image',
+      header,
       success: (res) => {
         if (res.statusCode === 200) {
           try {

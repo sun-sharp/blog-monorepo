@@ -4,7 +4,7 @@
       <u-form ref="formRef" :model="form" :rules="rules" label-width="180" class="account-form">
         <u-form-item label="头像">
           <view class="avatar-wrapper">
-            <u-avatar :src="getImgUrl(form.avatar) || '/static/logo.png'" size="80" @click="chooseAvatar" />
+            <u-avatar :src="avatarSrc" size="80" @click="chooseAvatar" />
           </view>
         </u-form-item>
         <u-form-item label="昵称" prop="nickname">
@@ -23,9 +23,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, computed, onMounted } from 'vue';
   import { useUserStore } from '../../../store';
-  import { userApi } from '../../../api';
+  import { userApi, imageApi } from '../../../api';
   import { getImgUrl } from '../../../../shared/src/utils/files';
 
   const userStore = useUserStore();
@@ -43,12 +43,24 @@
     username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   };
 
+  const avatarSrc = computed(() => getImgUrl(form.avatar) || '/static/logo.png');
+
   function chooseAvatar() {
     uni.chooseImage({
       count: 1,
       sizeType: ['compressed'],
-      success: (res) => {
-        form.avatar = res.tempFilePaths[0];
+      sourceType: ['album', 'camera'],
+      success: async (res) => {
+        const tempPath = res.tempFilePaths[0];
+        try {
+          uni.showLoading({ title: '上传中' });
+          const result = await imageApi.upload(tempPath, 'user_avatar');
+          form.avatar = result?.url || '';
+        } catch {
+          uni.showToast({ title: '头像上传失败', icon: 'none' });
+        } finally {
+          uni.hideLoading();
+        }
       },
     });
   }
@@ -68,6 +80,7 @@
       });
       await userStore.GetInfo();
       uni.showToast({ title: '保存成功', icon: 'success' });
+      setTimeout(() => uni.navigateBack(), 1000);
     } finally {
       loading.value = false;
     }
