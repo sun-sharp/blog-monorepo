@@ -7,6 +7,13 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-am-4.2.1 (2026-8-8)
+- 移动端
+  - 修改手机端的配置
+  - 修复移动端头像选取上传及代理配置
+  - 添加 uniapp x
+  - 列表页刷新优化：dirty flag 控制按需刷新
+
 ## bm-ns-am-4.2.0 (2026-8-8)
 - server 端
   - 对银行账单导入修改，增强数据验证逻辑
