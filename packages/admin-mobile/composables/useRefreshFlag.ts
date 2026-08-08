@@ -13,4 +13,3 @@ export function consumeRefreshFlag(key: string): boolean {
   }
   return false;
 }
-

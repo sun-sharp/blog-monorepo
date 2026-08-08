@@ -91,7 +91,7 @@
             "proxy" : {
                 "/dev-capital-api" : {
                     // "target" : "http://127.0.0.1:3000",
-					"target" : "https://www.yangruirui.top",
+                    "target" : "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
                         "^/dev-capital-api" : "/capital"
