@@ -41,9 +41,25 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {},
+            "icons" : {
+                "android" : {
+                    "hdpi" : "static/yangzhirui-1024.png",
+                    "xhdpi" : "static/yangzhirui-1024.png",
+                    "xxhdpi" : "static/yangzhirui-1024.png",
+                    "xxxhdpi" : "static/yangzhirui-1024.png"
+                },
+                "ios" : {
+                    "appstore" : "static/yangzhirui-1024.png"
+                }
+            },
+            "splashscreen" : {
+                "androidStyle" : "common"
+            }
         }
     },
     /* 快应用特有相关 */
