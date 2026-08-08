@@ -19,7 +19,7 @@ import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import * as path from 'path';
-import { runCode } from '@/common/string';
+import { runCode } from 'src/common/string';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;

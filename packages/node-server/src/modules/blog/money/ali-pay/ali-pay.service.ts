@@ -19,7 +19,7 @@ import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 import * as path from 'path';
-import { runCode } from '@/common/string';
+import { runCode } from 'src/common/string';
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 

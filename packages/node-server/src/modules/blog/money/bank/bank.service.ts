@@ -22,7 +22,7 @@ import { isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
-import { runCode } from '@/common/string';
+import { runCode } from 'src/common/string';
 
 const BANK_UPLOAD_FILE_NAME = '银行统一数据模版';
 const BANK_UPLOAD_FILE_ORIGINAL_NAME = `${BANK_UPLOAD_FILE_NAME}.xlsx`;
