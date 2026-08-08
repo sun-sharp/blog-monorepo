@@ -107,14 +107,14 @@
   import { consumeRefreshFlag } from '../../composables/useRefreshFlag';
   import { articleAPi } from '../../api';
   import { useApiTypeStore } from '../../store';
-  import type { ApiArticleItem } from '/#/api/blog/article';
+  import type { ApiLiteArticleItem } from '/#/api/blog/article';
 
   const props = defineProps<{ active: boolean }>();
 
   const apiTypeStore = useApiTypeStore();
 
   const keyword = ref('');
-  const list = ref<ApiArticleItem[]>([]);
+  const list = ref<ApiLiteArticleItem[]>([]);
   const loading = ref(false);
   const isRefreshing = ref(false);
   const current = ref(1);
@@ -180,7 +180,7 @@
       } else if (currentStatus.value === 2) {
         params.isPrivate = true;
       }
-      const res = await articleAPi.getFindPage(params);
+      const res = await articleAPi.getLitePage(params);
       if (isRefresh) {
         list.value = res.list || [];
       } else {

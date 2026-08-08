@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { articleAPi } from '@/api';
 import ArticleItem from '@/components/common/ArticleItem';
 import { Pagination, PaginationProps } from 'antd';
-import { ApiArticleItem } from '/#/api/blog/article';
+import { ApiLiteArticleItem } from '/#/api/blog/article';
 
 const Home: React.FC = () => {
-  const [articleData, setArticleData] = useState<ApiArticleItem[]>([]);
+  const [articleData, setArticleData] = useState<ApiLiteArticleItem[]>([]);
   const [pageCurrent, setPageCurrent] = useState(1);
   const [pageSize] = useState(10);
   const [pageTotal, setPageTotal] = useState(0);
@@ -15,7 +15,7 @@ const Home: React.FC = () => {
   // 查询文章
   const loadArticle = useCallback(() => {
     articleAPi
-      .getFindPage({
+      .getLitePage({
         size: pageSize,
         current: pageCurrent,
       })

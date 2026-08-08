@@ -1,5 +1,12 @@
 import { blogRequest } from '../../utils/request';
-import type { ApiArticleFindPageData, ApiArticleItem, ApiArticleSaveData, ApiArticleUpdateData, ApiBatchUpdatePrivateArticleData } from '/#/api/blog/article';
+import type {
+  ApiArticleFindPageData,
+  ApiArticleItem,
+  ApiArticleSaveData,
+  ApiArticleUpdateData,
+  ApiBatchUpdatePrivateArticleData,
+  ApiLiteArticleItem,
+} from '/#/api/blog/article';
 import type { TablePaginationResult } from '/#/components/table';
 
 const basic = '/article';
@@ -26,4 +33,8 @@ export const batchUpdatePrivate = (data: ApiBatchUpdatePrivateArticleData): Prom
 
 export const getDetails = (articleId: string): Promise<ApiArticleItem> => {
   return blogRequest({ url: `${basic}/details`, method: 'GET', data: { articleId } });
+};
+
+export const getLitePage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiLiteArticleItem[]>> => {
+  return blogRequest({ url: `${basic}/lite_page`, method: 'POST', data });
 };

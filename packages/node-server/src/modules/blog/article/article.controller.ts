@@ -97,4 +97,15 @@ export class ArticleController {
   exportArticle(@Param('articleId') articleId: string, @Res() res: Response) {
     return this.articleService.exportArticle(articleId, res);
   }
+
+  @Post('lite_page')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '条件并分页获取简洁文章列表' })
+  @UseGuards(OptionalJwtAuthGuard)
+  litePage(@Request() req: any, @Body() pageArticleDto: PageArticleDto) {
+    // 如果有用户信息，则查询全部文章（包括加密和不加密）
+    // 如果没有用户信息，则只查询不加密的文章
+    const user = req.user || null;
+    return this.articleService.litePage(pageArticleDto, user);
+  }
 }

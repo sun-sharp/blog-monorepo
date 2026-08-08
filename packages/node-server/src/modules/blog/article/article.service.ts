@@ -10,7 +10,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
-import { ApiArticleItem } from '/#/api/blog/article';
+import { ApiArticleItem, ApiLiteArticleItem } from '/#/api/blog/article';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
@@ -512,6 +512,73 @@ export class ArticleService {
           return {
             code: ApiCode.ERROR,
             message: err || '导出文章！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 条件并分页获取简洁文章列表（支持可选认证）
+   * @param {PageArticleDto} body
+   * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
+   * @return {Promise<IResponse>}
+   */
+  public litePage(body: PageArticleDto, user?: User | null): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 分页查询
+        .then(async () => {
+          const { size, current, keywords, categoryVal } = body;
+          const { limit, skip } = PaginateHandle(size, current);
+          const findData: FilterQuery<Article> = keywords
+            ? { $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }] }
+            : {};
+          if (categoryVal) {
+            findData.categoryVal = categoryVal;
+          }
+          // 如果没有用户登录，只查询不加密的文章
+          if (!user) {
+            findData.isPrivate = false;
+          }
+          const [total, findArr] = await Promise.all([
+            this.articleModel.countDocuments(findData),
+            this.articleModel
+              .find(findData)
+              .select('title brief authorId authorNickname categoryVal createTime isPrivate')
+              .sort({ createTime: -1 })
+              .limit(limit)
+              .skip(skip)
+              .lean()
+              .exec(),
+          ]);
+          const list: ApiLiteArticleItem[] = findArr.map((m) => {
+            const it = {
+              articleId: m._id,
+              title: m.title,
+              brief: m.brief,
+              authorId: m.authorId,
+              categoryVal: m.categoryVal,
+              createTime: nowDateFun(m.createTime),
+            };
+            if (user) {
+              it['isPrivate'] = m.isPrivate;
+              it['avatar'] = user.avatar;
+              it['authorNickname'] = user.nickname;
+            }
+            return it;
+          });
+          return {
+            code: ApiCode.SUCCESS,
+            result: { current, list, size, total },
+            message: '查询成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`条件并分页获取文章列表 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '查询失败！',
           };
         })
     );

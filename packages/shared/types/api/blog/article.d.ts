@@ -60,6 +60,14 @@ export type ApiArticle = ArticleBaseFields & ArticleExtraFields;
 export type ApiArticleItem = ApiArticle & ApiArticleId;
 
 /**
+ * @description: 文章的列表每项
+ */
+export type ApiLiteArticleItem = Omit<
+  ApiArticle,
+  'markdownContent' | 'htmlContent' | 'cssContent' | 'isPrivate' | 'authorNickname'
+> & { isPrivate?: boolean, avatar?: string, authorNickname?: string } & ApiArticleId;
+
+/**
  * @description: 文章更新参数
  */
 export type ApiArticleUpdateData = ArticleBaseFields & ApiArticleId;
