@@ -10,6 +10,7 @@ import { AliPayModule } from './money/ali-pay/ali-pay.module';
 import { BankModule } from './money/bank/bank.module';
 import { BillUploadModule } from './money/bill-upload/bill-upload.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { ArticleCssModule } from './article-css/article-css.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     ArticleModule,
     MoneyModule,
     ScheduleModule,
+    ArticleCssModule,
     RouterModule.register([
       {
         path: 'blog',
@@ -32,6 +34,10 @@ import { ScheduleModule } from './schedule/schedule.module';
           {
             path: '/',
             module: MoneyModule,
+          },
+          {
+            path: '/',
+            module: ArticleCssModule,
           },
           {
             path: '/money',

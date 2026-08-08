@@ -27,7 +27,10 @@ npm i -g @nestjs/cli
 nest --help
 
 # 创建当前目录下的CRUD
-nest g res modules/blog/schedule
+nest g res modules/blog/article-css
+
+# ✔ What transport layer do you use? REST API
+# ✔ Would you like to generate CRUD entry points? Yes
 ```
 
 ## 运行
