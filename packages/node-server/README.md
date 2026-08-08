@@ -29,8 +29,27 @@ nest --help
 # 创建当前目录下的CRUD
 nest g res modules/blog/article-css
 
+# 如果不需要 .spec.ts
+nest g res modules/blog/article-css --no-spec
+
 # ✔ What transport layer do you use? REST API
 # ✔ Would you like to generate CRUD entry points? Yes
+```
+
+### nest 命令说明
+```bash
+# 在text/txt目录下生成nest项目
+nest g application text/txt
+
+# 生成class命名的ts文件
+# CREATE src/text/txt/txt.ts (21 bytes)
+# CREATE src/text/txt/txt.spec.ts (142 bytes)
+nest g cl text/txt
+
+# 生成 nest-cli.json 文件
+nest g config
+
+
 ```
 
 ## 运行
