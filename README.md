@@ -74,6 +74,7 @@ cd packages/node-server && npm run build:server    # 构建 node-server
 - `src/constants/` - 共享常量（storage-name、http-enum 等）
 
 ## git 创建版本标签和从dev拉取到main的命令
+
 ```bash
 # 先推送dev分支
 git push origin dev
@@ -81,6 +82,21 @@ git push origin dev
 # 切换到本地 main（如果尚未切换）
 git checkout main
 # 或 git switch main
+
+# 从 dev 分支拉取并合并
+git pull origin dev
+
+# 推送 main 和标签
+git push origin main
+
+# 打标签
+git tag xxx-1.0.0
+
+# 推送标签
+git push origin --tags
+
+# or 执行前必须保证在dev分支，并没有提交
+git push origin dev && git checkout main && git pull origin dev && git push origin main && git tag xxx-1.0.0 && git push origin --tags
 ```
 
 
