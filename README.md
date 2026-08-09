@@ -89,6 +89,9 @@ git pull origin dev
 # 推送 main 和标签
 git push origin main
 
+# or 执行前必须保证在dev分支，并没有提交
+npm run git:dev-main-dev
+
 # 打标签
 git tag xxx-1.0.0
 
@@ -96,7 +99,7 @@ git tag xxx-1.0.0
 git push origin --tags
 
 # or 执行前必须保证在dev分支，并没有提交
-npx git push origin dev && git checkout main && git pull origin dev && git push origin main && git tag xxx-1.0.0 && git push origin --tags
+npm run git:dev-main-dev
 ```
 
 
