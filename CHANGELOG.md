@@ -7,6 +7,17 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-www-am-4.3.0 (2026-8-9)
+- server 端
+  - 优化 文章列表查询，速度加快
+  - 添加 文章css样式模块
+  - 修改 @符号的使用
+- 移动管理端
+  - 优化 文章列表查询，速度加快
+- website 端
+  - 优化 文章列表查询，速度加快
+  - 修改 文章 和 财务刷新机制
+
 ## bm-am-4.2.1 (2026-8-8)
 - 移动端
   - 修改手机端的配置
