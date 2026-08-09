@@ -96,7 +96,7 @@ git tag xxx-1.0.0
 git push origin --tags
 
 # or 执行前必须保证在dev分支，并没有提交
-git push origin dev && git checkout main && git pull origin dev && git push origin main && git tag xxx-1.0.0 && git push origin --tags
+npx git push origin dev && git checkout main && git pull origin dev && git push origin main && git tag xxx-1.0.0 && git push origin --tags
 ```
 
 

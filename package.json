@@ -9,6 +9,7 @@
     "packages/shared"
   ],
   "scripts": {
-    "typecheck:shared": "npm run typecheck --workspace=packages/shared"
+    "typecheck:shared": "npm run typecheck --workspace=packages/shared",
+    "git:dev-main": "git push origin dev && git checkout main && git pull origin dev && git push origin main"
   }
 }
