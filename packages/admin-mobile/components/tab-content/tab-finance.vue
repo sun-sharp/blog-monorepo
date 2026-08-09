@@ -703,12 +703,18 @@
     inited.value = true;
   });
 
+  function checkRefresh() {
+    if (inited.value && consumeRefreshFlag('bill')) loadData(true);
+  }
+
   watch(
     () => props.active,
     (val) => {
       if (val && inited.value && consumeRefreshFlag('bill')) loadData(true);
     }
   );
+
+  defineExpose({ checkRefresh });
 </script>
 
 <style lang="scss" scoped>

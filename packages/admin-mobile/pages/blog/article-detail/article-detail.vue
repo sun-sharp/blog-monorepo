@@ -525,6 +525,7 @@ img {
   onShow(() => {
     if (articleId.value && consumeRefreshFlag('article')) {
       loadArticle(articleId.value);
+      setRefreshFlag('article');
     }
   });
 </script>

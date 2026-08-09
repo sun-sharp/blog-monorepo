@@ -2,8 +2,8 @@
   <view class="main-page" :style="{ paddingTop: customNavHeight + 'px' }">
     <view class="main-content">
       <tab-home v-show="currentTab === 0" :active="currentTab === 0" />
-      <tab-article v-show="currentTab === 1" :active="currentTab === 1" />
-      <tab-finance v-show="currentTab === 2" :active="currentTab === 2" />
+      <tab-article v-show="currentTab === 1" ref="tabArticleRef" :active="currentTab === 1" />
+      <tab-finance v-show="currentTab === 2" ref="tabFinanceRef" :active="currentTab === 2" />
       <tab-mine v-show="currentTab === 3" :active="currentTab === 3" />
     </view>
 
@@ -22,6 +22,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { onShow } from '@dcloudio/uni-app';
   import TabHome from '../../components/tab-content/tab-home.vue';
   import TabArticle from '../../components/tab-content/tab-article.vue';
   import TabFinance from '../../components/tab-content/tab-finance.vue';
@@ -30,6 +31,8 @@
 
   const currentTab = ref(0);
   const customNavHeight = getCustomNavHeight();
+  const tabArticleRef = ref();
+  const tabFinanceRef = ref();
 
   const activeColor = '#007aff';
   const inactiveColor = '#333333';
@@ -44,6 +47,11 @@
   function onTap(index: number) {
     currentTab.value = index;
   }
+
+  onShow(() => {
+    if (currentTab.value === 1) tabArticleRef.value?.checkRefresh();
+    if (currentTab.value === 2) tabFinanceRef.value?.checkRefresh();
+  });
 </script>
 
 <style lang="scss" scoped>

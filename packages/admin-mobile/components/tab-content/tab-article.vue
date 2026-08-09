@@ -248,6 +248,12 @@
     inited.value = true;
   });
 
+  function checkRefresh() {
+    if (inited.value && consumeRefreshFlag('article')) {
+      loadData(true);
+    }
+  }
+
   watch(
     () => props.active,
     (val) => {
@@ -256,6 +262,8 @@
       }
     }
   );
+
+  defineExpose({ checkRefresh });
 </script>
 
 <style lang="scss" scoped>

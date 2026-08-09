@@ -22,36 +22,91 @@
         </view>
 
         <view class="bill-detail-info card">
-          <u-cell-group>
-            <u-cell-item title="交易对方" :value="bill.tradeOtherPerson || '--'" />
-            <u-cell-item title="对方备注" :value="bill.tradeOtherPersonRemarks || '--'" />
-            <u-cell-item title="收/支" :value="bill.incomeOrPay || '--'" />
-            <u-cell-item title="交易类型" :value="bill.tradeType || '--'" />
-            <u-cell-item title="说明" :value="bill.explain || '--'" />
-            <u-cell-item title="使用地点" :value="bill.place || '--'" />
-            <u-cell-item v-if="bill.balance !== undefined && bill.balance !== null" title="余额" :value="`¥${formatMoney(bill.balance)}`" />
-            <u-cell-item v-if="bill.otherCost !== undefined && bill.otherCost !== null" title="其它费用" :value="`¥${formatMoney(bill.otherCost)}`" />
+          <view class="info-row">
+            <text class="info-label">交易对方</text>
+            <text class="info-value">{{ bill.tradeOtherPerson || '--' }}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">对方备注</text>
+            <text class="info-value">{{ bill.tradeOtherPersonRemarks || '--' }}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">收/支</text>
+            <text class="info-value">{{ bill.incomeOrPay || '--' }}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">交易类型</text>
+            <text class="info-value">{{ bill.tradeType || '--' }}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">说明</text>
+            <text class="info-value">{{ bill.explain || '--' }}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">使用地点</text>
+            <text class="info-value">{{ bill.place || '--' }}</text>
+          </view>
+          <view v-if="bill.balance !== undefined && bill.balance !== null" class="info-row">
+            <text class="info-label">余额</text>
+            <text class="info-value">¥{{ formatMoney(bill.balance) }}</text>
+          </view>
+          <view v-if="bill.otherCost !== undefined && bill.otherCost !== null" class="info-row">
+            <text class="info-label">其它费用</text>
+            <text class="info-value">¥{{ formatMoney(bill.otherCost) }}</text>
+          </view>
 
-            <template v-if="source === 'weChat'">
-              <u-cell-item title="商品" :value="bill.goods || '--'" />
-              <u-cell-item title="支付方式" :value="bill.paymentMethod || '--'" />
-              <u-cell-item title="当前状态" :value="bill.currentStatus || '--'" />
-              <u-cell-item title="备注" :value="bill.remarks || '--'" />
-            </template>
+          <template v-if="source === 'weChat'">
+            <view class="info-row">
+              <text class="info-label">商品</text>
+              <text class="info-value">{{ bill.goods || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">支付方式</text>
+              <text class="info-value">{{ bill.paymentMethod || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">当前状态</text>
+              <text class="info-value">{{ bill.currentStatus || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">备注</text>
+              <text class="info-value">{{ bill.remarks || '--' }}</text>
+            </view>
+          </template>
 
-            <template v-if="source === 'aliPay'">
-              <u-cell-item title="商品说明" :value="bill.productDescription || '--'" />
-              <u-cell-item title="收/付款方式" :value="bill.paymentMethod || '--'" />
-              <u-cell-item title="对方账号" :value="bill.oppositeAccount || '--'" />
-              <u-cell-item v-if="bill.balanceBaby !== undefined && bill.balanceBaby !== null" title="余额宝" :value="`¥${formatMoney(bill.balanceBaby)}`" />
-            </template>
+          <template v-if="source === 'aliPay'">
+            <view class="info-row">
+              <text class="info-label">商品说明</text>
+              <text class="info-value">{{ bill.productDescription || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">收/付款方式</text>
+              <text class="info-value">{{ bill.paymentMethod || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">对方账号</text>
+              <text class="info-value">{{ bill.oppositeAccount || '--' }}</text>
+            </view>
+            <view v-if="bill.balanceBaby !== undefined && bill.balanceBaby !== null" class="info-row">
+              <text class="info-label">余额宝</text>
+              <text class="info-value">¥{{ formatMoney(bill.balanceBaby) }}</text>
+            </view>
+          </template>
 
-            <template v-if="source === 'bank'">
-              <u-cell-item title="银行类型" :value="bankTypeLabel" />
-              <u-cell-item title="凭证号码" :value="bill.voucherNo || '--'" />
-              <u-cell-item title="对方账号" :value="bill.tradeOtherPersonAccount || '--'" />
-            </template>
-          </u-cell-group>
+          <template v-if="source === 'bank'">
+            <view class="info-row">
+              <text class="info-label">银行类型</text>
+              <text class="info-value">{{ bankTypeLabel }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">凭证号码</text>
+              <text class="info-value">{{ bill.voucherNo || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">对方账号</text>
+              <text class="info-value">{{ bill.tradeOtherPersonAccount || '--' }}</text>
+            </view>
+          </template>
         </view>
       </template>
     </scroll-view>
@@ -66,7 +121,7 @@
   import { ref, computed } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { aggregateBillApi } from '../../../api';
-  import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { consumeRefreshFlag, setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
@@ -127,6 +182,7 @@
   onShow(() => {
     if (source.value && id.value && consumeRefreshFlag('bill')) {
       loadBill();
+      setRefreshFlag('bill');
     }
   });
 </script>
@@ -202,5 +258,31 @@
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     background-color: $uni-bg-color;
     box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid $uni-border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .info-label {
+    flex-shrink: 0;
+    font-size: $uni-font-size-base;
+    color: $uni-text-color-grey;
+    margin-right: 24rpx;
+  }
+
+  .info-value {
+    font-size: $uni-font-size-base;
+    color: $uni-text-color;
+    text-align: right;
+    word-break: break-all;
   }
 </style>
