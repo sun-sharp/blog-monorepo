@@ -6,34 +6,9 @@
     "packages/website",
     "packages/admin-web",
     "packages/node-server",
-    "packages/shared",
-    "packages/admin-mobile"
+    "packages/shared"
   ],
   "scripts": {
-    "dev:website": "npm run dev --workspace=packages/website",
-    "dev:prod:website": "npm run dev:prod --workspace=packages/website",
-    "dev:admin": "npm run dev --workspace=packages/admin-web",
-    "dev:text:admin": "npm run dev:text --workspace=packages/admin-web",
-    "dev:prod:admin": "npm run dev:prod --workspace=packages/admin-web",
-    "start:server": "npm run start --workspace=packages/node-server",
-    "start:watch:server": "npm run start:watch_debug --workspace=packages/node-server",
-    "build:website": "npm run build --workspace=packages/website",
-    "build:admin": "npm run build --workspace=packages/admin-web",
-    "build:server": "npm run build --workspace=packages/node-server",
-    "build:all": "npm run build:website && npm run build:admin && npm run build:server",
-    "lint:website": "npm run lint --workspace=packages/website",
-    "lint:admin": "npm run lint --workspace=packages/admin-web",
-    "lint:mobile": "npm run lint --workspace=packages/admin-mobile",
-    "lint:server": "npm run lint --workspace=packages/node-server",
-    "lint:all": "npm run lint:website && npm run lint:admin && npm run lint:server && npm run lint:mobile",
-    "lint:stylelint:website": "npm run lint:stylelint --workspace=packages/website",
-    "lint:stylelint:admin": "npm run lint:stylelint --workspace=packages/admin-web",
-    "lint:stylelint:all": "npm run lint:stylelint:website && npm run lint:stylelint:admin",
-    "rm_node_modules:website": "npm run rm_node_modules --workspace=packages/website",
-    "rm_node_modules:admin": "npm run rm_node_modules --workspace=packages/admin-web",
-    "rm_node_modules:server": "npm run rm_node_modules --workspace=packages/node-server",
-    "rm_node_modules:mobile": "npm run rm_node_modules --workspace=packages/admin-mobile",
-    "rm_node_modules:all": "rimraf yarn.lock && rimraf pnpm-lock.yaml && rimraf package-lock.json && rimraf node_modules && npm run rm_node_modules:website && npm run rm_node_modules:admin && npm run rm_node_modules:server && npm run rm_node_modules:mobile",
     "typecheck:shared": "npm run typecheck --workspace=packages/shared"
   }
 }

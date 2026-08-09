@@ -34,107 +34,23 @@ npm install
 ### 开发命令
 
 ```bash
-# 启动开发服务器
-npm run dev:website    # website 开发服务器 (端口 9222)
-npm run dev:admin      # admin-web 开发服务器 (端口 8222)
-npm run dev:server     # node-server 开发模式 (端口 3000)
-
-# 或进入各自目录运行
+# 进入各自目录运行
 cd packages/website && npm run dev
 cd packages/admin-web && npm run dev
 cd packages/node-server && npm run start:dev
+
+# admin-mobile运行需在HBuilder X 里
 ```
 
 ### 构建命令
 
 ```bash
-npm run build:website   # 构建 website
-npm run build:admin     # 构建 admin-web
-npm run build:server    # 构建 node-server
-npm run build:all       # 构建所有项目
-```
+# 进入各自目录构建
+cd packages/website && npm run build # 构建 website
+cd packages/admin-web && npm run build # 构建 admin-web
+cd packages/node-server && npm run build:server    # 构建 node-server
 
-### Lint 命令
-
-```bash
-npm run lint:website    # website lint 检查
-npm run lint:admin      # admin-web lint 检查
-npm run lint:server     # node-server lint 检查
-npm run typecheck:all   # 所有项目类型检查
-```
-
-## 构建输出目录
-
-| 项目 | 输出目录 |
-|------|----------|
-| admin-web | `manage/` |
-| website | `home/` |
-| node-server | `dist/` |
-
-## 路径别名
-
-所有项目统一使用以下路径别名：
-
-| 别名 | 映射路径 |
-|------|----------|
-| `@/*` | `src/*` |
-| `/#/api/*` | `packages/shared/types/api/*` |
-| `/#/common/*` | `packages/shared/types/common/*` |
-| `@shared/*` | `packages/shared/src/*` |
-
-各项目特有类型目录：
-
-| 项目 | 别名 | 映射路径 |
-|------|------|----------|
-| admin-web | `/#/vue/*` | `packages/shared/types/vue/*` |
-| website | `/#/react/*` | `packages/shared/types/react/*` |
-| node-server | `/#/*` (默认) | `packages/shared/types/*` |
-
-## 环境变量
-
-各项目使用不同的环境配置文件：
-
-| 项目 | 配置文件 |
-|------|----------|
-| admin-web | `.env.dev`, `.env.dev-local`, `.env.prod`, `.env.prod-local` |
-| website | `.env`, `.env.dev`, `.env.prod`, `.env.prod-local` |
-| node-server | `store/json/database/dev.json`, `store/json/database/prod.json` |
-
-## API 代理配置
-
-开发环境代理：
-
-| 前缀 | 目标模块 |
-|------|----------|
-| `/capital-api` | 后端 capital 模块 |
-| `/blog-api` | 后端 blog 模块 |
-
-website 默认代理到 `http://127.0.0.1:3000`
-
-## 关键注意事项
-
-### TypeScript 6.x 配置
-
-前端项目 `tsconfig.json` 必须包含：
-
-```json
-"ignoreDeprecations": "6.0"
-```
-
-### SCSS 规范 (website)
-
-必须使用 `@use`/`@forward`，禁止 `@import`（Sass 3.0 已弃用）。需要变量的文件必须显式导入：
-
-```scss
-@use '../../styles/variable' as *;
-```
-
-### SCSS 全局注入 (admin-web)
-
-vite.config.ts 已配置自动注入，无需手动导入：
-
-```scss
-@use "@/styles/variable.scss" as *;
+# admin-mobile构建需在HBuilder X 里
 ```
 
 ## 共享代码
@@ -156,6 +72,14 @@ vite.config.ts 已配置自动注入，无需手动导入：
 
 - `src/utils/` - 共享工具函数（is、storage、axios、files 等）
 - `src/constants/` - 共享常量（storage-name、http-enum 等）
+
+## git 创建版本标签和从dev拉取到main的命令
+```bash
+# 切换到本地 main（如果尚未切换）
+git checkout main
+# 或 git switch main
+```
+
 
 ## License
 
