@@ -75,6 +75,9 @@ cd packages/node-server && npm run build:server    # 构建 node-server
 
 ## git 创建版本标签和从dev拉取到main的命令
 ```bash
+# 先推送dev分支
+git push origin dev
+
 # 切换到本地 main（如果尚未切换）
 git checkout main
 # 或 git switch main
