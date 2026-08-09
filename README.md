@@ -93,13 +93,10 @@ git push origin main
 npm run git:dev-main-dev
 
 # 打标签
-git tag xxx-1.0.0
+git tag bm-xxx-4
 
 # 推送标签
 git push origin --tags
-
-# or 执行前必须保证在dev分支，并没有提交
-npm run git:dev-main-dev
 ```
 
 
