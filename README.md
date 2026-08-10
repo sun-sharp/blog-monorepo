@@ -89,7 +89,17 @@ git pull origin dev
 # 推送 main 和标签
 git push origin main
 
-# or 执行前必须保证在dev分支，并没有提交
+# 打标签
+git tag bm-xxx-4
+
+# 推送标签
+git push origin --tags
+```
+
+### or 执行前必须保证在dev分支，并没有提交
+
+
+```bash
 npm run git:dev-main-dev
 
 # 打标签

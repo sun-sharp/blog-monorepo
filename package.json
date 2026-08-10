@@ -9,6 +9,7 @@
     "packages/shared"
   ],
   "scripts": {
+    "start:watch:server": "npm run start:watch_debug --workspace=packages/node-server",
     "typecheck:shared": "npm run typecheck --workspace=packages/shared",
     "git:dev-main-dev": "git push origin dev && git checkout main && git pull origin dev && git push origin main && git checkout dev"
   }

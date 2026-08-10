@@ -139,4 +139,34 @@ export const capitalRequest = createRequest(CAPITAL_BASE);
 export const blogRequest = createRequest(BLOG_BASE);
 export const backupRequest = createRequest(BACKUP_BASE);
 
+export const uploadFileRequest = <T = any>(filePath: string): Promise<T> => {
+  const urlPrefix = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
+  return new Promise((resolve, reject) => {
+    const token = getToken();
+    const header: Record<string, string> = {};
+
+    if (token) {
+      header['Authorization'] = AUTHORIZATION_HEAD + token;
+    }
+    console.log(header, 'header');
+
+    uni.uploadFile({
+      url: `${urlPrefix}/article/upload_md`,
+      filePath,
+      name: 'file',
+      header,
+      success: (res) => {
+        try {
+          const data = JSON.parse(res.data);
+          if (data.code === 0) resolve(data.result as T);
+          else reject(new Error(data.message || '解析失败'));
+        } catch {
+          reject(new Error('解析响应失败'));
+        }
+      },
+      fail: (err) => reject(err),
+    });
+  });
+};
+
 export default request;

@@ -1,5 +1,5 @@
-import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get, Res } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from 'src/jwt/optional-jwt-auth.guard';
@@ -10,6 +10,7 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { AllPageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('article')
 @ApiTags('文章')
@@ -107,5 +108,17 @@ export class ArticleController {
     // 如果没有用户信息，则只查询不加密的文章
     const user = req.user || null;
     return this.articleService.litePage(pageArticleDto, user);
+  }
+
+  @ApiOperation({ summary: '上传 MD 文件并解析为 HTML（不存库，只返回预览数据）' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('upload_md')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  uploadMd(@UploadedFile() file: Express.Multer.File) {
+    return this.articleService.uploadMd(file);
   }
 }

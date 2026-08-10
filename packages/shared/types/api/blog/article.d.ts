@@ -98,3 +98,9 @@ export type ApiBatchUpdatePrivateArticleData = {
   // 是否加密
   isPrivate: boolean;
 };
+
+export interface UploadMdResult {
+  markdownContent: string;
+  htmlContent: string;
+  cssContent: string;
+}

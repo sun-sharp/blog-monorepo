@@ -18,6 +18,7 @@ import { AllPageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 import puppeteer from 'puppeteer';
 import { Response } from 'express';
+import { decodeBuffer, markdownToHtml } from 'src/common/markdown';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -444,8 +445,8 @@ export class ArticleService {
    */
   public exportArticle(articleId: string, res: Response): Promise<IResponse | Buffer> {
     return (
-      Promise.resolve(articleId)
-        .then(async (articleId) => {
+      Promise.resolve()
+        .then(async () => {
           const find = await this.articleModel.findOne({ _id: articleId }).lean();
           if (!find) {
             throw '获取文章详情失败';
@@ -582,5 +583,34 @@ export class ArticleService {
           };
         })
     );
+  }
+
+  /**
+   * @description: 上传 MD 文件并解析为 HTML（不落盘不存库）
+   * @param {Express.Multer.File} file
+   * @return {Promise<IResponse>}
+   */
+  public async uploadMd(file: Express.Multer.File): Promise<IResponse> {
+    try {
+      const mdText = decodeBuffer(file.buffer);
+      if (!mdText.trim()) throw '文件内容为空';
+      const htmlContent = await markdownToHtml(mdText);
+      logger.log(`上传 MD 文件并解析为 HTML 成功！`);
+      return {
+        code: ApiCode.SUCCESS,
+        result: {
+          markdownContent: mdText,
+          htmlContent,
+          cssContent: '',
+        },
+        message: '解析成功',
+      };
+    } catch (err) {
+      logger.error(`上传 MD 文件并解析为 HTML 失败! ${JSON.stringify(err)}`);
+      return {
+        code: ApiCode.ERROR,
+        message: `${JSON.stringify(err)}` || '上传 MD 文件并解析为 HTML 失败！',
+      };
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { blogRequest } from '../../utils/request';
+import { blogRequest, uploadFileRequest } from '../../utils/request';
 import type {
   ApiArticleFindPageData,
   ApiArticleItem,
@@ -6,6 +6,7 @@ import type {
   ApiArticleUpdateData,
   ApiBatchUpdatePrivateArticleData,
   ApiLiteArticleItem,
+  UploadMdResult,
 } from '/#/api/blog/article';
 import type { TablePaginationResult } from '/#/components/table';
 
@@ -37,4 +38,39 @@ export const getDetails = (articleId: string): Promise<ApiArticleItem> => {
 
 export const getLitePage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiLiteArticleItem[]>> => {
   return blogRequest({ url: `${basic}/lite_page`, method: 'POST', data });
+};
+
+export const uploadMd = (filePath: string): Promise<UploadMdResult> => {
+  // const isH5 = (() => {
+  //   try {
+  //     return uni.getSystemInfoSync().uniPlatform === 'web';
+  //   } catch {
+  //     return false;
+  //   }
+  // })();
+  // const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '/blog-api';
+  // const BASE_URL = import.meta.env.VITE_BASE_URL || '';
+  // const urlPrefix = isH5 ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
+  // const token = uni.getStorageSync('ACCESS_TOKEN') || '';
+  // const AUTH_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
+
+  // return new Promise((resolve, reject) => {
+  //   uni.uploadFile({
+  //     url: `${urlPrefix}/article/upload_md`,
+  //     filePath,
+  //     name: 'file',
+  //     header: { Authorization: AUTH_HEAD + token },
+  //     success: (res) => {
+  //       try {
+  //         const data = JSON.parse(res.data);
+  //         if (data.code === 0) resolve(data.result);
+  //         else reject(new Error(data.message || '解析失败'));
+  //       } catch {
+  //         reject(new Error('解析响应失败'));
+  //       }
+  //     },
+  //     fail: (err) => reject(err),
+  //   });
+  // });
+  return uploadFileRequest(filePath);
 };
