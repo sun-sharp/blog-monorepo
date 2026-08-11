@@ -282,7 +282,7 @@ export class ArticleService {
             `<body>` +
             `<div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">` +
             `<div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">` +
-            `<article id="preview-only-preview" class="md-editor-preview default-theme">${htmlContent}</article>` +
+            `<div id="preview-only-preview" class="md-editor-preview ${find.cssName}-theme md-editor-scrn">${htmlContent}</div>` +
             `</div>` +
             `</div>` +
             `</body>` +
