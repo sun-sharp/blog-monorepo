@@ -6,7 +6,6 @@
   import { getImgUrl, getUploadImageAction } from '@/utils';
   import { MdEditor, ToolbarNames } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
-  // import cssTextCont from 'md-editor-v3/lib/style.css?inline';
   import { computed, ref, watchEffect } from 'vue';
 
   const props = defineProps({
@@ -53,6 +52,10 @@
       },
       default: 'atom',
     }, // 代码块高亮样式名称
+    previewTheme: {
+      type: String,
+      default: '',
+    },
     markdownText: {
       type: String,
       default: '',
@@ -152,7 +155,7 @@
   <md-editor
     v-model="text"
     v-bind="getMdEditorBind"
-    preview-theme="github"
+    :preview-theme="props.previewTheme"
     :preview="false"
     @onChange="onChange"
     @onUploadImg="onUploadImg"

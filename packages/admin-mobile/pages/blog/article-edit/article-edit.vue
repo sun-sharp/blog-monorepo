@@ -291,7 +291,7 @@ img {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', `${BLOG_API_URL}/article/upload_md`);
         xhr.setRequestHeader('Authorization', authHead + token);
-        xhr.setRequestHeader('css-name', 'github');
+        xhr.setRequestHeader('css-name', 'default');
         xhr.onload = () => {
           try {
             const data = JSON.parse(xhr.responseText);
@@ -386,7 +386,7 @@ img {
         title: form.title.trim(),
         brief: form.brief.trim(),
         categoryVal: form.categoryVal as number,
-        cssName: 'github',
+        cssName: 'default',
         markdownContent: form.markdownContent, // 原样保存
         isPrivate: form.isPrivate,
       };

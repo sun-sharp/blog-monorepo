@@ -38,7 +38,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
   const { getArticleCategoryOption } = useApiType();
 
   const cssNameOptions = computed(() =>
-    ['github'].map((m) => ({
+    ['default', 'github', 'vuepress', 'smart-blue', 'mk-cute', 'cyanosis'].map((m) => ({
       value: m,
       label: m,
     }))

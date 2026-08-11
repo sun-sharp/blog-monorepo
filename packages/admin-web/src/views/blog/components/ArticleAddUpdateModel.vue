@@ -38,7 +38,7 @@
         </n-form-item>
         <n-form-item path="markdownContent" label="文章内容">
           <div class="w-full">
-            <md-editor-input v-model:markdown-text="modelForm.markdownContent" image-source="article_content" />
+            <md-editor-input v-model:markdown-text="modelForm.markdownContent" :preview-theme="modelForm.cssName || ''" image-source="article_content" />
             <!-- <code-mirror-input
               :model-value="codeHtmlText"
               :language-type="'html'"
