@@ -1,7 +1,7 @@
 import { blogRequest, uploadFileRequest } from '../../utils/request';
 import type {
+  ApiArticleDetails,
   ApiArticleFindPageData,
-  ApiArticleItem,
   ApiArticleSaveData,
   ApiArticleUpdateData,
   ApiBatchUpdatePrivateArticleData,
@@ -28,7 +28,7 @@ export const batchUpdatePrivate = (data: ApiBatchUpdatePrivateArticleData): Prom
   return blogRequest({ url: `${basic}/batch_update_private`, method: 'PUT', data, isShowSuccessMessage: true });
 };
 
-export const getDetails = (articleId: string): Promise<ApiArticleItem> => {
+export const getDetails = (articleId: string): Promise<ApiArticleDetails> => {
   return blogRequest({ url: `${basic}/details`, method: 'GET', data: { articleId } });
 };
 

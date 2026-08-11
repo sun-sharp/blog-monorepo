@@ -12,10 +12,10 @@ export interface ArticleBaseFields {
   brief: string;
   // 文章的类型标识
   categoryVal: number;
+  // 文章的css名称
+  cssName: string;
   // 文章的markdown内容
   markdownContent: string;
-  // 文章的css内容
-  cssContent: string;
   // 是否加密
   isPrivate: boolean;
 }
@@ -60,15 +60,19 @@ export type ApiArticleItem = ApiArticle & ApiArticleId;
 /**
  * @description: 文章的详情数据
  */
-export type ApiArticleDetails = ApiArticleItem & { htmlContent: string };
+export type ApiArticleDetails = ApiArticleItem & { htmlContent: string, cssContent: string };
 
 /**
  * @description: 文章的列表每项
  */
 export type ApiLiteArticleItem = Omit<
   ApiArticle,
-  'markdownContent' | 'cssContent' | 'isPrivate' | 'authorNickname'
-> & { isPrivate?: boolean, avatar?: string, authorNickname?: string } & ApiArticleId;
+  'markdownContent' | 'cssName' | 'isPrivate' | 'authorNickname'
+> & {
+  isPrivate?: boolean;
+  avatar?: string;
+  authorNickname?: string;
+} & ApiArticleId;
 
 /**
  * @description: 文章更新参数

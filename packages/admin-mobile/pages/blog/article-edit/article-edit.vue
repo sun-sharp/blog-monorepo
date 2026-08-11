@@ -291,7 +291,7 @@ img {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', `${BLOG_API_URL}/article/upload_md`);
         xhr.setRequestHeader('Authorization', authHead + token);
-        xhr.setRequestHeader('css-name', 'github-theme');
+        xhr.setRequestHeader('css-name', 'github');
         xhr.onload = () => {
           try {
             const data = JSON.parse(xhr.responseText);
@@ -386,9 +386,8 @@ img {
         title: form.title.trim(),
         brief: form.brief.trim(),
         categoryVal: form.categoryVal as number,
+        cssName: 'github',
         markdownContent: form.markdownContent, // 原样保存
-        htmlContent: form.htmlContent, // 原样保存（不重新生成）
-        cssContent: form.cssContent, // 原样保存
         isPrivate: form.isPrivate,
       };
       if (editId.value) {

@@ -4,7 +4,8 @@
 
   const emit = defineEmits(['finished']);
 
-  const { showModal, modelTitle, modelFromRef, modelForm, modelRules, categoryOptions, formBtnLoading, init, onSubmitOrEdit } = useArticleAddUpdateModel(emit);
+  const { showModal, modelTitle, modelFromRef, modelForm, modelRules, categoryOptions, cssNameOptions, formBtnLoading, init, onSubmitOrEdit } =
+    useArticleAddUpdateModel(emit);
 
   defineExpose({ init });
 </script>
@@ -32,9 +33,9 @@
         <n-form-item path="categoryVal" label="文章分类">
           <n-select v-model:value="modelForm.categoryVal" placeholder="请选择文章分类" filterable :options="categoryOptions" />
         </n-form-item>
-        <!-- <n-form-item path="cssName" label="文章css名称">
-          <n-select v-model:value="modelForm.cssName" placeholder="请选择文章分类" filterable :options="categoryOptions" />
-        </n-form-item> -->
+        <n-form-item path="cssName" label="文章css名称">
+          <n-select v-model:value="modelForm.cssName" placeholder="请选择文章css名称" filterable :options="cssNameOptions" />
+        </n-form-item>
         <n-form-item path="markdownContent" label="文章内容">
           <div class="w-full">
             <md-editor-input v-model:markdown-text="modelForm.markdownContent" image-source="article_content" />

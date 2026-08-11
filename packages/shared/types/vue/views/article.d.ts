@@ -7,8 +7,8 @@ export interface ArticleItemForm {
   title: null | string;
   brief: null | string;
   categoryVal: null | number;
+  cssName: null | string;
   markdownContent: string;
-  cssContent: string;
 }
 
 /**
@@ -18,5 +18,6 @@ export interface ArticleFormRules {
   title: FormItemRule[];
   brief: FormItemRule[];
   categoryVal: FormItemRule;
+  cssName: FormItemRule;
   markdownContent: FormItemRule;
 }

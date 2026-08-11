@@ -159,8 +159,8 @@ export class ArticleService {
    */
   public findDetails(articleId: string, user?: User | null): Promise<IResponse> {
     return (
-      Promise.resolve({ articleId, user })
-        .then(async ({ articleId, user }) => {
+      Promise.resolve()
+        .then(async () => {
           const findData: FilterQuery<Article> = { _id: articleId };
           // 如果没有用户登录，只查询不加密的文章
           if (!user) {
@@ -174,14 +174,12 @@ export class ArticleService {
             await markdownToHtml(find.markdownContent),
             await this.articleCssService.findOneByName(find.cssName),
           ]);
-          let useLiteInfo: ApiUserLiteInfo;
-          if (!user) {
-            useLiteInfo = await this.userService.getUseLiteInfoById(find.authorId);
-          }
+          const useLiteInfo: ApiUserLiteInfo = await this.userService.getUseLiteInfoById(find.authorId);
           const result: ApiArticleDetails = {
             articleId: find._id,
             title: find.title,
             brief: find.brief,
+            cssName: find.cssName,
             cssContent,
             htmlContent,
             markdownContent: find.markdownContent,

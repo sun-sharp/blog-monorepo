@@ -10,8 +10,8 @@ const defaultFromFields = {
   title: null,
   brief: null,
   categoryVal: null,
+  cssName: null,
   markdownContent: '',
-  cssContent: '',
 };
 
 // 添加文章弹窗 传参
@@ -37,6 +37,13 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
 
   const { getArticleCategoryOption } = useApiType();
 
+  const cssNameOptions = computed(() =>
+    ['github'].map((m) => ({
+      value: m,
+      label: m,
+    }))
+  );
+
   // 验证规则
   const validateMarkdown = (_rule: FormItemRule, value: string) => {
     if (!value) {
@@ -54,6 +61,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
       { min: 5, message: '最短长度为5', trigger: ['blur', 'input'] },
     ],
     categoryVal: { type: 'number', required: true, message: '请选择文章分类', trigger: ['blur', 'change'] },
+    cssName: { type: 'string', required: true, message: '请选择文章css名称', trigger: ['blur', 'change'] },
     markdownContent: {
       required: true,
       validator: validateMarkdown,
@@ -78,8 +86,8 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
           title: modelForm.title || '',
           brief: modelForm.brief || '',
           categoryVal: modelForm.categoryVal || 0,
+          cssName: modelForm.cssName || '',
           markdownContent: modelForm.markdownContent,
-          cssContent: modelForm.cssContent,
           isPrivate,
         };
         const req = addFromId.value ? articleAPi.update({ articleId: addFromId.value, ...postData }) : articleAPi.save(postData);
@@ -107,9 +115,10 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
     resetFields();
     if (addFromId.value) {
       const detInfo = await loadDet();
-      modelForm.title = detInfo.title || '';
-      modelForm.brief = detInfo.brief || '';
-      modelForm.categoryVal = detInfo.categoryVal || 0;
+      modelForm.title = detInfo.title || null;
+      modelForm.brief = detInfo.brief || null;
+      modelForm.categoryVal = detInfo.categoryVal || null;
+      modelForm.cssName = detInfo.cssName || null;
       modelForm.markdownContent = detInfo.markdownContent || '';
     }
   };
@@ -122,6 +131,7 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
     modelRules,
     contTab,
     categoryOptions: getArticleCategoryOption,
+    cssNameOptions,
     formBtnLoading,
     onSubmitOrEdit,
     resetFields,
