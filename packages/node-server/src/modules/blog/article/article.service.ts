@@ -19,13 +19,18 @@ import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article
 import puppeteer from 'puppeteer';
 import { Response } from 'express';
 import { decodeBuffer, markdownToHtml } from 'src/common/markdown';
+import { ArticleCssService } from '../article-css/article-css.service';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class ArticleService {
-  constructor(@InjectModel(Article.name, blogDatabaseName) private readonly articleModel: Model<Article>) {}
+  constructor(
+    @InjectModel(Article.name, blogDatabaseName)
+    private readonly articleModel: Model<Article>,
+    private readonly articleCssService: ArticleCssService,
+  ) {}
 
   /**
    * @description: 条件并分页获取文章列表（支持可选认证）
@@ -588,20 +593,21 @@ export class ArticleService {
   /**
    * @description: 上传 MD 文件并解析为 HTML（不落盘不存库）
    * @param {Express.Multer.File} file
+   * @param {string} cssName
    * @return {Promise<IResponse>}
    */
-  public async uploadMd(file: Express.Multer.File): Promise<IResponse> {
+  public async uploadMd(file: Express.Multer.File, cssName: string): Promise<IResponse> {
     try {
       const mdText = decodeBuffer(file.buffer);
       if (!mdText.trim()) throw '文件内容为空';
-      const htmlContent = await markdownToHtml(mdText);
+      const [htmlContent, cssContent] = await Promise.all([await markdownToHtml(mdText), await this.articleCssService.findOneByName(cssName)]);
       logger.log(`上传 MD 文件并解析为 HTML 成功！`);
       return {
         code: ApiCode.SUCCESS,
         result: {
           markdownContent: mdText,
           htmlContent,
-          cssContent: '',
+          cssContent,
         },
         message: '解析成功',
       };

@@ -291,6 +291,7 @@ img {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', `${BLOG_API_URL}/article/upload_md`);
         xhr.setRequestHeader('Authorization', authHead + token);
+        xhr.setRequestHeader('css-name', 'github-theme');
         xhr.onload = () => {
           try {
             const data = JSON.parse(xhr.responseText);

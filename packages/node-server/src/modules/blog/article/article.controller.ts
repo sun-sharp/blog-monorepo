@@ -1,4 +1,4 @@
-import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards, HttpCode, Body, Put, Delete, Param, Query, Get, Res, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -118,7 +118,7 @@ export class ArticleController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload_md')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  uploadMd(@UploadedFile() file: Express.Multer.File) {
-    return this.articleService.uploadMd(file);
+  uploadMd(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+    return this.articleService.uploadMd(file, (req.headers as any)['css-name']);
   }
 }
