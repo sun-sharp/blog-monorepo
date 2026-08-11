@@ -10,7 +10,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
-import { ApiArticleItem, ApiLiteArticleItem } from '/#/api/blog/article';
+import { ApiArticleDetails, ApiArticleItem, ApiLiteArticleItem } from '/#/api/blog/article';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
@@ -20,6 +20,8 @@ import puppeteer from 'puppeteer';
 import { Response } from 'express';
 import { decodeBuffer, markdownToHtml } from 'src/common/markdown';
 import { ArticleCssService } from '../article-css/article-css.service';
+import { ApiUserLiteInfo } from '/#/api/capital/user';
+import { UserService } from 'src/modules/capital/user/user.service';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -30,6 +32,7 @@ export class ArticleService {
     @InjectModel(Article.name, blogDatabaseName)
     private readonly articleModel: Model<Article>,
     private readonly articleCssService: ArticleCssService,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -61,11 +64,11 @@ export class ArticleService {
             articleId: m._id,
             title: m.title,
             brief: m.brief,
-            htmlContent: m.htmlContent,
-            cssContent: m.cssContent,
+            htmlContent: '',
+            cssContent: '',
             markdownContent: m.markdownContent,
             authorId: m.authorId,
-            authorNickname: m.authorNickname,
+            authorNickname: '',
             categoryVal: m.categoryVal,
             createTime: nowDateFun(m.createTime),
             // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）
@@ -158,11 +161,11 @@ export class ArticleService {
             articleId: m._id,
             title: m.title,
             brief: m.brief,
-            htmlContent: m.htmlContent,
-            cssContent: m.cssContent,
+            htmlContent: '',
+            cssContent: '',
             markdownContent: m.markdownContent,
             authorId: m.authorId,
-            authorNickname: m.authorNickname,
+            authorNickname: '',
             categoryVal: m.categoryVal,
             createTime: nowDateFun(m.createTime),
             isPrivate: m.isPrivate,
@@ -322,59 +325,27 @@ export class ArticleService {
           if (!find) {
             throw '获取文章详情失败';
           }
-          const result: ApiArticleItem = {
+          const [htmlContent, cssContent] = await Promise.all([
+            await markdownToHtml(find.markdownContent),
+            await this.articleCssService.findOneByName(find.cssName),
+          ]);
+          let useLiteInfo: ApiUserLiteInfo;
+          if (!user) {
+            useLiteInfo = await this.userService.getUseLiteInfoById(find.authorId);
+          }
+          const result: ApiArticleDetails = {
             articleId: find._id,
             title: find.title,
             brief: find.brief,
-            cssContent: find.cssContent,
+            cssContent,
+            htmlContent,
             markdownContent: find.markdownContent,
             authorId: find.authorId,
-            authorNickname: find.authorNickname,
+            authorNickname: useLiteInfo.nickname || user.nickname,
             categoryVal: find.categoryVal,
             createTime: nowDateFun(find.createTime),
             // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）
             ...(user && { isPrivate: find.isPrivate }),
-          };
-          return {
-            code: ApiCode.SUCCESS,
-            result,
-            message: '查询成功！',
-          };
-        })
-        // 返回错误
-        .catch((err) => {
-          logger.error(`获取文章详情 失败! ${err}`);
-          return {
-            code: ApiCode.ERROR,
-            message: err || '查询失败！',
-          };
-        })
-    );
-  }
-
-  /**
-   * @description: 获取文章详情
-   * @return {Promise<IResponse>}
-   */
-  public findAllDetails(articleId: string): Promise<IResponse> {
-    return (
-      Promise.resolve(articleId)
-        .then(async (articleId) => {
-          const find = await this.articleModel.findOne({ _id: articleId }).lean();
-          if (!find) {
-            throw '查询文章详情失败';
-          }
-          const result: ApiArticleItem = {
-            articleId: find._id,
-            title: find.title,
-            brief: find.brief,
-            cssContent: find.cssContent,
-            markdownContent: find.markdownContent,
-            authorId: find.authorId,
-            authorNickname: find.authorNickname,
-            categoryVal: find.categoryVal,
-            createTime: nowDateFun(find.createTime),
-            isPrivate: false,
           };
           return {
             code: ApiCode.SUCCESS,
@@ -455,15 +426,20 @@ export class ArticleService {
             throw '获取文章详情失败';
           }
 
+          const [htmlContent, cssContent] = await Promise.all([
+            await markdownToHtml(find.markdownContent),
+            await this.articleCssService.findOneByName(find.cssName),
+          ]);
+
           const htmlBody =
             `<html>` +
             `<head>` +
-            `<style>${find.cssContent}</style>` +
+            `<style>${cssContent}</style>` +
             `</head>` +
             `<body>` +
             `<div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">` +
             `<div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">` +
-            `<article id="preview-only-preview" class="md-editor-preview default-theme">${find.htmlContent}</article>` +
+            `<article id="preview-only-preview" class="md-editor-preview default-theme">${htmlContent}</article>` +
             `</div>` +
             `</div>` +
             `</body>` +

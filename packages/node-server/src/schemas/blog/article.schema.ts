@@ -19,25 +19,17 @@ export class Article extends Document {
   @Prop()
   brief: string;
 
-  // 文章的html内容
-  @Prop()
-  htmlContent: string;
-
   // 文章的markdown内容
   @Prop()
   markdownContent: string;
 
-  // 文章的css内容
+  // 文章的css名称
   @Prop()
-  cssContent: string;
+  cssName: string;
 
   // 文章的作者
   @Prop()
   authorId: string;
-
-  // 文章的作者昵称
-  @Prop()
-  authorNickname: string;
 
   // 文章的类型标识
   @Prop()

@@ -81,15 +81,6 @@ export class ArticleController {
     return this.articleService.findDetails(articleId, user);
   }
 
-  @Get('all_details')
-  @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '获取全部文章详情' })
-  @ApiBearerAuth('jwt')
-  @UseGuards(JwtAuthGuard)
-  findAllDetails(@Query('articleId') articleId: string) {
-    return this.articleService.findAllDetails(articleId);
-  }
-
   @Get('export_article/:articleId')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '导出文章' })

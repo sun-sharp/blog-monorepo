@@ -58,6 +58,11 @@ export type ApiArticle = ArticleBaseFields & ArticleExtraFields;
 export type ApiArticleItem = ApiArticle & ApiArticleId;
 
 /**
+ * @description: 文章的详情数据
+ */
+export type ApiArticleDetails = ApiArticleItem & { htmlContent: string };
+
+/**
  * @description: 文章的列表每项
  */
 export type ApiLiteArticleItem = Omit<

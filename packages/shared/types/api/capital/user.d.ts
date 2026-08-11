@@ -27,6 +27,20 @@ export interface ApiUser {
 }
 
 /**
+ * @description: 用户简单信息
+ */
+export type ApiUserLiteInfo = {
+  // 昵称
+  nickname: string;
+  // 用户头像
+  avatar: string;
+  // 角色类型
+  roleCode: string;
+  // 角色名称
+  roleName: string;
+};
+
+/**
  * @description: 用户信息
  */
 export interface ApiUserInfo extends Omit<ApiUser, 'password'>, ApiUserId {
@@ -37,7 +51,8 @@ export interface ApiUserInfo extends Omit<ApiUser, 'password'>, ApiUserId {
 /**
  * @description: 用户的列表每项（没有密码）
  */
-export interface ApiUserNoPasswordItem extends Omit<ApiUser, 'password'>, ApiUserId {}
+export interface ApiUserNoPasswordItem
+  extends Omit<ApiUser, 'password'>, ApiUserId {}
 
 /**
  * @description: 用户的列表每项
@@ -125,4 +140,10 @@ export interface UserItemForm {
 /**
  * @description: 用户选择类型
  */
-export type UserItemKey = 'nickname' | 'avatar' | 'username' | 'roleCode' | 'password' | 'verifyPassword';
+export type UserItemKey =
+  | 'nickname'
+  | 'avatar'
+  | 'username'
+  | 'roleCode'
+  | 'password'
+  | 'verifyPassword';

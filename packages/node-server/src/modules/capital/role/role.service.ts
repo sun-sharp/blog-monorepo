@@ -198,8 +198,8 @@ export class RoleService {
    */
   public findOneByRoleCode(roleCode: string): Promise<Role> {
     return (
-      Promise.resolve(roleCode)
-        .then(async (roleCode) => {
+      Promise.resolve()
+        .then(async () => {
           return await this.roleModel.findOne({ roleCode }, { _id: 0 });
         })
         // 返回错误
