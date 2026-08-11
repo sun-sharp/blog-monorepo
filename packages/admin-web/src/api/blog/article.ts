@@ -14,19 +14,6 @@ const basic = '/article';
 /**
  * @description 条件并分页获取文章列表
  * @param {ApiArticleFindPageData} data
- * @returns {Promise<TablePaginationResult<ApiArticleItem[]>>}
- */
-export const getFindPage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiArticleItem[]>> => {
-  return AxiosBlog.request({
-    url: `${basic}/find_all_page`,
-    method: 'POST',
-    data,
-  });
-};
-
-/**
- * @description 条件并分页获取文章列表
- * @param {ApiArticleFindPageData} data
  * @returns {Promise<TablePaginationResult<ApiLiteArticleItem[]>>}
  */
 export const getLitePage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiLiteArticleItem[]>> => {

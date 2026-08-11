@@ -12,10 +12,6 @@ import type { TablePaginationResult } from '/#/components/table';
 
 const basic = '/article';
 
-export const getFindPage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiArticleItem[]>> => {
-  return blogRequest({ url: `${basic}/find_all_page`, method: 'POST', data });
-};
-
 export const remove = (articleId: string): Promise<undefined> => {
   return blogRequest({ url: `${basic}/${articleId}`, method: 'DELETE', isShowSuccessMessage: true });
 };

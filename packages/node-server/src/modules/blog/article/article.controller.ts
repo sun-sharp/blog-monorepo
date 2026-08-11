@@ -5,9 +5,8 @@ import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from 'src/jwt/optional-jwt-auth.guard';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { AllPageArticleDto, LitePageArticleDto } from './dto/all-page-article.dto';
+import { LitePageArticleDto } from './dto/lite-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -16,26 +15,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('文章')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
-
-  @Post('find_page')
-  @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '条件并分页获取文章列表' })
-  @UseGuards(OptionalJwtAuthGuard)
-  findPage(@Request() req: any, @Body() pageArticleDto: PageArticleDto) {
-    // 如果有用户信息，则查询全部文章（包括加密和不加密）
-    // 如果没有用户信息，则只查询不加密的文章
-    const user = req.user || null;
-    return this.articleService.findPage(pageArticleDto, user);
-  }
-
-  @Post('find_all_page')
-  @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: 'jwt认证的条件并分页获取文章列表' })
-  @ApiBearerAuth('jwt')
-  @UseGuards(JwtAuthGuard)
-  findAllPage(@Body() pageArticleDto: AllPageArticleDto, @Request() req) {
-    return this.articleService.findAllPage(pageArticleDto, req.user);
-  }
 
   @Post('save')
   @HttpCode(ApiHttpStatus.SUCCESS)

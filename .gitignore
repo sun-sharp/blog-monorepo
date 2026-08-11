@@ -11,3 +11,8 @@ packages/api_static_dir/
 packages/api_dev_static_dir/
 session-**.md
 pnpm-lock.yaml
+
+# node-server
+packages/node-server/dist
+packages/node-server/node_modules
+packages/node-server/documentation

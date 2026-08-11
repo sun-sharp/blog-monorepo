@@ -7,14 +7,13 @@ import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { Article } from 'src/schemas/blog/article.schema';
 import { User } from 'src/schemas/capital/user.schema';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
-import { ApiArticleDetails, ApiArticleItem, ApiLiteArticleItem } from '/#/api/blog/article';
+import { ApiArticleDetails, ApiLiteArticleItem } from '/#/api/blog/article';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
-import { AllPageArticleDto, LitePageArticleDto } from './dto/all-page-article.dto';
+import { LitePageArticleDto } from './dto/lite-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 import puppeteer from 'puppeteer';
 import { Response } from 'express';
@@ -34,158 +33,6 @@ export class ArticleService {
     private readonly articleCssService: ArticleCssService,
     private readonly userService: UserService,
   ) {}
-
-  /**
-   * @description: 条件并分页获取文章列表（支持可选认证）
-   * @param {PageArticleDto} body
-   * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
-   * @return {Promise<IResponse>}
-   */
-  public findPage(body: PageArticleDto, user?: User | null): Promise<IResponse> {
-    return (
-      Promise.resolve({ body, user })
-        // 分页查询
-        .then(async ({ body, user }) => {
-          const { size, current, keywords, categoryVal } = body;
-          const { limit, skip } = PaginateHandle(size, current);
-          const findData: FilterQuery<Article> = keywords
-            ? { $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }] }
-            : {};
-          if (categoryVal) {
-            findData.categoryVal = categoryVal;
-          }
-          // 如果没有用户登录，只查询不加密的文章
-          if (!user) {
-            findData.isPrivate = false;
-          }
-          const total = await this.articleModel.find(findData).count();
-          const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
-          const list: ApiArticleItem[] = findArr.map((m) => ({
-            articleId: m._id,
-            title: m.title,
-            brief: m.brief,
-            htmlContent: '',
-            cssContent: '',
-            markdownContent: m.markdownContent,
-            authorId: m.authorId,
-            authorNickname: '',
-            categoryVal: m.categoryVal,
-            createTime: nowDateFun(m.createTime),
-            // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）
-            ...(user && { isPrivate: m.isPrivate }),
-          }));
-          return {
-            code: ApiCode.SUCCESS,
-            result: { current, list, size, total },
-            message: '查询成功！',
-          };
-        })
-        // 返回错误
-        .catch((err) => {
-          logger.error(`条件并分页获取文章列表 失败! ${err}`);
-          return {
-            code: ApiCode.ERROR,
-            message: err || '查询失败！',
-          };
-        })
-    );
-  }
-
-  /**
-   * @description: 条件并分页获取文章列表
-   * @param {PageArticleDto} body
-   * @return {Promise<IResponse>}
-   */
-  public findAllPage(body: AllPageArticleDto, user?: User): Promise<IResponse> {
-    return (
-      Promise.resolve()
-        // 分页查询
-        .then(async () => {
-          const { size, current, keywords, categoryVal, isPrivate } = body;
-          const { limit, skip } = PaginateHandle(size, current);
-          const userId = user?._id?.toString(); // 统一转为字符串，确保与 authorId 类型匹配
-          const isManage = user?.roleCode === 'manager'; // 是否管理员角色
-
-          // 收集所有查询条件
-          const conditions: FilterQuery<Article>[] = [];
-          // 关键字条件
-          if (keywords) {
-            conditions.push({
-              $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }],
-            });
-          }
-          // 分类条件
-          if (categoryVal) {
-            conditions.push({ categoryVal });
-          }
-          // ---------- 核心：权限条件 ----------
-          if (typeof isPrivate === 'boolean') {
-            if (isPrivate) {
-              // 明确要查私密文章 → 只能看自己的
-              if (!userId) {
-                // 未登录 → 直接返回空结果，避免无效查询
-                return {
-                  code: ApiCode.SUCCESS,
-                  result: { current, list: [], size, total: 0 },
-                  message: '查询成功！',
-                };
-              }
-              if (isManage) {
-                // 管理员 → 可以看所有私密文章
-                conditions.push({ isPrivate: true });
-              } else {
-                conditions.push({ isPrivate: true, authorId: userId });
-              }
-            } else {
-              // 明确要查公开文章 → 不加作者限制
-              conditions.push({ isPrivate: false });
-            }
-          } else {
-            // 未指定 isPrivate → 返回所有公开文章 + 当前用户自己的私密文章
-            if (userId) {
-              if (!isManage) {
-                conditions.push({
-                  $or: [{ isPrivate: false }, { isPrivate: true, authorId: userId }],
-                });
-              }
-            } else {
-              // 未登录只能看公开文章
-              conditions.push({ isPrivate: false });
-            }
-          }
-          const findData = conditions.length > 0 ? { $and: conditions } : {};
-          const total = await this.articleModel.find(findData).countDocuments(); // countDocuments 更规范
-          const findArr = await this.articleModel.find(findData).sort({ createTime: -1 }).limit(limit).skip(skip);
-
-          const list: ApiArticleItem[] = findArr.map((m) => ({
-            articleId: m._id,
-            title: m.title,
-            brief: m.brief,
-            htmlContent: '',
-            cssContent: '',
-            markdownContent: m.markdownContent,
-            authorId: m.authorId,
-            authorNickname: '',
-            categoryVal: m.categoryVal,
-            createTime: nowDateFun(m.createTime),
-            isPrivate: m.isPrivate,
-          }));
-          return {
-            code: ApiCode.SUCCESS,
-            result: { current, list, size, total },
-            message: '查询成功！',
-          };
-        })
-        // 返回错误
-        .catch((err) => {
-          logger.error(`条件并分页获取文章列表 失败! ${err}`);
-          return {
-            code: ApiCode.ERROR,
-            message: JSON.stringify(err) || '查询失败！',
-          };
-        })
-    );
-  }
 
   /**
    * @description: 新增文章
