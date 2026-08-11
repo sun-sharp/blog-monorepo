@@ -14,7 +14,7 @@ import { ApiArticleItem, ApiLiteArticleItem } from '/#/api/blog/article';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
-import { AllPageArticleDto } from './dto/all-page-article.dto';
+import { AllPageArticleDto, LitePageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 import puppeteer from 'puppeteer';
 import { Response } from 'express';
@@ -326,7 +326,6 @@ export class ArticleService {
             articleId: find._id,
             title: find.title,
             brief: find.brief,
-            htmlContent: find.htmlContent,
             cssContent: find.cssContent,
             markdownContent: find.markdownContent,
             authorId: find.authorId,
@@ -369,7 +368,6 @@ export class ArticleService {
             articleId: find._id,
             title: find.title,
             brief: find.brief,
-            htmlContent: find.htmlContent,
             cssContent: find.cssContent,
             markdownContent: find.markdownContent,
             authorId: find.authorId,
@@ -525,16 +523,16 @@ export class ArticleService {
 
   /**
    * @description: 条件并分页获取简洁文章列表（支持可选认证）
-   * @param {PageArticleDto} body
+   * @param {LitePageArticleDto} body
    * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
    * @return {Promise<IResponse>}
    */
-  public litePage(body: PageArticleDto, user?: User | null): Promise<IResponse> {
+  public litePage(body: LitePageArticleDto, user?: User | null): Promise<IResponse> {
     return (
       Promise.resolve()
         // 分页查询
         .then(async () => {
-          const { size, current, keywords, categoryVal } = body;
+          const { size, current, keywords, categoryVal, isPrivate } = body;
           const { limit, skip } = PaginateHandle(size, current);
           const findData: FilterQuery<Article> = keywords
             ? { $or: [{ title: { $regex: keywords, $options: 'i' } }, { brief: { $regex: keywords, $options: 'i' } }] }
@@ -545,6 +543,8 @@ export class ArticleService {
           // 如果没有用户登录，只查询不加密的文章
           if (!user) {
             findData.isPrivate = false;
+          } else if (typeof isPrivate === 'boolean') {
+            findData.isPrivate = isPrivate;
           }
           const [total, findArr] = await Promise.all([
             this.articleModel.countDocuments(findData),

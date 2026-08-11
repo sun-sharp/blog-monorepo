@@ -11,7 +11,6 @@ const defaultFromFields = {
   brief: null,
   categoryVal: null,
   markdownContent: '',
-  htmlContent: '',
   cssContent: '',
 };
 
@@ -42,8 +41,6 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
   const validateMarkdown = (_rule: FormItemRule, value: string) => {
     if (!value) {
       return new Error('请输入文章内容');
-    } else if (!modelForm.htmlContent) {
-      return new Error('预览文章内容数据不能为空，请检查代码');
     }
     return true;
   };
@@ -82,7 +79,6 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
           brief: modelForm.brief || '',
           categoryVal: modelForm.categoryVal || 0,
           markdownContent: modelForm.markdownContent,
-          htmlContent: modelForm.htmlContent,
           cssContent: modelForm.cssContent,
           isPrivate,
         };
@@ -99,17 +95,22 @@ export const useArticleAddUpdateModel = (emit: (event: 'finished', ...args: any[
     });
   };
 
+  // 获取详情
+  const loadDet = async () => {
+    return await articleAPi.getDetails(addFromId.value);
+  };
+
   // 初始化
-  const init = (row: ApiArticleItem) => {
+  const init = async (row: ApiArticleItem) => {
     addFromId.value = row?.articleId;
     showModal.value = true;
     resetFields();
     if (addFromId.value) {
-      modelForm.title = row.title || '';
-      modelForm.brief = row.brief || '';
-      modelForm.categoryVal = row.categoryVal || 0;
-      modelForm.markdownContent = row.markdownContent || '';
-      modelForm.htmlContent = row.htmlContent || '';
+      const detInfo = await loadDet();
+      modelForm.title = detInfo.title || '';
+      modelForm.brief = detInfo.brief || '';
+      modelForm.categoryVal = detInfo.categoryVal || 0;
+      modelForm.markdownContent = detInfo.markdownContent || '';
     }
   };
 

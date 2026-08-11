@@ -12,8 +12,6 @@ export interface ArticleBaseFields {
   brief: string;
   // 文章的类型标识
   categoryVal: number;
-  // 文章的html内容
-  htmlContent: string;
   // 文章的markdown内容
   markdownContent: string;
   // 文章的css内容
@@ -64,7 +62,7 @@ export type ApiArticleItem = ApiArticle & ApiArticleId;
  */
 export type ApiLiteArticleItem = Omit<
   ApiArticle,
-  'markdownContent' | 'htmlContent' | 'cssContent' | 'isPrivate' | 'authorNickname'
+  'markdownContent' | 'cssContent' | 'isPrivate' | 'authorNickname'
 > & { isPrivate?: boolean, avatar?: string, authorNickname?: string } & ApiArticleId;
 
 /**

@@ -32,13 +32,12 @@
         <n-form-item path="categoryVal" label="文章分类">
           <n-select v-model:value="modelForm.categoryVal" placeholder="请选择文章分类" filterable :options="categoryOptions" />
         </n-form-item>
+        <!-- <n-form-item path="cssName" label="文章css名称">
+          <n-select v-model:value="modelForm.cssName" placeholder="请选择文章分类" filterable :options="categoryOptions" />
+        </n-form-item> -->
         <n-form-item path="markdownContent" label="文章内容">
           <div class="w-full">
-            <md-editor-input
-              v-model:markdown-text="modelForm.markdownContent"
-              v-model:html-text="modelForm.htmlContent"
-              v-model:css-text="modelForm.cssContent"
-              image-source="article_content" />
+            <md-editor-input v-model:markdown-text="modelForm.markdownContent" image-source="article_content" />
             <!-- <code-mirror-input
               :model-value="codeHtmlText"
               :language-type="'html'"

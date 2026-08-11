@@ -7,7 +7,7 @@ import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { PageArticleDto } from './dto/page-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { AllPageArticleDto } from './dto/all-page-article.dto';
+import { AllPageArticleDto, LitePageArticleDto } from './dto/all-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -103,7 +103,7 @@ export class ArticleController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '条件并分页获取简洁文章列表' })
   @UseGuards(OptionalJwtAuthGuard)
-  litePage(@Request() req: any, @Body() pageArticleDto: PageArticleDto) {
+  litePage(@Request() req: any, @Body() pageArticleDto: LitePageArticleDto) {
     // 如果有用户信息，则查询全部文章（包括加密和不加密）
     // 如果没有用户信息，则只查询不加密的文章
     const user = req.user || null;

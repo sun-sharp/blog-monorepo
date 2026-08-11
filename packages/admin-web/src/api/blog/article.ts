@@ -1,5 +1,12 @@
 import { AxiosBlog } from '@/api/axios';
-import { ApiArticleFindPageData, ApiArticleItem, ApiArticleSaveData, ApiArticleUpdateData, ApiBatchUpdatePrivateArticleData } from '/#/api/blog/article';
+import {
+  ApiArticleFindPageData,
+  ApiArticleItem,
+  ApiArticleSaveData,
+  ApiArticleUpdateData,
+  ApiBatchUpdatePrivateArticleData,
+  ApiLiteArticleItem,
+} from '/#/api/blog/article';
 import { TablePaginationResult } from '/#/components/table';
 
 const basic = '/article';
@@ -14,6 +21,32 @@ export const getFindPage = (data: ApiArticleFindPageData): Promise<TablePaginati
     url: `${basic}/find_all_page`,
     method: 'POST',
     data,
+  });
+};
+
+/**
+ * @description 条件并分页获取文章列表
+ * @param {ApiArticleFindPageData} data
+ * @returns {Promise<TablePaginationResult<ApiLiteArticleItem[]>>}
+ */
+export const getLitePage = (data: ApiArticleFindPageData): Promise<TablePaginationResult<ApiLiteArticleItem[]>> => {
+  return AxiosBlog.request({
+    url: `${basic}/lite_page`,
+    method: 'POST',
+    data,
+  });
+};
+
+/**
+ * @description 查询文章详情
+ * @param {string} articleId
+ * @returns {Promise<TablePaginationResult<ApiLiteArticleItem[]>>}
+ */
+export const getDetails = (articleId: string): Promise<ApiArticleItem> => {
+  return AxiosBlog.request({
+    url: `${basic}/details`,
+    method: 'GET',
+    params: { articleId },
   });
 };
 

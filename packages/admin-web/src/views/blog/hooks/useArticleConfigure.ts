@@ -23,7 +23,7 @@ export const useArticleConfigure = () => {
   // 获取接口数据
   const searchParams = ref<ApiArticleSearchParams>({});
   const loadDataTable = async (pageParams: TablePaginationParams) => {
-    return await articleAPi.getFindPage({ ...searchParams.value, ...pageParams });
+    return await articleAPi.getLitePage({ ...searchParams.value, ...pageParams });
   };
   // 刷新数据
   const reloadTable = () => {
