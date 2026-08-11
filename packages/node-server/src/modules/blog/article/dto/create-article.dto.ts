@@ -16,22 +16,16 @@ export class CreateArticleDto {
   brief: string;
 
   @ApiProperty({
-    description: '文章的html内容',
-    example: '',
-  })
-  htmlContent: string;
-
-  @ApiProperty({
     description: '文章的markdown内容',
     example: '',
   })
   markdownContent: string;
 
   @ApiProperty({
-    description: '文章的css内容',
+    description: '文章的css名称',
     example: '',
   })
-  cssContent: string;
+  cssName: string;
 
   @ApiProperty({
     description: '文章的类型标识',
@@ -42,7 +36,7 @@ export class CreateArticleDto {
 
   @ApiProperty({
     description: '是否私密',
-    example: 1,
+    example: false,
   })
   @IsNotEmpty({ message: '是否私密不能为空' })
   @IsBoolean({ message: '是否私密必须是枚举值' })

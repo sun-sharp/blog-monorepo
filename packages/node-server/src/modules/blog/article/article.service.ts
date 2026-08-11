@@ -190,24 +190,22 @@ export class ArticleService {
   /**
    * @description: 新增文章
    * @param {User} user
-   * @param {CreateArticleDto} createArticleDto
+   * @param {CreateArticleDto} body
    * @return {Promise<IResponse>}
    */
-  public save(user: User, createArticleDto: CreateArticleDto): Promise<IResponse> {
+  public save(user: User, body: CreateArticleDto): Promise<IResponse> {
     return (
-      Promise.resolve({ user, body: createArticleDto })
+      Promise.resolve()
         // 添加
-        .then(async ({ user, body }) => {
+        .then(async () => {
           await this.articleModel.create({
             title: body.title,
             brief: body.brief,
-            htmlContent: body.htmlContent,
-            cssContent: body.cssContent,
             markdownContent: body.markdownContent,
             categoryVal: body.categoryVal,
             createTime: nowDateFun(),
             authorId: user._id,
-            authorNickname: user.nickname,
+            cssName: body.cssName,
             isPrivate: body.isPrivate,
           });
           return {
@@ -236,8 +234,8 @@ export class ArticleService {
       Promise.resolve(body)
         // 修改
         .then(async (body) => {
-          const { articleId, title, brief, htmlContent, cssContent, markdownContent, categoryVal, isPrivate } = body;
-          await this.articleModel.updateOne({ _id: articleId }, { title, brief, htmlContent, cssContent, markdownContent, categoryVal, isPrivate });
+          const { articleId, title, brief, cssName, markdownContent, categoryVal, isPrivate } = body;
+          await this.articleModel.updateOne({ _id: articleId }, { title, brief, cssName, markdownContent, categoryVal, isPrivate });
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
