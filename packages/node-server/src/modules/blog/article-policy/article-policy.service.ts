@@ -21,7 +21,7 @@ export class ArticlePolicyService {
    * @param expireDays 有效天数
    * @returns 创建的策略文档
    */
-  public async createPolicy(articleId: string, maxVisits: number = 5, expireDays: number = 1): Promise<string | null> {
+  public async createPolicy(articleId: string, maxVisits: number = 10, expireDays: number = 1): Promise<string | null> {
     try {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + expireDays);

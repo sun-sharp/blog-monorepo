@@ -10,6 +10,8 @@
   const htmlUrl = ref('');
 
   function handleMessage(event) {
+    console.log(event, 'event');
+
     const data = event.detail.data;
     if (data.type === 'imagePreview') {
       uni.previewImage({
