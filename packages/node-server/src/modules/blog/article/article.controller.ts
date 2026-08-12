@@ -71,6 +71,12 @@ export class ArticleController {
     return this.articleService.findMobileDetails(articleId, user);
   }
 
+  @Get('render')
+  @ApiOperation({ summary: '根据 policyId 查询文章 并处理成 html' })
+  renderHtml(@Query('pid') policyId: string, @Res() res: Response) {
+    return this.articleService.renderHtml(policyId, res);
+  }
+
   @Get('export_article/:articleId')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '导出文章' })

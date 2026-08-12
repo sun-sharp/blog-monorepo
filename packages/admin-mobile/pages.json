@@ -45,6 +45,12 @@
             "navigationBarTitleText": "日程编辑",
             "softinputMode": "adjustResize"
           }
+        },
+        {
+          "path": "web/full",
+          "style": {
+            "navigationBarTitleText": "web全屏"
+          }
         }
       ]
     },
@@ -175,7 +181,10 @@
   "preloadRule": {
     "pages/main/main": {
       "network": "all",
-      "packages": ["pages/blog", "pages/finance"]
+      "packages": [
+        "pages/blog",
+        "pages/finance"
+      ]
     }
   },
   "globalStyle": {

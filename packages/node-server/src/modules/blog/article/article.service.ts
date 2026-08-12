@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { nowDateFun } from 'src/common/date';
@@ -27,6 +27,8 @@ const { blogDatabaseName } = customConfig;
 
 @Injectable()
 export class ArticleService {
+  private readonly logger = new Logger(ArticleService.name);
+
   constructor(
     @InjectModel(Article.name, blogDatabaseName)
     private readonly articleModel: Model<Article>,
@@ -230,7 +232,7 @@ export class ArticleService {
           }
           // 获取策略和用户信息
           const [pid, useLiteInfo] = await Promise.all([
-            await this.articlePolicyService.createPolicy(find.authorId),
+            await this.articlePolicyService.createPolicy(find._id),
             await this.userService.getUseLiteInfoById(find.authorId),
           ]);
           const authorNickname = useLiteInfo ? (user ? user.nickname : '') : useLiteInfo.nickname;
@@ -492,6 +494,113 @@ export class ArticleService {
         code: ApiCode.ERROR,
         message: `${JSON.stringify(err)}` || '上传 MD 文件并解析为 HTML 失败！',
       };
+    }
+  }
+
+  /**
+   * @description: 根据 policyId 查询文章 并处理成 html
+   * @param {string} policyId
+   * @param {Response} res
+   * @return {Promise<IResponse>}
+   */
+  public async renderHtml(policyId: string, res: Response): Promise<Response> {
+    try {
+      if (!policyId) {
+        logger.warn('请求缺少 pid 参数');
+        return res.status(400).send('缺少参数 pid');
+      }
+
+      const articleId = await this.articlePolicyService.consumePolicy(policyId);
+      if (!articleId) {
+        return res.status(410).send('链接无效（策略不存在、已过期或访问次数用尽）');
+      }
+
+      const article = await this.articleModel.findOne({ _id: articleId }).lean();
+      if (!article) {
+        logger.warn(`文章不存在: ${articleId}`);
+        return res.status(404).send('文章不存在');
+      }
+
+      const [previewHtml, cssContent] = await Promise.all([
+        await markdownToHtml(article.markdownContent),
+        await this.articleCssService.findOneByName(article.cssName),
+      ]);
+
+      const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${article.title || '文章'}</title>
+  <style>${cssContent}</style>
+  <style>
+    body {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    /* 可加其他自定义样式 */
+  </style>
+</head>
+<body>
+  <div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">
+  <div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">
+  <div id="preview-only-preview" class="md-editor-preview ${article.cssName}-theme md-editor-scrn">${previewHtml}</div>
+  </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 收集所有图片链接
+      const allImages = document.querySelectorAll('img');
+      const imageUrls = Array.from(allImages).map(img => img.src);
+
+      allImages.forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function(e) {
+          e.stopPropagation();
+          // 发送消息到 uni-app 父页面
+          const data = {
+            type: 'imagePreview',
+            current: this.src,    // 当前点击的图片
+            urls: imageUrls       // 所有图片的 URL（用于滑动预览）
+          };
+          // 优先使用 uni-app 提供的 API
+          if (window.uni && window.uni.webView) {
+            window.uni.webView.postMessage({
+              data: data
+            });
+          } else {
+            // 兼容其他环境（如小程序 web-view）
+            window.parent.postMessage(data, '*');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+    `;
+
+      //   handleMessage(event) {
+      //   const data = event.detail.data;
+      //   if (data.type === 'imagePreview') {
+      //     uni.previewImage({
+      //       current: data.current,
+      //       urls: data.urls
+      //     });
+      //   }
+      // }
+      logger.log(`导出文章 htmlBody`);
+      res.setHeader('Content-Type', 'text/html');
+      return res.send(html);
+    } catch (err) {
+      logger.error(`根据 policyId 查询文章 并处理成 html 失败! ${JSON.stringify(err)}`);
+      return res.status(500).send('服务器内部错误，请稍后重试');
     }
   }
 }

@@ -23,7 +23,7 @@ const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
 const BACKUP_API_URL = import.meta.env.VITE_BACKUP_API_URL || '';
 const AUTHORIZATION_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
 
-function isH5Platform(): boolean {
+export function isH5Platform(): boolean {
   try {
     return uni.getSystemInfoSync().uniPlatform === 'web';
   } catch {
@@ -167,6 +167,10 @@ export const uploadFileRequest = <T = any>(filePath: string): Promise<T> => {
       fail: (err) => reject(err),
     });
   });
+};
+
+export const blogReqUrl = (url: string) => {
+  return `${BASE_URL}${BLOG_API_URL}${url}`;
 };
 
 export default request;

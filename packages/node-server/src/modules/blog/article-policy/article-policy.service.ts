@@ -25,6 +25,12 @@ export class ArticlePolicyService {
     try {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + expireDays);
+      // 先批量删除掉以前同样文章的策略
+      const deleteResult = await this.policyModel.deleteMany({ articleId });
+      if (!deleteResult) {
+        throw '批量删除策略 失败！';
+      }
+      logger.error(`批量删除策略 成功！${JSON.stringify(deleteResult)}`);
       const result = await this.policyModel.create({ articleId, maxVisits, expiresAt });
       logger.error(`创建策略 成功！${JSON.stringify(result)}`);
       return result._id;
@@ -71,7 +77,7 @@ export class ArticlePolicyService {
         logger.warn(`并发更新导致策略超限: ${policyId}`);
         return null;
       }
-
+      logger.log(`校验并消费一次访问成功: ${JSON.stringify(updated)}`);
       return updated.articleId;
     } catch (err) {
       logger.error(`消费策略时发生异常: ${JSON.stringify(err)}`);
