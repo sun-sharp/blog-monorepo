@@ -11,6 +11,7 @@ import { BankModule } from './money/bank/bank.module';
 import { BillUploadModule } from './money/bill-upload/bill-upload.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ArticleCssModule } from './article-css/article-css.module';
+import { ArticlePolicyModule } from './article-policy/article-policy.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ArticleCssModule } from './article-css/article-css.module';
     MoneyModule,
     ScheduleModule,
     ArticleCssModule,
+    ArticlePolicyModule,
     RouterModule.register([
       {
         path: 'blog',
@@ -38,6 +40,10 @@ import { ArticleCssModule } from './article-css/article-css.module';
           {
             path: '/',
             module: ArticleCssModule,
+          },
+          {
+            path: '/',
+            module: ArticlePolicyModule,
           },
           {
             path: '/money',

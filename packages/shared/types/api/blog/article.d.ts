@@ -63,6 +63,14 @@ export type ApiArticleItem = ApiArticle & ApiArticleId;
 export type ApiArticleDetails = ApiArticleItem & { htmlContent: string, cssContent: string };
 
 /**
+ * @description: 文章的移动端详情数据
+ */
+export type ApiArticleMobileDetails = Omit<
+  ApiArticleItem,
+  'markdownContent' | 'cssName'
+> & { pid: string };
+
+/**
  * @description: 文章的列表每项
  */
 export type ApiLiteArticleItem = Omit<

@@ -9,7 +9,7 @@ import { User } from 'src/schemas/capital/user.schema';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { imageIsHasHttpOrHttps } from 'src/common/validator/image-validator';
-import { ApiArticleDetails, ApiLiteArticleItem } from '/#/api/blog/article';
+import { ApiArticleDetails, ApiArticleMobileDetails, ApiLiteArticleItem } from '/#/api/blog/article';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { logger } from 'src/common/journal';
@@ -19,8 +19,8 @@ import puppeteer from 'puppeteer';
 import { Response } from 'express';
 import { decodeBuffer, markdownToHtml } from 'src/common/markdown';
 import { ArticleCssService } from '../article-css/article-css.service';
-import { ApiUserLiteInfo } from '/#/api/capital/user';
 import { UserService } from 'src/modules/capital/user/user.service';
+import { ArticlePolicyService } from '../article-policy/article-policy.service';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -31,6 +31,7 @@ export class ArticleService {
     @InjectModel(Article.name, blogDatabaseName)
     private readonly articleModel: Model<Article>,
     private readonly articleCssService: ArticleCssService,
+    private readonly articlePolicyService: ArticlePolicyService,
     private readonly userService: UserService,
   ) {}
 
@@ -174,7 +175,8 @@ export class ArticleService {
             await markdownToHtml(find.markdownContent),
             await this.articleCssService.findOneByName(find.cssName),
           ]);
-          const useLiteInfo: ApiUserLiteInfo = await this.userService.getUseLiteInfoById(find.authorId);
+          const useLiteInfo = await this.userService.getUseLiteInfoById(find.authorId);
+          const authorNickname = useLiteInfo ? (user ? user.nickname : '') : useLiteInfo.nickname;
           const result: ApiArticleDetails = {
             articleId: find._id,
             title: find.title,
@@ -184,7 +186,61 @@ export class ArticleService {
             htmlContent,
             markdownContent: find.markdownContent,
             authorId: find.authorId,
-            authorNickname: useLiteInfo.nickname || user.nickname,
+            authorNickname,
+            categoryVal: find.categoryVal,
+            createTime: nowDateFun(find.createTime),
+            // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）
+            ...(user && { isPrivate: find.isPrivate }),
+          };
+          return {
+            code: ApiCode.SUCCESS,
+            result,
+            message: '查询成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          logger.error(`获取文章详情 失败! ${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 获取文章详情（支持可选认证）
+   * @param {string} articleId 文章ID
+   * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
+   * @return {Promise<IResponse>}
+   */
+  public findMobileDetails(articleId: string, user?: User | null): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          const findData: FilterQuery<Article> = { _id: articleId };
+          // 如果没有用户登录，只查询不加密的文章
+          if (!user) {
+            findData.isPrivate = false;
+          }
+          const find = await this.articleModel.findOne(findData).lean();
+          if (!find) {
+            throw '获取文章详情失败';
+          }
+          // 获取策略和用户信息
+          const [pid, useLiteInfo] = await Promise.all([
+            await this.articlePolicyService.createPolicy(find.authorId),
+            await this.userService.getUseLiteInfoById(find.authorId),
+          ]);
+          const authorNickname = useLiteInfo ? (user ? user.nickname : '') : useLiteInfo.nickname;
+          const result: ApiArticleMobileDetails = {
+            articleId: find._id,
+            title: find.title,
+            brief: find.brief,
+            pid,
+            authorId: find.authorId,
+            authorNickname,
             categoryVal: find.categoryVal,
             createTime: nowDateFun(find.createTime),
             // 如果有用户登录，返回isPrivate字段；否则不返回（默认false）

@@ -234,39 +234,59 @@ export class UserService {
    * @param {string} userId
    * @return {Promise<User>}
    */
-  public getUseLiteInfoById(userId: string): Promise<ApiUserLiteInfo> {
-    return (
-      Promise.resolve()
-        // 获取信息
-        .then(async () => {
-          const user = await this.userModel.findOne({ _id: userId }).lean();
-          if (!user) {
-            throw {
-              code: ApiCode.ERROR,
-              message: `查询用户${userId}失败`,
-            };
-          }
-          const routeFind = await this.roleService.findOneByRoleCode(user.roleCode);
-          if (!routeFind) {
-            throw {
-              code: ApiCode.ERROR,
-              message: `查询角色${user.roleCode}失败`,
-            };
-          }
-          const result: ApiUserLiteInfo = {
-            nickname: user.nickname,
-            avatar: user.avatar,
-            roleCode: user.roleCode,
-            roleName: routeFind.name,
-          };
-          return result;
-        })
-        // 返回错误
-        .catch((err) => {
-          logger.error(`根据_id获取用户昵称、头像、角色 失败！ ${err}`);
-          return err;
-        })
-    );
+  public async getUseLiteInfoById(userId: string): Promise<ApiUserLiteInfo | null> {
+    try {
+      const user = await this.userModel.findOne({ _id: userId }).lean();
+      if (!user) {
+        throw `查询用户${userId}失败`;
+      }
+      const routeFind = await this.roleService.findOneByRoleCode(user.roleCode);
+      if (!routeFind) {
+        throw `查询角色${user.roleCode}失败`;
+      }
+      const result: ApiUserLiteInfo = {
+        nickname: user.nickname,
+        avatar: user.avatar,
+        roleCode: user.roleCode,
+        roleName: routeFind.name,
+      };
+      return result;
+    } catch (err) {
+      logger.error(`根据_id获取用户昵称、头像、角色 失败！ ${err}`);
+      return null;
+    }
+    // return (
+    //   Promise.resolve()
+    //     // 获取信息
+    //     .then(async () => {
+    //       const user = await this.userModel.findOne({ _id: userId }).lean();
+    //       if (!user) {
+    //         throw {
+    //           code: ApiCode.ERROR,
+    //           message: `查询用户${userId}失败`,
+    //         };
+    //       }
+    //       const routeFind = await this.roleService.findOneByRoleCode(user.roleCode);
+    //       if (!routeFind) {
+    //         throw {
+    //           code: ApiCode.ERROR,
+    //           message: `查询角色${user.roleCode}失败`,
+    //         };
+    //       }
+    //       const result: ApiUserLiteInfo = {
+    //         nickname: user.nickname,
+    //         avatar: user.avatar,
+    //         roleCode: user.roleCode,
+    //         roleName: routeFind.name,
+    //       };
+    //       return result;
+    //     })
+    //     // 返回错误
+    //     .catch((err) => {
+    //       logger.error(`根据_id获取用户昵称、头像、角色 失败！ ${err}`);
+    //       return err;
+    //     })
+    // );
   }
 
   /**

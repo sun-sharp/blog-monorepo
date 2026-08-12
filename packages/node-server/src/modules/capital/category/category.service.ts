@@ -20,7 +20,7 @@ export class CategoryService {
   constructor(@InjectModel(Category.name, capitalDatabaseName) private readonly categoryModel: Model<Category>) {}
 
   /**
-   * @description: 新增文章分类
+   * @description: 新增全局类型
    * @param {CreateCategoryDto} createCategoryDto
    * @return {Promise<IResponse>}
    */
@@ -49,7 +49,7 @@ export class CategoryService {
         })
         // 返回错误
         .catch((err) => {
-          logger.log(`新增文章分类失败！ ${err}`);
+          logger.log(`新增全局类型失败！ ${err}`);
           return {
             code: ApiCode.ERROR,
             message: err || '添加失败！',
@@ -194,31 +194,21 @@ export class CategoryService {
    * @param {UpdateCategoryDto} updateCategoryDto
    * @return {Promise<IResponse>}
    */
-  public update(updateCategoryDto: UpdateCategoryDto): Promise<IResponse> {
+  public update(body: UpdateCategoryDto): Promise<IResponse> {
     return (
-      Promise.resolve(updateCategoryDto)
+      Promise.resolve()
         // 修改
-        .then(async (body) => {
-          const { categoryId, value, type, valueStr } = body;
-          const findTypeData = await this.categoryModel.find({ type });
-          const filterData = findTypeData.filter((f) => f.id !== categoryId);
+        .then(async () => {
+          const { categoryId, value, type, valueStr, label } = body;
           if (value) {
-            const findValue = filterData.find((f) => f.value === value);
-            if (findValue) {
-              throw '全局类型标识重复';
-            }
-            return body;
+            return { categoryId, type, value, valueStr: null, label };
           } else if (valueStr) {
-            const findValueStr = filterData.find((f) => f.valueStr === valueStr);
-            if (findValueStr) {
-              throw '全局类型标识（字符串类型）重复';
-            }
-            return body;
+            return { categoryId, type, value: null, valueStr, label };
           }
         })
-        .then(async (body) => {
-          const { categoryId, ...other } = body;
+        .then(async ({ categoryId, ...other }) => {
           await this.categoryModel.updateOne({ _id: categoryId }, other);
+          logger.log(`修改全局类型 成功！`);
           return {
             code: ApiCode.SUCCESS,
             message: '修改成功！',
