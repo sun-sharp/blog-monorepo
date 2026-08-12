@@ -24,28 +24,19 @@ export class CategoryService {
    * @param {CreateCategoryDto} createCategoryDto
    * @return {Promise<IResponse>}
    */
-  public create(createCategoryDto: CreateCategoryDto): Promise<IResponse> {
+  public create(body: CreateCategoryDto): Promise<IResponse> {
     return (
-      Promise.resolve(createCategoryDto)
+      Promise.resolve()
         // 处理全局类型标识重复问题
-        .then(async (body) => {
+        .then(async () => {
           const { type, value, valueStr, label } = body;
           if (!value && !valueStr) {
             throw '请输入全局类型标识';
           }
-          const findTypeData = await this.categoryModel.find({ type });
           if (value) {
-            const findValue = findTypeData.find((f) => f.value === value);
-            if (findValue) {
-              throw '全局类型标识重复';
-            }
-            return { type, value, label };
+            return { type, value, valueStr: null, label };
           } else if (valueStr) {
-            const findValueStr = findTypeData.find((f) => f.valueStr === valueStr);
-            if (findValueStr) {
-              throw '全局类型标识（字符串类型）重复';
-            }
-            return { type, valueStr, label };
+            return { type, value: null, valueStr, label };
           }
         })
         // 添加
