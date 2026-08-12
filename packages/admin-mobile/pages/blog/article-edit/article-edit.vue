@@ -269,9 +269,9 @@ img {
         form.brief = article.brief;
         form.categoryVal = article.categoryVal;
         form.isPrivate = article.isPrivate;
-        form.markdownContent = article.markdownContent;
-        form.htmlContent = article.htmlContent || ''; // 保存原始的 htmlContent
-        form.cssContent = article.cssContent;
+        // form.markdownContent = article.markdownContent;
+        // form.htmlContent = article.htmlContent || ''; // 保存原始的 htmlContent
+        // form.cssContent = article.cssContent;
       }
     } catch (e) {
       console.error(e);
