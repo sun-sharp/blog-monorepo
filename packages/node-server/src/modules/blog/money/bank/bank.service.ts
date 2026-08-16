@@ -48,7 +48,7 @@ export class BankService {
       Promise.resolve()
         // 导入数据处理
         .then(async () => {
-          const originalName = file.originalname ? decodeURIComponent(file.originalname) : '';
+          const originalName = file.originalname ? Buffer.from(file.originalname, 'latin1').toString('utf8') : '';
           logger.log(`银行账单 上传文件名: ${originalName}`);
           if (originalName !== BANK_UPLOAD_FILE_ORIGINAL_NAME) {
             throw `上传的文件名称必须为「${BANK_UPLOAD_FILE_ORIGINAL_NAME}」！`;
