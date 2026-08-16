@@ -61,7 +61,6 @@ export class BankService {
               sheetName,
               buffer: buffer,
               startNum: 2,
-              maxRows: size,
               cellHandler: excelCellHandle,
               otherObj: { bankType: Number(itKey) },
             });
@@ -79,6 +78,7 @@ export class BankService {
             list = list.concat(excelArr);
           }
           if (list.length === 0) throw '导入的数据为空！';
+          logger.log(`银行账单文件 导入的数据 成功！共 ${list.length} 个`);
           // 过滤掉相同的数据
           const find = await this.bankModel.find();
           const result: ApiBankUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
