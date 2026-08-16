@@ -59,6 +59,7 @@ export class BankService {
           // ===== 预加载 workbook（只加载一次） =====
           const workbook = new ExcelJS.Workbook();
           await workbook.xlsx.load(buffer);
+          logger.log(`银行账单文件 预加载 workbook 成功！`);
           let list: ApiBankUpload[] = [];
           for (const itKey in bankExcelCellMap) {
             const { sheetName, excelCellHandle } = bankExcelCellMap[itKey];
