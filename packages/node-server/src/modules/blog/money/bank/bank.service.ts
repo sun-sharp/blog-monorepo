@@ -7,7 +7,7 @@ import { Response } from 'express';
 import { bankExcelCellMap } from 'src/common/constant/excel';
 import { storeDirStr } from 'src/common/constant/config';
 import { ApiCode } from 'src/common/enums/api-code.enum';
-import { excelXlsxHandleBuffer, twoArrForTimeSameFilter } from 'src/common/excel';
+import { parseSheetFromWorkbook, twoArrForTimeSameFilter } from 'src/common/excel';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { CreateBankBatchDto } from './dto/create-bank.dto';
@@ -23,6 +23,7 @@ import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { runCode } from 'src/common/string';
+import * as ExcelJS from 'exceljs';
 
 const BANK_UPLOAD_FILE_NAME = '银行统一数据模版';
 const BANK_UPLOAD_FILE_ORIGINAL_NAME = `${BANK_UPLOAD_FILE_NAME}.xlsx`;
@@ -53,19 +54,24 @@ export class BankService {
           if (originalName !== BANK_UPLOAD_FILE_ORIGINAL_NAME) {
             throw `上传的文件名称必须为「${BANK_UPLOAD_FILE_ORIGINAL_NAME}」！`;
           }
-          const { buffer } = file; // file为前端上传的excel
+          const { buffer } = file;
+
+          // ===== 预加载 workbook（只加载一次） =====
+          const workbook = new ExcelJS.Workbook();
+          await workbook.xlsx.load(buffer);
           let list: ApiBankUpload[] = [];
           for (const itKey in bankExcelCellMap) {
             const { sheetName, excelCellHandle } = bankExcelCellMap[itKey];
-            const excelArr = await excelXlsxHandleBuffer({
+            // 传入 workbook，不再传入 buffer
+            const excelArr = await parseSheetFromWorkbook({
               sheetName,
-              buffer: buffer,
+              workbook, // 复用同一个 workbook
               startNum: 2,
               cellHandler: excelCellHandle,
               otherObj: { bankType: Number(itKey) },
             });
             if (!excelArr) throw sheetName + '表导入的数据失败！';
-            // 判断验证数据是有问题
+            // ... 后续校验逻辑不变
             const listFilter = excelArr.filter(
               (f) =>
                 typeof f.balance !== 'number' ||
@@ -80,7 +86,17 @@ export class BankService {
           if (list.length === 0) throw '导入的数据为空！';
           logger.log(`银行账单文件 导入的数据 成功！共 ${list.length} 个`);
           // 过滤掉相同的数据
-          const find = await this.bankModel.find();
+          // 2. 找出 Excel 中最早和最晚的交易时间
+          const times = list.map((m) => new Date(m.tradeTime).getTime());
+          const minTime = new Date(Math.min(...times));
+          const maxTime = new Date(Math.max(...times));
+          // 3. 只查询这个时间范围内的数据（利用数据库索引）
+          const find = await this.bankModel.find({
+            tradeTime: {
+              $gte: minTime,
+              $lte: maxTime,
+            },
+          });
           const result: ApiBankUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
           if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据进行排序，排序优先级（交易时间）
