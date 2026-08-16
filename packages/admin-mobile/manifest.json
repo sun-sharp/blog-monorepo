@@ -89,33 +89,35 @@
         "devServer" : {
             "port" : 7444,
             "proxy" : {
-                "/capital" : {
-                    // "/dev-capital-api" : {
-                    "target" : "http://127.0.0.1:3000",
-                    // "target" : "https://www.yangruirui.top",
+                // "/capital" : {
+                "/dev-capital-api" : {
+                    // "target" : "http://127.0.0.1:3000",
+                    "target" : "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
-                        "^/capital" : "/capital"
+                        // "^/capital" : "/capital",
+						"^/dev-capital-api" : "/dev-capital-api"
                     }
                 },
-                // "^/dev-capital-api" : "/capital"
-                "/blog" : {
-                    // "/dev-blog-api": {
-                    "target" : "http://127.0.0.1:3000",
-                    // "target": "https://www.yangruirui.top",
+                // "/blog" : {
+                "/dev-blog-api": {
+                    // "target" : "http://127.0.0.1:3000",
+                    "target": "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
-                        "^/blog" : "/blog"
+                        // "^/blog" : "/blog"
+						"^/dev-blog-api" : "/dev-blog-api"
                     }
                 },
                 // "^/dev-blog-api": "/blog"
-                "/backup" : {
-                    // "/dev-backup-api": {
-                    "target" : "http://127.0.0.1:3000",
-                    // "target": "https://www.yangruirui.top",
+                // "/backup" : {
+                "/dev-backup-api": {
+                    // "target" : "http://127.0.0.1:3000",
+                    "target": "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
-                        "^/backup" : "/backup"
+                        // "^/backup" : "/backup",
+						"^/dev-backup-api" : "/dev-backup-api"
                     }
                 }
             }

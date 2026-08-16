@@ -61,6 +61,7 @@ export class BankService {
               sheetName,
               buffer: buffer,
               startNum: 2,
+              maxRows: size,
               cellHandler: excelCellHandle,
               otherObj: { bankType: Number(itKey) },
             });

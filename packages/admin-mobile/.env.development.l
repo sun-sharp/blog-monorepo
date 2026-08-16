@@ -7,16 +7,17 @@ VITE_DROP_CONSOLE = false
 VITE_AUTHORIZATION_HEAD = 'Bearer '
 
 # capital接口地址
-VITE_CAPITAL_API_URL = /dev-capital-api
+VITE_CAPITAL_API_URL = /capital
 
 # blog接口地址
-VITE_BLOG_API_URL = /dev-blog-api
+VITE_BLOG_API_URL = /blog
 
 # backup接口地址
-VITE_BACKUP_API_URL = /dev-backup-api
+VITE_BACKUP_API_URL = /backup
 
 # 后端基础地址
-VITE_BASE_URL = https://www.yangruirui.top
+VITE_BASE_URL = http://192.168.0.101:3000
+# VITE_BASE_URL = http://192.168.43.8:3000
 
 # 数据库名称
 VITE_CAPITAL_DATABASE_NAME = dev_capital
