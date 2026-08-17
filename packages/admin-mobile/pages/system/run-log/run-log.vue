@@ -63,7 +63,11 @@
           <u-empty mode="data" text="暂无日志" />
         </view>
         <view v-else class="run-log-content">
-          <text v-for="(line, idx) in logLines" :key="idx" class="run-log-line">{{ line }}</text>
+          <view v-for="(line, idx) in logLines" :key="idx" class="run-log-line">
+            <template v-for="(seg, segIdx) in highlightLine(line)" :key="segIdx">
+              <text class="run-log-seg" :class="segClass(seg)" :style="seg.color ? { color: seg.color } : undefined">{{ seg.text }}</text>
+            </template>
+          </view>
         </view>
       </view>
     </scroll-view>
@@ -94,6 +98,237 @@
   const linesOptions = [50, 100, 200, 500, 1000].map((n) => ({ label: `${n} 行`, value: n }));
 
   const logLines = computed(() => (logContent.value ? logContent.value.split('\n') : []));
+
+  interface LogSeg {
+    text: string;
+    type: 'time' | 'level' | 'key' | 'string' | 'number' | 'error' | 'plain';
+    color?: string;
+  }
+
+  const LEVELS = ['FATAL', 'ERROR', 'WARN', 'WARNING', 'INFO', 'DEBUG', 'TRACE'] as const;
+
+  const TIME_RE = /\d{1,2}[-/]\d{1,2}\d{4}[-/][ T]\d{1,2}:\d{1,2}:\d{1,2}(?:[.,]\d+)?(?:Z|[+-]\d{2}:?\d{2})?/;
+
+  const ANSI_RE =
+    // eslint-disable-next-line no-control-regex
+    /[\u001b\u009b][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d/#&.:=?%@~_]+)*)?\u0007)|(?:(?:\d{1,4}(?:[;:]\d{0,4})*)?[\dA-PR-TZcf-nq-uy=><~]))/g;
+
+  function levelClass(text: string): string {
+    const t = text.toUpperCase();
+    if (t === 'ERROR' || t === 'FATAL') return 'run-log-seg--error';
+    if (t === 'WARN' || t === 'WARNING') return 'run-log-seg--warn';
+    if (t === 'DEBUG' || t === 'TRACE') return 'run-log-seg--debug';
+    return 'run-log-seg--info';
+  }
+
+  function segClass(seg: LogSeg): string {
+    if (seg.color) return '';
+    switch (seg.type) {
+      case 'time':
+        return 'run-log-seg--time';
+      case 'level':
+        return `run-log-seg--level ${levelClass(seg.text)}`;
+      case 'key':
+        return 'run-log-seg--key';
+      case 'string':
+        return 'run-log-seg--string';
+      case 'number':
+        return 'run-log-seg--number';
+      case 'error':
+        return 'run-log-seg--error';
+      default:
+        return '';
+    }
+  }
+
+  function highlightLine(line: string): LogSeg[] {
+    if (!line) return [];
+    const runs = splitAnsiRuns(line);
+    // 全部内容拼接用于判断是否为 JSON
+    const plain = runs.map((r) => r.text).join('');
+    const trimmed = plain.trim();
+
+    const segs: LogSeg[] = [];
+    for (let i = 0; i < runs.length; i++) {
+      const run = runs[i];
+      const runText = run.text;
+      if (!runText) continue;
+      if (trimmed.startsWith('{') || trimmed === '[]') {
+        try {
+          const jsonSegs = tokenizeJson(trimmed).map(classify);
+          // JSON 型仅给整行第一个有颜色的 run 传色，保持简单
+          if (i === 0) return jsonSegs.map((s) => (run.color ? { ...s, color: run.color } : s));
+          return colorizeSegs(
+            jsonSegs,
+            runs.filter((r) => r.color).map((r) => r.color || '')
+          );
+        } catch {
+          /* fallthrough */
+        }
+      }
+      segs.push(...typeSegs(runText, run.color));
+    }
+    return mergeSegs(segs);
+  }
+
+  function splitAnsiRuns(line: string): { text: string; color?: string }[] {
+    const runs: { text: string; color?: string }[] = [];
+    let active: string | undefined;
+    let buffer = '';
+    let i = 0;
+    while (i < line.length) {
+      if (line.charCodeAt(i) === 0x1b || line.charCodeAt(i) === 0x9b) {
+        if (buffer) {
+          runs.push({ text: buffer, color: active });
+          buffer = '';
+        }
+        const code = line.slice(i, i + 10).match(ANSI_RE)?.[0] || line[i];
+        const color = ansiToColor(code);
+        if (color !== undefined) active = color;
+        else if (/\[[0]?m/.test(code)) active = undefined; // 重置
+        i += code.length;
+      } else {
+        buffer += line[i];
+        i++;
+      }
+    }
+    if (buffer) runs.push({ text: buffer, color: active });
+    return runs;
+  }
+
+  function typeSegs(text: string, color?: string): LogSeg[] {
+    const segs: LogSeg[] = [];
+    let rest = text;
+    while (rest.length) {
+      const timeMatch = rest.match(TIME_RE);
+      const head = timeMatch ? rest.slice(0, timeMatch.index || 0) : rest;
+      if (head.trim()) segs.push(...splitLevel(head));
+      if (timeMatch) {
+        segs.push({ text: timeMatch[0], type: 'time' });
+        rest = rest.slice((timeMatch.index || 0) + timeMatch.length);
+      } else {
+        rest = '';
+      }
+    }
+    if (segs.length === 0) segs.push({ text, type: 'plain' });
+    return colorizeSegs(segs, color ? [color] : []);
+  }
+
+  function colorizeSegs(segs: LogSeg[], colors: string[]): LogSeg[] {
+    if (!colors.length) return segs;
+    const color = colors[0];
+    return segs.map((s) => ({ ...s, color }));
+  }
+
+  const ANSI_COLORS: Record<string, string> = {
+    30: '#8f9aa8',
+    31: '#ff6b6b',
+    32: '#4cd964',
+    33: '#ffce54',
+    34: '#4fc1ff',
+    35: '#ae81ff',
+    36: '#4dd0e1',
+    37: '#d4d4d4',
+    90: '#8f9aa8',
+    91: '#ff4444',
+    92: '#39e575',
+    93: '#ffd75f',
+    94: '#6db3ff',
+    95: '#d7a2ff',
+    96: '#6ce6dd',
+    97: '#f5f7fa',
+  };
+
+  function ansiToColor(code: string): string | undefined {
+    if (!code.includes('[') || !code.endsWith('m')) return undefined;
+    const body = code
+      // eslint-disable-next-line no-control-regex
+      .replace(/\u001b\[\??/, '')
+      .replace(/m$/, '');
+    const params = body.split(';');
+    const fg = params.find((p) => /^3[0-7]$/.test(p)) || params.find((p) => /^9[0-7]$/.test(p));
+    return fg ? ANSI_COLORS[fg] : undefined;
+  }
+
+  function splitLevel(text: string): LogSeg[] {
+    const out: LogSeg[] = [];
+    let searchPos = 0;
+    while (searchPos < text.length) {
+      const upper = text.slice(searchPos).toUpperCase();
+      const level = LEVELS.find((l) => upper.includes(l));
+      if (!level) {
+        if (searchPos > 0) out.push({ text: text.slice(searchPos), type: 'plain' });
+        else if (out.length === 0) out.push({ text, type: 'plain' });
+        break;
+      }
+      const i = upper.indexOf(level);
+      const absolute = searchPos + i;
+      if (i > 0) out.push({ text: text.slice(searchPos, absolute), type: 'plain' });
+      out.push({ text: text.slice(absolute, absolute + level.length), type: 'level' });
+      searchPos = absolute + level.length;
+    }
+    if (out.length === 0) out.push({ text, type: 'plain' });
+    return out;
+  }
+
+  function mergeSegs(segs: LogSeg[]): LogSeg[] {
+    const out: LogSeg[] = [];
+    for (const s of segs) {
+      const last = out[out.length - 1];
+      if (last && last.type === s.type) last.text += s.text;
+      else out.push({ ...s });
+    }
+    return out;
+  }
+
+  function classify(seg: LogSeg): LogSeg {
+    if (seg.type !== 'plain') return seg;
+    if (/(error|exception|denied|failed|traceback|caused\s*by|stack\s*trace)/i.test(seg.text)) {
+      return { ...seg, type: 'error' };
+    }
+    return seg;
+  }
+
+  function tokenizeJson(line: string): LogSeg[] {
+    const segs: LogSeg[] = [];
+    let rest = line;
+    while (rest.length) {
+      if (rest[0] === '"') {
+        let j = 1;
+        while (j < rest.length && rest[j] !== '"') {
+          if (rest[j] === '\\') j++;
+          j++;
+        }
+        const s = rest.slice(0, j + 1);
+        const after = rest.slice(j + 1).replace(/^\s+/, '');
+        const isKey = after.startsWith(':');
+        segs.push({ text: s, type: isKey ? 'key' : 'string' });
+        rest = rest.slice(j + 1);
+      } else {
+        const m = rest.match(/^\d+[.]?\d*([eE][+-]?\d+)?/);
+        if (m) {
+          segs.push({ text: m[0], type: 'number' });
+          rest = rest.slice(m[0].length);
+        } else {
+          const colon = rest.match(/^(\s*:\s*)/);
+          if (colon) {
+            segs.push({ text: colon[0], type: 'plain' });
+            rest = rest.slice(colon[0].length);
+          } else {
+            const brace = rest.match(/^([,\[\]{}\s]+)/);
+            if (brace) {
+              segs.push({ text: brace[0], type: 'plain' });
+              rest = rest.slice(brace[0].length);
+            } else {
+              segs.push({ text: rest[0], type: 'plain' });
+              rest = rest.slice(1);
+            }
+          }
+        }
+      }
+    }
+    return mergeSegs(segs);
+  }
 
   function getStatusClass(status: string): string {
     if (status === 'online') return 'run-log-status--online';
@@ -306,11 +541,57 @@
   }
 
   .run-log-line {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
     font-size: 22rpx;
     line-height: 1.6;
     color: #d4d4d4;
     word-break: break-all;
     white-space: pre-wrap;
+    font-family: Consolas, Menlo, monospace;
+  }
+
+  .run-log-seg {
+    &--time {
+      color: #4fc1ff;
+      font-weight: 600;
+    }
+
+    &--level {
+      font-weight: bold;
+      margin-right: 6rpx;
+
+      &.run-log-seg--error {
+        color: #ff6b6b;
+      }
+
+      &.run-log-seg--warn {
+        color: #ffce54;
+      }
+
+      &.run-log-seg--info {
+        color: #4dd0e1;
+      }
+
+      &.run-log-seg--debug {
+        color: #b8b8b8;
+      }
+    }
+
+    &--error {
+      color: #ff6b6b;
+    }
+
+    &--key {
+      color: #66d9ef;
+    }
+
+    &--string {
+      color: #f9a825;
+    }
+
+    &--number {
+      color: #ae81ff;
+    }
   }
 </style>

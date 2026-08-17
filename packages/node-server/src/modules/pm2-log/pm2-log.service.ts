@@ -52,6 +52,7 @@ export class Pm2LogService {
    */
   public async listProcesses(): Promise<Pm2ProcessInfo[]> {
     try {
+      logger.log(`pm2 jlist 命令开始执行`);
       // 用 json 输出避免解析文本格式差异
       const stdout = await this.runPm2Command('pm2 jlist');
       let list: any[] = [];
@@ -65,7 +66,7 @@ export class Pm2LogService {
           throw err;
         }
       }
-      logger.error(`获取 pm2 进程列表 成功！`);
+      logger.log(`获取 pm2 进程列表 成功！`);
       const result: Pm2ProcessInfo[] = (list || []).map((m) => {
         const monit = m?.monit || {};
         return {
