@@ -97,7 +97,7 @@
 
   const linesOptions = [50, 100, 200, 500, 1000].map((n) => ({ label: `${n} 行`, value: n }));
 
-  const logLines = computed(() => (logContent.value ? logContent.value.split('\n') : []));
+  const logLines = computed(() => (logContent.value ? logContent.value.split('\n').reverse() : []));
 
   interface LogSeg {
     text: string;
