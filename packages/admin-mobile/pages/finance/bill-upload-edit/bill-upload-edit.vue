@@ -44,9 +44,25 @@
             <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
           </view>
           <view class="code-input-btns">
-            <text v-for="it in codeInputArray" :key="it" class="code-input-btn" @click="insertCode(it)">{{ it }}</text>
+            <text
+              v-for="it in codeInputArray"
+              :key="it"
+              class="code-input-btn"
+              @touchstart.stop.prevent="insertCode(it)"
+              @mousedown.stop.prevent="insertCode(it)">
+              {{ it }}
+            </text>
           </view>
-          <u-textarea v-model="form.code" placeholder="请输入代码" :auto-height="true" :maxlength="-1" :cursor-spacing="20" />
+          <u-textarea
+            ref="codeTextareaRef"
+            v-model="form.code"
+            placeholder="请输入代码"
+            :auto-height="true"
+            :maxlength="-1"
+            :cursor-spacing="20"
+            :hold-keyboard="true"
+            @focus="onCodeFocus"
+            @blur="onCodeBlur" />
         </view>
       </u-form>
     </scroll-view>
@@ -109,7 +125,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, reactive, computed, onMounted } from 'vue';
+  import { ref, reactive, computed, onMounted, nextTick } from 'vue';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { billUploadApi } from '../../../api';
@@ -124,6 +140,7 @@
   const formRef = ref();
   const loading = ref(false);
   const editId = ref('');
+  const codeTextareaRef = ref();
   const showBillUploadTypeSelect = ref(false);
   const showHandleTypeSelect = ref(false);
   const showInflowSelect = ref(false);
@@ -175,8 +192,58 @@
     ];
   });
 
+  // H5：定位到底层 textarea（virtualHost 时 $el 即 textarea，否则是其子孙）
+  function getCodeField(): HTMLTextAreaElement | null {
+    let field: HTMLTextAreaElement | null = null;
+    // #ifdef H5
+    const el: any = codeTextareaRef.value?.$el;
+    if (el) {
+      field = el.tagName === 'TEXTAREA' ? el : (el.querySelector?.('textarea') ?? null);
+    }
+    // #endif
+    return field;
+  }
+
+  function onCodeFocus() {
+    // #ifdef H5
+    const field = getCodeField();
+    if (field && typeof field.selectionEnd === 'number') {
+      field.setSelectionRange(field.selectionEnd, field.selectionEnd);
+    }
+    // #endif
+  }
+
+  function onCodeBlur() {
+    // 失焦时若 H5 则把光标移到末尾，保持一致
+    // #ifdef H5
+    const field = getCodeField();
+    if (field) {
+      field.value = form.code;
+      field.focus();
+      field.setSelectionRange(field.value.length, field.value.length);
+    }
+    // #endif
+  }
+
   function insertCode(code: string) {
+    if (!code) return;
+    // 始终追加到末尾
     form.code += code;
+
+    // H5：把光标移到末尾
+    // #ifdef H5
+    nextTick(() => {
+      const field = getCodeField();
+      if (!field) return;
+      field.value = form.code;
+      field.focus();
+      try {
+        field.setSelectionRange(field.value.length, field.value.length);
+      } catch {
+        /* ignore */
+      }
+    });
+    // #endif
   }
 
   const rules = {

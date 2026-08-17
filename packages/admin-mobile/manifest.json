@@ -96,28 +96,28 @@
                     "changeOrigin" : true,
                     "pathRewrite" : {
                         // "^/capital" : "/capital",
-						"^/dev-capital-api" : "/dev-capital-api"
+                        "^/dev-capital-api" : "/dev-capital-api"
                     }
                 },
                 // "/blog" : {
-                "/dev-blog-api": {
+                "/dev-blog-api" : {
                     // "target" : "http://127.0.0.1:3000",
-                    "target": "https://www.yangruirui.top",
+                    "target" : "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
                         // "^/blog" : "/blog"
-						"^/dev-blog-api" : "/dev-blog-api"
+                        "^/dev-blog-api" : "/dev-blog-api"
                     }
                 },
                 // "^/dev-blog-api": "/blog"
                 // "/backup" : {
-                "/dev-backup-api": {
+                "/dev-backup-api" : {
                     // "target" : "http://127.0.0.1:3000",
-                    "target": "https://www.yangruirui.top",
+                    "target" : "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
                         // "^/backup" : "/backup",
-						"^/dev-backup-api" : "/dev-backup-api"
+                        "^/dev-backup-api" : "/dev-backup-api"
                     }
                 }
             }
