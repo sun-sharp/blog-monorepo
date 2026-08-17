@@ -21,6 +21,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || '';
 const CAPITAL_API_URL = import.meta.env.VITE_CAPITAL_API_URL || '';
 const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
 const BACKUP_API_URL = import.meta.env.VITE_BACKUP_API_URL || '';
+const PM2_LOG_API_URL = import.meta.env.VITE_PM2_LOG_API_URL || '';
 const AUTHORIZATION_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
 
 export function isH5Platform(): boolean {
@@ -34,6 +35,7 @@ export function isH5Platform(): boolean {
 const CAPITAL_BASE = isH5Platform() ? CAPITAL_API_URL : `${BASE_URL}${CAPITAL_API_URL}`;
 const BLOG_BASE = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
 const BACKUP_BASE = isH5Platform() ? BACKUP_API_URL : `${BASE_URL}${BACKUP_API_URL}`;
+const PM2_LOG_BASE = isH5Platform() ? PM2_LOG_API_URL : `${BASE_URL}${PM2_LOG_API_URL}`;
 
 function buildUrl(config: RequestConfig): string {
   let url = config.url;
@@ -138,6 +140,7 @@ export function createRequest(baseUrl: string) {
 export const capitalRequest = createRequest(CAPITAL_BASE);
 export const blogRequest = createRequest(BLOG_BASE);
 export const backupRequest = createRequest(BACKUP_BASE);
+export const pm2LogRequest = createRequest(PM2_LOG_BASE);
 
 export const uploadFileRequest = <T = any>(filePath: string): Promise<T> => {
   const urlPrefix = isH5Platform() ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;

@@ -18,3 +18,4 @@ export * as bankApi from './blog/money/bank';
 export * as billUploadApi from './blog/money/bill-upload';
 
 export * as backupApi from './backup';
+export * as pm2LogApi from './pm2-log';

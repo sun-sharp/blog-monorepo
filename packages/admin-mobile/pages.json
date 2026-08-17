@@ -144,6 +144,12 @@
           "style": {
             "navigationBarTitleText": "数据备份"
           }
+        },
+        {
+          "path": "run-log/run-log",
+          "style": {
+            "navigationBarTitleText": "运行日志"
+          }
         }
       ]
     },

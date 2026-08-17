@@ -15,6 +15,9 @@ VITE_BLOG_API_URL = /blog
 # backup接口地址
 VITE_BACKUP_API_URL = /backup
 
+# pm2日志接口地址
+VITE_PM2_LOG_API_URL = /pm2-log
+
 # 后端基础地址
 VITE_BASE_URL = http://192.168.0.101:3000
 # VITE_BASE_URL = http://192.168.43.8:3000
