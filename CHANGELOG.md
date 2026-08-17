@@ -7,6 +7,13 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.4.1 (2026-8-17)
+- server 端
+  - 修改 日志 访问权限报错
+  - 修改 日志展示
+- 移动管理端
+  - 修改 日志展示
+
 ## bm-ns-aw-am-4.4.0 (2026-8-17)
 - server 端
   - 添加 上传 MD 文件并解析为 HTML接口
