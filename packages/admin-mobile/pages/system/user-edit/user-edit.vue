@@ -4,17 +4,17 @@
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <view class="user-edit-card card">
           <text class="user-edit-section-title">基本信息</text>
-          <u-form-item label="昵称" prop="nickname">
+          <u-form-item label="昵称" prop="nickname" required>
             <u-input v-model="form.nickname" placeholder="请输入昵称" :disabled="isEdit" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="用户名" prop="username">
+          <u-form-item label="用户名" prop="username" required>
             <u-input v-model="form.username" placeholder="请输入用户名" :disabled="isEdit" :cursor-spacing="20" />
           </u-form-item>
         </view>
 
         <view class="user-edit-card card">
           <text class="user-edit-section-title">角色设置</text>
-          <u-form-item label="角色" prop="roleCode">
+          <u-form-item label="角色" prop="roleCode" required>
             <view class="user-edit-select" @click="showRoleSelect = true">
               <text :class="form.roleCode ? 'user-edit-select-value' : 'user-edit-select-placeholder'">
                 {{ roleLabel || '请选择角色' }}
@@ -26,10 +26,10 @@
 
         <view v-if="!isEdit" class="user-edit-card card">
           <text class="user-edit-section-title">密码设置</text>
-          <u-form-item label="密码" prop="password">
+          <u-form-item label="密码" prop="password" required>
             <u-input v-model="form.password" type="password" placeholder="请输入密码" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="确认密码" prop="verifyPassword">
+          <u-form-item label="确认密码" prop="verifyPassword" required>
             <u-input v-model="form.verifyPassword" type="password" placeholder="请再次输入密码" :cursor-spacing="20" />
           </u-form-item>
         </view>

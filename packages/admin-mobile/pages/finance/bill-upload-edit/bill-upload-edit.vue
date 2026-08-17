@@ -3,13 +3,13 @@
     <scroll-view scroll-y class="edit-scroll">
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <view class="edit-card card">
-          <u-form-item label="账单导入类型" prop="billUploadType">
+          <u-form-item label="账单导入类型" prop="billUploadType" required>
             <view class="edit-select" @click="showBillUploadTypeSelect = true">
               <text :class="form.billUploadType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billUploadTypeLabel || '请选择' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
           </u-form-item>
-          <u-form-item label="需处理类型" prop="handleType">
+          <u-form-item label="需处理类型" prop="handleType" required>
             <view class="edit-select" @click="showHandleTypeSelect = true">
               <text :class="form.handleType ? 'edit-select-value' : 'edit-select-placeholder'">{{ handleTypeLabel || '请选择' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />

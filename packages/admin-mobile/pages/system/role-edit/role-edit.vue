@@ -4,13 +4,13 @@
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <view class="role-edit-card card">
           <text class="role-edit-section-title">角色信息</text>
-          <u-form-item label="角色名称" prop="name">
+          <u-form-item label="角色名称" prop="name" required>
             <u-input v-model="form.name" placeholder="请输入角色名称" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="角色编码" prop="roleCode">
+          <u-form-item label="角色编码" prop="roleCode" required>
             <u-input v-model="form.roleCode" placeholder="请输入角色编码" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="角色类型" prop="roleType">
+          <u-form-item label="角色类型" prop="roleType" required>
             <view class="role-edit-select" @click="showRoleTypeSelect = true">
               <text :class="form.roleType ? 'role-edit-select-value' : 'role-edit-select-placeholder'">
                 {{ roleTypeLabel || '请选择角色类型' }}

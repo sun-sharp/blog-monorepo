@@ -3,21 +3,21 @@
     <scroll-view scroll-y class="schedule-edit-scroll">
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <view class="schedule-edit-card card">
-          <u-form-item label="标题" prop="title">
+          <u-form-item label="标题" prop="title" required>
             <u-input v-model="form.title" placeholder="请输入日程标题" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="内容" prop="content">
+          <u-form-item label="内容" prop="content" required>
             <u-textarea v-model="form.content" placeholder="请输入日程内容" :cursor-spacing="20" />
           </u-form-item>
         </view>
         <view class="schedule-edit-card card">
-          <u-form-item label="开始日期" prop="startDate">
+          <u-form-item label="开始日期" prop="startDate" required>
             <view class="schedule-edit-select" @click="showStartCalendar = true">
               <text :class="form.startDate ? 'schedule-edit-select-value' : 'schedule-edit-select-placeholder'">{{ form.startDate || '请选择开始日期' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
           </u-form-item>
-          <u-form-item label="结束日期" prop="endDate">
+          <u-form-item label="结束日期" prop="endDate" required>
             <view class="schedule-edit-select" @click="showEndCalendar = true">
               <text :class="form.endDate ? 'schedule-edit-select-value' : 'schedule-edit-select-placeholder'">{{ form.endDate || '请选择结束日期' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />

@@ -14,7 +14,9 @@
     "lint": "eslint \"{src,types}/**/*.ts\" --fix",
     "rm_node_modules": "rimraf yarn.lock && rimraf pnpm-lock.yaml && rimraf package-lock.json && rimraf node_modules",
     "compodoc": "npx compodoc -p tsconfig.json -r 8000 -s --language=zh-CN --hideGenerator -n \"api接口文档\" --theme postmark",
-    "update_pm2": "npm install && pm2 reload ecosystem.config.js && pm2 list"
+    "update_pm2": "npm install && pm2 reload ecosystem.config.js && pm2 list",
+    "update_pm2:nest_dev": "npm install && pm2 reload ecosystem.config.js --only nest_dev && pm2 list",
+    "update_pm2:nest": "npm install && pm2 reload ecosystem.config.js --only nest && pm2 list"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.7",

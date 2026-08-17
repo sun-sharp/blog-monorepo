@@ -81,7 +81,7 @@
           <u-form-item label="交易对方备注" prop="tradeOtherPersonRemarks">
             <u-input v-model="form.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="流入/流出" prop="inflowOrOutflow">
+          <u-form-item label="流入/流出" prop="inflowOrOutflow" required>
             <view class="bill-edit-select" @click="showInflowSelect = true">
               <text :class="form.inflowOrOutflow ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ inflowLabel || '请选择' }}

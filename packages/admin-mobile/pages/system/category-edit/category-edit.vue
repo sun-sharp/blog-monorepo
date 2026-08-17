@@ -4,7 +4,7 @@
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
         <view class="category-edit-card card">
           <text class="category-edit-section-title">分类信息</text>
-          <u-form-item label="类型" prop="type">
+          <u-form-item label="类型" prop="type" required>
             <view class="category-edit-select" @click="showTypeSelect = true">
               <text :class="form.type ? 'category-edit-select-value' : 'category-edit-select-placeholder'">
                 {{ typeLabel || '请选择类型' }}
@@ -12,7 +12,7 @@
               <u-icon name="arrow-right" size="28" color="#999" />
             </view>
           </u-form-item>
-          <u-form-item label="标签" prop="label">
+          <u-form-item label="标签" prop="label" required>
             <u-input v-model="form.label" placeholder="请输入标签" :cursor-spacing="20" />
           </u-form-item>
         </view>
@@ -20,10 +20,10 @@
         <view class="category-edit-card card">
           <text class="category-edit-section-title">数值设置</text>
           <u-form-item label="数值" prop="value">
-            <u-number-box v-model="form.value" :min="0" />
+            <u-number-box v-model="form.value" :min="0" :disabled="!!form.valueStr" />
           </u-form-item>
           <u-form-item label="字符串值" prop="valueStr">
-            <u-input v-model="form.valueStr" placeholder="请输入字符串值" :cursor-spacing="20" />
+            <u-input v-model="form.valueStr" placeholder="请输入字符串值" :disabled="!!form.value" :cursor-spacing="20" />
           </u-form-item>
         </view>
       </u-form>
