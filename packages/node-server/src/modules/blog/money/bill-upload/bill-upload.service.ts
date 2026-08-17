@@ -11,6 +11,7 @@ import { CreateBillUploadDto } from './dto/create-bill-upload.dto';
 import { PageBillUploadDto } from './dto/page-bill-upload.dto';
 import { UpdateBillUploadDto } from './dto/update-bill-upload.dto';
 import { ApiBillUploadItem } from '/#/api/blog/bill-upload';
+import { validBillUploadCode, validBillUploadCodeExecut, codeFieldWhitelist } from 'src/common/validator/code-validator';
 
 const customConfig = useCustomConfig();
 const { blogDatabaseName } = customConfig;
@@ -29,6 +30,17 @@ export class BillUploadService {
       Promise.resolve(createBillUploadDto)
         // 判断类型是否相同
         .then(async (body) => {
+          // 校验 code 引用的字段是否合法
+          const fieldErr = validBillUploadCode(body.billUploadType, body.code);
+          if (fieldErr) {
+            throw fieldErr;
+          }
+          // 校验 code 可执行性（用示例数据跑一遍）
+          const sampleItem = this.buildSampleItem(body.billUploadType);
+          if (!validBillUploadCodeExecut(body.code, sampleItem)) {
+            throw '代码无法正常执行，请检查代码语法或其判断逻辑';
+          }
+          // 数据库防重：同一类型+需处理类型+条件配置 只允许一条
           const find = await this.billUploadModel.find({
             inflowOrOutflow: body.inflowOrOutflow,
             billType: body.billType,
@@ -159,6 +171,28 @@ export class BillUploadService {
       Promise.resolve(updateBillUploadDto)
         .then(async (body) => {
           const { billUploadId } = body;
+          // 校验 code 引用的字段是否合法
+          const fieldErr = validBillUploadCode(body.billUploadType, body.code);
+          if (fieldErr) {
+            throw fieldErr;
+          }
+          // 校验 code 可执行性
+          const sampleItem = this.buildSampleItem(body.billUploadType);
+          if (!validBillUploadCodeExecut(body.code, sampleItem)) {
+            throw '代码无法正常执行，请检查代码语法或其判断逻辑';
+          }
+          // 数据库防重（排除当前记录本身）
+          const find = await this.billUploadModel.find({
+            _id: { $ne: billUploadId },
+            inflowOrOutflow: body.inflowOrOutflow,
+            billType: body.billType,
+            billMethod: body.billMethod,
+            billUploadType: body.billUploadType,
+            handleType: body.handleType,
+          });
+          if (find.length > 0) {
+            throw '请切换类型，并重新保存';
+          }
           const updateData = {
             billUploadType: body.billUploadType,
             handleType: body.handleType,
@@ -182,6 +216,28 @@ export class BillUploadService {
           };
         })
     );
+  }
+
+  /**
+   * @description: 根据账单导入类型构建一条示例 item 数据，用于 code 可执行性校验
+   * @param {number} billUploadType 账单导入类型
+   * @return {Record<string, any>}
+   */
+  private buildSampleItem(billUploadType: number): Record<string, any> {
+    const sample: Record<string, any> = {};
+    // 各类型可用的 item 字段
+    const allowFields = this.getAllowFields(billUploadType);
+    allowFields.forEach((field) => {
+      sample[field] = field === 'moneyAmount' ? 0 : '';
+    });
+    return sample;
+  }
+
+  /**
+   * @description: 获取指定账单导入类型允许引用的 item 字段集合
+   */
+  private getAllowFields(billUploadType: number): string[] {
+    return codeFieldWhitelist[billUploadType] || [];
   }
 
   /**
