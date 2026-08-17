@@ -4,6 +4,8 @@ page {
   color: $uni-text-color;
   height: 100%;
   overflow: hidden;
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .container {

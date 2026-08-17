@@ -25,5 +25,13 @@
     overflow: hidden !important;
     height: 100% !important;
   }
+  page,
+  uni-page-body,
+  uni-view,
+  view,
+  text {
+    user-select: text;
+    -webkit-user-select: text;
+  }
   /* #endif */
 </style>
