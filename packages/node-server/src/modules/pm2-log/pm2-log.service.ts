@@ -65,6 +65,7 @@ export class Pm2LogService {
           throw err;
         }
       }
+      logger.error(`获取 pm2 进程列表 成功！`);
       const result: Pm2ProcessInfo[] = (list || []).map((m) => {
         const monit = m?.monit || {};
         return {
