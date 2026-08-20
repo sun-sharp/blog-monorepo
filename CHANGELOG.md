@@ -7,6 +7,15 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+
+## bm-ns-am-4.5.0 (2026-8-21)
+- 在 shared 添加尿酸血糖测量记录模块
+- server 端
+  - 添加尿酸血糖测量记录模块
+- 移动管理端
+  - 添加 尿酸血糖 页面列表
+  - 添加 尿酸血糖 页面编辑页
+
 ## bm-ns-am-4.4.1 (2026-8-17)
 - server 端
   - 修改 日志 访问权限报错
