@@ -12,6 +12,7 @@ import { ConfigurationModule } from './configuration/configuration.module';
 import { CategoryModule } from './category/category.module';
 import { ImageModule } from './image/image.module';
 import { WaitForDoModule } from './wait-for-do/wait-for-do.module';
+import { UricModule } from './uric/uric.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { WaitForDoModule } from './wait-for-do/wait-for-do.module';
     CategoryModule,
     ImageModule,
     WaitForDoModule,
+    UricModule,
     RouterModule.register([
       {
         path: 'capital',
@@ -56,6 +58,10 @@ import { WaitForDoModule } from './wait-for-do/wait-for-do.module';
           {
             path: '/',
             module: WaitForDoModule,
+          },
+          {
+            path: '/',
+            module: UricModule,
           },
         ],
       },
