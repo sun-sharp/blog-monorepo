@@ -6,6 +6,7 @@ export * as configurationApi from './capital/configuration';
 export * as categoryApi from './capital/category';
 export * as imageApi from './capital/image';
 export * as waitForDoApi from './capital/wait-for-do';
+export * as uricApi from './capital/uric';
 
 export * as articleAPi from './blog/article';
 export * as scheduleAPi from './blog/schedule';

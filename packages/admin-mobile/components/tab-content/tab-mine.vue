@@ -65,6 +65,7 @@
         <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
         <u-cell-item title="数据备份" icon="download" @click="navigateTo('/pages/system/backup/backup')" />
         <u-cell-item title="运行日志" icon="file-text" @click="navigateTo('/pages/system/run-log/run-log')" />
+        <u-cell-item title="尿酸血糖测量" icon="file-text" @click="navigateTo('/pages/system/uric/uric')" />
       </u-cell-group>
     </view>
 

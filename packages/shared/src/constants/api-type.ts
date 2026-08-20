@@ -32,7 +32,11 @@ export const menuTypeOption = [
 ];
 export const menuTypeObj = arrEnumToObj(menuTypeOption);
 
-export const menuTagTypeNameObj = arrEnumToObj(menuTypeOption, 'value', 'tagTypeName');
+export const menuTagTypeNameObj = arrEnumToObj(
+  menuTypeOption,
+  'value',
+  'tagTypeName',
+);
 
 export const roleTypeOption = [
   {
@@ -222,7 +226,26 @@ export const billJudgeKeyArr = [
   'tradeOtherPersonAccount',
   'incomeOrPay',
 ];
-export const billJudgeKeyOption = billJudgeKeyArr.map((m) => ({ value: m, label: m }));
+export const billJudgeKeyOption = billJudgeKeyArr.map((m) => ({
+  value: m,
+  label: m,
+}));
 
 export const judgeWayArr = ['indexOf', 'includes'];
 export const judgeWayOption = judgeWayArr.map((m) => ({ value: m, label: m }));
+
+export const measureTypeOption = [
+  {
+    value: 'hospital',
+    label: '医院检测'
+  },
+  {
+    value: 'TGU210-C',
+    label: '可孚测量仪TGU210-C'
+  },
+  {
+    value: 'EA-19',
+    label: '三诺测量仪EA-19'
+  },
+];
+export const measureTypeMap = arrEnumToObj(measureTypeOption);

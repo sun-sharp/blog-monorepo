@@ -34,3 +34,6 @@ export interface FieldConfig {
   label: string;
   type: 'string' | 'number' | 'date';
 }
+
+// 方法1：定义通用工具类（推荐，可复用）
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

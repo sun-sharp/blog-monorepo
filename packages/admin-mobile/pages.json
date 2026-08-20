@@ -150,6 +150,19 @@
           "style": {
             "navigationBarTitleText": "运行日志"
           }
+        },
+        {
+          "path": "uric/uric",
+          "style": {
+            "navigationBarTitleText": "尿酸血糖管理"
+          }
+        },
+        {
+          "path": "uric-edit/uric-edit",
+          "style": {
+            "navigationBarTitleText": "编辑尿酸血糖",
+            "softinputMode": "adjustResize"
+          }
         }
       ]
     },
