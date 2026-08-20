@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { IsDateFormat } from 'src/common/validator/is-date-format.validator';
 
 export class CreateUricDto {
   @ApiProperty({
     description: '测量时间',
   })
   @IsNotEmpty({ message: '测量时间不能为空' })
+  @IsDateFormat()
   measureTime: string;
 
   @ApiProperty({

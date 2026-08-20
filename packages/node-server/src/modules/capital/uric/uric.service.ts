@@ -11,6 +11,7 @@ import { PageUricDto } from './dto/page-uric.dto';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { ApiUricItem } from '/#/api/capital/uric';
 import { nowDateFun } from 'src/common/date';
+import { UpdateUricDto } from './dto/update-uric.dto';
 
 const customConfig = useCustomConfig();
 const { capitalDatabaseName } = customConfig;
@@ -77,7 +78,7 @@ export class UricService {
           ]);
           const list: ApiUricItem[] = (findArr || []).map((m) => {
             return {
-              uricId: m.id,
+              uricId: m._id,
               measureTime: nowDateFun(m.measureTime),
               uricAcid: m.uricAcid,
               bloodGlucose: m.bloodGlucose,
@@ -97,6 +98,101 @@ export class UricService {
           return {
             code: ApiCode.ERROR,
             message: err || '查询失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 查找尿酸血糖测量记录详情
+   * @param {string} uricId
+   * @return {Promise<IResponse>}
+   */
+  public details(uricId: string): Promise<IResponse> {
+    return Promise.resolve()
+      .then(async () => {
+        const m = await this.uricModel.findOne({ _id: uricId }).lean();
+        if (!m) throw '尿酸血糖测量记录不存在';
+        const result: ApiUricItem = {
+          uricId: m.id,
+          measureTime: nowDateFun(m.measureTime),
+          uricAcid: m.uricAcid,
+          bloodGlucose: m.bloodGlucose,
+          measureType: m.measureType,
+        };
+        this.logger.log(`查找尿酸血糖测量记录详情 成功！`);
+        return {
+          code: ApiCode.SUCCESS,
+          result,
+          message: '查询成功！',
+        };
+      })
+      .catch((err) => {
+        this.logger.error(`查找尿酸血糖测量记录详情 失败！${err}`);
+        return {
+          code: ApiCode.ERROR,
+          message: err || '查询失败！',
+        };
+      });
+  }
+
+  /**
+   * @description: 修改尿酸血糖测量记录
+   * @param {UpdateUricDto} body
+   * @return {Promise<IResponse>}
+   */
+  public update(body: UpdateUricDto): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        // 修改
+        .then(async () => {
+          const { uricId, measureTime, measureType, bloodGlucose = null, uricAcid = null } = body;
+          if (!uricAcid && !bloodGlucose) {
+            throw '至少输入一种测量值';
+          }
+          return { uricId, measureTime, uricAcid, bloodGlucose, measureType };
+        })
+        .then(async ({ uricId, ...other }) => {
+          await this.uricModel.updateOne({ _id: uricId }, other);
+          this.logger.log(`修改尿酸血糖测量记录 成功！`);
+          return {
+            code: ApiCode.SUCCESS,
+            message: '修改成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          this.logger.error(`修改尿酸血糖测量记录 失败！${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '修改失败！',
+          };
+        })
+    );
+  }
+
+  /**
+   * @description: 删除尿酸血糖测量记录
+   * @param {string} uricId
+   * @return {Promise<IResponse>}
+   */
+  public remove(uricId: string): Promise<IResponse> {
+    return (
+      Promise.resolve()
+        .then(async () => {
+          await this.uricModel.deleteOne({ _id: uricId });
+          this.logger.log(`删除尿酸血糖测量记录 成功！`);
+          return {
+            code: ApiCode.SUCCESS,
+            message: '删除成功！',
+          };
+        })
+        // 返回错误
+        .catch((err) => {
+          this.logger.error(`删除尿酸血糖测量记录 失败！${err}`);
+          return {
+            code: ApiCode.ERROR,
+            message: err || '删除失败！',
           };
         })
     );

@@ -89,13 +89,13 @@
   }
 
   function onTimeConfirm(e: any) {
-    form.measureTime = e;
+    form.measureTime = `${e.year}-${e.month}-${e.day} ${e.hour}:${e.minute}:00`;
     showTimePicker.value = false;
   }
 
   async function loadDetail(uricId: string) {
     try {
-      const uric = await uricApi.getOne(uricId);
+      const uric = await uricApi.details(uricId);
       if (uric) {
         form.measureTime = uric.measureTime || '';
         form.measureType = uric.measureType || '';
@@ -125,7 +125,11 @@
         uricAcid: form.uricAcid,
         bloodGlucose: form.bloodGlucose,
       };
-      await uricApi.save(data);
+      if (editId.value) {
+        await uricApi.update({ ...data, uricId: editId.value });
+      } else {
+        await uricApi.save(data);
+      }
       uni.showToast({ title: '保存成功', icon: 'success' });
       setRefreshFlag('uric');
       setTimeout(() => uni.navigateBack(), 500);

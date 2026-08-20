@@ -3,8 +3,7 @@
     <list-page
       ref="listPageRef"
       :api-fn="uricApi.getPage"
-      search-placeholder="搜索测量时间"
-      search-key="measureTime"
+      :show-search="false"
       :dropdown-items="dropdownItems"
       show-fab
       @fabClick="goToAdd"
@@ -88,18 +87,16 @@
   }
 
   function onLongPress(item: ApiUricItem) {
-    console.log(item, 'item');
-
-    //   uni.showModal({
-    //     title: '确认删除',
-    //     content: `确定删除记录「${item.measureTime}」？`,
-    //     success: async (res) => {
-    //       if (res.confirm) {
-    //         await uricApi.remove(item.uricId);
-    //         listPageRef.value?.refresh();
-    //       }
-    //     },
-    //   });
+    uni.showModal({
+      title: '确认删除',
+      content: `确定删除记录「${item.measureTime}」？`,
+      success: async (res) => {
+        if (res.confirm) {
+          await uricApi.remove(item.uricId);
+          listPageRef.value?.refresh();
+        }
+      },
+    });
   }
 
   onShow(() => {
