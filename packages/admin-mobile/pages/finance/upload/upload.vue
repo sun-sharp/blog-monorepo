@@ -291,6 +291,7 @@
   import { useUserStore, useApiTypeStore } from '../../../store';
   import { voucherTypeOption } from '../../../../shared/src/constants/api-type';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
+  import { setRefreshFlag } from 'composables/useRefreshFlag.ts';
 
   const userStore = useUserStore();
   const apiTypeStore = useApiTypeStore();
@@ -684,6 +685,7 @@
         await bankApi.batchSave({ batches });
       }
       uni.showToast({ title: '导入成功', icon: 'success' });
+      setRefreshFlag('bill');
       setTimeout(() => uni.navigateBack(), 1000);
     } catch {
       // request 内部已 toast
