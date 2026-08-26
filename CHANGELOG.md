@@ -7,6 +7,12 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-aw-am-4.5.1 (2026-8-26)
+
+- 修改银行导入的文件太大导致服务器崩溃的问题，进行单类导入
+  - 移动管理端
+  - server 端
+  - pc管理端
 
 ## bm-ns-am-4.5.0 (2026-8-21)
 - 在 shared 添加尿酸血糖测量记录模块
