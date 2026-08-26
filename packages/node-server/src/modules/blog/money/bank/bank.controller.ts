@@ -1,4 +1,4 @@
-import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put, Delete, Param, Res, Get } from '@nestjs/common';
+import { Controller, UseInterceptors, HttpCode, UploadedFile, Post, Request, UseGuards, Body, Put, Delete, Param, Res, Get, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiHttpStatus } from 'src/common/enums/api-code.enum';
@@ -26,8 +26,8 @@ export class BankController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  upload(@UploadedFile() file: UploadBankDto) {
-    return this.bankService.upload(file);
+  upload(@UploadedFile() file: UploadBankDto, @Body('bankType') bankType: number, @Query('bankType') queryBankType: number) {
+    return this.bankService.upload(file, bankType || queryBankType);
   }
 
   @Post('batch-save')
@@ -58,8 +58,8 @@ export class BankController {
 
   @Get('download')
   @ApiOperation({ summary: '下载银行账单模版文件' })
-  downloadFile(@Res() res: Response) {
-    this.bankService.downloadFile(res);
+  downloadFile(@Res() res: Response, @Query('bankType') bankType: number) {
+    this.bankService.downloadFile(res, bankType);
   }
 
   @Delete('remove/:bankId')

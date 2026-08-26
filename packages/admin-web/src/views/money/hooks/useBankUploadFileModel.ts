@@ -13,8 +13,15 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
   const showModal = ref<boolean>(false);
   const tableData = ref<ApiBankBatchSaveItem[]>([]);
   const excelUploadTotal = ref<number>(0);
+  const selectBankType = ref<number | undefined>(undefined);
+  const btnLoading = ref(false);
+  const uploadFileList = ref([]);
   const btnDisabled = computed<boolean>(() => {
-    return tableData.value.length === 0 || tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length !== 0;
+    if (!selectBankType.value || tableData.value.length === 0) return true;
+    return (
+      tableData.value.filter((f) => !f.inflowOrOutflow || !f.bankBillType).length !== 0 ||
+      tableData.value.filter((f) => f.bankType !== selectBankType.value).length !== 0
+    );
   });
 
   // 获取账单类型
@@ -68,11 +75,6 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
       key: 'tradeOtherPerson',
       align: 'center',
     },
-    // {
-    //   title: '交易对方账号',
-    //   key: 'tradeOtherPersonAccount',
-    //   align: 'center',
-    // },
     {
       title: '交易对方备注',
       key: 'tradeOtherPersonRemarks',
@@ -153,13 +155,13 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
       },
     },
   ]);
-  const uploadFileList = ref([]);
 
   // 重新刷新
   const reload = () => {
     tableData.value = [];
     uploadFileList.value = [];
     excelUploadTotal.value = 0;
+    selectBankType.value = undefined;
   };
 
   // 初始化
@@ -174,7 +176,6 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
   };
 
   // 保存列表数据
-  const btnLoading = ref(false);
   const confirmForm = () => {
     btnLoading.value = true;
     bankApi
@@ -191,14 +192,24 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
   };
 
   // 账单上传成功
-  const excelUploadChange = (data: ApiBankBase) => {
-    excelUploadTotal.value = tableData.value.concat(data).length;
-    tableData.value = tableData.value.concat(data).slice(0, 50);
+  const excelUploadChange = (data: ApiBankBase[]) => {
+    const rows = data.map((m) => ({ ...m, bankType: selectBankType.value })) as ApiBankBatchSaveItem[];
+    excelUploadTotal.value = tableData.value.concat(rows).length;
+    tableData.value = tableData.value.concat(rows).slice(0, 50);
   };
 
   const modalTitle = computed(() => {
     return '导入银行账单' + `(${tableData.value.length}/${excelUploadTotal.value})`;
   });
+
+  const uploadAction = computed(() => {
+    const action = getUploadBankAction();
+    if (selectBankType.value) {
+      return `${action}${action.includes('?') ? '&' : '?'}bankType=${selectBankType.value}`;
+    }
+    return action;
+  });
+
   return {
     modalTitle,
     showModal,
@@ -207,9 +218,10 @@ export const useBankUploadFileModel = (emit: (event: 'refresh', ...args: any[]) 
     rowClassName,
     excelUploadTotal,
     columns,
-    uploadAction: getUploadBankAction(),
+    uploadAction,
     uploadFileList,
     btnLoading,
+    selectBankType,
     init,
     reload,
     confirmForm,

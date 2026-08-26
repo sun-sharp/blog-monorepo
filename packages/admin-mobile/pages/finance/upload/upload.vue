@@ -17,12 +17,21 @@
           </u-radio-group>
         </view>
 
+        <view v-if="uploadType === 3" class="upload-types card">
+          <text class="upload-types-label">选择银行类型</text>
+          <u-radio-group v-model="selectBankType" placement="column">
+            <view v-for="item in bankTypeOptions" :key="item.value" class="upload-type-item" @click="selectBankType = item.value">
+              <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
+            </view>
+          </u-radio-group>
+        </view>
+
         <view class="upload-action card">
           <view v-if="uploadType === 3" class="upload-download" @click="handleDownloadBankFile">
             <u-icon name="download" size="32" color="#007aff" />
-            <text class="upload-download-text">下载原文件</text>
+            <text class="upload-download-text">下载该银行模版</text>
           </view>
-          <u-button type="primary" icon="file-text" @click="chooseFile">选择文件</u-button>
+          <u-button type="primary" icon="file-text" :disabled="uploadType === 3 && !selectBankType" @click="chooseFile">选择文件</u-button>
           <text class="upload-tip">支持 CSV、XLSX、XLS 格式文件</text>
           <!-- #ifdef MP-WEIXIN -->
           <view class="upload-mp-guide">
@@ -71,7 +80,7 @@
           </view>
           <view class="upload-help-item">
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">银行账单：选择 XLSX 文件后导入上传</text>
+            <text class="upload-help-text">银行账单：先选择银行，再上传该银行的 XLSX 文件，请分别导入 5 家银行</text>
           </view>
         </view>
       </scroll-view>
@@ -256,8 +265,8 @@
             </view>
             <view class="import-card-select">
               <text class="required">银行类型</text>
-              <text :class="['import-card-select-value', !item.bankType && 'placeholder']">
-                {{ getLabel('bankType', item.bankType) || '请选择' }}
+              <text :class="['import-card-select-value', !selectBankType && 'placeholder']">
+                {{ getLabel('bankType', selectBankType) || '请选择' }}
               </text>
             </view>
           </template>
@@ -297,6 +306,8 @@
   const uploadTimeout = ref(false);
   const uploadTimer = ref<ReturnType<typeof setTimeout> | null>(null);
 
+  const selectBankType = ref<number | undefined>(undefined);
+
   const tableData = ref<any[]>([]);
   const excelUploadTotal = ref(0);
   const saving = ref(false);
@@ -324,8 +335,10 @@
   const uploadTypeOptions = [
     { value: 1, label: '微信账单', desc: '微信支付导出的账单文件' },
     { value: 2, label: '支付宝账单', desc: '支付宝导出的账单文件' },
-    { value: 3, label: '银行账单', desc: '银行导出的流水文件' },
+    { value: 3, label: '银行账单', desc: '先选择银行，再上传该银行的账单文件' },
   ];
+
+  const bankTypeOptions = computed(() => apiTypeStore.getBankTypeOption.map((o) => ({ label: o.label, value: o.value })));
 
   // ---- 计算属性 ----
   const uploadTypeLabel = computed(() => {
@@ -337,7 +350,7 @@
   const saveDisabled = computed(() => {
     if (tableData.value.length === 0) return true;
     if (uploadType.value === 3) {
-      return tableData.value.some((item) => !item.inflowOrOutflow || !item.bankBillType || !item.bankType);
+      return tableData.value.some((item) => !item.inflowOrOutflow || !item.bankBillType);
     }
     return tableData.value.some((item) => !item.inflowOrOutflow || !item.billMethod || !item.billType);
   });
@@ -490,6 +503,9 @@
       }
       const formData = new FormData();
       formData.append('file', selectedFile.value);
+      if (uploadType.value === 3 && selectBankType.value) {
+        formData.append('bankType', String(selectBankType.value));
+      }
       const token = userStore.getToken;
       const authHead = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
       const xhr = new XMLHttpRequest();
@@ -545,6 +561,7 @@
         url: getUploadUrl(),
         filePath: selectedFilePath.value,
         name: 'file',
+        formData: uploadType.value === 3 && selectBankType.value ? { bankType: String(selectBankType.value) } : {},
         header: { Authorization: authHead + token },
         success: (res) => {
           clearUploadTimer();
@@ -585,6 +602,10 @@
 
   async function handleUpload() {
     if (!hasFile.value) return;
+    if (uploadType.value === 3 && !selectBankType.value) {
+      uni.showToast({ title: '请先选择银行类型', icon: 'none' });
+      return;
+    }
     uploading.value = true;
     uploadProgress.value = 0;
     uploadTimeout.value = false;
@@ -601,7 +622,7 @@
             row.billType = item.billType || undefined;
           } else {
             row.bankBillType = item.bankBillType || undefined;
-            row.bankType = item.bankType || undefined;
+            row.bankType = selectBankType.value;
           }
           return row;
         });
@@ -645,7 +666,7 @@
   function isRowIncomplete(index: number): boolean {
     const item = tableData.value[index];
     if (uploadType.value === 3) {
-      return !item.inflowOrOutflow || !item.bankBillType || !item.bankType;
+      return !item.inflowOrOutflow || !item.bankBillType;
     }
     return !item.inflowOrOutflow || !item.billMethod || !item.billType;
   }
@@ -735,7 +756,11 @@
   };
 
   function handleDownloadBankFile() {
-    const downloadUrl = bankApi.getDownloadUrl();
+    if (!selectBankType.value) {
+      uni.showToast({ title: '请先选择银行类型', icon: 'none' });
+      return;
+    }
+    const downloadUrl = bankApi.getDownloadUrl(selectBankType.value);
     const token = userStore.getToken;
     const authHead = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
 
@@ -810,6 +835,13 @@
     &:last-child {
       border-bottom: none;
     }
+  }
+
+  .upload-types-label {
+    font-size: $uni-font-size-base;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8rpx;
   }
 
   .upload-type-desc {

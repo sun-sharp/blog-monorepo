@@ -20,7 +20,7 @@ export const batchSave = (data: ApiBankBatchSaveData): Promise<undefined> => {
   return blogRequest({ url: `${basic}/batch-save`, method: 'POST', data });
 };
 
-export const getDownloadUrl = (): string => {
+export const getDownloadUrl = (bankType?: number): string => {
   const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '';
   const BASE_URL = import.meta.env.VITE_BASE_URL || '';
   const platform = (() => {
@@ -31,5 +31,5 @@ export const getDownloadUrl = (): string => {
     }
   })();
   const base = platform ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
-  return `${base}/money/bank/download`;
+  return `${base}/money/bank/download${bankType ? `?bankType=${bankType}` : ''}`;
 };

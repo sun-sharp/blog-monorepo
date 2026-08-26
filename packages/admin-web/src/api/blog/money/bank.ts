@@ -65,3 +65,25 @@ export const remove = (bankId: string): Promise<undefined> => {
     method: 'DELETE',
   });
 };
+
+/**
+ * @description: 下载银行账单模版（按银行）
+ * @param {number} bankType 银行类型(1-工商 2-农业 3-建设 4-民生 5-招商)
+ */
+export const downloadTemplate = (bankType: number): Promise<unknown> => {
+  const nameMap: Record<number, string> = {
+    1: '中国工商银行.xlsx',
+    2: '中国农业银行.xlsx',
+    3: '中国建设银行.xlsx',
+    4: '民生银行.xlsx',
+    5: '招商银行.xlsx',
+  };
+  return AxiosBlog.downloadExportFile(
+    {
+      url: `${basic}/download`,
+      method: 'GET',
+      params: { bankType },
+    },
+    { fileName: nameMap[bankType] || `bank-${bankType}.xlsx` }
+  );
+};

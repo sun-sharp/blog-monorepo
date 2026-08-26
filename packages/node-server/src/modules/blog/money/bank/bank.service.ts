@@ -25,8 +25,6 @@ import { billUploadTypeEnum } from 'src/common/enums/money.enum';
 import { runCode } from 'src/common/string';
 import * as ExcelJS from 'exceljs';
 
-const BANK_UPLOAD_FILE_NAME = '银行统一数据模版';
-const BANK_UPLOAD_FILE_ORIGINAL_NAME = `${BANK_UPLOAD_FILE_NAME}.xlsx`;
 const BANK_UPLOAD_DIR = join(storeDirStr, 'bank-upload');
 
 const customConfig = useCustomConfig();
@@ -42,53 +40,57 @@ export class BankService {
   /**
    * @description: 银行账单导入
    * @param {any} file
+   * @param {number} bankType 银行类型(1-工商 2-农业 3-建设 4-民生 5-招商)
+   * @param {number} size
    * @return {Promise<IResponse>}
    */
-  public upload(file: any, size: number = 50): Promise<IResponse> {
+  public upload(file: any, bankType?: number, size: number = 50): Promise<IResponse> {
     return (
       Promise.resolve()
         // 导入数据处理
         .then(async () => {
-          const originalName = file.originalname ? Buffer.from(file.originalname, 'latin1').toString('utf8') : '';
+          const originalName = file.originalname;
           logger.log(`银行账单 上传文件名: ${originalName}`);
-          if (originalName !== BANK_UPLOAD_FILE_ORIGINAL_NAME) {
-            throw `上传的文件名称必须为「${BANK_UPLOAD_FILE_ORIGINAL_NAME}」！`;
+          const selectBankType = Number(bankType);
+          const bankMap = bankExcelCellMap[selectBankType];
+          if (!bankMap) throw '请先选择银行类型！';
+          if (!/\.(xls|xlsx)$/i.test(originalName)) {
+            throw '上传的文件类型必须为 XLSX 或 XLS！';
           }
+          const { sheetName, excelCellHandle } = bankMap;
           const { buffer } = file;
 
           // ===== 预加载 workbook（只加载一次） =====
           const workbook = new ExcelJS.Workbook();
           await workbook.xlsx.load(buffer);
           logger.log(`银行账单文件 预加载 workbook 成功！`);
-          let list: ApiBankUpload[] = [];
-          for (const itKey in bankExcelCellMap) {
-            const { sheetName, excelCellHandle } = bankExcelCellMap[itKey];
-            // 传入 workbook，不再传入 buffer
-            const excelArr = await parseSheetFromWorkbook({
-              sheetName,
-              workbook, // 复用同一个 workbook
-              startNum: 2,
-              cellHandler: excelCellHandle,
-              otherObj: { bankType: Number(itKey) },
-            });
-            if (!excelArr) throw sheetName + '表导入的数据失败！';
-            // ... 后续校验逻辑不变
-            const listFilter = excelArr.filter(
-              (f) =>
-                typeof f.balance !== 'number' ||
-                typeof f.moneyAmount !== 'number' ||
-                typeof f.voucherType !== 'number' ||
-                !f.voucherNo ||
-                !isDateFormat(f.tradeTime),
-            );
-            if (listFilter.length > 0) throw `${sheetName} 表里的时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
-            list = list.concat(excelArr);
+          // 校验对应银行的 sheet 表是否存在
+          if (!workbook.getWorksheet(sheetName)) {
+            throw `Excel 中不存在「${sheetName}」表！`;
           }
-          if (list.length === 0) throw '导入的数据为空！';
-          logger.log(`银行账单文件 导入的数据 成功！共 ${list.length} 个`);
+          // 只解析所选银行对应的 sheet
+          const excelArr = await parseSheetFromWorkbook({
+            sheetName,
+            workbook,
+            startNum: 2,
+            cellHandler: excelCellHandle,
+            otherObj: { bankType: selectBankType },
+          });
+          if (!excelArr) throw sheetName + '表导入的数据失败！';
+          const listFilter = excelArr.filter(
+            (f) =>
+              typeof f.balance !== 'number' ||
+              typeof f.moneyAmount !== 'number' ||
+              typeof f.voucherType !== 'number' ||
+              !f.voucherNo ||
+              !isDateFormat(f.tradeTime),
+          );
+          if (listFilter.length > 0) throw `${sheetName} 表里的时间 ${listFilter.map((m) => m.tradeTime)} 的数据出错！`;
+          if (excelArr.length === 0) throw '导入的数据为空！';
+          logger.log(`银行账单文件 导入的数据 成功！共 ${excelArr.length} 个`);
           // 过滤掉相同的数据
           // 2. 找出 Excel 中最早和最晚的交易时间
-          const times = list.map((m) => new Date(m.tradeTime).getTime());
+          const times = excelArr.map((m) => new Date(m.tradeTime).getTime());
           const minTime = new Date(Math.min(...times));
           const maxTime = new Date(Math.max(...times));
           // 3. 只查询这个时间范围内的数据（利用数据库索引）
@@ -98,7 +100,7 @@ export class BankService {
               $lte: maxTime,
             },
           });
-          const result: ApiBankUpload[] = twoArrForTimeSameFilter(list, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
+          const result: ApiBankUpload[] = twoArrForTimeSameFilter(excelArr, find, 'tradeTime', ['voucherType', 'voucherNo', 'moneyAmount', 'incomeOrPay']);
           if (result.length === 0) throw '导入的数据全部和数据库的相同！';
           // 对数据进行排序，排序优先级（交易时间）
           result.sort(function (a, b) {
@@ -126,9 +128,6 @@ export class BankService {
               try {
                 runResult = runCode(f.code, { item, isAssignment: false });
               } catch (err) {
-                // logger.error(
-                //   `银行账单规则执行失败! 规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, bankType: ${item.bankType}, tradeTime: ${item.tradeTime}, 错误: ${err}`,
-                // );
                 throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType},  item: ${JSON.stringify(item)}], 错误: ${err}`;
               }
               const isAssignment = runResult.isAssignment;
@@ -154,12 +153,17 @@ export class BankService {
             return formatBillUploadItem(m);
           });
           logger.log(`银行账单导入${total}个`);
-          // 保存文件到 api_store_dir/bank-upload/
+          // 保存文件到 api_store_dir/bank-upload/{bankType}/
           if (!existsSync(BANK_UPLOAD_DIR)) mkdirSync(BANK_UPLOAD_DIR, { recursive: true });
-          const existingFiles = readdirSync(BANK_UPLOAD_DIR).filter((f) => f.startsWith(BANK_UPLOAD_FILE_NAME));
-          existingFiles.forEach((f) => unlinkSync(join(BANK_UPLOAD_DIR, f)));
-          writeFileSync(join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME), file.buffer);
-          logger.log(`报错文件保存成功！路径: ${join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME)}`);
+          const selectBankType = Number(bankType);
+          const bankMap = bankExcelCellMap[selectBankType];
+          const bankTypeDir = join(BANK_UPLOAD_DIR, String(selectBankType));
+          if (!existsSync(bankTypeDir)) mkdirSync(bankTypeDir, { recursive: true });
+          const saveFileName = `${bankMap.sheetName}.xlsx`;
+          const existingFiles = readdirSync(bankTypeDir).filter((f) => f.startsWith(bankMap.sheetName));
+          existingFiles.forEach((f) => unlinkSync(join(bankTypeDir, f)));
+          writeFileSync(join(bankTypeDir, saveFileName), file.buffer);
+          logger.log(`报错文件保存成功！路径: ${join(bankTypeDir, saveFileName)}`);
           return {
             code: ApiCode.SUCCESS,
             result: {
@@ -181,18 +185,25 @@ export class BankService {
   }
 
   /**
-   * @description: 下载银行账单模版文件
+   * @description: 下载银行账单模版文件（按银行）
    * @param {Response} res
+   * @param {number} bankType 银行类型(1-工商 2-农业 3-建设 4-民生 5-招商)
    * @return {IResponse | void}
    */
-  public downloadFile(res: Response): void {
-    const filePath = join(BANK_UPLOAD_DIR, BANK_UPLOAD_FILE_ORIGINAL_NAME);
+  public downloadFile(res: Response, bankType?: number): void {
+    const selectBankType = Number(bankType);
+    const bankMap = bankExcelCellMap[selectBankType];
+    if (!bankMap) {
+      res.status(404).json({ code: ApiCode.ERROR, message: '请先选择银行类型！' });
+      return;
+    }
+    const filePath = join(BANK_UPLOAD_DIR, String(selectBankType), `${bankMap.sheetName}.xlsx`);
     logger.log(`filePath: ${filePath}`);
     if (!existsSync(filePath)) {
       res.status(404).json({ code: ApiCode.ERROR, message: '文件不存在！' });
       return;
     }
-    res.download(filePath, `${new Date().getTime()}.xlsx`); // 第二个参数指定下载文件名
+    res.download(filePath, `${bankMap.sheetName}.xlsx`); // 第二个参数指定下载文件名
   }
 
   /**

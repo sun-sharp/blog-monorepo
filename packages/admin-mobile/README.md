@@ -31,6 +31,10 @@ npm run rm_node_modules
 
 ## 鸿蒙安装
 
+```bash
+cd '.\program\hm\DevEco Studio\sdk\default\openharmony\toolchains\'
+```
+
 路径：D:\program\hm\DevEco Studio\sdk\default\openharmony\toolchains>
 先卸载手机端的软件
 ```bash

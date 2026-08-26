@@ -119,13 +119,13 @@
                         "^/dev-backup-api" : "/dev-backup-api"
                     }
                 },
-				// "/pm2-log": {
+                // "/pm2-log": {
                 "/dev-pm2-log-api" : {
                     // "target" : "http://127.0.0.1:3000",
                     "target" : "https://www.yangruirui.top",
                     "changeOrigin" : true,
                     "pathRewrite" : {
-						// "^/pm2-log" : "pm2-log"
+                        // "^/pm2-log" : "pm2-log"
                         "^/dev-pm2-log-api" : "/dev-pm2-log-api"
                     }
                 }

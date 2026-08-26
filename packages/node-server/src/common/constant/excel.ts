@@ -101,6 +101,7 @@ export const aliPayExcelCellHandle = {
 // 银行账单所属类型
 export const bankExcelCellMap = {
   1: {
+    excelName: '工商银行数据模版',
     sheetName: '中国工商银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
@@ -139,6 +140,7 @@ export const bankExcelCellMap = {
     },
   },
   2: {
+    excelName: '农业银行数据模版',
     sheetName: '中国农业银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
@@ -173,6 +175,7 @@ export const bankExcelCellMap = {
     },
   },
   3: {
+    excelName: '建设银行数据模版',
     sheetName: '中国建设银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
@@ -213,6 +216,7 @@ export const bankExcelCellMap = {
     },
   },
   4: {
+    excelName: '民生银行数据模版',
     sheetName: '民生银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {
@@ -252,6 +256,7 @@ export const bankExcelCellMap = {
     },
   },
   5: {
+    excelName: '招商银行数据模版',
     sheetName: '招商银行',
     excelCellHandle: {
       1: (tar: any, val: any) => {

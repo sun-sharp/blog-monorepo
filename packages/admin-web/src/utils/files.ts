@@ -25,3 +25,9 @@ export const getUploadBankAction = (): string => {
   const { blogApiUrl } = APP_ENV_CONFIG;
   return `${blogApiUrl}/money/bank/upload`;
 };
+
+// 下载银行账单模版接口路径
+export const getDownloadBankAction = (bankType?: number): string => {
+  const { blogApiUrl } = APP_ENV_CONFIG;
+  return `${blogApiUrl}/money/bank/download${bankType ? `?bankType=${bankType}` : ''}`;
+};
