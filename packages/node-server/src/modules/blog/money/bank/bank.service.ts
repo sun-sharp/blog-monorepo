@@ -157,7 +157,7 @@ export class BankService {
           if (!existsSync(BANK_UPLOAD_DIR)) mkdirSync(BANK_UPLOAD_DIR, { recursive: true });
           const selectBankType = Number(bankType);
           const bankMap = bankExcelCellMap[selectBankType];
-          const bankTypeDir = join(BANK_UPLOAD_DIR, String(selectBankType));
+          const bankTypeDir = join(BANK_UPLOAD_DIR);
           if (!existsSync(bankTypeDir)) mkdirSync(bankTypeDir, { recursive: true });
           const saveFileName = `${bankMap.sheetName}.xlsx`;
           const existingFiles = readdirSync(bankTypeDir).filter((f) => f.startsWith(bankMap.sheetName));
