@@ -103,6 +103,7 @@ export const bankExcelCellMap = {
   1: {
     excelName: '工商银行数据模版',
     sheetName: '中国工商银行',
+    typeName: 'business',
     excelCellHandle: {
       1: (tar: any, val: any) => {
         tar['voucherNo'] = formatExcelStr(val);
@@ -142,6 +143,7 @@ export const bankExcelCellMap = {
   2: {
     excelName: '农业银行数据模版',
     sheetName: '中国农业银行',
+    typeName: 'agriculture',
     excelCellHandle: {
       1: (tar: any, val: any) => {
         tar['voucherNo'] = formatExcelStr(val);
@@ -177,6 +179,7 @@ export const bankExcelCellMap = {
   3: {
     excelName: '建设银行数据模版',
     sheetName: '中国建设银行',
+    typeName: 'build',
     excelCellHandle: {
       1: (tar: any, val: any) => {
         tar['voucherNo'] = formatExcelStr(val);
@@ -218,6 +221,7 @@ export const bankExcelCellMap = {
   4: {
     excelName: '民生银行数据模版',
     sheetName: '民生银行',
+    typeName: 'civil',
     excelCellHandle: {
       1: (tar: any, val: any) => {
         tar['voucherType'] = val === '卡' ? 2 : 1; // 1 存折，2 储蓄卡，3 信用卡
@@ -258,6 +262,7 @@ export const bankExcelCellMap = {
   5: {
     excelName: '招商银行数据模版',
     sheetName: '招商银行',
+    typeName: 'attractInvestment',
     excelCellHandle: {
       1: (tar: any, val: any) => {
         tar['voucherNo'] = formatExcelStr(val);

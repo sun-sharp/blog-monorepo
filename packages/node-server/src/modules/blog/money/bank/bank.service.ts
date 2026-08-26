@@ -18,7 +18,7 @@ import { ApiBank, ApiBankItem, ApiBankUpload } from '/#/api/blog/money/bank';
 import { IResponse } from '/#/common/common';
 import { useCustomConfig } from 'src/config';
 import { format } from 'date-fns';
-import { isDateFormat, nowDateFun } from 'src/common/date';
+import { getTimeStamp, isDateFormat, nowDateFun } from 'src/common/date';
 import { logger } from 'src/common/journal';
 import { BillUploadService } from '../bill-upload/bill-upload.service';
 import { billUploadTypeEnum } from 'src/common/enums/money.enum';
@@ -197,13 +197,13 @@ export class BankService {
       res.status(404).json({ code: ApiCode.ERROR, message: '请先选择银行类型！' });
       return;
     }
-    const filePath = join(BANK_UPLOAD_DIR, String(selectBankType), `${bankMap.sheetName}.xlsx`);
+    const filePath = join(BANK_UPLOAD_DIR, `${bankMap.sheetName}.xlsx`);
     logger.log(`filePath: ${filePath}`);
     if (!existsSync(filePath)) {
       res.status(404).json({ code: ApiCode.ERROR, message: '文件不存在！' });
       return;
     }
-    res.download(filePath, `${bankMap.sheetName}.xlsx`); // 第二个参数指定下载文件名
+    res.download(filePath, `${bankMap.typeName}_${getTimeStamp()}.xlsx`); // 第二个参数指定下载文件名
   }
 
   /**
