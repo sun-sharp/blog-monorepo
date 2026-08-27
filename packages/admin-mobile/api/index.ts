@@ -10,6 +10,7 @@ export * as uricApi from './capital/uric';
 
 export * as articleAPi from './blog/article';
 export * as scheduleAPi from './blog/schedule';
+export * as homeStatisticsApi from './blog/home-statistics';
 
 export * as moneyApi from './blog/money/index';
 export * as aggregateBillApi from './blog/money/aggregate';

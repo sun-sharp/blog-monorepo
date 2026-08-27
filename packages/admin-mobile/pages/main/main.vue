@@ -21,13 +21,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import TabHome from '../../components/tab-content/tab-home.vue';
   import TabArticle from '../../components/tab-content/tab-article.vue';
   import TabFinance from '../../components/tab-content/tab-finance.vue';
   import TabMine from '../../components/tab-content/tab-mine.vue';
   import { getCustomNavHeight } from '../../utils/custom-nav';
+  import { tabTargetRef, consumeSwitchTab } from '../../composables/useTabBus';
 
   const currentTab = ref(0);
   const customNavHeight = getCustomNavHeight();
@@ -47,6 +48,16 @@
   function onTap(index: number) {
     currentTab.value = index;
   }
+
+  watch(
+    (): number => {
+      consumeSwitchTab();
+      return tabTargetRef.value;
+    },
+    (target, prev) => {
+      if (target >= 0 && target !== prev) currentTab.value = target;
+    }
+  );
 
   onShow(() => {
     if (currentTab.value === 1) tabArticleRef.value?.checkRefresh();

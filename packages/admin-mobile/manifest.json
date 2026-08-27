@@ -2,8 +2,8 @@
     "name" : "阳之锐",
     "appid" : "__UNI__F1AA1F1",
     "description" : "个人使用",
-    "versionName" : "1.0.0",
-    "versionCode" : "100",
+    "versionName" : "4.5.1",
+    "versionCode" : 4501,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -155,7 +155,7 @@
                     "certpath" : "sun_sharp_f.cer",
                     "keyAlias" : "sun_sharp_b",
                     "keyPassword" : "0000001D6B2B7968846A583CC68A7678B519A49D4244AEEF273779013966C01998EAA3FB1D9F596F0AFF54D9B8",
-                    "profile" : "sun_sharp_zfRelease.p7b",
+                    "profile" : "sun_sharp_zf_0826Release.p7b",
                     "signAlg" : "SHA256withECDSA",
                     "storeFile" : "sun_sharp.p12",
                     "storePassword" : "0000001D5981AD075441B67E8C8B5B8857E54C08622C043D5BE821D15948F38C0835330DCA605A674B322F745D"

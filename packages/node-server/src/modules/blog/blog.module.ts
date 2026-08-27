@@ -12,6 +12,7 @@ import { BillUploadModule } from './money/bill-upload/bill-upload.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ArticleCssModule } from './article-css/article-css.module';
 import { ArticlePolicyModule } from './article-policy/article-policy.module';
+import { BlogSummaryModule } from './summary/blog-summary.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ArticlePolicyModule } from './article-policy/article-policy.module';
     ScheduleModule,
     ArticleCssModule,
     ArticlePolicyModule,
+    BlogSummaryModule,
     RouterModule.register([
       {
         path: 'blog',
@@ -44,6 +46,10 @@ import { ArticlePolicyModule } from './article-policy/article-policy.module';
           {
             path: '/',
             module: ArticlePolicyModule,
+          },
+          {
+            path: '/',
+            module: BlogSummaryModule,
           },
           {
             path: '/money',

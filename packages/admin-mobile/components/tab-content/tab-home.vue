@@ -24,46 +24,41 @@
       </u-grid>
     </view>
 
-    <view class="home-todo card">
-      <view class="home-todo-header">
+    <view class="home-stats card">
+      <view class="home-stats-header">
         <view class="home-section-title-row">
-          <u-icon name="list" size="32" color="#007aff" />
-          <text class="home-section-title">待办事项</text>
+          <u-icon name="trending-up" size="32" color="#007aff" />
+          <text class="home-section-title">数据统计</text>
         </view>
-        <u-subsection
-          :list="['进行中', '已完成']"
-          :current="todoState === 1 ? 0 : 1"
-          mode="subsection"
-          active-color="#007aff"
-          size="mini"
-          @change="onTodoStateChange" />
       </view>
-      <view v-if="waitForDoClassifyOption.length > 0" class="home-todo-tabs">
-        <u-tabs :list="classifyTabs" :current="currentClassify" :scrollable="true" active-color="#007aff" @change="onClassifyClick" />
-      </view>
-      <view class="home-todo-add">
-        <u-input
-          v-model="newTodoTitle"
-          placeholder="添加新待办，回车提交"
-          clearable
-          shape="round"
-          :custom-style="{ background: '#f5f5f5' }"
-          :cursor-spacing="20"
-          @confirm="addTodo" />
-        <u-button type="primary" size="mini" shape="circle" class="home-todo-add-btn" @click="addTodo">添加</u-button>
-      </view>
-      <view v-if="todoLoading" class="home-todo-center">
+      <view v-if="statLoading" class="home-stats-center">
         <u-loading mode="circle" />
       </view>
-      <view v-else-if="todoList.length === 0" class="home-todo-center">
-        <u-empty mode="data" text="暂无待办" icon-size="120" />
+      <view v-else-if="statItems.length === 0" class="home-stats-center">
+        <u-empty mode="data" text="暂无统计数据" icon-size="120" />
       </view>
-      <view v-else class="home-todo-list">
-        <view v-for="item in todoList" :key="item.waitForDoId" class="home-todo-item" @click="onTodoClick(item)">
-          <u-checkbox :model-value="item.state === 2" active-color="#007aff" shape="circle" @change="onTodoCheck(item)" />
-          <view class="home-todo-item-content">
-            <text :class="{ 'home-todo-done': item.state === 2 }" class="home-todo-item-title">{{ item.title }}</text>
-            <text v-if="item.deadline" class="home-todo-item-deadline">{{ item.deadline }}</text>
+      <view v-else class="home-stats-list">
+        <view
+          v-for="item in statItems"
+          :key="item.label"
+          class="home-stat-card"
+          :class="{ 'home-stat-card-clickable': item.url || item.tab !== undefined }"
+          @click="onStatClick(item)">
+          <view class="home-stat-main">
+            <view :class="['home-stat-icon', item.theme]">
+              <u-icon :name="item.icon" size="36" color="#fff" />
+            </view>
+            <view class="home-stat-meta">
+              <text class="home-stat-value">{{ item.value }}</text>
+              <text class="home-stat-label">{{ item.label }}</text>
+            </view>
+            <u-icon v-if="item.url || item.tab !== undefined" name="arrow-right" size="28" color="#ccc" />
+          </view>
+          <view v-if="item.children && item.children.length > 0" class="home-stat-children">
+            <view v-for="child in item.children" :key="child.label" class="home-stat-child">
+              <text class="home-stat-child-label">{{ child.label }}</text>
+              <text class="home-stat-child-value">{{ child.count }}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -73,100 +68,137 @@
 
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue';
-  import { useUserStore, useApiTypeStore } from '../../store';
-  import { waitForDoApi } from '../../api';
-  import type { ApiWaitForDoItem } from '/#/api/capital/wait-for-do';
+  import { useUserStore } from '../../store';
+  import { homeStatisticsApi } from '../../api';
+  import { emitSwitchTab } from '../../composables/useTabBus';
+  import type { ApiHomeStatistics, ApiHomeStatFinancialTypeCount, ApiHomeStatImageSourceCount } from '/#/api/blog/home-statistics';
+
+  interface StatCardItem {
+    icon: string;
+    label: string;
+    value: number;
+    theme: string;
+    url?: string;
+    tab?: number;
+    children?: { label: string; count: number }[];
+  }
 
   const props = defineProps<{ active: boolean }>();
 
   const userStore = useUserStore();
-  const apiTypeStore = useApiTypeStore();
 
   const userInfo = computed(() => userStore.getUserInfo);
-  const todoState = ref(1);
-  const currentClassify = ref(0);
-  const todoList = ref<ApiWaitForDoItem[]>([]);
-  const todoLoading = ref(false);
-  const newTodoTitle = ref('');
+  const statData = ref<ApiHomeStatistics | null>(null);
+  const statLoading = ref(false);
   const inited = ref(false);
 
-  const waitForDoClassifyOption = computed(() => apiTypeStore.getWaitForDoClassifyOption);
+  const statItems = computed<StatCardItem[]>(() => {
+    const d = statData.value;
+    if (!d) return [];
 
-  const classifyTabs = computed(() => {
-    const tabs = waitForDoClassifyOption.value.map((item) => ({ name: item.label }));
-    return [{ name: '全部' }, ...tabs];
+    const financialChildren: StatCardItem['children'] = [];
+    const financialTypeCount = d.financialTypeCount || [];
+    financialTypeCount.forEach((item: ApiHomeStatFinancialTypeCount) => {
+      financialChildren.push({ label: item.label, count: item.count });
+      (item.children || []).forEach((child: ApiHomeStatFinancialTypeCount) => {
+        financialChildren.push({ label: child.label, count: child.count });
+      });
+    });
+
+    const imageCount = (d.imageTypeCount || []).reduce((sum, m) => sum + m.count, 0);
+    const imageChildren: StatCardItem['children'] = (d.imageSourceCount || []).map((item: ApiHomeStatImageSourceCount) => ({
+      label: item.label,
+      count: item.count,
+    }));
+
+    return [
+      {
+        icon: 'red-packet',
+        label: '财务账单',
+        value: d.financialCount,
+        theme: 'theme-blue',
+        tab: 2,
+        children: financialChildren,
+      },
+      {
+        icon: 'file-text',
+        label: '文章',
+        value: d.articleCount,
+        theme: 'theme-green',
+        tab: 1,
+      },
+      {
+        icon: 'pic',
+        label: '图片',
+        value: imageCount,
+        theme: 'theme-orange',
+        url: '/pages/file/image/image',
+        children: imageChildren,
+      },
+      {
+        icon: 'level',
+        label: '测量',
+        value: d.uricCount,
+        theme: 'theme-purple',
+        url: '/pages/system/uric/uric',
+      },
+      {
+        icon: 'account',
+        label: '用户',
+        value: d.userCount,
+        theme: 'theme-cyan',
+        url: '/pages/system/user/user',
+      },
+      {
+        icon: 'tags',
+        label: '角色',
+        value: d.roleCount,
+        theme: 'theme-grey',
+        url: '/pages/system/role/role',
+      },
+      {
+        icon: 'grid',
+        label: '菜单',
+        value: d.menuCount,
+        theme: 'theme-blue',
+      },
+      {
+        icon: 'server-man',
+        label: '接口',
+        value: d.apiCount,
+        theme: 'theme-green',
+      },
+    ];
   });
 
-  async function loadTodoList() {
-    todoLoading.value = true;
+  function onStatClick(item: StatCardItem) {
+    if (item.tab !== undefined) {
+      emitSwitchTab(item.tab);
+      return;
+    }
+    if (item.url) {
+      navigateTo(item.url);
+    }
+  }
+
+  async function loadStatistics() {
+    if (!userInfo.value.userId) return;
+    statLoading.value = true;
     try {
-      const classify = currentClassify.value === 0 ? undefined : waitForDoClassifyOption.value[currentClassify.value - 1]?.value;
-      const res = await waitForDoApi.classifyAll(todoState.value, classify);
-      todoList.value = res || [];
+      statData.value = await homeStatisticsApi.homeStatistics();
     } catch {
-      todoList.value = [];
+      statData.value = null;
     } finally {
-      todoLoading.value = false;
+      statLoading.value = false;
     }
   }
-
-  function onTodoStateChange(index: number) {
-    todoState.value = index === 0 ? 1 : 2;
-    loadTodoList();
-  }
-
-  function onClassifyClick(index: number) {
-    currentClassify.value = index;
-    loadTodoList();
-  }
-
-  async function onTodoCheck(item: ApiWaitForDoItem) {
-    const newState = item.state === 1 ? 2 : 1;
-    try {
-      await waitForDoApi.updateState({
-        waitForDoId: item.waitForDoId,
-        state: newState,
-        ...(newState === 2 ? { completionTime: new Date() } : { $unset: { completionTime: '' } }),
-      });
-      loadTodoList();
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  function onTodoClick(item: ApiWaitForDoItem) {
-    uni.navigateTo({ url: `/pages/home/wait-for-do-detail?id=${item.waitForDoId}` });
-  }
-
-  async function addTodo() {
-    if (!newTodoTitle.value.trim()) return;
-    try {
-      const classify =
-        currentClassify.value === 0 ? waitForDoClassifyOption.value[0]?.value || 0 : waitForDoClassifyOption.value[currentClassify.value - 1]?.value || 0;
-      await waitForDoApi.save({
-        title: newTodoTitle.value.trim(),
-        classify: classify as number,
-        deadline: '',
-        state: 1,
-      });
-      newTodoTitle.value = '';
-      loadTodoList();
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  // function goToAccount() {
-  //   uni.navigateTo({ url: '/pages/setting/account/account' });
-  // }
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
   }
 
-  onMounted(async () => {
-    await apiTypeStore.getWaitForDoClassify();
-    loadTodoList();
+  onMounted(() => {
+    loadStatistics();
     inited.value = true;
   });
 
@@ -174,7 +206,7 @@
     () => props.active,
     (val) => {
       if (val && inited.value && userInfo.value.userId) {
-        loadTodoList();
+        loadStatistics();
       }
     }
   );
@@ -225,70 +257,118 @@
     margin-top: 12rpx;
   }
 
-  .home-todo-header {
+  .home-stats {
+    margin-top: 20rpx;
+  }
+
+  .home-stats-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20rpx;
   }
 
-  .home-todo-tabs {
-    margin-bottom: 16rpx;
-  }
-
-  .home-todo-center {
+  .home-stats-center {
     display: flex;
     justify-content: center;
     padding: 60rpx 0;
   }
 
-  .home-todo-list {
-    // max-height: 450rpx;
-    // overflow-y: auto;
+  .home-stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
   }
 
-  .home-todo-item {
+  .home-stat-card {
+    background-color: #f7f8fa;
+    border-radius: 16rpx;
+    padding: 24rpx;
+  }
+
+  .home-stat-card-clickable:active {
+    background-color: #eef1f5;
+  }
+
+  .home-stat-main {
     display: flex;
     align-items: center;
-    padding: 16rpx 0;
-    border-bottom: 1rpx solid $uni-border-color;
-
-    &:last-child {
-      border-bottom: none;
-    }
   }
 
-  .home-todo-item-content {
+  .home-stat-icon {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .theme-blue {
+    background: linear-gradient(135deg, #4facfe, #007aff);
+  }
+
+  .theme-green {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+  }
+
+  .theme-orange {
+    background: linear-gradient(135deg, #fa709a, #fee140);
+  }
+
+  .theme-purple {
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  }
+
+  .theme-cyan {
+    background: linear-gradient(135deg, #43e97b, #38bdf8);
+  }
+
+  .theme-grey {
+    background: linear-gradient(135deg, #bdc3c7, #7f8c8d);
+  }
+
+  .home-stat-meta {
     flex: 1;
-    margin-left: 16rpx;
+    margin-left: 20rpx;
+    display: flex;
+    flex-direction: column;
   }
 
-  .home-todo-item-title {
-    font-size: $uni-font-size-base;
+  .home-stat-value {
+    font-size: $uni-font-size-title;
+    font-weight: bold;
+    color: $uni-text-color;
   }
 
-  .home-todo-done {
-    text-decoration: line-through;
-    color: $uni-text-color-grey;
-  }
-
-  .home-todo-item-deadline {
+  .home-stat-label {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-top: 4rpx;
-    display: block;
   }
 
-  .home-todo-add {
+  .home-stat-children {
+    margin-top: 16rpx;
+    padding-top: 16rpx;
+    border-top: 1rpx solid #e5e5e5;
+  }
+
+  .home-stat-child {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 16rpx;
-    margin-top: 20rpx;
-    padding-top: 20rpx;
-    border-top: 1rpx solid $uni-border-color;
+    padding: 8rpx 0;
   }
 
-  .home-todo-add-btn {
-    flex-shrink: 0;
+  .home-stat-child-label {
+    font-size: 26rpx;
+    color: $uni-text-color;
+  }
+
+  .home-stat-child-value {
+    font-size: 26rpx;
+    font-weight: bold;
+    color: $uni-text-color;
   }
 </style>
