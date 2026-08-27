@@ -295,7 +295,7 @@
   import { useUserStore, useApiTypeStore } from '../../../store';
   import { voucherTypeOption } from '../../../../shared/src/constants/api-type';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
-  import { setRefreshFlag } from 'composables/useRefreshFlag.ts';
+  import { setRefreshFlag } from '../../../composables/useRefreshFlag.ts';
 
   const userStore = useUserStore();
   const apiTypeStore = useApiTypeStore();
