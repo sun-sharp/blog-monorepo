@@ -24,19 +24,20 @@ export class UricService {
 
   /**
    * @description: 新增尿酸血糖测量记录
+   * @param {string} userId 创建的用户id
    * @param {CreateUricDto} body
    * @return {Promise<IResponse>}
    */
-  public create(body: CreateUricDto): Promise<IResponse> {
+  public create(userId: string, body: CreateUricDto): Promise<IResponse> {
     return (
       Promise.resolve()
         // 处理全局类型标识重复问题
         .then(async () => {
-          const { measureTime, measureType, bloodGlucose = null, uricAcid = null } = body;
+          const { measureTime, measureType, bloodGlucose = null, uricAcid = null, bloodSugarPeriod } = body;
           if (!uricAcid && !bloodGlucose) {
             throw '至少输入一种测量值';
           }
-          return { measureTime, uricAcid, bloodGlucose, measureType };
+          return { measureTime, uricAcid, bloodGlucose, measureType, bloodSugarPeriod, userId };
         })
         // 添加
         .then(async (body) => {
@@ -76,15 +77,17 @@ export class UricService {
             this.uricModel.countDocuments(findData),
             this.uricModel.find(findData).sort({ measureTime: -1 }).limit(limit).skip(skip).lean().exec(),
           ]);
-          const list: ApiUricItem[] = (findArr || []).map((m) => {
-            return {
-              uricId: m._id,
-              measureTime: nowDateFun(m.measureTime),
-              uricAcid: m.uricAcid,
-              bloodGlucose: m.bloodGlucose,
-              measureType: m.measureType,
-            };
-          });
+const list: ApiUricItem[] = (findArr || []).map((m) => {
+    return {
+      uricId: m._id,
+      measureTime: nowDateFun(m.measureTime),
+      uricAcid: m.uricAcid,
+      bloodGlucose: m.bloodGlucose,
+      measureType: m.measureType,
+      bloodSugarPeriod: m.bloodSugarPeriod,
+      userId: m.userId,
+    };
+  });
           this.logger.log(`条件并分页获取尿酸血糖测量记录列表成功！`);
           return {
             code: ApiCode.SUCCESS,
@@ -119,6 +122,8 @@ export class UricService {
           uricAcid: m.uricAcid,
           bloodGlucose: m.bloodGlucose,
           measureType: m.measureType,
+          bloodSugarPeriod: m.bloodSugarPeriod,
+          userId: m.userId,
         };
         this.logger.log(`查找尿酸血糖测量记录详情 成功！`);
         return {
@@ -146,11 +151,11 @@ export class UricService {
       Promise.resolve()
         // 修改
         .then(async () => {
-          const { uricId, measureTime, measureType, bloodGlucose = null, uricAcid = null } = body;
+          const { uricId, measureTime, measureType, bloodGlucose = null, uricAcid = null, bloodSugarPeriod } = body;
           if (!uricAcid && !bloodGlucose) {
             throw '至少输入一种测量值';
           }
-          return { uricId, measureTime, uricAcid, bloodGlucose, measureType };
+          return { uricId, measureTime, uricAcid, bloodGlucose, measureType, bloodSugarPeriod };
         })
         .then(async ({ uricId, ...other }) => {
           await this.uricModel.updateOne({ _id: uricId }, other);

@@ -28,4 +28,9 @@ export class CreateUricDto {
   })
   @IsNotEmpty({ message: '测量方式不能为空' })
   measureType: string;
+
+  @ApiProperty({
+    description: '血糖检测时段(凌晨/空腹/早餐后/午餐前/午餐后/晚餐前/晚餐后/睡前/随机)',
+  })
+  bloodSugarPeriod: string;
 }

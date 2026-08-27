@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, HttpCode, Get, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpCode, Get, Param, Put, Delete, Request } from '@nestjs/common';
 import { UricService } from './uric.service';
 import { CreateUricDto } from './dto/create-uric.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -17,8 +17,8 @@ export class UricController {
   @Post('save')
   @HttpCode(ApiHttpStatus.SUCCESS)
   @ApiOperation({ summary: '创建尿酸血糖测量记录' })
-  create(@Body() createUricDto: CreateUricDto) {
-    return this.uricService.create(createUricDto);
+  create(@Request() req: any, @Body() createUricDto: CreateUricDto) {
+    return this.uricService.create(req.user?._id, createUricDto);
   }
 
   @Post('page')

@@ -30,12 +30,21 @@
           <u-form-item label="血糖值 (mmol/L)" prop="bloodGlucose">
             <u-input v-model="form.bloodGlucose" type="digit" placeholder="请输入血糖测量值" :cursor-spacing="20" />
           </u-form-item>
+          <u-form-item v-if="form.bloodGlucose" label="血糖检测时段" prop="bloodSugarPeriod">
+            <view class="uric-edit-select" @click="showPeriodSelect = true">
+              <text :class="form.bloodSugarPeriod ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
+                {{ periodLabel || '请选择血糖检测时段' }}
+              </text>
+              <u-icon name="arrow-right" size="28" color="#999" />
+            </view>
+          </u-form-item>
           <text class="uric-edit-tip">尿酸值与血糖值至少填写一项</text>
         </view>
       </u-form>
     </scroll-view>
 
     <u-select v-model="showTypeSelect" :list="measureTypeOption" title="选择测量方式" @confirm="onTypeConfirm" />
+    <u-select v-model="showPeriodSelect" :list="bloodSugarPeriodOption" title="选择血糖检测时段" @confirm="onPeriodConfirm" />
     <u-picker
       v-model="showTimePicker"
       mode="time"
@@ -55,13 +64,14 @@
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { uricApi } from '../../../api';
-  import { measureTypeOption } from '../../../../shared/src/constants/api-type';
+  import { measureTypeOption, bloodSugarPeriodOption } from '../../../../shared/src/constants/api-type';
   import { ApiUricSaveData } from '/#/api/capital/uric';
 
   const formRef = ref();
   const loading = ref(false);
   const editId = ref('');
   const showTypeSelect = ref(false);
+  const showPeriodSelect = ref(false);
   const showTimePicker = ref(false);
   const timePickerParams = { year: true, month: true, day: true, hour: true, minute: true };
 
@@ -72,10 +82,16 @@
     measureType: '',
     uricAcid: undefined,
     bloodGlucose: undefined,
+    bloodSugarPeriod: '',
   });
 
   const typeLabel = computed(() => {
     const item = measureTypeOption.find((o) => o.value === form.measureType);
+    return item?.label || '';
+  });
+
+  const periodLabel = computed(() => {
+    const item = bloodSugarPeriodOption.find((o) => o.value === form.bloodSugarPeriod);
     return item?.label || '';
   });
 
@@ -86,6 +102,10 @@
 
   function onTypeConfirm(e: any) {
     form.measureType = e[0]?.value ?? '';
+  }
+
+  function onPeriodConfirm(e: any) {
+    form.bloodSugarPeriod = e[0]?.value ?? '';
   }
 
   function onTimeConfirm(e: any) {
@@ -101,6 +121,7 @@
         form.measureType = uric.measureType || '';
         form.uricAcid = uric.uricAcid || undefined;
         form.bloodGlucose = uric.bloodGlucose || undefined;
+        form.bloodSugarPeriod = uric.bloodSugarPeriod || '';
       }
     } catch (e) {
       console.error(e);
@@ -124,6 +145,7 @@
         measureType: form.measureType,
         uricAcid: form.uricAcid,
         bloodGlucose: form.bloodGlucose,
+        bloodSugarPeriod: form.bloodSugarPeriod,
       };
       if (editId.value) {
         await uricApi.update({ ...data, uricId: editId.value });

@@ -22,6 +22,12 @@ export interface ApiUric {
 
     // 测量方式
     measureType: string;
+
+    // 血糖检测时段(凌晨/空腹/早餐后/午餐前/午餐后/晚餐前/晚餐后/睡前/随机)
+    bloodSugarPeriod: string;
+
+    // 创建的用户id
+    userId: string;
 }
 
 /**
@@ -44,10 +50,12 @@ export type ApiUricFindPageData = ApiPaginateParams & ApiUricSearchParams;
 
 
 /**
- * @description: 尿酸血糖测量记录的保存数据
+ * @description: 尿酸血糖测量记录的保存数据(不含 userId，由后端写入)
  */
-export type ApiUricSaveData = MakeOptional<ApiUric, 'uricAcid' | 'bloodGlucose'>;
-
+export type ApiUricSaveData = MakeOptional<
+  Omit<ApiUric, 'userId'>,
+  'uricAcid' | 'bloodGlucose' | 'bloodSugarPeriod'
+>;
 
 /**
  * @description: 尿酸血糖测量记录的修改数据

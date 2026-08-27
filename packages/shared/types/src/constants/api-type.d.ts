@@ -80,4 +80,18 @@ export declare const judgeWayOption: {
     value: string;
     label: string;
 }[];
+export declare const measureTypeOption: {
+    value: string;
+    label: string;
+}[];
+export declare const measureTypeMap: {
+    [x: string]: string | number;
+};
+export declare const bloodSugarPeriodOption: {
+    value: string;
+    label: string;
+}[];
+export declare const bloodSugarPeriodMap: {
+    [x: string]: string | number;
+};
 //# sourceMappingURL=api-type.d.ts.map

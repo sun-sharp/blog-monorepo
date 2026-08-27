@@ -26,6 +26,14 @@ export class Uric extends Document {
   // 测量方式
   @Prop()
   measureType: string;
+
+  // 血糖检测时段(凌晨/空腹/早餐后/午餐前/午餐后/晚餐前/晚餐后/睡前/随机)
+  @Prop()
+  bloodSugarPeriod: string;
+
+  // 创建的用户id
+  @Prop()
+  userId: string;
 }
 
 export const UricSchema = SchemaFactory.createForClass(Uric);

@@ -249,3 +249,44 @@ export const measureTypeOption = [
   },
 ];
 export const measureTypeMap = arrEnumToObj(measureTypeOption);
+
+// 血糖检测时段
+export const bloodSugarPeriodOption = [
+  {
+    value: '凌晨',
+    label: '凌晨',
+  },
+  {
+    value: '空腹',
+    label: '空腹',
+  },
+  {
+    value: '早餐后',
+    label: '早餐后',
+  },
+  {
+    value: '午餐前',
+    label: '午餐前',
+  },
+  {
+    value: '午餐后',
+    label: '午餐后',
+  },
+  {
+    value: '晚餐前',
+    label: '晚餐前',
+  },
+  {
+    value: '晚餐后',
+    label: '晚餐后',
+  },
+  {
+    value: '睡前',
+    label: '睡前',
+  },
+  {
+    value: '随机',
+    label: '随机',
+  },
+];
+export const bloodSugarPeriodMap = arrEnumToObj(bloodSugarPeriodOption);

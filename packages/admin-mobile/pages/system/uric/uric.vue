@@ -22,7 +22,9 @@
           <view class="uric-item-right">
             <view class="uric-item-values">
               <text v-if="item.uricAcid != null" class="uric-item-value">尿酸 {{ item.uricAcid }}umol/L</text>
-              <text v-if="item.bloodGlucose != null" class="uric-item-value">血糖 {{ item.bloodGlucose }}mmol/L</text>
+              <text v-if="item.bloodGlucose != null" class="uric-item-value">
+                血糖 {{ item.bloodGlucose }}mmol/L{{ item.bloodSugarPeriod ? `（${getPeriodLabel(item.bloodSugarPeriod)}）` : '' }}
+              </text>
             </view>
             <u-icon name="arrow-right" size="28" color="#ccc" />
           </view>
@@ -37,7 +39,7 @@
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { uricApi } from '../../../api';
-  import { measureTypeOption } from '../../../../shared/src/constants/api-type';
+  import { measureTypeOption, bloodSugarPeriodOption } from '../../../../shared/src/constants/api-type';
   import type { ApiUricItem } from '/#/api/capital/uric';
   import ListPage from '../../../components/list-page/list-page.vue';
 
@@ -59,6 +61,11 @@
 
   function getTypeLabel(type: string) {
     return measureTypeMap[type] || type;
+  }
+
+  function getPeriodLabel(period: string) {
+    const item = bloodSugarPeriodOption.find((o) => o.value === period);
+    return item?.label || period;
   }
 
   const typeColorMap: Record<string, string> = {};
