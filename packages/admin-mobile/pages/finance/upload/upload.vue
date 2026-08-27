@@ -225,6 +225,10 @@
               <text class="label">账单说明</text>
               <text class="value">{{ item.explain }}</text>
             </view>
+            <view v-if="item.place" class="import-card-row">
+              <text class="label">交易地点</text>
+              <text class="value">{{ item.place }}</text>
+            </view>
           </template>
 
           <!-- 可编辑区 -->

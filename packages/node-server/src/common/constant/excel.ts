@@ -9,13 +9,22 @@ const formatExcelStr = (str: any): string => {
   return str.replace(/\n/g, '').replace(/[ ]/g, '');
 };
 
-// 处理导入数字
-const formatExcelNum = (val: any): number => {
-  return isNaN(Number(val)) ? 0 : Number(val);
+// 处理导入金额，并保留小数
+const formatExcelPreNum = (val: any, precision = 2): number => {
+  const num = Number(val);
+  if (isNaN(num)) {
+    return 0;
+  }
+  return Number(num.toFixed(precision));
 };
 
+// 处理导入数字
+// const formatExcelNum = (val: any): number => {
+//   return isNaN(Number(val)) ? 0 : Number(val);
+// };
+
 const formatExcelFormula = (val: any): any => {
-  if (typeof val === 'object' && val.formula) {
+  if (typeof val === 'object') {
     return val.result ? val.result : '';
   }
   return val;
@@ -44,7 +53,7 @@ export const weChatExcelCellHandle = (fileType: 'csv' | 'xlsx') => ({
   }, // 收/支
   6: (tar: any, val: any) => {
     const money = safeString(val).replace(/[¥￥,]/g, '');
-    tar['moneyAmount'] = formatExcelNum(money);
+    tar['moneyAmount'] = formatExcelPreNum(money);
   }, // 金额(元)
   7: (tar: any, val: any) => {
     tar['paymentMethod'] = formatExcelStr(val);
@@ -86,7 +95,7 @@ export const aliPayExcelCellHandle = {
   // 金额
   7: (tar: any, val: any) => {
     const money = val;
-    tar['moneyAmount'] = formatExcelNum(money);
+    tar['moneyAmount'] = formatExcelPreNum(money);
   },
   // 收/付款方式
   8: (tar: any, val: any) => {
@@ -119,15 +128,15 @@ export const bankExcelCellMap = {
       10: (tar: any, val: any) => {
         if (typeof val !== 'number') {
           tar['incomeOrPay'] = '';
-          tar['moneyAmount'] = val;
+          tar['moneyAmount'] = formatExcelPreNum(val);
           return;
         }
         if (val < 0) tar['incomeOrPay'] = '支出';
         else tar['incomeOrPay'] = '收入';
-        tar['moneyAmount'] = Math.abs(val);
+        tar['moneyAmount'] = formatExcelPreNum(Math.abs(val));
       }, // 收入/支出金额
       11: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(val);
+        tar['balance'] = formatExcelPreNum(formatExcelFormula(val));
       }, // 余额
       12: (tar: any, val: any) => {
         tar['tradeOtherPerson'] = formatExcelStr(formatExcelFormula(val));
@@ -158,15 +167,15 @@ export const bankExcelCellMap = {
       4: (tar: any, val: any) => {
         if (typeof val !== 'number') {
           tar['incomeOrPay'] = '';
-          tar['moneyAmount'] = val;
+          tar['moneyAmount'] = formatExcelPreNum(val);
           return;
         }
         if (val < 0) tar['incomeOrPay'] = '支出';
         else tar['incomeOrPay'] = '收入';
-        tar['moneyAmount'] = Math.abs(val);
+        tar['moneyAmount'] = formatExcelPreNum(Math.abs(val));
       }, // 收入/支出金额
       5: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(val);
+        tar['balance'] = formatExcelPreNum(formatExcelFormula(val));
       }, // 余额
       6: (tar: any, val: any) => {
         tar['tradeOtherPerson'] = formatExcelStr(formatExcelFormula(val));
@@ -194,15 +203,15 @@ export const bankExcelCellMap = {
       6: (tar: any, val: any) => {
         if (typeof val !== 'number') {
           tar['incomeOrPay'] = '';
-          tar['moneyAmount'] = val;
+          tar['moneyAmount'] = formatExcelPreNum(val);
           return;
         }
         if (val < 0) tar['incomeOrPay'] = '支出';
         else tar['incomeOrPay'] = '收入';
-        tar['moneyAmount'] = Math.abs(val);
+        tar['moneyAmount'] = formatExcelPreNum(Math.abs(val));
       }, // 交易金额
       7: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(formatExcelFormula(val));
+        tar['balance'] = formatExcelPreNum(formatExcelFormula(val));
       }, // 账户余额
       8: (tar: any, val: any) => {
         tar['place'] = formatExcelStr(val);
@@ -238,15 +247,15 @@ export const bankExcelCellMap = {
       5: (tar: any, val: any) => {
         if (typeof val !== 'number') {
           tar['incomeOrPay'] = '';
-          tar['moneyAmount'] = val;
+          tar['moneyAmount'] = formatExcelPreNum(val);
           return;
         }
         if (val < 0) tar['incomeOrPay'] = '支出';
         else tar['incomeOrPay'] = '收入';
-        tar['moneyAmount'] = Math.abs(val);
+        tar['moneyAmount'] = formatExcelPreNum(Math.abs(val));
       }, // 交易金额
       6: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(formatExcelFormula(val));
+        tar['balance'] = formatExcelPreNum(formatExcelFormula(val));
       }, // 账户余额
       8: (tar: any, val: any) => {
         tar['tradeType'] = formatExcelStr(val);
@@ -274,15 +283,15 @@ export const bankExcelCellMap = {
       3: (tar: any, val: any) => {
         if (typeof val !== 'number') {
           tar['incomeOrPay'] = '';
-          tar['moneyAmount'] = val;
+          tar['moneyAmount'] = formatExcelPreNum(val);
           return;
         }
         if (val < 0) tar['incomeOrPay'] = '支出';
         else tar['incomeOrPay'] = '收入';
-        tar['moneyAmount'] = Math.abs(val);
+        tar['moneyAmount'] = formatExcelPreNum(Math.abs(val));
       }, // 交易金额
       4: (tar: any, val: any) => {
-        tar['balance'] = formatExcelNum(formatExcelFormula(val));
+        tar['balance'] = formatExcelPreNum(formatExcelFormula(val));
       }, // 余额
       5: (tar: any, val: any) => {
         tar['tradeType'] = formatExcelStr(val);
