@@ -33,8 +33,22 @@
       <u-button type="primary" shape="circle" :disabled="quickIndex === 4 && (!form.startTime || !form.endTime)" @click="handleConfirm">确定</u-button>
     </view>
   </u-popup>
-  <u-picker v-model="showStartPicker" mode="time" :params="pickerParams" :start-year="1950" :end-year="startEndYear" :default-time="form.startTime || today" @confirm="onStartConfirm" />
-  <u-picker v-model="showEndPicker" mode="time" :params="pickerParams" :start-year="endStartYear" :end-year="2050" :default-time="form.endTime || today" @confirm="onEndConfirm" />
+  <u-picker
+    v-model="showStartPicker"
+    mode="time"
+    :params="pickerParams"
+    :start-year="1950"
+    :end-year="startEndYear"
+    :default-time="form.startTime || today"
+    @confirm="onStartConfirm" />
+  <u-picker
+    v-model="showEndPicker"
+    mode="time"
+    :params="pickerParams"
+    :start-year="endStartYear"
+    :end-year="2050"
+    :default-time="form.endTime || today"
+    @confirm="onEndConfirm" />
 </template>
 
 <script lang="ts" setup>
