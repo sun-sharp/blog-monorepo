@@ -39,7 +39,7 @@
           <view v-if="bankTimeLabel" class="summary-filter-time-tag" @click="clearBankTimeRange">
             <u-icon name="calendar" size="24" color="#007aff" />
             <text class="summary-filter-time-text">{{ bankTimeLabel }}</text>
-            <u-icon name="close" size="24" color="#999" />
+            <!-- <u-icon name="close" size="24" color="#999" /> -->
           </view>
         </view>
         <view v-if="bankFlowList.length > 0" class="summary-flow-list">
@@ -72,7 +72,7 @@
           <view v-if="flowTimeLabel" class="summary-filter-time-tag" @click="clearFlowTimeRange">
             <u-icon name="calendar" size="24" color="#007aff" />
             <text class="summary-filter-time-text">{{ flowTimeLabel }}</text>
-            <u-icon name="close" size="24" color="#999" />
+            <!-- <u-icon name="close" size="24" color="#999" /> -->
           </view>
         </view>
         <template v-if="flowData">
