@@ -18,6 +18,7 @@
           <view class="bill-detail-tags">
             <u-tag v-if="inflowLabel" :text="inflowLabel" :type="bill.inflowOrOutflow === 1 ? 'success' : 'error'" size="mini" />
             <u-tag v-if="source === 'bank' && bankTypeLabel !== '--'" :text="bankTypeLabel" type="warning" size="mini" plain />
+            <u-tag v-if="(source === 'aliPay' || source === 'weChat') && billMethodLabel !== '--'" :text="billMethodLabel" type="warning" size="mini" plain />
           </view>
         </view>
 
@@ -93,11 +94,14 @@
             </view>
           </template>
 
-          <template v-if="source === 'bank'">
+          <template v-if="source === 'aliPay' || source === 'weChat'">
             <view class="info-row">
-              <text class="info-label">银行类型</text>
-              <text class="info-value">{{ bankTypeLabel }}</text>
+              <text class="info-label">账单类型</text>
+              <text class="info-value type">{{ billTypeLabel }}</text>
             </view>
+          </template>
+
+          <template v-if="source === 'bank'">
             <view class="info-row">
               <text class="info-label">凭证号码</text>
               <text class="info-value">{{ bill.voucherNo || '--' }}</text>
@@ -105,6 +109,10 @@
             <view class="info-row">
               <text class="info-label">对方账号</text>
               <text class="info-value">{{ bill.tradeOtherPersonAccount || '--' }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">银行账单类型</text>
+              <text class="info-value type">{{ bankBillTypeLabel }}</text>
             </view>
           </template>
         </view>
@@ -137,6 +145,8 @@
     return map[source.value] || '';
   });
 
+  const billTypeSelectList = computed(() => apiTypeStore.getBillTypeOption as { label: string; value: number | string; [key: string]: string | number }[]);
+
   const inflowLabel = computed(() => {
     if (!bill.value.inflowOrOutflow) return '';
     const found = inflowOrOutflowOption.find((o) => o.value === bill.value.inflowOrOutflow);
@@ -147,6 +157,23 @@
     if (source.value !== 'bank') return '--';
     const bankType = bill.value.bankType;
     const found = apiTypeStore.getBankTypeOption.find((o) => o.value === bankType);
+    return found ? found.label : '--';
+  });
+
+  const bankBillTypeLabel = computed(() => {
+    if (source.value !== 'bank') return '--';
+    const found = billTypeSelectList.value.find((o) => o.value === bill.value.bankBillType);
+    return found ? found.label : '--';
+  });
+
+  const billTypeLabel = computed(() => {
+    if (!['weChat', 'aliPay'].includes(source.value)) return '--';
+    const found = billTypeSelectList.value.find((o) => o.value === bill.value.billType);
+    return found ? found.label : '--';
+  });
+
+  const billMethodLabel = computed(() => {
+    const found = apiTypeStore.getBillMethodOption.find((o) => o.value === bill.value.billMethod);
     return found ? found.label : '--';
   });
 
@@ -175,7 +202,7 @@
   onLoad(async (options) => {
     if (options?.source) source.value = options.source;
     if (options?.id) id.value = options.id;
-    await apiTypeStore.getBankType();
+    Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod(), apiTypeStore.getBankType()]);
     loadBill();
   });
 
@@ -284,5 +311,15 @@
     color: $uni-text-color;
     text-align: right;
     word-break: break-all;
+
+    &.type {
+      font-weight: bold;
+      color: $uni-color-primary;
+    }
+
+    &.method {
+      font-weight: bold;
+      color: $uni-color-error;
+    }
   }
 </style>

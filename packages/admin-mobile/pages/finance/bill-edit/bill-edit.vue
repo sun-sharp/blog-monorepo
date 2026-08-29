@@ -102,7 +102,7 @@
           <u-form-item label="其它费用" prop="otherCost">
             <u-number-box v-model="form.otherCost" :min="0" :step="0.01" />
           </u-form-item>
-          <u-form-item label="银行账单类型" prop="bankBillType">
+          <u-form-item label="银行账单类型" prop="bankBillType" required>
             <view class="bill-edit-select" @click="showBankBillTypeSelect = true">
               <text :class="form.bankBillType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ bankBillTypeLabel || '请选择' }}
@@ -114,7 +114,7 @@
 
         <view v-if="source === 'aliPay' || source === 'weChat'" class="bill-edit-card card">
           <text class="bill-edit-section-title">{{ source === 'aliPay' ? '支付宝' : '微信' }}信息</text>
-          <u-form-item label="账单类型" prop="billType">
+          <u-form-item label="账单类型" prop="billType" required>
             <view class="bill-edit-select" @click="showBillTypeSelect = true">
               <text :class="form.billType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ billTypeLabel || '请选择' }}
@@ -122,7 +122,7 @@
               <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
           </u-form-item>
-          <u-form-item label="账单方式" prop="billMethod">
+          <u-form-item label="账单方式" prop="billMethod" required>
             <view class="bill-edit-select" @click="showBillMethodSelect = true">
               <text :class="form.billMethod ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ billMethodLabel || '请选择' }}
@@ -219,7 +219,10 @@
   }
 
   const rules = {
-    inflowOrOutflow: [{ required: true, message: '请选择流入/流出', trigger: 'change' }],
+    inflowOrOutflow: [{ required: true, type: 'number', message: '请选择流入/流出', trigger: 'change' }],
+    bankBillType: [{ required: true, type: 'number', message: '请选择银行账单类型', trigger: 'change' }],
+    billType: [{ required: true, type: 'number', message: '请选择账单类型', trigger: 'change' }],
+    billMethod: [{ required: true, type: 'number', message: '请选择账单方式', trigger: 'change' }],
   };
 
   async function loadDetail() {
@@ -242,7 +245,8 @@
 
   async function handleSave() {
     try {
-      await formRef.value?.validate();
+      const valid = await formRef.value?.validate().catch(() => false);
+      if (!valid) return;
     } catch {
       return;
     }
