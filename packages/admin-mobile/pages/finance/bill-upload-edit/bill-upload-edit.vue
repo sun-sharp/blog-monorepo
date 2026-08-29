@@ -15,19 +15,19 @@
               <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
           </u-form-item>
-          <u-form-item v-if="form.handleType === 'inflowOrOutflow'" label="流入/流出" prop="inflowOrOutflow">
+          <u-form-item v-if="form.handleType === 'inflowOrOutflow'" label="流入/流出" prop="inflowOrOutflow" required>
             <view class="edit-select" @click="showInflowSelect = true">
               <text :class="form.inflowOrOutflow ? 'edit-select-value' : 'edit-select-placeholder'">{{ inflowLabel || '请选择' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
           </u-form-item>
-          <u-form-item v-else-if="form.handleType === 'billType'" label="账单类型" prop="billType">
+          <u-form-item v-else-if="form.handleType === 'billType'" label="账单类型" prop="billType" required>
             <view class="edit-select" @click="showBillTypeSelect = true">
               <text :class="form.billType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billTypeLabel || '请选择' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />
             </view>
           </u-form-item>
-          <u-form-item v-else-if="form.handleType === 'billMethod'" label="账单方式" prop="billMethod">
+          <u-form-item v-else-if="form.handleType === 'billMethod'" label="账单方式" prop="billMethod" required>
             <view class="edit-select" @click="showBillMethodSelect = true">
               <text :class="form.billMethod ? 'edit-select-value' : 'edit-select-placeholder'">{{ billMethodLabel || '请选择' }}</text>
               <u-icon name="arrow-right" size="28" color="#bbb" />
@@ -36,33 +36,39 @@
         </view>
 
         <view class="edit-card card">
-          <view class="code-header">
-            <text class="code-title">代码</text>
-            <text class="code-tip">isAssignment 开头，boolean 类型，item 为账单数据</text>
-          </view>
-          <view v-if="codeFields.length > 0" class="code-fields">
-            <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
-          </view>
-          <view class="code-input-btns">
-            <text
-              v-for="it in codeInputArray"
-              :key="it"
-              class="code-input-btn"
-              @touchstart.stop.prevent="insertCode(it)"
-              @mousedown.stop.prevent="insertCode(it)">
-              {{ it }}
-            </text>
-          </view>
-          <u-textarea
-            ref="codeTextareaRef"
-            v-model="form.code"
-            placeholder="请输入代码"
-            :auto-height="true"
-            :maxlength="-1"
-            :cursor-spacing="20"
-            :hold-keyboard="true"
-            @focus="onCodeFocus"
-            @blur="onCodeBlur" />
+          <u-form-item prop="code" required>
+            <template #label>
+              <view class="code-header">
+                <text class="code-title">代码</text>
+                <text class="code-tip">isAssignment 开头，boolean 类型，item 为账单数据</text>
+              </view>
+            </template>
+            <view class="code-body">
+              <view v-if="codeFields.length > 0" class="code-fields">
+                <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
+              </view>
+              <view class="code-input-btns">
+                <text
+                  v-for="it in codeInputArray"
+                  :key="it"
+                  class="code-input-btn"
+                  @touchstart.stop.prevent="insertCode(it)"
+                  @mousedown.stop.prevent="insertCode(it)">
+                  {{ it }}
+                </text>
+              </view>
+              <u-textarea
+                ref="codeTextareaRef"
+                v-model="form.code"
+                placeholder="请输入代码"
+                :auto-height="true"
+                :maxlength="-1"
+                :cursor-spacing="20"
+                :hold-keyboard="true"
+                @focus="onCodeFocus"
+                @blur="onCodeBlur" />
+            </view>
+          </u-form-item>
         </view>
       </u-form>
     </scroll-view>
@@ -247,9 +253,12 @@
   }
 
   const rules = {
-    billUploadType: [{ required: true, message: '请选择账单导入类型', trigger: 'change' }],
+    billUploadType: [{ required: true, type: 'number', message: '请选择账单导入类型', trigger: 'change' }],
     handleType: [{ required: true, message: '请选择需处理类型', trigger: 'change' }],
-    code: [{ required: true, message: '请输入代码', trigger: 'blur' }],
+    inflowOrOutflow: [{ required: true, type: 'number', message: '请选择流入/流出', trigger: 'change' }],
+    billType: [{ required: true, type: 'number', message: '请选择账单类型', trigger: 'change' }],
+    billMethod: [{ required: true, type: 'number', message: '请选择账单方式', trigger: 'change' }],
+    code: [{ required: true, message: '请输入代码', trigger: ['blur', 'change'] }],
   };
 
   async function loadDetail(id: string) {
@@ -270,22 +279,23 @@
 
   async function handleSave() {
     try {
-      await formRef.value?.validate();
+      const valid = await formRef.value?.validate().catch(() => false);
+      if (!valid) return;
     } catch {
       return;
     }
-    if (form.handleType === 'inflowOrOutflow' && !form.inflowOrOutflow) {
-      uni.showToast({ title: '请选择流入/流出', icon: 'none' });
-      return;
-    }
-    if (form.handleType === 'billType' && !form.billType) {
-      uni.showToast({ title: '请选择账单类型', icon: 'none' });
-      return;
-    }
-    if (form.handleType === 'billMethod' && !form.billMethod) {
-      uni.showToast({ title: '请选择账单方式', icon: 'none' });
-      return;
-    }
+    // if (form.handleType === 'inflowOrOutflow' && !form.inflowOrOutflow) {
+    //   uni.showToast({ title: '请选择流入/流出', icon: 'none' });
+    //   return;
+    // }
+    // if (form.handleType === 'billType' && !form.billType) {
+    //   uni.showToast({ title: '请选择账单类型', icon: 'none' });
+    //   return;
+    // }
+    // if (form.handleType === 'billMethod' && !form.billMethod) {
+    //   uni.showToast({ title: '请选择账单方式', icon: 'none' });
+    //   return;
+    // }
     loading.value = true;
     try {
       const data: any = {
@@ -367,6 +377,11 @@
   .edit-select-placeholder {
     font-size: $uni-font-size-base;
     color: $uni-text-color-placeholder;
+  }
+
+  .code-body {
+    display: flex;
+    flex-direction: column;
   }
 
   .code-header {
