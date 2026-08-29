@@ -28,8 +28,8 @@
 
         <view class="upload-action card">
           <view v-if="uploadType === 3" class="upload-download" @click="handleDownloadBankFile">
-            <u-icon name="download" size="32" color="#007aff" />
-            <text class="upload-download-text">下载该银行模版</text>
+            <u-icon name="download" size="32" :color="selectBankType ? '#007aff' : '#999'" />
+            <text class="upload-download-text" :class="selectBankType ? '' : 'disabled'">下载该银行模版</text>
           </view>
           <u-button type="primary" icon="file-text" :disabled="uploadType === 3 && !selectBankType" @click="chooseFile">选择文件</u-button>
           <text class="upload-tip">支持 CSV、XLSX、XLS 格式文件</text>
@@ -68,7 +68,54 @@
           <u-button type="primary" :loading="uploading" :disabled="!selectedFileName" @click="handleUpload">开始导入</u-button>
         </view>
 
-        <view class="upload-help card">
+        <view v-if="uploadType === 1" class="upload-help card">
+          <text class="upload-help-title">微信账单导入说明</text>
+          <view class="upload-help-item">
+            <text class="upload-help-text">
+              在微信“我的”-“服务”-“钱包”-“账单”里，右上角三个点“...”里下载账单，选择“用于个人对账”，交易类型选择“全部账单”，文件类型为xlsx，上传的文件限制为 CSV
+              或者 XLSX 文件。
+            </text>
+          </view>
+        </view>
+
+        <view v-else-if="uploadType === 2" class="upload-help card">
+          <text class="upload-help-title">支付宝账单导入说明</text>
+          <view class="upload-help-item">
+            <text class="upload-help-text">
+              在支付宝“我的”-“账单”里的“...”更多里账单工具“开具交易流水证明”，申请用于个人对账，需选择交易对手信息和展示商品说明信息，接收方式为邮箱，去邮箱下载并输入密码解压，最后看文件里开头的行数是多少，文件类型为csv，上传的文件限制为
+              CSV 文件。
+            </text>
+          </view>
+        </view>
+
+        <view v-else-if="uploadType === 3" class="upload-help card">
+          <text class="upload-help-title">银行账单导入说明</text>
+          <view class="upload-help-item">
+            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+            <text class="upload-help-text">
+              工商银行：下载并登录工商银行APP，点击查看账号，在账号服务里有“明细打印”，选择账户，交易币种和交易类型选“全部”，勾选“显示对方户名和账号”和“明细文件加密”，确认并去邮箱里下载PDF文件，再上传该银行的
+              XLSX 模版文件
+            </text>
+          </view>
+          <view class="upload-help-item">
+            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+            <text class="upload-help-text">农业银行：下载并登录农业银行APP，再上传该银行的 XLSX 模版文件</text>
+          </view>
+          <view class="upload-help-item">
+            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+            <text class="upload-help-text">建设银行：下载并登录建设银行APP，再上传该银行的 XLSX 模版文件</text>
+          </view>
+          <view class="upload-help-item">
+            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+            <text class="upload-help-text">民生银行：下载并登录民生银行APP，再上传该银行的 XLSX 模版文件</text>
+          </view>
+          <view class="upload-help-item">
+            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+            <text class="upload-help-text">招商银行：下载并登录招商银行APP，再上传该银行的 XLSX 模版文件</text>
+          </view>
+        </view>
+
+        <!-- <view class="upload-help card">
           <text class="upload-help-title">使用说明</text>
           <view class="upload-help-item">
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
@@ -82,7 +129,7 @@
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
             <text class="upload-help-text">银行账单：先选择银行，再上传该银行的 XLSX 文件，请分别导入 5 家银行</text>
           </view>
-        </view>
+        </view> -->
       </scroll-view>
     </template>
 
@@ -763,7 +810,7 @@
 
   function handleDownloadBankFile() {
     if (!selectBankType.value) {
-      uni.showToast({ title: '请先选择银行类型', icon: 'none' });
+      // uni.showToast({ title: '请先选择银行类型', icon: 'none' });
       return;
     }
     const downloadUrl = bankApi.getDownloadUrl(selectBankType.value);
@@ -838,9 +885,9 @@
     padding: 16rpx 0;
     border-bottom: 1rpx solid $uni-border-color;
 
-    &:last-child {
-      border-bottom: none;
-    }
+    // &:last-child {
+    //   border-bottom: none;
+    // }
   }
 
   .upload-types-label {
@@ -874,6 +921,10 @@
     font-size: $uni-font-size-sm;
     color: $uni-color-primary;
     margin-left: 8rpx;
+
+    &.disabled {
+      color: $uni-text-color-grey;
+    }
   }
 
   .upload-tip {
@@ -979,6 +1030,7 @@
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-left: 12rpx;
+    line-height: 1.6;
   }
 
   // ---- 预览区 ----
