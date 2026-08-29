@@ -16,6 +16,43 @@ import { UpdateUricDto } from './dto/update-uric.dto';
 const customConfig = useCustomConfig();
 const { capitalDatabaseName } = customConfig;
 
+// 血糖检测时段-随机标识
+const BLOOD_SUGAR_PERIOD_RANDOM = 101;
+
+/**
+ * @description: 将血糖检测时段解析为具体的数字时段
+ * 当传入随机(101)时，根据 measureTime 的时间自动换算为对应的时段(1-8)
+ * @param {string} measureTime 测量时间
+ * @param {number} period 传入的时段(可为随机101)
+ * @return {number} 具体时段(1-8)
+ */
+const resolveBloodSugarPeriod = (measureTime: string, period?: number): number | undefined => {
+  if (period === undefined || period === null || period === 0) return undefined;
+  // 非随机，直接返回
+  if (period !== BLOOD_SUGAR_PERIOD_RANDOM) return period;
+  if (!measureTime) return undefined;
+  const now = new Date(measureTime);
+  if (isNaN(now.getTime())) return undefined;
+  const seconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  if (seconds >= 0 && seconds <= 5 * 3600 + 59 * 60 + 59) {
+    return 1; // 凌晨
+  } else if (seconds >= 6 * 3600 && seconds <= 8 * 3600 + 59 * 60 + 59) {
+    return 2; // 空腹
+  } else if (seconds >= 9 * 3600 && seconds <= 10 * 3600 + 59 * 60 + 59) {
+    return 3; // 早餐后
+  } else if (seconds >= 11 * 3600 && seconds <= 12 * 3600 + 29 * 60 + 59) {
+    return 4; // 午餐前
+  } else if (seconds >= 12 * 3600 + 30 * 60 && seconds <= 16 * 3600 + 59 * 60 + 59) {
+    return 5; // 午餐后
+  } else if (seconds >= 17 * 3600 && seconds <= 18 * 3600 + 59 * 60 + 59) {
+    return 6; // 晚餐前
+  } else if (seconds >= 19 * 3600 && seconds <= 20 * 3600 + 59 * 60 + 59) {
+    return 7; // 晚餐后
+  } else {
+    return 8; // 睡前
+  }
+};
+
 @Injectable()
 export class UricService {
   private readonly logger = new Logger(UricService.name);
@@ -37,7 +74,7 @@ export class UricService {
           if (!uricAcid && !bloodGlucose) {
             throw '至少输入一种测量值';
           }
-          return { measureTime, uricAcid, bloodGlucose, measureType, bloodSugarPeriod, userId };
+          return { measureTime, uricAcid, bloodGlucose, measureType, bloodSugarPeriod: resolveBloodSugarPeriod(measureTime, bloodSugarPeriod), userId };
         })
         // 添加
         .then(async (body) => {
@@ -155,7 +192,7 @@ const list: ApiUricItem[] = (findArr || []).map((m) => {
           if (!uricAcid && !bloodGlucose) {
             throw '至少输入一种测量值';
           }
-          return { uricId, measureTime, uricAcid, bloodGlucose, measureType, bloodSugarPeriod };
+          return { uricId, measureTime, uricAcid, bloodGlucose, measureType, bloodSugarPeriod: resolveBloodSugarPeriod(measureTime, bloodSugarPeriod) };
         })
         .then(async ({ uricId, ...other }) => {
           await this.uricModel.updateOne({ _id: uricId }, other);

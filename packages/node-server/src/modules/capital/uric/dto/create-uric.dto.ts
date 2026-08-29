@@ -30,7 +30,7 @@ export class CreateUricDto {
   measureType: string;
 
   @ApiProperty({
-    description: '血糖检测时段(凌晨/空腹/早餐后/午餐前/午餐后/晚餐前/晚餐后/睡前/随机)',
+    description: '血糖检测时段(1凌晨/2空腹/3早餐后/4午餐前/5午餐后/6晚餐前/7晚餐后/8睡前/101随机)',
   })
-  bloodSugarPeriod: string;
+  bloodSugarPeriod: number;
 }

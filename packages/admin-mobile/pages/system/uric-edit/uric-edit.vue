@@ -82,7 +82,7 @@
     measureType: '',
     uricAcid: undefined,
     bloodGlucose: undefined,
-    bloodSugarPeriod: '',
+    bloodSugarPeriod: undefined,
   });
 
   const typeLabel = computed(() => {
@@ -105,7 +105,7 @@
   }
 
   function onPeriodConfirm(e: any) {
-    form.bloodSugarPeriod = e[0]?.value ?? '';
+    form.bloodSugarPeriod = e[0]?.value ?? undefined;
   }
 
   function onTimeConfirm(e: any) {
@@ -121,7 +121,7 @@
         form.measureType = uric.measureType || '';
         form.uricAcid = uric.uricAcid || undefined;
         form.bloodGlucose = uric.bloodGlucose || undefined;
-        form.bloodSugarPeriod = uric.bloodSugarPeriod || '';
+        form.bloodSugarPeriod = uric.bloodSugarPeriod || undefined;
       }
     } catch (e) {
       console.error(e);

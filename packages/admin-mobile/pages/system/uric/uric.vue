@@ -63,9 +63,9 @@
     return measureTypeMap[type] || type;
   }
 
-  function getPeriodLabel(period: string) {
+  function getPeriodLabel(period: number) {
     const item = bloodSugarPeriodOption.find((o) => o.value === period);
-    return item?.label || period;
+    return item?.label || String(period);
   }
 
   const typeColorMap: Record<string, string> = {};

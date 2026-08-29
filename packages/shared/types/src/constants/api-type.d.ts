@@ -88,7 +88,7 @@ export declare const measureTypeMap: {
     [x: string]: string | number;
 };
 export declare const bloodSugarPeriodOption: {
-    value: string;
+    value: number;
     label: string;
 }[];
 export declare const bloodSugarPeriodMap: {
