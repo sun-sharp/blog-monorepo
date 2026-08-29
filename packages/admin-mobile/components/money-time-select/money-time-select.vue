@@ -33,8 +33,8 @@
       <u-button type="primary" shape="circle" :disabled="quickIndex === 4 && (!form.startTime || !form.endTime)" @click="handleConfirm">确定</u-button>
     </view>
   </u-popup>
-  <u-picker v-model="showStartPicker" mode="time" :params="pickerParams" :default-time="form.startTime || today" @confirm="onStartConfirm" />
-  <u-picker v-model="showEndPicker" mode="time" :params="pickerParams" :default-time="form.endTime || today" @confirm="onEndConfirm" />
+  <u-picker v-model="showStartPicker" mode="time" :params="pickerParams" :start-year="1950" :end-year="startEndYear" :default-time="form.startTime || today" @confirm="onStartConfirm" />
+  <u-picker v-model="showEndPicker" mode="time" :params="pickerParams" :start-year="endStartYear" :end-year="2050" :default-time="form.endTime || today" @confirm="onEndConfirm" />
 </template>
 
 <script lang="ts" setup>
@@ -69,6 +69,16 @@
     return formatDate(d);
   });
 
+  const endStartYear = computed(() => {
+    if (form.startTime) return Number(form.startTime.slice(0, 4));
+    return 1950;
+  });
+
+  const startEndYear = computed(() => {
+    if (form.endTime) return Number(form.endTime.slice(0, 4));
+    return 2050;
+  });
+
   function formatDate(date: Date): string {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -101,16 +111,30 @@
   }
 
   function onStartConfirm(e: any) {
-    form.startTime = `${e.year}-${e.month}-${e.day}`;
+    const startTime = `${e.year}-${e.month}-${e.day}`;
+    if (form.endTime && startTime >= form.endTime) {
+      uni.showToast({ title: '开始时间需早于结束时间', icon: 'none' });
+      return;
+    }
+    form.startTime = startTime;
     showStartPicker.value = false;
   }
 
   function onEndConfirm(e: any) {
-    form.endTime = `${e.year}-${e.month}-${e.day}`;
+    const endTime = `${e.year}-${e.month}-${e.day}`;
+    if (form.startTime && endTime <= form.startTime) {
+      uni.showToast({ title: '结束时间需晚于开始时间', icon: 'none' });
+      return;
+    }
+    form.endTime = endTime;
     showEndPicker.value = false;
   }
 
   function handleConfirm() {
+    if (quickIndex.value === 4 && form.startTime >= form.endTime) {
+      uni.showToast({ title: '结束时间需晚于开始时间', icon: 'none' });
+      return;
+    }
     let result: { startTime: string; endTime: string };
     if (quickIndex.value === 4) {
       result = { startTime: form.startTime, endTime: form.endTime };
