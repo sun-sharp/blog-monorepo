@@ -1,12 +1,190 @@
-## 0.6.2（2026-05-15）
+## 0.6.17（2026-08-24）
 ### Bug Fixes | Bug 修复
+
+- **u-link:** 修复u-link组件兼容多端渲染逻辑，头条小程序直接渲染文本，其他端保留插槽兼容 ([a918f56](https://github.com/anyup/uView-Pro/commit/a918f5608f199f0e61be0a2e98ad43560e7a6393))
+- **u-text:** 修复u-text组件在link模式下，头条小程序不显示 ([c7ea8eb](https://github.com/anyup/uView-Pro/commit/c7ea8eb8cf6dc8257f9c88a070239583b7f82566))
+## 0.6.16（2026-08-20）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **steps:** 修复横向步骤条连线断开和超宽截断问题 ([92fecdc](https://github.com/anyup/uView-Pro/commit/92fecdc75df0b20e4247397f47551e4472d32c0b))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.15（2026-08-04）
+
+### ♻️ Code Refactoring | 代码重构
+
+- **components:** 统一补全各组件内部依赖的子组件导入，支持单独组件引用 ([091b5bb](https://github.com/anyup/uView-Pro/commit/091b5bb70312f43026c9847cca0709cafccaaaaa))
+- **types:** 完善类型定义与包导出配置 ([d86d5cd](https://github.com/anyup/uView-Pro/commit/d86d5cd39d4e68adfa3000103fe90504727d978b))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.14（2026-07-30）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **uni-root:** 适配HBuilderX环境，添加parser降级逻辑 ([f70749d](https://github.com/anyup/uView-Pro/commit/f70749d14d8e67f44ee44707c6c185b6a06e4b7e))
+- **plugin:** 解决微信小程序平台Vite/Rollup的sourcemap不正确警告问题 ([8158f79](https://github.com/anyup/uView-Pro/commit/8158f79223a6d73b7a715e288c812432081c3b70))
+
+### ♻️ Code Refactoring | 代码重构
+
+- **types:** 优化uview-pro的类型声明和导出配置 ([f540d45](https://github.com/anyup/uView-Pro/commit/f540d45fc5bf1ba340138699872d8f97857656fb))
+
+### ✨ Features | 新功能
+
+- **root:** root根组件新增生命周期钩子和日志 ([d144b24](https://github.com/anyup/uView-Pro/commit/d144b2432402955e6973628d4dddaa2697f6f901))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.13（2026-07-28）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **u-picker:** 修复抖音小程序等平台picker数据加载，导致弹窗失败问题（#174） ([ead3cdc](https://github.com/anyup/uView-Pro/commit/ead3cdc18fc5be05a3022acac4485fc3e3e75faa))
+- **u-select:** 修复抖音小程序select弹出问题（#174） ([c7a4c28](https://github.com/anyup/uView-Pro/commit/c7a4c2856f9790747ec234b0a6cc1154b560d701))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.12（2026-07-24）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **vite:** 修复vite插件root根组件在使用npm方式引入时导致无法被正确加载的问题 ([90561fa](https://github.com/anyup/uView-Pro/commit/90561fa406a8c9d8d49f8223cdda333cc662a42a))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.11（2026-07-24）
+
+### ✨ Features | 新功能
+
+- **vite-plugin-uni-root:** 新增内置的 root vite 插件，实现全局根组件自动注入，无需自行引入第三方插件实现 ([f5359a9](https://github.com/anyup/uView-Pro/commit/f5359a92d93150a064f6814a8700cacf272d3556))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.10（2026-07-23）
+
+### ♻️ Code Refactoring | 代码重构
+
+- **u-config-provider:** 优化暗黑模式和主题初始化逻辑 ([0c010db](https://github.com/anyup/uView-Pro/commit/0c010db5b83bf9514b856cba95a7ba8d9aa56dbf))
+- **theme:** 简化初始化主题和多语言相关逻辑 ([ec5d64b](https://github.com/anyup/uView-Pro/commit/ec5d64b0c8e0b494ab21c8c4bf278cf1e2559317))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.9（2026-07-15）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **u-input:** 新增clear事件并在清空时触发（#175） ([103fadc](https://github.com/anyup/uView-Pro/commit/103fadc3649a9555ccb97682d04005ff63cc02f9))
+- **u-input:** 修复input在readonly状态下在低版本安卓上无效的问题 ([fccacbd](https://github.com/anyup/uView-Pro/commit/fccacbda882b846af1445dfaf7868f2981e21cb5))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.8（2026-07-03）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **u-button:** 添加data-eventsync属性以修复事件同步问题（#172） ([cbec72a](https://github.com/anyup/uView-Pro/commit/cbec72ac1959630dd7cb436fc74944bf0ad6bddb))
+- **u-input:** 修复输入框readonly状态下无效问题，调整z-index层级（#173） ([38eca40](https://github.com/anyup/uView-Pro/commit/38eca4023f2f0300b795e8eb786a22002cec67b3))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.7（2026-07-02）
+
+### ✨ Features | 新功能
+
+- **u-input:** u-input新增confirm-hold属性，支持点击键盘右下角按钮保持键盘不收起（#170） ([27a57cd](https://github.com/anyup/uView-Pro/commit/27a57cdf0046a11b1a8a72c6fb44aecbe39b0c50))
+- **u-textarea:** u-textarea新增confirm-hold属性，支持点击键盘右下角按钮保持键盘不收起（#170） ([3244812](https://github.com/anyup/uView-Pro/commit/3244812c961ab3cf2011e2433740fd9be407d347))
+- **input,textarea:** 新增confirm-hold属性的使用示例（#170） ([b030a2d](https://github.com/anyup/uView-Pro/commit/b030a2dfd30099cda2e9e63e96fb9a2e00d2f639))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.6（2026-06-10）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **u-calendar:** 修复日历标题无法实时通过切换多语言更新的问题，初始化英文日历默认分隔符（#166） ([18beabb](https://github.com/anyup/uView-Pro/commit/18beabbd72c4e21eb19b417d09073bd87457cefc))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.5（2026-06-05）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **locale:** 修复多个组件在多语言切换时不能实时更新的问题，统一默认值处理方式 ([86dbc61](https://github.com/anyup/uView-Pro/commit/86dbc61d4ffb9f70f2b98e11566b7ca90549a687))
+
+### ✨ Features | 新功能
+
+- **demo:** 新增多语言切换图标到演示页面的头部 ([9dfd98e](https://github.com/anyup/uView-Pro/commit/9dfd98e5ef8e1e0d5a091cd256fefee2a3ae8064))
+- **loadmore,verificationCode:** 优化loadmore和verificationCode组件的演示示例 ([cddfaf9](https://github.com/anyup/uView-Pro/commit/cddfaf94354ebf5fde954f0098e23a7debc5c550))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.4（2026-06-02）
+
+### ✨ Features | 新功能
+
+- **u-input:** 新增readonly输入属性，支持设置输入框只读状态，新增禁用与只读示例页面及配置项（#160） ([6a92373](https://github.com/anyup/uView-Pro/commit/6a92373a6c8a1c2875b93d6dbb3985df34887c4e))
+- **u-textarea:** 新增click事件支持，在只读/非禁用状态下可触发点击回调，更新演示页面（#160） ([a79dc57](https://github.com/anyup/uView-Pro/commit/a79dc57262bfb3909d2f35bbf26589906e9a4c8d))
+- **u-field:** 新增readonly属性支持，设置后可点击但无法输入，调整disabled和readonly状态的遮罩逻辑与样式（#160） ([708f13b](https://github.com/anyup/uView-Pro/commit/708f13bb3601c0c77a0a75f1b4d1c148f28c7229))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.3（2026-05-28）
+
+### 🐛 Bug Fixes | Bug 修复
+
+- **u-upload:** 修复进度条显示和上传终止的判断逻辑（#156） ([ad30563](https://github.com/anyup/uView-Pro/commit/ad305638b7e0977c60eda470a682ebb3ecf62c9e))
+
+### ✨ Features | 新功能
+
+- **u-dropdown:** 新增fixed定位选项，支持自动适配状态栏和导航栏高度，新增immersive沉浸式模式，增加offsetTop、navbarHeight、zIndex，增强灵活性 ([fc262bd](https://github.com/anyup/uView-Pro/commit/fc262bd5cc078fd3cbb825df2a9066427ccc9b69))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> 
+
+## 0.6.2（2026-05-15）
+
+### 🐛 Bug Fixes | Bug 修复
 
 - **u-checkbox:** 修复多选框在头条、抖音小程序图标偏移的问题 ([8ea1838](https://github.com/anyup/uView-Pro/commit/8ea18383b94b421cabea7d080a6867f4b6133ff5))
 - **u-radio:** 修复单选框在头条、抖音小程序图标偏移的问题 ([dd7d6fe](https://github.com/anyup/uView-Pro/commit/dd7d6fee5a22bb39b3dcea9a24b9a06da40ee20e))
 
-### Features | 新功能
+### ✨ Features | 新功能
 
 - 添加 u-input 组件禁用状态样式 (#155) ([1145d99](https://github.com/anyup/uView-Pro/commit/1145d996ca111da769665ee5dca1bf07a0a1968d))
+
+### 👥 Contributors
+
+<a href="https://github.com/anyup"><img src="https://github.com/anyup.png?size=40" width="40" height="40" alt="anyup" title="anyup"/></a> <a href="https://github.com/1361176289"><img src="https://github.com/1361176289.png?size=40" width="40" height="40" alt="小陆同学" title="小陆同学"/></a> 
+
 ## 0.6.1（2026-05-13）
 
 ### ✨ Features | 新功能

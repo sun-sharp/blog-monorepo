@@ -28,7 +28,7 @@
                         :hover-stay-time="150"
                         @tap="getResult('cancel')"
                     >
-                        {{ cancelText }}
+                        {{ getCancelText }}
                     </view>
                     <view class="u-select__header__title u-line-1"> {{ title }}</view>
                     <view
@@ -39,7 +39,7 @@
                         @touchmove.stop=""
                         @tap.stop="getResult('confirm')"
                     >
-                        {{ confirmText }}
+                        {{ getConfirmText }}
                     </view>
                 </view>
                 <view class="u-select__body">
@@ -86,7 +86,8 @@ export default {
 import { ref, computed, watch, nextTick } from 'vue';
 import { SelectProps } from './types';
 import type { SelectListItem } from '../../types/global';
-import { $u } from '../..';
+import { $u, useLocale } from '../..';
+import uPopup from '../u-popup/u-popup.vue';
 
 /**
  * select 列选择器
@@ -112,12 +113,14 @@ import { $u } from '../..';
 
 const props = defineProps(SelectProps);
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel', 'click']);
-// 用于列改变时，保存当前的索引，下一次变化时比较得出是哪一列发生了变化
+const { t } = useLocale();
 
+// 用于列改变时，保存当前的索引，下一次变化时比较得出是哪一列发生了变化
 const defaultSelector = ref<number[]>([0]);
 // picker-view的数据
 const columnData = ref<SelectListItem[][]>([]);
 // 控制 picker 是否渲染（等待初始化完成）
+// 初始为 false，确保 picker-view 原生组件在数据就绪后才创建（抖音小程序等平台需要在创建时就有完整数据）
 const readyToRender = ref(false);
 // 保存用户上次确认的索引，如果用户未确认过，则为 null，首次打开会使用 props.defaultValue
 const savedSelector = ref<number[] | null>(
@@ -139,21 +142,25 @@ const popupValue = computed({
     set: (val: boolean) => emit('update:modelValue', val)
 });
 
+// 国际化计算属性
+const getCancelText = computed(() => props.cancelText || t('uSelect.cancelText'));
+const getConfirmText = computed(() => props.confirmText || t('uSelect.confirmText'));
+
 watch(
     () => props.modelValue,
     async val => {
         if (val) {
-            // 等待一次 DOM 更新
-            await nextTick();
-            // 在 App（APP-PLUS）平台上，原生 picker 可能需要更长时间初始化
-            // 我们先执行 init，并在 init 完成后将 readyToRender 置为 true，保证 picker 在数据就绪后渲染
-            // #ifdef APP-PLUS
-            await new Promise(resolve => setTimeout(resolve, 20));
-            // #endif
+            // 同步调用 init()，确保 columnData 在 picker-view 渲染前就填充完毕
+            // 这对抖音等小程序平台至关重要：原生 picker-view 需要在创建时就有完整数据
             init();
             readyToRender.value = true;
+            // 在 App（APP-PLUS）平台上，原生 picker 可能需要更长时间初始化
+            // #ifdef APP-PLUS
+            await nextTick();
+            await new Promise(resolve => setTimeout(resolve, 20));
+            // #endif
         } else {
-            // 关闭弹窗时复位
+            // 关闭弹窗时复位，下次打开时 picker-view 会重新创建，确保数据刷新
             readyToRender.value = false;
         }
     },

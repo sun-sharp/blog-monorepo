@@ -44,6 +44,8 @@ export default {
 import { directionConfig, FabProps } from './types';
 import { computed, getCurrentInstance, onMounted, reactive, ref, useSlots, watch } from 'vue';
 import { $u } from '../../';
+import uButton from '../u-button/u-button.vue';
+import uIcon from '../u-icon/u-icon.vue';
 
 const props = defineProps(FabProps);
 const emit = defineEmits(['trigger']);
@@ -200,8 +202,9 @@ function handleBtnClick() {
     if (slots?.default) {
         expansion.value = !expansion.value;
         if (expansion.value) direction.value = calcDirection();
+    } else {
+        emit('trigger');
     }
-    emit('trigger');
 }
 
 // 计算方向
@@ -303,8 +306,12 @@ defineExpose({
 
     .u-fab-trigger {
         :deep(.u-fab-trigger-btn) {
+            width: 112rpx;
+            height: 112rpx;
+            border-radius: 112rpx;
+
             &::after {
-                border-radius: inherit;
+                border-radius: 112rpx;
             }
         }
     }

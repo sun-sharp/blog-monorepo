@@ -13,7 +13,7 @@
         <slot />
         <view class="u-tooltip" v-if="tooltip">
             <view class="u-tooltip-item u-tooltip-cancel" hover-class="u-tooltip-cancel-hover" @tap="onCancel">
-                {{ cancelBtn ? cancelText : '' }}
+                {{ cancelBtn ? getCancelText : '' }}
             </view>
             <view v-if="showTips" class="u-tooltip-item u-tooltip-tips">
                 {{
@@ -32,7 +32,7 @@
                 class="u-tooltip-item u-tooltips-submit"
                 hover-class="u-tooltips-submit-hover"
             >
-                {{ confirmBtn ? confirmText : '' }}
+                {{ confirmBtn ? getConfirmText : '' }}
             </view>
         </view>
         <block v-if="mode == 'number' || mode == 'card'">
@@ -67,6 +67,9 @@ export default {
 import { KeyboardProps } from './types';
 import { computed } from 'vue';
 import { $u, useLocale } from '../..';
+import uCarKeyboard from '../u-car-keyboard/u-car-keyboard.vue';
+import uNumberKeyboard from '../u-number-keyboard/u-number-keyboard.vue';
+import uPopup from '../u-popup/u-popup.vue';
 
 /**
  * keyboard 键盘
@@ -98,6 +101,10 @@ const emit = defineEmits(['change', 'update:modelValue', 'confirm', 'cancel', 'b
 const { t } = useLocale();
 
 const uZIndex = computed(() => (props.zIndex ? props.zIndex : $u.zIndex.popup));
+
+// 国际化计算属性
+const getCancelText = computed(() => props.cancelText || t('uKeyboard.cancelText'));
+const getConfirmText = computed(() => props.confirmText || t('uKeyboard.confirmText'));
 
 const popupValue = computed({
     get: () => props.modelValue,

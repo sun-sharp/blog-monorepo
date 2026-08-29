@@ -1,19 +1,15 @@
 /// <reference path="./components.d.ts" />
 /// <reference path="./uni-app.d.ts" />
 
-import { $u } from '../libs';
+export * from './global';
+export * from '../libs';
 
-// uview-pro 模块类型声明
-declare module 'uview-pro' {
-    // 导出安装函数
-    export function install(): void;
-}
-
-// 全局类型扩展
 declare global {
     interface Uni {
-        $u: typeof $u;
+        $u: typeof import('../libs').$u;
     }
 }
 
-export {};
+declare module 'uview-pro' {
+    export function install(app: any, options?: import('./global').UViewProOptions): void;
+}

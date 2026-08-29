@@ -29,7 +29,7 @@
                     color: color
                 }"
             >
-                {{ showMore ? openText : closeText }}
+                {{ showMore ? getOpenText : getCloseText }}
             </text>
             <view class="u-content__showmore-wrap__readmore-btn__icon u-flex">
                 <u-icon :color="color" :size="fontSize" :name="showMore ? 'arrow-up' : 'arrow-down'"></u-icon>
@@ -53,8 +53,9 @@ export default {
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick, getCurrentInstance } from 'vue';
-import { $u } from '../..';
+import { $u, useLocale } from '../..';
 import { ReadMoreProps } from './types';
+import uIcon from '../u-icon/u-icon.vue';
 
 /**
  * readMore 阅读更多
@@ -78,6 +79,8 @@ const props = defineProps(ReadMoreProps);
 
 const emit = defineEmits(['open', 'close']);
 
+const { t } = useLocale();
+
 // 是否需要隐藏一部分内容
 const isLongContent = ref(false);
 // 当前隐藏与显示的状态，true-显示，false-收起
@@ -90,6 +93,9 @@ const instance = getCurrentInstance();
 const innerShadowStyle = computed(() => {
     return showMore.value ? {} : props.shadowStyle;
 });
+
+const getOpenText = computed(() => props.openText || t('uReadMore.openText'));
+const getCloseText = computed(() => props.closeText || t('uReadMore.closeText'));
 
 // 监听 toggle 和 showHeight 变化，重新初始化
 watch(

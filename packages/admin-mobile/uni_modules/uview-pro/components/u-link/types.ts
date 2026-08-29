@@ -1,13 +1,16 @@
 import type { ExtractPropTypes, PropType } from 'vue';
-import { getColor, useLocale } from '../../';
-
-const { t } = useLocale();
+import { getColor } from '../../';
 
 /**
  * u-link 组件 props 类型定义
  * @description 超链接组件，支持多端跳转/复制/提示
  */
 export const LinkProps = {
+    /** 超链接文字 */
+    text: {
+        type: [String, Number] as PropType<string | number>,
+        default: ''
+    },
     /** 文字颜色 */
     color: {
         type: String,
@@ -31,7 +34,7 @@ export const LinkProps = {
     /** 小程序中复制到粘贴板的提示语 */
     mpTips: {
         type: String,
-        default: () => t('uLink.mpTips')
+        default: ''
     },
     /** 下划线颜色 */
     lineColor: {

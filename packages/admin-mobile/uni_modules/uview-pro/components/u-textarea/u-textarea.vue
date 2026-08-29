@@ -3,7 +3,8 @@
         class="u-textarea"
         :class="[
             {
-                'u-textarea--error': validateState
+                'u-textarea--error': validateState,
+                'u-textarea--disabled': props.disabled
             },
             textareaClass,
             customClass
@@ -19,6 +20,7 @@
             :placeholder-style="getPlaceholderStyle"
             :placeholder-class="props.placeholderClass"
             :disabled="props.disabled"
+            :readonly="props.readonly"
             :focus="props.focus"
             :autoHeight="props.autoHeight"
             :fixed="props.fixed"
@@ -30,6 +32,7 @@
             :adjustPosition="props.adjustPosition"
             :disableDefaultPadding="props.disableDefaultPadding"
             :holdKeyboard="props.holdKeyboard"
+            :confirm-hold="props.confirmHold"
             :maxlength="Number(props.maxlength)"
             :confirmType="(props.confirmType as any)"
             :ignoreCompositionEvent="props.ignoreCompositionEvent"
@@ -51,6 +54,8 @@
             {{ innerValue.length }}/{{ props.maxlength }}
         </text>
 
+        <!-- 透明遮罩，在readonly时显示，用于捕获点击事件（原生textarea设置disabled会阻止点击冒泡） -->
+        <view v-if="props.readonly" class="u-textarea__readonly-overlay" @tap.stop="textareaClick"></view>
         <view class="u-textarea__right-icon u-flex">
             <view
                 class="u-textarea__right-icon__clear u-textarea__right-icon__item"
@@ -86,6 +91,7 @@ import { ref, computed, watch, nextTick } from 'vue';
 import { TextareaProps } from './types';
 import { $u, useChildren } from '../../';
 import type { SizeType } from '../../types/global';
+import uIcon from '../u-icon/u-icon.vue';
 
 /**
  * Textarea 文本域
@@ -111,6 +117,7 @@ import type { SizeType } from '../../types/global';
  * @property {Boolean}				adjustPosition			键盘弹起时，是否自动上推页面（默认 true ）
  * @property {Boolean | Number}		disableDefaultPadding	是否去掉 iOS 下的默认内边距，只微信小程序有效（默认 false ）
  * @property {Boolean}				holdKeyboard			focus时，点击页面的时候不收起键盘，只微信小程序有效（默认 false ）
+ * @property {Boolean}				confirmHold				点击完成按钮时是否保持键盘不收起（默认 false ）
  * @property {String | Number}		maxlength				最大输入长度，设置为 -1 的时候不限制最大长度（默认 140 ）
  * @property {String}				border					边框类型，surround-四周边框，none-无边框，bottom-底部边框（默认 'surround' ）
  * @property {Boolean}				ignoreCompositionEvent	是否忽略组件内对文本合成系统事件的处理
@@ -132,7 +139,8 @@ const emit = defineEmits([
     'input',
     'confirm',
     'keyboardheightchange',
-    'change'
+    'change',
+    'click'
 ]);
 
 const { emitToParent } = useChildren('u-textarea', 'u-form-item');
@@ -359,6 +367,11 @@ function onClear(event: any) {
     valueChange();
 }
 
+function textareaClick() {
+    if (props.disabled) return;
+    emit('click');
+}
+
 defineExpose({
     onFormItemError
 });
@@ -373,6 +386,12 @@ defineExpose({
     position: relative;
     @include flex;
     flex: 1;
+
+    &__readonly-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
 
     &--border {
         border-radius: 4px;

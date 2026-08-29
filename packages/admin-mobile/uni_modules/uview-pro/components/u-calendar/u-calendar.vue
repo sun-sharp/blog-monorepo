@@ -18,7 +18,7 @@
         >
             <view class="u-calendar__header" v-if="!props.isPage">
                 <view class="u-calendar__header__text" v-if="!slots.tooltip">
-                    {{ toolTip }}
+                    {{ getToolTip }}
                 </view>
                 <slot v-else name="tooltip" />
             </view>
@@ -141,7 +141,7 @@
                                     class="u-calendar__content__item__lunar"
                                     :style="{ color: activeColor }"
                                 >
-                                    {{ startText }}
+                                    {{ getStartText }}
                                 </view>
                                 <!-- 范围选择结束日期显示"结束" -->
                                 <view
@@ -152,7 +152,7 @@
                                     class="u-calendar__content__item__lunar"
                                     :style="{ color: activeColor }"
                                 >
-                                    {{ endText }}
+                                    {{ getEndText }}
                                 </view>
                                 <!-- 节日名称 -->
                                 <view
@@ -225,6 +225,9 @@ import { ref, computed, watch, onMounted, useSlots } from 'vue';
 import { $u, useLocale } from '../..';
 import { CalendarProps, type CalendarEmits } from './types';
 import Calendar from '../../libs/util/calendar';
+import uButton from '../u-button/u-button.vue';
+import uIcon from '../u-icon/u-icon.vue';
+import uPopup from '../u-popup/u-popup.vue';
 
 /**
  * calendar 日历
@@ -275,7 +278,6 @@ const weekdayArr = ref<number[]>([]);
 const days = ref(0);
 const daysArr = ref<number[]>([]);
 const lunarArr = ref<any[]>([]);
-const showTitle = ref('');
 const year = ref(2020);
 const month = ref(0);
 // 当前月有多少天
@@ -346,6 +348,12 @@ const btnDisable = computed(() => {
     }
     return disable;
 });
+
+// 国际化计算属性
+const getStartText = computed(() => props.startText || t('uCalendar.startText'));
+const getEndText = computed(() => props.endText || t('uCalendar.endText'));
+const getToolTip = computed(() => props.toolTip || t('uCalendar.toolTip'));
+const showTitle = computed(() => `${year.value}${t('uCalendar.year')}${month.value}${t('uCalendar.month')}`);
 
 watch([dataChange, lunarChange], () => {
     init();
@@ -812,7 +820,6 @@ function changeData() {
     daysArr.value = generateArray(1, days.value);
     weekday.value = getWeekday(year.value, month.value);
     weekdayArr.value = generateArray(1, weekday.value);
-    showTitle.value = `${year.value}${t('uCalendar.year')}${month.value}${t('uCalendar.month')}`;
     if (props.showLunar) {
         lunarArr.value = [];
         daysArr.value.forEach(d => {

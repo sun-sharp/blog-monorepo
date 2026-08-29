@@ -1,8 +1,5 @@
 import type { ExtractPropTypes, PropType } from 'vue';
 import type { InputAlign, InputConfirmType, InputType, SizeType } from '../../types/global';
-import { useLocale } from '../../';
-
-const { t } = useLocale();
 
 /**
  * u-input 组件 props 类型定义
@@ -43,10 +40,15 @@ export const InputProps = {
     /** placeholder显示值(默认 '请输入内容') */
     placeholder: {
         type: String,
-        default: () => t('uInput.placeholder')
+        default: ''
     },
     /** 是否禁用输入框(默认false) */
     disabled: {
+        type: Boolean,
+        default: false
+    },
+    /** 是否只读，禁止输入但可点击，样式不变，可触发click事件(默认false) */
+    readonly: {
         type: Boolean,
         default: false
     },
@@ -144,6 +146,11 @@ export const InputProps = {
     adjustPosition: {
         type: Boolean,
         default: true
+    },
+    /** 点击键盘右下角按钮时是否保持键盘不收起（默认false） */
+    confirmHold: {
+        type: Boolean,
+        default: false
     },
     /** 输入框的验证状态，用于错误时，边框是否改为红色 */
     validateState: {

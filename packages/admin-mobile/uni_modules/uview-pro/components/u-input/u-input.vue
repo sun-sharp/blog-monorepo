@@ -21,9 +21,10 @@
             class="u-input__input u-input__textarea"
             :style="getStyle"
             :value="inputValue"
-            :placeholder="placeholder"
+            :placeholder="getPlaceholder"
             :placeholderStyle="getPlaceholderStyle"
             :disabled="disabled"
+            :readonly="readonly"
             :maxlength="inputMaxlength"
             :fixed="fixed"
             :focus="focus"
@@ -33,6 +34,7 @@
             :cursor-spacing="getCursorSpacing"
             :show-confirm-bar="showConfirmbar"
             :adjust-position="adjustPosition"
+            :confirm-hold="confirmHold"
             @input="handleInput"
             @blur="handleBlur"
             @focus="onFocus"
@@ -46,9 +48,10 @@
             :style="getStyle"
             :value="inputValue"
             :password="type == 'password' && !showPassword"
-            :placeholder="placeholder"
+            :placeholder="getPlaceholder"
             :placeholderStyle="getPlaceholderStyle"
             :disabled="disabled || type === 'select'"
+            :readonly="readonly"
             :maxlength="inputMaxlength"
             :focus="focus"
             :confirmType="confirmType"
@@ -57,12 +60,14 @@
             :selection-start="Number(uSelectionStart)"
             :show-confirm-bar="showConfirmbar"
             :adjust-position="adjustPosition"
+            :confirm-hold="confirmHold"
             @focus="onFocus"
             @blur="handleBlur"
             @input="handleInput"
             @confirm="onConfirm"
         />
-        <view class="u-input__select-overlay" v-if="type === 'select'" @tap.stop="inputClick"></view>
+        <!-- 透明遮罩，在readonly时显示，用于捕获点击事件（原生input设置disabled会阻止点击冒泡） -->
+        <view v-if="readonly || type === 'select'" class="u-input__readonly-overlay" @tap.stop="inputClick"></view>
         <view class="u-input__right-icon u-flex">
             <view
                 class="u-input__right-icon__clear u-input__right-icon__item"
@@ -123,12 +128,15 @@ export default {
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { $u, useChildren } from '../..';
+import { $u, useChildren, useLocale } from '../..';
 import { InputProps } from './types';
 import type { SizeType } from '../../types/global';
+import uIcon from '../u-icon/u-icon.vue';
 
 const props = defineProps(InputProps);
-const emit = defineEmits(['update:modelValue', 'input', 'blur', 'focus', 'confirm', 'click']);
+const emit = defineEmits(['update:modelValue', 'input', 'blur', 'focus', 'confirm', 'click', 'clear']);
+
+const { t } = useLocale();
 
 const { emitToParent } = useChildren('u-input', 'u-form-item');
 const { parentExposed } = useChildren('u-input', 'u-form');
@@ -259,6 +267,8 @@ const getCursorSpacing = computed(() => Number(props.cursorSpacing));
 const uSelectionStart = computed(() => String(props.selectionStart));
 // 光标结束位置
 const uSelectionEnd = computed(() => String(props.selectionEnd));
+// placeholder 国际化
+const getPlaceholder = computed(() => props.placeholder || t('uInput.placeholder'));
 
 /**
  * change 事件
@@ -325,6 +335,7 @@ function onClear(event: any) {
     } catch (e) {
         console.log(e);
     }
+    emit('clear');
     handleInput({ detail: { value: '' } });
 }
 
@@ -347,10 +358,13 @@ defineExpose({
     @include vue-flex;
     align-items: center;
 
-    &__select-overlay {
+    &__readonly-overlay {
         position: absolute;
-        inset: 0;
-        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
     }
 
     &__input {
@@ -381,7 +395,7 @@ defineExpose({
         padding: 1px 4px;
         border-radius: 10px;
         line-height: 16px;
-        z-index: 2;
+        z-index: 3;
     }
 
     &--border {
@@ -414,7 +428,7 @@ defineExpose({
 
     &__right-icon {
         position: relative;
-        z-index: 2;
+        z-index: 3;
 
         &--select {
             transition: transform 0.4s;
