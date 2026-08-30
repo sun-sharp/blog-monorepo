@@ -24,7 +24,6 @@
               type="warning"
               size="mini"
               plain />
-            <u-tag v-if="source === 'manual' && manualPaymentMethodLabel !== '--'" :text="manualPaymentMethodLabel" type="success" size="mini" plain />
           </view>
         </view>
 
@@ -124,16 +123,12 @@
 
           <template v-if="source === 'manual'">
             <view class="info-row">
-              <text class="info-label">支付方式</text>
-              <text class="info-value">{{ manualPaymentMethodLabel }}</text>
-            </view>
-            <view class="info-row">
               <text class="info-label">账单类型</text>
               <text class="info-value type">{{ billTypeLabel }}</text>
             </view>
             <view class="info-row">
-              <text class="info-label">账单方式</text>
-              <text class="info-value type">{{ billMethodLabel }}</text>
+              <text class="info-label">支付方式</text>
+              <text class="info-value method">{{ manualPaymentMethodLabel }}</text>
             </view>
           </template>
         </view>
@@ -141,7 +136,14 @@
     </scroll-view>
 
     <view v-if="bill.tradeTime" class="bill-detail-footer">
-      <u-button type="primary" shape="circle" icon="edit-pen" @click="goToEdit">编辑</u-button>
+      <view class="bill-detail-action-btn" @click="goToEdit">
+        <u-icon name="edit-pen" size="30" color="#007aff" />
+        <text class="bill-detail-action-text">编辑</text>
+      </view>
+      <view v-if="source === 'manual'" class="bill-detail-action-btn bill-detail-action-btn-danger" @click="onDelete">
+        <u-icon name="trash" size="30" color="#dd524d" />
+        <text class="bill-detail-action-text bill-detail-action-text-danger">删除</text>
+      </view>
     </view>
   </view>
 </template>
@@ -149,7 +151,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { aggregateBillApi } from '../../../api';
+  import { aggregateBillApi, manualBillApi } from '../../../api';
   import { consumeRefreshFlag, setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
   import { inflowOrOutflowOption, manualPaymentMethodOption } from '../../../../shared/src/constants/api-type';
@@ -223,7 +225,31 @@
   }
 
   function goToEdit() {
+    if (source.value === 'manual') {
+      uni.navigateTo({ url: `/pages/finance/manual-edit/manual-edit?id=${id.value}` });
+      return;
+    }
     uni.navigateTo({ url: `/pages/finance/bill-edit/bill-edit?source=${source.value}&id=${id.value}` });
+  }
+
+  function onDelete() {
+    if (source.value !== 'manual') return;
+    uni.showModal({
+      title: '确认删除',
+      content: '确定删除该人工录入账单？',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            await manualBillApi.remove(id.value);
+            uni.showToast({ title: '删除成功', icon: 'success' });
+            setRefreshFlag('bill');
+            setTimeout(() => uni.navigateBack(), 500);
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      },
+    });
   }
 
   onLoad(async (options) => {
@@ -308,10 +334,33 @@
 
   .bill-detail-footer {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40rpx;
     padding: 20rpx 30rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
-    background-color: $uni-bg-color;
-    box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    border-top: 1rpx solid #e5e5e5;
+  }
+
+  .bill-detail-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8rpx;
+    padding: 16rpx 40rpx;
+    border-radius: 44rpx;
+    min-width: 180rpx;
+  }
+
+  .bill-detail-action-text {
+    font-size: $uni-font-size-base;
+    color: #007aff;
+  }
+
+  .bill-detail-action-text-danger {
+    color: #dd524d;
   }
 
   .info-row {

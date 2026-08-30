@@ -99,15 +99,17 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed, onMounted } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { manualBillApi } from '../../../api';
   import { inflowOrOutflowOption, manualPaymentMethodOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
-  import { roundToTwoPrecise } from '../../../../shared/src/utils/number.js';
+  import { roundToTwoArrow } from '../../../../shared/src/utils/number.js';
 
   const formRef = ref();
   const loading = ref(false);
+  const editId = ref('');
   const showTradeTimePicker = ref(false);
   const showInflowSelect = ref(false);
   const showPaymentMethodSelect = ref(false);
@@ -133,28 +135,24 @@
   const moneyAmountInput = computed({
     get: () => {
       const val = form.moneyAmount;
-      if (typeof val === 'number') {
-        return roundToTwoPrecise(val);
-      } else if (typeof val === 'string' && val) {
-        return roundToTwoPrecise(Number(val));
+      if (val) {
+        return roundToTwoArrow(Number(val));
       } else {
         return 0;
       }
     },
-    set: (val: string) => (form.moneyAmount = val ? roundToTwoPrecise(Number(val)) : 0),
+    set: (val: string) => (form.moneyAmount = val ? roundToTwoArrow(val) : 0),
   });
   const balanceInput = computed({
     get: () => {
       const val = form.balance;
-      if (typeof val === 'number') {
-        return roundToTwoPrecise(val);
-      } else if (typeof val === 'string' && val) {
-        return roundToTwoPrecise(Number(val));
+      if (val) {
+        return roundToTwoArrow(Number(val));
       } else {
         return 0;
       }
     },
-    set: (val: string) => (form.balance = val ? roundToTwoPrecise(Number(val)) : 0),
+    set: (val: string) => (form.balance = val ? roundToTwoArrow(val) : 0),
   });
 
   const inflowOrOutflowList = inflowOrOutflowOption.map((item) => ({ label: item.label, value: item.value }));
@@ -218,7 +216,11 @@
         billType: form.billType,
         billMethod: form.billMethod,
       };
-      await manualBillApi.save(data);
+      if (editId.value) {
+        await manualBillApi.update({ ...data, manualBillId: editId.value });
+      } else {
+        await manualBillApi.save(data);
+      }
       uni.showToast({ title: '保存成功', icon: 'success' });
       setRefreshFlag('bill');
       setTimeout(() => uni.navigateBack(), 500);
@@ -227,8 +229,38 @@
     }
   }
 
+  async function loadDetail(id: string) {
+    try {
+      const res = await manualBillApi.getOne(id);
+      if (res) {
+        form.tradeTime = res.tradeTime || '';
+        form.tradeOtherPerson = res.tradeOtherPerson || '';
+        form.inflowOrOutflow = res.inflowOrOutflow ?? null;
+        form.moneyAmount = res.moneyAmount ?? 0;
+        form.manualPaymentMethod = res.manualPaymentMethod ?? null;
+        form.balance = res.balance ?? 0;
+        form.explain = res.explain || '';
+        form.place = res.place || '';
+        form.billType = res.billType ?? null;
+        form.billMethod = res.billMethod ?? null;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   onMounted(() => {
     Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod()]);
+  });
+
+  onLoad((options) => {
+    if (options?.id) {
+      editId.value = options.id;
+      uni.setNavigationBarTitle({ title: '编辑账单' });
+      loadDetail(options.id);
+    } else {
+      uni.setNavigationBarTitle({ title: '录入账单' });
+    }
   });
 </script>
 

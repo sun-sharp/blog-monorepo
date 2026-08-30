@@ -6,4 +6,5 @@ export * from './array';
 export * from './string';
 export * from './time';
 export * from './color';
+export * from './number';
 //# sourceMappingURL=index.d.ts.map
