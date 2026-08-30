@@ -91,6 +91,13 @@
                   <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
                   <text v-if="getBillBankTypeLabel(item)" class="finance-bill-tag">{{ getBillBankTypeLabel(item) }}</text>
                 </view>
+                <view
+                  v-if="['manual'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item) || getManualPaymentMethodLabel(item))"
+                  class="finance-bill-sub-tag-row">
+                  <text v-if="getManualPaymentMethodLabel(item)" class="finance-bill-tag">{{ getManualPaymentMethodLabel(item) }}</text>
+                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
+                </view>
               </view>
             </view>
             <view class="finance-bill-right">
@@ -116,6 +123,16 @@
           </view>
         </view>
         <view class="finance-fab-popup-body">
+          <view class="finance-fab-action-item" @click="onFabAction('manual')">
+            <view class="finance-fab-action-icon" style="background-color: #eef2ff">
+              <u-icon name="edit-pen" size="40" color="#6366f1" />
+            </view>
+            <view class="finance-fab-action-content">
+              <text class="finance-fab-action-label">录入账单</text>
+              <text class="finance-fab-action-desc">人工录入一条账单</text>
+            </view>
+            <u-icon name="arrow-right" size="32" color="#ccc" />
+          </view>
           <view class="finance-fab-action-item" @click="onFabAction('upload')">
             <view class="finance-fab-action-icon" style="background-color: #e8f4fd">
               <u-icon name="download" size="40" color="#007aff" />
@@ -275,6 +292,7 @@
   import { consumeRefreshFlag } from '../../composables/useRefreshFlag';
   import { aggregateBillApi, weChatApi, aliPayApi } from '../../api';
   import { useApiTypeStore } from '../../store';
+  import { manualPaymentMethodOption } from '../../../shared/src/constants/api-type';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
   import SearchableSelect from '../searchable-select/searchable-select.vue';
@@ -327,10 +345,10 @@
     return {};
   });
 
-  const sourceOptions = ['全部', '银行', '支付宝', '微信'];
+  const sourceOptions = ['全部', '银行', '支付宝', '微信', '人工录入'];
   const flowOptions = ['全部', '收入', '支出'];
 
-  const sourceValueMap: (undefined | 'bank' | 'aliPay' | 'weChat')[] = [undefined, 'bank', 'aliPay', 'weChat'];
+  const sourceValueMap: (undefined | 'bank' | 'aliPay' | 'weChat' | 'manual')[] = [undefined, 'bank', 'aliPay', 'weChat', 'manual'];
 
   const timeLabel = computed(() => {
     if (!timeRange.value) return '';
@@ -360,12 +378,12 @@
   });
 
   function getSourceLabel(source: string) {
-    const map: Record<string, string> = { bank: '银行', aliPay: '支付宝', weChat: '微信' };
+    const map: Record<string, string> = { bank: '银行', aliPay: '支付宝', weChat: '微信', manual: '人工录入' };
     return map[source] || source;
   }
 
   function getSourceIcon(source: string) {
-    const map: Record<string, string> = { bank: 'red-packet', aliPay: 'zhifubao', weChat: 'weixin-fill' };
+    const map: Record<string, string> = { bank: 'red-packet', aliPay: 'zhifubao', weChat: 'weixin-fill', manual: 'edit-pen' };
     return map[source] || 'list';
   }
 
@@ -381,6 +399,11 @@
 
   function getBillBankTypeLabel(item: ApiAggregateBillItem): string {
     const found = apiTypeStore.getBankTypeOption.find((o) => o.value === item.bankType);
+    return found ? found.label : '';
+  }
+
+  function getManualPaymentMethodLabel(item: ApiAggregateBillItem): string {
+    const found = manualPaymentMethodOption.find((o) => o.value === item.manualPaymentMethod);
     return found ? found.label : '';
   }
 
@@ -616,6 +639,7 @@
     if (item.source === 'bank') return item.balance;
     if (item.source === 'weChat') return item.balance;
     if (item.source === 'aliPay') return item.balance;
+    if (item.source === 'manual') return item.balance;
     return undefined;
   }
 
@@ -641,6 +665,9 @@
   function onFabAction(action: string) {
     showFabMenu.value = false;
     switch (action) {
+      case 'manual':
+        uni.navigateTo({ url: '/pages/finance/manual-edit/manual-edit' });
+        break;
       case 'upload':
         uni.navigateTo({ url: '/pages/finance/upload/upload' });
         break;

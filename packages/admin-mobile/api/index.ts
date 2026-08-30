@@ -18,6 +18,7 @@ export * as weChatApi from './blog/money/we-chat';
 export * as aliPayApi from './blog/money/ali-pay';
 export * as bankApi from './blog/money/bank';
 export * as billUploadApi from './blog/money/bill-upload';
+export * as manualBillApi from './blog/money/manual-bill';
 
 export * as backupApi from './backup';
 export * as pm2LogApi from './pm2-log';

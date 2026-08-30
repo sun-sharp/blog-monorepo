@@ -11,9 +11,9 @@ export class PageAggregateBillDto extends PaginateDto {
   @IsOptional()
   inflowOrOutflow: number;
 
-  @ApiProperty({ description: '账单来源: bank/aliPay/weChat', required: false })
+  @ApiProperty({ description: '账单来源: bank/aliPay/weChat/manual', required: false })
   @IsOptional()
-  @IsIn(['bank', 'aliPay', 'weChat'], { message: '账单来源必须是 bank/aliPay/weChat' })
+  @IsIn(['bank', 'aliPay', 'weChat', 'manual'], { message: '账单来源必须是 bank/aliPay/weChat/manual' })
   source: string;
 
   @ApiProperty({ description: '开始时间', required: false })
@@ -39,4 +39,8 @@ export class PageAggregateBillDto extends PaginateDto {
   @ApiProperty({ description: '银行账单类型', required: false })
   @IsOptional()
   bankBillType: number;
+
+  @ApiProperty({ description: '支付方式（手写账单）', required: false })
+  @IsOptional()
+  manualPaymentMethod: number;
 }

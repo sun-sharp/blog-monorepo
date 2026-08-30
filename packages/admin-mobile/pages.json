@@ -90,6 +90,13 @@
           }
         },
         {
+          "path": "manual-edit/manual-edit",
+          "style": {
+            "navigationBarTitleText": "录入账单",
+            "softinputMode": "adjustResize"
+          }
+        },
+        {
           "path": "summary/summary",
           "style": {
             "navigationBarTitleText": "财务汇总"

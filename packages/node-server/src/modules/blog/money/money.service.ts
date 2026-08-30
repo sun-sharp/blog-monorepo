@@ -26,10 +26,12 @@ import { createStoreDir } from 'src/common/fs-mkdir';
 import { storeDirStr } from 'src/common/constant/config';
 import { useCustomConfig } from 'src/config';
 import { BillUploadService } from './bill-upload/bill-upload.service';
+import { ManualBillService } from './manual-bill/manual-bill.service';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
 import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
+import { ManualBill } from 'src/schemas/blog/money/manual-bill.schema';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { nowDateFun } from 'src/common/date';
 import { PageAggregateBillDto } from './dto/page-aggregate-bill.dto';
@@ -45,11 +47,13 @@ export class MoneyService {
     @InjectModel(Bank.name, blogDatabaseName) private readonly bankModel: Model<Bank>,
     @InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>,
     @InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>,
+    @InjectModel(ManualBill.name, blogDatabaseName) private readonly manualBillModel: Model<ManualBill>,
     private readonly bankService: BankService,
     private readonly weChatService: WeChatService,
     private readonly aliPayService: AliPayService,
     private readonly categoryService: CategoryService,
     private readonly billUploadService: BillUploadService,
+    private readonly manualBillService: ManualBillService,
   ) {}
 
   index() {
@@ -537,6 +541,11 @@ export class MoneyService {
           const billUploadStr = JSON.stringify(billUploadData, null, '\t');
           writeFileSync(`${blogDir}/billUpload.json`, billUploadStr);
           logger.log('备份数据库blog/billUpload数据');
+          // 备份blog/manualBill
+          const manualBillData = await this.manualBillService.findAllToData();
+          const manualBillStr = JSON.stringify(manualBillData, null, '\t');
+          writeFileSync(`${blogDir}/manualBill.json`, manualBillStr);
+          logger.log('备份数据库blog/manualBill数据');
           return {
             code: ApiCode.SUCCESS,
             message: '备份成功！',
@@ -562,7 +571,20 @@ export class MoneyService {
   public findAggregatePage(userId: string, body: PageAggregateBillDto): Promise<IResponse> {
     return Promise.resolve({ userId, body })
       .then(async ({ userId, body }) => {
-        const { size, current, tradeOtherPerson, inflowOrOutflow, source, startTime, endTime, bankType, billType, billMethod, bankBillType } = body;
+        const {
+          size,
+          current,
+          tradeOtherPerson,
+          inflowOrOutflow,
+          source,
+          startTime,
+          endTime,
+          bankType,
+          billType,
+          billMethod,
+          bankBillType,
+          manualPaymentMethod,
+        } = body;
         const { limit, skip } = PaginateHandle(size, current);
 
         // 构建通用查询条件
@@ -579,6 +601,7 @@ export class MoneyService {
           if (billType) match.billType = billType;
           if (billMethod) match.billMethod = billMethod;
           if (bankBillType) match.bankBillType = bankBillType;
+          if (manualPaymentMethod) match.manualPaymentMethod = manualPaymentMethod;
           if (startTime && endTime) {
             const sTime = format(new Date(startTime), `yyyy-MM-dd 00:00:00`);
             const eTime = format(new Date(endTime), `yyyy-MM-dd 23:59:59`);
@@ -653,15 +676,35 @@ export class MoneyService {
           billMethod: m.billMethod,
         });
 
+        const mapManual = (m: any): ApiAggregateBillItem => ({
+          source: 'manual',
+          billId: m._id,
+          tradeTime: nowDateFun(m.tradeTime),
+          tradeType: m.tradeType,
+          tradeOtherPerson: m.tradeOtherPerson,
+          incomeOrPay: m.incomeOrPay,
+          moneyAmount: m.moneyAmount,
+          otherCost: m.otherCost,
+          inflowOrOutflow: m.inflowOrOutflow,
+          explain: m.explain,
+          place: m.place,
+          balance: m.balance,
+          manualPaymentMethod: m.manualPaymentMethod,
+          billType: m.billType,
+          billMethod: m.billMethod,
+        });
+
         const mapperMap: Record<string, (m: any) => ApiAggregateBillItem> = {
           bank: mapBank,
           aliPay: mapAliPay,
           weChat: mapWeChat,
+          manual: mapManual,
         };
         const modelMap: Record<string, Model<any>> = {
           bank: this.bankModel,
           aliPay: this.aliPayModel,
           weChat: this.weChatModel,
+          manual: this.manualBillModel,
         };
 
         // 指定来源：单表分页查询
@@ -679,8 +722,8 @@ export class MoneyService {
           };
         }
 
-        // 全部来源：使用 $unionWith 在数据库端聚合三表，统一排序分页
-        const sources = ['bank', 'aliPay', 'weChat'] as const;
+        // 全部来源：使用 $unionWith 在数据库端聚合四表，统一排序分页
+        const sources = ['bank', 'aliPay', 'weChat', 'manual'] as const;
         const pipeline: any[] = [];
 
         sources.forEach((src, idx) => {
@@ -705,6 +748,7 @@ export class MoneyService {
         const total = facetData.metadata[0]?.total || 0;
         const rawList: any[] = facetData.data || [];
         const list: ApiAggregateBillItem[] = rawList.map((m) => {
+          if (m.manualPaymentMethod !== undefined) return mapManual(m);
           if (m.bankType !== undefined || m.voucherType !== undefined) return mapBank(m);
           if (m.balanceBaby !== undefined || m.productDescription !== undefined) return mapAliPay(m);
           return mapWeChat(m);
@@ -804,6 +848,26 @@ export class MoneyService {
             billType: m.billType,
             billMethod: m.billMethod,
           };
+        } else if (source === 'manual') {
+          const m = await this.manualBillModel.findOne({ _id: billId }).lean();
+          if (!m) throw '手写账单不存在';
+          result = {
+            source: 'manual',
+            billId: m._id,
+            tradeTime: nowDateFun(m.tradeTime),
+            tradeType: m.tradeType,
+            tradeOtherPerson: m.tradeOtherPerson,
+            incomeOrPay: m.incomeOrPay,
+            moneyAmount: m.moneyAmount,
+            otherCost: m.otherCost,
+            inflowOrOutflow: m.inflowOrOutflow,
+            explain: m.explain,
+            place: m.place,
+            balance: m.balance,
+            manualPaymentMethod: m.manualPaymentMethod,
+            billType: m.billType,
+            billMethod: m.billMethod,
+          };
         } else {
           throw '账单来源不正确';
         }
@@ -832,6 +896,11 @@ export class MoneyService {
           await this.aliPayModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
         } else if (source === 'weChat') {
           await this.weChatModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
+        } else if (source === 'manual') {
+          await this.manualBillModel.updateOne(
+            { _id: billId },
+            { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod, manualPaymentMethod: body.manualPaymentMethod },
+          );
         } else {
           throw '账单来源不正确';
         }

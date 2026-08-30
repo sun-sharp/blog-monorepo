@@ -127,6 +127,26 @@ export const handleTypeOption = [
 ];
 export const handleTypeMap = arrEnumToObj(handleTypeOption);
 
+export const manualPaymentMethodOption = [
+  {
+    value: 1,
+    label: '现金',
+  },
+  {
+    value: 2,
+    label: '美团',
+  },
+  {
+    value: 3,
+    label: '京东',
+  },
+  {
+    value: 4,
+    label: '华为钱包',
+  },
+];
+export const manualPaymentMethodMap = arrEnumToObj(manualPaymentMethodOption);
+
 export const weChatBillJudgeOptions = [
   {
     value: 'tradeType',

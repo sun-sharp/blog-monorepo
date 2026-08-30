@@ -1,9 +1,9 @@
 import { ApiPaginateParams } from '../../common';
 
 /**
- * @description: 账单来源类型：bank=银行, aliPay=支付宝, weChat=微信
+ * @description: 账单来源类型：bank=银行, aliPay=支付宝, weChat=微信, manual=手写
  */
-export type BillSourceType = 'bank' | 'aliPay' | 'weChat';
+export type BillSourceType = 'bank' | 'aliPay' | 'weChat' | 'manual';
 
 /**
  * @description: 三表聚合账单列表项
@@ -20,7 +20,7 @@ export interface ApiAggregateBillItem {
   // 交易对方
   tradeOtherPerson: string;
   // 交易对方备注
-  tradeOtherPersonRemarks: string;
+  tradeOtherPersonRemarks?: string;
   // 收/支
   incomeOrPay: string;
   // 交易金额
@@ -52,6 +52,8 @@ export interface ApiAggregateBillItem {
   voucherNo?: string;
   tradeOtherPersonAccount?: string;
   bankBillType?: number;
+  // --- 手写账单特有 ---
+  manualPaymentMethod?: number;
 }
 
 /**
@@ -107,4 +109,6 @@ export interface ApiAggregateBillUpdateData {
   billType?: number;
   // 账单方式（微信/支付宝）
   billMethod?: number;
+  // 支付方式（手动账单）
+  manualPaymentMethod?: number;
 }

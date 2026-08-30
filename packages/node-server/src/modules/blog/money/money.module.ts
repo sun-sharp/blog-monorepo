@@ -10,9 +10,11 @@ import { CategoryModule } from 'src/modules/capital/category/category.module';
 import { UserModule } from 'src/modules/capital/user/user.module';
 import { RoleModule } from 'src/modules/capital/role/role.module';
 import { BillUploadModule } from './bill-upload/bill-upload.module';
+import { ManualBillModule } from './manual-bill/manual-bill.module';
 import { Bank, BankSchema } from 'src/schemas/blog/money/bank.schema';
 import { AliPay, AliPaySchema } from 'src/schemas/blog/money/ali-pay.schema';
 import { WeChat, WeChatSchema } from 'src/schemas/blog/money/we-chat.schema';
+import { ManualBill, ManualBillSchema } from 'src/schemas/blog/money/manual-bill.schema';
 import { useCustomConfig } from 'src/config';
 
 const customConfig = useCustomConfig();
@@ -23,6 +25,7 @@ const AGGREGATE_MONGO_MODULE = MongooseModule.forFeature(
     { name: Bank.name, schema: BankSchema },
     { name: AliPay.name, schema: AliPaySchema },
     { name: WeChat.name, schema: WeChatSchema },
+    { name: ManualBill.name, schema: ManualBillSchema },
   ],
   blogDatabaseName,
 );
@@ -34,6 +37,7 @@ const AGGREGATE_MONGO_MODULE = MongooseModule.forFeature(
     AliPayModule,
     BankModule,
     BillUploadModule,
+    ManualBillModule,
     JwtAuthModule,
     UserModule,
     CategoryModule,

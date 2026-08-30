@@ -18,7 +18,13 @@
           <view class="bill-detail-tags">
             <u-tag v-if="inflowLabel" :text="inflowLabel" :type="bill.inflowOrOutflow === 1 ? 'success' : 'error'" size="mini" />
             <u-tag v-if="source === 'bank' && bankTypeLabel !== '--'" :text="bankTypeLabel" type="warning" size="mini" plain />
-            <u-tag v-if="(source === 'aliPay' || source === 'weChat') && billMethodLabel !== '--'" :text="billMethodLabel" type="warning" size="mini" plain />
+            <u-tag
+              v-if="(source === 'aliPay' || source === 'weChat' || source === 'manual') && billMethodLabel !== '--'"
+              :text="billMethodLabel"
+              type="warning"
+              size="mini"
+              plain />
+            <u-tag v-if="source === 'manual' && manualPaymentMethodLabel !== '--'" :text="manualPaymentMethodLabel" type="success" size="mini" plain />
           </view>
         </view>
 
@@ -115,6 +121,21 @@
               <text class="info-value type">{{ bankBillTypeLabel }}</text>
             </view>
           </template>
+
+          <template v-if="source === 'manual'">
+            <view class="info-row">
+              <text class="info-label">支付方式</text>
+              <text class="info-value">{{ manualPaymentMethodLabel }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">账单类型</text>
+              <text class="info-value type">{{ billTypeLabel }}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">账单方式</text>
+              <text class="info-value type">{{ billMethodLabel }}</text>
+            </view>
+          </template>
         </view>
       </template>
     </scroll-view>
@@ -131,7 +152,7 @@
   import { aggregateBillApi } from '../../../api';
   import { consumeRefreshFlag, setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
-  import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
+  import { inflowOrOutflowOption, manualPaymentMethodOption } from '../../../../shared/src/constants/api-type';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
 
   const apiTypeStore = useApiTypeStore();
@@ -141,7 +162,7 @@
   const bill = ref<Partial<ApiAggregateBillDetail>>({});
 
   const sourceLabel = computed(() => {
-    const map: Record<string, string> = { bank: '银行', aliPay: '支付宝', weChat: '微信' };
+    const map: Record<string, string> = { bank: '银行', aliPay: '支付宝', weChat: '微信', manual: '人工录入' };
     return map[source.value] || '';
   });
 
@@ -167,13 +188,19 @@
   });
 
   const billTypeLabel = computed(() => {
-    if (!['weChat', 'aliPay'].includes(source.value)) return '--';
+    if (!['weChat', 'aliPay', 'manual'].includes(source.value)) return '--';
     const found = billTypeSelectList.value.find((o) => o.value === bill.value.billType);
     return found ? found.label : '--';
   });
 
   const billMethodLabel = computed(() => {
     const found = apiTypeStore.getBillMethodOption.find((o) => o.value === bill.value.billMethod);
+    return found ? found.label : '--';
+  });
+
+  const manualPaymentMethodLabel = computed(() => {
+    if (source.value !== 'manual') return '--';
+    const found = manualPaymentMethodOption.find((o) => o.value === bill.value.manualPaymentMethod);
     return found ? found.label : '--';
   });
 

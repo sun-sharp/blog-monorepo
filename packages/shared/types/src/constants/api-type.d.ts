@@ -58,6 +58,13 @@ export declare const handleTypeOption: {
 export declare const handleTypeMap: {
     [x: string]: string | number;
 };
+export declare const manualPaymentMethodOption: {
+    value: number;
+    label: string;
+}[];
+export declare const manualPaymentMethodMap: {
+    [x: string]: string | number;
+};
 export declare const weChatBillJudgeOptions: {
     value: string;
     label: string;
