@@ -55,6 +55,8 @@
       return tabTargetRef.value;
     },
     (target, prev) => {
+      console.log(target, 'target');
+
       if (target >= 0 && target !== prev) currentTab.value = target;
     }
   );

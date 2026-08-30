@@ -46,7 +46,9 @@
           @click="onStatClick(item)">
           <view class="home-stat-main">
             <view :class="['home-stat-icon', item.theme]">
-              <u-icon :name="item.icon" size="36" color="#fff" />
+              <!-- <u-icon :name="item.icon" size="36" color="#fff" /> -->
+              <u-icon v-if="item.iconType === 'sharp-icon'" :name="item.icon" size="36" color="#fff" custom-prefix="sharp-icon" />
+              <u-icon v-else :name="item.icon" size="36" color="#fff" />
             </view>
             <view class="home-stat-meta">
               <text class="home-stat-value">{{ item.value }}</text>
@@ -75,6 +77,7 @@
 
   interface StatCardItem {
     icon: string;
+    iconType?: string;
     label: string;
     value: number;
     theme: string;
@@ -114,6 +117,7 @@
     return [
       {
         icon: 'red-packet',
+        iconType: 'sharp-icon',
         label: '财务账单',
         value: d.financialCount,
         theme: 'theme-blue',
@@ -121,14 +125,16 @@
         children: financialChildren,
       },
       {
-        icon: 'file-text',
+        icon: 'book',
+        iconType: 'sharp-icon',
         label: '文章',
         value: d.articleCount,
         theme: 'theme-green',
         tab: 1,
       },
       {
-        icon: 'pic',
+        icon: 'tupian',
+        iconType: 'sharp-icon',
         label: '图片',
         value: imageCount,
         theme: 'theme-orange',
@@ -136,7 +142,8 @@
         children: imageChildren,
       },
       {
-        icon: 'level',
+        icon: 'blood-sugar',
+        iconType: 'sharp-icon',
         label: '测量',
         value: d.uricCount,
         theme: 'theme-purple',
@@ -150,20 +157,23 @@
         url: '/pages/system/user/user',
       },
       {
-        icon: 'tags',
+        icon: 'role',
+        iconType: 'sharp-icon',
         label: '角色',
         value: d.roleCount,
         theme: 'theme-grey',
         url: '/pages/system/role/role',
       },
       {
-        icon: 'grid',
+        icon: 'caidanguanli',
+        iconType: 'sharp-icon',
         label: '菜单',
         value: d.menuCount,
         theme: 'theme-blue',
       },
       {
-        icon: 'server-man',
+        icon: 'API',
+        iconType: 'sharp-icon',
         label: '接口',
         value: d.apiCount,
         theme: 'theme-green',
@@ -173,6 +183,8 @@
 
   function onStatClick(item: StatCardItem) {
     if (item.tab !== undefined) {
+      console.log(item.tab, 'item.tab');
+
       emitSwitchTab(item.tab);
       return;
     }

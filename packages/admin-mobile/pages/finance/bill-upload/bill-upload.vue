@@ -38,7 +38,14 @@
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { billUploadApi } from '../../../api';
-  import { billUploadTypeOption, handleTypeOption, inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
+  import {
+    aliPayBillUploadType,
+    bankBillUploadType,
+    billUploadTypeOption,
+    handleTypeOption,
+    inflowOrOutflowOption,
+    weChatBillUploadType,
+  } from '../../../../shared/src/constants/api-type';
   import type { ApiBillUploadItem } from '/#/api/blog/bill-upload';
   import { arrEnumToObj } from '../../../../shared/src/utils/array';
   import { useApiTypeStore } from '../../../store';
@@ -97,31 +104,29 @@
     return parts.join(' · ');
   }
 
-  const iconColorMap: Record<number, string> = {};
-  const colorPool = [
-    'linear-gradient(135deg, #4facfe, #007aff)',
-    'linear-gradient(135deg, #43e97b, #38f9d7)',
-    'linear-gradient(135deg, #fa709a, #fee140)',
-    'linear-gradient(135deg, #a18cd1, #fbc2eb)',
-    'linear-gradient(135deg, #fccb90, #d57eeb)',
-    'linear-gradient(135deg, #f093fb, #f5576c)',
-  ];
+  // const colorPool = [
+  //   'linear-gradient(135deg, #4facfe, #007aff)',
+  //   'linear-gradient(135deg, #43e97b, #38f9d7)',
+  //   'linear-gradient(135deg, #fa709a, #fee140)',
+  //   'linear-gradient(135deg, #a18cd1, #fbc2eb)',
+  //   'linear-gradient(135deg, #fccb90, #d57eeb)',
+  //   'linear-gradient(135deg, #f093fb, #f5576c)',
+  // ];
 
   function getIconColor(type: number) {
-    if (!iconColorMap[type]) {
-      iconColorMap[type] = colorPool[Object.keys(iconColorMap).length % colorPool.length];
-    }
-    return iconColorMap[type];
+    const iconColorMaps = {};
+    iconColorMaps[weChatBillUploadType] = 'linear-gradient(135deg, #4facfe, #007aff)';
+    iconColorMaps[aliPayBillUploadType] = 'linear-gradient(135deg, #43e97b, #38f9d7)';
+    iconColorMaps[bankBillUploadType] = 'linear-gradient(135deg, #fa709a, #fee140)';
+    return iconColorMaps[type];
   }
 
-  const uploadTypeIconMap: Record<number, string> = {};
-  const uploadTypeIconPool = ['weixin-fill', 'zhifubao', 'red-packet'];
-
   function getUploadTypeIcon(type: number) {
-    if (!uploadTypeIconMap[type]) {
-      uploadTypeIconMap[type] = uploadTypeIconPool[Object.keys(uploadTypeIconMap).length % uploadTypeIconPool.length];
-    }
-    return uploadTypeIconMap[type];
+    const uploadTypeIconMaps = {};
+    uploadTypeIconMaps[weChatBillUploadType] = 'weixin-fill';
+    uploadTypeIconMaps[aliPayBillUploadType] = 'zhifubao';
+    uploadTypeIconMaps[bankBillUploadType] = 'red-packet';
+    return uploadTypeIconMaps[type];
   }
 
   function goToAdd() {

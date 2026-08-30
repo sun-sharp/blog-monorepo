@@ -13,6 +13,8 @@
 <style lang="scss">
   @import './styles/common.scss';
 
+  @import './styles/sharp-icon.scss';
+
   @import '@/uni_modules/uview-pro/index.scss';
 
   page {
