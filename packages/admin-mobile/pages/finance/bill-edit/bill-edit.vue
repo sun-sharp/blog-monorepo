@@ -55,10 +55,20 @@
             </view>
           </template>
           <template v-if="source === 'bank'">
-            <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">银行类型</text>
-              <text class="bill-edit-readonly-value">{{ bankTypeLabel }}</text>
-            </view>
+            <template v-if="detail.isRetiredBankCard">
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">卡片状态</text>
+                <text class="bill-edit-readonly-value error">已报废</text>
+              </view>
+              <view v-if="detail.replaceCardNo" class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">新卡号</text>
+                <text class="bill-edit-readonly-value">{{ detail.replaceCardNo || '--' }}</text>
+              </view>
+              <view v-if="detail.bankCardRemark" class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">说明</text>
+                <text class="bill-edit-readonly-value">{{ detail.bankCardRemark || '--' }}</text>
+              </view>
+            </template>
             <view class="bill-edit-readonly-item">
               <text class="bill-edit-readonly-label">凭证号码</text>
               <text class="bill-edit-readonly-value">{{ detail.voucherNo || '--' }}</text>
@@ -67,11 +77,9 @@
               <text class="bill-edit-readonly-label">对方账号</text>
               <text class="bill-edit-readonly-value">{{ detail.tradeOtherPersonAccount || '--' }}</text>
             </view>
-          </template>
-          <template v-if="source === 'manual'">
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">支付方式</text>
-              <text class="bill-edit-readonly-value">{{ manualPaymentMethodLabel }}</text>
+              <text class="bill-edit-readonly-label">银行类型</text>
+              <text class="bill-edit-readonly-value primary">{{ bankTypeLabel }}</text>
             </view>
           </template>
           <view v-if="detail.balance !== undefined && detail.balance !== null" class="bill-edit-readonly-item">
@@ -137,34 +145,6 @@
             </view>
           </u-form-item>
         </view>
-
-        <view v-if="source === 'manual'" class="bill-edit-card card">
-          <text class="bill-edit-section-title">人工录入信息</text>
-          <u-form-item label="支付方式" prop="manualPaymentMethod" required>
-            <view class="bill-edit-select" @click="showManualPaymentMethodSelect = true">
-              <text :class="form.manualPaymentMethod ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ manualPaymentMethodLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item label="账单类型" prop="billType" required>
-            <view class="bill-edit-select" @click="showBillTypeSelect = true">
-              <text :class="form.billType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ billTypeLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item label="账单方式" prop="billMethod" required>
-            <view class="bill-edit-select" @click="showBillMethodSelect = true">
-              <text :class="form.billMethod ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ billMethodLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-        </view>
       </u-form>
     </scroll-view>
 
@@ -192,12 +172,6 @@
       :list="billMethodSelectList"
       :current-value="form.billMethod || undefined"
       @confirm="(item: any) => (form.billMethod = Number(item.value))" />
-    <searchable-select
-      v-model="showManualPaymentMethodSelect"
-      title="选择支付方式"
-      :list="manualPaymentMethodList"
-      :current-value="form.manualPaymentMethod || undefined"
-      @confirm="(item: any) => (form.manualPaymentMethod = Number(item.value))" />
 
     <view class="fixed-bottom-btn">
       <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
@@ -210,7 +184,7 @@
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { aggregateBillApi } from '../../../api';
-  import { inflowOrOutflowOption, manualPaymentMethodOption } from '../../../../shared/src/constants/api-type';
+  import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
@@ -223,12 +197,10 @@
   const showBankBillTypeSelect = ref(false);
   const showBillTypeSelect = ref(false);
   const showBillMethodSelect = ref(false);
-  const showManualPaymentMethodSelect = ref(false);
   const apiTypeStore = useApiTypeStore();
   const detail = ref<Partial<ApiAggregateBillDetail>>({});
 
   const inflowOrOutflowList = inflowOrOutflowOption.map((item) => ({ label: item.label, value: item.value }));
-  const manualPaymentMethodList = manualPaymentMethodOption.map((item) => ({ label: item.label, value: item.value }));
   const billTypeSelectList = computed(() => apiTypeStore.getBillTypeOption as { label: string; value: number | string; [key: string]: string | number }[]);
   const billMethodSelectList = computed(() => apiTypeStore.getBillMethodOption as { label: string; value: number | string; [key: string]: string | number }[]);
 
@@ -241,11 +213,9 @@
     bankBillType: null as number | null,
     billType: null as number | null,
     billMethod: null as number | null,
-    manualPaymentMethod: null as number | null,
   });
 
   const inflowLabel = computed(() => inflowOrOutflowList.find((r) => r.value === form.inflowOrOutflow)?.label || '');
-  const manualPaymentMethodLabel = computed(() => manualPaymentMethodList.find((r) => r.value === form.manualPaymentMethod)?.label || '');
   const bankBillTypeLabel = computed(() => billTypeSelectList.value.find((r) => r.value === form.bankBillType)?.label || '');
   const billTypeLabel = computed(() => billTypeSelectList.value.find((r) => r.value === form.billType)?.label || '');
   const billMethodLabel = computed(() => billMethodSelectList.value.find((r) => r.value === form.billMethod)?.label || '');
@@ -267,7 +237,6 @@
     bankBillType: [{ required: true, type: 'number', message: '请选择银行账单类型', trigger: 'change' }],
     billType: [{ required: true, type: 'number', message: '请选择账单类型', trigger: 'change' }],
     billMethod: [{ required: true, type: 'number', message: '请选择账单方式', trigger: 'change' }],
-    manualPaymentMethod: [{ required: true, type: 'number', message: '请选择支付方式', trigger: 'change' }],
   };
 
   async function loadDetail() {
@@ -283,7 +252,6 @@
       form.bankBillType = res.bankBillType ?? null;
       form.billType = res.billType ?? null;
       form.billMethod = res.billMethod ?? null;
-      form.manualPaymentMethod = res.manualPaymentMethod ?? null;
     } catch (e) {
       console.error(e);
     }
@@ -312,9 +280,6 @@
       } else {
         data.billType = form.billType;
         data.billMethod = form.billMethod;
-      }
-      if (source.value === 'manual') {
-        data.manualPaymentMethod = form.manualPaymentMethod;
       }
       await aggregateBillApi.updateAggregate(data);
       uni.showToast({ title: '保存成功', icon: 'success' });
@@ -397,6 +362,14 @@
     flex: 1;
     margin-left: 20rpx;
     word-break: break-all;
+
+    &.primary {
+      color: $uni-color-primary;
+    }
+
+    &.error {
+      color: $uni-color-error;
+    }
   }
 
   .bill-edit-select {

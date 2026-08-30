@@ -115,14 +115,10 @@
               <text class="info-label">对方账号</text>
               <text class="info-value">{{ bill.tradeOtherPersonAccount || '--' }}</text>
             </view>
-            <view class="info-row">
-              <text class="info-label">银行账单类型</text>
-              <text class="info-value type">{{ bankBillTypeLabel }}</text>
-            </view>
             <template v-if="bill.isRetiredBankCard">
               <view class="info-row">
                 <text class="info-label">卡片状态</text>
-                <text class="info-value type">已报废</text>
+                <text class="info-value error">已报废</text>
               </view>
               <view v-if="bill.replaceCardNo" class="info-row">
                 <text class="info-label">新卡号</text>
@@ -133,6 +129,10 @@
                 <text class="info-value">{{ bill.bankCardRemark }}</text>
               </view>
             </template>
+            <view class="info-row">
+              <text class="info-label">银行账单类型</text>
+              <text class="info-value type">{{ bankBillTypeLabel }}</text>
+            </view>
           </template>
 
           <template v-if="source === 'manual'">
@@ -408,6 +408,11 @@
     }
 
     &.method {
+      font-weight: bold;
+      color: $uni-color-error;
+    }
+
+    &.error {
       font-weight: bold;
       color: $uni-color-error;
     }
