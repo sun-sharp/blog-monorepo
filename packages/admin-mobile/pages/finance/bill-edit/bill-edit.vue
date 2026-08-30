@@ -55,6 +55,14 @@
             </view>
           </template>
           <template v-if="source === 'bank'">
+            <view class="bill-edit-readonly-item">
+              <text class="bill-edit-readonly-label">凭证号码</text>
+              <text class="bill-edit-readonly-value">{{ detail.voucherNo || '--' }}</text>
+            </view>
+            <view class="bill-edit-readonly-item">
+              <text class="bill-edit-readonly-label">对方账号</text>
+              <text class="bill-edit-readonly-value">{{ detail.tradeOtherPersonAccount || '--' }}</text>
+            </view>
             <template v-if="detail.isRetiredBankCard">
               <view class="bill-edit-readonly-item">
                 <text class="bill-edit-readonly-label">卡片状态</text>
@@ -70,21 +78,13 @@
               </view>
             </template>
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">凭证号码</text>
-              <text class="bill-edit-readonly-value">{{ detail.voucherNo || '--' }}</text>
-            </view>
-            <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">对方账号</text>
-              <text class="bill-edit-readonly-value">{{ detail.tradeOtherPersonAccount || '--' }}</text>
-            </view>
-            <view class="bill-edit-readonly-item">
               <text class="bill-edit-readonly-label">银行类型</text>
               <text class="bill-edit-readonly-value primary">{{ bankTypeLabel }}</text>
             </view>
           </template>
           <view v-if="detail.balance !== undefined && detail.balance !== null" class="bill-edit-readonly-item">
             <text class="bill-edit-readonly-label">余额</text>
-            <text class="bill-edit-readonly-value">¥{{ formatMoney(detail.balance) }}</text>
+            <text class="bill-edit-readonly-value primary">¥{{ formatMoney(detail.balance) }}</text>
           </view>
         </view>
       </view>
