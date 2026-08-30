@@ -94,8 +94,8 @@
                 <view
                   v-if="['manual'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item) || getManualPaymentMethodLabel(item))"
                   class="finance-bill-sub-tag-row">
-                  <text v-if="getManualPaymentMethodLabel(item)" class="finance-bill-tag">{{ getManualPaymentMethodLabel(item) }}</text>
                   <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getManualPaymentMethodLabel(item)" class="finance-bill-tag">{{ getManualPaymentMethodLabel(item) }}</text>
                   <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
                 </view>
               </view>
