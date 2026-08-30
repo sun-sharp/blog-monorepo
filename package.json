@@ -14,6 +14,7 @@
     "git:dev-main-dev": "git push origin dev && git checkout main && git pull origin dev && git push origin main && git checkout dev"
   },
   "dependencies": {
+    "@dcloudio/types": "^3.4.32",
     "json5": "^2.2.3"
   }
 }

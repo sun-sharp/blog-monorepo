@@ -10,6 +10,7 @@ import { AliPayModule } from './money/ali-pay/ali-pay.module';
 import { BankModule } from './money/bank/bank.module';
 import { BillUploadModule } from './money/bill-upload/bill-upload.module';
 import { ManualBillModule } from './money/manual-bill/manual-bill.module';
+import { BankCardModule } from './money/bank-card/bank-card.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ArticleCssModule } from './article-css/article-css.module';
 import { ArticlePolicyModule } from './article-policy/article-policy.module';
@@ -74,6 +75,10 @@ import { BlogSummaryModule } from './summary/blog-summary.module';
               {
                 path: '/',
                 module: ManualBillModule,
+              },
+              {
+                path: '/',
+                module: BankCardModule,
               },
             ],
           },

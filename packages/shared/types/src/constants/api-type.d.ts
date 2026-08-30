@@ -65,6 +65,13 @@ export declare const manualPaymentMethodOption: {
 export declare const manualPaymentMethodMap: {
     [x: string]: string | number;
 };
+export declare const bankCardStatusOption: {
+    value: number;
+    label: string;
+}[];
+export declare const bankCardStatusMap: {
+    [x: string]: string | number;
+};
 export declare const weChatBillJudgeOptions: {
     value: string;
     label: string;

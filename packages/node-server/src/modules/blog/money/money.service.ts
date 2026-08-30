@@ -32,6 +32,7 @@ import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
 import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
 import { ManualBill } from 'src/schemas/blog/money/manual-bill.schema';
+import { BankCard } from 'src/schemas/blog/money/bank-card.schema';
 import { PaginateHandle } from 'src/common/paginate/paginate-handle';
 import { nowDateFun } from 'src/common/date';
 import { PageAggregateBillDto } from './dto/page-aggregate-bill.dto';
@@ -48,6 +49,7 @@ export class MoneyService {
     @InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>,
     @InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>,
     @InjectModel(ManualBill.name, blogDatabaseName) private readonly manualBillModel: Model<ManualBill>,
+    @InjectModel(BankCard.name, blogDatabaseName) private readonly bankCardModel: Model<BankCard>,
     private readonly bankService: BankService,
     private readonly weChatService: WeChatService,
     private readonly aliPayService: AliPayService,
@@ -193,16 +195,21 @@ export class MoneyService {
           const weChat = await this.weChatService.findLastOneBalance(userId);
           // 查询银行账单
           const bankModelAll = await this.bankService.findModelAll(userId);
+          // 查询已报废的卡号（不参与余额合计）
+          const retiredCards = await this.bankCardModel.find({ userId, status: 2 }).lean();
+          // 构造「bankType--voucherType--cardNo」集合，用于过滤报废卡
+          const retiredCardSet = new Set<string>(retiredCards.map((c) => `${c.bankType}--${c.voucherType}--${c.cardNo}`));
+          const filterRetired = (arr: ApiBank[]): ApiBank[] => arr.filter((f) => !retiredCardSet.has(`${f.bankType}--${f.voucherType}--${f.voucherNo}`));
           // 工商银行
-          const businessArr = bankModelAll.filter((f) => f.bankType === 1);
+          const businessArr = filterRetired(bankModelAll.filter((f) => f.bankType === 1));
           // 农业银行
-          const agricultureArr = bankModelAll.filter((f) => f.bankType === 2);
+          const agricultureArr = filterRetired(bankModelAll.filter((f) => f.bankType === 2));
           // 建设银行
-          const buildArr = bankModelAll.filter((f) => f.bankType === 3);
+          const buildArr = filterRetired(bankModelAll.filter((f) => f.bankType === 3));
           // 民生银行
-          const civilArr = bankModelAll.filter((f) => f.bankType === 4);
+          const civilArr = filterRetired(bankModelAll.filter((f) => f.bankType === 4));
           // 招商银行
-          const attractInvestmentArr = bankModelAll.filter((f) => f.bankType === 5);
+          const attractInvestmentArr = filterRetired(bankModelAll.filter((f) => f.bankType === 5));
           // 获取银行每个凭证下的余额
           const bankVoucherBalanceFun = (balanceArr: ApiBank[]): ApiBankVoucherBalance[] => {
             // 判断数据是否为空
@@ -546,6 +553,11 @@ export class MoneyService {
           const manualBillStr = JSON.stringify(manualBillData, null, '\t');
           writeFileSync(`${blogDir}/manualBill.json`, manualBillStr);
           logger.log('备份数据库blog/manualBill数据');
+          // 备份blog/bankCard
+          const bankCardData = await this.bankCardModel.find().lean();
+          const bankCardStr = JSON.stringify(bankCardData, null, '\t');
+          writeFileSync(`${blogDir}/bankCard.json`, bankCardStr);
+          logger.log('备份数据库blog/bankCard数据');
           return {
             code: ApiCode.SUCCESS,
             message: '备份成功！',
@@ -800,6 +812,13 @@ export class MoneyService {
             tradeOtherPersonAccount: m.tradeOtherPersonAccount,
             bankBillType: m.bankBillType,
           };
+          // 附加银行卡片报废信息
+          const bankCard = await this.bankCardModel.findOne({ userId: m.userId, bankType: m.bankType, cardNo: m.voucherNo }).lean();
+          if (bankCard && bankCard.status === 2) {
+            result.isRetiredBankCard = true;
+            result.bankCardRemark = bankCard.cardRemark || '';
+            result.replaceCardNo = bankCard.replaceCardNo || '';
+          }
         } else if (source === 'aliPay') {
           const m = await this.aliPayModel.findOne({ _id: billId }).lean();
           if (!m) throw '支付宝账单不存在';

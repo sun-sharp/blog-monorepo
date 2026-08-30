@@ -54,6 +54,10 @@ export interface ApiAggregateBillItem {
   bankBillType?: number;
   // --- 手写账单特有 ---
   manualPaymentMethod?: number;
+  // --- 银行报废卡信息 ---
+  isRetiredBankCard?: boolean;
+  bankCardRemark?: string;
+  replaceCardNo?: string;
 }
 
 /**

@@ -147,6 +147,18 @@ export const manualPaymentMethodOption = [
 ];
 export const manualPaymentMethodMap = arrEnumToObj(manualPaymentMethodOption);
 
+export const bankCardStatusOption = [
+  {
+    value: 1,
+    label: '在用',
+  },
+  {
+    value: 2,
+    label: '已报废',
+  },
+];
+export const bankCardStatusMap = arrEnumToObj(bankCardStatusOption);
+
 export const weChatBillJudgeOptions = [
   {
     value: 'tradeType',

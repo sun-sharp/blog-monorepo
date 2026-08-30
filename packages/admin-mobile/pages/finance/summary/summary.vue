@@ -150,7 +150,19 @@
 
   async function loadBalance() {
     try {
-      balanceList.value = await moneyApi.statisticsMoneyBalance();
+      // balanceList.value = await moneyApi.statisticsMoneyBalance();
+      const list = await moneyApi.statisticsMoneyBalance();
+      balanceList.value = list
+        .filter((f) => f.value > 0)
+        .map((m) => {
+          if (!m.voucher) {
+            return m;
+          }
+          return {
+            ...m,
+            voucher: m.voucher.filter((f) => f.value > 0),
+          };
+        });
     } catch {
       balanceList.value = [];
     }

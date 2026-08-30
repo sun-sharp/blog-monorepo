@@ -119,6 +119,20 @@
               <text class="info-label">银行账单类型</text>
               <text class="info-value type">{{ bankBillTypeLabel }}</text>
             </view>
+            <template v-if="bill.isRetiredBankCard">
+              <view class="info-row">
+                <text class="info-label">卡片状态</text>
+                <text class="info-value type">已报废</text>
+              </view>
+              <view v-if="bill.replaceCardNo" class="info-row">
+                <text class="info-label">新卡号</text>
+                <text class="info-value">{{ bill.replaceCardNo }}</text>
+              </view>
+              <view v-if="bill.bankCardRemark" class="info-row">
+                <text class="info-label">说明</text>
+                <text class="info-value">{{ bill.bankCardRemark }}</text>
+              </view>
+            </template>
           </template>
 
           <template v-if="source === 'manual'">
