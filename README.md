@@ -109,6 +109,13 @@ git tag bm-xxx-4
 git push origin --tags
 ```
 
+## 更新版本
+修改 sync-versions.js文件里的 newVersion 和 newVersionCode
+```bash
+# 根目录执行
+node sync-versions.js
+```
+
 
 ## License
 
