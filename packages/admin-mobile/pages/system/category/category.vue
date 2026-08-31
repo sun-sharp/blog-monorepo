@@ -34,6 +34,7 @@
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
@@ -42,6 +43,8 @@
 
   const listPageRef = ref();
   const apiTypeStore = useApiTypeStore();
+
+  useFilterBackPress(listPageRef);
 
   const dropdownItems = [
     {

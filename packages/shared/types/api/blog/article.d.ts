@@ -67,7 +67,7 @@ export type ApiArticleDetails = ApiArticleItem & { htmlContent: string, cssConte
  */
 export type ApiArticleMobileDetails = Omit<
   ApiArticleItem,
-  'markdownContent' | 'cssName'
+  'markdownContent'
 > & { pid: string };
 
 /**

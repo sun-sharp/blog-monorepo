@@ -7,3 +7,4 @@ export * from './string';
 export * from './time';
 export * from './color';
 export * from './number';
+export * from './pinyin';

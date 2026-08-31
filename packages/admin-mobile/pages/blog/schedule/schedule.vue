@@ -34,11 +34,14 @@
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { scheduleAPi } from '../../../api';
   import type { ApiScheduleItem } from '/#/api/blog/schedule';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
+
+  useFilterBackPress(listPageRef);
 
   function goToAdd() {
     uni.navigateTo({ url: '/pages/blog/schedule-edit/schedule-edit' });

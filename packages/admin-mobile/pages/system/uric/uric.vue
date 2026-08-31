@@ -38,12 +38,15 @@
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { uricApi } from '../../../api';
   import { measureTypeOption, bloodSugarPeriodOption } from '../../../../shared/src/constants/api-type';
   import type { ApiUricItem } from '/#/api/capital/uric';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
+
+  useFilterBackPress(listPageRef);
 
   const dropdownItems = [
     {

@@ -62,7 +62,7 @@ export class ArticleController {
 
   @Get('mobile_details')
   @HttpCode(ApiHttpStatus.SUCCESS)
-  @ApiOperation({ summary: '获取文章详情（支持可选认证）' })
+  @ApiOperation({ summary: '获取手机端文章详情（支持可选认证）' })
   @UseGuards(OptionalJwtAuthGuard)
   findMobileDetails(@Request() req: any, @Query('articleId') articleId: string) {
     // 如果有用户信息，则查询全部文章的详情，不限制（包括加密和不加密）

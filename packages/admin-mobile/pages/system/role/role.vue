@@ -33,12 +33,15 @@
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { roleApi } from '../../../api';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
   import type { ApiRoleItem } from '/#/api/capital/role';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
+
+  useFilterBackPress(listPageRef);
 
   const roleTypeObj: Record<number, string> = {};
   roleTypeOption.forEach((item) => {

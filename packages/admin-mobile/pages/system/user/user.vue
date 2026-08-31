@@ -31,12 +31,15 @@
   import { ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { userApi } from '../../../api';
   import type { ApiUserItem } from '/#/api/capital/user';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
   const searchKey = 'nickname';
+
+  useFilterBackPress(listPageRef);
 
   function goToAdd() {
     uni.navigateTo({ url: '/pages/system/user-edit/user-edit' });

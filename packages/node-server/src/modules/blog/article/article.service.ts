@@ -212,7 +212,7 @@ export class ArticleService {
   }
 
   /**
-   * @description: 获取文章详情（支持可选认证）
+   * @description: 获取手机端文章详情（支持可选认证）
    * @param {string} articleId 文章ID
    * @param {User | null} user 可选的用户信息，有用户时查询全部，无用户时只查询不加密
    * @return {Promise<IResponse>}
@@ -240,6 +240,7 @@ export class ArticleService {
             articleId: find._id,
             title: find.title,
             brief: find.brief,
+            cssName: find.cssName,
             pid,
             authorId: find.authorId,
             authorNickname,

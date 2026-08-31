@@ -28,6 +28,10 @@
             <text class="info-label">是否加密</text>
             <text class="info-value">{{ article.isPrivate ? '加密' : '公开' }}</text>
           </view>
+          <view class="info-row">
+            <text class="info-label">文章css的名称</text>
+            <text class="info-value">{{ article.cssName }}</text>
+          </view>
           <view v-if="article.brief" class="info-row">
             <text class="info-label">简介</text>
             <text class="info-value">{{ article.brief }}</text>

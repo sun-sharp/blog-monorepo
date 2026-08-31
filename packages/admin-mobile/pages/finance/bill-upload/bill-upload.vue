@@ -7,6 +7,7 @@
       :dropdown-items="dropdownItems"
       show-fab
       @fabClick="goToAdd"
+      @filterChange="onFilterChange"
       @itemLongpress="onLongPress">
       <template #default="{ list, longpress }">
         <view v-for="item in list" :key="item.billUploadId" class="bill-upload-item card" @click="goToEdit(item.billUploadId)" @longpress="longpress(item)">
@@ -37,6 +38,7 @@
   import { ref, computed, onMounted } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
+  import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { billUploadApi } from '../../../api';
   import {
     aliPayBillUploadType,
@@ -54,24 +56,59 @@
   const listPageRef = ref();
   const apiTypeStore = useApiTypeStore();
 
+  useFilterBackPress(listPageRef);
+
   const billUploadTypeMap = arrEnumToObj(billUploadTypeOption);
   const handleTypeMap = arrEnumToObj(handleTypeOption);
   const inflowOrOutflowMap = arrEnumToObj(inflowOrOutflowOption);
 
-  const dropdownItems = [
-    {
-      title: '导入类型',
-      key: 'billUploadType',
-      options: [{ label: '全部', value: '' }, ...billUploadTypeOption],
-      value: '',
-    },
-    {
-      title: '处理类型',
-      key: 'handleType',
-      options: [{ label: '全部', value: '' }, ...handleTypeOption],
-      value: '',
-    },
-  ];
+  const selectedHandleType = ref('');
+
+  const dropdownItems = computed(() => {
+    const items: any[] = [
+      {
+        title: '导入类型',
+        key: 'billUploadType',
+        options: [{ label: '全部', value: '' }, ...billUploadTypeOption],
+        value: '',
+      },
+      {
+        title: '处理类型',
+        key: 'handleType',
+        options: [{ label: '全部', value: '' }, ...handleTypeOption],
+        value: selectedHandleType.value,
+      },
+    ];
+
+    if (selectedHandleType.value === 'inflowOrOutflow') {
+      items.push({
+        title: '收支',
+        key: 'inflowOrOutflow',
+        options: [{ label: '全部', value: '' }, ...inflowOrOutflowOption],
+        value: '',
+      });
+    } else if (selectedHandleType.value === 'billType') {
+      items.push({
+        title: '账单类型',
+        key: 'billType',
+        options: [{ label: '全部', value: '' }, ...apiTypeStore.getBillTypeOption],
+        value: '',
+      });
+    } else if (selectedHandleType.value === 'billMethod') {
+      items.push({
+        title: '账单方式',
+        key: 'billMethod',
+        options: [{ label: '全部', value: '' }, ...apiTypeStore.getBillMethodOption],
+        value: '',
+      });
+    }
+
+    return items;
+  });
+
+  function onFilterChange(filters: Record<string, any>) {
+    selectedHandleType.value = filters.handleType || '';
+  }
 
   const billTypeLabel = computed(() => {
     const map = new Map<number, string>();
