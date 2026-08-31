@@ -2,8 +2,8 @@
   "name": "阳之锐",
   "appid": "__UNI__F1AA1F1",
   "description": "个人使用",
-  "versionName": "4.5.4",
-  "versionCode": 4504,
+  "versionName": "4.5.5",
+  "versionCode": 4505,
   "transformPx": false,
   "app-plus": {
     "usingComponents": true,

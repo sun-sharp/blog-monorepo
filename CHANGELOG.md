@@ -7,6 +7,16 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.5.5 (2026-8-31)
+- shared 共享
+  - 列表查询方式修改优化
+- server 端
+  - 修改文章详情名称
+- 移动管理端
+  - 修改 导入账单 弹窗返回
+  - 列表查询方式修改优化
+  - 详情添加文章css的名称
+
 ## bm-ns-aw-am-4.5.4 (2026-8-31)
 - shared 共享
   - 添加 银行新卡号修改模块
