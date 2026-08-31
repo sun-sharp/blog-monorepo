@@ -3,7 +3,7 @@
     <view class="main-content">
       <tab-home v-show="currentTab === 0" :active="currentTab === 0" />
       <tab-article v-show="currentTab === 1" ref="tabArticleRef" :active="currentTab === 1" />
-      <tab-finance v-show="currentTab === 2" ref="tabFinanceRef" :active="currentTab === 2" />
+      <tab-finance v-show="currentTab === 2" ref="tabFinanceRef" :active="currentTab === 2" :external-filter="financeInitialFilter" />
       <tab-mine v-show="currentTab === 3" :active="currentTab === 3" />
     </view>
 
@@ -28,12 +28,13 @@
   import TabFinance from '../../components/tab-content/tab-finance.vue';
   import TabMine from '../../components/tab-content/tab-mine.vue';
   import { getCustomNavHeight } from '../../utils/custom-nav';
-  import { tabTargetRef, consumeSwitchTab } from '../../composables/useTabBus';
+  import { switchTabBusVersion, consumeSwitchTab } from '../../composables/useTabBus';
 
   const currentTab = ref(0);
   const customNavHeight = getCustomNavHeight();
   const tabArticleRef = ref();
   const tabFinanceRef = ref();
+  const financeInitialFilter = ref<{ source?: string; bankType?: number } | null>(null);
 
   const activeColor = '#007aff';
   const inactiveColor = '#333333';
@@ -50,14 +51,16 @@
   }
 
   watch(
-    (): number => {
-      consumeSwitchTab();
-      return tabTargetRef.value;
-    },
-    (target, prev) => {
-      console.log(target, 'target');
-
-      if (target >= 0 && target !== prev) currentTab.value = target;
+    () => switchTabBusVersion(),
+    () => {
+      const payload = consumeSwitchTab();
+      const target = payload.target;
+      if (target >= 0) {
+        currentTab.value = target;
+      }
+      if (target === 2 && (payload.source || payload.bankType)) {
+        financeInitialFilter.value = { source: payload.source, bankType: payload.bankType };
+      }
     }
   );
 

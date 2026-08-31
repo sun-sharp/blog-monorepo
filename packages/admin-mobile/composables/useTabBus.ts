@@ -1,19 +1,25 @@
-import { reactive, toRef } from 'vue';
+import { ref } from 'vue';
 
-interface TabBusState {
+export interface SwitchTabPayload {
   target: number;
+  source?: string;
+  bankType?: number;
 }
 
-const state = reactive<TabBusState>({ target: -1 });
+const pending = ref<SwitchTabPayload | null>(null);
+const version = ref(0);
 
-export function emitSwitchTab(index: number): void {
-  state.target = index;
+export function emitSwitchTab(payload: number | SwitchTabPayload): void {
+  pending.value = typeof payload === 'number' ? { target: payload } : { ...payload };
+  version.value++;
 }
 
-export const tabTargetRef = toRef(state, 'target');
+export function switchTabBusVersion(): number {
+  return version.value;
+}
 
-export function consumeSwitchTab(): number {
-  const target = state.target;
-  state.target = -1;
-  return target;
+export function consumeSwitchTab(): SwitchTabPayload {
+  const payload: SwitchTabPayload = pending.value ? { ...pending.value } : { target: -1 };
+  pending.value = null;
+  return payload;
 }

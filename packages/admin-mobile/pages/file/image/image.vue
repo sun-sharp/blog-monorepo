@@ -44,7 +44,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
-  import { onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { imageApi } from '../../../api';
   import { useApiTypeStore } from '../../../store';
   import type { ApiImageItem } from '/#/api/capital/image';
@@ -88,6 +88,14 @@
       // fallback, options may be empty
     }
   }
+
+  onLoad((query: Record<string, any> | undefined) => {
+    const source = query?.source as string | undefined;
+    if (source) {
+      const idx = imageSourceOption.value.findIndex((o) => o.value === source);
+      if (idx >= 0) currentSourceFilter.value = idx + 1;
+    }
+  });
 
   const sourceMap = computed(() => {
     const map: Record<string, string> = {};

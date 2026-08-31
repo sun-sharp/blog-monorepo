@@ -153,7 +153,7 @@ export class BlogSummaryService {
           {
             $group: {
               _id: {
-                source: { $arrayElemAt: [{ $split: ['$source', '_'] }, 0] },
+                source: '$source',
                 imageType: '$imageType',
               },
               count: { $sum: 1 },
@@ -161,8 +161,8 @@ export class BlogSummaryService {
           },
         ]);
         const imageSourceLabelMap: Record<string, string> = {
-          user: '个人用户图片',
-          article: '文章图片',
+          user_avatar: '个人用户图片',
+          article_content: '文章内容图片',
         };
         const imageSourceMap: Record<string, ApiHomeStatImageSourceCount> = {};
         (imageSourceGroup || []).forEach((m) => {

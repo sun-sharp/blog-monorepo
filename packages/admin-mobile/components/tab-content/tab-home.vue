@@ -38,15 +38,9 @@
         <u-empty mode="data" text="暂无统计数据" icon-size="120" />
       </view>
       <view v-else class="home-stats-list">
-        <view
-          v-for="item in statItems"
-          :key="item.label"
-          class="home-stat-card"
-          :class="{ 'home-stat-card-clickable': item.url || item.tab !== undefined }"
-          @click="onStatClick(item)">
-          <view class="home-stat-main">
+        <view v-for="item in statItems" :key="item.label" class="home-stat-card">
+          <view class="home-stat-main" :class="{ 'home-stat-main-clickable': item.url || item.tab !== undefined }" @click="onStatClick(item)">
             <view :class="['home-stat-icon', item.theme]">
-              <!-- <u-icon :name="item.icon" size="36" color="#fff" /> -->
               <u-icon v-if="item.iconType === 'sharp-icon'" :name="item.icon" size="36" color="#fff" custom-prefix="sharp-icon" />
               <u-icon v-else :name="item.icon" size="36" color="#fff" />
             </view>
@@ -57,10 +51,16 @@
             <u-icon v-if="item.url || item.tab !== undefined" name="arrow-right" size="28" color="#ccc" />
           </view>
           <view v-if="item.children && item.children.length > 0" class="home-stat-children">
-            <view v-for="child in item.children" :key="child.label" class="home-stat-child">
-              <text class="home-stat-child-label">{{ child.label }}</text>
-              <text class="home-stat-child-value">{{ child.count }}</text>
-            </view>
+            <u-grid :col="item.gridCol || 2" :border="false">
+              <u-grid-item v-for="child in item.children" :key="child.label" style="background-color: none" @click="onStatChildrenClick(child)">
+                <view class="home-stat-child-icon" :class="child.theme || 'nav-icon-green'">
+                  <u-icon v-if="child.iconType === 'sharp-icon'" :name="child.icon" size="36" color="#fff" custom-prefix="sharp-icon" />
+                  <u-icon v-else :name="child.icon" size="36" color="#fff" />
+                </view>
+                <text class="home-stat-child-label">{{ child.label }}</text>
+                <text class="home-stat-child-value">{{ child.count }}</text>
+              </u-grid-item>
+            </u-grid>
           </view>
         </view>
       </view>
@@ -75,6 +75,19 @@
   import { emitSwitchTab } from '../../composables/useTabBus';
   import type { ApiHomeStatistics, ApiHomeStatFinancialTypeCount, ApiHomeStatImageSourceCount } from '/#/api/blog/home-statistics';
 
+  interface StatCardChildItem {
+    label: string;
+    count: number;
+    icon?: string;
+    iconType?: string;
+    theme?: string;
+    url?: string;
+    tab?: number;
+    source?: string;
+    bankType?: number;
+    query?: string;
+  }
+
   interface StatCardItem {
     icon: string;
     iconType?: string;
@@ -83,7 +96,8 @@
     theme: string;
     url?: string;
     tab?: number;
-    children?: { label: string; count: number }[];
+    gridCol?: number;
+    children?: StatCardChildItem[];
   }
 
   const props = defineProps<{ active: boolean }>();
@@ -102,9 +116,25 @@
     const financialChildren: StatCardItem['children'] = [];
     const financialTypeCount = d.financialTypeCount || [];
     financialTypeCount.forEach((item: ApiHomeStatFinancialTypeCount) => {
-      financialChildren.push({ label: item.label, count: item.count });
+      const typeIcon = financialSourceIcon(item.source);
+      const typeItem: StatCardChildItem = {
+        label: item.label,
+        count: item.count,
+        ...typeIcon,
+        tab: 2,
+        source: item.source,
+      };
+      financialChildren.push(typeItem);
       (item.children || []).forEach((child: ApiHomeStatFinancialTypeCount) => {
-        financialChildren.push({ label: child.label, count: child.count });
+        const bankType = Number(child.source.replace('bank_', ''));
+        financialChildren.push({
+          label: child.label,
+          count: child.count,
+          ...childSourceIcon(child.source),
+          tab: 2,
+          source: 'bank',
+          bankType: Number.isNaN(bankType) ? undefined : bankType,
+        });
       });
     });
 
@@ -112,6 +142,9 @@
     const imageChildren: StatCardItem['children'] = (d.imageSourceCount || []).map((item: ApiHomeStatImageSourceCount) => ({
       label: item.label,
       count: item.count,
+      ...imageSourceIcon(item.source),
+      url: '/pages/file/image/image',
+      query: `source=${item.source}`,
     }));
 
     return [
@@ -122,6 +155,7 @@
         value: d.financialCount,
         theme: 'theme-blue',
         tab: 2,
+        gridCol: 4,
         children: financialChildren,
       },
       {
@@ -139,6 +173,7 @@
         value: imageCount,
         theme: 'theme-orange',
         url: '/pages/file/image/image',
+        gridCol: 2,
         children: imageChildren,
       },
       {
@@ -161,7 +196,7 @@
         iconType: 'sharp-icon',
         label: '角色',
         value: d.roleCount,
-        theme: 'theme-grey',
+        theme: 'theme-purple',
         url: '/pages/system/role/role',
       },
       {
@@ -183,13 +218,21 @@
 
   function onStatClick(item: StatCardItem) {
     if (item.tab !== undefined) {
-      console.log(item.tab, 'item.tab');
-
       emitSwitchTab(item.tab);
       return;
     }
     if (item.url) {
       navigateTo(item.url);
+    }
+  }
+
+  function onStatChildrenClick(child: StatCardChildItem) {
+    if (child.tab !== undefined) {
+      emitSwitchTab({ target: child.tab, source: child.source, bankType: child.bankType });
+      return;
+    }
+    if (child.url) {
+      navigateTo(child.query ? `${child.url}?${child.query}` : child.url);
     }
   }
 
@@ -207,6 +250,45 @@
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
+  }
+
+  function financialSourceIcon(source: string): { icon: string; iconType?: string; theme: string } {
+    const bankMap: Record<string, { icon: string; iconType?: string; theme: string }> = {
+      '1': { icon: 'gongshangyinhang', iconType: 'sharp-icon', theme: 'theme-orange' },
+      '2': { icon: 'nongyeyinxing', iconType: 'sharp-icon', theme: 'theme-orange' },
+      '3': { icon: 'jiansheyinxing', iconType: 'sharp-icon', theme: 'theme-orange' },
+      '4': { icon: 'minshengyinxing', iconType: 'sharp-icon', theme: 'theme-orange' },
+      '5': { icon: 'book', iconType: 'sharp-icon', theme: 'theme-orange' },
+    };
+    if (source.startsWith('bank_')) {
+      const bankIcon = bankMap[source.slice(5)];
+      if (bankIcon) return bankIcon;
+    }
+    switch (source) {
+      case 'weChat':
+        return { icon: 'weixin-fill', theme: 'theme-orange' };
+      case 'aliPay':
+        return { icon: 'zhifubao', theme: 'theme-orange' };
+      case 'bank':
+        return { icon: 'red-packet', theme: 'theme-orange' };
+      default:
+        return { icon: 'red-packet', theme: 'theme-orange' };
+    }
+  }
+
+  function childSourceIcon(source: string): { icon: string; iconType?: string; theme: string } {
+    return financialSourceIcon(source);
+  }
+
+  function imageSourceIcon(source: string): { icon: string; iconType?: string; theme: string } {
+    switch (source) {
+      case 'user':
+        return { icon: 'account', theme: 'theme-green' };
+      case 'article':
+        return { icon: 'book', iconType: 'sharp-icon', theme: 'theme-green' };
+      default:
+        return { icon: 'tupian', iconType: 'sharp-icon', theme: 'theme-green' };
+    }
   }
 
   onMounted(() => {
@@ -233,20 +315,21 @@
   }
 
   .home-section-title {
-    font-size: $uni-font-size-lg;
-    font-weight: bold;
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #1f2937;
   }
 
   .home-section-title-row {
     display: flex;
     align-items: center;
-    gap: 8rpx;
+    gap: 10rpx;
   }
 
   .nav-icon-wrap {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 24rpx;
+    width: 88rpx;
+    height: 88rpx;
+    border-radius: 26rpx;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -265,8 +348,10 @@
   }
 
   .nav-label {
-    font-size: $uni-font-size-sm;
-    margin-top: 12rpx;
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 14rpx;
   }
 
   .home-stats {
@@ -293,19 +378,21 @@
   }
 
   .home-stat-card {
-    background-color: #f7f8fa;
-    border-radius: 16rpx;
-    padding: 24rpx;
-  }
-
-  .home-stat-card-clickable:active {
-    background-color: #eef1f5;
+    // border-radius: 16rpx;
+    // background-color: #f7f8fa;
   }
 
   .home-stat-main {
     display: flex;
     align-items: center;
+    border-radius: 16rpx;
+    padding: 24rpx;
+    background-color: #eef1f5;
   }
+
+  // .home-stat-main-clickable:active {
+  //   background-color: #eef1f5;
+  // }
 
   .home-stat-icon {
     width: 72rpx;
@@ -337,10 +424,6 @@
     background: linear-gradient(135deg, #43e97b, #38bdf8);
   }
 
-  .theme-grey {
-    background: linear-gradient(135deg, #bdc3c7, #7f8c8d);
-  }
-
   .home-stat-meta {
     flex: 1;
     margin-left: 20rpx;
@@ -349,20 +432,21 @@
   }
 
   .home-stat-value {
-    font-size: $uni-font-size-title;
-    font-weight: bold;
+    font-size: 36rpx;
+    font-weight: 700;
     color: $uni-text-color;
   }
 
   .home-stat-label {
-    font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
-    margin-top: 4rpx;
+    font-size: 24rpx;
+    font-weight: 500;
+    color: #6b7280;
+    margin-top: 6rpx;
   }
 
   .home-stat-children {
     margin-top: 16rpx;
-    padding-top: 16rpx;
+    padding: 16rpx 24rpx;
     border-top: 1rpx solid #e5e5e5;
   }
 
@@ -373,14 +457,29 @@
     padding: 8rpx 0;
   }
 
+  .home-stat-child-icon {
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 18rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
   .home-stat-child-label {
-    font-size: 26rpx;
-    color: $uni-text-color;
+    font-size: 24rpx;
+    font-weight: 500;
+    color: #6b7280;
+    margin-top: 12rpx;
+    text-align: center;
   }
 
   .home-stat-child-value {
     font-size: 26rpx;
-    font-weight: bold;
+    font-weight: 700;
     color: $uni-text-color;
+    margin-top: 2rpx;
+    text-align: center;
   }
 </style>

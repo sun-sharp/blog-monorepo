@@ -297,7 +297,7 @@
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
   import SearchableSelect from '../searchable-select/searchable-select.vue';
 
-  const props = defineProps<{ active: boolean }>();
+  const props = defineProps<{ active: boolean; externalFilter?: { source?: string; bankType?: number } | null }>();
 
   const apiTypeStore = useApiTypeStore();
 
@@ -733,6 +733,27 @@
   function checkRefresh() {
     if (inited.value && consumeRefreshFlag('bill')) loadData(true);
   }
+
+  watch(
+    () => props.externalFilter,
+    (filter) => {
+      if (!filter) return;
+      const sourceMap: Record<string, number> = { bank: 1, aliPay: 2, weChat: 3, manual: 4 };
+      if (filter.source && sourceMap[filter.source] !== undefined) {
+        appliedSource.value = sourceMap[filter.source];
+        currentSource.value = appliedSource.value;
+        appliedBankType.value = undefined;
+        filterBankType.value = undefined;
+      }
+      if (filter.bankType) {
+        appliedSource.value = 1;
+        currentSource.value = 1;
+        appliedBankType.value = filter.bankType;
+        filterBankType.value = filter.bankType;
+      }
+      if (inited.value) loadData(true);
+    }
+  );
 
   watch(
     () => props.active,
