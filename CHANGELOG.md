@@ -7,6 +7,19 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-aw-am-4.5.4 (2026-8-31)
+- shared 共享
+  - 添加 银行新卡号修改模块
+- server 端
+  - 添加 银行新卡号修改模块
+  - 修改 首页统计样式和接口
+- 移动管理端
+  - 添加 银行新卡号修改模块
+  - 修改 账单详情和编辑
+  - 修改 财务编辑页
+  - 修改 自定义图标
+  - 修改 首页统计样式和接口
+
 ## bm-ns-aw-am-4.5.3 (2026-8-30)
 - shared 共享
   - 修改血糖检测时段类型

@@ -4,8 +4,8 @@ const path = require('path');
 // 先安装：npm install json5
 const JSON5 = require('json5');
 
-const newVersion = '4.5.3';
-const newVersionCode = 4503;
+const newVersion = '4.5.4';
+const newVersionCode = 4504;
 
 // ---------- package.json 列表 ----------
 const packageFiles = [
