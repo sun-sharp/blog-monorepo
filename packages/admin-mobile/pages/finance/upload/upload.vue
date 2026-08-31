@@ -337,7 +337,7 @@
 
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onBackPress } from '@dcloudio/uni-app';
   import { weChatApi, aliPayApi, bankApi } from '../../../api';
   import { useUserStore, useApiTypeStore } from '../../../store';
   import { voucherTypeOption } from '../../../../shared/src/constants/api-type';
@@ -414,6 +414,14 @@
 
   onLoad(async () => {
     await Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod(), apiTypeStore.getBankType()]);
+  });
+
+  onBackPress(() => {
+    if (step.value === 'preview') {
+      step.value = 'upload';
+      return true; // 拦截返回
+    }
+    return false;
   });
 
   function calcScrollHeight() {
