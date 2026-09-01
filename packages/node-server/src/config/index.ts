@@ -23,7 +23,30 @@ const {
   MONGODB_BIN_PATH,
 } = process.env;
 
+console.log(BLOG_DATABASE_NAME, 'blog数据库');
+console.log(CAPITAL_DATABASE_NAME, 'capital数据库');
 console.log(RUNNING_ENV, '运行环境');
+console.log(
+  JSON.stringify({
+    RUNNING_ENV,
+    PORT,
+    JWT_SECRET,
+    JWT_EXPIRES_IN,
+    BLOG_DATABASE_NAME,
+    CAPITAL_DATABASE_NAME,
+    IMAGE_REFIX_NAME,
+    STATIC_DIR_NAME,
+    STATIC_DIR_POSITION,
+    FILE_ACCESS_PATH,
+    SERVER_IP,
+    DATABASE_PORT,
+    MONGODB_ACCOUNT,
+    MONGODB_PASSWORD,
+    MONGODB_QUERY,
+    MONGODB_BIN_PATH,
+  }),
+  'process.env',
+);
 
 export const useCustomConfig = (): GlobalEnvConfig => ({
   port: Number(PORT) || 3000,

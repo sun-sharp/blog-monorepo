@@ -312,13 +312,30 @@
     uploading.value = true;
     try {
       const result = await articleAPi.uploadMd(filePath);
-      const name = fileName || filePath.split('/').pop() || 'content.md';
+      const name = normalizeFileName(fileName, filePath);
       setMdContent(result, name);
     } catch (e: any) {
       uni.showToast({ title: e.message || '上传失败', icon: 'none' });
     } finally {
       uploading.value = false;
     }
+  }
+
+  // 处理 app/鸿蒙等端返回的中文文件名乱码：
+  // 取路径最后一段，并解码 URL 编码的命名
+  function normalizeFileName(fileName?: string, filePath?: string): string {
+    let name = (fileName || filePath || 'content.md').trim();
+    // 取最后的 basename（兼容返回完整路径的情况）
+    const slashParts = name.split(/[\\/]/);
+    name = slashParts[slashParts.length - 1] || name;
+    try {
+      if (/%[0-9A-Fa-f]{2}/.test(name)) {
+        name = decodeURIComponent(name);
+      }
+    } catch {
+      // 解码失败保持原样
+    }
+    return name || 'content.md';
   }
 
   function setMdContent(result: UploadMdResult, fileName: string) {
