@@ -4,14 +4,14 @@ const path = require('path');
 // 先安装：npm install json5
 const JSON5 = require('json5');
 
-const newVersion = '4.5.5';
-const newVersionCode = 4505;
+const newVersion = '4.5.6';
+const newVersionCode = 4506;
 
 // ---------- package.json 列表 ----------
 const packageFiles = [
   './package.json',
   './packages/admin-mobile/package.json',
-  './packages/admin-mobile-x/package.json',
+  // './packages/admin-mobile-x/package.json',
   './packages/admin-web/package.json',
   './packages/node-server/package.json',
   './packages/website/package.json',

@@ -7,6 +7,15 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.5.6 (2026-9-1)
+- shared 共享
+  - 移动端文章编辑修改
+- server 端
+  - 移动端文章编辑修改
+- 移动管理端
+  - 移动端文章编辑修改
+  - 添加复制功能和图标修改
+
 ## bm-ns-am-4.5.5 (2026-8-31)
 - shared 共享
   - 列表查询方式修改优化
