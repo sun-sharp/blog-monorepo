@@ -19,6 +19,7 @@ import puppeteer from 'puppeteer';
 import { Response } from 'express';
 import { decodeBuffer, markdownToHtml } from 'src/common/markdown';
 import { ArticleCssService } from '../article-css/article-css.service';
+import { ArticlePreviewService } from '../article-preview/article-preview.service';
 import { UserService } from 'src/modules/capital/user/user.service';
 import { ArticlePolicyService } from '../article-policy/article-policy.service';
 
@@ -34,6 +35,7 @@ export class ArticleService {
     private readonly articleModel: Model<Article>,
     private readonly articleCssService: ArticleCssService,
     private readonly articlePolicyService: ArticlePolicyService,
+    private readonly articlePreviewService: ArticlePreviewService,
     private readonly userService: UserService,
   ) {}
 
@@ -241,6 +243,7 @@ export class ArticleService {
             title: find.title,
             brief: find.brief,
             cssName: find.cssName,
+            markdownContent: find.markdownContent,
             pid,
             authorId: find.authorId,
             authorNickname,
@@ -499,109 +502,55 @@ export class ArticleService {
   }
 
   /**
-   * @description: 根据 policyId 查询文章 并处理成 html
-   * @param {string} policyId
+   * @description: 根据 policyId 或 previewId 查询文章并处理成 html
+   * @param {string} pid 策略ID 或 临时预览ID
    * @param {Response} res
-   * @return {Promise<IResponse>}
+   * @return {Promise<Response>}
    */
-  public async renderHtml(policyId: string, res: Response): Promise<Response> {
+  public async renderHtml(pid: string, res: Response): Promise<Response> {
     try {
-      if (!policyId) {
+      if (!pid) {
         logger.warn('请求缺少 pid 参数');
         return res.status(400).send('缺少参数 pid');
       }
 
-      const articleId = await this.articlePolicyService.consumePolicy(policyId);
-      if (!articleId) {
-        return res.status(410).send('链接无效（策略不存在、已过期或访问次数用尽）');
+      // 优先按策略 ID 消费（已保存文章）
+      const articleId = await this.articlePolicyService.consumePolicy(pid);
+      if (articleId) {
+        const article = await this.articleModel.findOne({ _id: articleId }).lean();
+        if (!article) {
+          logger.warn(`文章不存在: ${articleId}`);
+          return res.status(404).send('文章不存在');
+        }
+        const html = await this.articlePreviewService.buildRenderHtml(article.markdownContent, article.cssName, article.title);
+        logger.log(`渲染已保存文章 html 成功`);
+        res.setHeader('Content-Type', 'text/html');
+        return res.send(html);
       }
 
-      const article = await this.articleModel.findOne({ _id: articleId }).lean();
-      if (!article) {
-        logger.warn(`文章不存在: ${articleId}`);
-        return res.status(404).send('文章不存在');
+      // 回退临时预览集合（未保存文章）
+      const preview = await this.articlePreviewService.findById(pid);
+      if (!preview) {
+        return res.status(410).send('链接无效（策略不存在、临时预览已过期或访问次数用尽）');
       }
 
-      const [previewHtml, cssContent] = await Promise.all([
-        await markdownToHtml(article.markdownContent),
-        await this.articleCssService.findOneByName(article.cssName),
-      ]);
-
-      const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${article.title || '文章'}</title>
-  <style>${cssContent}</style>
-  <style>
-    body {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.6;
-      color: #333;
-    }
-    /* 可加其他自定义样式 */
-  </style>
-</head>
-<body>
-  <div id="preview-only" class="md-editor md-edit-preview__cont md-editor-previewOnly">
-  <div id="preview-only-preview-wrapper" class="md-editor-preview-wrapper">
-  <div id="preview-only-preview" class="md-editor-preview ${article.cssName}-theme md-editor-scrn">${previewHtml}</div>
-  </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 收集所有图片链接
-      const allImages = document.querySelectorAll('img');
-      const imageUrls = Array.from(allImages).map(img => img.src);
-
-      allImages.forEach(img => {
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', function(e) {
-          e.stopPropagation();
-          // 发送消息到 uni-app 父页面
-          const data = {
-            type: 'imagePreview',
-            current: this.src,    // 当前点击的图片
-            urls: imageUrls       // 所有图片的 URL（用于滑动预览）
-          };
-          // 优先使用 uni-app 提供的 API
-          if (window.uni && window.uni.webView) {
-            window.uni.webView.postMessage({
-              data: data
-            });
-          } else {
-            // 兼容其他环境（如小程序 web-view）
-            window.parent.postMessage(data, '*');
-          }
-        });
-      });
-    });
-  </script>
-</body>
-</html>
-    `;
-
-      //   handleMessage(event) {
-      //   const data = event.detail.data;
-      //   if (data.type === 'imagePreview') {
-      //     uni.previewImage({
-      //       current: data.current,
-      //       urls: data.urls
-      //     });
-      //   }
-      // }
-      logger.log(`导出文章 htmlBody`);
+      const html = await this.articlePreviewService.buildRenderHtml(preview.markdownContent, preview.cssName, '文章预览');
+      logger.log(`渲染临时预览 html 成功`);
       res.setHeader('Content-Type', 'text/html');
       return res.send(html);
     } catch (err) {
-      logger.error(`根据 policyId 查询文章 并处理成 html 失败! ${JSON.stringify(err)}`);
+      logger.error(`根据 pid 查询文章并处理成 html 失败! ${JSON.stringify(err)}`);
       return res.status(500).send('服务器内部错误，请稍后重试');
     }
+  }
+
+  /**
+   * @description: 保存临时预览（未保存文章），返回 previewId
+   * @param {string} markdownContent
+   * @param {string} cssName
+   * @return {Promise<string | null>}
+   */
+  public async saveTempPreview(markdownContent: string, cssName: string): Promise<string | null> {
+    return this.articlePreviewService.saveTempPreview(markdownContent, cssName);
   }
 }

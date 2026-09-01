@@ -9,6 +9,7 @@ export * as waitForDoApi from './capital/wait-for-do';
 export * as uricApi from './capital/uric';
 
 export * as articleAPi from './blog/article';
+export * as articleCssApi from './blog/article-css';
 export * as scheduleAPi from './blog/schedule';
 export * as homeStatisticsApi from './blog/home-statistics';
 

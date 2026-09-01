@@ -65,10 +65,15 @@ export type ApiArticleDetails = ApiArticleItem & { htmlContent: string, cssConte
 /**
  * @description: 文章的移动端详情数据
  */
-export type ApiArticleMobileDetails = Omit<
-  ApiArticleItem,
-  'markdownContent'
-> & { pid: string };
+export type ApiArticleMobileDetails = ApiArticleItem & { pid: string };
+
+/**
+ * @description: 文章 css 列表项
+ */
+export type ApiArticleCssItem = {
+  // css 名称
+  name: string;
+};
 
 /**
  * @description: 文章的列表每项

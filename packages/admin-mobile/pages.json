@@ -20,13 +20,13 @@
     {
       "root": "pages/blog",
       "pages": [
-        // {
-        //   "path": "article-edit/article-edit",
-        //   "style": {
-        //     "navigationBarTitleText": "文章编辑",
-        //     "softinputMode": "adjustResize"
-        //   }
-        // },
+        {
+          "path": "article-edit/article-edit",
+          "style": {
+            "navigationBarTitleText": "文章编辑",
+            "softinputMode": "adjustResize"
+          }
+        },
         {
           "path": "article-detail/article-detail",
           "style": {

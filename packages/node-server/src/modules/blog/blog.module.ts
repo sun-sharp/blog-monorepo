@@ -14,6 +14,7 @@ import { BankCardModule } from './money/bank-card/bank-card.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ArticleCssModule } from './article-css/article-css.module';
 import { ArticlePolicyModule } from './article-policy/article-policy.module';
+import { ArticlePreviewModule } from './article-preview/article-preview.module';
 import { BlogSummaryModule } from './summary/blog-summary.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { BlogSummaryModule } from './summary/blog-summary.module';
     ScheduleModule,
     ArticleCssModule,
     ArticlePolicyModule,
+    ArticlePreviewModule,
     BlogSummaryModule,
     RouterModule.register([
       {

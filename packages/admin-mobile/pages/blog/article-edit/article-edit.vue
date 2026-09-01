@@ -9,11 +9,17 @@
         </view>
         <view class="article-edit-form">
           <view class="article-edit-field">
-            <text class="article-edit-label">标题</text>
+            <view class="article-edit-label-wrap">
+              <text class="article-edit-required">*</text>
+              <text class="article-edit-label">标题</text>
+            </view>
             <u-input v-model="form.title" placeholder="请输入文章标题" border clearable :cursor-spacing="20" />
           </view>
           <view class="article-edit-field">
-            <text class="article-edit-label">简介</text>
+            <view class="article-edit-label-wrap">
+              <text class="article-edit-required">*</text>
+              <text class="article-edit-label">简介</text>
+            </view>
             <u-textarea v-model="form.brief" placeholder="用一段话简短介绍这篇文章..." :maxlength="300" count auto-height :cursor-spacing="20" />
           </view>
         </view>
@@ -27,10 +33,25 @@
         </view>
         <view class="article-edit-form">
           <view class="article-edit-field article-edit-field-row" @click="showCategory = true">
-            <text class="article-edit-label">分类</text>
+            <view class="article-edit-label-wrap">
+              <text class="article-edit-required">*</text>
+              <text class="article-edit-label">分类</text>
+            </view>
             <view class="article-edit-field-value">
               <text :class="{ 'article-edit-placeholder': !categoryLabel }">
                 {{ categoryLabel || '请选择分类' }}
+              </text>
+              <u-icon name="arrow-right" size="32rpx" color="#c0c4cc" />
+            </view>
+          </view>
+          <view class="article-edit-field article-edit-field-row" @click="showCssName = true">
+            <view class="article-edit-label-wrap">
+              <text class="article-edit-required">*</text>
+              <text class="article-edit-label">文章css名称</text>
+            </view>
+            <view class="article-edit-field-value">
+              <text :class="{ 'article-edit-placeholder': !cssNameLabel }">
+                {{ cssNameLabel || '请选择css名称' }}
               </text>
               <u-icon name="arrow-right" size="32rpx" color="#c0c4cc" />
             </view>
@@ -46,31 +67,39 @@
       </view>
 
       <!-- 文章内容 -->
-      <view class="article-edit-card">
+      <view v-if="showMdSection" class="article-edit-card">
         <view class="article-edit-section-header">
           <u-icon name="file-text" size="36rpx" color="#007aff" />
           <text class="article-edit-section-title">文章内容</text>
         </view>
         <view class="article-edit-form">
-          <!-- 上传按钮 / 已有文件展示 -->
-          <view class="article-edit-md-upload" @click="chooseMdFile">
-            <u-icon name="upload" size="36rpx" color="#007aff" />
-            <text>{{ mdFileName || (form.markdownContent ? '已有内容（点击替换）' : '上传 MD 文件') }}</text>
-            <u-icon v-if="mdFileName" name="close" size="32rpx" color="#999" @click.stop="clearMdContent" />
+          <!-- 选择文件 -->
+          <view class="upload-action">
+            <u-button type="primary" icon="file-text" :disabled="uploading" @click="chooseMdFile">选择文件</u-button>
+            <text class="upload-tip">支持 .md、.markdown、.txt 格式文件</text>
+          </view>
+
+          <!-- 已选文件展示（账单上传样式） -->
+          <view v-if="mdFileName" class="upload-file">
+            <view class="upload-file-info">
+              <u-icon name="file-text" size="40" color="#007aff" />
+              <view class="upload-file-detail">
+                <text class="upload-file-name">{{ mdFileName }}</text>
+                <text class="upload-file-size">已选择文件</text>
+              </view>
+              <u-icon name="close" color="#999" @click.stop="clearMdContent" />
+            </view>
           </view>
 
           <!-- 上传进度 -->
-          <u-line-progress v-if="uploading" :percent="uploadProg" active-color="#007aff" />
-          <text v-if="uploading" class="article-edit-md-progress-text">解析中...</text>
+          <view v-if="uploading" class="upload-progress">
+            <u-line-progress :percent="uploadProg" active-color="#007aff" />
+            <text class="upload-progress-text">解析中...</text>
+          </view>
 
-          <!-- 预览区域 -->
-          <view v-if="previewHtml" class="article-edit-md-preview">
-            <!-- #ifdef H5 -->
-            <view class="article-edit-md-preview-content" v-html="previewHtml" />
-            <!-- #endif -->
-            <!-- #ifndef H5 -->
-            <mp-html :content="previewHtml" :css="previewCss" />
-            <!-- #endif -->
+          <!-- 预览按钮 -->
+          <view v-if="hasMdContent && !uploading" class="preview-action">
+            <u-button type="primary" plain icon="eye" @click="handlePreviewMd">预览</u-button>
           </view>
         </view>
       </view>
@@ -92,6 +121,15 @@
         :range="categoryRange"
         range-key="label"
         @confirm="onCategoryConfirm" />
+
+      <u-picker
+        v-model="showCssName"
+        mode="selector"
+        :default-selector="cssNameDefault"
+        :preserve-selection="false"
+        :range="cssNameRange"
+        range-key="label"
+        @confirm="onCssNameConfirm" />
     </scroll-view>
   </view>
 </template>
@@ -100,90 +138,9 @@
   import { ref, reactive, computed } from 'vue';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
-  import { articleAPi } from '../../../api';
+  import { articleAPi, articleCssApi } from '../../../api';
   import { useApiTypeStore, useUserStore } from '../../../store';
   import { UploadMdResult } from '/#/api';
-
-  // ---------- 强化样式：彻底解决代码块横向滚动问题 ----------
-  const HLJS_CSS = `
-/* 高亮样式 */
-.hljs { display: block; overflow-x: auto; padding: 0.5em; color: #333; background: #f8f8f8; }
-.hljs-comment, .hljs-quote { color: #998; font-style: italic; }
-.hljs-keyword, .hljs-selector-tag, .hljs-subst { color: #333; font-weight: bold; }
-.hljs-number, .hljs-literal, .hljs-variable, .hljs-template-variable, .hljs-tag .hljs-attr { color: #008080; }
-.hljs-string, .hljs-doctag { color: #d14; }
-.hljs-title, .hljs-section, .hljs-selector-id { color: #900; font-weight: bold; }
-.hljs-subst { font-weight: normal; }
-.hljs-type, .hljs-class .hljs-title { color: #458; font-weight: bold; }
-.hljs-tag, .hljs-name, .hljs-attribute { color: #000080; font-weight: normal; }
-.hljs-regexp, .hljs-link { color: #009926; }
-.hljs-symbol, .hljs-bullet { color: #990073; }
-.hljs-built_in, .hljs-builtin-name { color: #0086b3; }
-.hljs-meta { color: #999; font-weight: bold; }
-.hljs-deletion { background: #fdd; }
-.hljs-addition { background: #dfd; }
-.hljs-emphasis { font-style: italic; }
-.hljs-strong { font-weight: bold; }
-
-/* 禁止全局横向滚动（覆盖所有父容器） */
-.article-detail,
-.article-detail-scroll,
-.article-detail-content,
-page,
-view,
-.mp-html,
-.rich-text,
-.article-detail-scroll > view {
-  overflow-x: hidden !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-/* 代码块内部横向滚动（强力覆盖 mp-html 内部所有可能的结构） */
-pre,
-code,
-pre code,
-.hljs,
-.code-block,
-.mp-html pre,
-.mp-html code,
-.mp-html pre code,
-.article-detail-content pre,
-.article-detail-content code,
-.article-detail-content pre code {
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  white-space: pre !important;
-  word-break: normal !important;
-  max-width: 100% !important;
-  display: block !important;
-}
-
-/* 针对行内代码不滚动（仅块级代码滚动） */
-code:not(pre code) {
-  overflow-x: visible !important;
-  white-space: normal !important;
-}
-
-/* 表格处理 */
-table {
-  display: block !important;
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  max-width: 100% !important;
-}
-table td, table th {
-  white-space: nowrap;
-}
-
-/* 图片自适应 */
-img {
-  max-width: 100% !important;
-  height: auto !important;
-}
-
-.md-editor { height: 100%; }
-`;
 
   const userStore = useUserStore();
 
@@ -191,28 +148,59 @@ img {
   const loading = ref(false);
   const editId = ref('');
   const showCategory = ref(false);
+  const showCssName = ref(false);
 
   // 新增状态
   const mdFileName = ref('');
   const uploading = ref(false);
   const uploadProg = ref(0);
 
-  // 预览 computed（与 article-detail 的 processedHtml 结构一致）
-  const previewHtml = computed(() => {
-    if (!form.htmlContent) return '';
-    return `<div class="md-editor"><div class="md-editor-preview"><article class="default-theme">${form.htmlContent}</article></div></div>`;
+  // 是否展示 MD 上传区块（小程序端不支持 web-view 预览，去掉该功能）
+  const showMdSection = computed(() => {
+    let show = true;
+    // #ifdef MP-WEIXIN
+    show = false;
+    // #endif
+    return show;
   });
-  const previewCss = computed(() => (form.cssContent || '') + HLJS_CSS);
+
+  // 是否有可预览的内容
+  const hasMdContent = computed(() => !!form.markdownContent.trim());
 
   const form = reactive({
     title: '',
     brief: '',
     categoryVal: null as number | null,
+    cssName: 'default',
     isPrivate: false,
     markdownContent: '',
-    htmlContent: '', // 新增字段，保存原始的 HTML 内容
-    cssContent: '',
   });
+
+  // css 名称选项
+  const cssNameRange = ref<{ label: string; value: string }[]>([]);
+  const cssNameDefault = computed(() => {
+    const idx = cssNameRange.value.findIndex((item) => item.value === form.cssName);
+    return idx >= 0 ? [idx] : [0];
+  });
+  const cssNameLabel = computed(() => cssNameRange.value.find((item) => item.value === form.cssName)?.label || '');
+
+  async function loadCssNameOptions() {
+    try {
+      const res = await articleCssApi.list();
+      const list = Array.isArray(res) && res.length > 0 ? res : [{ name: 'default' }];
+      cssNameRange.value = list.map((item) => ({ label: item.name, value: item.name }));
+      if (!cssNameRange.value.find((item) => item.value === form.cssName) && cssNameRange.value[0]) {
+        form.cssName = cssNameRange.value[0].value;
+      }
+    } catch {
+      cssNameRange.value = [{ label: 'default', value: 'default' }];
+    }
+  }
+
+  function onCssNameConfirm(e: Array<number>) {
+    const idx = e[0];
+    form.cssName = cssNameRange.value[idx]?.value || 'default';
+  }
 
   const categoryRange = computed(() =>
     apiTypeStore.getArticleCategoryOption.map((item) => ({
@@ -234,7 +222,6 @@ img {
   });
 
   function onCategoryConfirm(e: Array<number>) {
-    // console.log('选择了分类：', JSON.stringify(e));
     const idx = e[0];
     form.categoryVal = typeof idx === 'number' ? categoryRange.value[idx].value : null;
   }
@@ -252,12 +239,20 @@ img {
       uni.showToast({ title: '请选择文章分类', icon: 'none' });
       return false;
     }
-    if (!form.markdownContent.trim()) {
+    if (!form.cssName.trim()) {
+      uni.showToast({ title: '请选择文章css名称', icon: 'none' });
+      return false;
+    }
+    // 小程序端不校验 MD 内容（不支持上传）
+    let needMdCheck = true;
+    // #ifdef MP-WEIXIN
+    needMdCheck = false;
+    // #endif
+    if (needMdCheck && !form.markdownContent.trim()) {
       uni.showToast({ title: '请上传文章内容（MD 文件）', icon: 'none' });
       return false;
     }
 
-    // 不再校验内容，因为内容不可编辑
     return true;
   }
 
@@ -268,10 +263,10 @@ img {
         form.title = article.title;
         form.brief = article.brief;
         form.categoryVal = article.categoryVal;
+        form.cssName = article.cssName || 'default';
         form.isPrivate = article.isPrivate;
-        // form.markdownContent = article.markdownContent;
-        // form.htmlContent = article.htmlContent || ''; // 保存原始的 htmlContent
-        // form.cssContent = article.cssContent;
+        form.markdownContent = article.markdownContent || '';
+        mdFileName.value = '';
       }
     } catch (e) {
       console.error(e);
@@ -291,7 +286,7 @@ img {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', `${BLOG_API_URL}/article/upload_md`);
         xhr.setRequestHeader('Authorization', authHead + token);
-        xhr.setRequestHeader('css-name', 'default');
+        xhr.setRequestHeader('css-name', form.cssName || 'default');
         xhr.onload = () => {
           try {
             const data = JSON.parse(xhr.responseText);
@@ -313,11 +308,11 @@ img {
   }
 
   // 非 H5 上传
-  async function handleMdUpload(filePath: string) {
+  async function handleMdUpload(filePath: string, fileName?: string) {
     uploading.value = true;
     try {
       const result = await articleAPi.uploadMd(filePath);
-      const name = filePath.split('/').pop() || 'content.md';
+      const name = fileName || filePath.split('/').pop() || 'content.md';
       setMdContent(result, name);
     } catch (e: any) {
       uni.showToast({ title: e.message || '上传失败', icon: 'none' });
@@ -328,15 +323,11 @@ img {
 
   function setMdContent(result: UploadMdResult, fileName: string) {
     form.markdownContent = result.markdownContent;
-    form.htmlContent = result.htmlContent;
-    form.cssContent = result.cssContent || '';
     mdFileName.value = fileName;
   }
 
   function clearMdContent() {
     form.markdownContent = '';
-    form.htmlContent = '';
-    form.cssContent = '';
     mdFileName.value = '';
   }
 
@@ -360,7 +351,8 @@ img {
       type: 'file',
       extension: ['.md', '.markdown', '.txt'],
       success: (res) => {
-        if (res.tempFiles?.[0]) handleMdUpload(res.tempFiles[0].path);
+        const temp = res.tempFiles?.[0] as any;
+        if (temp) handleMdUpload(temp.path, temp.name);
       },
     });
     // #endif
@@ -370,11 +362,33 @@ img {
       count: 1,
       extension: ['.md', '.markdown', '.txt'],
       success: (res) => {
-        const path = Array.isArray(res.tempFiles) ? (res.tempFiles[0] as any)?.path : res.tempFilePaths?.[0];
-        if (path) handleMdUpload(path);
+        const temp: any = Array.isArray(res.tempFiles) ? res.tempFiles[0] : null;
+        const path = temp?.path ?? res.tempFilePaths?.[0];
+        if (path) handleMdUpload(path, temp?.name);
       },
     });
     // #endif
+  }
+
+  // 预览：将当前 md 内容走临时预览接口渲染（与详情内容预览同一 web-view 页面）
+  async function handlePreviewMd() {
+    if (!form.markdownContent.trim()) {
+      uni.showToast({ title: '请先上传文章内容', icon: 'none' });
+      return;
+    }
+    uni.showLoading({ title: '生成预览中...', mask: true });
+    try {
+      const res = await articleAPi.previewTemp({ markdownContent: form.markdownContent, cssName: form.cssName || 'default' });
+      if (res?.previewId) {
+        uni.navigateTo({ url: `/pages/blog/web/full?pid=${res.previewId}` });
+      } else {
+        uni.showToast({ title: '生成预览失败', icon: 'none' });
+      }
+    } catch (e: any) {
+      uni.showToast({ title: e.message || '生成预览失败', icon: 'none' });
+    } finally {
+      uni.hideLoading();
+    }
   }
 
   async function handleSave() {
@@ -382,14 +396,17 @@ img {
 
     loading.value = true;
     try {
-      const data = {
+      const data: any = {
         title: form.title.trim(),
         brief: form.brief.trim(),
         categoryVal: form.categoryVal as number,
-        cssName: 'default',
-        markdownContent: form.markdownContent, // 原样保存
+        cssName: form.cssName || 'default',
         isPrivate: form.isPrivate,
       };
+      // 仅在非空时携带 md，避免编辑时清空库内容
+      if (form.markdownContent.trim()) {
+        data.markdownContent = form.markdownContent;
+      }
       if (editId.value) {
         await articleAPi.update({ ...data, articleId: editId.value });
       } else {
@@ -406,7 +423,7 @@ img {
   }
 
   onLoad(async (options) => {
-    await apiTypeStore.getArticleCategory();
+    await Promise.all([apiTypeStore.getArticleCategory(), loadCssNameOptions()]);
     if (options?.id) {
       editId.value = options.id;
       uni.setNavigationBarTitle({ title: '编辑文章' });
@@ -474,14 +491,24 @@ img {
     }
   }
 
+  .article-edit-label-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12rpx;
+  }
+
+  .article-edit-required {
+    color: #ff3b30;
+    font-size: 26rpx;
+    margin-right: 4rpx;
+  }
+
   .article-edit-label {
     display: block;
     font-size: 26rpx;
     color: $uni-text-color;
     font-weight: 500;
-    margin-bottom: 12rpx;
     flex-shrink: 0;
-    width: 100rpx;
   }
 
   .article-edit-field-row {
@@ -494,6 +521,10 @@ img {
 
     &:last-child {
       border-bottom: none;
+    }
+
+    .article-edit-label-wrap {
+      margin-bottom: 0;
     }
 
     .article-edit-label {
@@ -551,30 +582,61 @@ img {
     color: #fff;
   }
 
-  .article-edit-md-upload {
+  .upload-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10rpx 0 20rpx;
+  }
+
+  .upload-tip {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+    margin-top: 16rpx;
+  }
+
+  .upload-file {
+    padding: 24rpx;
+    margin-bottom: 20rpx;
+    background-color: $uni-bg-color;
+    border-radius: 16rpx;
+  }
+
+  .upload-file-info {
     display: flex;
     align-items: center;
-    gap: 12rpx;
-    padding: 24rpx;
-    background-color: #f5f8ff;
-    border-radius: 12rpx;
-    border: 2rpx dashed #d0d9f0;
   }
-  .article-edit-md-progress-text {
-    font-size: 22rpx;
-    color: $uni-text-color-grey;
-    margin-top: 8rpx;
+
+  .upload-file-detail {
+    flex: 1;
+    margin-left: 16rpx;
+  }
+
+  .upload-file-name {
+    font-size: $uni-font-size-base;
     display: block;
   }
-  .article-edit-md-preview {
-    margin-top: 20rpx;
-    border: 1rpx solid #eee;
-    border-radius: 12rpx;
-    overflow: hidden;
+
+  .upload-file-size {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+    display: block;
+    margin-top: 4rpx;
   }
-  .article-edit-md-preview-content {
-    padding: 24rpx;
-    max-height: 600rpx;
-    overflow-y: auto;
+
+  .upload-progress {
+    padding: 10rpx 0 20rpx;
+  }
+
+  .upload-progress-text {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+    margin-top: 12rpx;
+    text-align: center;
+    display: block;
+  }
+
+  .preview-action {
+    margin-top: 10rpx;
   }
 </style>

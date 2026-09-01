@@ -88,9 +88,11 @@
       </view>
     </scroll-view>
 
+    <!-- #ifndef MP-WEIXIN -->
     <view class="tab-article-fab" @click="goToAdd">
       <u-icon name="plus" size="44" color="#fff" />
     </view>
+    <!-- #endif -->
 
     <u-picker
       v-model="showCategoryPicker"
@@ -235,7 +237,9 @@
   }
 
   function goToAdd() {
+    // #ifndef MP-WEIXIN
     uni.navigateTo({ url: '/pages/blog/article-edit/article-edit' });
+    // #endif
   }
 
   function goToDetail(articleId: string) {

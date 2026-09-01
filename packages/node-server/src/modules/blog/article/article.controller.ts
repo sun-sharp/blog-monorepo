@@ -8,6 +8,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { LitePageArticleDto } from './dto/lite-page-article.dto';
 import { BatchUpdatePrivateArticleDto } from './dto/batch-update-private-article.dto';
+import { CreateArticlePreviewDto } from '../article-preview/dto/create-article-preview.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -107,5 +108,15 @@ export class ArticleController {
   @HttpCode(ApiHttpStatus.SUCCESS)
   uploadMd(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
     return this.articleService.uploadMd(file, (req.headers as any)['css-name']);
+  }
+
+  @Post('preview_temp')
+  @HttpCode(ApiHttpStatus.SUCCESS)
+  @ApiOperation({ summary: '保存临时预览（未保存文章），返回 previewId' })
+  @ApiBearerAuth('jwt')
+  @UseGuards(JwtAuthGuard)
+  async saveTempPreview(@Body() dto: CreateArticlePreviewDto) {
+    const previewId = await this.articleService.saveTempPreview(dto.markdownContent, dto.cssName || 'default');
+    return { previewId };
   }
 }

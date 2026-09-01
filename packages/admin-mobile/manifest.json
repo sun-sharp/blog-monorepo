@@ -1,161 +1,158 @@
 {
-  "name": "阳之锐",
-  "appid": "__UNI__F1AA1F1",
-  "description": "个人使用",
-  "versionName": "4.5.5",
-  "versionCode": 4505,
-  "transformPx": false,
-  "app-plus": {
-    "usingComponents": true,
-    "nvueStyleCompiler": "uni-app",
-    "compilerVersion": 3,
-    "splashscreen": {
-      "alwaysShowBeforeRender": true,
-      "waiting": true,
-      "autoclose": true,
-      "delay": 0
-    },
-    "modules": {},
-    "distribute": {
-      "android": {
-        "permissions": [
-          "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-          "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-          "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
-          "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-          "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-          "<uses-feature android:name=\"android.hardware.camera\"/>",
-          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-        ]
-      },
-      "ios": {
-        "dSYMs": false
-      },
-      "sdkConfigs": {},
-      "icons": {
-        "android": {
-          "hdpi": "static/yangzhirui-1024.png",
-          "xhdpi": "static/yangzhirui-1024.png",
-          "xxhdpi": "static/yangzhirui-1024.png",
-          "xxxhdpi": "static/yangzhirui-1024.png"
+    "name" : "阳之锐",
+    "appid" : "__UNI__F1AA1F1",
+    "description" : "个人使用",
+    "versionName" : "4.5.5",
+    "versionCode" : 4505,
+    "transformPx" : false,
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
         },
-        "ios": {
-          "appstore": "static/yangzhirui-1024.png"
+        "modules" : {},
+        "distribute" : {
+            "android" : {
+                "permissions" : [
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                ]
+            },
+            "ios" : {
+                "dSYMs" : false
+            },
+            "sdkConfigs" : {},
+            "icons" : {
+                "android" : {
+                    "hdpi" : "static/yangzhirui-1024.png",
+                    "xhdpi" : "static/yangzhirui-1024.png",
+                    "xxhdpi" : "static/yangzhirui-1024.png",
+                    "xxxhdpi" : "static/yangzhirui-1024.png"
+                },
+                "ios" : {
+                    "appstore" : "static/yangzhirui-1024.png"
+                }
+            },
+            "splashscreen" : {
+                "androidStyle" : "common"
+            }
         }
-      },
-      "splashscreen": {
-        "androidStyle": "common"
-      }
-    }
-  },
-  "quickapp": {},
-  "mp-weixin": {
-    "appid": "wxf229a8ab8f892027",
-    "setting": {
-      "urlCheck": false
     },
-    "usingComponents": true
-  },
-  "mp-alipay": {
-    "usingComponents": true
-  },
-  "mp-baidu": {
-    "usingComponents": true
-  },
-  "mp-toutiao": {
-    "usingComponents": true
-  },
-  "uniStatistics": {
-    "enable": false
-  },
-  "vueVersion": "3",
-  "h5": {
-    "devServer": {
-      "port": 7444,
-      "proxy": {
-        "/dev-capital-api": {
-          "target": "https://www.yangruirui.top",
-          "changeOrigin": true,
-          "pathRewrite": {
-            "^/dev-capital-api": "/dev-capital-api"
-          }
+    "quickapp" : {},
+    "mp-weixin" : {
+        "appid" : "wxf229a8ab8f892027",
+        "setting" : {
+            "urlCheck" : false
         },
-        "/dev-blog-api": {
-          "target": "https://www.yangruirui.top",
-          "changeOrigin": true,
-          "pathRewrite": {
-            "^/dev-blog-api": "/dev-blog-api"
-          }
-        },
-        "/dev-backup-api": {
-          "target": "https://www.yangruirui.top",
-          "changeOrigin": true,
-          "pathRewrite": {
-            "^/dev-backup-api": "/dev-backup-api"
-          }
-        },
-        "/dev-pm2-log-api": {
-          "target": "https://www.yangruirui.top",
-          "changeOrigin": true,
-          "pathRewrite": {
-            "^/dev-pm2-log-api": "/dev-pm2-log-api"
-          }
-        }
-      }
+        "usingComponents" : true
     },
-    "router": {
-      "base": "/h5/",
-      "mode": "history"
-    }
-  },
-  "app-harmony": {
-    "distribute": {
-      "bundleName": "sun.sharp.huawei",
-      "deviceTypes": [
-        "phone",
-        "tablet"
-      ],
-      "signingConfigs": {
-        "default": {
-          "certpath": "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1779631157006.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303",
-          "profile": "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1779631157006.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.p12",
-          "storePassword": "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303"
+    "mp-alipay" : {
+        "usingComponents" : true
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "vueVersion" : "3",
+    "h5" : {
+        "devServer" : {
+            "port" : 7444,
+            "proxy" : {
+                "/dev-capital-api" : {
+                    "target" : "https://www.yangruirui.top",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/dev-capital-api" : "/dev-capital-api"
+                    }
+                },
+                "/dev-blog-api" : {
+                    "target" : "https://www.yangruirui.top",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/dev-blog-api" : "/dev-blog-api"
+                    }
+                },
+                "/dev-backup-api" : {
+                    "target" : "https://www.yangruirui.top",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/dev-backup-api" : "/dev-backup-api"
+                    }
+                },
+                "/dev-pm2-log-api" : {
+                    "target" : "https://www.yangruirui.top",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/dev-pm2-log-api" : "/dev-pm2-log-api"
+                    }
+                }
+            }
         },
-        "release": {
-          "certpath": "sun_sharp_f.cer",
-          "keyAlias": "sun_sharp_b",
-          "keyPassword": "0000001D6B2B7968846A583CC68A7678B519A49D4244AEEF273779013966C01998EAA3FB1D9F596F0AFF54D9B8",
-          "profile": "sun_sharp_zf_0826Release.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "sun_sharp.p12",
-          "storePassword": "0000001D5981AD075441B67E8C8B5B8857E54C08622C043D5BE821D15948F38C0835330DCA605A674B322F745D"
+        "router" : {
+            "base" : "/h5/",
+            "mode" : "history"
         }
-      },
-      "targetSdkVersion": "5.0.1(13)",
-      "compatibleSdkVersion": "5.0.1(13)",
-      "modules": {
-        "uni-share": {},
-        "uni-map": {}
-      },
-      "splashScreens": {
-        "startWindowIcon": "static/yangzhirui-1024.png"
-      },
-      "icons": {
-        "foreground": "static/yangzhirui-1024.png",
-        "background": "static/yangzhirui-1024.png"
-      }
+    },
+    "app-harmony" : {
+        "distribute" : {
+            "bundleName" : "sun.sharp.huawei",
+            "deviceTypes" : [ "phone", "tablet" ],
+            "signingConfigs" : {
+                "default" : {
+                    "certpath" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1779631157006.cer",
+                    "keyAlias" : "debugKey",
+                    "keyPassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303",
+                    "profile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1779631157006.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "c:\\Users\\yrrye\\AppData\\Roaming\\HBuilder X\\extensions\\launcher\\agc-certs\\1776784829533.p12",
+                    "storePassword" : "0000001B10D3426596F1C261CA12A19DD71B0B3057B0E1070473AB67B44D5EA2F0869D5FBF94C7052A7303"
+                },
+                "release" : {
+                    "certpath" : "sun_sharp_f.cer",
+                    "keyAlias" : "sun_sharp_b",
+                    "keyPassword" : "0000001D6B2B7968846A583CC68A7678B519A49D4244AEEF273779013966C01998EAA3FB1D9F596F0AFF54D9B8",
+                    "profile" : "sun_sharp_zf_0826Release.p7b",
+                    "signAlg" : "SHA256withECDSA",
+                    "storeFile" : "sun_sharp.p12",
+                    "storePassword" : "0000001D5981AD075441B67E8C8B5B8857E54C08622C043D5BE821D15948F38C0835330DCA605A674B322F745D"
+                }
+            },
+            "targetSdkVersion" : "5.0.1(13)",
+            "compatibleSdkVersion" : "5.0.1(13)",
+            "modules" : {
+                "uni-share" : {},
+                "uni-map" : {}
+            },
+            "splashScreens" : {
+                "startWindowIcon" : "static/yangzhirui-1024.png"
+            },
+            "icons" : {
+                "foreground" : "static/yangzhirui-1024.png",
+                "background" : "static/yangzhirui-1024.png"
+            }
+        }
     }
-  }
 }

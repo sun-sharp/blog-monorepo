@@ -37,36 +37,9 @@ export const getLitePage = (data: ApiArticleFindPageData): Promise<TablePaginati
 };
 
 export const uploadMd = (filePath: string): Promise<UploadMdResult> => {
-  // const isH5 = (() => {
-  //   try {
-  //     return uni.getSystemInfoSync().uniPlatform === 'web';
-  //   } catch {
-  //     return false;
-  //   }
-  // })();
-  // const BLOG_API_URL = import.meta.env.VITE_BLOG_API_URL || '/blog-api';
-  // const BASE_URL = import.meta.env.VITE_BASE_URL || '';
-  // const urlPrefix = isH5 ? BLOG_API_URL : `${BASE_URL}${BLOG_API_URL}`;
-  // const token = uni.getStorageSync('ACCESS_TOKEN') || '';
-  // const AUTH_HEAD = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
-
-  // return new Promise((resolve, reject) => {
-  //   uni.uploadFile({
-  //     url: `${urlPrefix}/article/upload_md`,
-  //     filePath,
-  //     name: 'file',
-  //     header: { Authorization: AUTH_HEAD + token },
-  //     success: (res) => {
-  //       try {
-  //         const data = JSON.parse(res.data);
-  //         if (data.code === 0) resolve(data.result);
-  //         else reject(new Error(data.message || '解析失败'));
-  //       } catch {
-  //         reject(new Error('解析响应失败'));
-  //       }
-  //     },
-  //     fail: (err) => reject(err),
-  //   });
-  // });
   return uploadFileRequest(filePath);
+};
+
+export const previewTemp = (data: { markdownContent: string; cssName?: string }): Promise<{ previewId: string }> => {
+  return blogRequest({ url: `${basic}/preview_temp`, method: 'POST', data, isShowSuccessMessage: false });
 };
