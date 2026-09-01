@@ -49,6 +49,10 @@
     </scroll-view>
 
     <view v-if="article" class="article-detail-footer">
+      <view class="article-detail-action-btn" @click="handleCopyMd">
+        <u-icon name="copy" size="30" color="#007aff" custom-prefix="sharp-icon" />
+        <text class="article-detail-action-text">复制内容</text>
+      </view>
       <view class="article-detail-action-btn" @click="goToEdit">
         <u-icon name="edit-pen" size="30" color="#007aff" />
         <text class="article-detail-action-text">编辑</text>
@@ -99,6 +103,20 @@
 
   function goToHtmlCont(pid: string) {
     uni.navigateTo({ url: `/pages/blog/web/full?pid=${pid}` });
+  }
+
+  function handleCopyMd() {
+    const md = article.value?.markdownContent || '';
+    if (!md) {
+      uni.showToast({ title: '暂无内容可复制', icon: 'none' });
+      return;
+    }
+    uni.setClipboardData({
+      data: md,
+      success: () => {
+        uni.showToast({ title: '复制成功', icon: 'success' });
+      },
+    });
   }
 
   function handleDelete() {
@@ -211,8 +229,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40rpx;
-    padding: 20rpx 30rpx;
+    gap: 20rpx;
+    padding: 20rpx 24rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     background-color: #ffffff;
     border-top: 1rpx solid #e5e5e5;
@@ -223,9 +241,9 @@
     align-items: center;
     justify-content: center;
     gap: 8rpx;
-    padding: 16rpx 40rpx;
+    padding: 16rpx 28rpx;
     border-radius: 44rpx;
-    min-width: 180rpx;
+    min-width: 150rpx;
   }
 
   .article-detail-action-text {

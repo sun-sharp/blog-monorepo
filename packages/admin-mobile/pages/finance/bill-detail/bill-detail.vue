@@ -150,6 +150,10 @@
     </scroll-view>
 
     <view v-if="bill.tradeTime" class="bill-detail-footer">
+      <view v-if="source === 'manual'" class="bill-detail-action-btn" @click="goToCopyAdd">
+        <u-icon name="copy" size="30" color="#007aff" custom-prefix="sharp-icon" />
+        <text class="bill-detail-action-text">复制新增</text>
+      </view>
       <view class="bill-detail-action-btn" @click="goToEdit">
         <u-icon name="edit-pen" size="30" color="#007aff" />
         <text class="bill-detail-action-text">编辑</text>
@@ -244,6 +248,24 @@
       return;
     }
     uni.navigateTo({ url: `/pages/finance/bill-edit/bill-edit?source=${source.value}&id=${id.value}` });
+  }
+
+  function goToCopyAdd() {
+    if (source.value !== 'manual') return;
+    const b = bill.value;
+    const qs = [
+      `tradeTime=${encodeURIComponent(b.tradeTime || '')}`,
+      `tradeOtherPerson=${encodeURIComponent(b.tradeOtherPerson || '')}`,
+      `inflowOrOutflow=${b.inflowOrOutflow ?? ''}`,
+      `moneyAmount=${b.moneyAmount ?? ''}`,
+      `manualPaymentMethod=${b.manualPaymentMethod ?? ''}`,
+      `balance=${b.balance ?? ''}`,
+      `explain=${encodeURIComponent(b.explain || '')}`,
+      `place=${encodeURIComponent(b.place || '')}`,
+      `billType=${b.billType ?? ''}`,
+      `billMethod=${b.billMethod ?? ''}`,
+    ].join('&');
+    uni.navigateTo({ url: `/pages/finance/manual-edit/manual-edit?${qs}` });
   }
 
   function onDelete() {
@@ -351,8 +373,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40rpx;
-    padding: 20rpx 30rpx;
+    gap: 20rpx;
+    padding: 20rpx 24rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     background-color: #ffffff;
     border-top: 1rpx solid #e5e5e5;
@@ -363,9 +385,9 @@
     align-items: center;
     justify-content: center;
     gap: 8rpx;
-    padding: 16rpx 40rpx;
+    padding: 16rpx 28rpx;
     border-radius: 44rpx;
-    min-width: 180rpx;
+    min-width: 150rpx;
   }
 
   .bill-detail-action-text {

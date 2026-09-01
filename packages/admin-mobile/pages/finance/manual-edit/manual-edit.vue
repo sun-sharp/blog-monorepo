@@ -256,6 +256,12 @@
     Promise.all([apiTypeStore.getBillType(), apiTypeStore.getBillMethod()]);
   });
 
+  function parseNum(val: string | undefined): number | null {
+    if (val === undefined || val === '') return null;
+    const n = Number(val);
+    return Number.isNaN(n) ? null : n;
+  }
+
   onLoad((options) => {
     if (options?.id) {
       editId.value = options.id;
@@ -263,6 +269,25 @@
       loadDetail(options.id);
     } else {
       uni.setNavigationBarTitle({ title: '录入账单' });
+      // 从详情「复制新增」进入：预填字段
+      if (options) {
+        if (options.tradeTime) form.tradeTime = decodeURIComponent(options.tradeTime);
+        if (options.tradeOtherPerson) form.tradeOtherPerson = decodeURIComponent(options.tradeOtherPerson);
+        const inflow = parseNum(options.inflowOrOutflow);
+        if (inflow !== null) form.inflowOrOutflow = inflow;
+        const money = parseNum(options.moneyAmount);
+        if (money !== null) form.moneyAmount = money;
+        const method = parseNum(options.manualPaymentMethod);
+        if (method !== null) form.manualPaymentMethod = method;
+        const balance = parseNum(options.balance);
+        if (balance !== null) form.balance = balance;
+        if (options.explain) form.explain = decodeURIComponent(options.explain);
+        if (options.place) form.place = decodeURIComponent(options.place);
+        const billType = parseNum(options.billType);
+        if (billType !== null) form.billType = billType;
+        const billMethod = parseNum(options.billMethod);
+        if (billMethod !== null) form.billMethod = billMethod;
+      }
     }
   });
 </script>
