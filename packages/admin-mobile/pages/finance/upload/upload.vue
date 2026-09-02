@@ -1,121 +1,122 @@
 <template>
-  <view class="upload-page">
-    <!-- ====== 上传界面 ====== -->
-    <template v-if="step === 'upload'">
-      <scroll-view scroll-y class="upload-scroll" :style="scrollStyle">
-        <view class="upload-section card">
-          <text class="upload-section-title">导入账单</text>
-          <text class="upload-section-desc">选择账单类型并上传对应的账单文件</text>
-        </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="upload-page" :class="{ dark: isDark }">
+      <!-- ====== 上传界面 ====== -->
+      <template v-if="step === 'upload'">
+        <scroll-view scroll-y class="upload-scroll" :style="scrollStyle">
+          <view class="upload-section card" :class="{ dark: isDark }">
+            <text class="upload-section-title">导入账单</text>
+            <text class="upload-section-desc">选择账单类型并上传对应的账单文件</text>
+          </view>
 
-        <view class="upload-types card">
-          <u-radio-group v-model="uploadType" placement="column">
-            <view v-for="item in uploadTypeOptions" :key="item.value" class="upload-type-item" @click="uploadType = item.value">
-              <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
-              <text class="upload-type-desc">{{ item.desc }}</text>
+          <view class="upload-types card" :class="{ dark: isDark }">
+            <u-radio-group v-model="uploadType" placement="column">
+              <view v-for="item in uploadTypeOptions" :key="item.value" class="upload-type-item" @click="uploadType = item.value">
+                <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
+                <text class="upload-type-desc">{{ item.desc }}</text>
+              </view>
+            </u-radio-group>
+          </view>
+
+          <view v-if="uploadType === 3" class="upload-types card" :class="{ dark: isDark }">
+            <text class="upload-types-label">选择银行类型</text>
+            <u-radio-group v-model="selectBankType" placement="column">
+              <view v-for="item in bankTypeOptions" :key="item.value" class="upload-type-item" @click="selectBankType = item.value">
+                <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
+              </view>
+            </u-radio-group>
+          </view>
+
+          <view class="upload-action card" :class="{ dark: isDark }">
+            <view v-if="uploadType === 3" class="upload-download" @click="handleDownloadBankFile">
+              <u-icon name="download" size="32" :color="selectBankType ? '#007aff' : '#999'" />
+              <text class="upload-download-text" :class="selectBankType ? '' : 'disabled'">下载该银行模版</text>
             </view>
-          </u-radio-group>
-        </view>
-
-        <view v-if="uploadType === 3" class="upload-types card">
-          <text class="upload-types-label">选择银行类型</text>
-          <u-radio-group v-model="selectBankType" placement="column">
-            <view v-for="item in bankTypeOptions" :key="item.value" class="upload-type-item" @click="selectBankType = item.value">
-              <u-radio :name="item.value" :label="item.label" active-color="#007aff" />
+            <u-button type="primary" icon="file-text" :disabled="uploadType === 3 && !selectBankType" @click="chooseFile">选择文件</u-button>
+            <text class="upload-tip">支持 CSV、XLSX、XLS 格式文件</text>
+            <!-- #ifdef MP-WEIXIN -->
+            <view class="upload-mp-guide">
+              <text class="upload-mp-guide-title">小程序文件导入步骤：</text>
+              <view class="upload-mp-guide-step">
+                <text class="upload-mp-guide-num">1</text>
+                <text class="upload-mp-guide-text">在微信中打开「文件传输助手」，将账单文件发送到聊天中</text>
+              </view>
+              <view class="upload-mp-guide-step">
+                <text class="upload-mp-guide-num">2</text>
+                <text class="upload-mp-guide-text">点击上方「选择文件」，从聊天记录中选取该文件</text>
+              </view>
             </view>
-          </u-radio-group>
-        </view>
-
-        <view class="upload-action card">
-          <view v-if="uploadType === 3" class="upload-download" @click="handleDownloadBankFile">
-            <u-icon name="download" size="32" :color="selectBankType ? '#007aff' : '#999'" />
-            <text class="upload-download-text" :class="selectBankType ? '' : 'disabled'">下载该银行模版</text>
+            <!-- #endif -->
           </view>
-          <u-button type="primary" icon="file-text" :disabled="uploadType === 3 && !selectBankType" @click="chooseFile">选择文件</u-button>
-          <text class="upload-tip">支持 CSV、XLSX、XLS 格式文件</text>
-          <!-- #ifdef MP-WEIXIN -->
-          <view class="upload-mp-guide">
-            <text class="upload-mp-guide-title">小程序文件导入步骤：</text>
-            <view class="upload-mp-guide-step">
-              <text class="upload-mp-guide-num">1</text>
-              <text class="upload-mp-guide-text">在微信中打开「文件传输助手」，将账单文件发送到聊天中</text>
-            </view>
-            <view class="upload-mp-guide-step">
-              <text class="upload-mp-guide-num">2</text>
-              <text class="upload-mp-guide-text">点击上方「选择文件」，从聊天记录中选取该文件</text>
+
+          <view v-if="selectedFileName" class="upload-file card" :class="{ dark: isDark }">
+            <view class="upload-file-info">
+              <u-icon name="file-text" size="40" color="#007aff" />
+              <view class="upload-file-detail">
+                <text class="upload-file-name">{{ selectedFileName }}</text>
+                <text class="upload-file-size">已选择文件</text>
+              </view>
+              <u-icon name="close" color="#999" @click="clearFile" />
             </view>
           </view>
-          <!-- #endif -->
-        </view>
 
-        <view v-if="selectedFileName" class="upload-file card">
-          <view class="upload-file-info">
-            <u-icon name="file-text" size="40" color="#007aff" />
-            <view class="upload-file-detail">
-              <text class="upload-file-name">{{ selectedFileName }}</text>
-              <text class="upload-file-size">已选择文件</text>
+          <view v-if="uploading" class="upload-progress card" :class="{ dark: isDark }">
+            <u-line-progress :percent="uploadProgress" active-color="#007aff" />
+            <text class="upload-progress-text">上传中 {{ Math.floor(uploadProgress) }}%</text>
+          </view>
+
+          <view class="upload-submit">
+            <u-button type="primary" :loading="uploading" :disabled="!selectedFileName" @click="handleUpload">开始导入</u-button>
+          </view>
+
+          <view v-if="uploadType === 1" class="upload-help card" :class="{ dark: isDark }">
+            <text class="upload-help-title">微信账单导入说明</text>
+            <view class="upload-help-item">
+              <text class="upload-help-text">
+                在微信“我的”-“服务”-“钱包”-“账单”里，右上角三个点“...”里下载账单，选择“用于个人对账”，交易类型选择“全部账单”，文件类型为xlsx，上传的文件限制为
+                CSV 或者 XLSX 文件。
+              </text>
             </view>
-            <u-icon name="close" color="#999" @click="clearFile" />
           </view>
-        </view>
 
-        <view v-if="uploading" class="upload-progress card">
-          <u-line-progress :percent="uploadProgress" active-color="#007aff" />
-          <text class="upload-progress-text">上传中 {{ Math.floor(uploadProgress) }}%</text>
-        </view>
+          <view v-else-if="uploadType === 2" class="upload-help card" :class="{ dark: isDark }">
+            <text class="upload-help-title">支付宝账单导入说明</text>
+            <view class="upload-help-item">
+              <text class="upload-help-text">
+                在支付宝“我的”-“账单”里的“...”更多里账单工具“开具交易流水证明”，申请用于个人对账，需选择交易对手信息和展示商品说明信息，接收方式为邮箱，去邮箱下载并输入密码解压，最后看文件里开头的行数是多少，文件类型为csv，上传的文件限制为
+                CSV 文件。
+              </text>
+            </view>
+          </view>
 
-        <view class="upload-submit">
-          <u-button type="primary" :loading="uploading" :disabled="!selectedFileName" @click="handleUpload">开始导入</u-button>
-        </view>
+          <view v-else-if="uploadType === 3" class="upload-help card" :class="{ dark: isDark }">
+            <text class="upload-help-title">银行账单导入说明</text>
+            <view class="upload-help-item">
+              <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+              <text class="upload-help-text">
+                工商银行：下载并登录工商银行APP，点击查看账号，在账号服务里有“明细打印”，选择账户，交易币种和交易类型选“全部”，勾选“显示对方户名和账号”和“明细文件加密”，确认并去邮箱里下载PDF文件，再上传该银行的
+                XLSX 模版文件
+              </text>
+            </view>
+            <view class="upload-help-item">
+              <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+              <text class="upload-help-text">农业银行：下载并登录农业银行APP，再上传该银行的 XLSX 模版文件</text>
+            </view>
+            <view class="upload-help-item">
+              <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+              <text class="upload-help-text">建设银行：下载并登录建设银行APP，再上传该银行的 XLSX 模版文件</text>
+            </view>
+            <view class="upload-help-item">
+              <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+              <text class="upload-help-text">民生银行：下载并登录民生银行APP，再上传该银行的 XLSX 模版文件</text>
+            </view>
+            <view class="upload-help-item">
+              <u-icon name="checkmark-circle" size="28" color="#4cd964" />
+              <text class="upload-help-text">招商银行：下载并登录招商银行APP，再上传该银行的 XLSX 模版文件</text>
+            </view>
+          </view>
 
-        <view v-if="uploadType === 1" class="upload-help card">
-          <text class="upload-help-title">微信账单导入说明</text>
-          <view class="upload-help-item">
-            <text class="upload-help-text">
-              在微信“我的”-“服务”-“钱包”-“账单”里，右上角三个点“...”里下载账单，选择“用于个人对账”，交易类型选择“全部账单”，文件类型为xlsx，上传的文件限制为 CSV
-              或者 XLSX 文件。
-            </text>
-          </view>
-        </view>
-
-        <view v-else-if="uploadType === 2" class="upload-help card">
-          <text class="upload-help-title">支付宝账单导入说明</text>
-          <view class="upload-help-item">
-            <text class="upload-help-text">
-              在支付宝“我的”-“账单”里的“...”更多里账单工具“开具交易流水证明”，申请用于个人对账，需选择交易对手信息和展示商品说明信息，接收方式为邮箱，去邮箱下载并输入密码解压，最后看文件里开头的行数是多少，文件类型为csv，上传的文件限制为
-              CSV 文件。
-            </text>
-          </view>
-        </view>
-
-        <view v-else-if="uploadType === 3" class="upload-help card">
-          <text class="upload-help-title">银行账单导入说明</text>
-          <view class="upload-help-item">
-            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">
-              工商银行：下载并登录工商银行APP，点击查看账号，在账号服务里有“明细打印”，选择账户，交易币种和交易类型选“全部”，勾选“显示对方户名和账号”和“明细文件加密”，确认并去邮箱里下载PDF文件，再上传该银行的
-              XLSX 模版文件
-            </text>
-          </view>
-          <view class="upload-help-item">
-            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">农业银行：下载并登录农业银行APP，再上传该银行的 XLSX 模版文件</text>
-          </view>
-          <view class="upload-help-item">
-            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">建设银行：下载并登录建设银行APP，再上传该银行的 XLSX 模版文件</text>
-          </view>
-          <view class="upload-help-item">
-            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">民生银行：下载并登录民生银行APP，再上传该银行的 XLSX 模版文件</text>
-          </view>
-          <view class="upload-help-item">
-            <u-icon name="checkmark-circle" size="28" color="#4cd964" />
-            <text class="upload-help-text">招商银行：下载并登录招商银行APP，再上传该银行的 XLSX 模版文件</text>
-          </view>
-        </view>
-
-        <!-- <view class="upload-help card">
+          <!-- <view class="upload-help card">
           <text class="upload-help-title">使用说明</text>
           <view class="upload-help-item">
             <u-icon name="checkmark-circle" size="28" color="#4cd964" />
@@ -130,209 +131,210 @@
             <text class="upload-help-text">银行账单：先选择银行，再上传该银行的 XLSX 文件，请分别导入 5 家银行</text>
           </view>
         </view> -->
-      </scroll-view>
-    </template>
+        </scroll-view>
+      </template>
 
-    <!-- ====== 结果预览 ====== -->
-    <template v-else>
-      <view class="import-header">
-        <text class="import-header-title">{{ uploadTypeLabel }}</text>
-        <text class="import-header-count">{{ tableData.length }} / {{ excelUploadTotal }} 条</text>
-      </view>
-
-      <scroll-view scroll-y class="import-scroll" :style="scrollStyle">
-        <view v-for="(item, idx) in tableData" :key="idx" :class="['import-card', isRowIncomplete(idx) ? 'import-card-incomplete' : '']">
-          <view class="import-card-header">
-            <text class="import-card-index">#{{ idx + 1 }}</text>
-          </view>
-
-          <!-- WeChat 字段 -->
-          <template v-if="uploadType === 1">
-            <view class="import-card-row">
-              <text class="label">交易时间</text>
-              <text class="value">{{ item.tradeTime || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">交易类型</text>
-              <text class="value">{{ item.tradeType || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">交易对方</text>
-              <text class="value">{{ item.tradeOtherPerson || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">商品</text>
-              <text class="value">{{ item.goods || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">收/支</text>
-              <text :class="['value', item.incomeOrPay === '支出' ? 'money-outflow' : 'money-inflow']">{{ item.incomeOrPay || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">金额</text>
-              <text class="value money">&yen;{{ item.moneyAmount || 0 }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">支付方式</text>
-              <text class="value">{{ item.paymentMethod || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">当前状态</text>
-              <text class="value">{{ item.currentStatus || '--' }}</text>
-            </view>
-            <view v-if="item.remarks" class="import-card-row">
-              <text class="label">备注</text>
-              <text class="value">{{ item.remarks }}</text>
-            </view>
-          </template>
-
-          <!-- AliPay 字段 -->
-          <template v-if="uploadType === 2">
-            <view class="import-card-row">
-              <text class="label">交易时间</text>
-              <text class="value">{{ item.tradeTime || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">交易类型</text>
-              <text class="value">{{ item.tradeType || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">交易对方</text>
-              <text class="value">{{ item.tradeOtherPerson || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">商品说明</text>
-              <text class="value">{{ item.productDescription || '--' }}</text>
-            </view>
-            <view v-if="item.oppositeAccount" class="import-card-row">
-              <text class="label">对方账号</text>
-              <text class="value">{{ item.oppositeAccount }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">收/支</text>
-              <text :class="['value', item.incomeOrPay === '支出' ? 'money-outflow' : 'money-inflow']">{{ item.incomeOrPay || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">金额</text>
-              <text class="value money">&yen;{{ item.moneyAmount || 0 }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">收/付款方式</text>
-              <text class="value">{{ item.paymentMethod || '--' }}</text>
-            </view>
-            <view v-if="item.tradeStatus" class="import-card-row">
-              <text class="label">交易状态</text>
-              <text class="value">{{ item.tradeStatus }}</text>
-            </view>
-          </template>
-
-          <!-- Bank 字段 -->
-          <template v-if="uploadType === 3">
-            <view class="import-card-row">
-              <text class="label">交易时间</text>
-              <text class="value">{{ item.tradeTime || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">交易类型</text>
-              <text class="value">{{ item.tradeType || '--' }}</text>
-            </view>
-            <view v-if="item.voucherNo" class="import-card-row">
-              <text class="label">凭证号码</text>
-              <text class="value">{{ item.voucherNo }}</text>
-            </view>
-            <view v-if="item.voucherType" class="import-card-row">
-              <text class="label">凭证类型</text>
-              <text class="value">{{ getVoucherTypeLabel(item.voucherType) }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">交易对方</text>
-              <text class="value">{{ item.tradeOtherPerson || '--' }}</text>
-            </view>
-            <view v-if="item.tradeOtherPersonAccount" class="import-card-row">
-              <text class="label">对方账号</text>
-              <text class="value">{{ item.tradeOtherPersonAccount }}</text>
-            </view>
-            <view v-if="item.tradeOtherPersonRemarks" class="import-card-row">
-              <text class="label">交易对方备注</text>
-              <text class="value">{{ item.tradeOtherPersonRemarks }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">收/支</text>
-              <text :class="['value', item.incomeOrPay === '支出' ? 'money-outflow' : 'money-inflow']">{{ item.incomeOrPay || '--' }}</text>
-            </view>
-            <view class="import-card-row">
-              <text class="label">金额</text>
-              <text class="value money">&yen;{{ item.moneyAmount || 0 }}</text>
-            </view>
-            <view v-if="item.balance !== undefined" class="import-card-row">
-              <text class="label">余额</text>
-              <text class="value">&yen;{{ item.balance }}</text>
-            </view>
-            <view v-if="item.explain" class="import-card-row">
-              <text class="label">账单说明</text>
-              <text class="value">{{ item.explain }}</text>
-            </view>
-            <view v-if="item.place" class="import-card-row">
-              <text class="label">交易地点</text>
-              <text class="value">{{ item.place }}</text>
-            </view>
-          </template>
-
-          <!-- 可编辑区 -->
-          <view class="import-card-divider" />
-
-          <view class="import-card-radio">
-            <text class="required">流入 / 流出</text>
-            <u-radio-group v-model="item.inflowOrOutflow" placement="row">
-              <u-radio :name="1" label="流入" active-color="#4cd964" />
-              <u-radio :name="2" label="流出" active-color="#ff3b30" />
-            </u-radio-group>
-          </view>
-
-          <template v-if="uploadType !== 3">
-            <view class="import-card-select" @click="openSelect(idx, 'billType')">
-              <text class="required">账单类型</text>
-              <text :class="['import-card-select-value', !item.billType && 'placeholder']">
-                {{ getLabel('billType', item.billType) || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-            <view class="import-card-select" @click="openSelect(idx, 'billMethod')">
-              <text class="required">账单方式</text>
-              <text :class="['import-card-select-value', !item.billMethod && 'placeholder']">
-                {{ getLabel('billMethod', item.billMethod) || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </template>
-
-          <template v-if="uploadType === 3">
-            <view class="import-card-select" @click="openSelect(idx, 'bankBillType')">
-              <text class="required">银行账单类型</text>
-              <text :class="['import-card-select-value', !item.bankBillType && 'placeholder']">
-                {{ getLabel('billType', item.bankBillType) || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-            <view class="import-card-select">
-              <text class="required">银行类型</text>
-              <text :class="['import-card-select-value', !selectBankType && 'placeholder']">
-                {{ getLabel('bankType', selectBankType) || '请选择' }}
-              </text>
-            </view>
-          </template>
+      <!-- ====== 结果预览 ====== -->
+      <template v-else>
+        <view class="import-header">
+          <text class="import-header-title">{{ uploadTypeLabel }}</text>
+          <text class="import-header-count">{{ tableData.length }} / {{ excelUploadTotal }} 条</text>
         </view>
-      </scroll-view>
 
-      <view class="import-footer">
-        <u-button @click="goBackToUpload">重新导入</u-button>
-        <u-button type="primary" :loading="saving" :disabled="saveDisabled" @click="handleSave">确认保存</u-button>
-      </view>
-    </template>
+        <scroll-view scroll-y class="import-scroll" :style="scrollStyle">
+          <view v-for="(item, idx) in tableData" :key="idx" :class="{ 'import-card': true, 'import-card-incomplete': isRowIncomplete(idx), dark: isDark }">
+            <view class="import-card-header">
+              <text class="import-card-index">#{{ idx + 1 }}</text>
+            </view>
 
-    <!-- 共用搜索选择器 -->
-    <searchable-select v-model="selectVisible" :title="selectTitle" :list="selectList" :current-value="selectCurrentValue" @confirm="onSelectConfirm" />
-  </view>
+            <!-- WeChat 字段 -->
+            <template v-if="uploadType === 1">
+              <view class="import-card-row">
+                <text class="label">交易时间</text>
+                <text class="value">{{ item.tradeTime || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">交易类型</text>
+                <text class="value">{{ item.tradeType || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">交易对方</text>
+                <text class="value">{{ item.tradeOtherPerson || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">商品</text>
+                <text class="value">{{ item.goods || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">收/支</text>
+                <text :class="['value', item.incomeOrPay === '支出' ? 'money-outflow' : 'money-inflow']">{{ item.incomeOrPay || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">金额</text>
+                <text class="value money">&yen;{{ item.moneyAmount || 0 }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">支付方式</text>
+                <text class="value">{{ item.paymentMethod || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">当前状态</text>
+                <text class="value">{{ item.currentStatus || '--' }}</text>
+              </view>
+              <view v-if="item.remarks" class="import-card-row">
+                <text class="label">备注</text>
+                <text class="value">{{ item.remarks }}</text>
+              </view>
+            </template>
+
+            <!-- AliPay 字段 -->
+            <template v-if="uploadType === 2">
+              <view class="import-card-row">
+                <text class="label">交易时间</text>
+                <text class="value">{{ item.tradeTime || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">交易类型</text>
+                <text class="value">{{ item.tradeType || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">交易对方</text>
+                <text class="value">{{ item.tradeOtherPerson || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">商品说明</text>
+                <text class="value">{{ item.productDescription || '--' }}</text>
+              </view>
+              <view v-if="item.oppositeAccount" class="import-card-row">
+                <text class="label">对方账号</text>
+                <text class="value">{{ item.oppositeAccount }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">收/支</text>
+                <text :class="['value', item.incomeOrPay === '支出' ? 'money-outflow' : 'money-inflow']">{{ item.incomeOrPay || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">金额</text>
+                <text class="value money">&yen;{{ item.moneyAmount || 0 }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">收/付款方式</text>
+                <text class="value">{{ item.paymentMethod || '--' }}</text>
+              </view>
+              <view v-if="item.tradeStatus" class="import-card-row">
+                <text class="label">交易状态</text>
+                <text class="value">{{ item.tradeStatus }}</text>
+              </view>
+            </template>
+
+            <!-- Bank 字段 -->
+            <template v-if="uploadType === 3">
+              <view class="import-card-row">
+                <text class="label">交易时间</text>
+                <text class="value">{{ item.tradeTime || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">交易类型</text>
+                <text class="value">{{ item.tradeType || '--' }}</text>
+              </view>
+              <view v-if="item.voucherNo" class="import-card-row">
+                <text class="label">凭证号码</text>
+                <text class="value">{{ item.voucherNo }}</text>
+              </view>
+              <view v-if="item.voucherType" class="import-card-row">
+                <text class="label">凭证类型</text>
+                <text class="value">{{ getVoucherTypeLabel(item.voucherType) }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">交易对方</text>
+                <text class="value">{{ item.tradeOtherPerson || '--' }}</text>
+              </view>
+              <view v-if="item.tradeOtherPersonAccount" class="import-card-row">
+                <text class="label">对方账号</text>
+                <text class="value">{{ item.tradeOtherPersonAccount }}</text>
+              </view>
+              <view v-if="item.tradeOtherPersonRemarks" class="import-card-row">
+                <text class="label">交易对方备注</text>
+                <text class="value">{{ item.tradeOtherPersonRemarks }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">收/支</text>
+                <text :class="['value', item.incomeOrPay === '支出' ? 'money-outflow' : 'money-inflow']">{{ item.incomeOrPay || '--' }}</text>
+              </view>
+              <view class="import-card-row">
+                <text class="label">金额</text>
+                <text class="value money">&yen;{{ item.moneyAmount || 0 }}</text>
+              </view>
+              <view v-if="item.balance !== undefined" class="import-card-row">
+                <text class="label">余额</text>
+                <text class="value">&yen;{{ item.balance }}</text>
+              </view>
+              <view v-if="item.explain" class="import-card-row">
+                <text class="label">账单说明</text>
+                <text class="value">{{ item.explain }}</text>
+              </view>
+              <view v-if="item.place" class="import-card-row">
+                <text class="label">交易地点</text>
+                <text class="value">{{ item.place }}</text>
+              </view>
+            </template>
+
+            <!-- 可编辑区 -->
+            <view class="import-card-divider" />
+
+            <view class="import-card-radio">
+              <text class="required">流入 / 流出</text>
+              <u-radio-group v-model="item.inflowOrOutflow" placement="row">
+                <u-radio :name="1" label="流入" active-color="#4cd964" />
+                <u-radio :name="2" label="流出" active-color="#ff3b30" />
+              </u-radio-group>
+            </view>
+
+            <template v-if="uploadType !== 3">
+              <view class="import-card-select" @click="openSelect(idx, 'billType')">
+                <text class="required">账单类型</text>
+                <text :class="['import-card-select-value', !item.billType && 'placeholder']">
+                  {{ getLabel('billType', item.billType) || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+              <view class="import-card-select" @click="openSelect(idx, 'billMethod')">
+                <text class="required">账单方式</text>
+                <text :class="['import-card-select-value', !item.billMethod && 'placeholder']">
+                  {{ getLabel('billMethod', item.billMethod) || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+            </template>
+
+            <template v-if="uploadType === 3">
+              <view class="import-card-select" @click="openSelect(idx, 'bankBillType')">
+                <text class="required">银行账单类型</text>
+                <text :class="['import-card-select-value', !item.bankBillType && 'placeholder']">
+                  {{ getLabel('billType', item.bankBillType) || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+              <view class="import-card-select">
+                <text class="required">银行类型</text>
+                <text :class="['import-card-select-value', !selectBankType && 'placeholder']">
+                  {{ getLabel('bankType', selectBankType) || '请选择' }}
+                </text>
+              </view>
+            </template>
+          </view>
+        </scroll-view>
+
+        <view class="import-footer">
+          <u-button @click="goBackToUpload">重新导入</u-button>
+          <u-button type="primary" :loading="saving" :disabled="saveDisabled" @click="handleSave">确认保存</u-button>
+        </view>
+      </template>
+
+      <!-- 共用搜索选择器 -->
+      <searchable-select v-model="selectVisible" :title="selectTitle" :list="selectList" :current-value="selectCurrentValue" @confirm="onSelectConfirm" />
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -343,6 +345,9 @@
   import { voucherTypeOption } from '../../../../shared/src/constants/api-type';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag.ts';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const userStore = useUserStore();
   const apiTypeStore = useApiTypeStore();
@@ -859,6 +864,14 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+
+      .import-header {
+        background-color: $uni-bg-color-dark;
+      }
+    }
   }
 
   .upload-scroll {
@@ -1047,7 +1060,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 24rpx 30rpx;
-    background-color: #fff;
+    background-color: $uni-bg-color;
     border-bottom: 1rpx solid $uni-border-color;
   }
 
@@ -1069,15 +1082,19 @@
   }
 
   .import-card {
-    background-color: #fff;
+    background-color: $uni-bg-color;
     border-radius: 16rpx;
     padding: 24rpx;
     margin-bottom: 20rpx;
     transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+    }
   }
 
   .import-card-incomplete {
-    background-color: #fef0f0;
+    background-color: $uni-bg-color-light-red;
   }
 
   .import-card-header {
