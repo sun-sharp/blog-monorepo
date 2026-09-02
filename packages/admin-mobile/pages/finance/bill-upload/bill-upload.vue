@@ -1,37 +1,45 @@
 <template>
-  <view class="bill-upload-page">
-    <list-page
-      ref="listPageRef"
-      :api-fn="billUploadApi.getPage"
-      :show-search="false"
-      :dropdown-items="dropdownItems"
-      show-fab
-      @fabClick="goToAdd"
-      @filterChange="onFilterChange"
-      @itemLongpress="onLongPress">
-      <template #default="{ list, longpress }">
-        <view v-for="item in list" :key="item.billUploadId" class="bill-upload-item card" @click="goToEdit(item.billUploadId)" @longpress="longpress(item)">
-          <view class="bill-upload-item-left">
-            <view class="bill-upload-item-icon" :style="{ background: getIconColor(item.billUploadType) }">
-              <u-icon :name="getUploadTypeIcon(item.billUploadType)" size="32" color="#fff" />
+  <u-config-provider :dark-mode="mode">
+    <view class="bill-upload-page" :class="{ dark: isDark }">
+      <list-page
+        ref="listPageRef"
+        :api-fn="billUploadApi.getPage"
+        :show-search="false"
+        :dropdown-items="dropdownItems"
+        show-fab
+        @fabClick="goToAdd"
+        @filterChange="onFilterChange"
+        @itemLongpress="onLongPress">
+        <template #default="{ list, longpress }">
+          <view
+            v-for="item in list"
+            :key="item.billUploadId"
+            class="bill-upload-item card"
+            :class="{ dark: isDark }"
+            @click="goToEdit(item.billUploadId)"
+            @longpress="longpress(item)">
+            <view class="bill-upload-item-left">
+              <view class="bill-upload-item-icon" :style="{ background: getIconColor(item.billUploadType) }">
+                <u-icon :name="getUploadTypeIcon(item.billUploadType)" size="32" color="#fff" />
+              </view>
+              <view class="bill-upload-item-info">
+                <text class="bill-upload-item-title">{{ billUploadTypeMap[item.billUploadType] || '未知类型' }}</text>
+                <text class="bill-upload-item-desc">{{ buildLabel(item) }}</text>
+              </view>
             </view>
-            <view class="bill-upload-item-info">
-              <text class="bill-upload-item-title">{{ billUploadTypeMap[item.billUploadType] || '未知类型' }}</text>
-              <text class="bill-upload-item-desc">{{ buildLabel(item) }}</text>
+            <view class="bill-upload-item-right">
+              <view class="bill-upload-item-tags">
+                <u-tag v-if="item.inflowOrOutflow" :text="String(inflowOrOutflowMap[item.inflowOrOutflow] || '')" type="success" size="mini" plain />
+                <u-tag v-if="item.billType" :text="getBillTypeLabel(item.billType)" type="warning" size="mini" plain />
+                <u-tag v-if="item.billMethod" :text="getBillMethodLabel(item.billMethod)" type="primary" size="mini" plain />
+              </view>
+              <u-icon name="arrow-right" size="28" color="#ccc" />
             </view>
           </view>
-          <view class="bill-upload-item-right">
-            <view class="bill-upload-item-tags">
-              <u-tag v-if="item.inflowOrOutflow" :text="String(inflowOrOutflowMap[item.inflowOrOutflow] || '')" type="success" size="mini" plain />
-              <u-tag v-if="item.billType" :text="getBillTypeLabel(item.billType)" type="warning" size="mini" plain />
-              <u-tag v-if="item.billMethod" :text="getBillMethodLabel(item.billMethod)" type="primary" size="mini" plain />
-            </view>
-            <u-icon name="arrow-right" size="28" color="#ccc" />
-          </view>
-        </view>
-      </template>
-    </list-page>
-  </view>
+        </template>
+      </list-page>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -52,6 +60,9 @@
   import { arrEnumToObj } from '../../../../shared/src/utils/array';
   import { useApiTypeStore } from '../../../store';
   import ListPage from '../../../components/list-page/list-page.vue';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const listPageRef = ref();
   const apiTypeStore = useApiTypeStore();
@@ -141,15 +152,6 @@
     return parts.join(' · ');
   }
 
-  // const colorPool = [
-  //   'linear-gradient(135deg, #4facfe, #007aff)',
-  //   'linear-gradient(135deg, #43e97b, #38f9d7)',
-  //   'linear-gradient(135deg, #fa709a, #fee140)',
-  //   'linear-gradient(135deg, #a18cd1, #fbc2eb)',
-  //   'linear-gradient(135deg, #fccb90, #d57eeb)',
-  //   'linear-gradient(135deg, #f093fb, #f5576c)',
-  // ];
-
   function getIconColor(type: number) {
     const iconColorMaps = {};
     iconColorMaps[weChatBillUploadType] = 'linear-gradient(135deg, #4facfe, #007aff)';
@@ -204,6 +206,10 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+    }
   }
 
   .bill-upload-item {

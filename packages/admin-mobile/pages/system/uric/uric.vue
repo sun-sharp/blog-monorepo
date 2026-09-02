@@ -1,37 +1,45 @@
 <template>
-  <view class="uric-page">
-    <list-page
-      ref="listPageRef"
-      :api-fn="uricApi.getPage"
-      :show-search="false"
-      :dropdown-items="dropdownItems"
-      show-fab
-      @fabClick="goToAdd"
-      @itemLongpress="onLongPress">
-      <template #default="{ list, longpress }">
-        <view v-for="item in list" :key="item.uricId" class="uric-item card" @click="goToEdit(item.uricId)" @longpress="longpress(item)">
-          <view class="uric-item-left">
-            <view class="uric-item-icon" :style="{ background: getTypeColor(item.measureType) }">
-              <u-icon name="arrow-down-left" size="32" color="#fff" />
+  <u-config-provider :dark-mode="mode">
+    <view class="uric-page" :class="{ dark: isDark }">
+      <list-page
+        ref="listPageRef"
+        :api-fn="uricApi.getPage"
+        :show-search="false"
+        :dropdown-items="dropdownItems"
+        show-fab
+        @fabClick="goToAdd"
+        @itemLongpress="onLongPress">
+        <template #default="{ list, longpress }">
+          <view
+            v-for="item in list"
+            :key="item.uricId"
+            class="uric-item card"
+            :class="{ dark: isDark }"
+            @click="goToEdit(item.uricId)"
+            @longpress="longpress(item)">
+            <view class="uric-item-left">
+              <view class="uric-item-icon" :style="{ background: getTypeColor(item.measureType) }">
+                <u-icon :name="getTypeIcon(item.measureType)" size="32" color="#fff" custom-prefix="sharp-icon" />
+              </view>
+              <view class="uric-item-info">
+                <text class="uric-item-label">{{ item.measureTime }}</text>
+                <text class="uric-item-type">{{ getTypeLabel(item.measureType) }}</text>
+              </view>
             </view>
-            <view class="uric-item-info">
-              <text class="uric-item-label">{{ item.measureTime }}</text>
-              <text class="uric-item-type">{{ getTypeLabel(item.measureType) }}</text>
+            <view class="uric-item-right">
+              <view class="uric-item-values">
+                <text v-if="item.uricAcid != null" class="uric-item-value">尿酸 {{ item.uricAcid }}umol/L</text>
+                <text v-if="item.bloodGlucose != null" class="uric-item-value">
+                  血糖 {{ item.bloodGlucose }}mmol/L{{ item.bloodSugarPeriod ? `（${getPeriodLabel(item.bloodSugarPeriod)}）` : '' }}
+                </text>
+              </view>
+              <u-icon name="arrow-right" size="28" color="#ccc" />
             </view>
           </view>
-          <view class="uric-item-right">
-            <view class="uric-item-values">
-              <text v-if="item.uricAcid != null" class="uric-item-value">尿酸 {{ item.uricAcid }}umol/L</text>
-              <text v-if="item.bloodGlucose != null" class="uric-item-value">
-                血糖 {{ item.bloodGlucose }}mmol/L{{ item.bloodSugarPeriod ? `（${getPeriodLabel(item.bloodSugarPeriod)}）` : '' }}
-              </text>
-            </view>
-            <u-icon name="arrow-right" size="28" color="#ccc" />
-          </view>
-        </view>
-      </template>
-    </list-page>
-  </view>
+        </template>
+      </list-page>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -40,9 +48,19 @@
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { uricApi } from '../../../api';
-  import { measureTypeOption, bloodSugarPeriodOption } from '../../../../shared/src/constants/api-type';
+  import {
+    measureTypeOption,
+    bloodSugarPeriodOption,
+    HOSPITAL_MEASURE_TYPE,
+    TGU210_C_MEASURE_TYPE,
+    EA_19_MEASURE_TYPE,
+  } from '../../../../shared/src/constants/api-type';
   import type { ApiUricItem } from '/#/api/capital/uric';
   import ListPage from '../../../components/list-page/list-page.vue';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+  import { createTypeMapper } from '../../../../shared/src/utils';
+
+  const { isDark, mode } = useAppTheme();
 
   const listPageRef = ref();
 
@@ -71,22 +89,18 @@
     return item?.label || String(period);
   }
 
-  const typeColorMap: Record<string, string> = {};
-  const colorPool = [
-    'linear-gradient(135deg, #4facfe, #007aff)',
-    'linear-gradient(135deg, #43e97b, #38f9d7)',
-    'linear-gradient(135deg, #fa709a, #fee140)',
-    'linear-gradient(135deg, #a18cd1, #fbc2eb)',
-    'linear-gradient(135deg, #fccb90, #d57eeb)',
-    'linear-gradient(135deg, #f093fb, #f5576c)',
-  ];
+  const colorPool = ['linear-gradient(135deg, #4facfe, #007aff)', 'linear-gradient(135deg, #43e97b, #38f9d7)', 'linear-gradient(135deg, #fa709a, #fee140)'];
+  const iconPool = ['yiyuan', 'shequxietangceliang', 'a-blooddonation'];
 
-  function getTypeColor(type: string) {
-    if (!typeColorMap[type]) {
-      typeColorMap[type] = colorPool[Object.keys(typeColorMap).length % colorPool.length];
-    }
-    return typeColorMap[type];
-  }
+  const customHash = (str: string) => {
+    const map: Record<string, number> = {};
+    map[HOSPITAL_MEASURE_TYPE] = 0;
+    map[TGU210_C_MEASURE_TYPE] = 1;
+    map[EA_19_MEASURE_TYPE] = 2;
+    return map[str] !== undefined ? map[str] : 0; // 默认兜底
+  };
+  const getTypeColor = createTypeMapper(colorPool, customHash);
+  const getTypeIcon = createTypeMapper(iconPool, customHash);
 
   function goToAdd() {
     uni.navigateTo({ url: '/pages/system/uric-edit/uric-edit' });
@@ -122,6 +136,10 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+    }
   }
 
   .uric-item {
@@ -130,6 +148,10 @@
     justify-content: space-between;
     padding: 24rpx;
     margin-bottom: 16rpx;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+    }
 
     &:active {
       opacity: 0.85;

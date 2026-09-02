@@ -1,6 +1,6 @@
 <template>
   <u-popup :model-value="modelValue" mode="bottom" length="70%" :safe-area-inset-bottom="true" :border-radius="24" :z-index="10075" @close="handleClose">
-    <view class="ss-popup">
+    <view class="ss-popup" :class="{ dark: isDark }">
       <view class="ss-header">
         <text class="ss-title">{{ title }}</text>
         <view class="ss-close" @click="handleClose">
@@ -37,6 +37,9 @@
 
 <script lang="ts" setup>
   import { ref, computed, watch } from 'vue';
+  import { useAppTheme } from '../../composables/useAppTheme';
+
+  const { isDark } = useAppTheme();
 
   interface SelectOption {
     label: string;
@@ -118,9 +121,21 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: #fff;
+    background-color: $uni-bg-color;
     border-radius: 24rpx 24rpx 0 0;
     overflow: hidden;
+
+    &.dark {
+      background-color: $uni-bg-color-dark-2;
+
+      .ss-title {
+        color: $uni-text-color-grey;
+      }
+
+      .ss-list-item-label {
+        color: $uni-text-color-grey;
+      }
+    }
   }
 
   .ss-header {

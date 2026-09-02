@@ -1,62 +1,64 @@
 <template>
-  <view class="uric-edit-page">
-    <scroll-view scroll-y class="uric-edit-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="uric-edit-card card">
-          <text class="uric-edit-section-title">基本信息</text>
-          <u-form-item label="测量时间" prop="measureTime" required>
-            <view class="uric-edit-select" @click="showTimePicker = true">
-              <text :class="form.measureTime ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
-                {{ form.measureTime || '请选择测量时间' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </u-form-item>
-          <u-form-item label="测量方式" prop="measureType" required>
-            <view class="uric-edit-select" @click="showTypeSelect = true">
-              <text :class="form.measureType ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
-                {{ typeLabel || '请选择测量方式' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </u-form-item>
-        </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="uric-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="uric-edit-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="uric-edit-card card" :class="{ dark: isDark }">
+            <text class="uric-edit-section-title">基本信息</text>
+            <u-form-item label="测量时间" prop="measureTime" required>
+              <view class="uric-edit-select" @click="showTimePicker = true">
+                <text :class="form.measureTime ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
+                  {{ form.measureTime || '请选择测量时间' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+            </u-form-item>
+            <u-form-item label="测量方式" prop="measureType" required>
+              <view class="uric-edit-select" @click="showTypeSelect = true">
+                <text :class="form.measureType ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
+                  {{ typeLabel || '请选择测量方式' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+            </u-form-item>
+          </view>
 
-        <view class="uric-edit-card card">
-          <text class="uric-edit-section-title">测量数值</text>
-          <u-form-item label="尿酸值 (umol/L)" prop="uricAcid">
-            <u-input v-model="form.uricAcid" type="number" placeholder="请输入尿酸测量值" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="血糖值 (mmol/L)" prop="bloodGlucose">
-            <u-input v-model="form.bloodGlucose" type="digit" placeholder="请输入血糖测量值" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item v-if="form.bloodGlucose" label="血糖检测时段" prop="bloodSugarPeriod">
-            <view class="uric-edit-select" @click="showPeriodSelect = true">
-              <text :class="form.bloodSugarPeriod ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
-                {{ periodLabel || '请选择血糖检测时段' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </u-form-item>
-          <text class="uric-edit-tip">尿酸值与血糖值至少填写一项</text>
-        </view>
-      </u-form>
-    </scroll-view>
+          <view class="uric-edit-card card" :class="{ dark: isDark }">
+            <text class="uric-edit-section-title">测量数值</text>
+            <u-form-item label="尿酸值 (umol/L)" prop="uricAcid">
+              <u-input v-model="form.uricAcid" type="number" placeholder="请输入尿酸测量值" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="血糖值 (mmol/L)" prop="bloodGlucose">
+              <u-input v-model="form.bloodGlucose" type="digit" placeholder="请输入血糖测量值" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item v-if="form.bloodGlucose" label="血糖检测时段" prop="bloodSugarPeriod">
+              <view class="uric-edit-select" @click="showPeriodSelect = true">
+                <text :class="form.bloodSugarPeriod ? 'uric-edit-select-value' : 'uric-edit-select-placeholder'">
+                  {{ periodLabel || '请选择血糖检测时段' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+            </u-form-item>
+            <text class="uric-edit-tip">尿酸值与血糖值至少填写一项</text>
+          </view>
+        </u-form>
+      </scroll-view>
 
-    <u-select v-model="showTypeSelect" :list="measureTypeOption" title="选择测量方式" @confirm="onTypeConfirm" />
-    <u-select v-model="showPeriodSelect" :list="bloodSugarPeriodOption" title="选择血糖检测时段" @confirm="onPeriodConfirm" />
-    <u-picker
-      v-model="showTimePicker"
-      mode="time"
-      :params="timePickerParams"
-      :default-time="form.measureTime || currentTime"
-      @confirm="onTimeConfirm"
-      @close="showTimePicker = false" />
+      <u-select v-model="showTypeSelect" :list="measureTypeOption" title="选择测量方式" @confirm="onTypeConfirm" />
+      <u-select v-model="showPeriodSelect" :list="bloodSugarPeriodOption" title="选择血糖检测时段" @confirm="onPeriodConfirm" />
+      <u-picker
+        v-model="showTimePicker"
+        mode="time"
+        :params="timePickerParams"
+        :default-time="form.measureTime || currentTime"
+        @confirm="onTimeConfirm"
+        @close="showTimePicker = false" />
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -66,6 +68,9 @@
   import { uricApi } from '../../../api';
   import { measureTypeOption, bloodSugarPeriodOption } from '../../../../shared/src/constants/api-type';
   import { ApiUricSaveData } from '/#/api/capital/uric';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const formRef = ref();
   const loading = ref(false);
@@ -186,6 +191,14 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+
+      .uric-edit-section-title {
+        color: $uni-text-color-grey;
+      }
+    }
   }
 
   .uric-edit-scroll {

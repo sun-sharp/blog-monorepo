@@ -266,17 +266,20 @@ export const billJudgeKeyOption = billJudgeKeyArr.map((m) => ({
 export const judgeWayArr = ['indexOf', 'includes'];
 export const judgeWayOption = judgeWayArr.map((m) => ({ value: m, label: m }));
 
+export const HOSPITAL_MEASURE_TYPE = 'hospital';
+export const TGU210_C_MEASURE_TYPE = 'TGU210-C';
+export const EA_19_MEASURE_TYPE = 'EA-19';
 export const measureTypeOption = [
   {
-    value: 'hospital',
+    value: HOSPITAL_MEASURE_TYPE,
     label: '医院检测'
   },
   {
-    value: 'TGU210-C',
+    value: TGU210_C_MEASURE_TYPE,
     label: '可孚测量仪TGU210-C'
   },
   {
-    value: 'EA-19',
+    value: EA_19_MEASURE_TYPE,
     label: '三诺测量仪EA-19'
   },
 ];

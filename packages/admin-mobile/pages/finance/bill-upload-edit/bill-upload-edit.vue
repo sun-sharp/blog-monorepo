@@ -1,133 +1,135 @@
 <template>
-  <view class="edit-page">
-    <scroll-view scroll-y class="edit-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="edit-card card">
-          <u-form-item label="账单导入类型" prop="billUploadType" required>
-            <view class="edit-select" @click="showBillUploadTypeSelect = true">
-              <text :class="form.billUploadType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billUploadTypeLabel || '请选择' }}</text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item label="需处理类型" prop="handleType" required>
-            <view class="edit-select" @click="showHandleTypeSelect = true">
-              <text :class="form.handleType ? 'edit-select-value' : 'edit-select-placeholder'">{{ handleTypeLabel || '请选择' }}</text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item v-if="form.handleType === 'inflowOrOutflow'" label="流入/流出" prop="inflowOrOutflow" required>
-            <view class="edit-select" @click="showInflowSelect = true">
-              <text :class="form.inflowOrOutflow ? 'edit-select-value' : 'edit-select-placeholder'">{{ inflowLabel || '请选择' }}</text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item v-else-if="form.handleType === 'billType'" label="账单类型" prop="billType" required>
-            <view class="edit-select" @click="showBillTypeSelect = true">
-              <text :class="form.billType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billTypeLabel || '请选择' }}</text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item v-else-if="form.handleType === 'billMethod'" label="账单方式" prop="billMethod" required>
-            <view class="edit-select" @click="showBillMethodSelect = true">
-              <text :class="form.billMethod ? 'edit-select-value' : 'edit-select-placeholder'">{{ billMethodLabel || '请选择' }}</text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-        </view>
-
-        <view class="edit-card card">
-          <u-form-item prop="code" required>
-            <template #label>
-              <view class="code-header">
-                <text class="code-title">代码</text>
-                <text class="code-tip">isAssignment 开头，boolean 类型，item 为账单数据</text>
+  <u-config-provider :dark-mode="mode">
+    <view class="edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="edit-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="edit-card card" :class="{ dark: isDark }">
+            <u-form-item label="账单导入类型" prop="billUploadType" required>
+              <view class="edit-select" @click="showBillUploadTypeSelect = true">
+                <text :class="form.billUploadType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billUploadTypeLabel || '请选择' }}</text>
+                <u-icon name="arrow-right" size="28" color="#bbb" />
               </view>
-            </template>
-            <view class="code-body">
-              <view v-if="codeFields.length > 0" class="code-fields">
-                <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
+            </u-form-item>
+            <u-form-item label="需处理类型" prop="handleType" required>
+              <view class="edit-select" @click="showHandleTypeSelect = true">
+                <text :class="form.handleType ? 'edit-select-value' : 'edit-select-placeholder'">{{ handleTypeLabel || '请选择' }}</text>
+                <u-icon name="arrow-right" size="28" color="#bbb" />
               </view>
-              <view class="code-input-btns">
-                <text
-                  v-for="it in codeInputArray"
-                  :key="it"
-                  class="code-input-btn"
-                  @touchstart.stop.prevent="insertCode(it)"
-                  @mousedown.stop.prevent="insertCode(it)">
-                  {{ it }}
-                </text>
+            </u-form-item>
+            <u-form-item v-if="form.handleType === 'inflowOrOutflow'" label="流入/流出" prop="inflowOrOutflow" required>
+              <view class="edit-select" @click="showInflowSelect = true">
+                <text :class="form.inflowOrOutflow ? 'edit-select-value' : 'edit-select-placeholder'">{{ inflowLabel || '请选择' }}</text>
+                <u-icon name="arrow-right" size="28" color="#bbb" />
               </view>
-              <u-textarea
-                ref="codeTextareaRef"
-                v-model="form.code"
-                placeholder="请输入代码"
-                :auto-height="true"
-                :maxlength="-1"
-                :cursor-spacing="20"
-                :hold-keyboard="true"
-                @focus="onCodeFocus"
-                @blur="onCodeBlur" />
-            </view>
-          </u-form-item>
-        </view>
-      </u-form>
-    </scroll-view>
+            </u-form-item>
+            <u-form-item v-else-if="form.handleType === 'billType'" label="账单类型" prop="billType" required>
+              <view class="edit-select" @click="showBillTypeSelect = true">
+                <text :class="form.billType ? 'edit-select-value' : 'edit-select-placeholder'">{{ billTypeLabel || '请选择' }}</text>
+                <u-icon name="arrow-right" size="28" color="#bbb" />
+              </view>
+            </u-form-item>
+            <u-form-item v-else-if="form.handleType === 'billMethod'" label="账单方式" prop="billMethod" required>
+              <view class="edit-select" @click="showBillMethodSelect = true">
+                <text :class="form.billMethod ? 'edit-select-value' : 'edit-select-placeholder'">{{ billMethodLabel || '请选择' }}</text>
+                <u-icon name="arrow-right" size="28" color="#bbb" />
+              </view>
+            </u-form-item>
+          </view>
 
-    <searchable-select
-      v-model="showBillUploadTypeSelect"
-      title="选择导入类型"
-      :list="billUploadTypeList"
-      :current-value="form.billUploadType ?? undefined"
-      @confirm="
-        (item) => {
-          form.billUploadType = Number(item.value);
-        }
-      " />
-    <searchable-select
-      v-model="showHandleTypeSelect"
-      title="选择处理类型"
-      :list="handleTypeList"
-      :current-value="form.handleType || undefined"
-      @confirm="
-        (item) => {
-          form.handleType = String(item.value);
-        }
-      " />
-    <searchable-select
-      v-model="showInflowSelect"
-      title="选择流入/流出"
-      :list="inflowOrOutflowList"
-      :current-value="form.inflowOrOutflow ?? undefined"
-      @confirm="
-        (item) => {
-          form.inflowOrOutflow = Number(item.value);
-        }
-      " />
-    <searchable-select
-      v-model="showBillTypeSelect"
-      title="选择账单类型"
-      :list="billTypeSelectList"
-      :current-value="form.billType ?? undefined"
-      @confirm="
-        (item) => {
-          form.billType = Number(item.value);
-        }
-      " />
-    <searchable-select
-      v-model="showBillMethodSelect"
-      title="选择账单方式"
-      :list="billMethodSelectList"
-      :current-value="form.billMethod ?? undefined"
-      @confirm="
-        (item) => {
-          form.billMethod = Number(item.value);
-        }
-      " />
+          <view class="edit-card card" :class="{ dark: isDark }">
+            <u-form-item prop="code" required>
+              <template #label>
+                <view class="code-header">
+                  <text class="code-title">代码</text>
+                  <text class="code-tip">isAssignment 开头，boolean 类型，item 为账单数据</text>
+                </view>
+              </template>
+              <view class="code-body">
+                <view v-if="codeFields.length > 0" class="code-fields">
+                  <text v-for="field in codeFields" :key="field.key" class="code-field-item">{{ field.key }}: {{ field.label }}({{ field.type }})</text>
+                </view>
+                <view class="code-input-btns">
+                  <text
+                    v-for="it in codeInputArray"
+                    :key="it"
+                    class="code-input-btn"
+                    @touchstart.stop.prevent="insertCode(it)"
+                    @mousedown.stop.prevent="insertCode(it)">
+                    {{ it }}
+                  </text>
+                </view>
+                <u-textarea
+                  ref="codeTextareaRef"
+                  v-model="form.code"
+                  placeholder="请输入代码"
+                  :auto-height="true"
+                  :maxlength="-1"
+                  :cursor-spacing="20"
+                  :hold-keyboard="true"
+                  @focus="onCodeFocus"
+                  @blur="onCodeBlur" />
+              </view>
+            </u-form-item>
+          </view>
+        </u-form>
+      </scroll-view>
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      <searchable-select
+        v-model="showBillUploadTypeSelect"
+        title="选择导入类型"
+        :list="billUploadTypeList"
+        :current-value="form.billUploadType ?? undefined"
+        @confirm="
+          (item) => {
+            form.billUploadType = Number(item.value);
+          }
+        " />
+      <searchable-select
+        v-model="showHandleTypeSelect"
+        title="选择处理类型"
+        :list="handleTypeList"
+        :current-value="form.handleType || undefined"
+        @confirm="
+          (item) => {
+            form.handleType = String(item.value);
+          }
+        " />
+      <searchable-select
+        v-model="showInflowSelect"
+        title="选择流入/流出"
+        :list="inflowOrOutflowList"
+        :current-value="form.inflowOrOutflow ?? undefined"
+        @confirm="
+          (item) => {
+            form.inflowOrOutflow = Number(item.value);
+          }
+        " />
+      <searchable-select
+        v-model="showBillTypeSelect"
+        title="选择账单类型"
+        :list="billTypeSelectList"
+        :current-value="form.billType ?? undefined"
+        @confirm="
+          (item) => {
+            form.billType = Number(item.value);
+          }
+        " />
+      <searchable-select
+        v-model="showBillMethodSelect"
+        title="选择账单方式"
+        :list="billMethodSelectList"
+        :current-value="form.billMethod ?? undefined"
+        @confirm="
+          (item) => {
+            form.billMethod = Number(item.value);
+          }
+        " />
+
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -142,6 +144,9 @@
   import { bankUploadFields } from '../../../../shared/src/constants/api/bank-fields';
   import { useApiTypeStore } from '../../../store';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const formRef = ref();
   const loading = ref(false);
@@ -344,6 +349,14 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $uni-bg-color-dark;
+
+      .code-title {
+        color: $uni-text-color-grey;
+      }
+    }
   }
 
   .edit-scroll {

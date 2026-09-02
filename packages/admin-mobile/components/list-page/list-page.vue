@@ -1,6 +1,6 @@
 <template>
-  <view class="list-page">
-    <view v-if="showSearch" class="list-page-search">
+  <view class="list-page" :class="{ dark: isDark }">
+    <view v-if="showSearch" class="list-page-search" :class="{ dark: isDark }">
       <u-search
         v-model="keyword"
         :placeholder="searchPlaceholder"
@@ -12,7 +12,7 @@
         @clear="handleClear" />
     </view>
 
-    <view v-if="enabledItems.length > 0" class="list-page-filterbar">
+    <view v-if="enabledItems.length > 0" class="list-page-filterbar" :class="{ dark: isDark }">
       <scroll-view scroll-x class="list-page-filterbar__scroll" :show-scrollbar="false">
         <view class="list-page-filterbar__row">
           <view
@@ -28,7 +28,7 @@
       </scroll-view>
 
       <!-- 内联下拉面板：absolute 悬浮在查询栏下方，不挤压列表 -->
-      <view v-if="activeInlineKey !== '' && activeInlineField" class="list-page-inline-panel" @touchmove.stop.prevent @click.stop>
+      <view v-if="activeInlineKey !== '' && activeInlineField" class="list-page-inline-panel" :class="{ dark: isDark }" @touchmove.stop.prevent @click.stop>
         <view class="inline-panel__chips">
           <view
             v-for="opt in activeInlineField.options"
@@ -160,6 +160,9 @@
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue';
   import { getPinyinInitial } from '../../../shared/src/utils';
+  import { useAppTheme } from '../../composables/useAppTheme';
+
+  const { isDark } = useAppTheme();
 
   export interface ListDropdownItem {
     title: string;
@@ -554,6 +557,28 @@
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
+
+    &.dark {
+      .list-page-search {
+        background-color: $uni-bg-color-dark-2;
+      }
+
+      .list-page-filterbar {
+        background-color: $uni-bg-color-dark-2;
+      }
+
+      .list-page-inline-panel {
+        background-color: $uni-bg-color-dark-2;
+      }
+
+      .bottom-filter__title {
+        color: $uni-text-color-grey;
+      }
+
+      .bottom-filter__group-label {
+        color: $uni-text-color-grey;
+      }
+    }
   }
 
   .list-page-search {
