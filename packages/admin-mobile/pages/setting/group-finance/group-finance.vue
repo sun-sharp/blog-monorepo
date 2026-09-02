@@ -1,21 +1,23 @@
 <template>
-  <view class="group-page" :class="{ dark: themeStore.isDark }">
-    <scroll-view scroll-y class="group-scroll">
-      <view class="group-list card" :class="{ dark: themeStore.isDark }">
-        <u-cell-group :border="false">
-          <u-cell-item title="上传规则" icon="setting" @click="navigateTo('/pages/finance/bill-upload/bill-upload')" />
-          <u-cell-item title="财务汇总" icon="grid" @click="navigateTo('/pages/finance/summary/summary')" />
-          <u-cell-item title="导入账单" icon="download" @click="navigateTo('/pages/finance/upload/upload')" />
-        </u-cell-group>
-      </view>
-    </scroll-view>
-  </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="group-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="group-scroll">
+        <view class="group-list card" :class="{ dark: isDark }">
+          <u-cell-group :border="false">
+            <u-cell-item title="上传规则" icon="setting" @click="navigateTo('/pages/finance/bill-upload/bill-upload')" />
+            <u-cell-item title="财务汇总" icon="grid" @click="navigateTo('/pages/finance/summary/summary')" />
+            <u-cell-item title="导入账单" icon="download" @click="navigateTo('/pages/finance/upload/upload')" />
+          </u-cell-group>
+        </view>
+      </scroll-view>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
-  import { useThemeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
-  const themeStore = useThemeStore();
+  const { isDark, mode } = useAppTheme();
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
@@ -45,6 +47,13 @@
 
     &.dark {
       background-color: #2c2c30;
+
+      :deep(.u-cell),
+      :deep(.u-cell__title),
+      :deep(.u-cell__value) {
+        background-color: #2c2c30;
+        color: #e5e5e6 !important;
+      }
     }
   }
 </style>

@@ -1,22 +1,25 @@
 <template>
-  <view class="group-page" :class="{ dark: themeStore.isDark }">
-    <scroll-view scroll-y class="group-scroll">
-      <view class="group-list card" :class="{ dark: themeStore.isDark }">
-        <u-cell-group :border="false">
-          <u-cell-item title="用户管理" icon="account" @click="navigateTo('/pages/system/user/user')" />
-          <u-cell-item title="角色管理" icon="account-fill" @click="navigateTo('/pages/system/role/role')" />
-          <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
-          <u-cell-item title="运行日志" icon="file-text" @click="navigateTo('/pages/system/run-log/run-log')" />
-        </u-cell-group>
-      </view>
-    </scroll-view>
-  </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="group-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="group-scroll">
+        <view class="group-list card" :class="{ dark: isDark }">
+          <u-cell-group :border="false">
+            <u-cell-item title="用户管理" icon="account" @click="navigateTo('/pages/system/user/user')" />
+            <u-cell-item title="角色管理" icon="account-fill" @click="navigateTo('/pages/system/role/role')" />
+            <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
+            <u-cell-item title="数据备份" icon="download" @click="navigateTo('/pages/system/backup/backup')" />
+            <u-cell-item title="运行日志" icon="file-text" @click="navigateTo('/pages/system/run-log/run-log')" />
+          </u-cell-group>
+        </view>
+      </scroll-view>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
-  import { useThemeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
-  const themeStore = useThemeStore();
+  const { isDark, mode } = useAppTheme();
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
@@ -46,6 +49,13 @@
 
     &.dark {
       background-color: #2c2c30;
+
+      :deep(.u-cell),
+      :deep(.u-cell__title),
+      :deep(.u-cell__value) {
+        background-color: #2c2c30;
+        color: #e5e5e6 !important;
+      }
     }
   }
 </style>

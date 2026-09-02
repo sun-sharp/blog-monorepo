@@ -1,24 +1,27 @@
 <template>
-  <view class="setting-page" :class="{ dark: themeStore.isDark }">
-    <scroll-view scroll-y class="setting-scroll">
-      <view class="setting-list card" :class="{ dark: themeStore.isDark }">
-        <u-cell-group :border="false">
-          <u-cell-item title="账号管理" icon="account" @click="navigateTo('/pages/setting/account-manage/account-manage')" />
-          <u-cell-item title="关于我们" icon="info-circle" @click="navigateTo('/pages/setting/about/about')" />
-        </u-cell-group>
-      </view>
-    </scroll-view>
+  <u-config-provider :dark-mode="mode">
+    <view class="setting-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="setting-scroll">
+        <view class="setting-list card" :class="{ dark: isDark }">
+          <u-cell-group :border="false">
+            <u-cell-item title="账号管理" icon="account" @click="navigateTo('/pages/setting/account-manage/account-manage')" />
+            <u-cell-item title="关于我们" icon="info-circle" @click="navigateTo('/pages/setting/about/about')" />
+          </u-cell-group>
+        </view>
+      </scroll-view>
 
-    <view class="setting-footer">
-      <u-button type="error" plain shape="circle" @click="handleLogout">退出登录</u-button>
+      <view class="setting-footer">
+        <u-button type="error" plain shape="circle" @click="handleLogout">退出登录</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
-  import { useThemeStore, useUserStore } from '../../../store';
+  import { useUserStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
-  const themeStore = useThemeStore();
+  const { isDark, mode } = useAppTheme();
   const userStore = useUserStore();
 
   function navigateTo(url: string) {

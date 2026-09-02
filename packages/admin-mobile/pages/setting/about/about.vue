@@ -1,19 +1,21 @@
 <template>
-  <view class="about-page" :class="{ dark: themeStore.isDark }">
-    <view class="about-body">
-      <image class="about-logo" src="/static/logo.png" mode="aspectFit" />
-      <text class="about-name">{{ appName }}</text>
-      <text class="about-version">版本 v{{ version }}</text>
-      <text class="about-desc">个人博客与财务管理助手</text>
+  <u-config-provider :dark-mode="mode">
+    <view class="about-page" :class="{ dark: isDark }">
+      <view class="about-body">
+        <image class="about-logo" src="/static/logo.png" mode="aspectFit" />
+        <text class="about-name" :class="{ dark: isDark }">{{ appName }}</text>
+        <text class="about-version" :class="{ dark: isDark }">版本 v{{ version }}</text>
+        <text class="about-desc" :class="{ dark: isDark }">个人博客与财务管理助手</text>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { useThemeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
-  const themeStore = useThemeStore();
+  const { isDark, mode } = useAppTheme();
 
   const appName = ref('阳之锐');
   const version = ref('1.0.0');
@@ -66,12 +68,20 @@
     font-size: 40rpx;
     font-weight: bold;
     color: $uni-text-color;
+
+    &.dark {
+      color: #fff;
+    }
   }
 
   .about-version {
     margin-top: 12rpx;
     font-size: 26rpx;
     color: $uni-text-color-grey;
+
+    &.dark {
+      color: #b0b3b8;
+    }
   }
 
   .about-desc {
@@ -79,5 +89,9 @@
     font-size: 26rpx;
     color: $uni-text-color-grey;
     text-align: center;
+
+    &.dark {
+      color: #b0b3b8;
+    }
   }
 </style>

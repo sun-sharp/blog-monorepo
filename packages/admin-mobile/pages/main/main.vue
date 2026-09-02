@@ -1,23 +1,25 @@
 <template>
-  <view class="main-page" :style="{ paddingTop: customNavHeight + 'px' }">
-    <view class="main-content">
-      <tab-home v-show="currentTab === 0" :active="currentTab === 0" />
-      <tab-article v-show="currentTab === 1" ref="tabArticleRef" :active="currentTab === 1" />
-      <tab-finance v-show="currentTab === 2" ref="tabFinanceRef" :active="currentTab === 2" :external-filter="financeInitialFilter" />
-      <tab-mine v-show="currentTab === 3" :active="currentTab === 3" />
-    </view>
-
-    <view class="custom-tabbar" :class="{ dark: themeStore.isDark }">
-      <view v-for="(item, index) in tabs" :key="index" class="custom-tabbar__item" @tap="onTap(index)">
-        <u-icon :name="index === currentTab ? item.selectedIcon : item.icon" :size="44" :color="getTabColor(index === currentTab, themeStore.isDark)" />
-        <text class="custom-tabbar__text" :style="{ color: getTabColor(index === currentTab, themeStore.isDark) }">
-          {{ item.text }}
-        </text>
+  <u-config-provider :dark-mode="mode">
+    <view class="main-page" :class="{ dark: isDark }" :style="{ paddingTop: customNavHeight + 'px' }">
+      <view class="main-content">
+        <tab-home v-show="currentTab === 0" :active="currentTab === 0" />
+        <tab-article v-show="currentTab === 1" ref="tabArticleRef" :active="currentTab === 1" />
+        <tab-finance v-show="currentTab === 2" ref="tabFinanceRef" :active="currentTab === 2" :external-filter="financeInitialFilter" />
+        <tab-mine v-show="currentTab === 3" :active="currentTab === 3" />
       </view>
-    </view>
 
-    <global-loading />
-  </view>
+      <view class="custom-tabbar" :class="{ dark: isDark }">
+        <view v-for="(item, index) in tabs" :key="index" class="custom-tabbar__item" @tap="onTap(index)">
+          <u-icon :name="index === currentTab ? item.selectedIcon : item.icon" :size="44" :color="getTabColor(index === currentTab, isDark)" />
+          <text class="custom-tabbar__text" :style="{ color: getTabColor(index === currentTab, isDark) }">
+            {{ item.text }}
+          </text>
+        </view>
+      </view>
+
+      <global-loading />
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -27,12 +29,12 @@
   import TabArticle from '../../components/tab-content/tab-article.vue';
   import TabFinance from '../../components/tab-content/tab-finance.vue';
   import TabMine from '../../components/tab-content/tab-mine.vue';
-  import { useThemeStore } from '../../store';
+  import { useAppTheme } from '../../composables/useAppTheme';
   import { getCustomNavHeight } from '../../utils/custom-nav';
   import { switchTabBusVersion, consumeSwitchTab } from '../../composables/useTabBus';
 
   const currentTab = ref(0);
-  const themeStore = useThemeStore();
+  const { isDark, mode } = useAppTheme();
   const customNavHeight = getCustomNavHeight();
   const tabArticleRef = ref();
   const tabFinanceRef = ref();
@@ -83,6 +85,11 @@
     flex-direction: column;
     height: 100vh;
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: #1b1b1f;
+    }
   }
 
   .main-content {

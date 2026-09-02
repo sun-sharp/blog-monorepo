@@ -1,20 +1,22 @@
 <template>
-  <view class="account-manage-page" :class="{ dark: themeStore.isDark }">
-    <scroll-view scroll-y class="account-manage-scroll">
-      <view class="account-manage-list card" :class="{ dark: themeStore.isDark }">
-        <u-cell-group :border="false">
-          <u-cell-item title="修改登录名" icon="account" @click="navigateTo('/pages/setting/account/account')" />
-          <u-cell-item title="修改登录密码" icon="lock" @click="navigateTo('/pages/setting/password/password')" />
-        </u-cell-group>
-      </view>
-    </scroll-view>
-  </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="account-manage-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="account-manage-scroll">
+        <view class="account-manage-list card" :class="{ dark: isDark }">
+          <u-cell-group :border="false">
+            <u-cell-item title="修改登录名" icon="account" @click="navigateTo('/pages/setting/account/account')" />
+            <u-cell-item title="修改登录密码" icon="lock" @click="navigateTo('/pages/setting/password/password')" />
+          </u-cell-group>
+        </view>
+      </scroll-view>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
-  import { useThemeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
-  const themeStore = useThemeStore();
+  const { isDark, mode } = useAppTheme();
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
@@ -44,6 +46,13 @@
 
     &.dark {
       background-color: #2c2c30;
+
+      :deep(.u-cell),
+      :deep(.u-cell__title),
+      :deep(.u-cell__value) {
+        background-color: #2c2c30;
+        color: #e5e5e6 !important;
+      }
     }
   }
 </style>
