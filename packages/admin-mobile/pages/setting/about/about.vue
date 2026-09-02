@@ -18,14 +18,19 @@
   const appName = ref('阳之锐');
   const version = ref('1.0.0');
 
-  // #ifdef APP-PLUS
   try {
-    const runtime: any = (uni as any).requireNativePlugin?.('uni-runtime-info') || plus?.runtime;
-    version.value = runtime?.version || '1.0.0';
+    // 读取 manifest.json 的 versionName（跨端）
+    const baseInfo = (uni as any).getAppBaseInfo?.();
+    if (baseInfo?.appVersion) {
+      version.value = baseInfo.appVersion;
+    } else {
+      // #ifdef APP-PLUS
+      version.value = plus?.runtime?.version || version.value;
+      // #endif
+    }
   } catch {
     // ignore
   }
-  // #endif
 </script>
 
 <style lang="scss" scoped>

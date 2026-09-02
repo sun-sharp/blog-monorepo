@@ -1,16 +1,18 @@
 <template>
   <scroll-view scroll-y class="mine-page" :class="{ dark: themeStore.isDark }">
-    <!-- 顶部用户卡片：头像在上，名称/角色在下，右上角设置+主题 -->
-    <view class="mine-card">
-      <view class="mine-card-tools">
+    <view class="mine-head">
+      <view class="mine-head-tools">
         <view class="mine-tool-btn" @click="goToSetting">
-          <u-icon name="setting" size="40" color="#fff" />
+          <u-icon name="setting" size="40" color="#333" />
         </view>
         <view class="mine-tool-btn" @click="toggleTheme">
-          <u-icon :name="themeStore.isDark ? 'star-fill' : 'star'" size="40" color="#fff" />
+          <u-icon :name="themeStore.isDark ? 'star-fill' : 'star'" size="40" color="#333" />
         </view>
       </view>
-      <u-avatar :src="getImgUrl(userInfo.avatar) || '/static/logo.png'" size="128" />
+    </view>
+    <!-- 顶部用户卡片：头像在上，名称/角色在下，右上角设置+主题 -->
+    <view class="mine-card">
+      <u-avatar :src="getImgUrl(userInfo.avatar) || '/static/logo.png'" size="128" @click="navigateTo('/pages/setting/account/account')" />
       <text class="mine-card-name">{{ userInfo.nickname || '未登录' }}</text>
       <text class="mine-card-role">{{ userInfo.roleName || '普通用户' }}</text>
     </view>
@@ -25,10 +27,10 @@
     <!-- 分组标题入口 -->
     <view class="mine-section card" :class="{ dark: themeStore.isDark }">
       <u-cell-group :border="false">
-        <u-cell-item title="博客" icon="calendar" @click="navigateTo('/pages/setting/group-blog/group-blog')" />
-        <u-cell-item title="财务" icon="red-packet" @click="navigateTo('/pages/setting/group-finance/group-finance')" />
-        <u-cell-item title="文件" icon="photo" @click="navigateTo('/pages/setting/group-file/group-file')" />
-        <u-cell-item title="系统" icon="setting" @click="navigateTo('/pages/setting/group-system/group-system')" />
+        <u-cell-item title="博客管理" icon="calendar" @click="navigateTo('/pages/setting/group-blog/group-blog')" />
+        <u-cell-item title="财务管理" icon="red-packet" @click="navigateTo('/pages/setting/group-finance/group-finance')" />
+        <u-cell-item title="文件管理" icon="photo" @click="navigateTo('/pages/setting/group-file/group-file')" />
+        <u-cell-item title="系统管理" icon="setting" @click="navigateTo('/pages/setting/group-system/group-system')" />
       </u-cell-group>
     </view>
   </scroll-view>
@@ -72,6 +74,24 @@
     }
   }
 
+  .mine-head {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 10rpx 10rpx;
+  }
+
+  .mine-head-tools {
+    display: flex;
+    gap: 28rpx;
+  }
+
+  .mine-tool-btn {
+    // width: 36rpx;
+  }
+
   .mine-card {
     position: relative;
     display: flex;
@@ -80,39 +100,20 @@
     padding: 60rpx 24rpx 40rpx;
     margin-bottom: 20rpx;
     border-radius: 24rpx;
-    background: linear-gradient(135deg, #4a7dff, #2f54eb);
-    color: #fff;
-  }
-
-  .mine-card-tools {
-    position: absolute;
-    top: 20rpx;
-    right: 20rpx;
-    display: flex;
-    gap: 28rpx;
-  }
-
-  .mine-tool-btn {
-    width: 72rpx;
-    height: 72rpx;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.2);
+    color: #333;
   }
 
   .mine-card-name {
     margin-top: 20rpx;
     font-size: 36rpx;
     font-weight: bold;
-    color: #fff;
+    color: #333;
   }
 
   .mine-card-role {
     margin-top: 10rpx;
     font-size: 26rpx;
-    color: rgba(255, 255, 255, 0.85);
+    color: #333;
   }
 
   .mine-section {
