@@ -1,162 +1,127 @@
 <template>
-  <scroll-view scroll-y class="mine-page">
-    <view class="mine-header card">
-      <view class="mine-user" @click="goToAccount">
-        <u-avatar :src="getImgUrl(userInfo.avatar) || '/static/logo.png'" size="88" />
-        <view class="mine-user-info">
-          <text class="mine-user-name">{{ userInfo.nickname || '未登录' }}</text>
-          <text class="mine-user-role">{{ userInfo.roleName || '' }}</text>
+  <scroll-view scroll-y class="mine-page" :class="{ dark: themeStore.isDark }">
+    <!-- 顶部用户卡片：头像在上，名称/角色在下，右上角设置+主题 -->
+    <view class="mine-card">
+      <view class="mine-card-tools">
+        <view class="mine-tool-btn" @click="goToSetting">
+          <u-icon name="setting" size="40" color="#fff" />
         </view>
-        <u-icon name="arrow-right" color="#999" size="32" />
+        <view class="mine-tool-btn" @click="toggleTheme">
+          <u-icon :name="themeStore.isDark ? 'star-fill' : 'star'" size="40" color="#fff" />
+        </view>
       </view>
+      <u-avatar :src="getImgUrl(userInfo.avatar) || '/static/logo.png'" size="128" />
+      <text class="mine-card-name">{{ userInfo.nickname || '未登录' }}</text>
+      <text class="mine-card-role">{{ userInfo.roleName || '普通用户' }}</text>
     </view>
 
-    <view class="mine-section card">
-      <view class="mine-section-header">
-        <u-icon name="account" size="28" color="#007aff" />
-        <text class="mine-section-title">个人</text>
-      </view>
+    <!-- 一级入口：尿酸血糖测量 -->
+    <view class="mine-section card" :class="{ dark: themeStore.isDark }">
       <u-cell-group :border="false">
-        <u-cell-item title="账号设置" icon="account" @click="navigateTo('/pages/setting/account/account')" />
-        <u-cell-item title="修改密码" icon="lock" @click="navigateTo('/pages/setting/password/password')" />
-      </u-cell-group>
-    </view>
-
-    <view class="mine-section card">
-      <view class="mine-section-header">
-        <u-icon name="file-text" size="28" color="#4cd964" />
-        <text class="mine-section-title">博客</text>
-      </view>
-      <u-cell-group :border="false">
-        <u-cell-item title="日程管理" icon="calendar" @click="navigateTo('/pages/blog/schedule/schedule')" />
-      </u-cell-group>
-    </view>
-
-    <view class="mine-section card">
-      <view class="mine-section-header">
-        <u-icon name="red-packet" size="28" color="#f0ad4e" />
-        <text class="mine-section-title">财务</text>
-      </view>
-      <u-cell-group :border="false">
-        <u-cell-item title="上传规则" icon="setting" @click="navigateTo('/pages/finance/bill-upload/bill-upload')" />
-        <u-cell-item title="财务汇总" icon="grid" @click="navigateTo('/pages/finance/summary/summary')" />
-        <u-cell-item title="导入账单" icon="download" @click="navigateTo('/pages/finance/upload/upload')" />
-      </u-cell-group>
-    </view>
-
-    <view class="mine-section card">
-      <view class="mine-section-header">
-        <u-icon name="photo" size="28" color="#a18cd1" />
-        <text class="mine-section-title">文件</text>
-      </view>
-      <u-cell-group :border="false">
-        <u-cell-item title="图片管理" icon="photo" @click="navigateTo('/pages/file/image/image')" />
-      </u-cell-group>
-    </view>
-
-    <view class="mine-section card">
-      <view class="mine-section-header">
-        <u-icon name="setting" size="28" color="#dd524d" />
-        <text class="mine-section-title">系统管理</text>
-      </view>
-      <u-cell-group :border="false">
-        <u-cell-item title="用户管理" icon="account" @click="navigateTo('/pages/system/user/user')" />
-        <u-cell-item title="角色管理" icon="account-fill" @click="navigateTo('/pages/system/role/role')" />
-        <u-cell-item title="分类管理" icon="list" @click="navigateTo('/pages/system/category/category')" />
-        <u-cell-item title="数据备份" icon="download" @click="navigateTo('/pages/system/backup/backup')" />
-        <u-cell-item title="运行日志" icon="file-text" @click="navigateTo('/pages/system/run-log/run-log')" />
         <u-cell-item title="尿酸血糖测量" icon="file-text" @click="navigateTo('/pages/system/uric/uric')" />
       </u-cell-group>
     </view>
 
-    <view class="mine-logout">
-      <u-button type="error" plain shape="circle" @click="handleLogout">退出登录</u-button>
+    <!-- 分组标题入口 -->
+    <view class="mine-section card" :class="{ dark: themeStore.isDark }">
+      <u-cell-group :border="false">
+        <u-cell-item title="博客" icon="calendar" @click="navigateTo('/pages/setting/group-blog/group-blog')" />
+        <u-cell-item title="财务" icon="red-packet" @click="navigateTo('/pages/setting/group-finance/group-finance')" />
+        <u-cell-item title="文件" icon="photo" @click="navigateTo('/pages/setting/group-file/group-file')" />
+        <u-cell-item title="系统" icon="setting" @click="navigateTo('/pages/setting/group-system/group-system')" />
+      </u-cell-group>
     </view>
   </scroll-view>
 </template>
 
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { useUserStore } from '../../store';
+  import { useUserStore, useThemeStore } from '../../store';
   import { getImgUrl } from '../../../shared/src/utils/files';
 
   defineProps<{ active: boolean }>();
 
   const userStore = useUserStore();
+  const themeStore = useThemeStore();
   const userInfo = computed(() => userStore.getUserInfo);
-  function goToAccount() {
-    uni.navigateTo({ url: '/pages/setting/account/account' });
+
+  function toggleTheme() {
+    themeStore.toggle();
+    uni.showToast({ title: themeStore.isDark ? '已开启深色模式' : '已开启浅色模式', icon: 'none' });
+  }
+
+  function goToSetting() {
+    uni.navigateTo({ url: '/pages/setting/setting/setting' });
   }
 
   function navigateTo(url: string) {
     uni.navigateTo({ url });
-  }
-
-  function handleLogout() {
-    uni.showModal({
-      title: '提示',
-      content: '确定退出登录？',
-      success: (res) => {
-        if (res.confirm) {
-          userStore.logout();
-          uni.reLaunch({ url: '/pages/login/login' });
-        }
-      },
-    });
   }
 </script>
 
 <style lang="scss" scoped>
   .mine-page {
     height: 100%;
-    padding: 0 20rpx;
-    padding-bottom: 20rpx;
+    padding: 20rpx;
     box-sizing: border-box;
+    background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: #1b1b1f;
+    }
   }
 
-  .mine-user {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .mine-user-info {
-    flex: 1;
-    margin-left: 24rpx;
+  .mine-card {
+    position: relative;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 60rpx 24rpx 40rpx;
+    margin-bottom: 20rpx;
+    border-radius: 24rpx;
+    background: linear-gradient(135deg, #4a7dff, #2f54eb);
+    color: #fff;
   }
 
-  .mine-user-name {
-    font-size: $uni-font-size-lg;
+  .mine-card-tools {
+    position: absolute;
+    top: 20rpx;
+    right: 20rpx;
+    display: flex;
+    gap: 28rpx;
+  }
+
+  .mine-tool-btn {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .mine-card-name {
+    margin-top: 20rpx;
+    font-size: 36rpx;
     font-weight: bold;
+    color: #fff;
   }
 
-  .mine-user-role {
-    font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
-    margin-top: 6rpx;
+  .mine-card-role {
+    margin-top: 10rpx;
+    font-size: 26rpx;
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .mine-section {
-    margin-bottom: 16rpx;
+    margin-bottom: 20rpx;
     padding: 0 !important;
-  }
+    transition: background-color 0.2s;
 
-  .mine-section-header {
-    display: flex;
-    align-items: center;
-    gap: 8rpx;
-    padding: 20rpx 24rpx 8rpx;
-  }
-
-  .mine-section-title {
-    font-size: $uni-font-size-base;
-    font-weight: bold;
-  }
-
-  .mine-logout {
-    margin-top: 30rpx;
-    padding: 0 10rpx;
+    &.dark {
+      background-color: #2c2c30;
+    }
   }
 </style>

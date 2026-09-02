@@ -7,10 +7,10 @@
       <tab-mine v-show="currentTab === 3" :active="currentTab === 3" />
     </view>
 
-    <view class="custom-tabbar">
+    <view class="custom-tabbar" :class="{ dark: themeStore.isDark }">
       <view v-for="(item, index) in tabs" :key="index" class="custom-tabbar__item" @tap="onTap(index)">
-        <u-icon :name="index === currentTab ? item.selectedIcon : item.icon" :size="44" :color="index === currentTab ? activeColor : inactiveColor" />
-        <text class="custom-tabbar__text" :style="{ color: index === currentTab ? activeColor : inactiveColor }">
+        <u-icon :name="index === currentTab ? item.selectedIcon : item.icon" :size="44" :color="getTabColor(index === currentTab, themeStore.isDark)" />
+        <text class="custom-tabbar__text" :style="{ color: getTabColor(index === currentTab, themeStore.isDark) }">
           {{ item.text }}
         </text>
       </view>
@@ -27,10 +27,12 @@
   import TabArticle from '../../components/tab-content/tab-article.vue';
   import TabFinance from '../../components/tab-content/tab-finance.vue';
   import TabMine from '../../components/tab-content/tab-mine.vue';
+  import { useThemeStore } from '../../store';
   import { getCustomNavHeight } from '../../utils/custom-nav';
   import { switchTabBusVersion, consumeSwitchTab } from '../../composables/useTabBus';
 
   const currentTab = ref(0);
+  const themeStore = useThemeStore();
   const customNavHeight = getCustomNavHeight();
   const tabArticleRef = ref();
   const tabFinanceRef = ref();
@@ -38,6 +40,11 @@
 
   const activeColor = '#007aff';
   const inactiveColor = '#333333';
+
+  function getTabColor(active: boolean, dark: boolean) {
+    if (active) return activeColor;
+    return dark ? '#b0b3b8' : inactiveColor;
+  }
 
   const tabs = [
     { icon: 'home', selectedIcon: 'home-fill', text: '首页' },
@@ -92,6 +99,12 @@
     border-top: 1rpx solid #e5e5e5;
     padding-bottom: env(safe-area-inset-bottom);
     flex-shrink: 0;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: #1b1b1f;
+      border-top-color: #2c2c30;
+    }
   }
 
   .custom-tabbar__item {

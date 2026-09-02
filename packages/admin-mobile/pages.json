@@ -189,6 +189,50 @@
             "navigationBarTitleText": "修改密码",
             "softinputMode": "adjustResize"
           }
+        },
+        {
+          "path": "setting/setting",
+          "style": {
+            "navigationBarTitleText": "设置",
+            "softinputMode": "adjustResize"
+          }
+        },
+        {
+          "path": "account-manage/account-manage",
+          "style": {
+            "navigationBarTitleText": "账号管理",
+            "softinputMode": "adjustResize"
+          }
+        },
+        {
+          "path": "about/about",
+          "style": {
+            "navigationBarTitleText": "关于我们"
+          }
+        },
+        {
+          "path": "group-blog/group-blog",
+          "style": {
+            "navigationBarTitleText": "博客"
+          }
+        },
+        {
+          "path": "group-finance/group-finance",
+          "style": {
+            "navigationBarTitleText": "财务"
+          }
+        },
+        {
+          "path": "group-file/group-file",
+          "style": {
+            "navigationBarTitleText": "文件"
+          }
+        },
+        {
+          "path": "group-system/group-system",
+          "style": {
+            "navigationBarTitleText": "系统"
+          }
         }
       ]
     },
