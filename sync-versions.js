@@ -4,8 +4,8 @@ const path = require('path');
 // 先安装：npm install json5
 const JSON5 = require('json5');
 
-const newVersion = '4.5.7';
-const newVersionCode = 4507;
+const newVersion = '4.5.8';
+const newVersionCode = 4508;
 
 // ---------- package.json 列表 ----------
 const packageFiles = [
@@ -25,7 +25,7 @@ const manifestFiles = [
 ];
 
 // 工具函数：更新 JSON 文件（支持严格 JSON 和 JSON5 两种读取方式）
-function updateJsonFile(filePath, updateFn, useJson5 = false) {
+function updateJsonFile(filePath, updateFn, useJson5 = false, tab = 2) {
   const absolutePath = path.resolve(filePath);
 
   // 1. 检查文件是否存在
@@ -43,7 +43,7 @@ function updateJsonFile(filePath, updateFn, useJson5 = false) {
     updateFn(data);
     
     // 序列化时保持严格 JSON 格式（2空格缩进）
-    const output = JSON.stringify(data, null, 2) + '\n';
+    const output = JSON.stringify(data, null, tab) + '\n';
     fs.writeFileSync(absolutePath, output);
     console.log(`✅ 已更新: ${filePath}`);
   } catch (err) {
@@ -63,5 +63,5 @@ manifestFiles.forEach((file) => {
   updateJsonFile(file, (manifest) => {
     manifest.versionName = newVersion;
     manifest.versionCode = newVersionCode;
-  }, true); // 使用 JSON5
+  }, true, 4); // 使用 JSON5
 });

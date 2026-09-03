@@ -9,7 +9,6 @@ interface ManualBillForm {
   tradeOtherPerson: string | null;
   inflowOrOutflow: number | null;
   moneyAmount: number | null;
-  manualPaymentMethod: number | null;
   balance: number | null;
   explain: string | null;
   place: string | null;
@@ -22,7 +21,6 @@ const modelFields: ManualBillForm = {
   tradeOtherPerson: '',
   inflowOrOutflow: null,
   moneyAmount: null,
-  manualPaymentMethod: null,
   balance: null,
   explain: '',
   place: '',
@@ -52,12 +50,6 @@ const modelRules = {
     required: true,
     trigger: ['blur', 'change'],
     message: `请输入交易金额`,
-  },
-  manualPaymentMethod: {
-    type: 'number',
-    required: true,
-    trigger: ['blur', 'change'],
-    message: `请选择支付方式`,
   },
   balance: {
     type: 'number',
@@ -103,7 +95,6 @@ export const useManualBillAddUpdateModel = (emit: (event: 'refresh', ...args: an
       modelForm.tradeOtherPerson = row.tradeOtherPerson || '';
       modelForm.inflowOrOutflow = row.inflowOrOutflow ?? null;
       modelForm.moneyAmount = row.moneyAmount ?? null;
-      modelForm.manualPaymentMethod = row.manualPaymentMethod ?? null;
       modelForm.balance = row.balance ?? null;
       modelForm.explain = row.explain || '';
       modelForm.place = row.place || '';
@@ -131,7 +122,6 @@ export const useManualBillAddUpdateModel = (emit: (event: 'refresh', ...args: an
           tradeOtherPerson: modelForm.tradeOtherPerson || '',
           inflowOrOutflow: modelForm.inflowOrOutflow || 0,
           moneyAmount: modelForm.moneyAmount || 0,
-          manualPaymentMethod: modelForm.manualPaymentMethod || 0,
           balance: modelForm.balance || 0,
           explain: modelForm.explain || '',
           place: modelForm.place || '',

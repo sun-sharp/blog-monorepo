@@ -3,7 +3,7 @@ import { manualBillApi } from '@/api';
 import { getBillMethodData, getBillTypeData, useApiType } from '@/hooks';
 import { BasicColumn, TablePaginationParams } from '/#/components/table';
 import { FormSchema } from '/#/components/form';
-import { inflowOrOutflowMap, inflowOrOutflowOption, manualPaymentMethodMap, manualPaymentMethodOption } from '@/constant';
+import { inflowOrOutflowMap, inflowOrOutflowOption } from '@/constant';
 import { ApiManualBillItem, ApiManualBillSearchParams } from '/#/api/blog/money/manual-bill';
 import { NButton, NPopconfirm } from 'naive-ui';
 
@@ -48,15 +48,6 @@ export const useManualBillConfigure = () => {
       componentProps: {
         placeholder: '请选择流入/流出',
         options: inflowOrOutflowOption,
-      },
-    },
-    {
-      field: 'manualPaymentMethod',
-      component: 'NSelect',
-      label: '支付方式',
-      componentProps: {
-        placeholder: '请选择支付方式',
-        options: manualPaymentMethodOption,
       },
     },
     {
@@ -107,14 +98,6 @@ export const useManualBillConfigure = () => {
       align: 'center',
       render(row) {
         return '￥' + (row.moneyAmount || 0);
-      },
-    },
-    {
-      title: '支付方式',
-      key: 'manualPaymentMethod',
-      align: 'center',
-      render(row) {
-        return row.manualPaymentMethod ? manualPaymentMethodMap[row.manualPaymentMethod] : '';
       },
     },
     {
