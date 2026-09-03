@@ -101,15 +101,20 @@ export class WeChatService {
           // 处理每项数据
           const formatBillUploadItem = (m: ApiWeChatUpload) => {
             const item = { ...m };
+            const codeIt = { ...m };
             for (let i = 0; i < billUploadList.length; i++) {
               const f = billUploadList[i];
-              // 提取 code 中所有 item.xxx 属性名并去重，判断是否都为字符串类型
+              // 提取 code 中所有 item.xxx 属性名并去重，判断是否都为字符串类型，如果不是，并且为空，那么给它赋值
               const itemProps = [...new Set([...f.code.matchAll(/item\.(\w+)/g)].map((m) => m[1]))];
-              if (!itemProps.every((prop) => typeof item[prop] === 'string')) continue;
+              itemProps.forEach((prop) => {
+                if (typeof codeIt[prop] !== 'string' && !codeIt[prop]) {
+                  codeIt[prop] = '';
+                }
+              });
               // 判断是否赋值
               let runResult: any;
               try {
-                runResult = runCode(f.code, { item, isAssignment: false });
+                runResult = runCode(f.code, { codeIt, isAssignment: false });
               } catch (err) {
                 throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, billMethod: ${f.billMethod}, item: ${JSON.stringify(item)}], 错误: ${err}`;
               }
