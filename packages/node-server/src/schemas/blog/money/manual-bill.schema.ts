@@ -39,10 +39,6 @@ export class ManualBill extends Document {
   @Prop()
   otherCost: number;
 
-  // 支付方式：1=现金, 2=美团, 3=京东, 4=华为钱包
-  @Prop()
-  manualPaymentMethod: number;
-
   // 余额
   @Prop()
   balance: number;

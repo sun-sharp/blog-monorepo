@@ -91,11 +91,8 @@
                   <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
                   <text v-if="getBillBankTypeLabel(item)" class="finance-bill-tag">{{ getBillBankTypeLabel(item) }}</text>
                 </view>
-                <view
-                  v-if="['manual'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item) || getManualPaymentMethodLabel(item))"
-                  class="finance-bill-sub-tag-row">
+                <view v-if="['manual'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item))" class="finance-bill-sub-tag-row">
                   <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
-                  <text v-if="getManualPaymentMethodLabel(item)" class="finance-bill-tag">{{ getManualPaymentMethodLabel(item) }}</text>
                   <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
                 </view>
               </view>
@@ -292,7 +289,6 @@
   import { consumeRefreshFlag } from '../../composables/useRefreshFlag';
   import { aggregateBillApi, weChatApi, aliPayApi } from '../../api';
   import { useApiTypeStore } from '../../store';
-  import { manualPaymentMethodOption } from '../../../shared/src/constants/api-type';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
   import SearchableSelect from '../searchable-select/searchable-select.vue';
@@ -399,11 +395,6 @@
 
   function getBillBankTypeLabel(item: ApiAggregateBillItem): string {
     const found = apiTypeStore.getBankTypeOption.find((o) => o.value === item.bankType);
-    return found ? found.label : '';
-  }
-
-  function getManualPaymentMethodLabel(item: ApiAggregateBillItem): string {
-    const found = manualPaymentMethodOption.find((o) => o.value === item.manualPaymentMethod);
     return found ? found.label : '';
   }
 

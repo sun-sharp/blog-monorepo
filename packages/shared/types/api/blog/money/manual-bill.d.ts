@@ -9,8 +9,6 @@ export interface ManualBillBaseFields {
   tradeOtherPerson: string;
   // 交易金额
   moneyAmount: number;
-  // 支付方式：1=现金, 2=美团, 3=京东, 4=华为钱包
-  manualPaymentMethod: number;
   // 余额
   balance: number;
   // 账单说明
@@ -60,7 +58,7 @@ export type ApiManualBillUpdateData = ApiManualBillId &
   Partial<
     Pick<
       ManualBillBaseFields,
-      'tradeTime' | 'tradeOtherPerson' | 'moneyAmount' | 'balance' | 'explain' | 'place' | 'manualPaymentMethod' | 'incomeOrPay' | 'tradeType' | 'otherCost'
+      'tradeTime' | 'tradeOtherPerson' | 'moneyAmount' | 'balance' | 'explain' | 'place' | 'incomeOrPay' | 'tradeType' | 'otherCost'
     >
   > &
   Pick<ManualBillCreateFields, 'inflowOrOutflow' | 'billMethod' | 'billType'>;
@@ -68,7 +66,7 @@ export type ApiManualBillUpdateData = ApiManualBillId &
 /** 手写账单查询参数（部分字段可选） */
 export type ApiManualBillSearchParams = Partial<
   Pick<ManualBillCreateFields, 'inflowOrOutflow' | 'billType' | 'billMethod'> &
-    Pick<ManualBillBaseFields, 'tradeOtherPerson' | 'manualPaymentMethod'>
+    Pick<ManualBillBaseFields, 'tradeOtherPerson'>
 >;
 
 /** 分页查询参数 */

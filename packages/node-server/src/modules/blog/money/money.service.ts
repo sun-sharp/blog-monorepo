@@ -583,20 +583,7 @@ export class MoneyService {
   public findAggregatePage(userId: string, body: PageAggregateBillDto): Promise<IResponse> {
     return Promise.resolve({ userId, body })
       .then(async ({ userId, body }) => {
-        const {
-          size,
-          current,
-          tradeOtherPerson,
-          inflowOrOutflow,
-          source,
-          startTime,
-          endTime,
-          bankType,
-          billType,
-          billMethod,
-          bankBillType,
-          manualPaymentMethod,
-        } = body;
+        const { size, current, tradeOtherPerson, inflowOrOutflow, source, startTime, endTime, bankType, billType, billMethod, bankBillType } = body;
         const { limit, skip } = PaginateHandle(size, current);
 
         // 构建通用查询条件
@@ -613,7 +600,6 @@ export class MoneyService {
           if (billType) match.billType = billType;
           if (billMethod) match.billMethod = billMethod;
           if (bankBillType) match.bankBillType = bankBillType;
-          if (manualPaymentMethod) match.manualPaymentMethod = manualPaymentMethod;
           if (startTime && endTime) {
             const sTime = format(new Date(startTime), `yyyy-MM-dd 00:00:00`);
             const eTime = format(new Date(endTime), `yyyy-MM-dd 23:59:59`);
@@ -701,7 +687,6 @@ export class MoneyService {
           explain: m.explain,
           place: m.place,
           balance: m.balance,
-          manualPaymentMethod: m.manualPaymentMethod,
           billType: m.billType,
           billMethod: m.billMethod,
         });
@@ -745,6 +730,8 @@ export class MoneyService {
           } else {
             pipeline.push({ $unionWith: { coll: modelMap[src].collection.name, pipeline: [{ $match: matchStage }] } });
           }
+          // 标记来源，用于结果区分
+          pipeline.push({ $addFields: { _src: src } });
         });
 
         pipeline.push({ $sort: { tradeTime: -1 } });
@@ -760,9 +747,9 @@ export class MoneyService {
         const total = facetData.metadata[0]?.total || 0;
         const rawList: any[] = facetData.data || [];
         const list: ApiAggregateBillItem[] = rawList.map((m) => {
-          if (m.manualPaymentMethod !== undefined) return mapManual(m);
-          if (m.bankType !== undefined || m.voucherType !== undefined) return mapBank(m);
-          if (m.balanceBaby !== undefined || m.productDescription !== undefined) return mapAliPay(m);
+          if (m._src === 'manual') return mapManual(m);
+          if (m._src === 'bank') return mapBank(m);
+          if (m._src === 'aliPay') return mapAliPay(m);
           return mapWeChat(m);
         });
 
@@ -883,7 +870,6 @@ export class MoneyService {
             explain: m.explain,
             place: m.place,
             balance: m.balance,
-            manualPaymentMethod: m.manualPaymentMethod,
             billType: m.billType,
             billMethod: m.billMethod,
           };
@@ -916,10 +902,7 @@ export class MoneyService {
         } else if (source === 'weChat') {
           await this.weChatModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
         } else if (source === 'manual') {
-          await this.manualBillModel.updateOne(
-            { _id: billId },
-            { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod, manualPaymentMethod: body.manualPaymentMethod },
-          );
+          await this.manualBillModel.updateOne({ _id: billId }, { tradeOtherPersonRemarks, inflowOrOutflow, explain, place, billType, billMethod });
         } else {
           throw '账单来源不正确';
         }

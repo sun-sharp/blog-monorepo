@@ -28,11 +28,6 @@ export class UpdateManualBillDto {
   moneyAmount: number;
 
   @ApiProperty({
-    description: '支付方式：1=现金, 2=美团, 3=京东, 4=华为钱包',
-  })
-  manualPaymentMethod: number;
-
-  @ApiProperty({
     description: '余额',
   })
   balance: number;

@@ -60,6 +60,21 @@
             </view>
           </view>
 
+          <view v-if="uploadType === 1 || uploadType === 2" class="upload-range card" :class="{ dark: isDark }">
+            <text class="upload-range-title">数据行范围（可选）</text>
+            <text class="upload-range-desc">默认从数据起始行导入到末尾，可限定开始/结束行号</text>
+            <view class="upload-range-inputs">
+              <view class="upload-range-field">
+                <text class="upload-range-label">开始行</text>
+                <u-input v-model="startNumInput" type="number" placeholder="默认" border clearable :cursor-spacing="20" />
+              </view>
+              <view class="upload-range-field">
+                <text class="upload-range-label">结束行</text>
+                <u-input v-model="endNumInput" type="number" placeholder="默认" border clearable :cursor-spacing="20" />
+              </view>
+            </view>
+          </view>
+
           <view v-if="uploading" class="upload-progress card" :class="{ dark: isDark }">
             <u-line-progress :percent="uploadProgress" active-color="#007aff" />
             <text class="upload-progress-text">上传中 {{ Math.floor(uploadProgress) }}%</text>
@@ -363,6 +378,9 @@
   const uploadTimeout = ref(false);
   const uploadTimer = ref<ReturnType<typeof setTimeout> | null>(null);
 
+  const startNumInput = ref('');
+  const endNumInput = ref('');
+
   const selectBankType = ref<number | undefined>(undefined);
 
   const tableData = ref<any[]>([]);
@@ -559,6 +577,16 @@
     return `${base}${paths[uploadType.value] || ''}`;
   }
 
+  // 行号范围参数：仅填了才传（不传则后端默认）
+  function buildRangeParams(): Record<string, string> {
+    const params: Record<string, string> = {};
+    const s = startNumInput.value.trim();
+    const e = endNumInput.value.trim();
+    if (s) params.startNum = s;
+    if (e) params.endNum = e;
+    return params;
+  }
+
   // ---- 上传逻辑 ----
   function uploadH5(): Promise<{ list: any[]; total: number }> {
     return new Promise((resolve, reject) => {
@@ -571,6 +599,8 @@
       if (uploadType.value === 3 && selectBankType.value) {
         formData.append('bankType', String(selectBankType.value));
       }
+      // 行号范围（仅微信/支付宝，可选）
+      Object.entries(buildRangeParams()).forEach(([k, v]) => formData.append(k, v));
       const token = userStore.getToken;
       const authHead = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
       const xhr = new XMLHttpRequest();
@@ -622,11 +652,16 @@
       }
       const token = userStore.getToken;
       const authHead = import.meta.env.VITE_AUTHORIZATION_HEAD || 'Bearer ';
+      const formData: Record<string, string> = {};
+      if (uploadType.value === 3 && selectBankType.value) {
+        formData.bankType = String(selectBankType.value);
+      }
+      Object.assign(formData, buildRangeParams());
       const task = uni.uploadFile({
         url: getUploadUrl(),
         filePath: selectedFilePath.value,
         name: 'file',
-        formData: uploadType.value === 3 && selectBankType.value ? { bankType: String(selectBankType.value) } : {},
+        formData,
         header: { Authorization: authHead + token },
         success: (res) => {
           clearUploadTimer();
@@ -952,6 +987,37 @@
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-top: 12rpx;
+  }
+
+  .upload-range-title {
+    font-size: $uni-font-size-base;
+    font-weight: bold;
+    color: $uni-text-color;
+    display: block;
+  }
+
+  .upload-range-desc {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+    margin-top: 6rpx;
+    display: block;
+  }
+
+  .upload-range-inputs {
+    display: flex;
+    gap: 20rpx;
+    margin-top: 20rpx;
+  }
+
+  .upload-range-field {
+    flex: 1;
+  }
+
+  .upload-range-label {
+    font-size: $uni-font-size-sm;
+    color: $uni-text-color-grey;
+    margin-bottom: 8rpx;
+    display: block;
   }
 
   .upload-mp-guide {

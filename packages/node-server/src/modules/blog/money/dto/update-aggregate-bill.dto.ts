@@ -42,8 +42,4 @@ export class UpdateAggregateBillDto {
   @ApiProperty({ description: '账单方式（微信/支付宝）', required: false })
   @IsOptional()
   billMethod: number;
-
-  @ApiProperty({ description: '支付方式（手写账单）', required: false })
-  @IsOptional()
-  manualPaymentMethod: number;
 }

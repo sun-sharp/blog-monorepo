@@ -39,8 +39,4 @@ export class PageAggregateBillDto extends PaginateDto {
   @ApiProperty({ description: '银行账单类型', required: false })
   @IsOptional()
   bankBillType: number;
-
-  @ApiProperty({ description: '支付方式（手写账单）', required: false })
-  @IsOptional()
-  manualPaymentMethod: number;
 }

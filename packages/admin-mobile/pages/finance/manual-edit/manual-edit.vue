@@ -24,14 +24,6 @@
           <u-form-item label="交易金额" prop="moneyAmount" required>
             <u-input v-model="moneyAmountInput" type="digit" placeholder="请输入交易金额" :cursor-spacing="20" />
           </u-form-item>
-          <u-form-item label="支付方式" prop="manualPaymentMethod" required>
-            <view class="manual-edit-select" @click="showPaymentMethodSelect = true">
-              <text :class="form.manualPaymentMethod ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
-                {{ paymentMethodLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
           <u-form-item label="余额" prop="balance" required>
             <u-input v-model="balanceInput" type="digit" placeholder="请输入余额" :cursor-spacing="20" />
           </u-form-item>
@@ -73,12 +65,6 @@
       :current-value="form.inflowOrOutflow || undefined"
       @confirm="(item: any) => (form.inflowOrOutflow = Number(item.value))" />
     <searchable-select
-      v-model="showPaymentMethodSelect"
-      title="选择支付方式"
-      :list="paymentMethodList"
-      :current-value="form.manualPaymentMethod || undefined"
-      @confirm="(item: any) => (form.manualPaymentMethod = Number(item.value))" />
-    <searchable-select
       v-model="showBillTypeSelect"
       title="选择账单类型"
       :list="billTypeSelectList"
@@ -102,7 +88,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { manualBillApi } from '../../../api';
-  import { inflowOrOutflowOption, manualPaymentMethodOption } from '../../../../shared/src/constants/api-type';
+  import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
   import { roundToTwoArrow } from '../../../../shared/src/utils/number.js';
@@ -112,7 +98,6 @@
   const editId = ref('');
   const showTradeTimePicker = ref(false);
   const showInflowSelect = ref(false);
-  const showPaymentMethodSelect = ref(false);
   const showBillTypeSelect = ref(false);
   const showBillMethodSelect = ref(false);
   const apiTypeStore = useApiTypeStore();
@@ -124,7 +109,6 @@
     tradeOtherPerson: '',
     inflowOrOutflow: null as number | null,
     moneyAmount: 0,
-    manualPaymentMethod: null as number | null,
     balance: 0,
     explain: '',
     place: '',
@@ -156,12 +140,10 @@
   });
 
   const inflowOrOutflowList = inflowOrOutflowOption.map((item) => ({ label: item.label, value: item.value }));
-  const paymentMethodList = manualPaymentMethodOption.map((item) => ({ label: item.label, value: item.value }));
   const billTypeSelectList = computed(() => apiTypeStore.getBillTypeOption as { label: string; value: number | string; [key: string]: string | number }[]);
   const billMethodSelectList = computed(() => apiTypeStore.getBillMethodOption as { label: string; value: number | string; [key: string]: string | number }[]);
 
   const inflowLabel = computed(() => inflowOrOutflowList.find((r) => r.value === form.inflowOrOutflow)?.label || '');
-  const paymentMethodLabel = computed(() => paymentMethodList.find((r) => r.value === form.manualPaymentMethod)?.label || '');
   const billTypeLabel = computed(() => billTypeSelectList.value.find((r) => r.value === form.billType)?.label || '');
   const billMethodLabel = computed(() => billMethodSelectList.value.find((r) => r.value === form.billMethod)?.label || '');
 
@@ -181,7 +163,6 @@
     tradeOtherPerson: [{ required: true, message: '请输入交易对方', trigger: 'change' }],
     inflowOrOutflow: [{ required: true, type: 'number', message: '请选择流入/流出', trigger: 'change' }],
     moneyAmount: [{ required: true, type: 'number', message: '请输入交易金额', trigger: ['change', 'blur'] }],
-    manualPaymentMethod: [{ required: true, type: 'number', message: '请选择支付方式', trigger: 'change' }],
     balance: [{ required: true, type: 'number', message: '请输入余额', trigger: ['change', 'blur'] }],
     billType: [{ required: true, type: 'number', message: '请选择账单类型', trigger: 'change' }],
     billMethod: [{ required: true, type: 'number', message: '请选择账单方式', trigger: 'change' }],
@@ -212,7 +193,6 @@
         tradeOtherPerson: form.tradeOtherPerson,
         inflowOrOutflow: form.inflowOrOutflow,
         moneyAmount: form.moneyAmount,
-        manualPaymentMethod: form.manualPaymentMethod,
         balance: form.balance,
         explain: form.explain,
         place: form.place,
@@ -240,7 +220,6 @@
         form.tradeOtherPerson = res.tradeOtherPerson || '';
         form.inflowOrOutflow = res.inflowOrOutflow ?? null;
         form.moneyAmount = res.moneyAmount ?? 0;
-        form.manualPaymentMethod = res.manualPaymentMethod ?? null;
         form.balance = res.balance ?? 0;
         form.explain = res.explain || '';
         form.place = res.place || '';
@@ -277,8 +256,6 @@
         if (inflow !== null) form.inflowOrOutflow = inflow;
         const money = parseNum(options.moneyAmount);
         if (money !== null) form.moneyAmount = money;
-        const method = parseNum(options.manualPaymentMethod);
-        if (method !== null) form.manualPaymentMethod = method;
         const balance = parseNum(options.balance);
         if (balance !== null) form.balance = balance;
         if (options.explain) form.explain = decodeURIComponent(options.explain);

@@ -15,12 +15,6 @@ export class PageManualBillDto extends PaginateDto {
   inflowOrOutflow: number;
 
   @ApiProperty({
-    description: '支付方式',
-    required: false,
-  })
-  manualPaymentMethod: number;
-
-  @ApiProperty({
     description: '账单类型',
     required: false,
   })

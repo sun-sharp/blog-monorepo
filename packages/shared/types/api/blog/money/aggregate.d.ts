@@ -52,8 +52,6 @@ export interface ApiAggregateBillItem {
   voucherNo?: string;
   tradeOtherPersonAccount?: string;
   bankBillType?: number;
-  // --- 手写账单特有 ---
-  manualPaymentMethod?: number;
   // --- 银行报废卡信息 ---
   isRetiredBankCard?: boolean;
   bankCardRemark?: string;
@@ -113,6 +111,4 @@ export interface ApiAggregateBillUpdateData {
   billType?: number;
   // 账单方式（微信/支付宝）
   billMethod?: number;
-  // 支付方式（手动账单）
-  manualPaymentMethod?: number;
 }

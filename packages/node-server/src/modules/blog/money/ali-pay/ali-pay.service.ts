@@ -114,7 +114,7 @@ export class AliPayService {
               try {
                 runResult = runCode(f.code, { codeIt, isAssignment: false });
               } catch (err) {
-                throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, billMethod: ${f.billMethod}, item: ${JSON.stringify(item)}], 错误: ${err}`;
+                throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, billMethod: ${f.billMethod}, 代码code：${f.code} item: ${JSON.stringify(item)}], 错误: ${err}`;
               }
               const isAssignment = runResult.isAssignment;
               if (isAssignment) {

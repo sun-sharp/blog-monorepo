@@ -55,7 +55,7 @@ export const excelCsvHandleBuffer = async (obj: excelCsvHandleBufferObj): Promis
   const rowCount = worksheet.rowCount;
   // 处理表格的数据
   worksheet.eachRow((row, rowNumber) => {
-    if (rowNumber >= startNum && rowNumber <= rowCount - endNum) {
+    if (rowNumber >= startNum && rowNumber <= (endNum ? endNum : rowCount)) {
       const target = Object.assign({}, otherObj);
       row.eachCell((cell, cellNumber) => {
         let cellVal: any = cell.value;
@@ -91,7 +91,7 @@ export const excelXlsxHandleBuffer = async (obj: excelXlsxHandleBufferObj): Prom
   const rowCount = worksheet.rowCount;
   // 处理表格的数据
   worksheet.eachRow((row, rowNumber) => {
-    if (rowNumber >= startNum && rowNumber <= rowCount - endNum) {
+    if (rowNumber >= startNum && rowNumber <= (endNum ? endNum : rowCount)) {
       const target = Object.assign({}, otherObj);
       row.eachCell((cell, cellNumber) => {
         let cellVal: any = cell.value;
@@ -144,7 +144,7 @@ export const parseSheetFromWorkbook = async (params: ParseSheetFromWorkbookParam
 
   const rowCount = worksheet.rowCount;
   worksheet.eachRow((row, rowNumber) => {
-    if (rowNumber >= startNum && rowNumber <= rowCount - endNum) {
+    if (rowNumber >= startNum && rowNumber <= (endNum ? endNum : rowCount)) {
       const target = Object.assign({}, otherObj);
       row.eachCell((cell, cellNumber) => {
         let cellVal: any = cell.value;

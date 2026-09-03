@@ -99,7 +99,7 @@
             </view>
           </template>
 
-          <template v-if="source === 'aliPay' || source === 'weChat'">
+          <template v-if="source === 'aliPay' || source === 'weChat' || source === 'manual'">
             <view class="info-row">
               <text class="info-label">账单类型</text>
               <text class="info-value type">{{ billTypeLabel }}</text>
@@ -134,17 +134,6 @@
               <text class="info-value type">{{ bankBillTypeLabel }}</text>
             </view>
           </template>
-
-          <template v-if="source === 'manual'">
-            <view class="info-row">
-              <text class="info-label">账单类型</text>
-              <text class="info-value type">{{ billTypeLabel }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">支付方式</text>
-              <text class="info-value method">{{ manualPaymentMethodLabel }}</text>
-            </view>
-          </template>
         </view>
       </template>
     </scroll-view>
@@ -172,7 +161,7 @@
   import { aggregateBillApi, manualBillApi } from '../../../api';
   import { consumeRefreshFlag, setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
-  import { inflowOrOutflowOption, manualPaymentMethodOption } from '../../../../shared/src/constants/api-type';
+  import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
 
   const apiTypeStore = useApiTypeStore();
@@ -218,12 +207,6 @@
     return found ? found.label : '--';
   });
 
-  const manualPaymentMethodLabel = computed(() => {
-    if (source.value !== 'manual') return '--';
-    const found = manualPaymentMethodOption.find((o) => o.value === bill.value.manualPaymentMethod);
-    return found ? found.label : '--';
-  });
-
   function formatMoney(val: number | undefined | null): string {
     if (val === undefined || val === null) return '0.00';
     return Number(val).toFixed(2);
@@ -258,7 +241,6 @@
       `tradeOtherPerson=${encodeURIComponent(b.tradeOtherPerson || '')}`,
       `inflowOrOutflow=${b.inflowOrOutflow ?? ''}`,
       `moneyAmount=${b.moneyAmount ?? ''}`,
-      `manualPaymentMethod=${b.manualPaymentMethod ?? ''}`,
       `balance=${b.balance ?? ''}`,
       `explain=${encodeURIComponent(b.explain || '')}`,
       `place=${encodeURIComponent(b.place || '')}`,

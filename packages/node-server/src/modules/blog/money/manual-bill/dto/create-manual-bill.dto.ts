@@ -24,12 +24,6 @@ export class CreateManualBillDto {
   moneyAmount: number;
 
   @ApiProperty({
-    description: '支付方式：1=现金, 2=美团, 3=京东, 4=华为钱包',
-  })
-  @IsNotEmpty({ message: '支付方式不能为空！' })
-  manualPaymentMethod: number;
-
-  @ApiProperty({
     description: '余额',
   })
   @IsNotEmpty({ message: '余额不能为空！' })

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { useManualBillAddUpdateModel } from '../hooks/useManualBillAddUpdateModel';
-  import { inflowOrOutflowOption, manualPaymentMethodOption } from '@/constant';
+  import { inflowOrOutflowOption } from '@/constant';
 
   const emit = defineEmits(['refresh']);
 
@@ -24,9 +24,6 @@
       </n-form-item>
       <n-form-item label="交易金额" path="moneyAmount">
         <n-input-number v-model:value="modelForm.moneyAmount" :min="0" :precision="2" placeholder="请输入交易金额" style="width: 100%" />
-      </n-form-item>
-      <n-form-item label="支付方式" path="manualPaymentMethod">
-        <n-select v-model:value="modelForm.manualPaymentMethod" :options="manualPaymentMethodOption" clearable placeholder="请选择支付方式" />
       </n-form-item>
       <n-form-item label="余额" path="balance">
         <n-input-number v-model:value="modelForm.balance" :min="0" :precision="2" placeholder="请输入余额" style="width: 100%" />

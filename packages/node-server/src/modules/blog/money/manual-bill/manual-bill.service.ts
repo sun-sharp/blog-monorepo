@@ -55,14 +55,13 @@ export class ManualBillService {
    * @return {Promise<IResponse>}
    */
   public findPage(userId: string, body: PageManualBillDto): Promise<IResponse> {
-    return Promise.resolve({ userId, body })
-      .then(async ({ userId, body }) => {
-        const { size, current, tradeOtherPerson, inflowOrOutflow, manualPaymentMethod, billType, billMethod } = body;
+    return Promise.resolve()
+      .then(async () => {
+        const { size, current, tradeOtherPerson, inflowOrOutflow, billType, billMethod } = body;
         const { limit, skip } = PaginateHandle(size, current);
         const findData: FilterQuery<ManualBill> = { userId };
         if (tradeOtherPerson) findData.tradeOtherPerson = { $regex: tradeOtherPerson };
         if (inflowOrOutflow) findData.inflowOrOutflow = inflowOrOutflow;
-        if (manualPaymentMethod) findData.manualPaymentMethod = manualPaymentMethod;
         if (billType) findData.billType = billType;
         if (billMethod) findData.billMethod = billMethod;
         const total = await this.manualBillModel.find(findData).count();
@@ -76,7 +75,6 @@ export class ManualBillService {
             incomeOrPay,
             moneyAmount,
             otherCost,
-            manualPaymentMethod,
             balance,
             inflowOrOutflow,
             explain,
@@ -91,7 +89,6 @@ export class ManualBillService {
             incomeOrPay,
             moneyAmount,
             otherCost,
-            manualPaymentMethod,
             balance,
             inflowOrOutflow,
             explain,
@@ -133,7 +130,6 @@ export class ManualBillService {
           incomeOrPay: m.incomeOrPay,
           moneyAmount: m.moneyAmount,
           otherCost: m.otherCost,
-          manualPaymentMethod: m.manualPaymentMethod,
           balance: m.balance,
           inflowOrOutflow: m.inflowOrOutflow,
           explain: m.explain,
@@ -173,7 +169,6 @@ export class ManualBillService {
           inflowOrOutflow,
           explain,
           place,
-          manualPaymentMethod,
           billType,
           billMethod,
           incomeOrPay,
@@ -187,7 +182,6 @@ export class ManualBillService {
           inflowOrOutflow,
           explain,
           place,
-          manualPaymentMethod,
           billType,
           billMethod,
           incomeOrPay,
