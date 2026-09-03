@@ -7,6 +7,20 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-aw-am-4.5.7 (2026-9-4)
+- shared 共享
+  - 修改 我的页面布局和主题色切换
+  - 账单人工录入的去掉支付方式的字段 manualPaymentMethod
+- server 端
+  - 修改 账单导入接口处理问题
+  - 账单人工录入的去掉支付方式的字段 manualPaymentMethod
+- 移动管理端
+  - 修改 我的页面布局和主题色切换
+  - 账单人工录入的去掉支付方式的字段 manualPaymentMethod
+  - 账单导入也添加开始行和结束行的输入传参
+- pc管理端
+  - 账单人工录入的去掉支付方式的字段 manualPaymentMethod
+
 ## bm-ns-am-4.5.6 (2026-9-1)
 - shared 共享
   - 移动端文章编辑修改
