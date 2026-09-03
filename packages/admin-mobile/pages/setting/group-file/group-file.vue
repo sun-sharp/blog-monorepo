@@ -5,6 +5,7 @@
         <view class="group-list card" :class="{ dark: isDark }">
           <u-cell-group :border="false">
             <u-cell-item title="图片管理" icon="photo" @click="navigateTo('/pages/file/image/image')" />
+            <u-cell-item title="数据备份" icon="download" @click="navigateTo('/pages/system/backup/backup')" />
           </u-cell-group>
         </view>
       </scroll-view>

@@ -94,6 +94,9 @@ export declare const judgeWayOption: {
     value: string;
     label: string;
 }[];
+export declare const HOSPITAL_MEASURE_TYPE = "hospital";
+export declare const TGU210_C_MEASURE_TYPE = "TGU210-C";
+export declare const EA_19_MEASURE_TYPE = "EA-19";
 export declare const measureTypeOption: {
     value: string;
     label: string;

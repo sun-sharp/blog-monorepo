@@ -83,29 +83,26 @@
       @close="showBottomFilter = false">
       <view class="bottom-filter">
         <view class="bottom-filter__header">
-          <text class="bottom-filter__title">筛选</text>
+          <text class="bottom-filter__title">{{ activeBottomField ? activeBottomField.title : '筛选' }}</text>
           <view class="bottom-filter__close" @click="showBottomFilter = false">
             <u-icon name="close" size="36" color="#999" />
           </view>
         </view>
-        <view class="bottom-filter__body">
-          <view v-for="(field, idx) in bottomItems" :key="'bf' + idx" class="bottom-filter__group">
-            <text class="bottom-filter__group-label">{{ field.title }}</text>
-            <view class="bottom-filter__chips">
-              <view
-                v-for="opt in field.options"
-                :key="opt.value"
-                class="filter-chip"
-                :class="{ 'filter-chip--selected': bottomDraft[field.key] === opt.value }"
-                @click="onChipSelect(field, opt)">
-                <text class="filter-chip__text">{{ opt.label }}</text>
-              </view>
+        <view v-if="activeBottomField" class="bottom-filter__body">
+          <view class="bottom-filter__chips">
+            <view
+              v-for="opt in activeBottomField.options"
+              :key="opt.value"
+              class="bottom-filter-chip"
+              :class="{ 'bottom-filter-chip--selected': bottomDraft[activeBottomField.key] === opt.value }"
+              @click="onChipSelect(activeBottomField, opt)">
+              <text class="bottom-filter-chip__text">{{ opt.label }}</text>
             </view>
           </view>
         </view>
         <view class="bottom-filter__footer">
-          <u-button @click="resetBottom">重置</u-button>
-          <u-button type="primary" @click="confirmBottom">确定</u-button>
+          <u-button size="large" @click="resetBottom">重置</u-button>
+          <u-button size="large" type="primary" @click="confirmBottom">确定</u-button>
         </view>
       </view>
     </u-popup>
@@ -293,7 +290,7 @@
     }
     if (item.mode === 'bottom') {
       closeInlinePanel();
-      openModeFilter();
+      openModeFilter(item);
       return;
     }
     // full
@@ -309,31 +306,35 @@
     handleDropdownChange();
   }
 
-  // ---- 底部弹窗 ----
-  function openModeFilter() {
-    bottomDraft.value = {};
-    bottomItems.value.forEach((f) => {
-      bottomDraft.value[f.key] = f.value;
-    });
+  // ---- 底部弹窗（一次只展示一个筛选项）----
+  const activeBottomKey = ref('');
+
+  function openModeFilter(item?: ListDropdownItem) {
+    const key = item ? item.key : (bottomItems.value[0]?.key ?? '');
+    activeBottomKey.value = key;
+    const field = item || activeBottomField.value;
+    // 用该项当前值初始化草稿，打开时当前已生效的选项即高亮
+    bottomDraft.value = { [key]: field ? field.value : '' };
     showBottomFilter.value = true;
   }
+
+  const activeBottomField = computed(() => bottomItems.value.find((f) => f.key === activeBottomKey.value) || null);
 
   function onChipSelect(field: ListDropdownItem, opt: { label: string; value: any }) {
     bottomDraft.value[field.key] = opt.value;
   }
 
   function resetBottom() {
-    Object.keys(bottomDraft.value).forEach((k) => {
-      bottomDraft.value[k] = '';
-    });
+    if (activeBottomField.value) {
+      bottomDraft.value[activeBottomField.value.key] = '';
+    }
   }
 
   function confirmBottom() {
-    bottomItems.value.forEach((f) => {
-      if (bottomDraft.value[f.key] !== undefined) {
-        f.value = bottomDraft.value[f.key];
-      }
-    });
+    const field = activeBottomField.value;
+    if (field && bottomDraft.value[field.key] !== undefined) {
+      field.value = bottomDraft.value[field.key];
+    }
     showBottomFilter.value = false;
     handleDropdownChange();
   }
@@ -571,12 +572,68 @@
         background-color: $uni-bg-color-dark-2;
       }
 
+      .bottom-filter {
+        background-color: $uni-bg-color-dark-2;
+      }
+
+      .full-filter {
+        background-color: $uni-bg-color-dark-2;
+      }
+
       .bottom-filter__title {
-        color: $uni-text-color-grey;
+        color: $uni-text-color-inverse;
+      }
+
+      .bottom-filter__close {
+        background-color: #2a2a2e;
       }
 
       .bottom-filter__group-label {
         color: $uni-text-color-grey;
+      }
+
+      .full-filter__close {
+        background-color: #2a2a2e;
+      }
+
+      .full-filter__group-title {
+        color: #007aff;
+        border-bottom-color: #3a4251;
+      }
+
+      .full-filter__empty {
+        color: $uni-text-color-grey;
+      }
+
+      .filter-chip {
+        background-color: #2a2a2e;
+        color: #cfd3dc;
+
+        &--selected {
+          background-color: #007aff;
+          color: #fff;
+          border: 1rpx solid #007aff;
+        }
+
+        &--active {
+          color: #8ab4ff;
+        }
+
+        &--open {
+          background-color: rgba(0, 122, 255, 0.2);
+          color: #8ab4ff;
+        }
+      }
+
+      .bottom-filter-chip {
+        background-color: #2a2a2e;
+        color: #cfd3dc;
+
+        &--selected {
+          background-color: #007aff;
+          color: #fff;
+          border: 1rpx solid #007aff;
+        }
       }
     }
   }
@@ -660,6 +717,29 @@
     }
 
     .filter-chip__text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .bottom-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6rpx;
+    padding: 12rpx 24rpx;
+    background-color: #f5f6f8;
+    border-radius: 28rpx;
+    font-size: 26rpx;
+    color: #333;
+
+    &--selected {
+      background-color: #e8f4fd;
+      color: #007aff;
+      border: 1rpx solid #007aff;
+    }
+
+    .bottom-filter-chip__text {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

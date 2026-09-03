@@ -142,7 +142,7 @@
         </view>
 
         <scroll-view scroll-y class="import-scroll" :style="scrollStyle">
-          <view v-for="(item, idx) in tableData" :key="idx" :class="{ 'import-card': true, 'import-card-incomplete': isRowIncomplete(idx), dark: isDark }">
+          <view v-for="(item, idx) in tableData" :key="idx" :class="{ 'import-card': true, dark: isDark, incomplete: isRowIncomplete(idx) }">
             <view class="import-card-header">
               <text class="import-card-index">#{{ idx + 1 }}</text>
             </view>
@@ -869,7 +869,7 @@
       background-color: $uni-bg-color-dark;
 
       .import-header {
-        background-color: $uni-bg-color-dark;
+        background-color: $uni-bg-color-dark-2;
       }
     }
   }
@@ -1089,12 +1089,16 @@
     transition: background-color 0.2s;
 
     &.dark {
-      background-color: $uni-bg-color-dark;
-    }
-  }
+      background-color: $uni-bg-color-dark-2;
 
-  .import-card-incomplete {
-    background-color: $uni-bg-color-light-red;
+      &.incomplete {
+        background-color: $uni-bg-color-dark-red;
+      }
+    }
+
+    &.incomplete {
+      background-color: $uni-bg-color-light-red;
+    }
   }
 
   .import-card-header {
@@ -1124,7 +1128,7 @@
     .value {
       flex: 1;
       font-size: 26rpx;
-      color: $uni-text-color;
+      // color: $uni-text-color;
       word-break: break-all;
 
       &.money {
@@ -1147,7 +1151,7 @@
 
     .required {
       font-size: 26rpx;
-      color: $uni-text-color;
+      // color: $uni-text-color;
       font-weight: bold;
 
       &::before {
@@ -1170,7 +1174,7 @@
 
     .required {
       font-size: 26rpx;
-      color: $uni-text-color;
+      // color: $uni-text-color;
       font-weight: bold;
 
       &::before {
@@ -1183,7 +1187,7 @@
       flex: 1;
       text-align: right;
       font-size: 26rpx;
-      color: $uni-text-color;
+      // color: $uni-text-color;
       margin-right: 8rpx;
 
       &.placeholder {
