@@ -7,6 +7,12 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-ns-am-4.5.9 (2026-9-15)
+- server 端
+  - 银行、微信、支付宝规则执行失败问题，item改成了codeIt
+- 移动管理端
+  - 开始时间可以等于结束时间，时间筛选
+
 ## bm-ns-aw-am-4.5.8 (2026-9-4)
 - pc管理端
   - 账单人工录入的去掉支付方式的字段 manualPaymentMethod 遗留的问题

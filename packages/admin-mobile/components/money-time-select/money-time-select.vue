@@ -126,8 +126,8 @@
 
   function onStartConfirm(e: any) {
     const startTime = `${e.year}-${e.month}-${e.day}`;
-    if (form.endTime && startTime >= form.endTime) {
-      uni.showToast({ title: '开始时间需早于结束时间', icon: 'none' });
+    if (form.endTime && startTime > form.endTime) {
+      uni.showToast({ title: '开始时间需早于或等于结束时间', icon: 'none' });
       return;
     }
     form.startTime = startTime;
@@ -136,8 +136,8 @@
 
   function onEndConfirm(e: any) {
     const endTime = `${e.year}-${e.month}-${e.day}`;
-    if (form.startTime && endTime <= form.startTime) {
-      uni.showToast({ title: '结束时间需晚于开始时间', icon: 'none' });
+    if (form.startTime && endTime < form.startTime) {
+      uni.showToast({ title: '结束时间需晚于或等于开始时间', icon: 'none' });
       return;
     }
     form.endTime = endTime;
@@ -145,8 +145,8 @@
   }
 
   function handleConfirm() {
-    if (quickIndex.value === 4 && form.startTime >= form.endTime) {
-      uni.showToast({ title: '结束时间需晚于开始时间', icon: 'none' });
+    if (quickIndex.value === 4 && form.startTime > form.endTime) {
+      uni.showToast({ title: '结束时间需晚于或等于开始时间', icon: 'none' });
       return;
     }
     let result: { startTime: string; endTime: string };

@@ -132,9 +132,9 @@ export class BankService {
               // 判断是否赋值
               let runResult: any;
               try {
-                runResult = runCode(f.code, { codeIt, isAssignment: false });
+                runResult = runCode(f.code, { item: codeIt, isAssignment: false });
               } catch (err) {
-                throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType},  item: ${JSON.stringify(item)}], 错误: ${err}`;
+                throw `规则执行失败 [规则ID: ${f._id}, handleType: ${f.handleType}, billType: ${f.billType}, billMethod: ${f.billMethod}, codeIt: ${JSON.stringify(codeIt)}], 错误: ${err}`;
               }
               const isAssignment = runResult.isAssignment;
               if (isAssignment) {
