@@ -725,13 +725,12 @@ export class MoneyService {
 
         sources.forEach((src, idx) => {
           const matchStage = buildMatch(src === 'bank' && bankType ? { bankType } : undefined);
+          const setStage = { $set: { _src: src } };
           if (idx === 0) {
-            pipeline.push({ $match: matchStage });
+            pipeline.push({ $match: matchStage }, setStage);
           } else {
-            pipeline.push({ $unionWith: { coll: modelMap[src].collection.name, pipeline: [{ $match: matchStage }] } });
+            pipeline.push({ $unionWith: { coll: modelMap[src].collection.name, pipeline: [{ $match: matchStage }, setStage] } });
           }
-          // 标记来源，用于结果区分
-          pipeline.push({ $addFields: { _src: src } });
         });
 
         pipeline.push({ $sort: { tradeTime: -1 } });
@@ -752,7 +751,7 @@ export class MoneyService {
           if (m._src === 'aliPay') return mapAliPay(m);
           return mapWeChat(m);
         });
-
+        logger.log(`三表聚合分页查询账单列表 成功! ${total}条`);
         return {
           code: ApiCode.SUCCESS,
           result: { current, list, size, total },

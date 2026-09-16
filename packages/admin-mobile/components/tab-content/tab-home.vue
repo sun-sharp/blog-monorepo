@@ -271,6 +271,8 @@
         return { icon: 'zhifubao', theme: 'theme-orange' };
       case 'bank':
         return { icon: 'red-packet', theme: 'theme-orange' };
+      case 'manual':
+        return { icon: 'edit-pen', theme: 'theme-orange' };
       default:
         return { icon: 'red-packet', theme: 'theme-orange' };
     }

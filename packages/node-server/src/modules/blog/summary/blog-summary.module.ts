@@ -14,6 +14,7 @@ import { Article, ArticleSchema } from 'src/schemas/blog/article.schema';
 import { Bank, BankSchema } from 'src/schemas/blog/money/bank.schema';
 import { WeChat, WeChatSchema } from 'src/schemas/blog/money/we-chat.schema';
 import { AliPay, AliPaySchema } from 'src/schemas/blog/money/ali-pay.schema';
+import { ManualBill, ManualBillSchema } from 'src/schemas/blog/money/manual-bill.schema';
 import { BillUpload, BillUploadSchema } from 'src/schemas/blog/money/bill-upload.schema';
 import { BlogSummaryController } from './blog-summary.controller';
 import { BlogSummaryService } from './blog-summary.service';
@@ -38,6 +39,7 @@ const BLOG_MONGO_MODULE = MongooseModule.forFeature(
     { name: Bank.name, schema: BankSchema },
     { name: WeChat.name, schema: WeChatSchema },
     { name: AliPay.name, schema: AliPaySchema },
+    { name: ManualBill.name, schema: ManualBillSchema },
     { name: BillUpload.name, schema: BillUploadSchema },
   ],
   blogDatabaseName,

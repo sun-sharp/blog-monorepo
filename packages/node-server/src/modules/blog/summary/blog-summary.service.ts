@@ -15,6 +15,7 @@ import { Article } from 'src/schemas/blog/article.schema';
 import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { WeChat } from 'src/schemas/blog/money/we-chat.schema';
 import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
+import { ManualBill } from 'src/schemas/blog/money/manual-bill.schema';
 import { BillUpload } from 'src/schemas/blog/money/bill-upload.schema';
 import {
   ApiHomeStatBillUploadTypeCount,
@@ -58,6 +59,7 @@ export class BlogSummaryService {
     @InjectModel(Bank.name, blogDatabaseName) private readonly bankModel: Model<Bank>,
     @InjectModel(WeChat.name, blogDatabaseName) private readonly weChatModel: Model<WeChat>,
     @InjectModel(AliPay.name, blogDatabaseName) private readonly aliPayModel: Model<AliPay>,
+    @InjectModel(ManualBill.name, blogDatabaseName) private readonly manualBillModel: Model<ManualBill>,
     @InjectModel(BillUpload.name, blogDatabaseName) private readonly billUploadModel: Model<BillUpload>,
     // 服务
     private readonly roleService: RoleService,
@@ -81,13 +83,15 @@ export class BlogSummaryService {
         const weChatCondition = isAdmin ? {} : financialMineCondition;
         const aliPayCondition = isAdmin ? {} : financialMineCondition;
         const bankCondition = isAdmin ? {} : financialMineCondition;
-        const [weChatCount, aliPayCount, bankCount, bankTypeGroup] = await Promise.all([
+        const manualCondition = isAdmin ? {} : financialMineCondition;
+        const [weChatCount, aliPayCount, bankCount, manualCount, bankTypeGroup] = await Promise.all([
           this.weChatModel.countDocuments(weChatCondition),
           this.aliPayModel.countDocuments(aliPayCondition),
           this.bankModel.countDocuments(bankCondition),
+          this.manualBillModel.countDocuments(manualCondition),
           this.bankModel.aggregate<{ _id: number; count: number }>([{ $match: bankCondition }, { $group: { _id: '$bankType', count: { $sum: 1 } } }]),
         ]);
-        const financialCount = weChatCount + aliPayCount + bankCount;
+        const financialCount = weChatCount + aliPayCount + bankCount + manualCount;
         const bankChildren: ApiHomeStatFinancialTypeCount[] = (bankTypeGroup || [])
           .map((m) => ({
             source: `bank_${m._id}`,
@@ -104,6 +108,7 @@ export class BlogSummaryService {
             count: bankCount,
             children: bankChildren,
           },
+          { source: 'manual', label: '人工录入', count: manualCount },
         ];
 
         // 文章数(普通用户看自己，管理员看全表)
