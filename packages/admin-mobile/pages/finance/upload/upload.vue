@@ -346,19 +346,25 @@
         </view>
       </template>
 
-      <!-- 共用搜索选择器 -->
-      <searchable-select v-model="selectVisible" :title="selectTitle" :list="selectList" :current-value="selectCurrentValue" @confirm="onSelectConfirm" />
+      <!-- 共用选项选择器 -->
+      <option-select
+        ref="optionSelectRef"
+        v-model="selectVisible"
+        :title="selectTitle"
+        :list="selectList"
+        :current-value="selectCurrentValue"
+        @confirm="onSelectConfirm" />
     </view>
   </u-config-provider>
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, computed, watch, onMounted } from 'vue';
   import { onLoad, onBackPress } from '@dcloudio/uni-app';
   import { weChatApi, aliPayApi, bankApi } from '../../../api';
   import { useUserStore, useApiTypeStore } from '../../../store';
   import { voucherTypeOption } from '../../../../shared/src/constants/api-type';
-  import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
+  import OptionSelect from '../../../components/option-select/option-select.vue';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag.ts';
   import { useAppTheme } from '../../../composables/useAppTheme';
 
@@ -381,6 +387,24 @@
   const startNumInput = ref('');
   const endNumInput = ref('');
 
+  // 各账单类型的数据起始行默认值
+  const defaultStartNumMap: Record<number, number> = {
+    1: 19, // 微信账单
+    2: 25, // 支付宝账单
+  };
+
+  watch(
+    () => uploadType.value,
+    (val) => {
+      if (defaultStartNumMap[val]) {
+        startNumInput.value = String(defaultStartNumMap[val]);
+      } else {
+        startNumInput.value = '';
+      }
+    },
+    { immediate: true }
+  );
+
   const selectBankType = ref<number | undefined>(undefined);
 
   const tableData = ref<any[]>([]);
@@ -392,6 +416,7 @@
   const selectField = ref('');
   const selectList = ref<{ label: string; value: number }[]>([]);
   const selectTitle = ref('');
+  const optionSelectRef = ref();
 
   const scrollTopOffset = ref(0);
   const scrollStyle = computed(() => {
@@ -440,6 +465,10 @@
   });
 
   onBackPress(() => {
+    if (optionSelectRef.value && typeof optionSelectRef.value.closeFullFilter === 'function' && optionSelectRef.value.isFullFilterVisible()) {
+      optionSelectRef.value.closeFullFilter();
+      return true;
+    }
     if (step.value === 'preview') {
       step.value = 'upload';
       return true; // 拦截返回
@@ -755,9 +784,10 @@
     selectVisible.value = true;
   }
 
-  function onSelectConfirm(item: { label: string; value: number | string }) {
-    if (selectIndex.value >= 0 && selectField.value) {
-      (tableData.value[selectIndex.value] as any)[selectField.value] = item.value;
+  function onSelectConfirm(item: any) {
+    const selected = Array.isArray(item) ? item[0] : item;
+    if (selected && selectIndex.value >= 0 && selectField.value) {
+      (tableData.value[selectIndex.value] as any)[selectField.value] = selected.value;
     }
     selectVisible.value = false;
   }
