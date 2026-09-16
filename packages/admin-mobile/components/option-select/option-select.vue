@@ -68,6 +68,7 @@
           <view class="full-filter__chips">
             <view
               v-for="opt in group._options"
+              :id="`full-opt-${group._letter}-${opt[valueKey]}`"
               :key="opt[valueKey]"
               class="option-chip"
               :class="{ 'option-chip--selected': isSelected(opt) }"
@@ -278,6 +279,19 @@
     fullScrollIntoView.value = `full-group-${letter}`;
   }
 
+  // 全屏打开时，定位到当前选中的选项所在位置（使选中的 chip 可见）
+  function computeInitialScroll() {
+    const target =
+      props.multiple && props.currentValues?.length
+        ? props.currentValues[0]
+        : props.currentValue !== undefined && props.currentValue !== null && props.currentValue !== ''
+          ? props.currentValue
+          : undefined;
+    if (target === undefined) return '';
+    const found = fullGroups.value.find((g) => g._options.some((o) => String(o[props.valueKey]) === String(target)));
+    return found ? `full-opt-${found._letter}-${target}` : '';
+  }
+
   // ---- 打开时重置 ----
   watch(
     () => props.modelValue,
@@ -285,7 +299,9 @@
       if (val) {
         initSelectedSet();
         fullKeyword.value = '';
-        fullScrollIntoView.value = '';
+        setTimeout(() => {
+          fullScrollIntoView.value = computeInitialScroll();
+        }, 100);
       }
     }
   );
