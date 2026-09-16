@@ -124,15 +124,16 @@ export class BlogSummaryService {
         // 菜单数
         const menuCount = await this.menuModel.countDocuments({});
 
-        // 尿酸盐糖测量总数 + 按类型分组
-        const [uricCount, uricTypeGroup] = await Promise.all([
+        // 尿酸盐糖测量总数 + 按尿酸/血糖非空记录数分拆
+        const [uricCount, uricAcidCount, bloodGlucoseCount] = await Promise.all([
           this.uricModel.countDocuments({}),
-          this.uricModel.aggregate<{ _id: string; count: number }>([{ $group: { _id: '$measureType', count: { $sum: 1 } } }]),
+          this.uricModel.countDocuments({ uricAcid: { $ne: null } }),
+          this.uricModel.countDocuments({ bloodGlucose: { $ne: null } }),
         ]);
-        const uricTypeCount: ApiHomeStatUricTypeCount[] = (uricTypeGroup || []).map((m) => ({
-          type: m._id,
-          count: m.count,
-        }));
+        const uricTypeCount: ApiHomeStatUricTypeCount[] = [
+          { type: 'uricAcid', count: uricAcidCount },
+          { type: 'bloodGlucose', count: bloodGlucoseCount },
+        ];
 
         // 上传规则每个大类的数量
         const billUploadGroup = await this.billUploadModel.aggregate<{ _id: number; count: number }>([

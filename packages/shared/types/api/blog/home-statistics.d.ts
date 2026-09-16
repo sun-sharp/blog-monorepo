@@ -52,7 +52,7 @@ export interface ApiHomeStatImageTypeCount {
  * @description: 首页统计-尿酸血糖测量类型数量
  */
 export interface ApiHomeStatUricTypeCount {
-  // 测量类型(尿酸/血糖)
+  // 测量类型(uricAcid-尿酸 bloodGlucose-血糖)
   type: string;
   // 数量
   count: number;

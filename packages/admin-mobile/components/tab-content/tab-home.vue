@@ -147,6 +147,13 @@
       query: `source=${item.source}`,
     }));
 
+    const uricChildren: StatCardItem['children'] = (d.uricTypeCount || []).map((item) => ({
+      label: item.type === 'uricAcid' ? '尿酸' : '血糖',
+      count: item.count,
+      ...uricSourceIcon(item.type),
+      url: '/pages/system/uric/uric',
+    }));
+
     return [
       {
         icon: 'red-packet',
@@ -179,10 +186,12 @@
       {
         icon: 'blood-sugar',
         iconType: 'sharp-icon',
-        label: '测量',
+        label: '尿酸血糖测量',
         value: d.uricCount,
         theme: 'theme-purple',
         url: '/pages/system/uric/uric',
+        gridCol: 2,
+        children: uricChildren,
       },
       {
         icon: 'account',
@@ -290,6 +299,15 @@
         return { icon: 'book', iconType: 'sharp-icon', theme: 'theme-green' };
       default:
         return { icon: 'tupian', iconType: 'sharp-icon', theme: 'theme-green' };
+    }
+  }
+
+  function uricSourceIcon(type: string): { icon: string; iconType?: string; theme: string } {
+    switch (type) {
+      case 'uricAcid':
+        return { icon: 'shequxietangceliang', iconType: 'sharp-icon', theme: 'theme-blue' };
+      default:
+        return { icon: 'yiyuan', iconType: 'sharp-icon', theme: 'theme-green' };
     }
   }
 
