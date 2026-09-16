@@ -281,6 +281,7 @@
       :title="filterSelectTitle"
       :list="filterSelectList"
       :current-value="filterSelectCurrent"
+      :full-top-inset="true"
       @confirm="onFilterSelectConfirm" />
   </view>
 </template>
@@ -756,7 +757,21 @@
     }
   );
 
-  defineExpose({ checkRefresh });
+  defineExpose({
+    checkRefresh,
+    isFullFilterVisible: () => {
+      const sel = filterSelectRef.value;
+      return !!(sel && typeof sel.isFullFilterVisible === 'function' && sel.isFullFilterVisible());
+    },
+    closeFullFilter: () => {
+      const sel = filterSelectRef.value;
+      if (sel && typeof sel.closeFullFilter === 'function' && sel.isFullFilterVisible()) {
+        sel.closeFullFilter();
+        return true;
+      }
+      return false;
+    },
+  });
 </script>
 
 <style lang="scss" scoped>

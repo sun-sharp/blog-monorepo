@@ -74,54 +74,64 @@
         </u-form>
       </scroll-view>
 
-      <searchable-select
+      <option-select
+        ref="billUploadTypeRef"
         v-model="showBillUploadTypeSelect"
         title="选择导入类型"
         :list="billUploadTypeList"
         :current-value="form.billUploadType ?? undefined"
         @confirm="
-          (item) => {
-            form.billUploadType = Number(item.value);
+          (item: any) => {
+            const selected = Array.isArray(item) ? item[0] : item;
+            form.billUploadType = Number(selected.value);
           }
         " />
-      <searchable-select
+      <option-select
+        ref="handleTypeRef"
         v-model="showHandleTypeSelect"
         title="选择处理类型"
         :list="handleTypeList"
         :current-value="form.handleType || undefined"
         @confirm="
-          (item) => {
-            form.handleType = String(item.value);
+          (item: any) => {
+            const selected = Array.isArray(item) ? item[0] : item;
+            form.handleType = String(selected.value);
           }
         " />
-      <searchable-select
+      <option-select
+        ref="inflowRef"
         v-model="showInflowSelect"
         title="选择流入/流出"
         :list="inflowOrOutflowList"
         :current-value="form.inflowOrOutflow ?? undefined"
         @confirm="
-          (item) => {
-            form.inflowOrOutflow = Number(item.value);
+          (item: any) => {
+            const selected = Array.isArray(item) ? item[0] : item;
+            form.inflowOrOutflow = Number(selected.value);
           }
         " />
-      <searchable-select
+      <option-select
+        ref="billTypeRef"
         v-model="showBillTypeSelect"
         title="选择账单类型"
         :list="billTypeSelectList"
         :current-value="form.billType ?? undefined"
         @confirm="
-          (item) => {
-            form.billType = Number(item.value);
+          (item: any) => {
+            const selected = Array.isArray(item) ? item[0] : item;
+            form.billType = Number(selected.value);
           }
         " />
-      <searchable-select
+      <option-select
+        ref="billMethodRef"
         v-model="showBillMethodSelect"
         title="选择账单方式"
         :list="billMethodSelectList"
         :current-value="form.billMethod ?? undefined"
         @confirm="
-          (item) => {
-            form.billMethod = Number(item.value);
+          (item: any) => {
+            const selected = Array.isArray(item) ? item[0] : item;
+            form.billMethod = Number(selected.value);
           }
         " />
 
@@ -135,7 +145,7 @@
 <script lang="ts" setup>
   import { ref, reactive, computed, onMounted, nextTick } from 'vue';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onBackPress } from '@dcloudio/uni-app';
   import { billUploadApi } from '../../../api';
   import { billUploadTypeOption, handleTypeOption, inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import { weChatBillUploadType, aliPayBillUploadType, bankBillUploadType } from '../../../../shared/src/constants/api-type';
@@ -143,7 +153,7 @@
   import { aliPayUploadFields } from '../../../../shared/src/constants/api/ali-pay-fields';
   import { bankUploadFields } from '../../../../shared/src/constants/api/bank-fields';
   import { useApiTypeStore } from '../../../store';
-  import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
+  import OptionSelect from '../../../components/option-select/option-select.vue';
   import { useAppTheme } from '../../../composables/useAppTheme';
 
   const { isDark, mode } = useAppTheme();
@@ -157,6 +167,11 @@
   const showInflowSelect = ref(false);
   const showBillTypeSelect = ref(false);
   const showBillMethodSelect = ref(false);
+  const billUploadTypeRef = ref();
+  const handleTypeRef = ref();
+  const inflowRef = ref();
+  const billTypeRef = ref();
+  const billMethodRef = ref();
   const apiTypeStore = useApiTypeStore();
 
   const billUploadTypeList = billUploadTypeOption.map((item) => ({ label: item.label, value: item.value }));
@@ -336,6 +351,17 @@
     } else {
       uni.setNavigationBarTitle({ title: '新建上传规则' });
     }
+  });
+
+  onBackPress(() => {
+    const refs = [billUploadTypeRef, handleTypeRef, inflowRef, billTypeRef, billMethodRef];
+    for (const r of refs) {
+      if (r.value && typeof r.value.closeFullFilter === 'function' && r.value.isFullFilterVisible()) {
+        r.value.closeFullFilter();
+        return true;
+      }
+    }
+    return false;
   });
 </script>
 

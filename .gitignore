@@ -36,12 +36,12 @@ packages/website/dist
 
 # admin-mobile
 packages/admin-mobile/node_modules
-packages/admin-mobile/unpackage/
+packages/admin-mobile/unpackage
 packages/admin-mobile/.DS_Store
-packages/admin-mobile/.hbuilderx/
+packages/admin-mobile/.hbuilderx
 
 # admin-mobile-x
 packages/admin-mobile-x/node_modules
-packages/admin-mobile-x/unpackage/
+packages/admin-mobile-x/unpackage
 packages/admin-mobile-x/.DS_Store
-packages/admin-mobile-x/.hbuilderx/
+packages/admin-mobile-x/.hbuilderx

@@ -128,6 +128,7 @@
       valueKey?: string;
       threshold?: number;
       mode?: Mode;
+      fullTopInset?: boolean;
     }>(),
     {
       title: '请选择',
@@ -137,6 +138,7 @@
       valueKey: 'value',
       threshold: 15,
       mode: 'auto',
+      fullTopInset: false,
     }
   );
 
@@ -230,20 +232,17 @@
   }
 
   // ---- 全屏弹窗：顶部留白。
-  // 当页面为自定义导航栏(navigationStyle=custom)时，全屏弹窗会顶到状态栏，需按状态栏高度下移；
-  // 当页面为原生导航栏时，弹窗已从导航栏下方开始，无需再加状态栏高度，避免输入框下移过多。
+  // 仅当调用方传入 fullTopInset（页面为自定义导航栏，内容顶到屏幕顶部）时，
+  // 才按状态栏高度下移；否则不加（原生导航栏页面弹窗已从导航栏下方开始）。
   const fullFilterStyle = computed(() => {
+    if (!props.fullTopInset) return {};
     let statusBarHeight = 0;
-    let navBarHeight = 0;
     try {
-      const info = uni.getSystemInfoSync();
-      statusBarHeight = info.statusBarHeight || 0;
-      navBarHeight = info.navigationBarHeight || 0;
+      statusBarHeight = uni.getSystemInfoSync().statusBarHeight || 0;
     } catch {
       // ignore
     }
-    const top = navBarHeight > 0 ? 24 : statusBarHeight + 24;
-    return { paddingTop: `${top}rpx` };
+    return { paddingTop: `${statusBarHeight + 24}rpx` };
   });
 
   // ---- full 模式：拼音分组 + 搜索 + 索引 ----

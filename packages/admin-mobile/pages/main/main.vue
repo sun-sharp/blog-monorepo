@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
   import { ref, watch } from 'vue';
-  import { onShow } from '@dcloudio/uni-app';
+  import { onShow, onBackPress } from '@dcloudio/uni-app';
   import TabHome from '../../components/tab-content/tab-home.vue';
   import TabArticle from '../../components/tab-content/tab-article.vue';
   import TabFinance from '../../components/tab-content/tab-finance.vue';
@@ -74,6 +74,15 @@
   onShow(() => {
     if (currentTab.value === 1) tabArticleRef.value?.checkRefresh();
     if (currentTab.value === 2) tabFinanceRef.value?.checkRefresh();
+  });
+
+  onBackPress(() => {
+    const activeTab = currentTab.value === 1 ? tabArticleRef.value : currentTab.value === 2 ? tabFinanceRef.value : null;
+    if (activeTab && typeof activeTab.isFullFilterVisible === 'function' && activeTab.isFullFilterVisible()) {
+      activeTab.closeFullFilter();
+      return true;
+    }
+    return false;
   });
 </script>
 

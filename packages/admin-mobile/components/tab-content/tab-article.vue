@@ -11,33 +11,16 @@
         @custom="handleSearch"
         @clear="handleClear" />
       <view class="article-toolbar-actions">
-        <view class="article-toolbar-btn" @click="showFilter = !showFilter">
-          <u-icon name="setting" size="36" :color="showFilter || hasFilter ? '#007aff' : '#666'" />
+        <view class="article-toolbar-btn" @click="openFilterPopup">
+          <u-icon name="setting" size="36" :color="hasActiveFilter ? '#007aff' : '#666'" />
         </view>
       </view>
     </view>
 
-    <view v-if="showFilter" class="article-filter">
-      <view class="article-filter-row">
-        <text class="article-filter-label">分类</text>
-        <view class="article-filter-picker" @click="showCategoryPicker = true">
-          <text :class="currentCategoryLabel ? 'article-filter-value' : 'article-filter-placeholder'">
-            {{ currentCategoryLabel || '全部分类' }}
-          </text>
-          <u-icon name="arrow-down" size="24" color="#999" />
-        </view>
-      </view>
-      <view class="article-filter-row">
-        <text class="article-filter-label">状态</text>
-        <u-subsection
-          :list="statusOptions"
-          :current="currentStatus"
-          mode="button"
-          active-color="#007aff"
-          inactive-color="#666666"
-          bg-color="#f5f5f5"
-          size="mini"
-          @change="onStatusChange" />
+    <view v-if="activeFilterTags.length > 0" class="article-filter">
+      <view v-for="tag in activeFilterTags" :key="tag.field" class="article-filter-tag" @click="clearFilterTag(tag.field)">
+        <text class="article-filter-tag-text">{{ tag.label }}</text>
+        <u-icon name="close" size="24" color="#999" />
       </view>
     </view>
 
@@ -94,12 +77,57 @@
     </view>
     <!-- #endif -->
 
-    <u-picker
-      v-model="showCategoryPicker"
-      mode="selector"
-      :range="categoryPickerOptions"
-      range-key="label"
-      :default-selector="[categoryPickerIndex]"
+    <u-popup v-model="showFilterPopup" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFilterPopup = false">
+      <view class="article-filter-popup">
+        <view class="article-filter-popup-header">
+          <text class="article-filter-popup-title">筛选</text>
+          <view class="article-filter-popup-close" @click="showFilterPopup = false">
+            <u-icon name="close" size="36" color="#999" />
+          </view>
+        </view>
+        <scroll-view scroll-y class="article-filter-popup-body">
+          <view class="article-filter-popup-row">
+            <view class="article-filter-popup-label-row">
+              <text class="article-filter-popup-label">分类</text>
+              <u-icon v-if="draftCategory" name="close-circle-fill" size="28" color="#999" @click="draftCategory = ''" />
+            </view>
+            <view class="article-filter-popup-select" @click="showCategorySelect = true">
+              <text :class="['article-filter-popup-select-value', !draftCategory && 'placeholder']">
+                {{ getCategoryOptionLabel(draftCategory) || '全部分类' }}
+              </text>
+              <u-icon name="arrow-right" size="24" color="#999" />
+            </view>
+          </view>
+          <view class="article-filter-popup-row">
+            <view class="article-filter-popup-label-row">
+              <text class="article-filter-popup-label">状态</text>
+              <u-icon v-if="draftStatus" name="close-circle-fill" size="28" color="#999" @click="draftStatus = 0" />
+            </view>
+            <u-subsection
+              :list="statusOptions"
+              :current="draftStatus"
+              mode="button"
+              active-color="#007aff"
+              inactive-color="#666666"
+              bg-color="#f5f5f5"
+              size="mini"
+              @change="onStatusChange" />
+          </view>
+        </scroll-view>
+        <view class="article-filter-popup-footer">
+          <u-button @click="clearAllFilters">重置</u-button>
+          <u-button type="primary" @click="onFilterConfirm">确定</u-button>
+        </view>
+      </view>
+    </u-popup>
+
+    <option-select
+      ref="categorySelectRef"
+      v-model="showCategorySelect"
+      title="选择分类"
+      :list="categoryOptionList"
+      :current-value="draftCategory || undefined"
+      :full-top-inset="true"
       @confirm="onCategoryConfirm" />
   </view>
 </template>
@@ -110,6 +138,7 @@
   import { articleAPi } from '../../api';
   import { useApiTypeStore } from '../../store';
   import type { ApiLiteArticleItem } from '/#/api/blog/article';
+  import OptionSelect from '../option-select/option-select.vue';
 
   const props = defineProps<{ active: boolean }>();
 
@@ -121,30 +150,22 @@
   const isRefreshing = ref(false);
   const current = ref(1);
   const total = ref(0);
-  const showFilter = ref(false);
-  const showCategoryPicker = ref(false);
-  const currentCategory = ref<number | string>('');
-  const currentStatus = ref(0);
   const inited = ref(false);
+  const showFilterPopup = ref(false);
+  const showCategorySelect = ref(false);
+  const categorySelectRef = ref();
+  // 已生效筛选
+  const appliedCategory = ref<number | string>('');
+  const appliedStatus = ref(0);
+  // 弹窗草稿
+  const draftCategory = ref<number | string>('');
+  const draftStatus = ref(0);
 
   const pageSize = 20;
 
   const articleCategoryOption = computed(() => apiTypeStore.getArticleCategoryOption);
 
-  const categoryPickerOptions = computed(() => [{ label: '全部分类', value: '' }, ...articleCategoryOption.value]);
-
-  const categoryPickerIndex = computed(() => {
-    const idx = categoryPickerOptions.value.findIndex((item) => item.value === currentCategory.value);
-    return idx >= 0 ? idx : 0;
-  });
-
-  const currentCategoryLabel = computed(() => {
-    if (!currentCategory.value) return '';
-    const item = articleCategoryOption.value.find((opt) => opt.value === currentCategory.value);
-    return item?.label || '';
-  });
-
-  const hasFilter = computed(() => currentCategory.value !== '' || currentStatus.value !== 0);
+  const categoryOptionList = computed(() => articleCategoryOption.value as unknown as { label: string; value: number | string }[]);
 
   const statusOptions = ['全部', '公开', '加密'];
 
@@ -153,6 +174,52 @@
     if (list.value.length >= total.value && total.value > 0) return 'nomore';
     return 'loadmore';
   });
+
+  function getCategoryOptionLabel(categoryVal: number | string | undefined): string {
+    if (categoryVal === undefined || categoryVal === '' || categoryVal === null) return '';
+    const item = articleCategoryOption.value.find((opt) => opt.value === categoryVal);
+    return item?.label || '';
+  }
+
+  const hasActiveFilter = computed(() => appliedCategory.value !== '' || appliedStatus.value !== 0);
+
+  const activeFilterTags = computed(() => {
+    const tags: { field: string; label: string }[] = [];
+    if (appliedCategory.value !== '') {
+      tags.push({ field: 'categoryVal', label: getCategoryOptionLabel(appliedCategory.value) || '全部分类' });
+    }
+    if (appliedStatus.value !== 0) {
+      tags.push({ field: 'status', label: statusOptions[appliedStatus.value] });
+    }
+    return tags;
+  });
+
+  function openFilterPopup() {
+    draftCategory.value = appliedCategory.value;
+    draftStatus.value = appliedStatus.value;
+    showFilterPopup.value = true;
+  }
+
+  function clearAllFilters() {
+    draftCategory.value = '';
+    draftStatus.value = 0;
+  }
+
+  function clearFilterTag(field: string) {
+    if (field === 'categoryVal') {
+      appliedCategory.value = '';
+    } else if (field === 'status') {
+      appliedStatus.value = 0;
+    }
+    loadData(true);
+  }
+
+  function onFilterConfirm() {
+    showFilterPopup.value = false;
+    appliedCategory.value = draftCategory.value;
+    appliedStatus.value = draftStatus.value;
+    loadData(true);
+  }
 
   function getCategoryLabel(categoryVal: number | string) {
     const item = articleCategoryOption.value.find((opt) => opt.value === categoryVal);
@@ -174,12 +241,12 @@
       if (keyword.value) {
         params.keywords = keyword.value;
       }
-      if (currentCategory.value) {
-        params.categoryVal = currentCategory.value;
+      if (appliedCategory.value) {
+        params.categoryVal = appliedCategory.value;
       }
-      if (currentStatus.value === 1) {
+      if (appliedStatus.value === 1) {
         params.isPrivate = false;
-      } else if (currentStatus.value === 2) {
+      } else if (appliedStatus.value === 2) {
         params.isPrivate = true;
       }
       const res = await articleAPi.getLitePage(params);
@@ -226,14 +293,12 @@
   }
 
   function onStatusChange(index: number) {
-    currentStatus.value = index;
-    loadData(true);
+    draftStatus.value = index;
   }
 
-  function onCategoryConfirm(e: any) {
-    const index = Array.isArray(e) ? e[0] : e;
-    currentCategory.value = categoryPickerOptions.value[index]?.value ?? '';
-    loadData(true);
+  function onCategoryConfirm(item: any) {
+    const selected = Array.isArray(item) ? item[0] : item;
+    draftCategory.value = selected?.value ?? '';
   }
 
   function goToAdd() {
@@ -267,7 +332,21 @@
     }
   );
 
-  defineExpose({ checkRefresh });
+  defineExpose({
+    checkRefresh,
+    isFullFilterVisible: () => {
+      const sel = categorySelectRef.value;
+      return !!(sel && typeof sel.isFullFilterVisible === 'function' && sel.isFullFilterVisible());
+    },
+    closeFullFilter: () => {
+      const sel = categorySelectRef.value;
+      if (sel && typeof sel.closeFullFilter === 'function' && sel.isFullFilterVisible()) {
+        sel.closeFullFilter();
+        return true;
+      }
+      return false;
+    },
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -302,48 +381,115 @@
 
   .article-filter {
     margin: 0 20rpx 16rpx;
-    background-color: $uni-bg-color;
-    border-radius: 16rpx;
-    padding: 20rpx 24rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
-  }
-
-  .article-filter-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16rpx;
+    gap: 12rpx;
+    flex-wrap: wrap;
   }
 
-  .article-filter-row:last-child {
-    margin-bottom: 0;
-  }
-
-  .article-filter-label {
-    font-size: 26rpx;
-    color: $uni-text-color-grey;
-    flex-shrink: 0;
-  }
-
-  .article-filter-picker {
-    display: flex;
+  .article-filter-tag {
+    display: inline-flex;
     align-items: center;
     gap: 8rpx;
-    padding: 12rpx 20rpx;
-    background-color: #f5f5f5;
-    border-radius: 8rpx;
-    min-width: 160rpx;
-    justify-content: flex-end;
+    background-color: #e8f4fd;
+    border-radius: 20rpx;
+    padding: 8rpx 20rpx;
   }
 
-  .article-filter-value {
-    font-size: 26rpx;
+  .article-filter-tag-text {
+    font-size: 24rpx;
+    color: #007aff;
+  }
+
+  .article-filter-popup {
+    display: flex;
+    flex-direction: column;
+    max-height: 70vh;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .article-filter-popup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 32rpx 30rpx 16rpx;
+  }
+
+  .article-filter-popup-title {
+    font-size: 32rpx;
+    font-weight: 600;
     color: $uni-text-color;
   }
 
-  .article-filter-placeholder {
+  .article-filter-popup-close {
+    position: absolute;
+    right: 24rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56rpx;
+    height: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+  }
+
+  .article-filter-popup-body {
+    flex: 1;
+    padding: 0 30rpx;
+    max-height: 50vh;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .article-filter-popup-row {
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
+    overflow: hidden;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .article-filter-popup-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12rpx;
+  }
+
+  .article-filter-popup-label {
     font-size: 26rpx;
-    color: $uni-text-color-placeholder;
+    color: #666;
+  }
+
+  .article-filter-popup-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16rpx 20rpx;
+    background-color: #f5f5f5;
+    border-radius: 12rpx;
+  }
+
+  .article-filter-popup-select-value {
+    font-size: 26rpx;
+    color: #333;
+    &.placeholder {
+      color: #999;
+    }
+  }
+
+  .article-filter-popup-footer {
+    display: flex;
+    gap: 20rpx;
+    padding: 20rpx 30rpx;
+    padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+    border-top: 1rpx solid #f0f0f0;
   }
 
   .article-list-scroll {
