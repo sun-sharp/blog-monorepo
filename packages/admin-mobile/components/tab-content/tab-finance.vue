@@ -275,7 +275,8 @@
 
     <money-time-select v-model:show="showTimeSelect" @confirm="onTimeConfirm" />
     <money-time-select v-model:show="showBalanceTimeSelect" @confirm="onBalanceTimeConfirm" />
-    <searchable-select
+    <option-select
+      ref="filterSelectRef"
       v-model="filterSelectVisible"
       :title="filterSelectTitle"
       :list="filterSelectList"
@@ -291,7 +292,7 @@
   import { useApiTypeStore } from '../../store';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
-  import SearchableSelect from '../searchable-select/searchable-select.vue';
+  import OptionSelect from '../option-select/option-select.vue';
 
   const props = defineProps<{ active: boolean; externalFilter?: { source?: string; bankType?: number } | null }>();
 
@@ -331,6 +332,7 @@
   const filterSelectTitle = ref('');
   const filterSelectList = ref<{ label: string; value: number | string }[]>([]);
   const filterSelectField = ref('');
+  const filterSelectRef = ref();
 
   const scrollTopOffset = ref(0);
   const scrollStyle = computed(() => {
@@ -434,8 +436,9 @@
     filterSelectVisible.value = true;
   }
 
-  function onFilterSelectConfirm(item: { label: string; value: number | string }) {
-    const val = item.value as number;
+  function onFilterSelectConfirm(item: any) {
+    const selected = Array.isArray(item) ? item[0] : item;
+    const val = selected?.value as number;
     const field = filterSelectField.value;
     if (field === 'billType') filterBillType.value = val;
     else if (field === 'billMethod') filterBillMethod.value = val;

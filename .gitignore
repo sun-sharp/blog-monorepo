@@ -1,5 +1,6 @@
+# 根目录
 node_modules
-
+yarn.lock
 package-lock.json
 
 # TypeScript 构建缓存（可重新生成）
@@ -14,5 +15,33 @@ pnpm-lock.yaml
 
 # node-server
 packages/node-server/dist
+packages/node-server/dist_dev
+packages/node-server/dist_prod
 packages/node-server/node_modules
 packages/node-server/documentation
+# env
+packages/node-server/.env.dev
+packages/node-server/.env.prod
+packages/node-server/.env
+
+# admin-web
+packages/admin-web/node_modules
+packages/admin-web/manage
+packages/admin-web/dist
+
+# website
+packages/website/node_modules
+packages/website/home
+packages/website/dist
+
+# admin-mobile
+packages/admin-mobile/node_modules
+packages/admin-mobile/unpackage/
+packages/admin-mobile/.DS_Store
+packages/admin-mobile/.hbuilderx/
+
+# admin-mobile-x
+packages/admin-mobile-x/node_modules
+packages/admin-mobile-x/unpackage/
+packages/admin-mobile-x/.DS_Store
+packages/admin-mobile-x/.hbuilderx/

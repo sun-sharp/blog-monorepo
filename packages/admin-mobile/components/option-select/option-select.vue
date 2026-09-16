@@ -1,14 +1,14 @@
 <template>
   <!-- roll 模式：滚动选择框（<=阈值 且 单选） -->
   <u-picker
-    v-if="mode === 'roll'"
-    :model-value="modelValue"
+    v-model="rollModelValue"
     mode="selector"
     :range="list"
     :range-key="labelKey"
     :default-selector="[rollIndex]"
     :safe-area-inset-bottom="true"
     @confirm="onRollConfirm"
+    @cancel="handleClose"
     @close="handleClose" />
 
   <!-- bottom 模式：半屏弹窗（多选 <=阈值） -->
@@ -53,7 +53,7 @@
     :length="'100%'"
     :safe-area-inset-bottom="true"
     @close="handleClose">
-    <view class="full-filter" :class="{ dark: isDark }">
+    <view class="full-filter" :class="{ dark: isDark }" :style="fullFilterStyle">
       <view class="full-filter__search-row">
         <view class="full-filter__search">
           <u-search v-model="fullKeyword" placeholder="搜索选项" shape="round" :show-action="false" @clear="fullKeyword = ''" />
@@ -187,6 +187,13 @@
   }
 
   // ---- roll 模式 ----
+  const rollModelValue = computed({
+    get: () => mode.value === 'roll' && props.modelValue,
+    set: (val: boolean) => {
+      if (props.modelValue !== val) emit('update:modelValue', val);
+    },
+  });
+
   const rollIndex = computed(() => {
     const idx = props.list.findIndex((o) => String(o[props.valueKey]) === String(props.currentValue));
     return idx >= 0 ? idx : 0;
@@ -221,6 +228,23 @@
   function handleClose() {
     emit('update:modelValue', false);
   }
+
+  // ---- 全屏弹窗：顶部留白。
+  // 当页面为自定义导航栏(navigationStyle=custom)时，全屏弹窗会顶到状态栏，需按状态栏高度下移；
+  // 当页面为原生导航栏时，弹窗已从导航栏下方开始，无需再加状态栏高度，避免输入框下移过多。
+  const fullFilterStyle = computed(() => {
+    let statusBarHeight = 0;
+    let navBarHeight = 0;
+    try {
+      const info = uni.getSystemInfoSync();
+      statusBarHeight = info.statusBarHeight || 0;
+      navBarHeight = info.navigationBarHeight || 0;
+    } catch {
+      // ignore
+    }
+    const top = navBarHeight > 0 ? 24 : statusBarHeight + 24;
+    return { paddingTop: `${top}rpx` };
+  });
 
   // ---- full 模式：拼音分组 + 搜索 + 索引 ----
   const fullKeyword = ref('');

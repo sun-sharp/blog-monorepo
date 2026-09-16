@@ -1,8 +1,0 @@
-node_modules/
-unpackage/dist/
-unpackage/resources/
-unpackage/cache/
-unpackage/build/
-unpackage/logs/
-.hbuilderx/
-.DS_Store
