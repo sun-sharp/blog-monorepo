@@ -113,22 +113,20 @@
         </view>
       </view>
 
-      <u-picker
+      <option-select
+        ref="categoryRef"
         v-model="showCategory"
-        mode="selector"
-        :default-selector="categoryDefault"
-        :preserve-selection="false"
-        :range="categoryRange"
-        range-key="label"
+        title="选择分类"
+        :list="categoryRange"
+        :current-value="form.categoryVal ?? undefined"
         @confirm="onCategoryConfirm" />
 
-      <u-picker
+      <option-select
+        ref="cssNameRef"
         v-model="showCssName"
-        mode="selector"
-        :default-selector="cssNameDefault"
-        :preserve-selection="false"
-        :range="cssNameRange"
-        range-key="label"
+        title="选择css名称"
+        :list="cssNameRange"
+        :current-value="form.cssName || undefined"
         @confirm="onCssNameConfirm" />
     </scroll-view>
   </view>
@@ -137,7 +135,8 @@
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onBackPress } from '@dcloudio/uni-app';
+  import OptionSelect from '../../../components/option-select/option-select.vue';
   import { articleAPi, articleCssApi } from '../../../api';
   import { useApiTypeStore, useUserStore } from '../../../store';
   import { UploadMdResult } from '/#/api';
@@ -149,6 +148,8 @@
   const editId = ref('');
   const showCategory = ref(false);
   const showCssName = ref(false);
+  const categoryRef = ref();
+  const cssNameRef = ref();
 
   // 新增状态
   const mdFileName = ref('');
@@ -178,10 +179,6 @@
 
   // css 名称选项
   const cssNameRange = ref<{ label: string; value: string }[]>([]);
-  const cssNameDefault = computed(() => {
-    const idx = cssNameRange.value.findIndex((item) => item.value === form.cssName);
-    return idx >= 0 ? [idx] : [0];
-  });
   const cssNameLabel = computed(() => cssNameRange.value.find((item) => item.value === form.cssName)?.label || '');
 
   async function loadCssNameOptions() {
@@ -197,9 +194,9 @@
     }
   }
 
-  function onCssNameConfirm(e: Array<number>) {
-    const idx = e[0];
-    form.cssName = cssNameRange.value[idx]?.value || 'default';
+  function onCssNameConfirm(item: any) {
+    const selected = Array.isArray(item) ? item[0] : item;
+    form.cssName = selected?.value || form.cssName || 'default';
   }
 
   const categoryRange = computed(() =>
@@ -209,21 +206,15 @@
     }))
   );
 
-  const categoryDefault = computed(() => {
-    if (form.categoryVal == null) return [0];
-    const idx = categoryRange.value.findIndex((item) => item.value === form.categoryVal);
-    return idx >= 0 ? [idx] : [0];
-  });
-
   const categoryLabel = computed(() => {
     if (form.categoryVal == null) return '';
     const opt = categoryRange.value.find((item) => item.value === form.categoryVal);
     return opt?.label || '';
   });
 
-  function onCategoryConfirm(e: Array<number>) {
-    const idx = e[0];
-    form.categoryVal = typeof idx === 'number' ? categoryRange.value[idx].value : null;
+  function onCategoryConfirm(item: any) {
+    const selected = Array.isArray(item) ? item[0] : item;
+    form.categoryVal = typeof selected?.value === 'number' ? selected.value : null;
   }
 
   function validate(): boolean {
@@ -448,6 +439,17 @@
     } else {
       uni.setNavigationBarTitle({ title: '新建文章' });
     }
+  });
+
+  onBackPress(() => {
+    const refs = [categoryRef, cssNameRef];
+    for (const r of refs) {
+      if (r.value && typeof r.value.closeFullFilter === 'function' && r.value.isFullFilterVisible()) {
+        r.value.closeFullFilter();
+        return true;
+      }
+    }
+    return false;
   });
 </script>
 

@@ -58,24 +58,27 @@
     </scroll-view>
 
     <u-picker v-model="showTradeTimePicker" mode="time" :params="timePickerParams" :default-time="form.tradeTime || today" @confirm="onTradeTimeConfirm" />
-    <searchable-select
+    <option-select
+      ref="inflowRef"
       v-model="showInflowSelect"
       title="选择流入/流出"
       :list="inflowOrOutflowList"
       :current-value="form.inflowOrOutflow || undefined"
-      @confirm="(item: any) => (form.inflowOrOutflow = Number(item.value))" />
-    <searchable-select
+      @confirm="(item: any) => (form.inflowOrOutflow = Number((Array.isArray(item) ? item[0] : item)?.value))" />
+    <option-select
+      ref="billTypeRef"
       v-model="showBillTypeSelect"
       title="选择账单类型"
       :list="billTypeSelectList"
       :current-value="form.billType || undefined"
-      @confirm="(item: any) => (form.billType = Number(item.value))" />
-    <searchable-select
+      @confirm="(item: any) => (form.billType = Number((Array.isArray(item) ? item[0] : item)?.value))" />
+    <option-select
+      ref="billMethodRef"
       v-model="showBillMethodSelect"
       title="选择账单方式"
       :list="billMethodSelectList"
       :current-value="form.billMethod || undefined"
-      @confirm="(item: any) => (form.billMethod = Number(item.value))" />
+      @confirm="(item: any) => (form.billMethod = Number((Array.isArray(item) ? item[0] : item)?.value))" />
 
     <view class="fixed-bottom-btn">
       <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
@@ -85,12 +88,12 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed, onMounted } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onBackPress } from '@dcloudio/uni-app';
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { manualBillApi } from '../../../api';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
-  import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
+  import OptionSelect from '../../../components/option-select/option-select.vue';
   import { roundToTwoArrow } from '../../../../shared/src/utils/number.js';
 
   const formRef = ref();
@@ -100,6 +103,9 @@
   const showInflowSelect = ref(false);
   const showBillTypeSelect = ref(false);
   const showBillMethodSelect = ref(false);
+  const inflowRef = ref();
+  const billTypeRef = ref();
+  const billMethodRef = ref();
   const apiTypeStore = useApiTypeStore();
 
   const timePickerParams = { year: true, month: true, day: true, hour: true, minute: true, second: true };
@@ -266,6 +272,17 @@
         if (billMethod !== null) form.billMethod = billMethod;
       }
     }
+  });
+
+  onBackPress(() => {
+    const refs = [inflowRef, billTypeRef, billMethodRef];
+    for (const r of refs) {
+      if (r.value && typeof r.value.closeFullFilter === 'function' && r.value.isFullFilterVisible()) {
+        r.value.closeFullFilter();
+        return true;
+      }
+    }
+    return false;
   });
 </script>
 
