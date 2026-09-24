@@ -3,19 +3,19 @@
     <view class="home-quick-nav card" :class="{ dark: isDark }">
       <text class="home-section-title" :class="{ dark: isDark }">快捷功能</text>
       <u-grid :col="3" :border="false">
-        <u-grid-item @click="navigateTo('/pages/blog/schedule/schedule')">
+        <u-grid-item :bg-color="isDark ? '#303030' : ''" @click="navigateTo('/pages/blog/schedule/schedule')">
           <view class="nav-icon-wrap nav-icon-green">
             <u-icon name="calendar" size="40" color="#fff" />
           </view>
           <text class="nav-label" :class="{ dark: isDark }">日程</text>
         </u-grid-item>
-        <u-grid-item @click="navigateTo('/pages/finance/upload/upload')">
+        <u-grid-item :bg-color="isDark ? '#303030' : ''" @click="navigateTo('/pages/finance/upload/upload')">
           <view class="nav-icon-wrap nav-icon-orange">
             <u-icon name="download" size="40" color="#fff" />
           </view>
           <text class="nav-label" :class="{ dark: isDark }">导入</text>
         </u-grid-item>
-        <u-grid-item @click="navigateTo('/pages/finance/summary/summary')">
+        <u-grid-item :bg-color="isDark ? '#303030' : ''" @click="navigateTo('/pages/finance/summary/summary')">
           <view class="nav-icon-wrap nav-icon-blue">
             <u-icon name="grid" size="40" color="#fff" />
           </view>
@@ -52,7 +52,7 @@
           </view>
           <view v-if="item.children && item.children.length > 0" class="home-stat-children" :class="{ dark: isDark }">
             <u-grid :col="item.gridCol || 2" :border="false">
-              <u-grid-item v-for="child in item.children" :key="child.label" style="background-color: none" @click="onStatChildrenClick(child)">
+              <u-grid-item v-for="child in item.children" :key="child.label" :bg-color="isDark ? '#303030' : ''" @click="onStatChildrenClick(child)">
                 <view class="home-stat-child-icon" :class="child.theme || 'nav-icon-green'">
                   <u-icon v-if="child.iconType === 'sharp-icon'" :name="child.icon" size="36" color="#fff" custom-prefix="sharp-icon" />
                   <u-icon v-else :name="child.icon" size="36" color="#fff" />
@@ -344,6 +344,10 @@
     &.dark {
       color: $dark-text-color;
     }
+  }
+
+  .grid-dark {
+    background-color: $dark-chip-bg;
   }
 
   .home-section-title-row {
