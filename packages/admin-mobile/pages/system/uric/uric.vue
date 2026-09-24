@@ -28,8 +28,8 @@
             </view>
             <view class="uric-item-right">
               <view class="uric-item-values">
-                <text v-if="item.uricAcid != null" class="uric-item-value">尿酸 {{ item.uricAcid }}umol/L</text>
-                <text v-if="item.bloodGlucose != null" class="uric-item-value">
+                <text v-if="item.uricAcid != null" :class="['uric-item-value', getUricLevelClass(item.uricAcid)]">尿酸 {{ item.uricAcid }}umol/L</text>
+                <text v-if="item.bloodGlucose != null" :class="['uric-item-value', getBloodGlucoseLevelClass(item.bloodGlucose, item.bloodSugarPeriod)]">
                   血糖 {{ item.bloodGlucose }}mmol/L{{ item.bloodSugarPeriod ? `（${getPeriodLabel(item.bloodSugarPeriod)}）` : '' }}
                 </text>
               </view>
@@ -44,7 +44,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { uricApi } from '../../../api';
@@ -58,6 +58,7 @@
   import type { ApiUricItem } from '/#/api/capital/uric';
   import ListPage from '../../../components/list-page/list-page.vue';
   import { useAppTheme } from '../../../composables/useAppTheme';
+  import { DARK_NAV_BAR_FRONT_COLOR, DARK_NAV_BAR_BG_COLOR, LIGHT_NAV_BAR_FRONT_COLOR, LIGHT_NAV_BAR_BG_COLOR } from '../../../../shared/src/constants';
   import { createTypeMapper } from '../../../../shared/src/utils';
 
   const { isDark, mode } = useAppTheme();
@@ -122,6 +123,37 @@
       },
     });
   }
+
+  function getUricLevelClass(value: number): string {
+    if (value < 180) return 'uric-level-warn';
+    if (value <= 360) return 'uric-level-normal';
+    if (value <= 420) return 'uric-level-warn';
+    if (value <= 540) return 'uric-level-danger';
+    return 'uric-level-critical';
+  }
+
+  function getBloodGlucoseLevelClass(value: number, period: number): string {
+    if (value < 3.9) return 'uric-level-danger';
+    if (period === 1) {
+      // 空腹血糖
+      if (value <= 6.1) return 'uric-level-normal';
+      if (value < 7.0) return 'uric-level-warn';
+      return 'uric-level-danger';
+    } else {
+      // 非空腹血糖
+      if (value <= 7.8) return 'uric-level-normal';
+      if (value < 11.1) return 'uric-level-warn';
+      return 'uric-level-danger';
+    }
+  }
+
+  onLoad(() => {
+    // 根据主题设置导航栏颜色
+    uni.setNavigationBarColor({
+      frontColor: isDark.value ? DARK_NAV_BAR_FRONT_COLOR : LIGHT_NAV_BAR_FRONT_COLOR,
+      backgroundColor: isDark.value ? DARK_NAV_BAR_BG_COLOR : LIGHT_NAV_BAR_BG_COLOR,
+    });
+  });
 
   onShow(() => {
     if (consumeRefreshFlag('uric')) listPageRef.value?.refresh();
@@ -214,5 +246,22 @@
   .uric-item-value {
     font-size: $uni-font-size-sm;
     color: $dark-text-color;
+  }
+
+  .uric-level-normal {
+    color: $uni-color-success;
+  }
+
+  .uric-level-warn {
+    color: $uni-color-warning;
+  }
+
+  .uric-level-danger {
+    color: $uni-color-error;
+  }
+
+  .uric-level-critical {
+    color: #c0392b;
+    font-weight: bold;
   }
 </style>

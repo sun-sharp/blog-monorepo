@@ -10,7 +10,13 @@
         @fabClick="goToAdd"
         @itemLongpress="onLongPress">
         <template #default="{ list, longpress }">
-          <view v-for="item in list" :key="item.roleId" class="role-item card" :class="{ dark: isDark }" @click="goToEdit(item.roleId)" @longpress="longpress(item)">
+          <view
+            v-for="item in list"
+            :key="item.roleId"
+            class="role-item card"
+            :class="{ dark: isDark }"
+            @click="goToEdit(item.roleId)"
+            @longpress="longpress(item)">
             <view class="role-item-left">
               <view class="role-item-icon">
                 <u-icon name="account" size="32" color="#fff" />

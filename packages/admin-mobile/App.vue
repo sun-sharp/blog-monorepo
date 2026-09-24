@@ -16,16 +16,9 @@
 
   // 每次前台展示时同步导航栏/窗口底色（pages.json globalStyle 为静态亮色，暗色需动态调整）
   onShow(() => {
-    const { isDark, mode } = useAppTheme();
+    const { mode } = useAppTheme();
     const { setTheme } = useTheme();
     setTheme(mode.value);
-    uni.setNavigationBarColor({
-      frontColor: isDark.value ? '#ffffff' : '#000000',
-      backgroundColor: isDark.value ? '#1b1b1f' : '#ffffff',
-      fail: () => {
-        // 自定义导航栏页面调用会失败，忽略
-      },
-    });
   });
 </script>
 
@@ -53,6 +46,10 @@
   text {
     user-select: text;
     -webkit-user-select: text;
+  }
+  .u-config-provider {
+    height: 100%;
+    overflow: hidden;
   }
   /* #endif */
 </style>

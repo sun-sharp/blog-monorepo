@@ -74,6 +74,8 @@
   import { setRefreshFlag, consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
   import { useAppTheme } from '../../../composables/useAppTheme';
+  import { DARK_NAV_BAR_FRONT_COLOR, DARK_NAV_BAR_BG_COLOR, LIGHT_NAV_BAR_FRONT_COLOR, LIGHT_NAV_BAR_BG_COLOR } from '../../../../shared/src/constants';
+
   import type { ApiArticleMobileDetails } from '/#/api/blog/article';
 
   const apiTypeStore = useApiTypeStore();
@@ -149,6 +151,11 @@
       console.warn('缺少文章ID');
       loading.value = false;
     }
+    // 根据主题设置导航栏颜色
+    uni.setNavigationBarColor({
+      frontColor: isDark.value ? DARK_NAV_BAR_FRONT_COLOR : LIGHT_NAV_BAR_FRONT_COLOR,
+      backgroundColor: isDark.value ? DARK_NAV_BAR_BG_COLOR : LIGHT_NAV_BAR_BG_COLOR,
+    });
   });
 
   onShow(() => {
