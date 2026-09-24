@@ -1,40 +1,42 @@
 <template>
-  <view class="category-edit-page">
-    <scroll-view scroll-y class="category-edit-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="category-edit-card card">
-          <text class="category-edit-section-title">分类信息</text>
-          <u-form-item label="类型" prop="type" required>
-            <view class="category-edit-select" @click="showTypeSelect = true">
-              <text :class="form.type ? 'category-edit-select-value' : 'category-edit-select-placeholder'">
-                {{ typeLabel || '请选择类型' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </u-form-item>
-          <u-form-item label="标签" prop="label" required>
-            <u-input v-model="form.label" placeholder="请输入标签" :cursor-spacing="20" />
-          </u-form-item>
-        </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="category-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="category-edit-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="category-edit-card card" :class="{ dark: isDark }">
+            <text class="category-edit-section-title" :class="{ dark: isDark }">分类信息</text>
+            <u-form-item label="类型" prop="type" required>
+              <view class="category-edit-select" :class="{ dark: isDark }" @click="showTypeSelect = true">
+                <text :class="form.type ? 'category-edit-select-value' : 'category-edit-select-placeholder'">
+                  {{ typeLabel || '请选择类型' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#999'" />
+              </view>
+            </u-form-item>
+            <u-form-item label="标签" prop="label" required>
+              <u-input v-model="form.label" placeholder="请输入标签" :cursor-spacing="20" />
+            </u-form-item>
+          </view>
 
-        <view class="category-edit-card card">
-          <text class="category-edit-section-title">数值设置</text>
-          <u-form-item label="数值" prop="value">
-            <u-number-box v-model="form.value" :min="0" :disabled="!!form.valueStr" />
-          </u-form-item>
-          <u-form-item label="字符串值" prop="valueStr">
-            <u-input v-model="form.valueStr" placeholder="请输入字符串值" :disabled="!!form.value" :cursor-spacing="20" />
-          </u-form-item>
-        </view>
-      </u-form>
-    </scroll-view>
+          <view class="category-edit-card card" :class="{ dark: isDark }">
+            <text class="category-edit-section-title" :class="{ dark: isDark }">数值设置</text>
+            <u-form-item label="数值" prop="value">
+              <u-number-box v-model="form.value" :min="0" :disabled="!!form.valueStr" />
+            </u-form-item>
+            <u-form-item label="字符串值" prop="valueStr">
+              <u-input v-model="form.valueStr" placeholder="请输入字符串值" :disabled="!!form.value" :cursor-spacing="20" />
+            </u-form-item>
+          </view>
+        </u-form>
+      </scroll-view>
 
-    <u-select v-model="showTypeSelect" :list="categoryTypeList" title="选择类型" @confirm="onTypeConfirm" />
+      <u-select v-model="showTypeSelect" :list="categoryTypeList" title="选择类型" @confirm="onTypeConfirm" />
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -44,6 +46,9 @@
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const formRef = ref();
   const loading = ref(false);
@@ -132,6 +137,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .category-edit-scroll {
@@ -152,6 +162,10 @@
     color: $uni-text-color;
     display: block;
     margin-bottom: 20rpx;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .category-edit-select {
@@ -162,6 +176,10 @@
     padding: 0 24rpx;
     background-color: #f5f5f5;
     border-radius: 12rpx;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .category-edit-select-value {

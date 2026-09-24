@@ -1,89 +1,91 @@
 <template>
-  <view class="manual-edit-page">
-    <scroll-view scroll-y class="manual-edit-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="manual-edit-card card">
-          <text class="manual-edit-section-title">基本信息</text>
-          <u-form-item label="交易时间" prop="tradeTime" required>
-            <view class="manual-edit-select" @click="showTradeTimePicker = true">
-              <text :class="form.tradeTime ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">{{ form.tradeTime || '请选择' }}</text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item label="交易对方" prop="tradeOtherPerson" required>
-            <u-input v-model="form.tradeOtherPerson" placeholder="请输入交易对方" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="流入/流出" prop="inflowOrOutflow" required>
-            <view class="manual-edit-select" @click="showInflowSelect = true">
-              <text :class="form.inflowOrOutflow ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
-                {{ inflowLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item label="交易金额" prop="moneyAmount" required>
-            <u-input v-model="moneyAmountInput" type="digit" placeholder="请输入交易金额" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="余额" prop="balance" required>
-            <u-input v-model="balanceInput" type="digit" placeholder="请输入余额" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="说明" prop="explain">
-            <u-input v-model="form.explain" placeholder="请输入说明" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="交易场所" prop="place">
-            <u-input v-model="form.place" placeholder="请输入交易场所" :cursor-spacing="20" />
-          </u-form-item>
-        </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="manual-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="manual-edit-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="manual-edit-card card" :class="{ dark: isDark }">
+            <text class="manual-edit-section-title" :class="{ dark: isDark }">基本信息</text>
+            <u-form-item label="交易时间" prop="tradeTime" required>
+              <view class="manual-edit-select" :class="{ dark: isDark }" @click="showTradeTimePicker = true">
+                <text :class="form.tradeTime ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">{{ form.tradeTime || '请选择' }}</text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+            <u-form-item label="交易对方" prop="tradeOtherPerson" required>
+              <u-input v-model="form.tradeOtherPerson" placeholder="请输入交易对方" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="流入/流出" prop="inflowOrOutflow" required>
+              <view class="manual-edit-select" :class="{ dark: isDark }" @click="showInflowSelect = true">
+                <text :class="form.inflowOrOutflow ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
+                  {{ inflowLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+            <u-form-item label="交易金额" prop="moneyAmount" required>
+              <u-input v-model="moneyAmountInput" type="digit" placeholder="请输入交易金额" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="余额" prop="balance" required>
+              <u-input v-model="balanceInput" type="digit" placeholder="请输入余额" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="说明" prop="explain">
+              <u-input v-model="form.explain" placeholder="请输入说明" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="交易场所" prop="place">
+              <u-input v-model="form.place" placeholder="请输入交易场所" :cursor-spacing="20" />
+            </u-form-item>
+          </view>
 
-        <view class="manual-edit-card card">
-          <text class="manual-edit-section-title">分类信息</text>
-          <u-form-item label="账单类型" prop="billType" required>
-            <view class="manual-edit-select" @click="showBillTypeSelect = true">
-              <text :class="form.billType ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
-                {{ billTypeLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-          <u-form-item label="账单方式" prop="billMethod" required>
-            <view class="manual-edit-select" @click="showBillMethodSelect = true">
-              <text :class="form.billMethod ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
-                {{ billMethodLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
-            </view>
-          </u-form-item>
-        </view>
-      </u-form>
-    </scroll-view>
+          <view class="manual-edit-card card" :class="{ dark: isDark }">
+            <text class="manual-edit-section-title" :class="{ dark: isDark }">分类信息</text>
+            <u-form-item label="账单类型" prop="billType" required>
+              <view class="manual-edit-select" :class="{ dark: isDark }" @click="showBillTypeSelect = true">
+                <text :class="form.billType ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
+                  {{ billTypeLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+            <u-form-item label="账单方式" prop="billMethod" required>
+              <view class="manual-edit-select" :class="{ dark: isDark }" @click="showBillMethodSelect = true">
+                <text :class="form.billMethod ? 'manual-edit-select-value' : 'manual-edit-select-placeholder'">
+                  {{ billMethodLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+          </view>
+        </u-form>
+      </scroll-view>
 
-    <u-picker v-model="showTradeTimePicker" mode="time" :params="timePickerParams" :default-time="form.tradeTime || today" @confirm="onTradeTimeConfirm" />
-    <option-select
-      ref="inflowRef"
-      v-model="showInflowSelect"
-      title="选择流入/流出"
-      :list="inflowOrOutflowList"
-      :current-value="form.inflowOrOutflow || undefined"
-      @confirm="(item: any) => (form.inflowOrOutflow = Number((Array.isArray(item) ? item[0] : item)?.value))" />
-    <option-select
-      ref="billTypeRef"
-      v-model="showBillTypeSelect"
-      title="选择账单类型"
-      :list="billTypeSelectList"
-      :current-value="form.billType || undefined"
-      @confirm="(item: any) => (form.billType = Number((Array.isArray(item) ? item[0] : item)?.value))" />
-    <option-select
-      ref="billMethodRef"
-      v-model="showBillMethodSelect"
-      title="选择账单方式"
-      :list="billMethodSelectList"
-      :current-value="form.billMethod || undefined"
-      @confirm="(item: any) => (form.billMethod = Number((Array.isArray(item) ? item[0] : item)?.value))" />
+      <u-picker v-model="showTradeTimePicker" mode="time" :params="timePickerParams" :default-time="form.tradeTime || today" @confirm="onTradeTimeConfirm" />
+      <option-select
+        ref="inflowRef"
+        v-model="showInflowSelect"
+        title="选择流入/流出"
+        :list="inflowOrOutflowList"
+        :current-value="form.inflowOrOutflow || undefined"
+        @confirm="(item: any) => (form.inflowOrOutflow = Number((Array.isArray(item) ? item[0] : item)?.value))" />
+      <option-select
+        ref="billTypeRef"
+        v-model="showBillTypeSelect"
+        title="选择账单类型"
+        :list="billTypeSelectList"
+        :current-value="form.billType || undefined"
+        @confirm="(item: any) => (form.billType = Number((Array.isArray(item) ? item[0] : item)?.value))" />
+      <option-select
+        ref="billMethodRef"
+        v-model="showBillMethodSelect"
+        title="选择账单方式"
+        :list="billMethodSelectList"
+        :current-value="form.billMethod || undefined"
+        @confirm="(item: any) => (form.billMethod = Number((Array.isArray(item) ? item[0] : item)?.value))" />
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -93,8 +95,11 @@
   import { manualBillApi } from '../../../api';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import OptionSelect from '../../../components/option-select/option-select.vue';
   import { roundToTwoArrow } from '../../../../shared/src/utils/number.js';
+
+  const { isDark, mode } = useAppTheme();
 
   const formRef = ref();
   const loading = ref(false);
@@ -296,6 +301,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .manual-edit-scroll {
@@ -317,6 +327,10 @@
     color: $uni-text-color;
     display: block;
     margin-bottom: 20rpx;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .manual-edit-select {
@@ -327,6 +341,10 @@
     padding: 0 24rpx;
     background-color: #f5f5f5;
     border-radius: 12rpx;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .manual-edit-select-value {

@@ -1,8 +1,9 @@
 <template>
-  <view class="bill-edit-page">
-    <scroll-view scroll-y class="bill-edit-scroll">
-      <view v-if="detail.tradeTime" class="bill-edit-card card">
-        <text class="bill-edit-section-title">账单信息</text>
+  <u-config-provider :dark-mode="mode">
+    <view class="bill-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="bill-edit-scroll">
+        <view v-if="detail.tradeTime" class="bill-edit-card card" :class="{ dark: isDark }">
+          <text class="bill-edit-section-title" :class="{ dark: isDark }">账单信息</text>
         <view class="bill-edit-readonly">
           <view class="bill-edit-readonly-item">
             <text class="bill-edit-readonly-label">交易时间</text>
@@ -90,17 +91,17 @@
       </view>
 
       <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="bill-edit-card card">
-          <text class="bill-edit-section-title">基本信息</text>
+        <view class="bill-edit-card card" :class="{ dark: isDark }">
+          <text class="bill-edit-section-title" :class="{ dark: isDark }">基本信息</text>
           <u-form-item label="交易对方备注" prop="tradeOtherPersonRemarks">
             <u-input v-model="form.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" :cursor-spacing="20" />
           </u-form-item>
           <u-form-item label="流入/流出" prop="inflowOrOutflow" required>
-            <view class="bill-edit-select" @click="showInflowSelect = true">
+            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showInflowSelect = true">
               <text :class="form.inflowOrOutflow ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ inflowLabel || '请选择' }}
               </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
             </view>
           </u-form-item>
           <u-form-item label="说明" prop="explain">
@@ -111,37 +112,37 @@
           </u-form-item>
         </view>
 
-        <view v-if="source === 'bank'" class="bill-edit-card card">
-          <text class="bill-edit-section-title">银行信息</text>
+        <view v-if="source === 'bank'" class="bill-edit-card card" :class="{ dark: isDark }">
+          <text class="bill-edit-section-title" :class="{ dark: isDark }">银行信息</text>
           <u-form-item label="其它费用" prop="otherCost">
             <u-number-box v-model="form.otherCost" :min="0" :step="0.01" />
           </u-form-item>
           <u-form-item label="银行账单类型" prop="bankBillType" required>
-            <view class="bill-edit-select" @click="showBankBillTypeSelect = true">
+            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBankBillTypeSelect = true">
               <text :class="form.bankBillType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ bankBillTypeLabel || '请选择' }}
               </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
             </view>
           </u-form-item>
         </view>
 
-        <view v-if="source === 'aliPay' || source === 'weChat'" class="bill-edit-card card">
-          <text class="bill-edit-section-title">{{ source === 'aliPay' ? '支付宝' : '微信' }}信息</text>
+        <view v-if="source === 'aliPay' || source === 'weChat'" class="bill-edit-card card" :class="{ dark: isDark }">
+          <text class="bill-edit-section-title" :class="{ dark: isDark }">{{ source === 'aliPay' ? '支付宝' : '微信' }}信息</text>
           <u-form-item label="账单类型" prop="billType" required>
-            <view class="bill-edit-select" @click="showBillTypeSelect = true">
+            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBillTypeSelect = true">
               <text :class="form.billType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ billTypeLabel || '请选择' }}
               </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
             </view>
           </u-form-item>
           <u-form-item label="账单方式" prop="billMethod" required>
-            <view class="bill-edit-select" @click="showBillMethodSelect = true">
+            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBillMethodSelect = true">
               <text :class="form.billMethod ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
                 {{ billMethodLabel || '请选择' }}
               </text>
-              <u-icon name="arrow-right" size="28" color="#bbb" />
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
             </view>
           </u-form-item>
         </view>
@@ -173,7 +174,7 @@
       :current-value="form.billMethod || undefined"
       @confirm="(item: any) => (form.billMethod = Number(item.value))" />
 
-    <view class="fixed-bottom-btn">
+    <view class="fixed-bottom-btn" :class="{ dark: isDark }">
       <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
     </view>
   </view>
@@ -186,8 +187,11 @@
   import { aggregateBillApi } from '../../../api';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
   import SearchableSelect from '../../../components/searchable-select/searchable-select.vue';
+
+  const { isDark, mode } = useAppTheme();
 
   const formRef = ref();
   const loading = ref(false);
@@ -314,6 +318,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .bill-edit-scroll {
@@ -335,6 +344,10 @@
     color: $uni-text-color;
     display: block;
     margin-bottom: 20rpx;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .bill-edit-readonly {
@@ -353,6 +366,10 @@
     font-size: $uni-font-size-base;
     color: $uni-text-color-grey;
     flex-shrink: 0;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .bill-edit-readonly-value {
@@ -363,8 +380,16 @@
     margin-left: 20rpx;
     word-break: break-all;
 
+    &.dark {
+      color: $dark-text-color;
+    }
+
     &.primary {
       color: $uni-color-primary;
+
+      &.dark {
+        color: #4d9fff;
+      }
     }
 
     &.error {
@@ -380,6 +405,10 @@
     padding: 0 24rpx;
     background-color: #f5f5f5;
     border-radius: 12rpx;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .bill-edit-select-value {

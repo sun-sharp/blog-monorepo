@@ -1,158 +1,160 @@
 <template>
-  <view class="bill-detail-page">
-    <scroll-view scroll-y class="bill-detail-scroll">
-      <view v-if="loading && !bill.tradeTime" class="bill-detail-loading">
-        <u-loading mode="circle" size="60" />
-        <text class="bill-detail-loading-text">加载中...</text>
-      </view>
-
-      <template v-if="bill.tradeTime">
-        <view class="bill-detail-header card">
-          <view class="bill-detail-amount-row">
-            <text :class="bill.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="bill-detail-amount">
-              {{ bill.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ formatMoney(bill.moneyAmount) }}
-            </text>
-            <u-tag :text="sourceLabel" type="primary" size="mini" plain />
-          </view>
-          <text class="bill-detail-time">{{ bill.tradeTime || '' }}</text>
-          <view class="bill-detail-tags">
-            <u-tag v-if="inflowLabel" :text="inflowLabel" :type="bill.inflowOrOutflow === 1 ? 'success' : 'error'" size="mini" />
-            <u-tag v-if="source === 'bank' && bankTypeLabel !== '--'" :text="bankTypeLabel" type="warning" size="mini" plain />
-            <u-tag
-              v-if="(source === 'aliPay' || source === 'weChat' || source === 'manual') && billMethodLabel !== '--'"
-              :text="billMethodLabel"
-              type="warning"
-              size="mini"
-              plain />
-          </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="bill-detail-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="bill-detail-scroll">
+        <view v-if="loading && !bill.tradeTime" class="bill-detail-loading">
+          <u-loading mode="circle" size="60" />
+          <text class="bill-detail-loading-text" :class="{ dark: isDark }">加载中...</text>
         </view>
 
-        <view class="bill-detail-info card">
-          <view class="info-row">
-            <text class="info-label">交易对方</text>
-            <text class="info-value">{{ bill.tradeOtherPerson || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">对方备注</text>
-            <text class="info-value">{{ bill.tradeOtherPersonRemarks || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">收/支</text>
-            <text class="info-value">{{ bill.incomeOrPay || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">交易类型</text>
-            <text class="info-value">{{ bill.tradeType || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">说明</text>
-            <text class="info-value">{{ bill.explain || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">使用地点</text>
-            <text class="info-value">{{ bill.place || '--' }}</text>
-          </view>
-          <view v-if="bill.balance !== undefined && bill.balance !== null" class="info-row">
-            <text class="info-label">余额</text>
-            <text class="info-value">¥{{ formatMoney(bill.balance) }}</text>
-          </view>
-          <view v-if="bill.otherCost !== undefined && bill.otherCost !== null" class="info-row">
-            <text class="info-label">其它费用</text>
-            <text class="info-value">¥{{ formatMoney(bill.otherCost) }}</text>
+        <template v-if="bill.tradeTime">
+          <view class="bill-detail-header card" :class="{ dark: isDark }">
+            <view class="bill-detail-amount-row">
+              <text :class="bill.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="bill-detail-amount">
+                {{ bill.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ formatMoney(bill.moneyAmount) }}
+              </text>
+              <u-tag :text="sourceLabel" type="primary" size="mini" plain />
+            </view>
+            <text class="bill-detail-time" :class="{ dark: isDark }">{{ bill.tradeTime || '' }}</text>
+            <view class="bill-detail-tags">
+              <u-tag v-if="inflowLabel" :text="inflowLabel" :type="bill.inflowOrOutflow === 1 ? 'success' : 'error'" size="mini" />
+              <u-tag v-if="source === 'bank' && bankTypeLabel !== '--'" :text="bankTypeLabel" type="warning" size="mini" plain />
+              <u-tag
+                v-if="(source === 'aliPay' || source === 'weChat' || source === 'manual') && billMethodLabel !== '--'"
+                :text="billMethodLabel"
+                type="warning"
+                size="mini"
+                plain />
+            </view>
           </view>
 
-          <template v-if="source === 'weChat'">
-            <view class="info-row">
-              <text class="info-label">商品</text>
-              <text class="info-value">{{ bill.goods || '--' }}</text>
+          <view class="bill-detail-info card" :class="{ dark: isDark }">
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">交易对方</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ bill.tradeOtherPerson || '--' }}</text>
             </view>
-            <view class="info-row">
-              <text class="info-label">支付方式</text>
-              <text class="info-value">{{ bill.paymentMethod || '--' }}</text>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">对方备注</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ bill.tradeOtherPersonRemarks || '--' }}</text>
             </view>
-            <view class="info-row">
-              <text class="info-label">当前状态</text>
-              <text class="info-value">{{ bill.currentStatus || '--' }}</text>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">收/支</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ bill.incomeOrPay || '--' }}</text>
             </view>
-            <view class="info-row">
-              <text class="info-label">备注</text>
-              <text class="info-value">{{ bill.remarks || '--' }}</text>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">交易类型</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ bill.tradeType || '--' }}</text>
             </view>
-          </template>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">说明</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ bill.explain || '--' }}</text>
+            </view>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">使用地点</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ bill.place || '--' }}</text>
+            </view>
+            <view v-if="bill.balance !== undefined && bill.balance !== null" class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">余额</text>
+              <text class="info-value" :class="{ dark: isDark }">¥{{ formatMoney(bill.balance) }}</text>
+            </view>
+            <view v-if="bill.otherCost !== undefined && bill.otherCost !== null" class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">其它费用</text>
+              <text class="info-value" :class="{ dark: isDark }">¥{{ formatMoney(bill.otherCost) }}</text>
+            </view>
 
-          <template v-if="source === 'aliPay'">
-            <view class="info-row">
-              <text class="info-label">商品说明</text>
-              <text class="info-value">{{ bill.productDescription || '--' }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">收/付款方式</text>
-              <text class="info-value">{{ bill.paymentMethod || '--' }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">对方账号</text>
-              <text class="info-value">{{ bill.oppositeAccount || '--' }}</text>
-            </view>
-            <view v-if="bill.balanceBaby !== undefined && bill.balanceBaby !== null" class="info-row">
-              <text class="info-label">余额宝</text>
-              <text class="info-value">¥{{ formatMoney(bill.balanceBaby) }}</text>
-            </view>
-          </template>
-
-          <template v-if="source === 'aliPay' || source === 'weChat' || source === 'manual'">
-            <view class="info-row">
-              <text class="info-label">账单类型</text>
-              <text class="info-value type">{{ billTypeLabel }}</text>
-            </view>
-          </template>
-
-          <template v-if="source === 'bank'">
-            <view class="info-row">
-              <text class="info-label">凭证号码</text>
-              <text class="info-value">{{ bill.voucherNo || '--' }}</text>
-            </view>
-            <view class="info-row">
-              <text class="info-label">对方账号</text>
-              <text class="info-value">{{ bill.tradeOtherPersonAccount || '--' }}</text>
-            </view>
-            <template v-if="bill.isRetiredBankCard">
-              <view class="info-row">
-                <text class="info-label">卡片状态</text>
-                <text class="info-value error">已报废</text>
+            <template v-if="source === 'weChat'">
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">商品</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.goods || '--' }}</text>
               </view>
-              <view v-if="bill.replaceCardNo" class="info-row">
-                <text class="info-label">新卡号</text>
-                <text class="info-value">{{ bill.replaceCardNo }}</text>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">支付方式</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.paymentMethod || '--' }}</text>
               </view>
-              <view v-if="bill.bankCardRemark" class="info-row">
-                <text class="info-label">说明</text>
-                <text class="info-value">{{ bill.bankCardRemark }}</text>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">当前状态</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.currentStatus || '--' }}</text>
+              </view>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">备注</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.remarks || '--' }}</text>
               </view>
             </template>
-            <view class="info-row">
-              <text class="info-label">银行账单类型</text>
-              <text class="info-value type">{{ bankBillTypeLabel }}</text>
-            </view>
-          </template>
-        </view>
-      </template>
-    </scroll-view>
 
-    <view v-if="bill.tradeTime" class="bill-detail-footer">
-      <view v-if="source === 'manual'" class="bill-detail-action-btn" @click="goToCopyAdd">
-        <u-icon name="copy" size="30" color="#007aff" custom-prefix="sharp-icon" />
-        <text class="bill-detail-action-text">复制新增</text>
-      </view>
-      <view class="bill-detail-action-btn" @click="goToEdit">
-        <u-icon name="edit-pen" size="30" color="#007aff" />
-        <text class="bill-detail-action-text">编辑</text>
-      </view>
-      <view v-if="source === 'manual'" class="bill-detail-action-btn bill-detail-action-btn-danger" @click="onDelete">
-        <u-icon name="trash" size="30" color="#dd524d" />
-        <text class="bill-detail-action-text bill-detail-action-text-danger">删除</text>
+            <template v-if="source === 'aliPay'">
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">商品说明</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.productDescription || '--' }}</text>
+              </view>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">收/付款方式</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.paymentMethod || '--' }}</text>
+              </view>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">对方账号</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.oppositeAccount || '--' }}</text>
+              </view>
+              <view v-if="bill.balanceBaby !== undefined && bill.balanceBaby !== null" class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">余额宝</text>
+                <text class="info-value" :class="{ dark: isDark }">¥{{ formatMoney(bill.balanceBaby) }}</text>
+              </view>
+            </template>
+
+            <template v-if="source === 'aliPay' || source === 'weChat' || source === 'manual'">
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">账单类型</text>
+                <text class="info-value type" :class="{ dark: isDark }">{{ billTypeLabel }}</text>
+              </view>
+            </template>
+
+            <template v-if="source === 'bank'">
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">凭证号码</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.voucherNo || '--' }}</text>
+              </view>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">对方账号</text>
+                <text class="info-value" :class="{ dark: isDark }">{{ bill.tradeOtherPersonAccount || '--' }}</text>
+              </view>
+              <template v-if="bill.isRetiredBankCard">
+                <view class="info-row" :class="{ dark: isDark }">
+                  <text class="info-label" :class="{ dark: isDark }">卡片状态</text>
+                  <text class="info-value error" :class="{ dark: isDark }">已报废</text>
+                </view>
+                <view v-if="bill.replaceCardNo" class="info-row" :class="{ dark: isDark }">
+                  <text class="info-label" :class="{ dark: isDark }">新卡号</text>
+                  <text class="info-value" :class="{ dark: isDark }">{{ bill.replaceCardNo }}</text>
+                </view>
+                <view v-if="bill.bankCardRemark" class="info-row" :class="{ dark: isDark }">
+                  <text class="info-label" :class="{ dark: isDark }">说明</text>
+                  <text class="info-value" :class="{ dark: isDark }">{{ bill.bankCardRemark }}</text>
+                </view>
+              </template>
+              <view class="info-row" :class="{ dark: isDark }">
+                <text class="info-label" :class="{ dark: isDark }">银行账单类型</text>
+                <text class="info-value type" :class="{ dark: isDark }">{{ bankBillTypeLabel }}</text>
+              </view>
+            </template>
+          </view>
+        </template>
+      </scroll-view>
+
+      <view v-if="bill.tradeTime" class="bill-detail-footer" :class="{ dark: isDark }">
+        <view v-if="source === 'manual'" class="bill-detail-action-btn" @click="goToCopyAdd">
+          <u-icon name="copy" size="30" color="#007aff" custom-prefix="sharp-icon" />
+          <text class="bill-detail-action-text">复制新增</text>
+        </view>
+        <view class="bill-detail-action-btn" @click="goToEdit">
+          <u-icon name="edit-pen" size="30" color="#007aff" />
+          <text class="bill-detail-action-text">编辑</text>
+        </view>
+        <view v-if="source === 'manual'" class="bill-detail-action-btn bill-detail-action-btn-danger" @click="onDelete">
+          <u-icon name="trash" size="30" color="#dd524d" />
+          <text class="bill-detail-action-text bill-detail-action-text-danger">删除</text>
+        </view>
       </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -161,10 +163,12 @@
   import { aggregateBillApi, manualBillApi } from '../../../api';
   import { consumeRefreshFlag, setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import { inflowOrOutflowOption } from '../../../../shared/src/constants/api-type';
   import type { ApiAggregateBillDetail } from '/#/api/blog/money/aggregate';
 
   const apiTypeStore = useApiTypeStore();
+  const { isDark, mode } = useAppTheme();
   const source = ref('');
   const id = ref('');
   const loading = ref(false);
@@ -295,6 +299,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .bill-detail-scroll {
@@ -340,6 +349,10 @@
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-top: 12rpx;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .bill-detail-tags {
@@ -360,6 +373,12 @@
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     background-color: #ffffff;
     border-top: 1rpx solid #e5e5e5;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+      border-top-color: $dark-border-color;
+    }
   }
 
   .bill-detail-action-btn {
@@ -391,6 +410,10 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &.dark {
+      border-bottom-color: $dark-border-color;
+    }
   }
 
   .info-label {
@@ -398,6 +421,10 @@
     font-size: $uni-font-size-base;
     color: $uni-text-color-grey;
     margin-right: 24rpx;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .info-value {
@@ -406,9 +433,17 @@
     text-align: right;
     word-break: break-all;
 
+    &.dark {
+      color: $dark-text-color;
+    }
+
     &.type {
       font-weight: bold;
       color: $uni-color-primary;
+
+      &.dark {
+        color: #4d9fff;
+      }
     }
 
     &.method {

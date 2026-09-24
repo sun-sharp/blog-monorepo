@@ -1,33 +1,41 @@
 <template>
-  <view class="category-page">
-    <list-page
-      ref="listPageRef"
-      :api-fn="categoryApi.getPage"
-      search-placeholder="搜索分类标签"
-      search-key="label"
-      :dropdown-items="dropdownItems"
-      show-fab
-      @fabClick="goToAdd"
-      @itemLongpress="onLongPress">
-      <template #default="{ list, longpress }">
-        <view v-for="item in list" :key="item.categoryId" class="category-item card" @click="goToEdit(item.categoryId)" @longpress="longpress(item)">
-          <view class="category-item-left">
-            <view class="category-item-icon" :style="{ background: getCategoryColor(item.type) }">
-              <u-icon name="tags" size="32" color="#fff" />
+  <u-config-provider :dark-mode="mode">
+    <view class="category-page" :class="{ dark: isDark }">
+      <list-page
+        ref="listPageRef"
+        :api-fn="categoryApi.getPage"
+        search-placeholder="搜索分类标签"
+        search-key="label"
+        :dropdown-items="dropdownItems"
+        show-fab
+        @fabClick="goToAdd"
+        @itemLongpress="onLongPress">
+        <template #default="{ list, longpress }">
+          <view
+            v-for="item in list"
+            :key="item.categoryId"
+            class="category-item card"
+            :class="{ dark: isDark }"
+            @click="goToEdit(item.categoryId)"
+            @longpress="longpress(item)">
+            <view class="category-item-left">
+              <view class="category-item-icon" :style="{ background: getCategoryColor(item.type) }">
+                <u-icon name="tags" size="32" color="#fff" />
+              </view>
+              <view class="category-item-info">
+                <text class="category-item-label" :class="{ dark: isDark }">{{ item.label }}</text>
+                <text class="category-item-type" :class="{ dark: isDark }">{{ getTypeLabel(item.type) }}</text>
+              </view>
             </view>
-            <view class="category-item-info">
-              <text class="category-item-label">{{ item.label }}</text>
-              <text class="category-item-type">{{ getTypeLabel(item.type) }}</text>
+            <view class="category-item-right">
+              <text class="category-item-value" :class="{ dark: isDark }">{{ item.valueStr || item.value }}</text>
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#ccc'" />
             </view>
           </view>
-          <view class="category-item-right">
-            <text class="category-item-value">{{ item.valueStr || item.value }}</text>
-            <u-icon name="arrow-right" size="28" color="#ccc" />
-          </view>
-        </view>
-      </template>
-    </list-page>
-  </view>
+        </template>
+      </list-page>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -38,11 +46,13 @@
   import { categoryApi } from '../../../api';
   import { categoryTypeOption } from '../../../../shared/src/constants/api-type';
   import { useApiTypeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import type { ApiCategoryItem } from '/#/api/capital/category';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
   const apiTypeStore = useApiTypeStore();
+  const { isDark, mode } = useAppTheme();
 
   useFilterBackPress(listPageRef);
 
@@ -116,6 +126,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .category-item {
@@ -160,6 +175,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .category-item-type {
@@ -167,6 +186,10 @@
     color: $uni-text-color-grey;
     margin-top: 6rpx;
     display: block;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .category-item-right {
@@ -179,5 +202,9 @@
   .category-item-value {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 </style>

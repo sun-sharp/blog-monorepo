@@ -8,6 +8,15 @@ page {
   -webkit-user-select: text;
 }
 
+.page-dark {
+  background-color: $dark-page-bg !important;
+  color: $dark-text-color;
+}
+
+.page-dark .card {
+  background-color: $dark-card-bg;
+}
+
 .container {
   padding: 20rpx;
 }
@@ -20,7 +29,7 @@ page {
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 
   &.dark {
-    background-color: $uni-bg-color-dark-2;
+    background-color: $dark-card-bg;
   }
 }
 
@@ -73,7 +82,7 @@ page {
   z-index: 99;
 
   &.dark {
-    background-color: $uni-bg-color-dark-2;
+    background-color: $dark-card-bg;
   }
 }
 

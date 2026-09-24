@@ -1,26 +1,29 @@
 <template>
-  <view class="article-page">
-    <view class="article-toolbar">
+  <view class="article-page" :class="{ dark: isDark }">
+    <view class="article-toolbar" :class="{ dark: isDark }">
       <u-search
         v-model="keyword"
         placeholder="搜索文章标题"
         shape="round"
         :show-action="true"
         action-text="搜索"
+        :bg-color="isDark ? '#2a2a2e' : '#f5f5f5'"
+        :input-color="isDark ? '#e8e8ea' : '#333'"
+        :color="isDark ? '#e8e8ea' : '#333'"
         @search="handleSearch"
         @custom="handleSearch"
         @clear="handleClear" />
       <view class="article-toolbar-actions">
         <view class="article-toolbar-btn" @click="openFilterPopup">
-          <u-icon name="setting" size="36" :color="hasActiveFilter ? '#007aff' : '#666'" />
+          <u-icon name="setting" size="36" :color="hasActiveFilter ? '#007aff' : isDark ? '#b0b3b8' : '#666'" />
         </view>
       </view>
     </view>
 
     <view v-if="activeFilterTags.length > 0" class="article-filter">
-      <view v-for="tag in activeFilterTags" :key="tag.field" class="article-filter-tag" @click="clearFilterTag(tag.field)">
-        <text class="article-filter-tag-text">{{ tag.label }}</text>
-        <u-icon name="close" size="24" color="#999" />
+      <view v-for="tag in activeFilterTags" :key="tag.field" class="article-filter-tag" :class="{ dark: isDark }" @click="clearFilterTag(tag.field)">
+        <text class="article-filter-tag-text" :class="{ dark: isDark }">{{ tag.label }}</text>
+        <u-icon name="close" size="24" :color="isDark ? '#7d8085' : '#999'" />
       </view>
     </view>
 
@@ -29,7 +32,7 @@
       class="article-list-scroll"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="black"
+      :refresher-default-style="isDark ? 'white' : 'black'"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
       <view v-if="loading && list.length === 0" class="article-loading">
@@ -40,30 +43,30 @@
         <u-empty mode="data" text="暂无文章" icon-size="160" />
       </view>
       <view v-if="list.length > 0" class="article-list">
-        <view v-for="item in list" :key="item.articleId" class="article-item card" @click="goToDetail(item.articleId)">
+        <view v-for="item in list" :key="item.articleId" class="article-item card" :class="{ dark: isDark }" @click="goToDetail(item.articleId)">
           <view class="article-item-main">
             <view class="article-item-icon" :class="item.isPrivate ? 'article-item-icon-private' : 'article-item-icon-public'">
               <u-icon :name="item.isPrivate ? 'lock' : 'file-text'" size="32" color="#fff" />
             </view>
             <view class="article-item-content">
               <view class="article-item-header">
-                <text class="article-item-title">{{ item.title }}</text>
+                <text class="article-item-title" :class="{ dark: isDark }">{{ item.title }}</text>
                 <u-tag v-if="item.isPrivate" text="加密" type="warning" size="mini" plain />
               </view>
-              <text v-if="item.brief" class="article-item-brief">{{ item.brief }}</text>
+              <text v-if="item.brief" class="article-item-brief" :class="{ dark: isDark }">{{ item.brief }}</text>
               <view class="article-item-footer">
                 <view class="article-item-meta">
-                  <u-icon name="calendar" size="22" color="#999" />
-                  <text class="article-item-time">{{ item.createTime?.slice(0, 10) }}</text>
+                  <u-icon name="calendar" size="22" :color="isDark ? '#7d8085' : '#999'" />
+                  <text class="article-item-time" :class="{ dark: isDark }">{{ item.createTime?.slice(0, 10) }}</text>
                 </view>
                 <view class="article-item-meta">
-                  <u-icon name="account" size="22" color="#999" />
-                  <text class="article-item-author">{{ item.authorNickname || '未知作者' }}</text>
+                  <u-icon name="account" size="22" :color="isDark ? '#7d8085' : '#999'" />
+                  <text class="article-item-author" :class="{ dark: isDark }">{{ item.authorNickname || '未知作者' }}</text>
                 </view>
               </view>
             </view>
           </view>
-          <view v-if="item.categoryVal" class="article-item-tags">
+          <view v-if="item.categoryVal" class="article-item-tags" :class="{ dark: isDark }">
             <u-tag :text="getCategoryLabel(item.categoryVal)" type="primary" size="mini" plain />
           </view>
         </view>
@@ -78,43 +81,43 @@
     <!-- #endif -->
 
     <u-popup v-model="showFilterPopup" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFilterPopup = false">
-      <view class="article-filter-popup">
+      <view class="article-filter-popup" :class="{ dark: isDark }">
         <view class="article-filter-popup-header">
-          <text class="article-filter-popup-title">筛选</text>
-          <view class="article-filter-popup-close" @click="showFilterPopup = false">
-            <u-icon name="close" size="36" color="#999" />
+          <text class="article-filter-popup-title" :class="{ dark: isDark }">筛选</text>
+          <view class="article-filter-popup-close" :class="{ dark: isDark }" @click="showFilterPopup = false">
+            <u-icon name="close" size="36" :color="isDark ? '#7d8085' : '#999'" />
           </view>
         </view>
         <scroll-view scroll-y class="article-filter-popup-body">
-          <view class="article-filter-popup-row">
+          <view class="article-filter-popup-row" :class="{ dark: isDark }">
             <view class="article-filter-popup-label-row">
-              <text class="article-filter-popup-label">分类</text>
-              <u-icon v-if="draftCategory" name="close-circle-fill" size="28" color="#999" @click="draftCategory = ''" />
+              <text class="article-filter-popup-label" :class="{ dark: isDark }">分类</text>
+              <u-icon v-if="draftCategory" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="draftCategory = ''" />
             </view>
-            <view class="article-filter-popup-select" @click="showCategorySelect = true">
-              <text :class="['article-filter-popup-select-value', !draftCategory && 'placeholder']">
+            <view class="article-filter-popup-select" :class="{ dark: isDark }" @click="showCategorySelect = true">
+              <text :class="['article-filter-popup-select-value', !draftCategory && 'placeholder', isDark && 'dark']">
                 {{ getCategoryOptionLabel(draftCategory) || '全部分类' }}
               </text>
-              <u-icon name="arrow-right" size="24" color="#999" />
+              <u-icon name="arrow-right" size="24" :color="isDark ? '#7d8085' : '#999'" />
             </view>
           </view>
-          <view class="article-filter-popup-row">
+          <view class="article-filter-popup-row" :class="{ dark: isDark }">
             <view class="article-filter-popup-label-row">
-              <text class="article-filter-popup-label">状态</text>
-              <u-icon v-if="draftStatus" name="close-circle-fill" size="28" color="#999" @click="draftStatus = 0" />
+              <text class="article-filter-popup-label" :class="{ dark: isDark }">状态</text>
+              <u-icon v-if="draftStatus" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="draftStatus = 0" />
             </view>
             <u-subsection
               :list="statusOptions"
               :current="draftStatus"
               mode="button"
               active-color="#007aff"
-              inactive-color="#666666"
-              bg-color="#f5f5f5"
+              :inactive-color="isDark ? '#b0b3b8' : '#666666'"
+              :bg-color="isDark ? '#2a2a2e' : '#f5f5f5'"
               size="mini"
               @change="onStatusChange" />
           </view>
         </scroll-view>
-        <view class="article-filter-popup-footer">
+        <view class="article-filter-popup-footer" :class="{ dark: isDark }">
           <u-button @click="clearAllFilters">重置</u-button>
           <u-button type="primary" @click="onFilterConfirm">确定</u-button>
         </view>
@@ -137,12 +140,14 @@
   import { consumeRefreshFlag } from '../../composables/useRefreshFlag';
   import { articleAPi } from '../../api';
   import { useApiTypeStore } from '../../store';
+  import { useAppTheme } from '../../composables/useAppTheme';
   import type { ApiLiteArticleItem } from '/#/api/blog/article';
   import OptionSelect from '../option-select/option-select.vue';
 
   const props = defineProps<{ active: boolean }>();
 
   const apiTypeStore = useApiTypeStore();
+  const { isDark } = useAppTheme();
 
   const keyword = ref('');
   const list = ref<ApiLiteArticleItem[]>([]);
@@ -355,6 +360,11 @@
     flex-direction: column;
     height: 100%;
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .article-toolbar {
@@ -363,6 +373,11 @@
     gap: 16rpx;
     padding: 16rpx 20rpx;
     background-color: $uni-bg-color;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .article-toolbar-actions {
@@ -394,11 +409,19 @@
     background-color: #e8f4fd;
     border-radius: 20rpx;
     padding: 8rpx 20rpx;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+    }
   }
 
   .article-filter-tag-text {
     font-size: 24rpx;
     color: #007aff;
+
+    &.dark {
+      color: #4d9fff;
+    }
   }
 
   .article-filter-popup {
@@ -408,6 +431,12 @@
     overflow: hidden;
     width: 100%;
     box-sizing: border-box;
+    background-color: $uni-bg-color;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
   }
 
   .article-filter-popup-header {
@@ -422,6 +451,10 @@
     font-size: 32rpx;
     font-weight: 600;
     color: $uni-text-color;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .article-filter-popup-close {
@@ -436,6 +469,10 @@
     justify-content: center;
     border-radius: 50%;
     background-color: #f5f5f5;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+    }
   }
 
   .article-filter-popup-body {
@@ -453,6 +490,10 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &.dark {
+      border-bottom-color: $dark-border-color;
+    }
   }
 
   .article-filter-popup-label-row {
@@ -465,6 +506,10 @@
   .article-filter-popup-label {
     font-size: 26rpx;
     color: #666;
+
+    &.dark {
+      color: $dark-text-color-2;
+    }
   }
 
   .article-filter-popup-select {
@@ -474,6 +519,10 @@
     padding: 16rpx 20rpx;
     background-color: #f5f5f5;
     border-radius: 12rpx;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .article-filter-popup-select-value {
@@ -481,6 +530,12 @@
     color: #333;
     &.placeholder {
       color: #999;
+    }
+    &.dark {
+      color: $dark-text-color;
+      &.placeholder {
+        color: $dark-text-color-3;
+      }
     }
   }
 
@@ -490,6 +545,10 @@
     padding: 20rpx 30rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     border-top: 1rpx solid #f0f0f0;
+
+    &.dark {
+      border-top-color: $dark-border-color;
+    }
   }
 
   .article-list-scroll {
@@ -576,6 +635,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .article-item-brief {
@@ -586,6 +649,10 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .article-item-footer {
@@ -604,11 +671,19 @@
   .article-item-time {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-placeholder;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .article-item-author {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-placeholder;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .article-item-tags {
@@ -618,6 +693,10 @@
     margin-top: 16rpx;
     padding-top: 16rpx;
     border-top: 1rpx solid #f0f0f0;
+
+    &.dark {
+      border-top-color: $dark-border-color;
+    }
   }
 
   .tab-article-fab {

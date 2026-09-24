@@ -1,34 +1,34 @@
 <template>
-  <scroll-view scroll-y class="home-page">
-    <view class="home-quick-nav card">
-      <text class="home-section-title">快捷功能</text>
+  <scroll-view scroll-y class="home-page" :class="{ dark: isDark }">
+    <view class="home-quick-nav card" :class="{ dark: isDark }">
+      <text class="home-section-title" :class="{ dark: isDark }">快捷功能</text>
       <u-grid :col="3" :border="false">
         <u-grid-item @click="navigateTo('/pages/blog/schedule/schedule')">
           <view class="nav-icon-wrap nav-icon-green">
             <u-icon name="calendar" size="40" color="#fff" />
           </view>
-          <text class="nav-label">日程</text>
+          <text class="nav-label" :class="{ dark: isDark }">日程</text>
         </u-grid-item>
         <u-grid-item @click="navigateTo('/pages/finance/upload/upload')">
           <view class="nav-icon-wrap nav-icon-orange">
             <u-icon name="download" size="40" color="#fff" />
           </view>
-          <text class="nav-label">导入</text>
+          <text class="nav-label" :class="{ dark: isDark }">导入</text>
         </u-grid-item>
         <u-grid-item @click="navigateTo('/pages/finance/summary/summary')">
           <view class="nav-icon-wrap nav-icon-blue">
             <u-icon name="grid" size="40" color="#fff" />
           </view>
-          <text class="nav-label">汇总</text>
+          <text class="nav-label" :class="{ dark: isDark }">汇总</text>
         </u-grid-item>
       </u-grid>
     </view>
 
-    <view class="home-stats card">
+    <view class="home-stats card" :class="{ dark: isDark }">
       <view class="home-stats-header">
         <view class="home-section-title-row">
           <u-icon name="trending-up" size="32" color="#007aff" />
-          <text class="home-section-title">数据统计</text>
+          <text class="home-section-title" :class="{ dark: isDark }">数据统计</text>
         </view>
       </view>
       <view v-if="statLoading" class="home-stats-center">
@@ -39,26 +39,26 @@
       </view>
       <view v-else class="home-stats-list">
         <view v-for="item in statItems" :key="item.label" class="home-stat-card">
-          <view class="home-stat-main" :class="{ 'home-stat-main-clickable': item.url || item.tab !== undefined }" @click="onStatClick(item)">
+          <view class="home-stat-main" :class="{ 'home-stat-main-clickable': item.url || item.tab !== undefined, dark: isDark }" @click="onStatClick(item)">
             <view :class="['home-stat-icon', item.theme]">
               <u-icon v-if="item.iconType === 'sharp-icon'" :name="item.icon" size="36" color="#fff" custom-prefix="sharp-icon" />
               <u-icon v-else :name="item.icon" size="36" color="#fff" />
             </view>
             <view class="home-stat-meta">
-              <text class="home-stat-value">{{ item.value }}</text>
-              <text class="home-stat-label">{{ item.label }}</text>
+              <text class="home-stat-value" :class="{ dark: isDark }">{{ item.value }}</text>
+              <text class="home-stat-label" :class="{ dark: isDark }">{{ item.label }}</text>
             </view>
-            <u-icon v-if="item.url || item.tab !== undefined" name="arrow-right" size="28" color="#ccc" />
+            <u-icon v-if="item.url || item.tab !== undefined" name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
-          <view v-if="item.children && item.children.length > 0" class="home-stat-children">
+          <view v-if="item.children && item.children.length > 0" class="home-stat-children" :class="{ dark: isDark }">
             <u-grid :col="item.gridCol || 2" :border="false">
               <u-grid-item v-for="child in item.children" :key="child.label" style="background-color: none" @click="onStatChildrenClick(child)">
                 <view class="home-stat-child-icon" :class="child.theme || 'nav-icon-green'">
                   <u-icon v-if="child.iconType === 'sharp-icon'" :name="child.icon" size="36" color="#fff" custom-prefix="sharp-icon" />
                   <u-icon v-else :name="child.icon" size="36" color="#fff" />
                 </view>
-                <text class="home-stat-child-label">{{ child.label }}</text>
-                <text class="home-stat-child-value">{{ child.count }}</text>
+                <text class="home-stat-child-label" :class="{ dark: isDark }">{{ child.label }}</text>
+                <text class="home-stat-child-value" :class="{ dark: isDark }">{{ child.count }}</text>
               </u-grid-item>
             </u-grid>
           </view>
@@ -73,6 +73,7 @@
   import { useUserStore } from '../../store';
   import { homeStatisticsApi } from '../../api';
   import { emitSwitchTab } from '../../composables/useTabBus';
+  import { useAppTheme } from '../../composables/useAppTheme';
   import type { ApiHomeStatistics, ApiHomeStatFinancialTypeCount, ApiHomeStatImageSourceCount } from '/#/api/blog/home-statistics';
 
   interface StatCardChildItem {
@@ -103,6 +104,7 @@
   const props = defineProps<{ active: boolean }>();
 
   const userStore = useUserStore();
+  const { isDark } = useAppTheme();
 
   const userInfo = computed(() => userStore.getUserInfo);
   const statData = ref<ApiHomeStatistics | null>(null);
@@ -338,6 +340,10 @@
     font-size: 30rpx;
     font-weight: 700;
     color: #1f2937;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .home-section-title-row {
@@ -372,6 +378,10 @@
     font-weight: 600;
     color: #374151;
     margin-top: 14rpx;
+
+    &.dark {
+      color: $dark-text-color-2;
+    }
   }
 
   .home-stats {
@@ -408,6 +418,11 @@
     border-radius: 16rpx;
     padding: 24rpx;
     background-color: #eef1f5;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+    }
   }
 
   // .home-stat-main-clickable:active {
@@ -455,6 +470,10 @@
     font-size: 36rpx;
     font-weight: 700;
     color: $uni-text-color;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .home-stat-label {
@@ -462,12 +481,20 @@
     font-weight: 500;
     color: #6b7280;
     margin-top: 6rpx;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .home-stat-children {
     margin-top: 16rpx;
     padding: 16rpx 24rpx;
     border-top: 1rpx solid #e5e5e5;
+
+    &.dark {
+      border-top-color: $dark-border-color;
+    }
   }
 
   .home-stat-child {
@@ -493,6 +520,10 @@
     color: #6b7280;
     margin-top: 12rpx;
     text-align: center;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .home-stat-child-value {
@@ -501,5 +532,9 @@
     color: $uni-text-color;
     margin-top: 2rpx;
     text-align: center;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 </style>

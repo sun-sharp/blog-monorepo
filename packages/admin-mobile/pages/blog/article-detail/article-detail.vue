@@ -1,68 +1,70 @@
 <template>
-  <view class="article-detail">
-    <scroll-view scroll-y class="article-detail-scroll">
-      <view v-if="loading" class="article-detail-loading">
-        <u-loading mode="circle" size="60" />
-        <text class="article-detail-loading-text">加载中...</text>
-      </view>
-
-      <template v-else-if="article">
-        <view class="article-detail-info card">
-          <view class="info-row">
-            <text class="info-label">标题</text>
-            <text class="info-value">{{ article.title || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">分类</text>
-            <text class="info-value">{{ categoryLabel || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">作者</text>
-            <text class="info-value">{{ article.authorNickname || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">创建时间</text>
-            <text class="info-value">{{ article.createTime?.slice(0, 10) || '--' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">是否加密</text>
-            <text class="info-value">{{ article.isPrivate ? '加密' : '公开' }}</text>
-          </view>
-          <view class="info-row">
-            <text class="info-label">文章css的名称</text>
-            <text class="info-value">{{ article.cssName }}</text>
-          </view>
-          <view v-if="article.brief" class="info-row">
-            <text class="info-label">简介</text>
-            <text class="info-value">{{ article.brief }}</text>
-          </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="article-detail" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="article-detail-scroll">
+        <view v-if="loading" class="article-detail-loading">
+          <u-loading mode="circle" size="60" />
+          <text class="article-detail-loading-text" :class="{ dark: isDark }">加载中...</text>
         </view>
 
-        <view class="article-detail-action">
-          <u-button type="primary" shape="circle" icon="eye" @click="goToHtmlCont(article.pid)">详细内容</u-button>
+        <template v-else-if="article">
+          <view class="article-detail-info card" :class="{ dark: isDark }">
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">标题</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ article.title || '--' }}</text>
+            </view>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">分类</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ categoryLabel || '--' }}</text>
+            </view>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">作者</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ article.authorNickname || '--' }}</text>
+            </view>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">创建时间</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ article.createTime?.slice(0, 10) || '--' }}</text>
+            </view>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">是否加密</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ article.isPrivate ? '加密' : '公开' }}</text>
+            </view>
+            <view class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">文章css的名称</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ article.cssName }}</text>
+            </view>
+            <view v-if="article.brief" class="info-row" :class="{ dark: isDark }">
+              <text class="info-label" :class="{ dark: isDark }">简介</text>
+              <text class="info-value" :class="{ dark: isDark }">{{ article.brief }}</text>
+            </view>
+          </view>
+
+          <view class="article-detail-action">
+            <u-button type="primary" shape="circle" icon="eye" @click="goToHtmlCont(article.pid)">详细内容</u-button>
+          </view>
+        </template>
+
+        <view v-else class="article-detail-empty">
+          <u-empty mode="data" text="文章不存在" />
         </view>
-      </template>
+      </scroll-view>
 
-      <view v-else class="article-detail-empty">
-        <u-empty mode="data" text="文章不存在" />
-      </view>
-    </scroll-view>
-
-    <view v-if="article" class="article-detail-footer">
-      <view class="article-detail-action-btn" @click="handleCopyMd">
-        <u-icon name="copy" size="30" color="#007aff" custom-prefix="sharp-icon" />
-        <text class="article-detail-action-text">复制内容</text>
-      </view>
-      <view class="article-detail-action-btn" @click="goToEdit">
-        <u-icon name="edit-pen" size="30" color="#007aff" />
-        <text class="article-detail-action-text">编辑</text>
-      </view>
-      <view class="article-detail-action-btn article-detail-action-btn-danger" @click="handleDelete">
-        <u-icon name="trash" size="30" color="#dd524d" />
-        <text class="article-detail-action-text article-detail-action-text-danger">删除</text>
+      <view v-if="article" class="article-detail-footer" :class="{ dark: isDark }">
+        <view class="article-detail-action-btn" @click="handleCopyMd">
+          <u-icon name="copy" size="30" color="#007aff" custom-prefix="sharp-icon" />
+          <text class="article-detail-action-text">复制内容</text>
+        </view>
+        <view class="article-detail-action-btn" @click="goToEdit">
+          <u-icon name="edit-pen" size="30" color="#007aff" />
+          <text class="article-detail-action-text">编辑</text>
+        </view>
+        <view class="article-detail-action-btn article-detail-action-btn-danger" @click="handleDelete">
+          <u-icon name="trash" size="30" color="#dd524d" />
+          <text class="article-detail-action-text article-detail-action-text-danger">删除</text>
+        </view>
       </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -71,9 +73,11 @@
   import { articleAPi } from '../../../api';
   import { setRefreshFlag, consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useApiTypeStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import type { ApiArticleMobileDetails } from '/#/api/blog/article';
 
   const apiTypeStore = useApiTypeStore();
+  const { isDark, mode } = useAppTheme();
   const article = ref<ApiArticleMobileDetails | null>(null);
   const loading = ref(true);
   const articleId = ref('');
@@ -165,6 +169,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .article-detail-scroll {
@@ -203,6 +212,10 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &.dark {
+      border-bottom-color: $dark-border-color;
+    }
   }
 
   .info-label {
@@ -210,6 +223,10 @@
     font-size: $uni-font-size-base;
     color: $uni-text-color-grey;
     margin-right: 24rpx;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .info-value {
@@ -217,6 +234,10 @@
     color: $uni-text-color;
     text-align: right;
     word-break: break-all;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .article-detail-action {
@@ -234,6 +255,12 @@
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     background-color: #ffffff;
     border-top: 1rpx solid #e5e5e5;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+      border-top-color: $dark-border-color;
+    }
   }
 
   .article-detail-action-btn {

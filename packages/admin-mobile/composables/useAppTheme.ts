@@ -15,18 +15,47 @@ function readMode(): AppDarkMode {
   return 'light';
 }
 
-const mode = ref<AppDarkMode>(readMode());
-
-const isDark = computed(() => {
-  if (mode.value === 'dark') return true;
-  if (mode.value === 'light') return false;
-  // auto：跟随系统
+function readSystemDark(): boolean {
   try {
     const sys = uni.getSystemInfoSync() as any;
     return sys?.theme === 'dark' || sys?.osTheme === 'dark';
   } catch {
     return false;
   }
+}
+
+const mode = ref<AppDarkMode>(readMode());
+const systemDark = ref(readSystemDark());
+
+// 监听系统主题变化（auto 模式实时响应）
+try {
+  uni.onThemeChange?.((res: { theme?: string }) => {
+    systemDark.value = res?.theme === 'dark';
+  });
+} catch {
+  // ignore
+}
+
+// #ifdef H5
+try {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const listener = () => {
+      systemDark.value = media.matches;
+    };
+    if (media.addEventListener) media.addEventListener('change', listener);
+    else if (media.addListener) media.addListener(listener);
+  }
+} catch {
+  // ignore
+}
+// #endif
+
+const isDark = computed(() => {
+  if (mode.value === 'dark') return true;
+  if (mode.value === 'light') return false;
+  // auto：跟随系统
+  return systemDark.value;
 });
 
 export function useAppTheme() {
@@ -50,6 +79,7 @@ export function useAppTheme() {
   return {
     mode,
     isDark,
+    systemDark,
     toggle,
     setDark,
     setMode,

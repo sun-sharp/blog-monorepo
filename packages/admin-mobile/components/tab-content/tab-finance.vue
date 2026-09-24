@@ -1,14 +1,14 @@
 <template>
-  <view class="finance-page">
-    <view class="finance-header card">
+  <view class="finance-page" :class="{ dark: isDark }">
+    <view class="finance-header card" :class="{ dark: isDark }">
       <view class="finance-summary-row">
         <view class="finance-summary-item">
-          <text class="finance-summary-label">总收入</text>
+          <text class="finance-summary-label" :class="{ dark: isDark }">总收入</text>
           <text class="finance-summary-value money-inflow">¥{{ inflowTotal }}</text>
         </view>
-        <view class="finance-summary-divider" />
+        <view class="finance-summary-divider" :class="{ dark: isDark }" />
         <view class="finance-summary-item">
-          <text class="finance-summary-label">总支出</text>
+          <text class="finance-summary-label" :class="{ dark: isDark }">总支出</text>
           <text class="finance-summary-value money-outflow">¥{{ outflowTotal }}</text>
         </view>
       </view>
@@ -21,28 +21,31 @@
         shape="round"
         :show-action="true"
         action-text="搜索"
+        :bg-color="isDark ? '#2a2a2e' : '#f5f5f5'"
+        :input-color="isDark ? '#e8e8ea' : '#333'"
+        :color="isDark ? '#e8e8ea' : '#333'"
         @search="handleSearch"
         @custom="handleSearch"
         @clear="handleClear" />
       <view class="finance-toolbar-actions">
         <view class="finance-toolbar-btn" @click="showTimeSelect = true">
-          <u-icon name="calendar" size="36" :color="timeLabel ? '#007aff' : '#666'" />
+          <u-icon name="calendar" size="36" :color="timeLabel ? '#007aff' : isDark ? '#b0b3b8' : '#666'" />
         </view>
         <view class="finance-toolbar-btn" @click="openFilterPopup">
-          <u-icon name="setting" size="36" :color="hasActiveFilter ? '#007aff' : '#666'" />
+          <u-icon name="setting" size="36" :color="hasActiveFilter ? '#007aff' : isDark ? '#b0b3b8' : '#666'" />
         </view>
       </view>
     </view>
 
     <view v-if="timeLabel || hasActiveFilter" class="finance-filter">
-      <view v-if="timeLabel" class="finance-filter-time-tag" @click="clearTimeRange">
+      <view v-if="timeLabel" class="finance-filter-time-tag" :class="{ dark: isDark }" @click="clearTimeRange">
         <u-icon name="calendar" size="24" color="#007aff" />
-        <text class="finance-filter-time-text">{{ timeLabel }}</text>
-        <u-icon name="close" size="24" color="#999" />
+        <text class="finance-filter-time-text" :class="{ dark: isDark }">{{ timeLabel }}</text>
+        <u-icon name="close" size="24" :color="isDark ? '#7d8085' : '#999'" />
       </view>
-      <view v-for="tag in activeFilterTags" :key="tag.field" class="finance-filter-time-tag" @click="clearFilterTag(tag.field)">
-        <text class="finance-filter-time-text">{{ tag.label }}</text>
-        <u-icon name="close" size="24" color="#999" />
+      <view v-for="tag in activeFilterTags" :key="tag.field" class="finance-filter-time-tag" :class="{ dark: isDark }" @click="clearFilterTag(tag.field)">
+        <text class="finance-filter-time-text" :class="{ dark: isDark }">{{ tag.label }}</text>
+        <u-icon name="close" size="24" :color="isDark ? '#7d8085' : '#999'" />
       </view>
     </view>
 
@@ -52,7 +55,7 @@
       :style="scrollStyle"
       :refresher-enabled="true"
       :refresher-triggered="isRefreshing"
-      refresher-default-style="black"
+      :refresher-default-style="isDark ? 'white' : 'black'"
       @refresherrefresh="onPullDownRefresh"
       @scrolltolower="onReachBottom">
       <view v-if="loading && list.length === 0" class="finance-loading">
@@ -65,35 +68,40 @@
       <view v-if="list.length > 0" class="finance-list">
         <template v-for="(group, date) in groupedByDate" :key="date">
           <view class="finance-date-header">
-            <text class="finance-date-text">{{ date }}</text>
+            <text class="finance-date-text" :class="{ dark: isDark }">{{ date }}</text>
           </view>
-          <view v-for="item in group" :key="`${item.source}_${item.billId}`" class="finance-bill-item card" @click="goToDetail(item)">
+          <view
+            v-for="item in group"
+            :key="`${item.source}_${item.billId}`"
+            class="finance-bill-item card"
+            :class="{ dark: isDark }"
+            @click="goToDetail(item)">
             <view class="finance-bill-left">
               <view :class="['finance-bill-icon', item.inflowOrOutflow === 1 ? 'finance-bill-icon-in' : 'finance-bill-icon-out']">
                 <u-icon :name="getSourceIcon(item.source)" size="32" color="#fff" />
               </view>
               <view class="finance-bill-info">
-                <text class="finance-bill-title">{{ item.tradeOtherPerson || item.explain || '--' }}</text>
+                <text class="finance-bill-title" :class="{ dark: isDark }">{{ item.tradeOtherPerson || item.explain || '--' }}</text>
                 <view class="finance-bill-sub-row">
-                  <text class="finance-bill-sub">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 19) || '' }}</text>
+                  <text class="finance-bill-sub" :class="{ dark: isDark }">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 19) || '' }}</text>
                 </view>
                 <view class="finance-bill-sub-row">
-                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
-                  <text v-if="getBalanceBabyLabel(item)" class="finance-bill-balance">余额宝 ¥{{ formatMoney(getBalanceBabyValue(item)) }}</text>
+                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance" :class="{ dark: isDark }">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
+                  <text v-if="getBalanceBabyLabel(item)" class="finance-bill-balance" :class="{ dark: isDark }">余额宝 ¥{{ formatMoney(getBalanceBabyValue(item)) }}</text>
                 </view>
                 <view
                   v-if="['aliPay', 'weChat'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item))"
                   class="finance-bill-sub-tag-row">
-                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
-                  <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
+                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag" :class="{ dark: isDark }">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getBillMethodLabel(item)" class="finance-bill-tag" :class="{ dark: isDark }">{{ getBillMethodLabel(item) }}</text>
                 </view>
                 <view v-if="['bank'].includes(item.source) && (getBillTypeLabel(item) || getBillBankTypeLabel(item))" class="finance-bill-sub-tag-row">
-                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
-                  <text v-if="getBillBankTypeLabel(item)" class="finance-bill-tag">{{ getBillBankTypeLabel(item) }}</text>
+                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag" :class="{ dark: isDark }">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getBillBankTypeLabel(item)" class="finance-bill-tag" :class="{ dark: isDark }">{{ getBillBankTypeLabel(item) }}</text>
                 </view>
                 <view v-if="['manual'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item))" class="finance-bill-sub-tag-row">
-                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag">{{ getBillTypeLabel(item) }}</text>
-                  <text v-if="getBillMethodLabel(item)" class="finance-bill-tag">{{ getBillMethodLabel(item) }}</text>
+                  <text v-if="getBillTypeLabel(item)" class="finance-bill-tag" :class="{ dark: isDark }">{{ getBillTypeLabel(item) }}</text>
+                  <text v-if="getBillMethodLabel(item)" class="finance-bill-tag" :class="{ dark: isDark }">{{ getBillMethodLabel(item) }}</text>
                 </view>
               </view>
             </view>
@@ -112,161 +120,161 @@
       <u-icon name="plus" size="44" color="#fff" />
     </view>
     <u-popup :model-value="showFabMenu" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFabMenu = false">
-      <view class="finance-fab-popup">
+      <view class="finance-fab-popup" :class="{ dark: isDark }">
         <view class="finance-fab-popup-header">
-          <text class="finance-fab-popup-title">快捷操作</text>
-          <view class="finance-fab-popup-close" @click="showFabMenu = false">
-            <u-icon name="close" size="36" color="#999" />
+          <text class="finance-fab-popup-title" :class="{ dark: isDark }">快捷操作</text>
+          <view class="finance-fab-popup-close" :class="{ dark: isDark }" @click="showFabMenu = false">
+            <u-icon name="close" size="36" :color="isDark ? '#7d8085' : '#999'" />
           </view>
         </view>
         <view class="finance-fab-popup-body">
-          <view class="finance-fab-action-item" @click="onFabAction('manual')">
-            <view class="finance-fab-action-icon" style="background-color: #eef2ff">
+          <view class="finance-fab-action-item" :class="{ dark: isDark }" @click="onFabAction('manual')">
+            <view class="finance-fab-action-icon" :style="{ backgroundColor: isDark ? 'rgba(99, 102, 241, 0.2)' : '#eef2ff' }">
               <u-icon name="edit-pen" size="40" color="#6366f1" />
             </view>
             <view class="finance-fab-action-content">
-              <text class="finance-fab-action-label">录入账单</text>
-              <text class="finance-fab-action-desc">人工录入一条账单</text>
+              <text class="finance-fab-action-label" :class="{ dark: isDark }">录入账单</text>
+              <text class="finance-fab-action-desc" :class="{ dark: isDark }">人工录入一条账单</text>
             </view>
-            <u-icon name="arrow-right" size="32" color="#ccc" />
+            <u-icon name="arrow-right" size="32" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
-          <view class="finance-fab-action-item" @click="onFabAction('upload')">
-            <view class="finance-fab-action-icon" style="background-color: #e8f4fd">
+          <view class="finance-fab-action-item" :class="{ dark: isDark }" @click="onFabAction('upload')">
+            <view class="finance-fab-action-icon" :style="{ backgroundColor: isDark ? 'rgba(0, 122, 255, 0.2)' : '#e8f4fd' }">
               <u-icon name="download" size="40" color="#007aff" />
             </view>
             <view class="finance-fab-action-content">
-              <text class="finance-fab-action-label">导入账单</text>
-              <text class="finance-fab-action-desc">上传银行/支付宝/微信账单</text>
+              <text class="finance-fab-action-label" :class="{ dark: isDark }">导入账单</text>
+              <text class="finance-fab-action-desc" :class="{ dark: isDark }">上传银行/支付宝/微信账单</text>
             </view>
-            <u-icon name="arrow-right" size="32" color="#ccc" />
+            <u-icon name="arrow-right" size="32" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
-          <view class="finance-fab-action-item" @click="onFabAction('summary')">
-            <view class="finance-fab-action-icon" style="background-color: #fef5e0">
+          <view class="finance-fab-action-item" :class="{ dark: isDark }" @click="onFabAction('summary')">
+            <view class="finance-fab-action-icon" :style="{ backgroundColor: isDark ? 'rgba(240, 173, 78, 0.2)' : '#fef5e0' }">
               <u-icon name="grid" size="40" color="#f0ad4e" />
             </view>
             <view class="finance-fab-action-content">
-              <text class="finance-fab-action-label">财务汇总</text>
-              <text class="finance-fab-action-desc">查看收支统计与图表分析</text>
+              <text class="finance-fab-action-label" :class="{ dark: isDark }">财务汇总</text>
+              <text class="finance-fab-action-desc" :class="{ dark: isDark }">查看收支统计与图表分析</text>
             </view>
-            <u-icon name="arrow-right" size="32" color="#ccc" />
+            <u-icon name="arrow-right" size="32" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
-          <view class="finance-fab-action-item" @click="onFabAction('weChatBalance')">
-            <view class="finance-fab-action-icon" style="background-color: #e8faf0">
+          <view class="finance-fab-action-item" :class="{ dark: isDark }" @click="onFabAction('weChatBalance')">
+            <view class="finance-fab-action-icon" :style="{ backgroundColor: isDark ? 'rgba(7, 193, 96, 0.2)' : '#e8faf0' }">
               <u-icon name="weixin-fill" size="40" color="#07c160" />
             </view>
             <view class="finance-fab-action-content">
-              <text class="finance-fab-action-label">处理零钱余额</text>
-              <text class="finance-fab-action-desc">按时间范围处理微信零钱余额</text>
+              <text class="finance-fab-action-label" :class="{ dark: isDark }">处理零钱余额</text>
+              <text class="finance-fab-action-desc" :class="{ dark: isDark }">按时间范围处理微信零钱余额</text>
             </view>
-            <u-icon name="arrow-right" size="32" color="#ccc" />
+            <u-icon name="arrow-right" size="32" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
-          <view class="finance-fab-action-item" @click="onFabAction('aliPayBalance')">
-            <view class="finance-fab-action-icon" style="background-color: #e8f4fd">
+          <view class="finance-fab-action-item" :class="{ dark: isDark }" @click="onFabAction('aliPayBalance')">
+            <view class="finance-fab-action-icon" :style="{ backgroundColor: isDark ? 'rgba(22, 119, 255, 0.2)' : '#e8f4fd' }">
               <u-icon name="zhifubao" size="40" color="#1677ff" />
             </view>
             <view class="finance-fab-action-content">
-              <text class="finance-fab-action-label">处理支付宝余额</text>
-              <text class="finance-fab-action-desc">按时间范围处理支付宝余额</text>
+              <text class="finance-fab-action-label" :class="{ dark: isDark }">处理支付宝余额</text>
+              <text class="finance-fab-action-desc" :class="{ dark: isDark }">按时间范围处理支付宝余额</text>
             </view>
-            <u-icon name="arrow-right" size="32" color="#ccc" />
+            <u-icon name="arrow-right" size="32" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
-          <view class="finance-fab-action-item" @click="onFabAction('aliPayBalanceBaby')">
-            <view class="finance-fab-action-icon" style="background-color: #fff3e0">
+          <view class="finance-fab-action-item" :class="{ dark: isDark }" @click="onFabAction('aliPayBalanceBaby')">
+            <view class="finance-fab-action-icon" :style="{ backgroundColor: isDark ? 'rgba(255, 153, 0, 0.2)' : '#fff3e0' }">
               <u-icon name="rmb-circle" size="40" color="#ff9900" />
             </view>
             <view class="finance-fab-action-content">
-              <text class="finance-fab-action-label">处理余额宝</text>
-              <text class="finance-fab-action-desc">按时间范围处理支付宝余额宝</text>
+              <text class="finance-fab-action-label" :class="{ dark: isDark }">处理余额宝</text>
+              <text class="finance-fab-action-desc" :class="{ dark: isDark }">按时间范围处理支付宝余额宝</text>
             </view>
-            <u-icon name="arrow-right" size="32" color="#ccc" />
+            <u-icon name="arrow-right" size="32" :color="isDark ? '#7d8085' : '#ccc'" />
           </view>
         </view>
       </view>
     </u-popup>
 
     <u-popup :model-value="showFilterPopup" mode="bottom" :border-radius="24" :safe-area-inset-bottom="true" @close="showFilterPopup = false">
-      <view class="finance-filter-popup">
+      <view class="finance-filter-popup" :class="{ dark: isDark }">
         <view class="finance-filter-popup-header">
-          <text class="finance-filter-popup-title">筛选</text>
-          <view class="finance-filter-popup-close" @click="showFilterPopup = false">
-            <u-icon name="close" size="36" color="#999" />
+          <text class="finance-filter-popup-title" :class="{ dark: isDark }">筛选</text>
+          <view class="finance-filter-popup-close" :class="{ dark: isDark }" @click="showFilterPopup = false">
+            <u-icon name="close" size="36" :color="isDark ? '#7d8085' : '#999'" />
           </view>
         </view>
         <scroll-view scroll-y class="finance-filter-popup-body">
-          <view class="finance-filter-popup-row">
-            <text class="finance-filter-popup-label">来源</text>
+          <view class="finance-filter-popup-row" :class="{ dark: isDark }">
+            <text class="finance-filter-popup-label" :class="{ dark: isDark }">来源</text>
             <u-subsection
               :list="sourceOptions"
               :current="currentSource"
               mode="button"
               active-color="#007aff"
-              inactive-color="#666666"
-              bg-color="#f5f5f5"
+              :inactive-color="isDark ? '#b0b3b8' : '#666666'"
+              :bg-color="isDark ? '#2a2a2e' : '#f5f5f5'"
               size="mini"
               @change="onSourceChange" />
           </view>
-          <view class="finance-filter-popup-row">
-            <text class="finance-filter-popup-label">收支</text>
+          <view class="finance-filter-popup-row" :class="{ dark: isDark }">
+            <text class="finance-filter-popup-label" :class="{ dark: isDark }">收支</text>
             <u-subsection
               :list="flowOptions"
               :current="currentFlow"
               mode="button"
               active-color="#007aff"
-              inactive-color="#666666"
-              bg-color="#f5f5f5"
+              :inactive-color="isDark ? '#b0b3b8' : '#666666'"
+              :bg-color="isDark ? '#2a2a2e' : '#f5f5f5'"
               size="mini"
               @change="onFlowChange" />
           </view>
-          <view v-if="currentSource !== 1" class="finance-filter-popup-row">
+          <view v-if="currentSource !== 1" class="finance-filter-popup-row" :class="{ dark: isDark }">
             <view class="finance-filter-popup-label-row">
-              <text class="finance-filter-popup-label">账单类型</text>
-              <u-icon v-if="filterBillType" name="close-circle-fill" size="28" color="#999" @click="filterBillType = undefined" />
+              <text class="finance-filter-popup-label" :class="{ dark: isDark }">账单类型</text>
+              <u-icon v-if="filterBillType" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="filterBillType = undefined" />
             </view>
-            <view class="finance-filter-popup-select" @click="openFilterSelect('billType')">
-              <text :class="['finance-filter-popup-select-value', !filterBillType && 'placeholder']">
+            <view class="finance-filter-popup-select" :class="{ dark: isDark }" @click="openFilterSelect('billType')">
+              <text :class="['finance-filter-popup-select-value', !filterBillType && 'placeholder', isDark && 'dark']">
                 {{ filterBillType ? getBillTypeOptionLabel(filterBillType) : '全部' }}
               </text>
-              <u-icon name="arrow-right" size="24" color="#999" />
+              <u-icon name="arrow-right" size="24" :color="isDark ? '#7d8085' : '#999'" />
             </view>
           </view>
-          <view v-if="currentSource !== 1" class="finance-filter-popup-row">
+          <view v-if="currentSource !== 1" class="finance-filter-popup-row" :class="{ dark: isDark }">
             <view class="finance-filter-popup-label-row">
-              <text class="finance-filter-popup-label">账单方式</text>
-              <u-icon v-if="filterBillMethod" name="close-circle-fill" size="28" color="#999" @click="filterBillMethod = undefined" />
+              <text class="finance-filter-popup-label" :class="{ dark: isDark }">账单方式</text>
+              <u-icon v-if="filterBillMethod" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="filterBillMethod = undefined" />
             </view>
-            <view class="finance-filter-popup-select" @click="openFilterSelect('billMethod')">
-              <text :class="['finance-filter-popup-select-value', !filterBillMethod && 'placeholder']">
+            <view class="finance-filter-popup-select" :class="{ dark: isDark }" @click="openFilterSelect('billMethod')">
+              <text :class="['finance-filter-popup-select-value', !filterBillMethod && 'placeholder', isDark && 'dark']">
                 {{ filterBillMethod ? getBillMethodOptionLabel(filterBillMethod) : '全部' }}
               </text>
-              <u-icon name="arrow-right" size="24" color="#999" />
+              <u-icon name="arrow-right" size="24" :color="isDark ? '#7d8085' : '#999'" />
             </view>
           </view>
-          <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row">
+          <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row" :class="{ dark: isDark }">
             <view class="finance-filter-popup-label-row">
-              <text class="finance-filter-popup-label">银行类型</text>
-              <u-icon v-if="filterBankType" name="close-circle-fill" size="28" color="#999" @click="filterBankType = undefined" />
+              <text class="finance-filter-popup-label" :class="{ dark: isDark }">银行类型</text>
+              <u-icon v-if="filterBankType" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="filterBankType = undefined" />
             </view>
-            <view class="finance-filter-popup-select" @click="openFilterSelect('bankType')">
-              <text :class="['finance-filter-popup-select-value', !filterBankType && 'placeholder']">
+            <view class="finance-filter-popup-select" :class="{ dark: isDark }" @click="openFilterSelect('bankType')">
+              <text :class="['finance-filter-popup-select-value', !filterBankType && 'placeholder', isDark && 'dark']">
                 {{ filterBankType ? getBankTypeOptionLabel(filterBankType) : '全部' }}
               </text>
-              <u-icon name="arrow-right" size="24" color="#999" />
+              <u-icon name="arrow-right" size="24" :color="isDark ? '#7d8085' : '#999'" />
             </view>
           </view>
-          <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row">
+          <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row" :class="{ dark: isDark }">
             <view class="finance-filter-popup-label-row">
-              <text class="finance-filter-popup-label">银行账单类型</text>
-              <u-icon v-if="filterBankBillType" name="close-circle-fill" size="28" color="#999" @click="filterBankBillType = undefined" />
+              <text class="finance-filter-popup-label" :class="{ dark: isDark }">银行账单类型</text>
+              <u-icon v-if="filterBankBillType" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="filterBankBillType = undefined" />
             </view>
-            <view class="finance-filter-popup-select" @click="openFilterSelect('bankBillType')">
-              <text :class="['finance-filter-popup-select-value', !filterBankBillType && 'placeholder']">
+            <view class="finance-filter-popup-select" :class="{ dark: isDark }" @click="openFilterSelect('bankBillType')">
+              <text :class="['finance-filter-popup-select-value', !filterBankBillType && 'placeholder', isDark && 'dark']">
                 {{ filterBankBillType ? getBillTypeOptionLabel(filterBankBillType) : '全部' }}
               </text>
-              <u-icon name="arrow-right" size="24" color="#999" />
+              <u-icon name="arrow-right" size="24" :color="isDark ? '#7d8085' : '#999'" />
             </view>
           </view>
         </scroll-view>
-        <view class="finance-filter-popup-footer">
+        <view class="finance-filter-popup-footer" :class="{ dark: isDark }">
           <u-button @click="clearAllFilters">重置</u-button>
           <u-button type="primary" @click="onFilterConfirm">确定</u-button>
         </view>
@@ -291,6 +299,7 @@
   import { consumeRefreshFlag } from '../../composables/useRefreshFlag';
   import { aggregateBillApi, weChatApi, aliPayApi } from '../../api';
   import { useApiTypeStore } from '../../store';
+  import { useAppTheme } from '../../composables/useAppTheme';
   import type { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
   import MoneyTimeSelect from '../money-time-select/money-time-select.vue';
   import OptionSelect from '../option-select/option-select.vue';
@@ -298,6 +307,7 @@
   const props = defineProps<{ active: boolean; externalFilter?: { source?: string; bankType?: number } | null }>();
 
   const apiTypeStore = useApiTypeStore();
+  const { isDark } = useAppTheme();
 
   const keyword = ref('');
   const list = ref<ApiAggregateBillItem[]>([]);
@@ -780,6 +790,11 @@
     flex-direction: column;
     height: 100%;
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .finance-header {
@@ -798,6 +813,10 @@
   .finance-summary-label {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
   .finance-summary-value {
     font-size: 36rpx;
@@ -808,6 +827,10 @@
     width: 2rpx;
     height: 60rpx;
     background-color: $uni-border-color;
+
+    &.dark {
+      background-color: $dark-border-color;
+    }
   }
   .finance-toolbar {
     display: flex;
@@ -845,11 +868,19 @@
     background-color: #e8f4fd;
     border-radius: 20rpx;
     padding: 8rpx 20rpx;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+    }
   }
 
   .finance-filter-time-text {
     font-size: 24rpx;
     color: #007aff;
+
+    &.dark {
+      color: #4d9fff;
+    }
   }
 
   .finance-filter-popup {
@@ -859,6 +890,12 @@
     overflow: hidden;
     width: 100%;
     box-sizing: border-box;
+    background-color: $uni-bg-color;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
   }
 
   .finance-filter-popup-header {
@@ -873,6 +910,10 @@
     font-size: 32rpx;
     font-weight: 600;
     color: $uni-text-color;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .finance-filter-popup-close {
@@ -887,6 +928,10 @@
     justify-content: center;
     border-radius: 50%;
     background-color: #f5f5f5;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+    }
   }
 
   .finance-filter-popup-body {
@@ -904,6 +949,10 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &.dark {
+      border-bottom-color: $dark-border-color;
+    }
   }
 
   .finance-filter-popup-label-row {
@@ -916,6 +965,10 @@
   .finance-filter-popup-label {
     font-size: 26rpx;
     color: #666;
+
+    &.dark {
+      color: $dark-text-color-2;
+    }
   }
 
   .finance-filter-popup-select {
@@ -925,6 +978,10 @@
     padding: 16rpx 20rpx;
     background-color: #f5f5f5;
     border-radius: 12rpx;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .finance-filter-popup-select-value {
@@ -932,6 +989,12 @@
     color: #333;
     &.placeholder {
       color: #999;
+    }
+    &.dark {
+      color: $dark-text-color;
+      &.placeholder {
+        color: $dark-text-color-3;
+      }
     }
   }
 
@@ -941,6 +1004,10 @@
     padding: 20rpx 30rpx;
     padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
     border-top: 1rpx solid #f0f0f0;
+
+    &.dark {
+      border-top-color: $dark-border-color;
+    }
   }
   .finance-list-scroll {
     flex: 1;
@@ -968,6 +1035,10 @@
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     font-weight: bold;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
   .finance-bill-item {
     display: flex;
@@ -1009,11 +1080,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
   .finance-bill-sub {
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     display: block;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
   .finance-bill-sub-tag-row,
   .finance-bill-sub-row {
@@ -1030,6 +1109,10 @@
     font-size: 22rpx;
     color: $uni-text-color-grey;
     flex-shrink: 0;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
   .finance-bill-tag {
     font-size: 20rpx;
@@ -1038,6 +1121,11 @@
     padding: 2rpx 12rpx;
     border-radius: 6rpx;
     max-width: 240rpx;
+
+    &.dark {
+      color: #4d9fff;
+      background-color: rgba(0, 122, 255, 0.15);
+    }
   }
   .finance-bill-right {
     flex-shrink: 0;
@@ -1063,6 +1151,12 @@
 
   .finance-fab-popup {
     padding: 0;
+    background-color: $uni-bg-color;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
 
     .finance-fab-popup-header {
       display: flex;
@@ -1076,6 +1170,10 @@
         font-size: 32rpx;
         font-weight: 600;
         color: $uni-text-color;
+
+        &.dark {
+          color: $dark-text-color;
+        }
       }
 
       .finance-fab-popup-close {
@@ -1090,6 +1188,14 @@
         justify-content: center;
         border-radius: 50%;
         background-color: #f5f5f5;
+
+        &.dark {
+          background-color: $dark-chip-bg;
+        }
+      }
+
+      &.dark {
+        border-bottom-color: $dark-border-color;
       }
     }
 
@@ -1105,6 +1211,12 @@
 
         &:active {
           background-color: #f8f8f8;
+        }
+
+        &.dark {
+          &:active {
+            background-color: $dark-hover-bg;
+          }
         }
 
         .finance-fab-action-icon {
@@ -1126,6 +1238,10 @@
             font-weight: 500;
             color: $uni-text-color;
             display: block;
+
+            &.dark {
+              color: $dark-text-color;
+            }
           }
 
           .finance-fab-action-desc {
@@ -1133,6 +1249,10 @@
             color: $uni-text-color-placeholder;
             margin-top: 6rpx;
             display: block;
+
+            &.dark {
+              color: $dark-text-color-3;
+            }
           }
         }
       }

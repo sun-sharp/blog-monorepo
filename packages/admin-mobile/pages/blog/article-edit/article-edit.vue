@@ -1,135 +1,137 @@
 <template>
-  <view class="article-edit-page">
-    <scroll-view scroll-y class="article-edit-scroll">
-      <!-- 基本信息 -->
-      <view class="article-edit-card">
-        <view class="article-edit-section-header">
-          <u-icon name="file-text" size="36rpx" color="#007aff" />
-          <text class="article-edit-section-title">基本信息</text>
-        </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="article-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="article-edit-scroll">
+        <!-- 基本信息 -->
+        <view class="article-edit-card" :class="{ dark: isDark }">
+          <view class="article-edit-section-header" :class="{ dark: isDark }">
+            <u-icon name="file-text" size="36rpx" color="#007aff" />
+            <text class="article-edit-section-title" :class="{ dark: isDark }">基本信息</text>
+          </view>
         <view class="article-edit-form">
           <view class="article-edit-field">
             <view class="article-edit-label-wrap">
               <text class="article-edit-required">*</text>
-              <text class="article-edit-label">标题</text>
+              <text class="article-edit-label" :class="{ dark: isDark }">标题</text>
             </view>
             <u-input v-model="form.title" placeholder="请输入文章标题" border clearable :cursor-spacing="20" />
           </view>
           <view class="article-edit-field">
             <view class="article-edit-label-wrap">
               <text class="article-edit-required">*</text>
-              <text class="article-edit-label">简介</text>
+              <text class="article-edit-label" :class="{ dark: isDark }">简介</text>
             </view>
             <u-textarea v-model="form.brief" placeholder="用一段话简短介绍这篇文章..." :maxlength="300" count auto-height :cursor-spacing="20" />
           </view>
         </view>
       </view>
 
-      <!-- 文章设置 -->
-      <view class="article-edit-card">
-        <view class="article-edit-section-header">
-          <u-icon name="setting" size="36rpx" color="#007aff" />
-          <text class="article-edit-section-title">文章设置</text>
-        </view>
-        <view class="article-edit-form">
-          <view class="article-edit-field article-edit-field-row" @click="showCategory = true">
-            <view class="article-edit-label-wrap">
-              <text class="article-edit-required">*</text>
-              <text class="article-edit-label">分类</text>
-            </view>
-            <view class="article-edit-field-value">
-              <text :class="{ 'article-edit-placeholder': !categoryLabel }">
-                {{ categoryLabel || '请选择分类' }}
-              </text>
-              <u-icon name="arrow-right" size="32rpx" color="#c0c4cc" />
-            </view>
+        <!-- 文章设置 -->
+        <view class="article-edit-card" :class="{ dark: isDark }">
+          <view class="article-edit-section-header" :class="{ dark: isDark }">
+            <u-icon name="setting" size="36rpx" color="#007aff" />
+            <text class="article-edit-section-title" :class="{ dark: isDark }">文章设置</text>
           </view>
-          <view class="article-edit-field article-edit-field-row" @click="showCssName = true">
-            <view class="article-edit-label-wrap">
-              <text class="article-edit-required">*</text>
-              <text class="article-edit-label">文章css名称</text>
-            </view>
-            <view class="article-edit-field-value">
-              <text :class="{ 'article-edit-placeholder': !cssNameLabel }">
-                {{ cssNameLabel || '请选择css名称' }}
-              </text>
-              <u-icon name="arrow-right" size="32rpx" color="#c0c4cc" />
-            </view>
-          </view>
-          <view class="article-edit-field article-edit-field-row">
-            <text class="article-edit-label">加密</text>
-            <view class="article-edit-field-value">
-              <text v-if="form.isPrivate" class="article-edit-tip">开启后仅自己可见</text>
-              <u-switch v-model="form.isPrivate" active-color="#f0ad4e" />
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 文章内容 -->
-      <view v-if="showMdSection" class="article-edit-card">
-        <view class="article-edit-section-header">
-          <u-icon name="file-text" size="36rpx" color="#007aff" />
-          <text class="article-edit-section-title">文章内容</text>
-        </view>
-        <view class="article-edit-form">
-          <!-- 选择文件 -->
-          <view class="upload-action">
-            <u-button type="primary" icon="file-text" :disabled="uploading" @click="chooseMdFile">选择文件</u-button>
-            <text class="upload-tip">支持 .md、.markdown、.txt 格式文件</text>
-          </view>
-
-          <!-- 已选文件展示（账单上传样式） -->
-          <view v-if="mdFileName" class="upload-file">
-            <view class="upload-file-info">
-              <u-icon name="file-text" size="40" color="#007aff" />
-              <view class="upload-file-detail">
-                <text class="upload-file-name">{{ mdFileName }}</text>
-                <text class="upload-file-size">已选择文件</text>
+          <view class="article-edit-form">
+            <view class="article-edit-field article-edit-field-row" @click="showCategory = true">
+              <view class="article-edit-label-wrap">
+                <text class="article-edit-required">*</text>
+                <text class="article-edit-label" :class="{ dark: isDark }">分类</text>
               </view>
-              <u-icon name="close" color="#999" @click.stop="clearMdContent" />
+              <view class="article-edit-field-value">
+                <text :class="{ 'article-edit-placeholder': !categoryLabel, dark: isDark }">
+                  {{ categoryLabel || '请选择分类' }}
+                </text>
+                <u-icon name="arrow-right" size="32rpx" :color="isDark ? '#7d8085' : '#c0c4cc'" />
+              </view>
+            </view>
+            <view class="article-edit-field article-edit-field-row" @click="showCssName = true">
+              <view class="article-edit-label-wrap">
+                <text class="article-edit-required">*</text>
+                <text class="article-edit-label" :class="{ dark: isDark }">文章css名称</text>
+              </view>
+              <view class="article-edit-field-value">
+                <text :class="{ 'article-edit-placeholder': !cssNameLabel, dark: isDark }">
+                  {{ cssNameLabel || '请选择css名称' }}
+                </text>
+                <u-icon name="arrow-right" size="32rpx" :color="isDark ? '#7d8085' : '#c0c4cc'" />
+              </view>
+            </view>
+            <view class="article-edit-field article-edit-field-row">
+              <text class="article-edit-label" :class="{ dark: isDark }">加密</text>
+              <view class="article-edit-field-value">
+                <text v-if="form.isPrivate" class="article-edit-tip" :class="{ dark: isDark }">开启后仅自己可见</text>
+                <u-switch v-model="form.isPrivate" active-color="#f0ad4e" />
+              </view>
             </view>
           </view>
+        </view>
 
-          <!-- 上传进度 -->
-          <view v-if="uploading" class="upload-progress">
-            <u-line-progress :percent="uploadProg" active-color="#007aff" />
-            <text class="upload-progress-text">解析中...</text>
+        <!-- 文章内容 -->
+        <view v-if="showMdSection" class="article-edit-card" :class="{ dark: isDark }">
+          <view class="article-edit-section-header" :class="{ dark: isDark }">
+            <u-icon name="file-text" size="36rpx" color="#007aff" />
+            <text class="article-edit-section-title" :class="{ dark: isDark }">文章内容</text>
           </view>
+          <view class="article-edit-form">
+            <!-- 选择文件 -->
+            <view class="upload-action">
+              <u-button type="primary" icon="file-text" :disabled="uploading" @click="chooseMdFile">选择文件</u-button>
+              <text class="upload-tip" :class="{ dark: isDark }">支持 .md、.markdown、.txt 格式文件</text>
+            </view>
 
-          <!-- 预览按钮 -->
-          <view v-if="hasMdContent && !uploading" class="preview-action">
-            <u-button type="primary" plain icon="eye" @click="handlePreviewMd">预览</u-button>
+            <!-- 已选文件展示（账单上传样式） -->
+            <view v-if="mdFileName" class="upload-file" :class="{ dark: isDark }">
+              <view class="upload-file-info">
+                <u-icon name="file-text" size="40" color="#007aff" />
+                <view class="upload-file-detail">
+                  <text class="upload-file-name" :class="{ dark: isDark }">{{ mdFileName }}</text>
+                  <text class="upload-file-size" :class="{ dark: isDark }">已选择文件</text>
+                </view>
+                <u-icon name="close" :color="isDark ? '#7d8085' : '#999'" @click.stop="clearMdContent" />
+              </view>
+            </view>
+
+            <!-- 上传进度 -->
+            <view v-if="uploading" class="upload-progress">
+              <u-line-progress :percent="uploadProg" active-color="#007aff" />
+              <text class="upload-progress-text" :class="{ dark: isDark }">解析中...</text>
+            </view>
+
+            <!-- 预览按钮 -->
+            <view v-if="hasMdContent && !uploading" class="preview-action">
+              <u-button type="primary" plain icon="eye" @click="handlePreviewMd">预览</u-button>
+            </view>
           </view>
         </view>
-      </view>
 
-      <!-- 保存按钮 -->
-      <view class="article-edit-footer">
-        <view class="article-edit-save-btn" @click="handleSave">
-          <u-loading v-if="loading" mode="circle" size="32rpx" color="#fff" />
-          <u-icon v-else name="checkmark-circle" size="36rpx" color="#fff" />
-          <text class="article-edit-save-text">{{ loading ? '保存中...' : '保存文章' }}</text>
+        <!-- 保存按钮 -->
+        <view class="article-edit-footer" :class="{ dark: isDark }">
+          <view class="article-edit-save-btn" @click="handleSave">
+            <u-loading v-if="loading" mode="circle" size="32rpx" color="#fff" />
+            <u-icon v-else name="checkmark-circle" size="36rpx" color="#fff" />
+            <text class="article-edit-save-text">{{ loading ? '保存中...' : '保存文章' }}</text>
+          </view>
         </view>
-      </view>
 
-      <option-select
-        ref="categoryRef"
-        v-model="showCategory"
-        title="选择分类"
-        :list="categoryRange"
-        :current-value="form.categoryVal ?? undefined"
-        @confirm="onCategoryConfirm" />
+        <option-select
+          ref="categoryRef"
+          v-model="showCategory"
+          title="选择分类"
+          :list="categoryRange"
+          :current-value="form.categoryVal ?? undefined"
+          @confirm="onCategoryConfirm" />
 
-      <option-select
-        ref="cssNameRef"
-        v-model="showCssName"
-        title="选择css名称"
-        :list="cssNameRange"
-        :current-value="form.cssName || undefined"
-        @confirm="onCssNameConfirm" />
-    </scroll-view>
-  </view>
+        <option-select
+          ref="cssNameRef"
+          v-model="showCssName"
+          title="选择css名称"
+          :list="cssNameRange"
+          :current-value="form.cssName || undefined"
+          @confirm="onCssNameConfirm" />
+      </scroll-view>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -139,9 +141,11 @@
   import OptionSelect from '../../../components/option-select/option-select.vue';
   import { articleAPi, articleCssApi } from '../../../api';
   import { useApiTypeStore, useUserStore } from '../../../store';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import { UploadMdResult } from '/#/api';
 
   const userStore = useUserStore();
+  const { isDark, mode } = useAppTheme();
 
   const apiTypeStore = useApiTypeStore();
   const loading = ref(false);
@@ -463,6 +467,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .article-edit-scroll {
@@ -480,6 +489,11 @@
     padding: 30rpx;
     margin-bottom: 20rpx;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
   }
 
   .article-edit-section-header {
@@ -489,12 +503,20 @@
     padding-bottom: 24rpx;
     margin-bottom: 24rpx;
     border-bottom: 1rpx solid #f0f0f0;
+
+    &.dark {
+      border-bottom-color: $dark-border-color;
+    }
   }
 
   .article-edit-section-title {
     font-size: 30rpx;
     font-weight: 600;
     color: $uni-text-color;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .article-edit-form {
@@ -528,6 +550,10 @@
     color: $uni-text-color;
     font-weight: 500;
     flex-shrink: 0;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .article-edit-field-row {
@@ -549,6 +575,10 @@
     .article-edit-label {
       margin-bottom: 0;
     }
+
+    &.dark {
+      border-bottom-color: $dark-border-color;
+    }
   }
 
   .article-edit-field-value {
@@ -557,15 +587,27 @@
     gap: 8rpx;
     font-size: 26rpx;
     color: $uni-text-color;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .article-edit-placeholder {
     color: $uni-text-color-placeholder;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .article-edit-tip {
     font-size: 22rpx;
     color: $uni-text-color-grey;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .article-edit-footer {
@@ -580,6 +622,12 @@
     background-color: $uni-bg-color;
     border-top: 1rpx solid #e5e5e5;
     z-index: 100;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-card-bg;
+      border-top-color: $dark-border-color;
+    }
   }
 
   .article-edit-save-btn {
@@ -612,6 +660,10 @@
     font-size: $uni-font-size-sm;
     color: $uni-text-color-grey;
     margin-top: 16rpx;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .upload-file {
@@ -619,6 +671,11 @@
     margin-bottom: 20rpx;
     background-color: $uni-bg-color;
     border-radius: 16rpx;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .upload-file-info {
@@ -634,6 +691,10 @@
   .upload-file-name {
     font-size: $uni-font-size-base;
     display: block;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .upload-file-size {
@@ -641,6 +702,10 @@
     color: $uni-text-color-grey;
     display: block;
     margin-top: 4rpx;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .upload-progress {
@@ -653,6 +718,10 @@
     margin-top: 12rpx;
     text-align: center;
     display: block;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .preview-action {

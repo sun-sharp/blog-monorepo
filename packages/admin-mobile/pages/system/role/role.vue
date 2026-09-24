@@ -1,32 +1,34 @@
 <template>
-  <view class="role-page">
-    <list-page
-      ref="listPageRef"
-      :api-fn="roleApi.getPage"
-      search-placeholder="搜索角色"
-      search-key="name"
-      show-fab
-      @fabClick="goToAdd"
-      @itemLongpress="onLongPress">
-      <template #default="{ list, longpress }">
-        <view v-for="item in list" :key="item.roleId" class="role-item card" @click="goToEdit(item.roleId)" @longpress="longpress(item)">
-          <view class="role-item-left">
-            <view class="role-item-icon">
-              <u-icon name="account" size="32" color="#fff" />
+  <u-config-provider :dark-mode="mode">
+    <view class="role-page" :class="{ dark: isDark }">
+      <list-page
+        ref="listPageRef"
+        :api-fn="roleApi.getPage"
+        search-placeholder="搜索角色"
+        search-key="name"
+        show-fab
+        @fabClick="goToAdd"
+        @itemLongpress="onLongPress">
+        <template #default="{ list, longpress }">
+          <view v-for="item in list" :key="item.roleId" class="role-item card" :class="{ dark: isDark }" @click="goToEdit(item.roleId)" @longpress="longpress(item)">
+            <view class="role-item-left">
+              <view class="role-item-icon">
+                <u-icon name="account" size="32" color="#fff" />
+              </view>
+              <view class="role-item-info">
+                <text class="role-item-name" :class="{ dark: isDark }">{{ item.name }}</text>
+                <text class="role-item-code" :class="{ dark: isDark }">{{ item.roleCode }}</text>
+              </view>
             </view>
-            <view class="role-item-info">
-              <text class="role-item-name">{{ item.name }}</text>
-              <text class="role-item-code">{{ item.roleCode }}</text>
+            <view class="role-item-right">
+              <u-tag :text="roleTypeObj[item.roleType] || '未知'" type="info" size="mini" plain />
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#ccc'" />
             </view>
           </view>
-          <view class="role-item-right">
-            <u-tag :text="roleTypeObj[item.roleType] || '未知'" type="info" size="mini" plain />
-            <u-icon name="arrow-right" size="28" color="#ccc" />
-          </view>
-        </view>
-      </template>
-    </list-page>
-  </view>
+        </template>
+      </list-page>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -35,11 +37,13 @@
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { roleApi } from '../../../api';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
   import type { ApiRoleItem } from '/#/api/capital/role';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
+  const { isDark, mode } = useAppTheme();
 
   useFilterBackPress(listPageRef);
 
@@ -81,6 +85,12 @@
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
+    background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .role-item {
@@ -130,6 +140,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .role-item-code {
@@ -137,6 +151,10 @@
     color: $uni-text-color-grey;
     margin-top: 6rpx;
     display: block;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .role-item-right {

@@ -1,47 +1,49 @@
 <template>
-  <view class="user-edit-page">
-    <scroll-view scroll-y class="user-edit-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="user-edit-card card">
-          <text class="user-edit-section-title">基本信息</text>
-          <u-form-item label="昵称" prop="nickname" required>
-            <u-input v-model="form.nickname" placeholder="请输入昵称" :disabled="isEdit" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="用户名" prop="username" required>
-            <u-input v-model="form.username" placeholder="请输入用户名" :disabled="isEdit" :cursor-spacing="20" />
-          </u-form-item>
-        </view>
+  <u-config-provider :dark-mode="mode">
+    <view class="user-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="user-edit-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="user-edit-card card" :class="{ dark: isDark }">
+            <text class="user-edit-section-title" :class="{ dark: isDark }">基本信息</text>
+            <u-form-item label="昵称" prop="nickname" required>
+              <u-input v-model="form.nickname" placeholder="请输入昵称" :disabled="isEdit" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="用户名" prop="username" required>
+              <u-input v-model="form.username" placeholder="请输入用户名" :disabled="isEdit" :cursor-spacing="20" />
+            </u-form-item>
+          </view>
 
-        <view class="user-edit-card card">
-          <text class="user-edit-section-title">角色设置</text>
-          <u-form-item label="角色" prop="roleCode" required>
-            <view class="user-edit-select" @click="showRoleSelect = true">
-              <text :class="form.roleCode ? 'user-edit-select-value' : 'user-edit-select-placeholder'">
-                {{ roleLabel || '请选择角色' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </u-form-item>
-        </view>
+          <view class="user-edit-card card" :class="{ dark: isDark }">
+            <text class="user-edit-section-title" :class="{ dark: isDark }">角色设置</text>
+            <u-form-item label="角色" prop="roleCode" required>
+              <view class="user-edit-select" :class="{ dark: isDark }" @click="showRoleSelect = true">
+                <text :class="form.roleCode ? 'user-edit-select-value' : 'user-edit-select-placeholder'">
+                  {{ roleLabel || '请选择角色' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#999'" />
+              </view>
+            </u-form-item>
+          </view>
 
-        <view v-if="!isEdit" class="user-edit-card card">
-          <text class="user-edit-section-title">密码设置</text>
-          <u-form-item label="密码" prop="password" required>
-            <u-input v-model="form.password" type="password" placeholder="请输入密码" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="确认密码" prop="verifyPassword" required>
-            <u-input v-model="form.verifyPassword" type="password" placeholder="请再次输入密码" :cursor-spacing="20" />
-          </u-form-item>
-        </view>
-      </u-form>
-    </scroll-view>
+          <view v-if="!isEdit" class="user-edit-card card" :class="{ dark: isDark }">
+            <text class="user-edit-section-title" :class="{ dark: isDark }">密码设置</text>
+            <u-form-item label="密码" prop="password" required>
+              <u-input v-model="form.password" type="password" placeholder="请输入密码" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="确认密码" prop="verifyPassword" required>
+              <u-input v-model="form.verifyPassword" type="password" placeholder="请再次输入密码" :cursor-spacing="20" />
+            </u-form-item>
+          </view>
+        </u-form>
+      </scroll-view>
 
-    <u-select v-model="showRoleSelect" :list="roleList" title="选择角色" @confirm="onRoleConfirm" />
+      <u-select v-model="showRoleSelect" :list="roleList" title="选择角色" @confirm="onRoleConfirm" />
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -49,6 +51,9 @@
   import { setRefreshFlag } from '../../../composables/useRefreshFlag';
   import { onLoad } from '@dcloudio/uni-app';
   import { userApi, roleApi, capitalApi } from '../../../api';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const formRef = ref();
   const loading = ref(false);
@@ -158,6 +163,11 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .user-edit-scroll {
@@ -178,6 +188,10 @@
     color: $uni-text-color;
     display: block;
     margin-bottom: 20rpx;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .user-edit-select {
@@ -188,6 +202,10 @@
     padding: 0 24rpx;
     background-color: #f5f5f5;
     border-radius: 12rpx;
+
+    &.dark {
+      background-color: $dark-input-bg;
+    }
   }
 
   .user-edit-select-value {

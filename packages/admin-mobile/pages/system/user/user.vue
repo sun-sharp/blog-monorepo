@@ -1,30 +1,38 @@
 <template>
-  <view class="user-page">
-    <list-page
-      ref="listPageRef"
-      :api-fn="userApi.getPage"
-      search-placeholder="搜索昵称/用户名"
-      :search-key="searchKey"
-      show-fab
-      @fabClick="goToAdd"
-      @itemLongpress="onLongPress">
-      <template #default="{ list, longpress }">
-        <view v-for="item in list" :key="item.userId" class="user-item card" @click="goToEdit(item.userId)" @longpress="longpress(item)">
-          <view class="user-item-left">
-            <u-avatar :src="item.avatar" size="76" />
-            <view class="user-item-info">
-              <text class="user-item-name">{{ item.nickname || item.username }}</text>
-              <text class="user-item-username">@{{ item.username }}</text>
+  <u-config-provider :dark-mode="mode">
+    <view class="user-page" :class="{ dark: isDark }">
+      <list-page
+        ref="listPageRef"
+        :api-fn="userApi.getPage"
+        search-placeholder="搜索昵称/用户名"
+        :search-key="searchKey"
+        show-fab
+        @fabClick="goToAdd"
+        @itemLongpress="onLongPress">
+        <template #default="{ list, longpress }">
+          <view
+            v-for="item in list"
+            :key="item.userId"
+            class="user-item card"
+            :class="{ dark: isDark }"
+            @click="goToEdit(item.userId)"
+            @longpress="longpress(item)">
+            <view class="user-item-left">
+              <u-avatar :src="item.avatar" size="76" />
+              <view class="user-item-info">
+                <text class="user-item-name" :class="{ dark: isDark }">{{ item.nickname || item.username }}</text>
+                <text class="user-item-username" :class="{ dark: isDark }">@{{ item.username }}</text>
+              </view>
+            </view>
+            <view class="user-item-right">
+              <u-tag :text="item.roleCode" type="primary" size="mini" plain />
+              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#ccc'" />
             </view>
           </view>
-          <view class="user-item-right">
-            <u-tag :text="item.roleCode" type="primary" size="mini" plain />
-            <u-icon name="arrow-right" size="28" color="#ccc" />
-          </view>
-        </view>
-      </template>
-    </list-page>
-  </view>
+        </template>
+      </list-page>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -33,11 +41,13 @@
   import { consumeRefreshFlag } from '../../../composables/useRefreshFlag';
   import { useFilterBackPress } from '../../../composables/useFilterBackPress';
   import { userApi } from '../../../api';
+  import { useAppTheme } from '../../../composables/useAppTheme';
   import type { ApiUserItem } from '/#/api/capital/user';
   import ListPage from '../../../components/list-page/list-page.vue';
 
   const listPageRef = ref();
   const searchKey = 'nickname';
+  const { isDark, mode } = useAppTheme();
 
   useFilterBackPress(listPageRef);
 
@@ -74,6 +84,12 @@
     /* #ifdef H5 */
     height: 100%;
     /* #endif */
+    background-color: $uni-bg-color-grey;
+    transition: background-color 0.2s;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .user-item {
@@ -112,6 +128,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .user-item-username {
@@ -119,6 +139,10 @@
     color: $uni-text-color-grey;
     margin-top: 6rpx;
     display: block;
+
+    &.dark {
+      color: $dark-text-color-3;
+    }
   }
 
   .user-item-right {
