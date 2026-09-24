@@ -91,7 +91,7 @@
   }
 
   const colorPool = ['linear-gradient(135deg, #4facfe, #007aff)', 'linear-gradient(135deg, #43e97b, #38f9d7)', 'linear-gradient(135deg, #fa709a, #fee140)'];
-  const iconPool = ['yiyuan', 'shequxietangceliang', 'a-blooddonation'];
+  const iconPool = ['yiyuan', 'shequxietangceliang', 'niaosuan'];
 
   const customHash = (str: string) => {
     const map: Record<string, number> = {};
@@ -171,6 +171,14 @@
 
     &.dark {
       background-color: $dark-page-bg;
+
+      .uric-item-type {
+        color: $uni-text-color;
+      }
+
+      .uric-item-value {
+        color: $uni-text-color;
+      }
     }
   }
 
@@ -224,7 +232,7 @@
 
   .uric-item-type {
     font-size: $uni-font-size-sm;
-    color: $dark-text-color;
+    color: $uni-text-color;
     margin-top: 6rpx;
     display: block;
   }
@@ -245,7 +253,7 @@
 
   .uric-item-value {
     font-size: $uni-font-size-sm;
-    color: $dark-text-color;
+    color: $uni-text-color;
   }
 
   .uric-level-normal {
