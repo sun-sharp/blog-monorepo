@@ -51,7 +51,7 @@
     transition: background-color 0.2s;
 
     &.dark {
-      background-color: #1b1b1f;
+      background-color: $dark-page-bg;
     }
   }
 
@@ -67,7 +67,7 @@
     transition: background-color 0.2s;
 
     &.dark {
-      background-color: #2c2c30;
+      background-color: $dark-card-bg;
     }
   }
 

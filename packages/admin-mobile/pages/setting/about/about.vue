@@ -44,7 +44,7 @@
     transition: background-color 0.2s;
 
     &.dark {
-      background-color: #1b1b1f;
+      background-color: $dark-page-bg;
     }
   }
 
@@ -70,7 +70,7 @@
     color: $uni-text-color;
 
     &.dark {
-      color: #fff;
+      color: $dark-text-color;
     }
   }
 
@@ -80,7 +80,7 @@
     color: $uni-text-color-grey;
 
     &.dark {
-      color: #b0b3b8;
+      color: $dark-text-color;
     }
   }
 
@@ -91,7 +91,7 @@
     text-align: center;
 
     &.dark {
-      color: #b0b3b8;
+      color: $dark-text-color;
     }
   }
 </style>

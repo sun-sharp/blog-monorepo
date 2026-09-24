@@ -95,7 +95,7 @@
     transition: background-color 0.2s;
 
     &.dark {
-      background-color: #1b1b1f;
+      background-color: $dark-page-bg;
     }
   }
 
@@ -109,15 +109,15 @@
     align-items: center;
     justify-content: space-around;
     min-height: 120rpx;
-    background-color: #ffffff;
-    border-top: 1rpx solid #e5e5e5;
+    background-color: $uni-bg-color;
+    border-top: 1rpx solid $uni-border-color;
     padding-bottom: env(safe-area-inset-bottom);
     flex-shrink: 0;
     transition: background-color 0.2s;
 
     &.dark {
-      background-color: #1b1b1f;
-      border-top-color: #2c2c30;
+      background-color: $dark-page-bg;
+      border-top-color: $dark-border-color;
     }
   }
 

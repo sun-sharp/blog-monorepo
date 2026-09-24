@@ -193,10 +193,10 @@
     background-color: $uni-bg-color-grey;
 
     &.dark {
-      background-color: $uni-bg-color-dark;
+      background-color: $dark-page-bg;
 
       .uric-edit-section-title {
-        color: $uni-text-color-grey;
+        color: $dark-text-color;
       }
     }
   }
@@ -243,6 +243,6 @@
 
   .uric-edit-tip {
     font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
+    color: $dark-text-color;
   }
 </style>

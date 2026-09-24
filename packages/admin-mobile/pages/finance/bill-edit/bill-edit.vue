@@ -4,180 +4,181 @@
       <scroll-view scroll-y class="bill-edit-scroll">
         <view v-if="detail.tradeTime" class="bill-edit-card card" :class="{ dark: isDark }">
           <text class="bill-edit-section-title" :class="{ dark: isDark }">账单信息</text>
-        <view class="bill-edit-readonly">
-          <view class="bill-edit-readonly-item">
-            <text class="bill-edit-readonly-label">交易时间</text>
-            <text class="bill-edit-readonly-value">{{ detail.tradeTime }}</text>
-          </view>
-          <view class="bill-edit-readonly-item">
-            <text class="bill-edit-readonly-label">交易对方</text>
-            <text class="bill-edit-readonly-value">{{ detail.tradeOtherPerson || '--' }}</text>
-          </view>
-          <view class="bill-edit-readonly-item">
-            <text class="bill-edit-readonly-label">收/支</text>
-            <text class="bill-edit-readonly-value">{{ detail.incomeOrPay || '--' }}</text>
-          </view>
-          <view class="bill-edit-readonly-item">
-            <text class="bill-edit-readonly-label">交易金额</text>
-            <text :class="detail.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="bill-edit-readonly-value">
-              {{ detail.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ formatMoney(detail.moneyAmount) }}
-            </text>
-          </view>
-          <view class="bill-edit-readonly-item">
-            <text class="bill-edit-readonly-label">交易类型</text>
-            <text class="bill-edit-readonly-value">{{ detail.tradeType || '--' }}</text>
-          </view>
-          <template v-if="source === 'weChat'">
+          <view class="bill-edit-readonly">
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">商品</text>
-              <text class="bill-edit-readonly-value">{{ detail.goods || '--' }}</text>
+              <text class="bill-edit-readonly-label">交易时间</text>
+              <text class="bill-edit-readonly-value">{{ detail.tradeTime }}</text>
             </view>
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">支付方式</text>
-              <text class="bill-edit-readonly-value">{{ detail.paymentMethod || '--' }}</text>
+              <text class="bill-edit-readonly-label">交易对方</text>
+              <text class="bill-edit-readonly-value">{{ detail.tradeOtherPerson || '--' }}</text>
             </view>
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">当前状态</text>
-              <text class="bill-edit-readonly-value">{{ detail.currentStatus || '--' }}</text>
-            </view>
-          </template>
-          <template v-if="source === 'aliPay'">
-            <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">商品说明</text>
-              <text class="bill-edit-readonly-value">{{ detail.productDescription || '--' }}</text>
+              <text class="bill-edit-readonly-label">收/支</text>
+              <text class="bill-edit-readonly-value">{{ detail.incomeOrPay || '--' }}</text>
             </view>
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">收/付款方式</text>
-              <text class="bill-edit-readonly-value">{{ detail.paymentMethod || '--' }}</text>
+              <text class="bill-edit-readonly-label">交易金额</text>
+              <text :class="detail.inflowOrOutflow === 1 ? 'money-inflow' : 'money-outflow'" class="bill-edit-readonly-value">
+                {{ detail.inflowOrOutflow === 1 ? '+' : '-' }}¥{{ formatMoney(detail.moneyAmount) }}
+              </text>
             </view>
             <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">对方账号</text>
-              <text class="bill-edit-readonly-value">{{ detail.oppositeAccount || '--' }}</text>
+              <text class="bill-edit-readonly-label">交易类型</text>
+              <text class="bill-edit-readonly-value">{{ detail.tradeType || '--' }}</text>
             </view>
-          </template>
-          <template v-if="source === 'bank'">
-            <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">凭证号码</text>
-              <text class="bill-edit-readonly-value">{{ detail.voucherNo || '--' }}</text>
-            </view>
-            <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">对方账号</text>
-              <text class="bill-edit-readonly-value">{{ detail.tradeOtherPersonAccount || '--' }}</text>
-            </view>
-            <template v-if="detail.isRetiredBankCard">
+            <template v-if="source === 'weChat'">
               <view class="bill-edit-readonly-item">
-                <text class="bill-edit-readonly-label">卡片状态</text>
-                <text class="bill-edit-readonly-value error">已报废</text>
+                <text class="bill-edit-readonly-label">商品</text>
+                <text class="bill-edit-readonly-value">{{ detail.goods || '--' }}</text>
               </view>
-              <view v-if="detail.replaceCardNo" class="bill-edit-readonly-item">
-                <text class="bill-edit-readonly-label">新卡号</text>
-                <text class="bill-edit-readonly-value">{{ detail.replaceCardNo || '--' }}</text>
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">支付方式</text>
+                <text class="bill-edit-readonly-value">{{ detail.paymentMethod || '--' }}</text>
               </view>
-              <view v-if="detail.bankCardRemark" class="bill-edit-readonly-item">
-                <text class="bill-edit-readonly-label">说明</text>
-                <text class="bill-edit-readonly-value">{{ detail.bankCardRemark || '--' }}</text>
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">当前状态</text>
+                <text class="bill-edit-readonly-value">{{ detail.currentStatus || '--' }}</text>
               </view>
             </template>
-            <view class="bill-edit-readonly-item">
-              <text class="bill-edit-readonly-label">银行类型</text>
-              <text class="bill-edit-readonly-value primary">{{ bankTypeLabel }}</text>
+            <template v-if="source === 'aliPay'">
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">商品说明</text>
+                <text class="bill-edit-readonly-value">{{ detail.productDescription || '--' }}</text>
+              </view>
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">收/付款方式</text>
+                <text class="bill-edit-readonly-value">{{ detail.paymentMethod || '--' }}</text>
+              </view>
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">对方账号</text>
+                <text class="bill-edit-readonly-value">{{ detail.oppositeAccount || '--' }}</text>
+              </view>
+            </template>
+            <template v-if="source === 'bank'">
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">凭证号码</text>
+                <text class="bill-edit-readonly-value">{{ detail.voucherNo || '--' }}</text>
+              </view>
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">对方账号</text>
+                <text class="bill-edit-readonly-value">{{ detail.tradeOtherPersonAccount || '--' }}</text>
+              </view>
+              <template v-if="detail.isRetiredBankCard">
+                <view class="bill-edit-readonly-item">
+                  <text class="bill-edit-readonly-label">卡片状态</text>
+                  <text class="bill-edit-readonly-value error">已报废</text>
+                </view>
+                <view v-if="detail.replaceCardNo" class="bill-edit-readonly-item">
+                  <text class="bill-edit-readonly-label">新卡号</text>
+                  <text class="bill-edit-readonly-value">{{ detail.replaceCardNo || '--' }}</text>
+                </view>
+                <view v-if="detail.bankCardRemark" class="bill-edit-readonly-item">
+                  <text class="bill-edit-readonly-label">说明</text>
+                  <text class="bill-edit-readonly-value">{{ detail.bankCardRemark || '--' }}</text>
+                </view>
+              </template>
+              <view class="bill-edit-readonly-item">
+                <text class="bill-edit-readonly-label">银行类型</text>
+                <text class="bill-edit-readonly-value primary">{{ bankTypeLabel }}</text>
+              </view>
+            </template>
+            <view v-if="detail.balance !== undefined && detail.balance !== null" class="bill-edit-readonly-item">
+              <text class="bill-edit-readonly-label">余额</text>
+              <text class="bill-edit-readonly-value primary">¥{{ formatMoney(detail.balance) }}</text>
             </view>
-          </template>
-          <view v-if="detail.balance !== undefined && detail.balance !== null" class="bill-edit-readonly-item">
-            <text class="bill-edit-readonly-label">余额</text>
-            <text class="bill-edit-readonly-value primary">¥{{ formatMoney(detail.balance) }}</text>
           </view>
         </view>
+
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="bill-edit-card card" :class="{ dark: isDark }">
+            <text class="bill-edit-section-title" :class="{ dark: isDark }">基本信息</text>
+            <u-form-item label="交易对方备注" prop="tradeOtherPersonRemarks">
+              <u-input v-model="form.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="流入/流出" prop="inflowOrOutflow" required>
+              <view class="bill-edit-select" :class="{ dark: isDark }" @click="showInflowSelect = true">
+                <text :class="form.inflowOrOutflow ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
+                  {{ inflowLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+            <u-form-item label="说明" prop="explain">
+              <u-input v-model="form.explain" placeholder="请输入说明" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="交易场所" prop="place">
+              <u-input v-model="form.place" placeholder="请输入交易场所" :cursor-spacing="20" />
+            </u-form-item>
+          </view>
+
+          <view v-if="source === 'bank'" class="bill-edit-card card" :class="{ dark: isDark }">
+            <text class="bill-edit-section-title" :class="{ dark: isDark }">银行信息</text>
+            <u-form-item label="其它费用" prop="otherCost">
+              <u-number-box v-model="form.otherCost" :min="0" :step="0.01" />
+            </u-form-item>
+            <u-form-item label="银行账单类型" prop="bankBillType" required>
+              <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBankBillTypeSelect = true">
+                <text :class="form.bankBillType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
+                  {{ bankBillTypeLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+          </view>
+
+          <view v-if="source === 'aliPay' || source === 'weChat'" class="bill-edit-card card" :class="{ dark: isDark }">
+            <text class="bill-edit-section-title" :class="{ dark: isDark }">{{ source === 'aliPay' ? '支付宝' : '微信' }}信息</text>
+            <u-form-item label="账单类型" prop="billType" required>
+              <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBillTypeSelect = true">
+                <text :class="form.billType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
+                  {{ billTypeLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+            <u-form-item label="账单方式" prop="billMethod" required>
+              <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBillMethodSelect = true">
+                <text :class="form.billMethod ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
+                  {{ billMethodLabel || '请选择' }}
+                </text>
+                <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
+              </view>
+            </u-form-item>
+          </view>
+        </u-form>
+      </scroll-view>
+
+      <searchable-select
+        v-model="showInflowSelect"
+        title="选择流入/流出"
+        :list="inflowOrOutflowList"
+        :current-value="form.inflowOrOutflow || undefined"
+        @confirm="(item: any) => (form.inflowOrOutflow = Number(item.value))" />
+      <searchable-select
+        v-model="showBankBillTypeSelect"
+        title="选择银行账单类型"
+        :list="billTypeSelectList"
+        :current-value="form.bankBillType || undefined"
+        @confirm="(item: any) => (form.bankBillType = Number(item.value))" />
+      <searchable-select
+        v-model="showBillTypeSelect"
+        title="选择账单类型"
+        :list="billTypeSelectList"
+        :current-value="form.billType || undefined"
+        @confirm="(item: any) => (form.billType = Number(item.value))" />
+      <searchable-select
+        v-model="showBillMethodSelect"
+        title="选择账单方式"
+        :list="billMethodSelectList"
+        :current-value="form.billMethod || undefined"
+        @confirm="(item: any) => (form.billMethod = Number(item.value))" />
+
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
       </view>
-
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="bill-edit-card card" :class="{ dark: isDark }">
-          <text class="bill-edit-section-title" :class="{ dark: isDark }">基本信息</text>
-          <u-form-item label="交易对方备注" prop="tradeOtherPersonRemarks">
-            <u-input v-model="form.tradeOtherPersonRemarks" placeholder="请输入交易对方备注" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="流入/流出" prop="inflowOrOutflow" required>
-            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showInflowSelect = true">
-              <text :class="form.inflowOrOutflow ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ inflowLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
-            </view>
-          </u-form-item>
-          <u-form-item label="说明" prop="explain">
-            <u-input v-model="form.explain" placeholder="请输入说明" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="交易场所" prop="place">
-            <u-input v-model="form.place" placeholder="请输入交易场所" :cursor-spacing="20" />
-          </u-form-item>
-        </view>
-
-        <view v-if="source === 'bank'" class="bill-edit-card card" :class="{ dark: isDark }">
-          <text class="bill-edit-section-title" :class="{ dark: isDark }">银行信息</text>
-          <u-form-item label="其它费用" prop="otherCost">
-            <u-number-box v-model="form.otherCost" :min="0" :step="0.01" />
-          </u-form-item>
-          <u-form-item label="银行账单类型" prop="bankBillType" required>
-            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBankBillTypeSelect = true">
-              <text :class="form.bankBillType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ bankBillTypeLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
-            </view>
-          </u-form-item>
-        </view>
-
-        <view v-if="source === 'aliPay' || source === 'weChat'" class="bill-edit-card card" :class="{ dark: isDark }">
-          <text class="bill-edit-section-title" :class="{ dark: isDark }">{{ source === 'aliPay' ? '支付宝' : '微信' }}信息</text>
-          <u-form-item label="账单类型" prop="billType" required>
-            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBillTypeSelect = true">
-              <text :class="form.billType ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ billTypeLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
-            </view>
-          </u-form-item>
-          <u-form-item label="账单方式" prop="billMethod" required>
-            <view class="bill-edit-select" :class="{ dark: isDark }" @click="showBillMethodSelect = true">
-              <text :class="form.billMethod ? 'bill-edit-select-value' : 'bill-edit-select-placeholder'">
-                {{ billMethodLabel || '请选择' }}
-              </text>
-              <u-icon name="arrow-right" size="28" :color="isDark ? '#7d8085' : '#bbb'" />
-            </view>
-          </u-form-item>
-        </view>
-      </u-form>
-    </scroll-view>
-
-    <searchable-select
-      v-model="showInflowSelect"
-      title="选择流入/流出"
-      :list="inflowOrOutflowList"
-      :current-value="form.inflowOrOutflow || undefined"
-      @confirm="(item: any) => (form.inflowOrOutflow = Number(item.value))" />
-    <searchable-select
-      v-model="showBankBillTypeSelect"
-      title="选择银行账单类型"
-      :list="billTypeSelectList"
-      :current-value="form.bankBillType || undefined"
-      @confirm="(item: any) => (form.bankBillType = Number(item.value))" />
-    <searchable-select
-      v-model="showBillTypeSelect"
-      title="选择账单类型"
-      :list="billTypeSelectList"
-      :current-value="form.billType || undefined"
-      @confirm="(item: any) => (form.billType = Number(item.value))" />
-    <searchable-select
-      v-model="showBillMethodSelect"
-      title="选择账单方式"
-      :list="billMethodSelectList"
-      :current-value="form.billMethod || undefined"
-      @confirm="(item: any) => (form.billMethod = Number(item.value))" />
-
-    <view class="fixed-bottom-btn" :class="{ dark: isDark }">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>

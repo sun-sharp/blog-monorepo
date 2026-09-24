@@ -107,7 +107,7 @@
     background-color: $uni-bg-color-grey;
 
     &.dark {
-      background-color: $uni-bg-color-dark;
+      background-color: $dark-page-bg;
     }
   }
 
@@ -125,7 +125,7 @@
     padding: 20rpx;
 
     &.dark {
-      background-color: $uni-bg-color-dark;
+      background-color: $dark-card-bg;
     }
   }
 

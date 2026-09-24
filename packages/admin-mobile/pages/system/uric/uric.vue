@@ -138,7 +138,7 @@
     background-color: $uni-bg-color-grey;
 
     &.dark {
-      background-color: $uni-bg-color-dark;
+      background-color: $dark-page-bg;
     }
   }
 
@@ -150,7 +150,7 @@
     margin-bottom: 16rpx;
 
     &.dark {
-      background-color: $uni-bg-color-dark;
+      background-color: $dark-card-bg;
     }
 
     &:active {
@@ -192,7 +192,7 @@
 
   .uric-item-type {
     font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
+    color: $dark-text-color;
     margin-top: 6rpx;
     display: block;
   }
@@ -213,6 +213,6 @@
 
   .uric-item-value {
     font-size: $uni-font-size-sm;
-    color: $uni-text-color-grey;
+    color: $dark-text-color;
   }
 </style>
