@@ -7,7 +7,7 @@
             <u-icon name="setting" size="40" :color="isDark ? '#fff' : '#333'" />
           </view>
           <view class="mine-tool-btn" @click="toggleTheme">
-            <u-icon :name="isDark ? 'yueliang' : 'taiyang'" custom-prefix="sharp-icon" size="40" :color="isDark ? '#fff' : '#333'" />
+            <u-icon :name="isDark ? 'yueliang' : 'taiyang'" custom-prefix="sharp-icon" size="40" :color="isDark ? '#fff' : '#F9C626'" />
           </view>
         </view>
       </view>
