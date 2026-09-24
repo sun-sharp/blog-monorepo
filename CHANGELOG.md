@@ -6,6 +6,10 @@
 - bm-aw-xxx 表示修改了子项目admin-web的代码
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
+## bm-am-4.5.12 (2026-9-25)
+- 移动管理端
+  1. 修改尿酸血糖图标和主题色问题
+
 ## bm-am-4.5.11 (2026-9-25)
 - 移动管理端
   1. 整体主题优化

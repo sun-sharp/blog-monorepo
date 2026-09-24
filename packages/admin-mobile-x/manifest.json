@@ -2,8 +2,8 @@
     "name": "admin-mobile-x",
     "appid": "__UNI__51092FA",
     "description": "",
-    "versionName": "4.5.11",
-    "versionCode": 4511,
+    "versionName": "4.5.12",
+    "versionCode": 4512,
     "uni-app-x": {
         "styleIsolationVersion": "2"
     },
