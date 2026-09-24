@@ -1,54 +1,58 @@
 <template>
-  <view class="login-page">
-    <view class="login-bg" />
-    <scroll-view scroll-y class="login-scroll">
-      <view class="login-content" :style="{ paddingTop: `calc(${customNavHeight}px + 100rpx)` }">
-        <view class="login-header">
-          <view class="login-logo-wrap">
-            <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
+  <u-config-provider :dark-mode="mode">
+    <view class="login-page" :class="{ dark: isDark }">
+      <view class="login-bg" :class="{ dark: isDark }" />
+      <scroll-view scroll-y class="login-scroll">
+        <view class="login-content" :style="{ paddingTop: `calc(${customNavHeight}px + 100rpx)` }">
+          <view class="login-header">
+            <view class="login-logo-wrap">
+              <image class="login-logo" src="/static/logo.png" mode="aspectFit" />
+            </view>
+            <text class="login-title">{{ appTitle }}</text>
+            <text class="login-subtitle">欢迎回来，请登录你的账号</text>
           </view>
-          <text class="login-title">{{ appTitle }}</text>
-          <text class="login-subtitle">欢迎回来，请登录你的账号</text>
+          <view class="login-form card" :class="{ dark: isDark }">
+            <u-form ref="formRef" :model="form" :rules="rules">
+              <u-form-item prop="username">
+                <u-input
+                  v-model="form.username"
+                  placeholder="请输入用户名"
+                  prefix-icon="account"
+                  :prefix-icon-style="{ color: '#999' }"
+                  shape="round"
+                  :cursor-spacing="20" />
+              </u-form-item>
+              <u-form-item prop="password">
+                <u-input
+                  v-model="form.password"
+                  type="password"
+                  placeholder="请输入密码"
+                  prefix-icon="lock"
+                  :prefix-icon-style="{ color: '#999' }"
+                  shape="round"
+                  :cursor-spacing="20" />
+              </u-form-item>
+            </u-form>
+            <u-button type="primary" :loading="loading" shape="circle" class="login-btn" @click="handleLogin">登 录</u-button>
+          </view>
         </view>
-        <view class="login-form card">
-          <u-form ref="formRef" :model="form" :rules="rules">
-            <u-form-item prop="username">
-              <u-input
-                v-model="form.username"
-                placeholder="请输入用户名"
-                prefix-icon="account"
-                :prefix-icon-style="{ color: '#999' }"
-                shape="round"
-                :cursor-spacing="20" />
-            </u-form-item>
-            <u-form-item prop="password">
-              <u-input
-                v-model="form.password"
-                type="password"
-                placeholder="请输入密码"
-                prefix-icon="lock"
-                :prefix-icon-style="{ color: '#999' }"
-                shape="round"
-                :cursor-spacing="20" />
-            </u-form-item>
-          </u-form>
-          <u-button type="primary" :loading="loading" shape="circle" class="login-btn" @click="handleLogin">登 录</u-button>
-        </view>
-      </view>
-    </scroll-view>
-  </view>
+      </scroll-view>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
   import { ref, reactive } from 'vue';
   import { useUserStore } from '../../store';
   import { getCustomNavHeight } from '../../utils/custom-nav';
+  import { useAppTheme } from '../../composables/useAppTheme';
 
   const customNavHeight = getCustomNavHeight();
   const appTitle = import.meta.env.VITE_APP_TITLE || '管理后台';
   const userStore = useUserStore();
   const formRef = ref();
   const loading = ref(false);
+  const { isDark, mode } = useAppTheme();
 
   const form = reactive({
     username: '',
@@ -85,6 +89,10 @@
   .login-page {
     position: relative;
     height: 100vh;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .login-bg {
@@ -95,6 +103,10 @@
     height: 60vh;
     background: linear-gradient(135deg, #667eea, #007aff);
     border-radius: 0 0 60rpx 60rpx;
+
+    &.dark {
+      background: linear-gradient(135deg, #283052, #001c39);
+    }
   }
 
   .login-scroll {

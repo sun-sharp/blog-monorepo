@@ -1,79 +1,81 @@
 <template>
-  <view class="run-log-page">
-    <scroll-view scroll-y class="run-log-scroll" :refresher-enabled="true" :refresher-triggered="refreshing" @refresherrefresh="onRefresh">
-      <!-- 进程列表 -->
-      <view class="run-log-process card">
-        <view class="run-log-header">
-          <text class="run-log-title">运行进程</text>
-          <text class="run-log-count">共 {{ processes.length }} 个</text>
-        </view>
-        <view v-if="loading && processes.length === 0" class="run-log-empty">
-          <u-loading mode="circle" size="48" />
-        </view>
-        <view v-else-if="processes.length === 0" class="run-log-empty">
-          <u-empty mode="data" text="暂无进程" />
-        </view>
-        <view v-else class="run-log-process-list">
-          <view
-            v-for="proc in processes"
-            :key="proc.name"
-            class="run-log-process-item"
-            :class="{ 'run-log-process-item--active': selectedName === proc.name }"
-            @click="selectProcess(proc)">
-            <view class="run-log-process-info">
-              <view class="run-log-process-name-row">
-                <text class="run-log-process-name">{{ proc.name }}</text>
-                <text class="run-log-process-status" :class="getStatusClass(proc.status)">{{ proc.status }}</text>
+  <u-config-provider :dark-mode="mode">
+    <view class="run-log-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="run-log-scroll" :refresher-enabled="true" :refresher-triggered="refreshing" @refresherrefresh="onRefresh">
+        <!-- 进程列表 -->
+        <view class="run-log-process card" :class="{ dark: isDark }">
+          <view class="run-log-header">
+            <text class="run-log-title">运行进程</text>
+            <text class="run-log-count">共 {{ processes.length }} 个</text>
+          </view>
+          <view v-if="loading && processes.length === 0" class="run-log-empty">
+            <u-loading mode="circle" size="48" />
+          </view>
+          <view v-else-if="processes.length === 0" class="run-log-empty">
+            <u-empty mode="data" text="暂无进程" />
+          </view>
+          <view v-else class="run-log-process-list">
+            <view
+              v-for="proc in processes"
+              :key="proc.name"
+              class="run-log-process-item"
+              :class="{ 'run-log-process-item--active': selectedName === proc.name, dark: isDark }"
+              @click="selectProcess(proc)">
+              <view class="run-log-process-info">
+                <view class="run-log-process-name-row">
+                  <text class="run-log-process-name" :class="{ dark: isDark }">{{ proc.name }}</text>
+                  <text class="run-log-process-status" :class="getStatusClass(proc.status)">{{ proc.status }}</text>
+                </view>
+                <view class="run-log-process-meta">
+                  <text>PID {{ proc.pid }}</text>
+                  <text>{{ proc.cpu }} CPU</text>
+                  <text>{{ proc.memory }}</text>
+                  <text>重启 {{ proc.restarts }} 次</text>
+                </view>
+                <view class="run-log-process-meta">
+                  <text>运行 {{ proc.uptime }}</text>
+                  <text v-if="proc.namespace">{{ proc.namespace }}</text>
+                </view>
               </view>
-              <view class="run-log-process-meta">
-                <text>PID {{ proc.pid }}</text>
-                <text>{{ proc.cpu }} CPU</text>
-                <text>{{ proc.memory }}</text>
-                <text>重启 {{ proc.restarts }} 次</text>
-              </view>
-              <view class="run-log-process-meta">
-                <text>运行 {{ proc.uptime }}</text>
-                <text v-if="proc.namespace">{{ proc.namespace }}</text>
-              </view>
+              <u-icon name="arrow-right" size="24" color="#999" />
             </view>
-            <u-icon name="arrow-right" size="24" color="#999" />
           </view>
         </view>
-      </view>
 
-      <!-- 日志详情 -->
-      <view v-if="selectedName" class="run-log-detail card">
-        <view class="run-log-header">
-          <text class="run-log-title">日志详情</text>
-          <view class="run-log-detail-actions">
-            <u-subsection :list="typeTabs" :current="typeIndex" mode="button" active-color="#667eea" :button-size="20" @change="onTypeChange"></u-subsection>
-            <view class="run-log-lines-select" @click="showLinesSelect = true">
-              <text class="run-log-lines-text">最近{{ linesData }}行</text>
-              <u-icon name="arrow-down" size="20" color="#999" />
+        <!-- 日志详情 -->
+        <view v-if="selectedName" class="run-log-detail card" :class="{ dark: isDark }">
+          <view class="run-log-header">
+            <text class="run-log-title">日志详情</text>
+            <view class="run-log-detail-actions">
+              <u-subsection :list="typeTabs" :current="typeIndex" mode="button" active-color="#667eea" :button-size="20" @change="onTypeChange"></u-subsection>
+              <view class="run-log-lines-select" @click="showLinesSelect = true">
+                <text class="run-log-lines-text">最近{{ linesData }}行</text>
+                <u-icon name="arrow-down" size="20" color="#999" />
+              </view>
+              <u-icon name="reload" size="36" color="#667eea" @click="loadLog" />
             </view>
-            <u-icon name="reload" size="36" color="#667eea" @click="loadLog" />
+          </view>
+
+          <view v-if="logLoading" class="run-log-empty">
+            <u-loading mode="circle" size="60" />
+            <text class="run-log-loading-text">正在加载日志...</text>
+          </view>
+          <view v-else-if="!logContent" class="run-log-empty">
+            <u-empty mode="data" text="暂无日志" />
+          </view>
+          <view v-else class="run-log-content">
+            <view v-for="(line, idx) in logLines" :key="idx" class="run-log-line">
+              <template v-for="(seg, segIdx) in highlightLine(line)" :key="segIdx">
+                <text class="run-log-seg" :class="segClass(seg)" :style="seg.color ? { color: seg.color } : undefined">{{ seg.text }}</text>
+              </template>
+            </view>
           </view>
         </view>
+      </scroll-view>
 
-        <view v-if="logLoading" class="run-log-empty">
-          <u-loading mode="circle" size="60" />
-          <text class="run-log-loading-text">正在加载日志...</text>
-        </view>
-        <view v-else-if="!logContent" class="run-log-empty">
-          <u-empty mode="data" text="暂无日志" />
-        </view>
-        <view v-else class="run-log-content">
-          <view v-for="(line, idx) in logLines" :key="idx" class="run-log-line">
-            <template v-for="(seg, segIdx) in highlightLine(line)" :key="segIdx">
-              <text class="run-log-seg" :class="segClass(seg)" :style="seg.color ? { color: seg.color } : undefined">{{ seg.text }}</text>
-            </template>
-          </view>
-        </view>
-      </view>
-    </scroll-view>
-
-    <u-select v-model="showLinesSelect" :list="linesOptions" title="选择行数" @confirm="onLinesConfirm"></u-select>
-  </view>
+      <u-select v-model="showLinesSelect" :list="linesOptions" title="选择行数" @confirm="onLinesConfirm"></u-select>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -81,6 +83,9 @@
   import { onMounted } from 'vue';
   import { pm2LogApi } from '../../../api';
   import type { Pm2ProcessInfo } from '../../../api/pm2-log';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const processes = ref<Pm2ProcessInfo[]>([]);
   const loading = ref(false);
@@ -397,8 +402,12 @@
   .run-log-page {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .run-log-scroll {
@@ -460,6 +469,14 @@
       border-color: $uni-color-primary;
       background-color: #f5f8ff;
     }
+
+    &.dark {
+      background-color: $dark-chip-bg;
+
+      &.run-log-process-item--active {
+        background-color: rgba(0, 122, 255, 0.12);
+      }
+    }
   }
 
   .run-log-process-info {
@@ -478,6 +495,10 @@
     font-size: $uni-font-size-base;
     font-weight: 600;
     color: $uni-text-color;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .run-log-process-status {

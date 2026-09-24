@@ -1,33 +1,35 @@
 <template>
-  <view class="role-edit-page">
-    <scroll-view scroll-y class="role-edit-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
-        <view class="role-edit-card card">
-          <text class="role-edit-section-title">角色信息</text>
-          <u-form-item label="角色名称" prop="name" required>
-            <u-input v-model="form.name" placeholder="请输入角色名称" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="角色编码" prop="roleCode" required>
-            <u-input v-model="form.roleCode" placeholder="请输入角色编码" :cursor-spacing="20" />
-          </u-form-item>
-          <u-form-item label="角色类型" prop="roleType" required>
-            <view class="role-edit-select" @click="showRoleTypeSelect = true">
-              <text :class="form.roleType ? 'role-edit-select-value' : 'role-edit-select-placeholder'">
-                {{ roleTypeLabel || '请选择角色类型' }}
-              </text>
-              <u-icon name="arrow-right" size="28" color="#999" />
-            </view>
-          </u-form-item>
-        </view>
-      </u-form>
-    </scroll-view>
+  <u-config-provider :dark-mode="mode">
+    <view class="role-edit-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="role-edit-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top">
+          <view class="role-edit-card card" :class="{ dark: isDark }">
+            <text class="role-edit-section-title" :class="{ dark: isDark }">角色信息</text>
+            <u-form-item label="角色名称" prop="name" required>
+              <u-input v-model="form.name" placeholder="请输入角色名称" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="角色编码" prop="roleCode" required>
+              <u-input v-model="form.roleCode" placeholder="请输入角色编码" :cursor-spacing="20" />
+            </u-form-item>
+            <u-form-item label="角色类型" prop="roleType" required>
+              <view class="role-edit-select" @click="showRoleTypeSelect = true">
+                <text :class="form.roleType ? 'role-edit-select-value' : 'role-edit-select-placeholder'">
+                  {{ roleTypeLabel || '请选择角色类型' }}
+                </text>
+                <u-icon name="arrow-right" size="28" color="#999" />
+              </view>
+            </u-form-item>
+          </view>
+        </u-form>
+      </scroll-view>
 
-    <u-select v-model="showRoleTypeSelect" :list="roleTypeList" title="选择角色类型" @confirm="onRoleTypeConfirm" />
+      <u-select v-model="showRoleTypeSelect" :list="roleTypeList" title="选择角色类型" @confirm="onRoleTypeConfirm" />
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" shape="circle" :loading="loading" @click="handleSave">保存</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -36,7 +38,9 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { roleApi } from '../../../api';
   import { roleTypeOption } from '../../../../shared/src/constants/api-type';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
+  const { isDark, mode } = useAppTheme();
   const formRef = ref();
   const loading = ref(false);
   const editId = ref('');
@@ -123,6 +127,10 @@
     height: 100%;
     /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .role-edit-scroll {
@@ -143,6 +151,10 @@
     color: $uni-text-color;
     display: block;
     margin-bottom: 20rpx;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .role-edit-select {

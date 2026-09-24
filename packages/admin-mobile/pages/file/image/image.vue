@@ -1,45 +1,47 @@
 <template>
-  <view class="image-page">
-    <view class="image-header card">
-      <u-search v-model="searchKeyword" placeholder="搜索图片名称" shape="round" @search="handleSearch" @clear="handleClear" />
-      <view class="image-filter-row">
-        <u-subsection :list="sourceFilterOptions" :current="currentSourceFilter" mode="subsection" active-color="#007aff" @change="onSourceFilterChange" />
+  <u-config-provider :dark-mode="mode">
+    <view class="image-page" :class="{ dark: isDark }">
+      <view class="image-header card" :class="{ dark: isDark }">
+        <u-search v-model="searchKeyword" placeholder="搜索图片名称" shape="round" @search="handleSearch" @clear="handleClear" />
+        <view class="image-filter-row">
+          <u-subsection :list="sourceFilterOptions" :current="currentSourceFilter" mode="subsection" active-color="#007aff" @change="onSourceFilterChange" />
+        </view>
       </view>
-    </view>
 
-    <scroll-view
-      scroll-y
-      class="image-list-scroll"
-      :style="scrollStyle"
-      :refresher-enabled="true"
-      :refresher-triggered="isRefreshing"
-      refresher-default-style="black"
-      @refresherrefresh="onPullDownRefresh"
-      @scrolltolower="onReachBottom">
-      <view v-if="loading && list.length === 0" class="image-loading">
-        <u-loading mode="circle" size="60" />
-        <text class="image-loading-text">加载中...</text>
-      </view>
-      <view v-if="!loading && list.length === 0" class="image-empty">
-        <u-empty mode="data" text="暂无图片" icon-size="160" />
-      </view>
-      <view v-if="list.length > 0" class="image-grid">
-        <view v-for="item in list" :key="item.imageId" class="image-grid-item">
-          <view class="image-card" @longpress="onLongPress(item)">
-            <u-image :src="getImgUrl(item.url)" width="100%" height="200rpx" mode="aspectFill" :fade="true" @click="previewImage(getImgUrl(item.url))" />
-            <view class="image-card-info">
-              <text class="image-card-name text-ellipsis">{{ item.name }}</text>
-              <view class="image-card-meta-row">
-                <u-tag v-if="item.source" :text="getSourceLabel(item.source)" size="mini" type="primary" plain />
-                <text class="image-card-meta">{{ item.imageType }} · {{ item.uploadTime?.slice(0, 10) }}</text>
+      <scroll-view
+        scroll-y
+        class="image-list-scroll"
+        :style="scrollStyle"
+        :refresher-enabled="true"
+        :refresher-triggered="isRefreshing"
+        refresher-default-style="black"
+        @refresherrefresh="onPullDownRefresh"
+        @scrolltolower="onReachBottom">
+        <view v-if="loading && list.length === 0" class="image-loading">
+          <u-loading mode="circle" size="60" />
+          <text class="image-loading-text">加载中...</text>
+        </view>
+        <view v-if="!loading && list.length === 0" class="image-empty">
+          <u-empty mode="data" text="暂无图片" icon-size="160" />
+        </view>
+        <view v-if="list.length > 0" class="image-grid">
+          <view v-for="item in list" :key="item.imageId" class="image-grid-item">
+            <view class="image-card" :class="{ dark: isDark }" @longpress="onLongPress(item)">
+              <u-image :src="getImgUrl(item.url)" width="100%" height="200rpx" mode="aspectFill" :fade="true" @click="previewImage(getImgUrl(item.url))" />
+              <view class="image-card-info">
+                <text class="image-card-name text-ellipsis">{{ item.name }}</text>
+                <view class="image-card-meta-row">
+                  <u-tag v-if="item.source" :text="getSourceLabel(item.source)" size="mini" type="primary" plain />
+                  <text class="image-card-meta">{{ item.imageType }} · {{ item.uploadTime?.slice(0, 10) }}</text>
+                </view>
               </view>
             </view>
           </view>
         </view>
-      </view>
-      <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
-    </scroll-view>
-  </view>
+        <u-loadmore :status="loadMoreStatus" @loadmore="loadMore" />
+      </scroll-view>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +51,9 @@
   import { useApiTypeStore } from '../../../store';
   import type { ApiImageItem } from '/#/api/capital/image';
   import { getImgUrl } from '../../../../shared/src/utils/files';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
+  const { isDark, mode } = useAppTheme();
   const apiTypeStore = useApiTypeStore();
   const searchKeyword = ref('');
   const list = ref<ApiImageItem[]>([]);
@@ -222,10 +226,11 @@
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
-    /* #ifdef H5 */
-    height: 100%;
-    /* #endif */
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
   }
 
   .image-header {
@@ -271,6 +276,10 @@
     border-radius: $uni-border-radius-lg;
     overflow: hidden;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
 
     &:active {
       opacity: 0.85;

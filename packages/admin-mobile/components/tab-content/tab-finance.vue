@@ -70,12 +70,7 @@
           <view class="finance-date-header">
             <text class="finance-date-text" :class="{ dark: isDark }">{{ date }}</text>
           </view>
-          <view
-            v-for="item in group"
-            :key="`${item.source}_${item.billId}`"
-            class="finance-bill-item card"
-            :class="{ dark: isDark }"
-            @click="goToDetail(item)">
+          <view v-for="item in group" :key="`${item.source}_${item.billId}`" class="finance-bill-item card" :class="{ dark: isDark }" @click="goToDetail(item)">
             <view class="finance-bill-left">
               <view :class="['finance-bill-icon', item.inflowOrOutflow === 1 ? 'finance-bill-icon-in' : 'finance-bill-icon-out']">
                 <u-icon :name="getSourceIcon(item.source)" size="32" color="#fff" />
@@ -86,8 +81,12 @@
                   <text class="finance-bill-sub" :class="{ dark: isDark }">{{ getSourceLabel(item.source) }} · {{ item.tradeTime?.slice(11, 19) || '' }}</text>
                 </view>
                 <view class="finance-bill-sub-row">
-                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance" :class="{ dark: isDark }">余额 ¥{{ formatMoney(getBalanceValue(item)) }}</text>
-                  <text v-if="getBalanceBabyLabel(item)" class="finance-bill-balance" :class="{ dark: isDark }">余额宝 ¥{{ formatMoney(getBalanceBabyValue(item)) }}</text>
+                  <text v-if="getBalanceLabel(item)" class="finance-bill-balance" :class="{ dark: isDark }">
+                    余额 ¥{{ formatMoney(getBalanceValue(item)) }}
+                  </text>
+                  <text v-if="getBalanceBabyLabel(item)" class="finance-bill-balance" :class="{ dark: isDark }">
+                    余额宝 ¥{{ formatMoney(getBalanceBabyValue(item)) }}
+                  </text>
                 </view>
                 <view
                   v-if="['aliPay', 'weChat'].includes(item.source) && (getBillTypeLabel(item) || getBillMethodLabel(item))"
@@ -264,7 +263,12 @@
           <view v-if="currentSource === 0 || currentSource === 1" class="finance-filter-popup-row" :class="{ dark: isDark }">
             <view class="finance-filter-popup-label-row">
               <text class="finance-filter-popup-label" :class="{ dark: isDark }">银行账单类型</text>
-              <u-icon v-if="filterBankBillType" name="close-circle-fill" size="28" :color="isDark ? '#7d8085' : '#999'" @click="filterBankBillType = undefined" />
+              <u-icon
+                v-if="filterBankBillType"
+                name="close-circle-fill"
+                size="28"
+                :color="isDark ? '#7d8085' : '#999'"
+                @click="filterBankBillType = undefined" />
             </view>
             <view class="finance-filter-popup-select" :class="{ dark: isDark }" @click="openFilterSelect('bankBillType')">
               <text :class="['finance-filter-popup-select-value', !filterBankBillType && 'placeholder', isDark && 'dark']">

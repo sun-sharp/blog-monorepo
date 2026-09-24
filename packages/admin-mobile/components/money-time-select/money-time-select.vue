@@ -1,15 +1,15 @@
 <template>
   <u-popup v-model="popupShow" mode="bottom" round="20" @close="handleClose">
-    <view class="time-select">
+    <view class="time-select" :class="{ dark: isDark }">
       <view class="time-select-header">
-        <text class="time-select-title">选择时间范围</text>
+        <text class="time-select-title" :class="{ dark: isDark }">选择时间范围</text>
         <u-icon name="close" size="40" @click="handleClose" />
       </view>
       <view class="time-select-quick">
         <view
           v-for="(item, index) in quickOptions"
           :key="index"
-          :class="['time-select-quick-item', quickIndex === index && 'time-select-quick-active']"
+          :class="['time-select-quick-item', quickIndex === index && 'time-select-quick-active', isDark && 'dark']"
           @click="onQuickSelect(index)">
           <text :class="['time-select-quick-text', quickIndex === index && 'time-select-quick-text-active']">{{ item.label }}</text>
         </view>
@@ -53,6 +53,9 @@
 
 <script lang="ts" setup>
   import { ref, reactive, computed } from 'vue';
+  import { useAppTheme } from '../../composables/useAppTheme';
+
+  const { isDark } = useAppTheme();
 
   const props = defineProps<{ show: boolean }>();
   const emit = defineEmits(['update:show', 'confirm']);
@@ -168,6 +171,14 @@
   .time-select {
     padding: 30rpx;
     padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+
+    &.dark {
+      background-color: $dark-card-bg;
+
+      .time-select-date {
+        color: $dark-text-color;
+      }
+    }
   }
 
   .time-select-header {
@@ -180,6 +191,10 @@
   .time-select-title {
     font-size: $uni-font-size-lg;
     font-weight: bold;
+
+    &.dark {
+      color: $dark-text-color;
+    }
   }
 
   .time-select-quick {
@@ -196,6 +211,10 @@
     padding: 12rpx 0;
     border-radius: 12rpx;
     background-color: #f5f5f5;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+    }
   }
 
   .time-select-quick-active {

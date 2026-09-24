@@ -1,102 +1,104 @@
 <template>
-  <view class="backup-page">
-    <scroll-view scroll-y class="backup-scroll" :refresher-enabled="true" :refresher-triggered="refreshing" @refresherrefresh="onRefresh">
-      <view class="backup-action card">
-        <view class="backup-action-header">
-          <view class="backup-action-icon">
-            <u-icon name="download" size="40" color="#fff" />
-          </view>
-          <view class="backup-action-info">
-            <text class="backup-action-title">数据备份</text>
-            <text class="backup-action-desc">选择备份范围后执行</text>
-          </view>
-        </view>
-        <view class="backup-action-type">
-          <u-subsection :list="backupTypes" :current="backupTypeIndex" mode="button" active-color="#667eea" @change="onBackupTypeChange"></u-subsection>
-        </view>
-        <view v-if="backupTypeIndex === 1" class="backup-action-select">
-          <text class="backup-select-label">选择数据库</text>
-          <view class="backup-select-picker" @click="showDbSelect = true">
-            <text :class="{ 'backup-select-placeholder': !selectedDb }">{{ selectedDb || '请选择数据库' }}</text>
-            <u-icon name="arrow-right-fill" size="24" color="#999" />
-          </view>
-        </view>
-        <view v-if="backupTypeIndex === 2" class="backup-action-select">
-          <text class="backup-select-label">选择数据库</text>
-          <view class="backup-select-picker" @click="showDbSelectForCollection = true">
-            <text :class="{ 'backup-select-placeholder': !selectedDbForCollection }">{{ selectedDbForCollection || '请选择数据库' }}</text>
-            <u-icon name="arrow-right-fill" size="24" color="#999" />
-          </view>
-          <text class="backup-select-label">选择集合</text>
-          <view class="backup-select-picker" @click="onPickCollection">
-            <text :class="{ 'backup-select-placeholder': !selectedCollection }">{{ selectedCollection || '请选择集合' }}</text>
-            <u-icon name="arrow-right-fill" size="24" color="#999" />
-          </view>
-        </view>
-        <view class="backup-action-btn">
-          <u-button type="primary" shape="circle" :loading="backupLoading" :disabled="!canBackup" @click="handleBackup">立即备份</u-button>
-        </view>
-      </view>
-
-      <view class="backup-list-header">
-        <text class="backup-list-title">备份记录</text>
-        <text v-if="backups.length > 0" class="backup-list-count">共 {{ groupedBackups.length }} 组</text>
-      </view>
-
-      <view v-if="backups.length > 0" class="backup-groups">
-        <view v-for="group in groupedBackups" :key="group.name" class="backup-group card">
-          <view class="backup-group-header" @click="toggleGroup(group.name)">
-            <view class="backup-group-icon" :style="{ background: groupColors.default }">
-              <u-icon name="file-text-fill" size="28" color="#fff" />
+  <u-config-provider :dark-mode="mode">
+    <view class="backup-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="backup-scroll" :refresher-enabled="true" :refresher-triggered="refreshing" @refresherrefresh="onRefresh">
+        <view class="backup-action card" :class="{ dark: isDark }">
+          <view class="backup-action-header">
+            <view class="backup-action-icon">
+              <u-icon name="download" size="40" color="#fff" />
             </view>
-            <view class="backup-group-info">
-              <text class="backup-group-name">{{ group.name }}</text>
-              <text class="backup-group-time">{{ group.items[0].backupTime }}</text>
-            </view>
-            <view class="backup-group-right">
-              <text class="backup-group-size">{{ formatSize(group.totalSize) }}</text>
-              <u-icon :name="expandedGroups.has(group.name) ? 'arrow-up' : 'arrow-down'" size="24" color="#999" />
+            <view class="backup-action-info">
+              <text class="backup-action-title">数据备份</text>
+              <text class="backup-action-desc">选择备份范围后执行</text>
             </view>
           </view>
+          <view class="backup-action-type">
+            <u-subsection :list="backupTypes" :current="backupTypeIndex" mode="button" active-color="#667eea" @change="onBackupTypeChange"></u-subsection>
+          </view>
+          <view v-if="backupTypeIndex === 1" class="backup-action-select">
+            <text class="backup-select-label">选择数据库</text>
+            <view class="backup-select-picker" @click="showDbSelect = true">
+              <text :class="{ 'backup-select-placeholder': !selectedDb }">{{ selectedDb || '请选择数据库' }}</text>
+              <u-icon name="arrow-right-fill" size="24" color="#999" />
+            </view>
+          </view>
+          <view v-if="backupTypeIndex === 2" class="backup-action-select">
+            <text class="backup-select-label">选择数据库</text>
+            <view class="backup-select-picker" @click="showDbSelectForCollection = true">
+              <text :class="{ 'backup-select-placeholder': !selectedDbForCollection }">{{ selectedDbForCollection || '请选择数据库' }}</text>
+              <u-icon name="arrow-right-fill" size="24" color="#999" />
+            </view>
+            <text class="backup-select-label">选择集合</text>
+            <view class="backup-select-picker" @click="onPickCollection">
+              <text :class="{ 'backup-select-placeholder': !selectedCollection }">{{ selectedCollection || '请选择集合' }}</text>
+              <u-icon name="arrow-right-fill" size="24" color="#999" />
+            </view>
+          </view>
+          <view class="backup-action-btn">
+            <u-button type="primary" shape="circle" :loading="backupLoading" :disabled="!canBackup" @click="handleBackup">立即备份</u-button>
+          </view>
+        </view>
 
-          <view v-if="expandedGroups.has(group.name)" class="backup-group-detail">
-            <view v-for="item in group.items" :key="item.fileName + item.database" class="backup-db-item">
-              <view class="backup-db-header">
-                <view class="backup-item-tag" :class="getDatabaseTagClass(item.database)">
-                  <text>{{ item.database }}</text>
-                </view>
-                <text class="backup-item-size">{{ formatSize(item.fileSize) }}</text>
+        <view class="backup-list-header">
+          <text class="backup-list-title">备份记录</text>
+          <text v-if="backups.length > 0" class="backup-list-count">共 {{ groupedBackups.length }} 组</text>
+        </view>
+
+        <view v-if="backups.length > 0" class="backup-groups">
+          <view v-for="group in groupedBackups" :key="group.name" class="backup-group card" :class="{ dark: isDark }">
+            <view class="backup-group-header" @click="toggleGroup(group.name)">
+              <view class="backup-group-icon" :style="{ background: groupColors.default }">
+                <u-icon name="file-text-fill" size="28" color="#fff" />
               </view>
-              <view v-if="item.collections.length > 0" class="backup-db-collections">
-                <view v-for="col in item.collections" :key="col" class="backup-collection-row">
-                  <text class="backup-collection-name">{{ col }}</text>
-                  <view class="backup-collection-actions">
-                    <text class="backup-collection-btn" @click="handleRestoreCollection(group.name, item.database, col)">恢复</text>
+              <view class="backup-group-info">
+                <text class="backup-group-name">{{ group.name }}</text>
+                <text class="backup-group-time">{{ group.items[0].backupTime }}</text>
+              </view>
+              <view class="backup-group-right">
+                <text class="backup-group-size">{{ formatSize(group.totalSize) }}</text>
+                <u-icon :name="expandedGroups.has(group.name) ? 'arrow-up' : 'arrow-down'" size="24" color="#999" />
+              </view>
+            </view>
+
+            <view v-if="expandedGroups.has(group.name)" class="backup-group-detail" :class="{ dark: isDark }">
+              <view v-for="item in group.items" :key="item.fileName + item.database" class="backup-db-item" :class="{ dark: isDark }">
+                <view class="backup-db-header">
+                  <view class="backup-item-tag" :class="getDatabaseTagClass(item.database)">
+                    <text>{{ item.database }}</text>
+                  </view>
+                  <text class="backup-item-size">{{ formatSize(item.fileSize) }}</text>
+                </view>
+                <view v-if="item.collections.length > 0" class="backup-db-collections">
+                  <view v-for="col in item.collections" :key="col" class="backup-collection-row">
+                    <text class="backup-collection-name">{{ col }}</text>
+                    <view class="backup-collection-actions">
+                      <text class="backup-collection-btn" @click="handleRestoreCollection(group.name, item.database, col)">恢复</text>
+                    </view>
                   </view>
                 </view>
+                <view class="backup-db-actions">
+                  <u-button type="primary" size="mini" plain shape="circle" @click="handleRestoreDatabase(group.name, item.database)">恢复数据库</u-button>
+                </view>
               </view>
-              <view class="backup-db-actions">
-                <u-button type="primary" size="mini" plain shape="circle" @click="handleRestoreDatabase(group.name, item.database)">恢复数据库</u-button>
-              </view>
-            </view>
 
-            <view class="backup-group-actions">
-              <u-button type="primary" size="mini" plain shape="circle" @click="handleRestoreAll(group.name)">恢复全部</u-button>
-              <u-button type="error" size="mini" plain shape="circle" @click="handleDelete(group.name)">删除</u-button>
+              <view class="backup-group-actions">
+                <u-button type="primary" size="mini" plain shape="circle" @click="handleRestoreAll(group.name)">恢复全部</u-button>
+                <u-button type="error" size="mini" plain shape="circle" @click="handleDelete(group.name)">删除</u-button>
+              </view>
             </view>
           </view>
         </view>
-      </view>
 
-      <view v-else-if="!loading" class="backup-empty">
-        <u-empty mode="data" text="暂无备份记录" icon-size="120" />
-      </view>
-    </scroll-view>
+        <view v-else-if="!loading" class="backup-empty">
+          <u-empty mode="data" text="暂无备份记录" icon-size="120" />
+        </view>
+      </scroll-view>
 
-    <u-select v-model="showDbSelect" :list="dbOptions" title="选择数据库" @confirm="onDbSelectConfirm"></u-select>
-    <u-select v-model="showDbSelectForCollection" :list="dbOptions" title="选择数据库" @confirm="onDbSelectForCollectionConfirm"></u-select>
-    <u-select v-model="showCollectionSelect" :list="collectionOptions" title="选择集合" @confirm="onCollectionSelectConfirm"></u-select>
-  </view>
+      <u-select v-model="showDbSelect" :list="dbOptions" title="选择数据库" @confirm="onDbSelectConfirm"></u-select>
+      <u-select v-model="showDbSelectForCollection" :list="dbOptions" title="选择数据库" @confirm="onDbSelectForCollectionConfirm"></u-select>
+      <u-select v-model="showCollectionSelect" :list="collectionOptions" title="选择集合" @confirm="onCollectionSelectConfirm"></u-select>
+    </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -104,7 +106,9 @@
   import { onShow } from '@dcloudio/uni-app';
   import { backupApi } from '../../../api';
   import type { BackupFileInfo } from '../../../api/backup';
+  import { useAppTheme } from '../../../composables/useAppTheme';
 
+  const { isDark, mode } = useAppTheme();
   const capitalDatabaseName = import.meta.env.VITE_CAPITAL_DATABASE_NAME || 'capital';
   const blogDatabaseName = import.meta.env.VITE_BLOG_DATABASE_NAME || 'blog';
 
@@ -351,8 +355,12 @@
   .backup-page {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .backup-scroll {
@@ -366,6 +374,10 @@
   .backup-action {
     margin-bottom: 24rpx;
     background: linear-gradient(135deg, #ffffff, #f0f7ff);
+
+    &.dark {
+      background: $dark-card-bg;
+    }
   }
 
   .backup-action-header {
@@ -521,6 +533,10 @@
     margin-top: 16rpx;
     padding-top: 16rpx;
     border-top: 2rpx solid $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
   }
 
   .backup-db-item {
@@ -528,6 +544,14 @@
     border-radius: 12rpx;
     padding: 20rpx;
     margin-bottom: 16rpx;
+
+    &.dark {
+      background-color: $dark-chip-bg;
+
+      .backup-collection-name {
+        color: $dark-text-color;
+      }
+    }
   }
 
   .backup-db-header {

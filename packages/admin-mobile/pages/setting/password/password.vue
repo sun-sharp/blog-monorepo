@@ -1,32 +1,37 @@
 <template>
-  <view class="password-page">
-    <scroll-view scroll-y class="password-scroll">
-      <u-form ref="formRef" :model="form" :rules="rules" label-position="top" class="password-form">
-        <u-form-item label="用户名">
-          <u-input v-model="form.username" disabled border />
-        </u-form-item>
-        <u-form-item label="当前密码" prop="password">
-          <u-input v-model="form.password" type="password" placeholder="请输入当前密码" border :cursor-spacing="20" />
-        </u-form-item>
-        <u-form-item label="新密码" prop="updatePassword">
-          <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" border :cursor-spacing="20" />
-        </u-form-item>
-        <u-form-item label="确认新密码" prop="confirmPassword">
-          <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" border :cursor-spacing="20" />
-        </u-form-item>
-      </u-form>
-    </scroll-view>
+  <u-config-provider :dark-mode="mode">
+    <view class="password-page" :class="{ dark: isDark }">
+      <scroll-view scroll-y class="password-scroll">
+        <u-form ref="formRef" :model="form" :rules="rules" label-position="top" class="password-form" :class="{ dark: isDark }">
+          <u-form-item label="用户名">
+            <u-input v-model="form.username" disabled border />
+          </u-form-item>
+          <u-form-item label="当前密码" prop="password">
+            <u-input v-model="form.password" type="password" placeholder="请输入当前密码" border :cursor-spacing="20" />
+          </u-form-item>
+          <u-form-item label="新密码" prop="updatePassword">
+            <u-input v-model="form.updatePassword" type="password" placeholder="请输入新密码" border :cursor-spacing="20" />
+          </u-form-item>
+          <u-form-item label="确认新密码" prop="confirmPassword">
+            <u-input v-model="form.confirmPassword" type="password" placeholder="请再次输入新密码" border :cursor-spacing="20" />
+          </u-form-item>
+        </u-form>
+      </scroll-view>
 
-    <view class="fixed-bottom-btn">
-      <u-button type="primary" :loading="loading" @click="handleSave">修改密码</u-button>
+      <view class="fixed-bottom-btn" :class="{ dark: isDark }">
+        <u-button type="primary" :loading="loading" @click="handleSave">修改密码</u-button>
+      </view>
     </view>
-  </view>
+  </u-config-provider>
 </template>
 
 <script lang="ts" setup>
   import { ref, reactive, onMounted } from 'vue';
   import { useUserStore } from '../../../store';
   import { userApi } from '../../../api';
+  import { useAppTheme } from '../../../composables/useAppTheme';
+
+  const { isDark, mode } = useAppTheme();
 
   const userStore = useUserStore();
   const formRef = ref();
@@ -82,6 +87,10 @@
     flex-direction: column;
     height: 100vh;
     background-color: $uni-bg-color-grey;
+
+    &.dark {
+      background-color: $dark-page-bg;
+    }
   }
 
   .password-scroll {
@@ -96,5 +105,9 @@
     background-color: $uni-bg-color;
     border-radius: 12rpx;
     padding: 20rpx;
+
+    &.dark {
+      background-color: $dark-card-bg;
+    }
   }
 </style>
