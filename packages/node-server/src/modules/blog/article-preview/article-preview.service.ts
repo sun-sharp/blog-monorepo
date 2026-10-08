@@ -68,10 +68,7 @@ export class ArticlePreviewService {
    * @return {Promise<string>} 完整 HTML 字符串
    */
   public async buildRenderHtml(markdownContent: string, cssName: string, title: string): Promise<string> {
-    const [previewHtml, cssContent] = await Promise.all([
-      markdownToHtml(markdownContent),
-      this.articleCssService.findOneByName(cssName),
-    ]);
+    const [previewHtml, cssContent] = await Promise.all([markdownToHtml(markdownContent), this.articleCssService.findOneByName(cssName)]);
     return this.wrapRenderHtml(previewHtml, cssContent, cssName, title || '文章');
   }
 

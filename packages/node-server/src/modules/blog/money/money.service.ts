@@ -20,13 +20,8 @@ import {
 import { ApiAggregateBillItem } from '/#/api/blog/money/aggregate';
 import { ApiBank } from '/#/api/blog/money/bank';
 import { IResponse } from '/#/common/common';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { logger } from 'src/common/journal';
-import { createStoreDir } from 'src/common/fs-mkdir';
-import { storeDirStr } from 'src/common/constant/config';
 import { useCustomConfig } from 'src/config';
-import { BillUploadService } from './bill-upload/bill-upload.service';
-import { ManualBillService } from './manual-bill/manual-bill.service';
 import { StatisticsStartEndTimeDto } from 'src/common/dto/statistics-start-end-time.dto';
 import { Bank } from 'src/schemas/blog/money/bank.schema';
 import { AliPay } from 'src/schemas/blog/money/ali-pay.schema';
@@ -54,8 +49,6 @@ export class MoneyService {
     private readonly weChatService: WeChatService,
     private readonly aliPayService: AliPayService,
     private readonly categoryService: CategoryService,
-    private readonly billUploadService: BillUploadService,
-    private readonly manualBillService: ManualBillService,
   ) {}
 
   index() {
@@ -494,81 +487,6 @@ export class MoneyService {
           return {
             code: ApiCode.ERROR,
             message: err || '获取失败！',
-          };
-        })
-    );
-  }
-
-  /**
-   * @description: 备份数据库Blog/money数据
-   * @return {Promise<IResponse>}
-   */
-  public backupsCapital(): Promise<IResponse> {
-    return (
-      Promise.resolve()
-        .then(async () => {
-          // 判断store目录是否存在
-          createStoreDir();
-          // 判断json目录是否存在
-          const jsonDir = `${storeDirStr}/json`;
-          const hasJsonDir = existsSync(jsonDir);
-          if (!hasJsonDir) {
-            // 创建json目录
-            mkdirSync(jsonDir);
-            logger.log('创建json目录');
-          }
-          // 判断json/blog目录是否路径存在
-          const blogDir = `${jsonDir}/${blogDatabaseName}`;
-          const hasDir = existsSync(blogDir);
-          if (!hasDir) {
-            // 创建json/blog目录
-            mkdirSync(blogDir);
-            logger.log('创建json/blog目录');
-          }
-          return blogDir;
-        })
-        .then(async (blogDir) => {
-          // 备份blog/bank
-          const bankData = await this.bankService.findAllToData();
-          const bankStr = JSON.stringify(bankData, null, '\t');
-          writeFileSync(`${blogDir}/bank.json`, bankStr);
-          logger.log('备份数据库blog/bank数据');
-          // 备份blog/weChat
-          const weChatData = await this.weChatService.findAllToData();
-          const weChatStr = JSON.stringify(weChatData, null, '\t');
-          writeFileSync(`${blogDir}/weChat.json`, weChatStr);
-          logger.log('备份数据库blog/weChat数据');
-          // 备份blog/aliPay
-          const aliPayData = await this.aliPayService.findAllToData();
-          const aliPayStr = JSON.stringify(aliPayData, null, '\t');
-          writeFileSync(`${blogDir}/aliPay.json`, aliPayStr);
-          logger.log('备份数据库blog/aliPay数据');
-          // 备份blog/billUpload
-          const billUploadData = await this.billUploadService.findAllToData();
-          const billUploadStr = JSON.stringify(billUploadData, null, '\t');
-          writeFileSync(`${blogDir}/billUpload.json`, billUploadStr);
-          logger.log('备份数据库blog/billUpload数据');
-          // 备份blog/manualBill
-          const manualBillData = await this.manualBillService.findAllToData();
-          const manualBillStr = JSON.stringify(manualBillData, null, '\t');
-          writeFileSync(`${blogDir}/manualBill.json`, manualBillStr);
-          logger.log('备份数据库blog/manualBill数据');
-          // 备份blog/bankCard
-          const bankCardData = await this.bankCardModel.find().lean();
-          const bankCardStr = JSON.stringify(bankCardData, null, '\t');
-          writeFileSync(`${blogDir}/bankCard.json`, bankCardStr);
-          logger.log('备份数据库blog/bankCard数据');
-          return {
-            code: ApiCode.SUCCESS,
-            message: '备份成功！',
-          };
-        })
-        // 返回错误
-        .catch((err) => {
-          logger.log(`备份数据库blog/money 失败! ${err}`);
-          return {
-            code: ApiCode.ERROR,
-            message: err || '备份失败！',
           };
         })
     );

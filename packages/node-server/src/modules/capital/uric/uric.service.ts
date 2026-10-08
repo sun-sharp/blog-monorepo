@@ -114,17 +114,17 @@ export class UricService {
             this.uricModel.countDocuments(findData),
             this.uricModel.find(findData).sort({ measureTime: -1 }).limit(limit).skip(skip).lean().exec(),
           ]);
-const list: ApiUricItem[] = (findArr || []).map((m) => {
-    return {
-      uricId: m._id,
-      measureTime: nowDateFun(m.measureTime),
-      uricAcid: m.uricAcid,
-      bloodGlucose: m.bloodGlucose,
-      measureType: m.measureType,
-      bloodSugarPeriod: m.bloodSugarPeriod,
-      userId: m.userId,
-    };
-  });
+          const list: ApiUricItem[] = (findArr || []).map((m) => {
+            return {
+              uricId: m._id,
+              measureTime: nowDateFun(m.measureTime),
+              uricAcid: m.uricAcid,
+              bloodGlucose: m.bloodGlucose,
+              measureType: m.measureType,
+              bloodSugarPeriod: m.bloodSugarPeriod,
+              userId: m.userId,
+            };
+          });
           this.logger.log(`条件并分页获取尿酸血糖测量记录列表成功！`);
           return {
             code: ApiCode.SUCCESS,

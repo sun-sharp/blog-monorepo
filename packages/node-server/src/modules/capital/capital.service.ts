@@ -13,16 +13,6 @@ import { CreateConfigurationDto } from './configuration/dto/create-configuration
 import { IResponse } from '/#/common/common';
 import { ApiCapitalLoginResult } from '/#/api/capital';
 import { ApiMenuItem } from '/#/api/capital/menu';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { WaitForDoService } from './wait-for-do/wait-for-do.service';
-import { ImageService } from './image/image.service';
-import { CategoryService } from './category/category.service';
-import { storeDirStr } from 'src/common/constant/config';
-import { createStoreDir } from 'src/common/fs-mkdir';
-import { useCustomConfig } from 'src/config';
-
-const customConfig = useCustomConfig();
-const { capitalDatabaseName } = customConfig;
 
 @Injectable()
 export class CapitalService {
@@ -30,10 +20,7 @@ export class CapitalService {
     private readonly userService: UserService,
     private readonly roleService: RoleService,
     private readonly menuService: MenuService,
-    private readonly waitForDoService: WaitForDoService,
-    private readonly imageService: ImageService,
     private readonly configurationService: ConfigurationService,
-    private readonly categoryService: CategoryService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -307,86 +294,6 @@ export class CapitalService {
           return {
             code: ApiCode.ERROR,
             message: err || '删除失败！',
-          };
-        })
-    );
-  }
-
-  /**
-   * @description: 备份数据库Capital数据
-   * @return {Promise<IResponse>}
-   */
-  public backupsCapital(): Promise<IResponse> {
-    return (
-      Promise.resolve()
-        .then(async () => {
-          // 判断store目录是否存在
-          createStoreDir();
-          // 判断json目录是否存在
-          const jsonDir = `${storeDirStr}/json`;
-          const hasJsonDir = existsSync(jsonDir);
-          if (!hasJsonDir) {
-            // 创建json目录
-            mkdirSync(jsonDir);
-            logger.log('创建json目录');
-          }
-          // 判断json/capital目录是否路径存在
-          const capitalDir = `${jsonDir}/${capitalDatabaseName}`;
-          const hasDir = existsSync(capitalDir);
-          if (!hasDir) {
-            // 创建json/capital目录
-            mkdirSync(capitalDir);
-            logger.log('创建json/capital目录');
-          }
-          return capitalDir;
-        })
-        .then(async (capitalDir) => {
-          // 备份capital/user
-          const userData = await this.userService.findAllToData();
-          const userStr = JSON.stringify(userData, null, '\t');
-          writeFileSync(`${capitalDir}/user.json`, userStr);
-          logger.log('备份数据库capital/user数据');
-          // 备份capital/role
-          const roleData = await this.roleService.findAllToData();
-          const roleStr = JSON.stringify(roleData, null, '\t');
-          writeFileSync(`${capitalDir}/role.json`, roleStr);
-          logger.log('备份数据库capital/role数据');
-          // 备份capital/menu
-          const menuData = await this.menuService.findAllToData();
-          const menuStr = JSON.stringify(menuData, null, '\t');
-          writeFileSync(`${capitalDir}/menu.json`, menuStr);
-          logger.log('备份数据库capital/menu数据');
-          // 备份capital/waitForDo
-          const waitForDoData = await this.waitForDoService.findAllToData();
-          const waitForDoStr = JSON.stringify(waitForDoData, null, '\t');
-          writeFileSync(`${capitalDir}/waitForDo.json`, waitForDoStr);
-          logger.log('备份数据库capital/waitForDo数据');
-          // 备份capital/image
-          const imageData = await this.imageService.findAllToData();
-          const imageStr = JSON.stringify(imageData, null, '\t');
-          writeFileSync(`${capitalDir}/image.json`, imageStr);
-          logger.log('备份数据库capital/image数据');
-          // 备份capital/configuration
-          const configurationData = await this.configurationService.findAllToData();
-          const configurationStr = JSON.stringify(configurationData, null, '\t');
-          writeFileSync(`${capitalDir}/configuration.json`, configurationStr);
-          logger.log('备份数据库capital/configuration数据');
-          // 备份capital/category
-          const categoryData = await this.categoryService.findAllToData();
-          const categoryStr = JSON.stringify(categoryData, null, '\t');
-          writeFileSync(`${capitalDir}/category.json`, categoryStr);
-          logger.log('备份数据库capital/category数据');
-          return {
-            code: ApiCode.SUCCESS,
-            message: '备份成功！',
-          };
-        })
-        // 返回错误
-        .catch((err) => {
-          logger.error(`备份数据库Capital数据 失败！${err}`);
-          return {
-            code: ApiCode.ERROR,
-            message: err || '备份失败！',
           };
         })
     );
