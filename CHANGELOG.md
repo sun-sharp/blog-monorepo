@@ -7,6 +7,10 @@
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
 
+## bm-am-4.5.14 (2026-10-21)
+- 移动管理端
+  1. 修改 账单编辑和人工录入编辑的说明输入方式
+
 ## bm-am-4.5.13 (2026-10-21)
 - server 端
   1. 去掉旧的定时json备份方式

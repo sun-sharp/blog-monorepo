@@ -29,7 +29,7 @@
               <u-input v-model="balanceInput" type="digit" placeholder="请输入余额" :cursor-spacing="20" />
             </u-form-item>
             <u-form-item label="说明" prop="explain">
-              <u-input v-model="form.explain" placeholder="请输入说明" :cursor-spacing="20" />
+              <u-textarea v-model="form.explain" placeholder="请输入说明" count maxlength="500" confirm-type="return" :cursor-spacing="20" />
             </u-form-item>
             <u-form-item label="交易场所" prop="place">
               <u-input v-model="form.place" placeholder="请输入交易场所" :cursor-spacing="20" />
