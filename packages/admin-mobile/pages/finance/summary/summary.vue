@@ -93,8 +93,9 @@
                 <text class="summary-chart-name">{{ item.name }}</text>
                 <view class="summary-chart-bar-wrap">
                   <view class="summary-chart-bar summary-chart-bar-in" :style="{ width: getBarWidth(item.money, flowData.inflowSumTotal) }" />
+                  <text class="summary-chart-bar-text">{{ showBarPercent(item.money, flowData.inflowSumTotal) }}</text>
                 </view>
-                <text class="money-inflow summary-chart-val">+¥{{ item.money }}</text>
+                <text class="money-inflow summary-chart-val" @click="toTabFinance(item.name)">+¥{{ item.money }}</text>
               </view>
             </view>
             <view v-if="flowData.outflowChart.length > 0" class="summary-chart-section">
@@ -103,6 +104,7 @@
                 <text class="summary-chart-name">{{ item.name }}</text>
                 <view class="summary-chart-bar-wrap">
                   <view class="summary-chart-bar summary-chart-bar-out" :style="{ width: getBarWidth(item.money, flowData.outflowSumTotal) }" />
+                  <text class="summary-chart-bar-text">{{ showBarPercent(item.money, flowData.outflowSumTotal) }}</text>
                 </view>
                 <text class="money-outflow summary-chart-val">-¥{{ item.money }}</text>
               </view>
@@ -112,8 +114,8 @@
         </view>
       </scroll-view>
 
-      <money-time-select v-model:show="showBankTimeSelect" @confirm="onBankTimeConfirm" />
-      <money-time-select v-model:show="showFlowTimeSelect" @confirm="onFlowTimeConfirm" />
+      <money-time-select v-model:show="showBankTimeSelect" :default-index="1" @confirm="onBankTimeConfirm" />
+      <money-time-select v-model:show="showFlowTimeSelect" :default-index="1" @confirm="onFlowTimeConfirm" />
     </view>
   </u-config-provider>
 </template>
@@ -148,14 +150,20 @@
     return `${flowTimeRange.value.startTime} ~ ${flowTimeRange.value.endTime}`;
   });
 
+  // 计算进度条宽度
   function getBarWidth(value: number, total: number): string {
     if (!total) return '0%';
     return Math.min((value / total) * 100, 100) + '%';
   }
 
+  // 计算进度条百分比
+  function showBarPercent(value: number, total: number): string {
+    if (!total) return '0%';
+    return Math.min(Math.round((value / total) * 100 * 10) / 10, 100) + '%';
+  }
+
   async function loadBalance() {
     try {
-      // balanceList.value = await moneyApi.statisticsMoneyBalance();
       const list = await moneyApi.statisticsMoneyBalance();
       balanceList.value = list
         .filter((f) => f.value > 0)
@@ -223,6 +231,10 @@
   //   flowTimeRange.value = defaultRange;
   //   loadFlowData(defaultRange);
   // }
+
+  function toTabFinance(name: string) {
+    uni.navigateTo({ url: `/pages/main/main?tab=finance&name=${name}` });
+  }
 
   onMounted(async () => {
     await loadBalance();
@@ -360,7 +372,7 @@
 
   .summary-filter-time-text {
     font-size: 24rpx;
-    color: #007aff;
+    color: $uni-color-primary;
   }
 
   .summary-flow-list {
@@ -453,15 +465,16 @@
 
   .summary-chart-bar-wrap {
     flex: 1;
-    height: 20rpx;
+    height: 30rpx;
     background-color: $uni-bg-color-grey;
-    border-radius: 10rpx;
+    border-radius: 16rpx;
     overflow: hidden;
+    position: relative;
   }
 
   .summary-chart-bar {
     height: 100%;
-    border-radius: 10rpx;
+    border-radius: 16rpx;
     transition: width 0.3s ease;
   }
 
@@ -471,6 +484,15 @@
 
   .summary-chart-bar-out {
     background: linear-gradient(90deg, #ff6b6b, #ff3b30);
+  }
+
+  .summary-chart-bar-text {
+    font-size: 22rpx;
+    color: $uni-color-primary;
+    position: absolute;
+    right: 20rpx;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .summary-chart-val {

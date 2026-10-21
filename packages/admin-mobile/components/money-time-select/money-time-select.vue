@@ -57,7 +57,7 @@
 
   const { isDark } = useAppTheme();
 
-  const props = defineProps<{ show: boolean }>();
+  const props = defineProps<{ show: boolean; defaultIndex?: number }>();
   const emit = defineEmits(['update:show', 'confirm']);
 
   const quickOptions = [
@@ -68,7 +68,7 @@
     { label: '自定义', days: 0 },
   ];
 
-  const quickIndex = ref(0);
+  const quickIndex = ref(props.defaultIndex ?? 0);
   const showStartPicker = ref(false);
   const showEndPicker = ref(false);
 

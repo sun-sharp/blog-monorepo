@@ -342,35 +342,35 @@ export class MoneyService {
           // 查询某时间范围内的银行账单
           const bankModelAll = await this.bankService.findModelAll(userId, query.startTime, query.endTime);
           //* 现金流入/流出的金额 */
-          const bankCashName = '银行现金';
-          const transitMoneyArr = bankModelAll
-            .filter((f) => [billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType))
-            .map((m) => {
-              if (m.inflowOrOutflow === 1) {
-                return 0 - m.moneyAmount;
-              } else if (m.inflowOrOutflow === 2) {
-                return m.moneyAmount;
-              } else {
-                return 0;
-              }
-            });
-          // 现金花费方式的
-          const spendMoneyArr = bankModelAll
-            .filter((f) => [billTypeEnum.cashSpend].includes(f.bankBillType))
-            .map((m) => {
-              if (m.inflowOrOutflow === 1) {
-                return 0 - m.moneyAmount;
-              } else if (m.inflowOrOutflow === 2) {
-                return m.moneyAmount;
-              } else {
-                return 0;
-              }
-            });
-          // 银行现金流出的
-          const transitMoney = sumArrayToMoney(transitMoneyArr);
-          const bankCashOutflow = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
-          // 银行现金流入的
-          const bankCashInflow = transitMoney < 0 ? 0 - transitMoney : 0;
+          // const bankCashName = '银行现金';
+          // const transitMoneyArr = bankModelAll
+          //   .filter((f) => [billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType))
+          //   .map((m) => {
+          //     if (m.inflowOrOutflow === 1) {
+          //       return 0 - m.moneyAmount;
+          //     } else if (m.inflowOrOutflow === 2) {
+          //       return m.moneyAmount;
+          //     } else {
+          //       return 0;
+          //     }
+          //   });
+          // // 现金花费方式的
+          // const spendMoneyArr = bankModelAll
+          //   .filter((f) => [billTypeEnum.cashSpend].includes(f.bankBillType))
+          //   .map((m) => {
+          //     if (m.inflowOrOutflow === 1) {
+          //       return 0 - m.moneyAmount;
+          //     } else if (m.inflowOrOutflow === 2) {
+          //       return m.moneyAmount;
+          //     } else {
+          //       return 0;
+          //     }
+          //   });
+          // // 银行现金流出的
+          // const transitMoney = sumArrayToMoney(transitMoneyArr);
+          // const bankCashOutflow = (transitMoney > 0 ? transitMoney : 0) + sumArrayToMoney(spendMoneyArr);
+          // // 银行现金流入的
+          // const bankCashInflow = transitMoney < 0 ? 0 - transitMoney : 0;
           //* 银行除现金外，其它方式 */
           const bankOtherMoneyArr = bankModelAll.filter(
             (f) => ![billTypeEnum.cashSpend, billTypeEnum.cashPartTransit, billTypeEnum.cashTransit].includes(f.bankBillType),
@@ -425,7 +425,7 @@ export class MoneyService {
           });
           // 汇总流出的数据
           const outflowFilter = aliPayAndWeChatInflowOrOutflowArr.filter(
-            (f: { billType: number }) =>
+            (f) =>
               ![
                 billTypeEnum.aliPayBalanceBabyRecharge,
                 billTypeEnum.withdrawBusiness,
@@ -439,16 +439,17 @@ export class MoneyService {
               ].includes(f.billType),
           );
           const outflowMoneyArr = outflowFilter
-            .map((m: { name: string; outflowMoney: number }) => ({
+            .map((m) => ({
               name: m.name,
+              billType: m.billType,
               money: m.outflowMoney,
             }))
             .filter((f: { money: number }) => f.money !== 0);
-          const outflowChart = (bankCashOutflow > 0 ? [{ name: bankCashName, money: bankCashOutflow }] : []).concat(outflowMoneyArr);
-          const outflowSumTotal = sumArrayToMoney(outflowFilter.map((m: { outflowMoney: number }) => m.outflowMoney).concat([bankCashOutflow]));
+          const outflowChart = [].concat(outflowMoneyArr);
+          const outflowSumTotal = sumArrayToMoney(outflowFilter.map((m: { outflowMoney: number }) => m.outflowMoney).concat([]));
           // 汇总流入的数据
           const inflowFilterArr = aliPayAndWeChatInflowOrOutflowArr.filter(
-            (f: { billType: number }) =>
+            (f) =>
               ![
                 billTypeEnum.weChatChangeRecharge,
                 billTypeEnum.aliPayBalanceRecharge,
@@ -461,13 +462,14 @@ export class MoneyService {
               ].includes(f.billType),
           );
           const inflowMoneyArr = inflowFilterArr
-            .map((m: { name: string; inflowMoney: number }) => ({
+            .map((m) => ({
               name: m.name,
+              billType: m.billType,
               money: m.inflowMoney,
             }))
             .filter((f: { money: number }) => f.money !== 0);
-          const inflowChart = (bankCashInflow > 0 ? [{ name: bankCashName, money: bankCashInflow }] : []).concat(inflowMoneyArr);
-          const inflowSumTotal = sumArrayToMoney(inflowFilterArr.map((m: { inflowMoney: number }) => m.inflowMoney).concat([bankCashInflow]));
+          const inflowChart = [].concat(inflowMoneyArr);
+          const inflowSumTotal = sumArrayToMoney(inflowFilterArr.map((m: { inflowMoney: number }) => m.inflowMoney).concat([]));
           // 结果
           const result: ApiInflowOrOutflowMoneyResult = {
             outflowSumTotal,
