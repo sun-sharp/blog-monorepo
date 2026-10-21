@@ -6,6 +6,16 @@
 - bm-aw-xxx 表示修改了子项目admin-web的代码
 - bm-am-xxx 表示修改了子项目admin-mobile的代码
 - bm-ns-www-aw-am-xxx 表示修改了子项目node-server、website、admin-web、admin-mobile的代码
+
+## bm-am-4.5.13 (2026-10-21)
+- server 端
+  1. 去掉旧的定时json备份方式
+  2. 优化 统计某时间范围内的方式流入/流出的金额 接口
+- 移动管理端
+  1. 修改 账单说明输入方式
+  2. 汇总的流入/流出分布样式优化
+  3. 时间选择器默认值的定义
+
 ## bm-am-4.5.12 (2026-9-25)
 - 移动管理端
   1. 修改尿酸血糖图标和主题色问题
